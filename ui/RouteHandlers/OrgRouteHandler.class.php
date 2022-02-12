@@ -398,7 +398,7 @@ class OrgRouteHandler
         $adminDao = new DAO\AdminDao();
         $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org'  => $org,
             'org2' => $org2,
             'activitys'    => $this->generateOptions($this->possibleActivitys(), $org2->getActivitys()),
@@ -514,7 +514,7 @@ class OrgRouteHandler
                 }
             }
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "orgs" => $orgs,
                 'adminForOrg' => $adminForOrg,
                 "templateData" => $templateData
@@ -525,7 +525,7 @@ class OrgRouteHandler
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "isSiteAdmin"   => $isSiteAdmin,
             "extra_scripts" => $extra_scripts,
@@ -585,7 +585,7 @@ class OrgRouteHandler
                 }
             }
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'orgs'         => $orgs,
                 'adminForOrg'  => $adminForOrg,
                 'templateData' => $templateData
@@ -595,7 +595,7 @@ class OrgRouteHandler
         $extra_scripts = file_get_contents(__DIR__ . '/../js/TaskView.js');
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'isSiteAdmin'     => $isSiteAdmin,
             'extra_scripts'   => $extra_scripts,
@@ -708,7 +708,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org", $org);
-        $app->view()->appendData(array("user_list" => $user_list, 'sesskey' => $sesskey));
+        $template_data = array_merge($template_data, array("user_list" => $user_list, 'sesskey' => $sesskey));
         
         $app->render("org/org.request_queue.tpl");
     }
@@ -966,7 +966,7 @@ class OrgRouteHandler
                 }
 
                 if (!is_null($errorOccured)) {
-                    $app->view()->appendData(array(
+                    $template_data = array_merge($template_data, array(
                     "errorOccured" => $errorOccured,
                     "errorList" => $errorList
                     ));
@@ -1011,10 +1011,10 @@ class OrgRouteHandler
         $adminDao = new DAO\AdminDao();
         //if ($adminDao->isOrgAdmin($org->getId(), $userId) || $adminDao->isSiteAdmin($userId)) { [}]
         if ($adminDao->isSiteAdmin($userId)) {
-            $app->view()->appendData(array('orgAdmin' => true));
+            $template_data = array_merge($template_data, array('orgAdmin' => true));
         }
         
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org'  => $org,
             'org2' => $org2,
             'activitys'    => $this->generateOptions($this->possibleActivitys(), $org2->getActivitys()),
@@ -1985,7 +1985,7 @@ class OrgRouteHandler
 
         $siteName = Common\Lib\Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 "org" => $org,
                 'org2' => $org2,
@@ -2035,7 +2035,7 @@ class OrgRouteHandler
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $app->view()->setData("badge", $badge);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     "org_id"        => $org_id,
                     "extra_scripts" =>$extra_scripts
         ));
@@ -2084,7 +2084,7 @@ class OrgRouteHandler
     
         $user_list = $badgeDao->getUserWithBadge($badge_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "user_list" => $user_list
         ));
@@ -2121,7 +2121,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org_id", $org_id);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
         ));
         $app->render("org/org.create-badge.tpl");
@@ -2142,7 +2142,7 @@ class OrgRouteHandler
                 if (empty($foundOrgs)) {
                     UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
                 }
-                $app->view()->appendData(array('searchedText' => $post['search_name']));
+                $template_data = array_merge($template_data, array('searchedText' => $post['search_name']));
             }
 
             if (isset($post['allOrgs'])) {
@@ -2150,7 +2150,7 @@ class OrgRouteHandler
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'foundOrgs'     => $foundOrgs
         ));
 
@@ -2168,7 +2168,7 @@ class OrgRouteHandler
 
         $badge = $badgeDao->getBadge($badge_id);
         $app->view()->setData("badge", $badge);
-        $app->view()->appendData(array("org_id" => $org_id));
+        $template_data = array_merge($template_data, array("org_id" => $org_id));
         
         $app->render("org/org.edit-badge.tpl");
     }
@@ -2206,7 +2206,7 @@ class OrgRouteHandler
                 "orgId"             => $orgId
         );
 
-        $app->view()->appendData($viewData);
+        $template_data = array_merge($template_data, $viewData);
         $app->render("org/org.task-complete.tpl");
     }
 
@@ -2323,7 +2323,7 @@ class OrgRouteHandler
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey' => $sesskey,
                     'extra_scripts' => $extra_scripts,
                     'task'      => $task,
@@ -2431,7 +2431,7 @@ class OrgRouteHandler
         $viewData['reviews'] = $reviews;
         $viewData['extra_scripts'] = $extra_scripts;
 
-        $app->view()->appendData($viewData);
+        $template_data = array_merge($template_data, $viewData);
         $app->render('org/org.task-reviews.tpl');
     }
 }

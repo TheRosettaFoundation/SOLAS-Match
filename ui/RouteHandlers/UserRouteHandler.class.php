@@ -253,7 +253,7 @@ class UserRouteHandler
             UserRouteHandler::flashNow('warning', $msg);
         }
 
-        $app->view()->appendData($viewData);
+        $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
@@ -392,7 +392,7 @@ class UserRouteHandler
             $org_admin = $userDao->is_admin_or_org_member($user_id);
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
             'activeSourceLanguages' => $activeSourceLanguages,
             'activeTargetLanguages' => $activeTargetLanguages,
@@ -486,7 +486,7 @@ class UserRouteHandler
            
         });
         </script>';
-        $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
         $error = null;
         if (\SolasMatch\UI\isValidPost($app)) {
@@ -526,7 +526,7 @@ class UserRouteHandler
             }
         }
         if ($error !== null) {
-            $app->view()->appendData(array("error" => $error));
+            $template_data = array_merge($template_data, array("error" => $error));
         }
         $app->render("user/register.tpl");
     }
@@ -565,13 +565,13 @@ class UserRouteHandler
             }
         }
         if ($error !== null) {
-            $app->view()->appendData(array("error" => $error));
+            $template_data = array_merge($template_data, array("error" => $error));
         }
         if ($warning !== null) {
-            $app->view()->appendData(array("warning" => $warning));
+            $template_data = array_merge($template_data, array("warning" => $warning));
         }
 
-        $app->view()->appendData(array('user_id' => $user_id, 'sesskey' => $sesskey));
+        $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
         $app->render("user/change-email.tpl");
     }
 
@@ -602,7 +602,7 @@ class UserRouteHandler
             }
         }
 
-        $app->view()->appendData(array('uuid' => $uuid));
+        $template_data = array_merge($template_data, array('uuid' => $uuid));
 
         $app->render("user/email.verification.tpl");
     }
@@ -871,7 +871,7 @@ class UserRouteHandler
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'extra_scripts' => self::createGooglePlusJavaScript(),
             'client_id'    => Common\Lib\Settings::get('proz.client_id'),
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
@@ -1029,8 +1029,8 @@ class UserRouteHandler
             $(".logout").hide();
         });
             </script>';
-            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
+            $template_data = array_merge($template_data, array("extra_scripts" => $extra_scripts));
+            $template_data = array_merge($template_data, array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
             $app->render('user/googleregister.tpl');
         }
     }
@@ -1282,7 +1282,7 @@ class UserRouteHandler
 
         $notifData = $userDao->getUserTaskStreamNotification($user_id);
         if ($notifData) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'intervalId' => $notifData->getInterval(),
             ));
         }
@@ -1716,7 +1716,7 @@ class UserRouteHandler
         });
         </script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
             'siteAPI'          => Common\Lib\Settings::get('site.api'),
             'isSiteAdmin'      => $isSiteAdmin,
@@ -1831,7 +1831,7 @@ class UserRouteHandler
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
             'siteAPI'           => Common\Lib\Settings::get('site.api'),
             'isSiteAdmin'       => $isSiteAdmin,
@@ -1893,7 +1893,7 @@ class UserRouteHandler
 
         $certification_list = $userDao->getCertificationList($user_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'user'          => $user,
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
@@ -1928,7 +1928,7 @@ class UserRouteHandler
 
         $all_users = $userDao->users_review();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('user/users_review.tpl');
     }
 
@@ -1955,7 +1955,7 @@ class UserRouteHandler
             }
         }
 
-        $app->view()->appendData(array('all_users' => $all_users, 'sesskey' => $sesskey));
+        $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
         $app->render('user/users_new.tpl');
     }
 
@@ -1999,7 +1999,7 @@ class UserRouteHandler
         $template_data = [];
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('user/users_tracked.tpl');
     }
 
@@ -2020,7 +2020,7 @@ class UserRouteHandler
                 UserRouteHandler::flashNow('success', "Added Tracking Code (if not already present), URL: $url");
             }
         }
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'  => $sesskey,
             'referers' => $userDao->get_referers(),
         ));
@@ -2141,7 +2141,7 @@ class UserRouteHandler
 
             if (isset($post['referenceRequest'])) {
                 $userDao->requestReferenceEmail($user_id);
-                $app->view()->appendData(array("requestSuccess" => true));
+                $template_data = array_merge($template_data, array("requestSuccess" => true));
             }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
@@ -2351,7 +2351,7 @@ class UserRouteHandler
             $langPrefName = '';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "badges" => $badges,
             "orgList" => $orgList,
@@ -2394,7 +2394,7 @@ class UserRouteHandler
 
                 $strict = $notifData->getStrict();
             }
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "interval"       => $interval,
                 "lastSent"       => $lastSent,
                 "strict"         => $strict,
@@ -2422,7 +2422,7 @@ class UserRouteHandler
             $howheard = $howheard[0];
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'certificate'            => $certificate,
             'recognition'            => $recognition,
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
@@ -2471,7 +2471,7 @@ class UserRouteHandler
         $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'user-profile',
             'this_user' => $user,
             'userPersonalInfo' => $userPersonalInfo,
@@ -2551,7 +2551,7 @@ class UserRouteHandler
 
             $strict = $notifData->getStrict();
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "interval"  => $interval,
                 "intervalId" => $notifData->getInterval(),
                 "lastSent"  => $lastSent,
@@ -2559,7 +2559,7 @@ class UserRouteHandler
             ));
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "user" => $user
         ));
@@ -2594,7 +2594,7 @@ class UserRouteHandler
         $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>" . file_get_contents(__DIR__ . "/../js/RateIt/src/jquery.rateit.min.js") . "</script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'task'          => $task,
             'reviews'       => $reviews,
             'isSiteAdmin'   => $isSiteAdmin,

@@ -1081,7 +1081,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                     "org" => $org,
                     "graph" => $graphView,
                     "extra_scripts" => $extra_scripts,
@@ -1102,7 +1102,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 'volunteerTaskLanguageMap' => $volunteerTaskLanguageMap,
@@ -1118,7 +1118,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         if ($reload_for_wordcount) $project = $projectDao->getProject($project_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
@@ -1430,7 +1430,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter1.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "siteAPI"               => Common\Lib\Settings::get('site.api'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
@@ -1906,7 +1906,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate9.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "siteAPI"               => Common\Lib\Settings::get('site.api'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
@@ -2095,7 +2095,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $project = $projectDao->getProject($project_id);
         $org_id = $project->getOrganisationId();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "org_id" => $org_id,
                 "project_id" => $project_id
         ));
@@ -2587,11 +2587,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       }
       fclose($fp_for_lock);
 
-        //global $app;
-        //$app->view()->appendData(array(
-        //    'body' => 'Dummy',
-        //));
-        //$app->render('nothing.tpl');
       die;
     }
 

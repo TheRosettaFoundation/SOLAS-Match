@@ -437,7 +437,7 @@ class AdminRouteHandler
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey'       => $sesskey,
                     "adminUserId"   => $userId,
                     "adminList"     => $adminList,
@@ -463,7 +463,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->getUsers();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/all_users.tpl');
     }
 
@@ -475,7 +475,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->getUsers();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/all_users_plain.tpl');
     }
 
@@ -487,7 +487,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->active_now();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/active_now.tpl');
     }
 
@@ -499,7 +499,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->active_now_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/active_now_matecat.tpl');
     }
 
@@ -511,7 +511,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->testing_center();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/testing_center.tpl');
     }
 
@@ -559,7 +559,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->late_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/late_matecat.tpl');
     }
 
@@ -571,7 +571,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->complete_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/complete_matecat.tpl');
     }
 
@@ -583,7 +583,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->user_task_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/user_task_reviews.tpl');
     }
 
@@ -595,7 +595,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->submitted_task_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/submitted_task_reviews.tpl');
     }
 
@@ -668,7 +668,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->tasks_no_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/tasks_no_reviews.tpl');
     }
 
@@ -704,7 +704,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->project_source_file_scores();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/project_source_file_scores.tpl');
     }
 
@@ -761,7 +761,7 @@ class AdminRouteHandler
             }
         }
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/first_completed_task.tpl');
     }
 
@@ -773,7 +773,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->active_users();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/active_users.tpl');
     }
 
@@ -789,7 +789,7 @@ class AdminRouteHandler
             $all_users_unique[$all_user['email']] = array('email' => $all_user['email'], 'display_name' => $all_user['display_name']);
         }
 
-        $app->view()->appendData(array('all_users' => $all_users_unique));
+        $template_data = array_merge($template_data, array('all_users' => $all_users_unique));
         $app->render('admin/active_users_unique.tpl');
     }
 
@@ -801,7 +801,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->unclaimed_tasks();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/unclaimed_tasks.tpl');
     }
 
@@ -819,7 +819,7 @@ class AdminRouteHandler
             $source_target = explode('-', $_POST['search_users_language_pair']);
             if (!empty($source_target) && count($source_target) == 2) {
                 $all_users = $statsDao->search_users_by_language_pair($source_target[0], $source_target[1]);
-                $app->view()->appendData(array('all_users' => $all_users));
+                $template_data = array_merge($template_data, array('all_users' => $all_users));
             }
         }
 
@@ -837,7 +837,7 @@ class AdminRouteHandler
         if ($code === 'full') $code = null;
         $all_users = $statsDao->user_languages($code);
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/user_languages.tpl');
     }
 
@@ -873,7 +873,7 @@ class AdminRouteHandler
         if ($code === 'full') $code = null;
         $all_users = $statsDao->user_task_languages($code);
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/user_task_languages.tpl');
     }
 
@@ -885,7 +885,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->user_words_by_language();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/user_words_by_language.tpl');
     }
 
@@ -1324,7 +1324,7 @@ class AdminRouteHandler
             $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
         }
 
-        $app->view()->appendData(array('words' => $words, 'years' => $years));
+        $template_data = array_merge($template_data, array('words' => $words, 'years' => $years));
         $app->render('admin/language_work_requested.tpl');
 
     }
@@ -1408,7 +1408,7 @@ class AdminRouteHandler
             }
         }
 
-        $app->view()->appendData(array('totals' => $totals, 'breakdown' => $breakdown));
+        $template_data = array_merge($template_data, array('totals' => $totals, 'breakdown' => $breakdown));
         $app->render('admin/translators_for_language_pairs.tpl');
     }
 
@@ -1457,7 +1457,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->matecat_analyse_status();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/matecat_analyse_status.tpl');
     }
 
@@ -1469,7 +1469,7 @@ class AdminRouteHandler
 
         $all_users = $statsDao->list_memsource_projects();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
         $app->render('admin/list_memsource_projects.tpl');
     }
 

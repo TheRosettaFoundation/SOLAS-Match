@@ -222,7 +222,7 @@ class TaskRouteHandler
         }
 
         $app->view()->setData("archivedTasks", $archivedTasks);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                                     "page_no" => $page_no,
                                     "last" => $totalPages,
                                     "top" => $top,
@@ -443,7 +443,7 @@ class TaskRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'claimed-tasks',
             'thisUser' => $user,
             'user_id' => $user_id,
@@ -584,7 +584,7 @@ class TaskRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'recent-tasks',
             'thisUser' => $user,
             'user_id' => $user_id,
@@ -820,7 +820,7 @@ class TaskRouteHandler
         $projectFileDownload = $app->getRouteCollector()->getRouteParser()->urlFor("home")."project/".$task->getProjectId()."/file";
 
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey' => $sesskey,
                     "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
@@ -851,7 +851,7 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
             'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
             'memsource_task' => $memsource_task,
@@ -1128,7 +1128,7 @@ class TaskRouteHandler
         });
         </script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "extra_scripts" => $extra_scripts,
             "taskTypeColours" => $taskTypeColours,
@@ -1418,7 +1418,7 @@ class TaskRouteHandler
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "extra_scripts" => $extra_scripts,
             "task"          => $task,
@@ -1553,7 +1553,7 @@ class TaskRouteHandler
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
@@ -1582,7 +1582,7 @@ class TaskRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "org_name" => $org->getName(),
             "tip"      => $tip
         ));
@@ -1606,7 +1606,7 @@ class TaskRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org_name' => $org->getName(),
             'tip'      => $tip
         ));
@@ -1889,7 +1889,7 @@ class TaskRouteHandler
             $restrictTaskStatus = 'checked';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'             => $sesskey,
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
@@ -1958,7 +1958,7 @@ class TaskRouteHandler
             $chunked_message = '';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "file_preview_path" => $file_path,
             'chunked_message' => $chunked_message,
             "filename" => $task_file_info->getFilename()
@@ -2060,7 +2060,7 @@ class TaskRouteHandler
         }
         $taskMetaData[$task_id] = $metaData;
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                      "task" => $task,
                      "taskMetaData" => $taskMetaData
         ));
@@ -2075,14 +2075,14 @@ class TaskRouteHandler
 
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if ($isOrgMember || $isSiteAdmin) {
-            $app->view()->appendData(array("isOrgMember" => $isOrgMember));
+            $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
         $alsoViewedTasksCount = 0; 
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
@@ -2189,7 +2189,7 @@ class TaskRouteHandler
       });
     </script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
@@ -2363,7 +2363,7 @@ class TaskRouteHandler
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-created", array("task_id" => $newTaskId)));
                 } else {
                     $taskDao->deleteTask($newTaskId);
-                    $app->view()->appendData(array("upload_error" => $upload_error));
+                    $template_data = array_merge($template_data, array("upload_error" => $upload_error));
                 }
             }
         }
@@ -2393,7 +2393,7 @@ class TaskRouteHandler
         $task_word_count = $task->getWordCount();
         if (empty($task_word_count) && $project->getWordCount() > 1) $task->setWordCount($project->getWordCount());
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "project"       => $project,
             "task"          => $task,
@@ -2421,7 +2421,7 @@ class TaskRouteHandler
 
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "project_id" => $task->getProjectId(),
                 "task_id"    => $task->getId()
         ));
@@ -2526,7 +2526,7 @@ class TaskRouteHandler
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "project" => $project,
             "task" => $task,
@@ -2622,7 +2622,7 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "org" => $organisation,
             "project" => $project,
@@ -2857,7 +2857,7 @@ class TaskRouteHandler
 
         $formAction = $app->getRouteCollector()->getRouteParser()->urlFor("task-review", array('task_id' => $taskId));
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,

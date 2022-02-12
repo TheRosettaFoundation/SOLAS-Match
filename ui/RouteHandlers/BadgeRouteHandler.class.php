@@ -39,7 +39,7 @@ class BadgeRouteHandler
 
         $siteName = Common\Lib\Settings::get('site.name');
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "current_page"  => "badge-list",
                 "badgeList"     => $badgeList,
                 'siteName'      => $siteName,

@@ -43,7 +43,7 @@ class StaticRouteHandler
 <script src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/build/packages/browser/dart.js\"></script>
 <script src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
         ";
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'extra_scripts' => $extraScripts
         ));
         $app->render("static/statistics.tpl");

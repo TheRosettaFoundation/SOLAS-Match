@@ -64,13 +64,13 @@ class TagRouteHandler
         }
         
         if (is_null($nameErr)) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "user_tags" => $user_tags,
                 "foundTags" => $foundTags,
                 'searchedText'  => $name
             ));
         } else {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                     "user_tags" => $user_tags,
                     "foundTags" => $foundTags,
                     "nameErr"  => $nameErr
@@ -163,18 +163,18 @@ class TagRouteHandler
         $app->view()->setData('taskOrgs', $taskOrgs);
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "user_id" => $user_id
         ));
 
         $user_tags = $userDao->getUserTags($user_id);
         if ($user_tags && count($user_tags) > 0) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'user_tags' => $user_tags
             ));
             foreach ($user_tags as $userTag) {
                 if ($label == $userTag->getLabel()) {
-                    $app->view()->appendData(array(
+                    $template_data = array_merge($template_data, array(
                         'subscribed' => true
                     ));
                 }
@@ -190,7 +190,7 @@ class TagRouteHandler
 
         $top_tags= $tagDao->getTopTags(30);
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "tag" => $tag,
             "top_tags" => $top_tags,
