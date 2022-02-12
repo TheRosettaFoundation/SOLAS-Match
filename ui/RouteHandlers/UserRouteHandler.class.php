@@ -2586,6 +2586,26 @@ class UserRouteHandler
 
         $app->render("user/user.task-reviews.tpl");
     }
+
+    public static function flash($key, $value)
+    {
+        global $flash_messages;
+        $flash_messages['next'][$key] = $value;
+    }
+
+    public static function flashNow($key, $value)
+    {
+        global $flash_messages;
+        $flash_messages['now'][$key] = $value;
+    }
+
+    public static function flashKeep()
+    {
+        global $flash_messages;
+        foreach ($flash_messages['prev'] as $key => $val) {
+            $flash_messages['next'][$key] = $val;
+        }
+    }
 }
 
 $route_handler = new UserRouteHandler();
