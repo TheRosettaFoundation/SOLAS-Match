@@ -640,8 +640,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
         $reload_for_wordcount = 0;
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'projectView');
 
             $task = null;
@@ -1198,7 +1198,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['project_deadline'])
@@ -1484,7 +1484,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $create_memsource = 1; // This org uses memsource
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])

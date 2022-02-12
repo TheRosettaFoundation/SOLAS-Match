@@ -139,7 +139,7 @@ class OrgRouteHandler
         $org = null;
         $errorOccured = null;
         $errorList = array();
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             $org = new Common\Protobufs\Models\Organisation();
 
             if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
@@ -436,8 +436,8 @@ class OrgRouteHandler
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
         
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard');
 
             if (isset($post['track'])) {
@@ -640,8 +640,8 @@ class OrgRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $org = $orgDao->getOrganisation($org_id);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue');
             
             if (isset($post['email'])) {
@@ -755,7 +755,7 @@ class OrgRouteHandler
         $errorOccured = null;
         $errorList=array();
         
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
 
             if (isset($post['updateOrgDetails'])) {
                 if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
@@ -1737,8 +1737,8 @@ class OrgRouteHandler
 
         $memberIsAdmin = array();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile');
                    
             if (isset($post['deleteBadge'])) {
@@ -2033,8 +2033,8 @@ class OrgRouteHandler
                     "extra_scripts" =>$extra_scripts
         ));
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge');
             
             if (isset($post['email']) && $post['email'] != "") {
@@ -2095,7 +2095,7 @@ class OrgRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge');
             
             if ($post['title'] == "" || $post['description'] == "") {
@@ -2125,8 +2125,8 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
@@ -2213,8 +2213,8 @@ class OrgRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview');
 
             if (isset($post['submitReview'])) {

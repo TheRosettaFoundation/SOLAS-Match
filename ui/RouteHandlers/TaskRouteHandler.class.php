@@ -280,8 +280,8 @@ class TaskRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
@@ -786,8 +786,8 @@ class TaskRouteHandler
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
         $task = $taskDao->getTask($taskId);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim');
 
             $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -912,8 +912,8 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'task');
 
             $project = $projectDao->getProject($task->getProjectId());
@@ -1182,8 +1182,8 @@ class TaskRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $taskId)));
         }
 
-        if ($app->request()->isPost()) {
-          $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+          $post = $request->getParsedBody();
           Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
 
           if (!empty($post['copy_from_matecat'])) {
@@ -1460,8 +1460,8 @@ class TaskRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
             if (!empty($post['copy_from_matecat'])) {
@@ -1674,7 +1674,7 @@ class TaskRouteHandler
         $app->view()->setData("task", $task);
 
         if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter');
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
@@ -1953,8 +1953,8 @@ class TaskRouteHandler
         ));
 
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskView');
 
             if (isset($post['published'])) {
@@ -2259,7 +2259,7 @@ class TaskRouteHandler
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate');
 
             if (isset($post['title'])) {
@@ -2440,8 +2440,8 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback');
 
             if (isset($post['feedback'])) {
@@ -2544,8 +2544,8 @@ class TaskRouteHandler
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback');
 
             if (isset($post['feedback'])) {
@@ -2718,8 +2718,8 @@ class TaskRouteHandler
             UserRouteHandler::flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskReview');
 
             if (isset($post['submitReview'])) {

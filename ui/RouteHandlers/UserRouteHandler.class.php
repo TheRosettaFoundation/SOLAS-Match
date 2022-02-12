@@ -260,8 +260,8 @@ class UserRouteHandler
         $topTasksCount = 0;
 
         $filter = array();
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
@@ -488,7 +488,7 @@ class UserRouteHandler
 
         $error = null;
         if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
+            $post = $request->getParsedBody();
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
@@ -542,8 +542,8 @@ class UserRouteHandler
 
         $error = null;
         $warning = null;
-        if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail');
 
             if (!Lib\Validator::validateEmail($post['email'])) {
@@ -586,8 +586,8 @@ class UserRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
                     UserRouteHandler::flash('success', Lib\Localisation::getTranslation('email_verification_8'));
@@ -618,8 +618,8 @@ class UserRouteHandler
 
         $user_id = $reset_request->getUserId();
         $app->view()->setData("uid", $uid);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
                 if (
@@ -649,8 +649,8 @@ class UserRouteHandler
         global $app;
         $userDao = new DAO\UserDao();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
                     $email = $post['email_address'];
@@ -705,8 +705,8 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
 
         $error = null;
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['login'])) {
                 $user = null;
@@ -987,8 +987,8 @@ class UserRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'googleregister');
 
             $user_personal_info->setFirstName($post['first_name']);
@@ -1095,7 +1095,7 @@ class UserRouteHandler
             $isSiteAdmin = false;
         }
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
@@ -1793,7 +1793,7 @@ class UserRouteHandler
             $isSiteAdmin = false;
         }
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
@@ -1859,7 +1859,7 @@ class UserRouteHandler
         $extra_scripts = '';
 
         $upload_pending = 1;
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (
                 empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                 || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)
@@ -1929,8 +1929,8 @@ class UserRouteHandler
 
         $all_users = $userDao->users_new();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'users_new');
             if (!empty($post['max_user_id'])) {
                 foreach ($all_users as $user_row) {
@@ -1996,8 +1996,8 @@ class UserRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code');
 
             if (!empty($post['tracking_code'])) {
@@ -2109,8 +2109,8 @@ class UserRouteHandler
 
         $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
 
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
@@ -2490,8 +2490,8 @@ class UserRouteHandler
 
         $user = $userDao->getUser($userId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification');
 
             if (isset($post['interval'])) {
@@ -2563,8 +2563,8 @@ class UserRouteHandler
         if (!empty($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) $isSiteAdmin = true;
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        if ($isSiteAdmin && $app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($isSiteAdmin && $request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews');
             if (!empty($post['user_id'])) $taskDao->delete_review($taskId, $post['user_id']);
         }

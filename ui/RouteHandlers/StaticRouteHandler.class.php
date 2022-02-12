@@ -63,7 +63,7 @@ class StaticRouteHandler
     public function siteLanguage(Request $request, Response $response)
     {
         global $app;
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);
             }

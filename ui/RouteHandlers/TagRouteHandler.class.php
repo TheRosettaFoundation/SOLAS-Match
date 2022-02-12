@@ -45,8 +45,8 @@ class TagRouteHandler
         $name = "";
         $nameErr = null;
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['search'])) {
                 $name = $post['searchName'];
