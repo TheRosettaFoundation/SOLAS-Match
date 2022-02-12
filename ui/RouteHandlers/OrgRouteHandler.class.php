@@ -1698,8 +1698,8 @@ class OrgRouteHandler
         $start_dateError = '';
         if ($isSiteAdmin) {
             $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/start_datePicker.js\"></script>";
+            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/start_datePicker.js\"></script>";
         } else {
             $extra_scripts = '';
         }
@@ -1811,7 +1811,7 @@ class OrgRouteHandler
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_23'),
-                                $app->urlFor("user-public-profile", array("user_id" => $user_id)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $user_id)),
                                 $user_name,
                                 $org_name
                             )
@@ -1835,7 +1835,7 @@ class OrgRouteHandler
                         "success",
                         sprintf(
                             Lib\Localisation::getTranslation('org_public_profile_25'),
-                            $app->urlFor("user-public-profile", array("user_id" => $user_id)),
+                            $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $user_id)),
                             $user_name
                         )
                     );
@@ -1855,7 +1855,7 @@ class OrgRouteHandler
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_26'),
-                                $app->urlFor("user-public-profile", array("user_id" => $userId)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
                                 $userName
                             )
                         );
@@ -1864,7 +1864,7 @@ class OrgRouteHandler
                             "error",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_27'),
-                                $app->urlFor("user-public-profile", array("user_id" => $userId)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
                                 $userName
                             )
                         );
@@ -2025,7 +2025,7 @@ class OrgRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $badge = $badgeDao->getBadge($badge_id);
-        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
+        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $app->view()->setData("badge", $badge);
         $app->view()->appendData(array(
@@ -2176,7 +2176,7 @@ class OrgRouteHandler
         $claimant = $taskDao->getUserClaimedTask($taskId);
         $claimantProfile = "";
         if ($claimant != null) {
-            $claimantProfile = $app->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
+            $claimantProfile = $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
             $userName = $userDao->getUserRealName($claimant->getId());
             if (is_null($userName) || $userName == '') {
                 $userName = $claimant->getDisplayName();
@@ -2294,7 +2294,7 @@ class OrgRouteHandler
 
         $translator = $taskDao->getUserClaimedTask($taskId);
 
-        $formAction = $app->urlFor("org-task-review", array(
+        $formAction = $app->getRouteCollector()->getRouteParser()->urlFor("org-task-review", array(
                     'org_id'    => $orgId,
                     'task_id'   => $taskId
         ));
@@ -2305,7 +2305,7 @@ class OrgRouteHandler
         $extra_scripts .= "taskIds[0] = $taskId;";
         $extra_scripts .= "</script>";
         
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
@@ -2411,7 +2411,7 @@ class OrgRouteHandler
             $reviews[$taskId] = $taskReviews;
         }
 
-        $extra_scripts = "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
 
         $viewData['task'] = $task;

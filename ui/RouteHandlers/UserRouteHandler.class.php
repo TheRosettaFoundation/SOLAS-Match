@@ -353,9 +353,9 @@ class UserRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
@@ -497,7 +497,7 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor("login"));
                 } else {
                     $error = "User is not verified";
                     // notify user that they are not yet verified an resent verification email
@@ -513,7 +513,7 @@ class UserRouteHandler
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
                     UserRouteHandler::flashNow(
                         "success",
-                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
+                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
                     );
                 } else {
                     UserRouteHandler::flashNow(
@@ -715,8 +715,8 @@ class UserRouteHandler
                 } catch (Common\Exceptions\SolasMatchException $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
-                        $app->urlFor("login"),
-                        $app->urlFor("register"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
                         $e->getMessage()
                     );
                     UserRouteHandler::flashNow('error', $error);
@@ -788,7 +788,7 @@ class UserRouteHandler
                     }
                 }
 
-                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
+                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), "[$error]");
                 UserRouteHandler::flash('error', $error);
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
@@ -802,8 +802,8 @@ class UserRouteHandler
                 } catch (\Exception $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
-                        $app->urlFor("login"),
-                        $app->urlFor("register"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
                         $e->getMessage()
                     );
                     UserRouteHandler::flash('error', $error);
@@ -950,8 +950,8 @@ class UserRouteHandler
 
         $error = sprintf(
             Lib\Localisation::getTranslation('proz_error'),
-            $app->urlFor('login'),
-            $app->urlFor('register'),
+            $app->getRouteCollector()->getRouteParser()->urlFor('login'),
+            $app->getRouteCollector()->getRouteParser()->urlFor('register'),
             "[$bad_message]"
         );
         error_log($bad_message);
@@ -1307,10 +1307,10 @@ class UserRouteHandler
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>';
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile5.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile5.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
             $(".countclick").hide();
@@ -1818,8 +1818,8 @@ class UserRouteHandler
             }
         }
 
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
 
         $app->view()->appendData(array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
@@ -2289,7 +2289,7 @@ class UserRouteHandler
                             }
                             curl_close($re);
 
-                            UserRouteHandler::flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            UserRouteHandler::flashNow('success', '<a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $translation_task_id]) .
                                 '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
                         }
                     }
@@ -2317,7 +2317,7 @@ class UserRouteHandler
 
         $org_creation = Common\Lib\Settings::get("site.organisation_creation");
 
-        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
+        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
 
@@ -2573,7 +2573,7 @@ class UserRouteHandler
         $reviews = $taskDao->getTaskReviews($taskId);
 
         $extra_scripts = "";
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>" . file_get_contents(__DIR__ . "/../js/RateIt/src/jquery.rateit.min.js") . "</script>";
 
         $app->view()->appendData(array(

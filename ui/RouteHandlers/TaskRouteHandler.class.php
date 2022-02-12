@@ -437,9 +437,9 @@ class TaskRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'claimed-tasks',
@@ -577,9 +577,9 @@ class TaskRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($recentTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $recentTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'recent-tasks',
@@ -813,7 +813,7 @@ class TaskRouteHandler
         $taskMetaData = $taskDao->getTaskInfo($taskId);
 
         // Used in proofreading page, link to original project file
-        $projectFileDownload = $app->urlFor("home")."project/".$task->getProjectId()."/file";
+        $projectFileDownload = $app->getRouteCollector()->getRouteParser()->urlFor("home")."project/".$task->getProjectId()."/file";
 
 
         $app->view()->appendData(array(
@@ -1621,8 +1621,8 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -2372,8 +2372,8 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
 
         $task_word_count = $task->getWordCount();
@@ -2452,7 +2452,7 @@ class TaskRouteHandler
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('task_org_feedback_6'),
-                                $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                 $claimant->getDisplayName()
                             )
                         );
@@ -2472,9 +2472,9 @@ class TaskRouteHandler
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
-                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                         $task->getTitle(),
-                                        $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                         $claimant->getDisplayName()
                                     )
                                 );
@@ -2483,7 +2483,7 @@ class TaskRouteHandler
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
-                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                         $task->getTitle(),
                                         '',
                                         ''
@@ -2496,9 +2496,9 @@ class TaskRouteHandler
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_org_feedback_4'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle(),
-                                    $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                     $claimant->getDisplayName()
                                 )
                             );
@@ -2566,7 +2566,7 @@ class TaskRouteHandler
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_3'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle()
                                 )
                             );
@@ -2576,13 +2576,13 @@ class TaskRouteHandler
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_4'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle()
                                 )
                             );
                         }
                     } else {
-                        $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
+                        $orgProfile = $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
                         UserRouteHandler::flash(
                             "success",
                             sprintf(
@@ -2831,13 +2831,13 @@ class TaskRouteHandler
         }
         $extra_scripts .= "</script>";
 
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
+        $formAction = $app->getRouteCollector()->getRouteParser()->urlFor("task-review", array('task_id' => $taskId));
 
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,

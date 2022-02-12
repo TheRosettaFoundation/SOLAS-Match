@@ -38,9 +38,9 @@ class StaticRouteHandler
         global $app;
         $extraScripts = "
 <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
-<script type=\"application/dart\" src=\"{$app->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/dart.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+<script type=\"application/dart\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
+<script src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/build/packages/browser/dart.js\"></script>
+<script src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
         ";
         $app->view()->appendData(array(
             'extra_scripts' => $extraScripts
