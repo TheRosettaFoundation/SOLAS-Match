@@ -221,8 +221,8 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $app->view()->setData("archivedTasks", $archivedTasks);
         $template_data = array_merge($template_data, array(
+                                    'archivedTasks' => $archivedTasks,
                                     "page_no" => $page_no,
                                     "last" => $totalPages,
                                     "top" => $top,
@@ -810,9 +810,6 @@ class TaskRouteHandler
             }
         }
 
-        $app->view()->setData("convert", "false");
-
-
         $sourcelocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
         $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
@@ -829,7 +826,6 @@ class TaskRouteHandler
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
-//                    'matecat_url'   => $taskDao->get_matecat_url($task),
                     'matecat_url'   => '',
                     'allow_download'=> $taskDao->get_allow_download($task, $memsource_task),
                     'memsource_task'=> $memsource_task,
@@ -851,11 +847,11 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
 
         $task = $taskDao->getTask($task_id);
-        $app->view()->setData("task", $task);
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $template_data = array_merge($template_data, array(
+            'task' => $task,
             'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
             'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
             'memsource_task' => $memsource_task,
@@ -1627,7 +1623,6 @@ class TaskRouteHandler
     public function taskAlter(Request $request, Response $response, $args)
     {
         global $app;
-        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1692,7 +1687,7 @@ class TaskRouteHandler
         $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
         $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
-        $app->view()->setData("task", $task);
+        $template_data = ['task' => $task];
 
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();

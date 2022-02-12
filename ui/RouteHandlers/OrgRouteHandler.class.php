@@ -710,8 +710,7 @@ class OrgRouteHandler
             }
         }
         
-        $app->view()->setData("org", $org);
-        $template_data = array_merge($template_data, array("user_list" => $user_list, 'sesskey' => $sesskey));
+        $template_data = array_merge($template_data, array('org' => $org, 'user_list' => $user_list, 'sesskey' => $sesskey));
         
         UserRouteHandler::render("org/org.request_queue.tpl", $template_data, $response);
         return $response;
@@ -1989,8 +1988,8 @@ class OrgRouteHandler
         }
 
         $siteName = Common\Lib\Settings::get("site.name");
-        $app->view()->setData("current_page", "org-public-profile");
         $template_data = array_merge($template_data, array(
+                'current_page' => 'org-public-profile',
                 'sesskey' => $sesskey,
                 "org" => $org,
                 'org2' => $org2,
@@ -2040,8 +2039,8 @@ class OrgRouteHandler
         $badge = $badgeDao->getBadge($badge_id);
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-        $app->view()->setData("badge", $badge);
         $template_data = array_merge($template_data, array(
+                    'badge'         => $badge,
                     "org_id"        => $org_id,
                     "extra_scripts" =>$extra_scripts
         ));
@@ -2127,9 +2126,9 @@ class OrgRouteHandler
             }
         }
         
-        $app->view()->setData("org_id", $org_id);
         $template_data = array_merge($template_data, array(
-            'sesskey'       => $sesskey,
+            'org_id'  => $org_id,
+            'sesskey' => $sesskey,
         ));
         UserRouteHandler::render("org/org.create-badge.tpl", $template_data, $response);
         return $response;
@@ -2176,8 +2175,7 @@ class OrgRouteHandler
         $badgeDao = new DAO\BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
-        $app->view()->setData("badge", $badge);
-        $template_data = array_merge($template_data, array("org_id" => $org_id));
+        $template_data = array_merge($template_data, array('badge' => $badge, 'org_id' => $org_id));
         
         UserRouteHandler::render("org/org.edit-badge.tpl", $template_data, $response);
         return $response;

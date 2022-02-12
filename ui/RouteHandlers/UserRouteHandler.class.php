@@ -614,7 +614,6 @@ class UserRouteHandler
     public function passwordReset(Request $request, Response $response, $args)
     {
         global $app;
-        $template_data = [];
         $uid = $args['uid'];
 
         $userDao = new DAO\UserDao();
@@ -626,7 +625,7 @@ class UserRouteHandler
         }
 
         $user_id = $reset_request->getUserId();
-        $app->view()->setData("uid", $uid);
+        $template_data = ['uid' => $uid];
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -2092,7 +2091,6 @@ class UserRouteHandler
     public static function userPublicProfile(Request $request, Response $response, $args)
     {
         global $app;
-        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2107,10 +2105,10 @@ class UserRouteHandler
 
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-            $app->view()->setData('isSiteAdmin', $isSiteAdmin);
+            $template_data = ['isSiteAdmin' => $isSiteAdmin];
         } else {
             $isSiteAdmin = 0;
-            $app->view()->setData('isSiteAdmin', 0);
+            $template_data = ['isSiteAdmin' => 0];
         }
 
         $private_access = 0;
