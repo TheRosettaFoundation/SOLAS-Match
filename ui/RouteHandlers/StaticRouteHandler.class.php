@@ -67,7 +67,7 @@ class StaticRouteHandler
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);
             }
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$app->request()->getReferrer());
+            return $response->withStatus(302)->withHeader('Location', $app->request()->getReferrer());
         } else {
             $app->response()->body(Common\Lib\UserSession::getUserLanguage());
         }
