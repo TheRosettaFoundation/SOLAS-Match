@@ -416,7 +416,8 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-        $app->render('index-home.tpl');
+        UserRouteHandler::render('index-home.tpl', $template_data, $response);
+        return $response;
     }
 
     public function register(Request $request, Response $response, $args)
@@ -528,7 +529,8 @@ class UserRouteHandler
         if ($error !== null) {
             $template_data = array_merge($template_data, array("error" => $error));
         }
-        $app->render("user/register.tpl");
+        UserRouteHandler::render("user/register.tpl", $template_data, $response);
+        return $response;
     }
 
     public function changeEmail(Request $request, Response $response, $args)
@@ -572,7 +574,8 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
-        $app->render("user/change-email.tpl");
+        UserRouteHandler::render("user/change-email.tpl", $template_data, $response);
+        return $response;
     }
 
     public function emailVerification(Request $request, Response $response, $args)
@@ -604,7 +607,8 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array('uuid' => $uuid));
 
-        $app->render("user/email.verification.tpl");
+        UserRouteHandler::render("user/email.verification.tpl", $template_data, $response);
+        return $response;
     }
 
     public function passwordReset(Request $request, Response $response, $args)
@@ -646,7 +650,8 @@ class UserRouteHandler
                 UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-        $app->render("user/password-reset.tpl");
+        UserRouteHandler::render("user/password-reset.tpl", $template_data, $response);
+        return $response;
     }
 
     public function passResetRequest(Request $request, Response $response)
@@ -692,7 +697,8 @@ class UserRouteHandler
                 }
             }
         }
-        $app->render("user/user.reset-password.tpl");
+        UserRouteHandler::render("user/user.reset-password.tpl", $template_data, $response);
+        return $response;
     }
 
     public function logout(Request $request, Response $response)
@@ -877,7 +883,8 @@ class UserRouteHandler
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
 
-        $app->render("user/login.tpl");
+        UserRouteHandler::render("user/login.tpl", $template_data, $response);
+        return $response;
     }
 
     public function login_proz(Request $request, Response $response)
@@ -1031,7 +1038,8 @@ class UserRouteHandler
             </script>';
             $template_data = array_merge($template_data, array("extra_scripts" => $extra_scripts));
             $template_data = array_merge($template_data, array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
-            $app->render('user/googleregister.tpl');
+            UserRouteHandler::render('user/googleregister.tpl', $template_data, $response);
+            return $response;
         }
     }
 
@@ -1745,7 +1753,8 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        $app->render('user/user-private-profile.tpl');
+        UserRouteHandler::render('user/user-private-profile.tpl', $template_data, $response);
+        return $response;
     }
 
     public function native_languages(Request $request, Response $response, $args)
@@ -1844,7 +1853,8 @@ class UserRouteHandler
             'sesskey'           => $sesskey,
         ));
 
-        $app->render('user/user-code-of-conduct.tpl');
+        UserRouteHandler::render('user/user-code-of-conduct.tpl', $template_data, $response);
+        return $response;
     }
 
     public static function userUploads(Request $request, Response $response, $args)
@@ -1902,7 +1912,8 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        $app->render('user/user-uploads.tpl');
+        UserRouteHandler::render('user/user-uploads.tpl', $template_data, $response);
+        return $response;
     }
 
     public static function userDownload(Request $request, Response $response, $args)
@@ -1929,7 +1940,8 @@ class UserRouteHandler
         $all_users = $userDao->users_review();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('user/users_review.tpl');
+        UserRouteHandler::render('user/users_review.tpl', $template_data, $response);
+        return $response;
     }
 
     public function users_new(Request $request, Response $response)
@@ -1956,7 +1968,8 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
-        $app->render('user/users_new.tpl');
+        UserRouteHandler::render('user/users_new.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_users_new(Request $request, Response $response, $args)
@@ -2000,7 +2013,8 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('user/users_tracked.tpl');
+        UserRouteHandler::render('user/users_tracked.tpl', $template_data, $response);
+        return $response;
     }
 
     public function add_tracking_code(Request $request, Response $response)
@@ -2024,7 +2038,8 @@ class UserRouteHandler
             'sesskey'  => $sesskey,
             'referers' => $userDao->get_referers(),
         ));
-        $app->render('user/add_tracking_code.tpl');
+        UserRouteHandler::render('user/add_tracking_code.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_users_tracked(Request $request, Response $response)
@@ -2445,7 +2460,8 @@ class UserRouteHandler
             'show_create_memsource_user'      => $show_create_memsource_user,
         ));
 
-        $app->render("user/user-public-profile.tpl");
+        UserRouteHandler::render("user/user-public-profile.tpl", $template_data, $response);
+        return $response;
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
@@ -2492,7 +2508,8 @@ class UserRouteHandler
             'show_create_memsource_user' => 0,
         ));
 
-        $app->render('user/user-public-profile.tpl');
+        UserRouteHandler::render('user/user-public-profile.tpl', $template_data, $response);
+        return $response;
     }
 
     public function editTaskStreamNotification(Request $request, Response $response, $args)
@@ -2564,7 +2581,8 @@ class UserRouteHandler
             "user" => $user
         ));
 
-        $app->render("user/user.task-stream-notification-edit.tpl");
+        UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $template_data, $response);
+        return $response;
     }
 
     public function userTaskReviews(Request $request, Response $response, $args)
@@ -2602,7 +2620,8 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts
         ));
 
-        $app->render("user/user.task-reviews.tpl");
+        UserRouteHandler::render("user/user.task-reviews.tpl", $template_data, $response);
+        return $response;
     }
 
     public static function flash($key, $value)
@@ -2623,6 +2642,23 @@ class UserRouteHandler
         foreach ($flash_messages['prev'] as $key => $val) {
             $flash_messages['next'][$key] = $val;
         }
+    }
+
+    public static function render($template, $template_data, Response $response) {
+        global $flash_messages;
+
+        $smarty = new \Smarty();
+        $smarty->setTemplateDir('/repo/SOLAS-Match/v4/templating/templates');
+        $smarty->setCompileDir('/repo/SOLAS-Match/v4/templating/templates_compiled');
+        $smarty->setCacheDir('/repo/SOLAS-Match/v4/templating/cache');
+        $smarty->registerClass('UserSession', '\SolasMatch\Common\Lib\UserSession');
+        $smarty->registerClass('TemplateHelper', '\SolasMatch\UI\Lib\TemplateHelper');
+
+        foreach ($template_data as $key => $item) $smarty->assign($key, $item);
+
+        $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
+
+        $response->getBody()->write($smarty->fetch($template));
     }
 }
 

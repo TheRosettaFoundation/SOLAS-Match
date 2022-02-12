@@ -452,7 +452,8 @@ class AdminRouteHandler
                     "extra_scripts" => $extra_scripts
         ));
 
-        $app->render("admin/site-admin.dashboard.tpl");
+        UserRouteHandler::render("admin/site-admin.dashboard.tpl", $template_data, $response);
+        return $response;
     }
 
     public function all_users(Request $request, Response $response)
@@ -464,7 +465,8 @@ class AdminRouteHandler
         $all_users = $statsDao->getUsers();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/all_users.tpl');
+        UserRouteHandler::render('admin/all_users.tpl', $template_data, $response);
+        return $response;
     }
 
     public function all_users_plain(Request $request, Response $response)
@@ -476,7 +478,8 @@ class AdminRouteHandler
         $all_users = $statsDao->getUsers();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/all_users_plain.tpl');
+        UserRouteHandler::render('admin/all_users_plain.tpl', $template_data, $response);
+        return $response;
     }
 
     public function active_now(Request $request, Response $response)
@@ -488,7 +491,8 @@ class AdminRouteHandler
         $all_users = $statsDao->active_now();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/active_now.tpl');
+        UserRouteHandler::render('admin/active_now.tpl', $template_data, $response);
+        return $response;
     }
 
     public function active_now_matecat(Request $request, Response $response)
@@ -500,7 +504,8 @@ class AdminRouteHandler
         $all_users = $statsDao->active_now_matecat();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/active_now_matecat.tpl');
+        UserRouteHandler::render('admin/active_now_matecat.tpl', $template_data, $response);
+        return $response;
     }
 
     public function testing_center(Request $request, Response $response)
@@ -512,7 +517,8 @@ class AdminRouteHandler
         $all_users = $statsDao->testing_center();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/testing_center.tpl');
+        UserRouteHandler::render('admin/testing_center.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_testing_center(Request $request, Response $response)
@@ -560,7 +566,8 @@ class AdminRouteHandler
         $all_users = $statsDao->late_matecat();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/late_matecat.tpl');
+        UserRouteHandler::render('admin/late_matecat.tpl', $template_data, $response);
+        return $response;
     }
 
     public function complete_matecat(Request $request, Response $response)
@@ -572,7 +579,8 @@ class AdminRouteHandler
         $all_users = $statsDao->complete_matecat();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/complete_matecat.tpl');
+        UserRouteHandler::render('admin/complete_matecat.tpl', $template_data, $response);
+        return $response;
     }
 
     public function user_task_reviews(Request $request, Response $response)
@@ -584,7 +592,8 @@ class AdminRouteHandler
         $all_users = $statsDao->user_task_reviews();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/user_task_reviews.tpl');
+        UserRouteHandler::render('admin/user_task_reviews.tpl', $template_data, $response);
+        return $response;
     }
 
     public function submitted_task_reviews(Request $request, Response $response, $args)
@@ -596,7 +605,8 @@ class AdminRouteHandler
         $all_users = $statsDao->submitted_task_reviews();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/submitted_task_reviews.tpl');
+        UserRouteHandler::render('admin/submitted_task_reviews.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_submitted_task_reviews(Request $request, Response $response)
@@ -669,7 +679,8 @@ class AdminRouteHandler
         $all_users = $statsDao->tasks_no_reviews();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/tasks_no_reviews.tpl');
+        UserRouteHandler::render('admin/tasks_no_reviews.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_tasks_no_reviews(Request $request, Response $response)
@@ -705,7 +716,8 @@ class AdminRouteHandler
         $all_users = $statsDao->project_source_file_scores();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/project_source_file_scores.tpl');
+        UserRouteHandler::render('admin/project_source_file_scores.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_project_source_file_scores(Request $request, Response $response)
@@ -762,7 +774,8 @@ class AdminRouteHandler
         }
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/first_completed_task.tpl');
+        UserRouteHandler::render('admin/first_completed_task.tpl', $template_data, $response);
+        return $response;
     }
 
     public function active_users(Request $request, Response $response)
@@ -774,7 +787,8 @@ class AdminRouteHandler
         $all_users = $statsDao->active_users();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/active_users.tpl');
+        UserRouteHandler::render('admin/active_users.tpl', $template_data, $response);
+        return $response;
     }
 
     public function active_users_unique(Request $request, Response $response)
@@ -790,7 +804,8 @@ class AdminRouteHandler
         }
 
         $template_data = array_merge($template_data, array('all_users' => $all_users_unique));
-        $app->render('admin/active_users_unique.tpl');
+        UserRouteHandler::render('admin/active_users_unique.tpl', $template_data, $response);
+        return $response;
     }
 
     public function unclaimed_tasks(Request $request, Response $response)
@@ -802,7 +817,8 @@ class AdminRouteHandler
         $all_users = $statsDao->unclaimed_tasks();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/unclaimed_tasks.tpl');
+        UserRouteHandler::render('admin/unclaimed_tasks.tpl', $template_data, $response);
+        return $response;
     }
 
     public function search_users_by_language_pair(Request $request, Response $response)
@@ -823,7 +839,8 @@ class AdminRouteHandler
             }
         }
 
-        $app->render('admin/search_users_by_language_pair.tpl');
+        UserRouteHandler::render('admin/search_users_by_language_pair.tpl', $template_data, $response);
+        return $response;
     }
 
     public function user_languages(Request $request, Response $response, $args)
@@ -838,7 +855,8 @@ class AdminRouteHandler
         $all_users = $statsDao->user_languages($code);
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/user_languages.tpl');
+        UserRouteHandler::render('admin/user_languages.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_user_languages(Request $request, Response $response)
@@ -874,7 +892,8 @@ class AdminRouteHandler
         $all_users = $statsDao->user_task_languages($code);
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/user_task_languages.tpl');
+        UserRouteHandler::render('admin/user_task_languages.tpl', $template_data, $response);
+        return $response;
     }
 
     public function user_words_by_language(Request $request, Response $response)
@@ -886,7 +905,8 @@ class AdminRouteHandler
         $all_users = $statsDao->user_words_by_language();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/user_words_by_language.tpl');
+        UserRouteHandler::render('admin/user_words_by_language.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_user_words_by_language(Request $request, Response $response)
@@ -1325,7 +1345,8 @@ class AdminRouteHandler
         }
 
         $template_data = array_merge($template_data, array('words' => $words, 'years' => $years));
-        $app->render('admin/language_work_requested.tpl');
+        UserRouteHandler::render('admin/language_work_requested.tpl', $template_data, $response);
+        return $response;
 
     }
 
@@ -1409,7 +1430,8 @@ class AdminRouteHandler
         }
 
         $template_data = array_merge($template_data, array('totals' => $totals, 'breakdown' => $breakdown));
-        $app->render('admin/translators_for_language_pairs.tpl');
+        UserRouteHandler::render('admin/translators_for_language_pairs.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_translators_for_language_pairs(Request $request, Response $response)
@@ -1458,7 +1480,8 @@ class AdminRouteHandler
         $all_users = $statsDao->matecat_analyse_status();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/matecat_analyse_status.tpl');
+        UserRouteHandler::render('admin/matecat_analyse_status.tpl', $template_data, $response);
+        return $response;
     }
 
     public function list_memsource_projects(Request $request, Response $response)
@@ -1470,7 +1493,8 @@ class AdminRouteHandler
         $all_users = $statsDao->list_memsource_projects();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        $app->render('admin/list_memsource_projects.tpl');
+        UserRouteHandler::render('admin/list_memsource_projects.tpl', $template_data, $response);
+        return $response;
     }
 
     public function download_covid_projects(Request $request, Response $response)

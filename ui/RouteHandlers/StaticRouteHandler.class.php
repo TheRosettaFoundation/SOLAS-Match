@@ -46,19 +46,20 @@ class StaticRouteHandler
         $template_data = array_merge($template_data, array(
             'extra_scripts' => $extraScripts
         ));
-        $app->render("static/statistics.tpl");
+        UserRouteHandler::render("static/statistics.tpl", $template_data, $response);
+        return $response;
     }
 
     public function privacy(Request $request, Response $response)
     {
-         global $app;
-         $app->render("static/privacy.tpl");
+        UserRouteHandler::render("static/privacy.tpl", [], $response);
+        return $response;
     }
     
     public function terms(Request $request, Response $response)
     {
-         global $app;
-         $app->render("static/terms.tpl");
+        UserRouteHandler::render("static/terms.tpl", [], $response);
+        return $response;
     }
     
     public function siteLanguage(Request $request, Response $response)

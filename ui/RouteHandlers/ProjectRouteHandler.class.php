@@ -1132,8 +1132,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'project' => $project,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
-                //'allow_downloads'     => $allow_downloads,
-        $app->render("project/project.view.tpl");
+
+        UserRouteHandler::render("project/project.view.tpl", $template_data, $response);
+        return $response;
     }
 
     private function addChunkTask(
@@ -1462,7 +1463,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'sesskey'        => $sesskey,
         ));
 
-        $app->render("project/project.alter.tpl");
+        UserRouteHandler::render("project/project.alter.tpl", $template_data, $response);
+        return $response;
     }
 
     public function projectCreate(Request $request, Response $response, $args)
@@ -1932,7 +1934,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
         ));
-        $app->render("project/project.create.tpl");
+        UserRouteHandler::render("project/project.create.tpl", $template_data, $response);
+        return $response;
     }
 
     private function addProjectTask(
@@ -2100,7 +2103,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "project_id" => $project_id
         ));
 
-        $app->render("project/project.created.tpl");
+        UserRouteHandler::render("project/project.created.tpl", $template_data, $response);
+        return $response;
     }
 
     public function archiveProject(Request $request, Response $response, $args)
