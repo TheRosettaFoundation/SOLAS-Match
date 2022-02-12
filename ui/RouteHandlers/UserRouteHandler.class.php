@@ -1875,7 +1875,7 @@ class UserRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return;
+        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return $response;
 
         $user = $userDao->getUser($user_id);
 
