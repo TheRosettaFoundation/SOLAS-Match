@@ -2660,6 +2660,7 @@ class UserRouteHandler
         $smarty->setCacheDir('/repo/SOLAS-Match/v4/templating/cache');
         $smarty->registerClass('UserSession', '\SolasMatch\Common\Lib\UserSession');
         $smarty->registerClass('TemplateHelper', '\SolasMatch\UI\Lib\TemplateHelper');
+        $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
 
@@ -2673,3 +2674,22 @@ $route_handler = new UserRouteHandler();
 $route_handler->init();
 unset($route_handler);
 
+function smarty_function_urlFor($params, $template)
+{
+    global $app;
+
+    $name = isset($params['name']) ? $params['name'] : '';
+
+    if (isset($params['options'])) {
+        $options = explode('|', $params['options']);
+        $options_array = [];
+        foreach ($options as $option) {
+            list($key, $value) = explode('.', $option);
+            $options_array[$key] = $value;
+        }
+        $url = $app->getRouteCollector()->getRouteParser()->urlFor($name, $options_array);
+    } else {
+        $url = $app->getRouteCollector()->getRouteParser()->urlFor($name);
+    }
+    return $url;
+}
