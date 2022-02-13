@@ -35,7 +35,6 @@ class TagRouteHandler
 
     public function tagsList(Request $request, Response $response)
     {
-        global $app;
         $template_data = [];
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
@@ -82,7 +81,6 @@ class TagRouteHandler
 
     public function tagSubscribe(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $id = $args['id'];
         $subscribe = $args['subscribe'];
@@ -126,12 +124,11 @@ class TagRouteHandler
             }
         }
         
-        $app->response()->redirect($app->request()->getReferer());
+        return $response->withStatus(302)->withHeader('Location', $request->getUri());
     }
 
     public function tagDetails(Request $request, Response $response, $args)
     {
-        global $app;
         $id = $args['id'];
 
         $tagDao = new DAO\TagDao();
