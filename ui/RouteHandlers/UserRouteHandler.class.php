@@ -549,7 +549,7 @@ class UserRouteHandler
         $warning = null;
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');

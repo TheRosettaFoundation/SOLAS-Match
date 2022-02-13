@@ -157,14 +157,15 @@ class UserSession
 
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_error_partial_upload')); // This is most likely reason: FILE UPLOAD error => 3, The uploaded file was only partially uploaded
             if ($is_a_post) {
-                $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
+                return $_SERVER['REQUEST_URI']; // Will be a GET
             }
             else {
-                $app->redirect($app->urlFor('home'));
+                return $app->getRouteCollector()->getRouteParser()->urlFor('home');
             }
 
 //            throw new \Exception("CSRF attempt identified!: $location");
         }
+        return 0;
     }
 
     /**
