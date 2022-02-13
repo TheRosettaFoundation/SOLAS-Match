@@ -634,9 +634,8 @@ class UserRouteHandler
                     isset($post['confirmation_password']) &&
                     $post['confirmation_password'] == $post['new_password']
                 ) {
-
-                    $response = $userDao->resetPassword($post['new_password'], $uid);
-                    if ($response) {
+                    $response_dao = $userDao->resetPassword($post['new_password'], $uid);
+                    if ($response_dao) {
                         UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                     } else {
@@ -679,15 +678,13 @@ class UserRouteHandler
                             );
                         }
                     } else {
-                        //get request time
-                        $response = $userDao->getPasswordResetRequestTime($email);
-                        if ($response != null) {
+                        $response_dao = $userDao->getPasswordResetRequestTime($email);
+                        if ($response_dao != null) {
                             UserRouteHandler::flashNow(
                                 "info",
                                 Lib\Localisation::getTranslation('user_reset_password_3'),
-                                $response
+                                $response_dao
                             );
-                            //Send request
                             $userDao->requestPasswordReset($email);
                         }
                     }

@@ -1262,9 +1262,9 @@ class TaskRouteHandler
                 $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
                 $siteApi = Common\Lib\Settings::get("site.api");
                 $filename = urlencode($_FILES[$fieldName]["name"]);
-                $request = $siteApi."v0/io/contentMime/$filename";
+                $request_url = $siteApi . "v0/io/contentMime/$filename";
                 $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::POST, null, null, $data);
+                $fileUploadMime = $helper->call(null, $request_url, Common\Enums\HttpMethodEnum::POST, null, null, $data);
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
@@ -1996,15 +1996,15 @@ class TaskRouteHandler
 
             if (isset($post['track'])) {
                 if ($post['track'] == "Ignore") {
-                    $response = $userDao->untrackTask($user_id, $task->getId());
-                    if ($response) {
+                    $response_dao = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response_dao) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
                         UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $task->getId());
-                    if ($response) {
+                    $response_dao = $userDao->trackTask($user_id, $task->getId());
+                    if ($response_dao) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
                         UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_11'));

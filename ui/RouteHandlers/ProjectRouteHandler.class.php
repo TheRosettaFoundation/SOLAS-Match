@@ -686,8 +686,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!$post['trackTask']) {
-                    $response = $userDao->untrackTask($user_id, $task->getId());
-                    if ($response) {
+                    $response_dao = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response_dao) {
                         UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('project_view_11'), $task_title)
@@ -699,8 +699,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         );
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $post['task_id']);
-                    if ($response) {
+                    $response_dao = $userDao->trackTask($user_id, $post['task_id']);
+                    if ($response_dao) {
                         UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('project_view_13'), $task_title)
@@ -1057,8 +1057,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
                     $task_id = $task->getId();
                     $metaData = array();
-                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                    if ($response == 1) {
+                    $response_dao = $userDao->isSubscribedToTask($user_id, $task_id);
+                    if ($response_dao == 1) {
                         $metaData['tracking'] = true;
                         $userSubscribedToProject = 1; // For self service projects, $userSubscribedToProject will not have been set (other projects are not initially tracked for creator)
                     } else {
