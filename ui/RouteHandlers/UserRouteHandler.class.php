@@ -2658,8 +2658,14 @@ class UserRouteHandler
         $smarty->setTemplateDir('/repo/SOLAS-Match/v4/templating/templates');
         $smarty->setCompileDir('/repo/SOLAS-Match/v4/templating/templates_compiled');
         $smarty->setCacheDir('/repo/SOLAS-Match/v4/templating/cache');
-        $smarty->registerClass('UserSession', '\SolasMatch\Common\Lib\UserSession');
-        $smarty->registerClass('TemplateHelper', '\SolasMatch\UI\Lib\TemplateHelper');
+        $smarty->registerClass('Settings',                 '\SolasMatch\Common\Lib\Settings');
+        $smarty->registerClass('UserSession',              '\SolasMatch\Common\Lib\UserSession');
+        $smarty->registerClass('TemplateHelper',           '\SolasMatch\UI\Lib\TemplateHelper');
+        $smarty->registerClass('Localisation',             '\SolasMatch\UI\Lib\Localisation');
+        $smarty->registerClass('TaskTypeEnum',             '\SolasMatch\Common\Enums\TaskTypeEnum');
+        $smarty->registerClass('TaskStatusEnum',           '\SolasMatch\Common\Enums\TaskStatusEnum');
+        $smarty->registerClass('NotificationIntervalEnum', '\SolasMatch\Common\Enums\NotificationIntervalEnum');
+        $smarty->registerClass('BanTypeEnum',              '\SolasMatch\Common\Enums\BanTypeEnum');
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
