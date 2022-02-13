@@ -275,7 +275,7 @@ class AdminRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         if ($post = $request->getParsedBody()) {
-            Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
@@ -813,7 +813,7 @@ class AdminRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if (!empty($_POST['search_users_language_pair'])) {
-            Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $source_target = explode('-', $_POST['search_users_language_pair']);
             if (!empty($source_target) && count($source_target) == 2) {

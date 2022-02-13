@@ -89,7 +89,7 @@ class TagRouteHandler
         $tagDao = new DAO\TagDao();
         $userDao = new DAO\UserDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'tagSubscribe');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'tagSubscribe')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
         $tag = $tagDao->getTag($id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();

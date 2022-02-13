@@ -643,7 +643,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $reload_for_wordcount = 0;
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'projectView');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $task = null;
             if (isset($post['task_id'])) {
@@ -2115,7 +2115,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $projectDao = new DAO\ProjectDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
         $project = $projectDao->getProject($project_id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();

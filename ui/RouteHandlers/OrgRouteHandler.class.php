@@ -441,7 +441,7 @@ class OrgRouteHandler
         
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['track'])) {
                 $project_id = $post['project_id'];
@@ -645,7 +645,7 @@ class OrgRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -1745,7 +1745,7 @@ class OrgRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
                    
             if (isset($post['deleteBadge'])) {
                 $badgeDao->deleteBadge($post['badge_id']);
@@ -2043,7 +2043,7 @@ class OrgRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if (isset($post['email']) && $post['email'] != "") {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -2106,7 +2106,7 @@ class OrgRouteHandler
 
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if ($post['title'] == "" || $post['description'] == "") {
                 UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
@@ -2232,7 +2232,7 @@ class OrgRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['submitReview'])) {
                 $review = new Common\Protobufs\Models\TaskReview();

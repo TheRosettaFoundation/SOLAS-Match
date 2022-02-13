@@ -1002,7 +1002,7 @@ class UserRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'googleregister');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'googleregister')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $user_personal_info->setFirstName($post['first_name']);
             $user_personal_info->setLastName($post['last_name']);
@@ -1963,7 +1963,7 @@ class UserRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'users_new');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'users_new')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if (!empty($post['max_user_id'])) {
                 foreach ($all_users as $user_row) {
                     if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
@@ -2034,7 +2034,7 @@ class UserRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!empty($post['tracking_code'])) {
                 $url = $userDao->record_referer($post['tracking_code']);
@@ -2148,7 +2148,7 @@ class UserRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
@@ -2532,7 +2532,7 @@ class UserRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['interval'])) {
                 $success = false;
@@ -2607,7 +2607,7 @@ class UserRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         if ($isSiteAdmin && $request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if (!empty($post['user_id'])) $taskDao->delete_review($taskId, $post['user_id']);
         }
 

@@ -794,7 +794,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $user_id = Common\Lib\UserSession::getCurrentUserID();
 
@@ -920,7 +920,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'task');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'task')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_id=$project->getOrganisationId();
@@ -1192,7 +1192,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
           $post = $request->getParsedBody();
-          Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
+          if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
           if (!empty($post['copy_from_matecat'])) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
@@ -1472,7 +1472,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!empty($post['copy_from_matecat'])) {
                 error_log("Setting Task COMPLETE for: $taskId");
@@ -1688,7 +1688,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
@@ -1970,7 +1970,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskView');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['published'])) {
                 if ($post['published']) {
@@ -2220,7 +2220,7 @@ class TaskRouteHandler
 
         $taskDao = new DAO\TaskDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
         $user_ids = (string)$request->getBody();
         $insert = '';
@@ -2277,7 +2277,7 @@ class TaskRouteHandler
         $task->setProjectId($project_id);
 
         if ($post = $request->getParsedBody()) {
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['title'])) {
                 $task->setTitle(mb_substr($post['title'], 0, 128));
@@ -2462,7 +2462,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != "") {
@@ -2568,7 +2568,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != '') {
@@ -2744,7 +2744,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskReview');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskReview')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['submitReview'])) {
                 $i = 0;
