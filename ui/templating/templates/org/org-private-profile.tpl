@@ -1,6 +1,5 @@
 {include file='header.tpl'}
 
-{if isset($org)}
     <div class='page-header'><h1>
     {if $org->getName() != ''}
         {$org->getName()}
@@ -14,9 +13,6 @@
             </a>
         </h1>
     </div>
-{else}
-    header({urlFor name='home'});
-{/if}
 
 {include file="handle-flash-messages.tpl"}
 
