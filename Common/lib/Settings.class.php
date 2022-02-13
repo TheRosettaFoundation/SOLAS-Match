@@ -29,9 +29,4 @@ class Settings
         }
         return $settings;
     }
-
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('Settings', __NAMESPACE__.'\Settings');
-    }
 }

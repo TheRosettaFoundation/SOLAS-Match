@@ -9,9 +9,4 @@ class BanTypeEnum
     const MONTH      = 3;
     const PERMANENT  = 4;
     const HOUR       = 5;
-
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('BanTypeEnum', __NAMESPACE__.'\BanTypeEnum');
-    }
 }

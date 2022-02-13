@@ -54,7 +54,7 @@ class UserSession
     
     public static function setReferer($ref)
     {
-        $_SESSION['ref'] = $ref;
+        $_SESSION['ref'] = (string)$ref;
     }
 
     public static function getReferer()
@@ -94,11 +94,6 @@ class UserSession
         }
     }
 
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('UserSession', __NAMESPACE__.'\UserSession');
-    }
-
     /**
      * Get Key for using in Form Posts and subsequent (when POST recieved) security check against CSRF.
      *
@@ -119,6 +114,8 @@ class UserSession
      * @return void, will error_log() and redirect if test fails.
      */
     public static function checkCSRFKey($post, $location) {
+        global $app;
+
         $is_a_post = false;
 
         if (is_array($post)) {
@@ -158,8 +155,7 @@ class UserSession
 
             error_log($_SERVER['REQUEST_URI']);
 
-            $app = \Slim\Slim::getInstance();
-            $app->flash('error', Lib\Localisation::getTranslation('common_error_partial_upload')); // This is most likely reason: FILE UPLOAD error => 3, The uploaded file was only partially uploaded
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_error_partial_upload')); // This is most likely reason: FILE UPLOAD error => 3, The uploaded file was only partially uploaded
             if ($is_a_post) {
                 $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
             }

@@ -524,9 +524,4 @@ class TemplateHelper
         }
         return $string;
     }
-
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('TemplateHelper', __NAMESPACE__.'\TemplateHelper');
-    }
 }
