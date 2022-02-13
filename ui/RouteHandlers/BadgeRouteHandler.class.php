@@ -23,7 +23,6 @@ class BadgeRouteHandler
 
     public function badgeList(Request $request, Response $response)
     {
-        global $app;
         $template_data = [];
 
         $org_list = array();
