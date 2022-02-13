@@ -177,7 +177,6 @@ class TaskRouteHandler
 
     public function archivedTasks(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $page_no = $args['page_no'];
 
@@ -663,7 +662,6 @@ class TaskRouteHandler
 
     public function archiveTask(Request $request, Response $response, $args)
     {
-        global $app;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -838,7 +836,6 @@ class TaskRouteHandler
 
     public function taskClaimed(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $task_id = $args['task_id'];
 
@@ -1572,7 +1569,6 @@ class TaskRouteHandler
 
     public function taskUploaded(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $task_id = $args['task_id'];
 
@@ -1597,7 +1593,6 @@ class TaskRouteHandler
 
     public function taskChunkCompleted(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $task_id = $args['task_id'];
 
@@ -2113,7 +2108,6 @@ class TaskRouteHandler
 
     public function task_search_translators(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $task_id = $args['task_id'];
 
@@ -2424,7 +2418,6 @@ class TaskRouteHandler
 
     public function taskCreated(Request $request, Response $response, $args)
     {
-        global $app;
         $template_data = [];
         $taskId = $args['task_id'];
 
