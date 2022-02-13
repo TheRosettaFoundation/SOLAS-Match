@@ -846,25 +846,28 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function requestAuthCode($email)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $redirectUri = 'https://';
         } else {
             $redirectUri = 'http://';
         }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
 
         $request = "{$this->siteApi}v0/users/$email/auth/code/?".
             'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             "redirect_uri=$redirectUri&".
             'response_type=code';
-        $app->redirect($request);
+
+        return $request;
     }
     
     public function loginWithAuthCode($authCode)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+
         $request = "{$this->siteApi}v0/users/authCode/login";
 
         $redirectUri = '';
@@ -873,7 +876,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         } else {
             $redirectUri = 'http://';
         }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
 
         $postArgs = 'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             'client_secret='.Common\Lib\Settings::get('oauth.client_secret').'&'.

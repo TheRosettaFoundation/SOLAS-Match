@@ -790,7 +790,7 @@ class UserRouteHandler
                             $email = $payload['email'];
                             if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
                             error_log("Google Sign-In, Login: $email");
-                            $userDao->requestAuthCode($email); // Does a redirect
+                            return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                         }
                     } else {
                         $error = 'Invalid ID token';
@@ -940,9 +940,8 @@ class UserRouteHandler
 
                     if (!empty($response_data->email)) {
                         error_log("ProZ SSO, Login: {$response_data->email}");
-                        $userDao->requestAuthCode($response_data->email);
-                        // This does not return,
-                        // it redirects to API /v0/users/$email/auth/code
+                        return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($response_data->email));
+                        // Redirects to API /v0/users/$email/auth/code
                         // which starts "normal" Trommons authorization process
                         // (and may register a user if the email is new),
                         // which then redirects to /login URL with a different Trommons 'code',
