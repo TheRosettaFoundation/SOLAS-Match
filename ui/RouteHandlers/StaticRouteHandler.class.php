@@ -64,32 +64,31 @@ class StaticRouteHandler
     
     public function siteLanguage(Request $request, Response $response)
     {
-        global $app;
         if ($post = $request->getParsedBody()) {
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);
             }
             return $response->withStatus(302)->withHeader('Location', $request->getUri());
         } else {
-            $app->response()->body(Common\Lib\UserSession::getUserLanguage());
+            $response->getBody()->write(Common\Lib\UserSession::getUserLanguage());
         }
     }
 
     public function getUserHash(Request $request, Response $response)
     {
         if (!is_null(Common\Lib\UserSession::getAccessToken())) {
-            \Slim\Slim::getInstance()->response()->body(Common\Lib\UserSession::getAccessToken()->getToken());
+            $response->getBody()->write(Common\Lib\UserSession::getAccessToken()->getToken());
         }
     }
     
     public function getDefaultStrings(Request $request, Response $response)
     {
-        \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getDefaultStrings());
+        $response->getBody()->write(Lib\Localisation::getDefaultStrings());
     }
 
     public function getUserStrings(Request $request, Response $response)
     {
-        \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getUserStrings());
+        $response->getBody()->write(Lib\Localisation::getUserStrings());
     }
 }
 
