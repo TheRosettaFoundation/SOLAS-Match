@@ -725,9 +725,10 @@ class TaskRouteHandler
             if (!empty($headerArr)) {
                 $headerArr = unserialize($headerArr);
                 foreach ($headerArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
                 "error",
@@ -878,9 +879,10 @@ class TaskRouteHandler
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
             foreach ($headerArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+                $response->withHeader($key, $val);
             }
         }
+        return $response;
     }
 
     public function task(Request $request, Response $response, $args)
@@ -2213,7 +2215,6 @@ class TaskRouteHandler
 
     public function task_invites_sent(Request $request, Response $response, $args)
     {
-        global $app;
         $task_id = $args['task_id'];
         $sesskey = $args['sesskey'];
 
@@ -2221,7 +2222,7 @@ class TaskRouteHandler
 
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
 
-        $user_ids = $app->request()->getBody();
+        $user_ids = (string)$request->getBody();
         $insert = '';
         $comma = '';
         if (!empty($user_ids)) {
