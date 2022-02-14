@@ -188,7 +188,7 @@ class Middleware
 
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos($app->request()->getPathInfo(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
-            $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
@@ -240,7 +240,7 @@ class Middleware
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
 //error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
-                $app->flash('error', Localisation::getTranslation('common_error_already_claimed'));
+                \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 $app->redirect($app->urlFor('home'));
             }
         }
@@ -248,6 +248,8 @@ class Middleware
 
     public function authUserForOrg(\Slim\Route $route;;;;;;;   Request $request, RequestHandler $handler)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -281,6 +283,8 @@ class Middleware
 
     public function authUserForOrgTask(\Slim\Route $route;;;;;;;;;; Request $request, RequestHandler $handler)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -317,6 +321,8 @@ class Middleware
 
     public function authUserForOrgProject(\Slim\Route $route;;;;;;;;;;;;;   Request $request, RequestHandler $handler)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -346,6 +352,8 @@ class Middleware
 
     public function authUserForProjectImage(\Slim\Route $route;;;;;;;;; Request $request, RequestHandler $handler)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -369,6 +377,8 @@ class Middleware
 
     public function authUserForTaskDownload(\Slim\Route $route;;;;;;;;;;;; Request $request, RequestHandler $handler)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -412,7 +422,7 @@ class Middleware
         $adminDao = new DAO\AdminDao();
         if ($adminDao->isUserBanned(Common\Lib\UserSession::getCurrentUserID())) {
             Common\Lib\UserSession::destroySession();
-            $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
         }
     }
@@ -449,7 +459,7 @@ class Middleware
                         //An admin has previously revoked this task from the user.
                         $message = Localisation::getTranslation('common_error_cannot_reclaim_admin_revoked');
                     }
-                    $app->flash(
+                    \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash(
                         'error',
                         sprintf(
                             $message,
