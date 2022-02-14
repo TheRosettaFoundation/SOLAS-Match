@@ -495,7 +495,7 @@ class Middleware
                         'error',
                         sprintf(
                             $message,
-                            $app->getRouteCollector()->getRouteParser()->urlFor("task-claimed", array("task_id" => $taskId)),
+                            (string)$app->getRouteCollector()->getRouteParser()->urlFor("task-claimed", array("task_id" => $taskId)),
                             $task->getTitle()
                         )
                     );
