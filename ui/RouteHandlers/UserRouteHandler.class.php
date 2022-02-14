@@ -2382,6 +2382,13 @@ class UserRouteHandler
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
             $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+            $volunteer_id = urlencode(base64_encode("$encrypted::$iv")); 
+
+            //$badges = 'https://dev2.translatorswb.org/badge.php?volunteer_id=aXFxMjJmUmdyTFQvWVVjZ0NOWHA4dz09OjrJZ8k%2F5Utc99BmuYAHzf8z';
+            $user_badges = $userDao->getbadges($user_id);
+
+           // echo '<pre>',print_r($user_badges,1),'</pre>';die;
+            
 
         }
 
@@ -2400,6 +2407,7 @@ class UserRouteHandler
         $app->view()->appendData(array(
             'certificate'            => $certificate,
             'recognition'            => $recognition,
+            'user_badges'                 => $user_badges,
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'key'                    => $key,
             'private_access'         => $private_access,

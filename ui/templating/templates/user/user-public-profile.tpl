@@ -275,7 +275,8 @@ alert('You have already requested to take a test in order to become a Kató Veri
         <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                    <tbody align="left" width="48%">
+                    <tbody align="left" width="48%"> 
+                     
                         {if !empty($certificate)}
                         <tr>
                             <td>
@@ -412,18 +413,22 @@ alert('You have already requested to take a test in order to become a Kató Veri
             </div>
         </td>
 
-        <td style="width: 4%" />
+        <td style="width: 4%"> </td>
         <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                    <tbody align="left" width="48%">
-                        {if !empty($recognition)}
+                    <tbody align="left" width="48%"> 
+                    {if !empty($user_badges['recognition_points'])}  
                         <tr>
-                            <td>
-                                <img src="{$recognition}" width="50%" />
-                            </td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
+                                <h5 class="recognition_points">{$user_badges['recognition_points']}<br/> RECOGNITION POINTS</h5>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="50%" />
+                        </div>
                         </tr>
-                        {/if}
+                          {/if}        
                     </tbody>
                 </table>
             </div>
@@ -463,7 +468,30 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
             </div>
         </td>
 
-        <td style="width: 40%"></td>
+      
+        <td style="width: 4%"> </td>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                      {if !empty($user_badges['recognition_points'])}
+                        <tr>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="name">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
+                                <p class="recognition_points">{$user_badges['recognition_points']} RECOGNITION POINTS <br/> of which <br/>
+                                {$user_badges['strategic_points']} POINTS <br/>
+                                IN STRATEGIC LANGUAGES
+                                </p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="75%" />
+                        </div>
+                        </tr>
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+        </td>
     </tr>
 </table>
 {/if}
