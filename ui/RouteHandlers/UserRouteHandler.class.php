@@ -614,6 +614,7 @@ class UserRouteHandler
     public function passwordReset(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $uid = $args['uid'];
 
         $userDao = new DAO\UserDao();
@@ -625,7 +626,7 @@ class UserRouteHandler
         }
 
         $user_id = $reset_request->getUserId();
-        $template_data = ['uid' => $uid];
+        $template_data = array_merge($template_data, ['uid' => $uid]);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -2099,6 +2100,7 @@ class UserRouteHandler
     public static function userPublicProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2113,10 +2115,10 @@ class UserRouteHandler
 
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-            $template_data = ['isSiteAdmin' => $isSiteAdmin];
+            $template_data = array_merge($template_data, ['isSiteAdmin' => $isSiteAdmin]);
         } else {
             $isSiteAdmin = 0;
-            $template_data = ['isSiteAdmin' => 0];
+            $template_data = array_merge($template_data, ['isSiteAdmin' => 0]);
         }
 
         $private_access = 0;
@@ -2650,8 +2652,8 @@ class UserRouteHandler
         }
     }
 
-    public static function render($template, $template_data, Response $response) {
-        global $flash_messages;
+    public static function render($template, Response $response) {
+        global $template_data, $flash_messages;
 
         $smarty = new \Smarty();
         $smarty->setTemplateDir('/repo/SOLAS-Match/v4/templating/templates');
