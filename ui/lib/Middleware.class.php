@@ -125,9 +125,7 @@ class Middleware
         }
         $template_data = array_merge($template_data, ['locs' => Lib\Localisation::loadTranslationFiles()]);
 
-        $response = $handler->handle($request);
-
-        return $response;
+        return $handler->handle($request);
     }
 
     public function Flash(Request $request, RequestHandler $handler)
@@ -174,12 +172,10 @@ class Middleware
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
-        $response = $handler->handle($request);
-
-        return $response;
+        return $handler->handle($request);
     }
 
-    public function authUserIsLoggedInNoProfile()
+    public function authUserIsLoggedInNoProfile(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -196,14 +192,7 @@ class Middleware
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
-        return true;
-    }
-    
-    public static function notFound()
-    {
-        global $app;
-        $app->flash('error', Localisation::getTranslation('common_error_not_exist'));
-        $app->redirect($app->urlFor('home'));
+        return $handler->handle($request);
     }
     
     public function isSiteAdmin()
@@ -216,12 +205,12 @@ class Middleware
         return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
     }
 
-    public function authIsSiteAdmin()
+    public function authIsSiteAdmin(Request $request, RequestHandler $handler)
     {
         global $app;
 
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -230,12 +219,12 @@ class Middleware
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
     }
 
-    public function authenticateUserForTask(\Slim\Route $route)
+    public function authenticateUserForTask(\Slim\Route $route;;;;;;;;;;; Request $request, RequestHandler $handler)
     {
         global $app;
 
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
 
         $taskDao = new DAO\TaskDao();
@@ -257,11 +246,10 @@ class Middleware
         }
     }
 
-
-    public function authUserForOrg(\Slim\Route $route)
+    public function authUserForOrg(\Slim\Route $route;;;;;;;   Request $request, RequestHandler $handler)
     {
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -275,14 +263,15 @@ class Middleware
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
                         if ($orgObject->getId() == $org_id) {
-                            return true;
+                            return $handler->handle($request);
                         }
                     }
                 }
             }
         }
         
-        self::notFound();
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
     /*
@@ -290,10 +279,10 @@ class Middleware
      *  Used for altering task details
      */
 
-    public function authUserForOrgTask(\Slim\Route $route)
+    public function authUserForOrgTask(\Slim\Route $route;;;;;;;;;; Request $request, RequestHandler $handler)
     {
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
 
         $taskDao = new DAO\TaskDao();
@@ -314,21 +303,22 @@ class Middleware
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
                         if ($orgObject->getId() == $org_id) {
-                            return true;
+                            return $handler->handle($request);
                         }
                     }
                 }
             }
         }
        
-        self::notFound();
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
     
 
-    public function authUserForOrgProject(\Slim\Route $route)
+    public function authUserForOrgProject(\Slim\Route $route;;;;;;;;;;;;;   Request $request, RequestHandler $handler)
     {
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
 
         $params = $route->getParams();
@@ -345,18 +335,19 @@ class Middleware
             if ($userOrgs) {
                 foreach ($userOrgs as $org) {
                     if ($org->getId() == $project_orgid) {
-                        return true;
+                        return $handler->handle($request);
                     }
                 }
             }
         }
-        self::notFound();
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
-    public function authUserForProjectImage(\Slim\Route $route)
+    public function authUserForProjectImage(\Slim\Route $route;;;;;;;;; Request $request, RequestHandler $handler)
     {
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
         
         $params = $route->getParams();
@@ -369,16 +360,17 @@ class Middleware
             $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
             
             if ($projectImageApprovedAndUploaded) {
-                return true;
+                return $handler->handle($request);
             }
         }
-        self::notFound();
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
-    public function authUserForTaskDownload(\Slim\Route $route)
+    public function authUserForTaskDownload(\Slim\Route $route;;;;;;;;;;;; Request $request, RequestHandler $handler)
     {
         if ($this->isSiteAdmin()) {
-            return true;
+            return $handler->handle($request);
         }
 
         $taskDao = new DAO\TaskDao();
@@ -390,7 +382,7 @@ class Middleware
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
             if ($taskDao->getUserClaimedTask($task_id)) {
-                return true;
+                return $handler->handle($request);
             }
 
             $project = $projectDao->getProject($task->getProjectId());
@@ -402,14 +394,15 @@ class Middleware
                 if (!is_null($user_orgs)) {
                     foreach ($user_orgs as $orgObject) {
                         if ($orgObject->getId() == $org_id) {
-                            return true;
+                            return $handler->handle($request);
                         }
                     }
                 }
             }
         }
        
-        self::notFound();
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
     
     public function isUserBanned()
@@ -424,7 +417,7 @@ class Middleware
         }
     }
     
-    public function isBlacklisted(\Slim\Route $route)
+    public function isBlacklisted(\Slim\Route $route ;;;; Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -466,7 +459,7 @@ class Middleware
                     );
                     $app->response()->redirect($app->urlFor('home'));
                 } else {
-                    return true;
+                    return $handler->handle($request);
                 }
             }
         }
