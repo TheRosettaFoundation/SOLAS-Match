@@ -158,7 +158,7 @@ class Middleware
         $this->isUserBanned();
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
-            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'test common_login_required_to_access_page');
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
@@ -186,8 +186,8 @@ class Middleware
         $this->isUserBanned();
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
-            $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos($app->request()->getPathInfo(), '/googleregister')) {
@@ -224,10 +224,10 @@ class Middleware
             return true;
         }
 
-        $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
 
         Common\Lib\UserSession::setReferer($request->getUri());
-        $app->redirect($app->urlFor('login'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
     }
 
     public function authenticateUserForTask(\Slim\Route $route)
