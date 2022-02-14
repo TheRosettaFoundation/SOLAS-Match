@@ -229,13 +229,13 @@ class Middleware
         }
 
         $taskDao = new DAO\TaskDao();
-        $params = $route->getParams();
+        $params = $request->getQueryParams();
 
         $this->authUserIsLoggedIn();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $claimant = null;
-        if ($params !== null) {
+        if (!empty($params['task_id'])) {
             $task_id = $params['task_id'];
             $claimant = $taskDao->getUserClaimedTask($task_id);
         }
@@ -261,8 +261,8 @@ class Middleware
         $orgDao = new DAO\OrganisationDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $params = $route->getParams();
-        if ($params !== null) {
+        $params = $request->getQueryParams();
+        if (!empty($params['org_id'])) {
             $org_id = $params['org_id'];
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -297,8 +297,8 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
 
-        $params= $route->getParams();
-        if ($params != null) {
+        $params = $request->getQueryParams();
+        if (!empty($params['task_id'])) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject($task->getProjectId());
@@ -331,11 +331,11 @@ class Middleware
             return $handler->handle($request);
         }
 
-        $params = $route->getParams();
+        $params = $request->getQueryParams();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         
-        if ($params != null) {
+        if (!empty($params['project_id'])) {
             $user_id = Common\Lib\UserSession::getCurrentUserID();
             $project_id = $params['project_id'];
             $userOrgs = $userDao->getUserOrgs($user_id);
@@ -363,11 +363,11 @@ class Middleware
             return $handler->handle($request);
         }
         
-        $params = $route->getParams();
+        $params = $request->getQueryParams();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         
-        if ($params != null) {
+        if (!empty($params['project_id'])) {
             $project_id = $params['project_id'];
             $project = $projectDao->getProject($project_id);
             $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
@@ -393,8 +393,8 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
 
-        $params= $route->getParams();
-        if ($params != null) {
+        $params = $request->getQueryParams();
+        if (!empty($params['task_id'])) {
             $task_id = $params['task_id'];
             $task = $taskDao->getTask($task_id);
             if ($taskDao->getUserClaimedTask($task_id)) {
@@ -438,8 +438,8 @@ class Middleware
 
         $isLoggedIn = $this->authUserIsLoggedIn();
         if ($isLoggedIn) {
-            $params = $route->getParams();
-            if (!is_null($params)) {
+            $params = $request->getQueryParams();
+            if (!empty($params['task_id'])) {
                 $taskId = $params['task_id'];
                 $userId = Common\Lib\UserSession::getCurrentUserID();
                 $userDao = new DAO\UserDao();
