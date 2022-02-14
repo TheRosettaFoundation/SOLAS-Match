@@ -153,7 +153,7 @@ class Middleware
     {
         global $app;
 
-        $this->isUserBanned();
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -179,7 +179,7 @@ class Middleware
     {
         global $app;
 
-        $this->isUserBanned();
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -197,7 +197,6 @@ class Middleware
     
     public function isSiteAdmin()
     {
-        $this->isUserBanned();
         if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
             return false;
         }
@@ -417,14 +416,13 @@ class Middleware
     
     public function isUserBanned()
     {
-        global $app;
-
         $adminDao = new DAO\AdminDao();
         if ($adminDao->isUserBanned(Common\Lib\UserSession::getCurrentUserID())) {
             Common\Lib\UserSession::destroySession();
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
-            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            return true;
         }
+        return false;
     }
     
     public function isBlacklisted(\Slim\Route $route ;;;; Request $request, RequestHandler $handler)
