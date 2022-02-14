@@ -181,13 +181,11 @@ class Middleware
 
     public function authUserIsLoggedInNoProfile()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $this->isUserBanned();
         if (!Common\Lib\UserSession::getCurrentUserID()) {
-            Common\Lib\UserSession::setReferer(
-                $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
-            );
+            Common\Lib\UserSession::setReferer($request->getUri());
             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
@@ -203,7 +201,7 @@ class Middleware
     
     public static function notFound()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $app->flash('error', Localisation::getTranslation('common_error_not_exist'));
         $app->redirect($app->urlFor('home'));
     }
@@ -220,24 +218,26 @@ class Middleware
 
     public function authIsSiteAdmin()
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return true;
         }
 
-        $app = \Slim\Slim::getInstance();
         $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
 
-        Common\Lib\UserSession::setReferer($app->request()->getUrl() . $app->request()->getScriptName() . $app->request()->getPathInfo());
+        Common\Lib\UserSession::setReferer($request->getUri());
         $app->redirect($app->urlFor('login'));
     }
 
     public function authenticateUserForTask(\Slim\Route $route)
     {
+        global $app;
+
         if ($this->isSiteAdmin()) {
             return true;
         }
 
-        $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $params = $route->getParams();
 
@@ -414,9 +414,10 @@ class Middleware
     
     public function isUserBanned()
     {
+        global $app;
+
         $adminDao = new DAO\AdminDao();
         if ($adminDao->isUserBanned(Common\Lib\UserSession::getCurrentUserID())) {
-            $app = \Slim\Slim::getInstance();
             Common\Lib\UserSession::destroySession();
             $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
@@ -425,6 +426,8 @@ class Middleware
     
     public function isBlacklisted(\Slim\Route $route)
     {
+        global $app;
+
         $isLoggedIn = $this->authUserIsLoggedIn();
         if ($isLoggedIn) {
             $params = $route->getParams();
@@ -438,7 +441,6 @@ class Middleware
                 if ($isBlackListed) {
                     $taskDao = new DAO\TaskDao();
                     $task = $taskDao->getTask($taskId);
-                    $app = \Slim\Slim::getInstance();
                     $message = null;
                     
                     $isBlackListedByAdmin = $userDao->isBlacklistedForTaskByAdmin($userId, $taskId);
