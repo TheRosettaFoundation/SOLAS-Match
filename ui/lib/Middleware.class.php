@@ -154,6 +154,7 @@ class Middleware
         global $app;
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -180,13 +181,14 @@ class Middleware
         global $app;
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
-        if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos($app->request()->getPathInfo(), '/googleregister')) {
+        if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos((string)$request->getUri(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
@@ -218,7 +220,7 @@ class Middleware
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
     }
 
-    public function authenticateUserForTask(\Slim\Route $route;;;;;;;;;;; Request $request, RequestHandler $handler)
+    public function authenticateUserForTask(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -230,6 +232,7 @@ class Middleware
         $params = $route->getParams();
 
         $this->authUserIsLoggedIn();
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $claimant = null;
         if ($params !== null) {
@@ -243,9 +246,10 @@ class Middleware
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
+FAL THRU????
     }
 
-    public function authUserForOrg(\Slim\Route $route;;;;;;;   Request $request, RequestHandler $handler)
+    public function authUserForOrg(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -280,7 +284,7 @@ class Middleware
      *  Used for altering task details
      */
 
-    public function authUserForOrgTask(\Slim\Route $route;;;;;;;;;; Request $request, RequestHandler $handler)
+    public function authUserForOrgTask(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -318,7 +322,7 @@ class Middleware
     }
     
 
-    public function authUserForOrgProject(\Slim\Route $route;;;;;;;;;;;;;   Request $request, RequestHandler $handler)
+    public function authUserForOrgProject(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -345,11 +349,12 @@ class Middleware
                 }
             }
         }
+
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
-    public function authUserForProjectImage(\Slim\Route $route;;;;;;;;; Request $request, RequestHandler $handler)
+    public function authUserForProjectImage(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -370,11 +375,12 @@ class Middleware
                 return $handler->handle($request);
             }
         }
+
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
-    public function authUserForTaskDownload(\Slim\Route $route;;;;;;;;;;;; Request $request, RequestHandler $handler)
+    public function authUserForTaskDownload(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -425,7 +431,7 @@ class Middleware
         return false;
     }
     
-    public function isBlacklisted(\Slim\Route $route ;;;; Request $request, RequestHandler $handler)
+    public function isBlacklisted(Request $request, RequestHandler $handler)
     {
         global $app;
 
@@ -471,5 +477,6 @@ class Middleware
                 }
             }
         }
+SORT OF FALL THRU
     }
 }
