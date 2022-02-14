@@ -93,48 +93,45 @@ class Middleware
 
     public function beforeDispatch(Request $request, RequestHandler $handler)
     {
-/* (**)
-    if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
-        Common\Lib\UserSession::clearCurrentUserID();
-    }
-
-    $userDao = new DAO\UserDao();
-    if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
-        $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
-        if (!is_null($current_user)) {
-            $app->view()->appendData(array('user' => $current_user));
-            $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
-            if ($org_array && count($org_array) > 0) {
-                $app->view()->appendData(array(
-                    'user_is_organisation_member' => true
-                ));
-            }
-
-            $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
-            if ($tasks && count($tasks) > 0) {
-                $app->view()->appendData(array(
-                    "user_has_active_tasks" => true
-                ));
-            }
-            $adminDao = new DAO\AdminDao();
-            $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-            if ($isAdmin) {
-                $app->view()->appendData(array(
-                    'site_admin' => true
-                ));
-            }
-        } else {
+        if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
             Common\Lib\UserSession::clearCurrentUserID();
-            Common\Lib\UserSession::clearAccessToken();
         }
-    }
-    $app->view()->appendData(array(
-        'locs' => Lib\Localisation::loadTranslationFiles()
-    ));
-*/
+
+        $userDao = new DAO\UserDao();
+        if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
+            if (!is_null($current_user)) {
+                $app->view()->appendData(array('user' => $current_user));
+                $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
+                if ($org_array && count($org_array) > 0) {
+                    $app->view()->appendData(array(
+                        'user_is_organisation_member' => true
+                    ));
+                }
+
+                $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
+                if ($tasks && count($tasks) > 0) {
+                    $app->view()->appendData(array(
+                        "user_has_active_tasks" => true
+                    ));
+                }
+                $adminDao = new DAO\AdminDao();
+                $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+                if ($isAdmin) {
+                    $app->view()->appendData(array(
+                        'site_admin' => true
+                    ));
+                }
+            } else {
+                Common\Lib\UserSession::clearCurrentUserID();
+                Common\Lib\UserSession::clearAccessToken();
+            }
+        }
+        $app->view()->appendData(array(
+            'locs' => Lib\Localisation::loadTranslationFiles()
+        ));
 
         $response = $handler->handle($request);
-//        error_log('Body as of beforeDispatch middleware: ' . $response->getBody());
 
         return $response;
     }
@@ -142,8 +139,6 @@ class Middleware
     public function Flash(Request $request, RequestHandler $handler)
     {
         global $flash_messages;
-        error_log('TOP Flash middleware');
-
         $flash_messages = [
             'prev' => [], // Flash messages from prev request (loaded when middleware called)
             'next' => [], // Flash messages for next request
