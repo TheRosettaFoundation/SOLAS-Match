@@ -189,7 +189,7 @@ class Middleware
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos($app->request()->getPathInfo(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
-            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
         return $handler->handle($request);
@@ -241,7 +241,7 @@ class Middleware
             if ($user_id != $claimant->getId()) {
 //error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_already_claimed'));
-                $app->redirect($app->urlFor('home'));
+                return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
     }
@@ -423,7 +423,7 @@ class Middleware
         if ($adminDao->isUserBanned(Common\Lib\UserSession::getCurrentUserID())) {
             Common\Lib\UserSession::destroySession();
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
-            $app->redirect($app->urlFor('home'));
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
     
