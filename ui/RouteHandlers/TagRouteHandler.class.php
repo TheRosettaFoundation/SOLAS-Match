@@ -129,6 +129,7 @@ class TagRouteHandler
 
     public function tagDetails(Request $request, Response $response, $args)
     {
+        $template_data = [];
         $id = $args['id'];
 
         $tagDao = new DAO\TagDao();
@@ -154,12 +155,12 @@ class TagRouteHandler
             $taskOrgs[$currId] = $orgDao->getOrganisation($currTaskProj->getOrganisationId());
         }
 
-        $template_data = [
+        $template_data = array_merge($template_data, [
             'tasks' => $tasks,
             'taskTags' => $taskTags,
             'taskProjTitles' => $taskProjTitles,
             'taskOrgs' => $taskOrgs
-        ];
+        ]);
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $template_data = array_merge($template_data, array(
