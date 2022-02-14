@@ -52,13 +52,13 @@ class StaticRouteHandler
 
     public function privacy(Request $request, Response $response)
     {
-        UserRouteHandler::render("static/privacy.tpl", [], $response);
+        UserRouteHandler::render("static/privacy.tpl", $response);
         return $response;
     }
     
     public function terms(Request $request, Response $response)
     {
-        UserRouteHandler::render("static/terms.tpl", [], $response);
+        UserRouteHandler::render("static/terms.tpl", $response);
         return $response;
     }
     
