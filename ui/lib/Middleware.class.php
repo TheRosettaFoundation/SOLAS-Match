@@ -196,6 +196,33 @@ class Middleware
 
         return $handler->handle($request);
     }
+
+    private function user_not_logged_in(Request $request)
+    {
+        global $app;
+
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+
+        if (!Common\Lib\UserSession::getCurrentUserID()) {
+            Common\Lib\UserSession::setReferer($request->getUri());
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+        }
+
+        if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
+            $userDao = new DAO\UserDao();
+            if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+                \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
+                return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
+            }
+        } elseif ($_SESSION['profile_completed'] == 1) {
+            error_log('authUserIsLoggedIn() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
+        }
+
+        return 0;
+    }
     
     public function isSiteAdmin()
     {
@@ -231,7 +258,7 @@ class Middleware
         $taskDao = new DAO\TaskDao();
         $params = $request->getQueryParams();
 
-        $this->authUserIsLoggedIn();
+        if ($ret = $this->user_not_logged_in($request)) return $ret;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $claimant = null;
@@ -436,8 +463,8 @@ class Middleware
     {
         global $app;
 
-        $isLoggedIn = $this->authUserIsLoggedIn();
-        if ($isLoggedIn) {
+        if ($ret = $this->user_not_logged_in($request)) return $ret;
+
             $params = $request->getQueryParams();
             if (!empty($params['task_id'])) {
                 $taskId = $params['task_id'];
@@ -477,7 +504,6 @@ class Middleware
                     return $handler->handle($request);
                 }
             }
-        }
 
         return $handler->handle($request);
     }
