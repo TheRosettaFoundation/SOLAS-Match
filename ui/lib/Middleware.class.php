@@ -4,11 +4,189 @@ namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
 class Middleware
 {
+    public function SessionCookie(Request $request, RequestHandler $handler)
+    {
+        if (session_id() === '') {
+            error_log('session_start()');
+            session_start();
+        }
+
+        $cookies = $request->getCookieParams();
+        if (!empty($cookies['slim_session'])) {
+            $secret = Common\Lib\Settings::get('session.site_key');
+            $value = explode('|', $cookies['slim_session']);
+            if (count($value) === 3 && ((int)$value[0] === 0 || (int)$value[0] > time())) {
+                $key = hash_hmac('sha1', $value[0], $secret);
+                $iv = self::getIv($value[0], $secret);
+                $plainString = '';
+                $data = base64_decode($value[1]);
+                if (!empty($data)) {
+                    $ivSize = 16;
+                    if (strlen($iv) > $ivSize) {
+                        $iv = substr($iv, 0, $ivSize);
+                    }
+                    $keySize = 16;
+                    if (strlen($key) > $keySize) {
+                        $key = substr($key, 0, $keySize);
+                    }
+                    $plainString = openssl_decrypt($data, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+                    $plainString = rtrim($plainString, "\0");
+                }
+                $verificationString = hash_hmac('sha1', $value[0] . $plainString, $key);
+                if ($verificationString === $value[2]) {
+                    try {
+                        $_SESSION = unserialize($plainString);
+                    } catch (\Exception $e) {
+                        $_SESSION = [];
+                    }
+                } else {
+                    $_SESSION = [];
+                }
+            } else {
+                $_SESSION = [];
+            }
+        } else {
+            $_SESSION = [];
+        }
+
+        $response = $handler->handle($request);
+
+        $plainString = serialize($_SESSION);
+
+        if (strlen($plainString) > 4096) {
+            error_log('WARNING! SessionCookie data size is larger than 4KB. Content save failed.');
+            $value = '';
+        } else {
+            $expires = strtotime('12 hours');
+            $key = hash_hmac('sha1', $expires, $secret);
+            $iv = self::getIv($expires, $secret);
+            $ivSize = 16;
+            if (strlen($iv) > $ivSize) {
+                $iv = substr($iv, 0, $ivSize);
+            }
+            $keySize = 16;
+            if (strlen($key) > $keySize) {
+                $key = substr($key, 0, $keySize);
+            }
+            $secureString = base64_encode(openssl_encrypt($plainString, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv));
+            $verificationString = hash_hmac('sha1', $expires . $plainString, $key);
+            $value = implode('|', array($expires, $secureString, $verificationString));
+        }
+        return $response->withAddedHeader('Set-Cookie', 'slim_session=' . urlencode($value) . '; path=/; expires=' . gmdate('D, d-M-Y H:i:s e', $expires));
+    }
+
+    private static function getIv($expires, $secret)
+    {
+        $data1 = hash_hmac('sha1', 'a' . $expires . 'b', $secret);
+        $data2 = hash_hmac('sha1', 'z' . $expires . 'y', $secret);
+
+        return pack("h*", $data1 . $data2);
+    }
+
+    public function beforeDispatch(Request $request, RequestHandler $handler)
+    {
+/* (**)
+    if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
+        Common\Lib\UserSession::clearCurrentUserID();
+    }
+
+    $userDao = new DAO\UserDao();
+    if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
+        $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
+        if (!is_null($current_user)) {
+            $app->view()->appendData(array('user' => $current_user));
+            $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
+            if ($org_array && count($org_array) > 0) {
+                $app->view()->appendData(array(
+                    'user_is_organisation_member' => true
+                ));
+            }
+
+            $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
+            if ($tasks && count($tasks) > 0) {
+                $app->view()->appendData(array(
+                    "user_has_active_tasks" => true
+                ));
+            }
+            $adminDao = new DAO\AdminDao();
+            $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+            if ($isAdmin) {
+                $app->view()->appendData(array(
+                    'site_admin' => true
+                ));
+            }
+        } else {
+            Common\Lib\UserSession::clearCurrentUserID();
+            Common\Lib\UserSession::clearAccessToken();
+        }
+    }
+    $app->view()->appendData(array(
+        'locs' => Lib\Localisation::loadTranslationFiles()
+    ));
+*/
+
+        $response = $handler->handle($request);
+//        error_log('Body as of beforeDispatch middleware: ' . $response->getBody());
+
+        return $response;
+    }
+
+    public function Flash(Request $request, RequestHandler $handler)
+    {
+        global $flash_messages;
+        error_log('TOP Flash middleware');
+
+        $flash_messages = [
+            'prev' => [], // Flash messages from prev request (loaded when middleware called)
+            'next' => [], // Flash messages for next request
+            'now'  => []  // Flash messages for current request
+        ];
+
+        // Read flash messaging from previous request if available
+        if (isset($_SESSION['slim.flash'])) {
+            $flash_messages['prev'] = $_SESSION['slim.flash'];
+        }
+
+        $response = $handler->handle($request);
+
+        $_SESSION['slim.flash'] = $flash_messages['next'];
+
+        return $response;
+    }
+
+[[FROM MW...
+    public function authUserIsLoggedIn(Request $request, RequestHandler $handler)
+    {
+// https://www.slimframework.com/docs/v4/concepts/middleware.html
+        global $app;
+        error_log('TOP middleware');
+
+        if (!Common\Lib\UserSession::getCurrentUserID()) {
+            Common\Lib\UserSession::setReferer($request->getUri());
+            error_log('Referer set to: ' . $_SESSION['ref']);
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'test common_login_required_to_access_page');
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+        }
+
+        if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
+        } elseif ($_SESSION['profile_completed'] == 1) {
+            error_log('authUserIsLoggedIn() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
+        }
+
+        $response = $handler->handle($request);
+//        error_log('Body as of middleware: ' . $response->getBody());
+
+        return $response;
+    }
+]]
     public function authUserIsLoggedIn()
     {
         $app = \Slim\Slim::getInstance();
