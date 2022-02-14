@@ -246,7 +246,8 @@ class Middleware
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
-FAL THRU????
+
+        return $handler->handle($request);
     }
 
     public function authUserForOrg(Request $request, RequestHandler $handler)
@@ -467,16 +468,17 @@ FAL THRU????
                         'error',
                         sprintf(
                             $message,
-                            $app->urlFor("task-claimed", array("task_id" => $taskId)),
+                            $app->getRouteCollector()->getRouteParser()->urlFor("task-claimed", array("task_id" => $taskId)),
                             $task->getTitle()
                         )
                     );
-                    $app->response()->redirect($app->urlFor('home'));
+                    return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 } else {
                     return $handler->handle($request);
                 }
             }
         }
-SORT OF FALL THRU
+
+        return $handler->handle($request);
     }
 }
