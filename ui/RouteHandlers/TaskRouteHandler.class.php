@@ -1620,6 +1620,7 @@ class TaskRouteHandler
     public function taskAlter(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1684,7 +1685,7 @@ class TaskRouteHandler
         $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
         $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
-        $template_data = ['task' => $task];
+        $template_data = array_merge($template_data, ['task' => $task]);
 
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
