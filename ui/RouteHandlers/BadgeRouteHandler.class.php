@@ -23,7 +23,7 @@ class BadgeRouteHandler
 
     public function badgeList(Request $request, Response $response)
     {
-        $template_data = [];
+        global $template_data;
 
         $org_list = array();
         $orgDao = new DAO\OrganisationDao();
@@ -45,7 +45,7 @@ class BadgeRouteHandler
                 "org_list"      => $org_list
         ));
         
-        UserRouteHandler::render("badge/badge-list.tpl", $template_data, $response);
+        UserRouteHandler::render("badge/badge-list.tpl", $response);
         return $response;
     }
 }

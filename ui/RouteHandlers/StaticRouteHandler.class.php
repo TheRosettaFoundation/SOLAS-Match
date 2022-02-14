@@ -35,8 +35,7 @@ class StaticRouteHandler
 
     public function statistics(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $extraScripts = "
 <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
 <script type=\"application/dart\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
@@ -46,7 +45,7 @@ class StaticRouteHandler
         $template_data = array_merge($template_data, array(
             'extra_scripts' => $extraScripts
         ));
-        UserRouteHandler::render("static/statistics.tpl", $template_data, $response);
+        UserRouteHandler::render("static/statistics.tpl", $response);
         return $response;
     }
 

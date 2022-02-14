@@ -103,8 +103,7 @@ class OrgRouteHandler
 
     public function createOrg(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -418,14 +417,13 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        UserRouteHandler::render("org/create-org.tpl", $template_data, $response);
+        UserRouteHandler::render("org/create-org.tpl", $response);
         return $response;
     }
 
     public function orgDashboard(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -528,14 +526,13 @@ class OrgRouteHandler
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
-        UserRouteHandler::render("org/org.dashboard.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.dashboard.tpl", $response);
         return $response;
     }
 
     public function org_orgDashboard(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
 
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -600,7 +597,7 @@ class OrgRouteHandler
             'beyond_3_months' => 1,
             'current_page'    => 'org-dashboard'
         ));
-        UserRouteHandler::render('org/org.dashboard.tpl', $template_data, $response);
+        UserRouteHandler::render('org/org.dashboard.tpl', $response);
         return $response;
     }
 
@@ -633,8 +630,7 @@ class OrgRouteHandler
 
     public function orgRequestQueue(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
 
         $orgDao = new DAO\OrganisationDao();
@@ -708,14 +704,13 @@ class OrgRouteHandler
         
         $template_data = array_merge($template_data, array('org' => $org, 'user_list' => $user_list, 'sesskey' => $sesskey));
         
-        UserRouteHandler::render("org/org.request_queue.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.request_queue.tpl", $response);
         return $response;
     }
 
     public function orgPrivateProfile(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -1030,7 +1025,7 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        UserRouteHandler::render("org/org-private-profile.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org-private-profile.tpl", $response);
         return $response;
     }
 
@@ -1688,8 +1683,7 @@ class OrgRouteHandler
 
     public function orgPublicProfile(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
 
         $adminDao = new DAO\AdminDao();
@@ -2016,14 +2010,13 @@ class OrgRouteHandler
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 
-        UserRouteHandler::render("org/org-public-profile.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org-public-profile.tpl", $response);
         return $response;
     }
 
     public function orgManageBadge(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
         $badge_id = $args['badge_id'];
 
@@ -2090,14 +2083,13 @@ class OrgRouteHandler
             "user_list" => $user_list
         ));
         
-        UserRouteHandler::render("org/org.manage-badge.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.manage-badge.tpl", $response);
         return $response;
     }
 
     public function orgCreateBadge(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
 
         $badgeDao = new DAO\BadgeDao();
@@ -2126,14 +2118,13 @@ class OrgRouteHandler
             'org_id'  => $org_id,
             'sesskey' => $sesskey,
         ));
-        UserRouteHandler::render("org/org.create-badge.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.create-badge.tpl", $response);
         return $response;
     }
 
     public function orgSearch(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
@@ -2157,14 +2148,13 @@ class OrgRouteHandler
                     'foundOrgs'     => $foundOrgs
         ));
 
-        UserRouteHandler::render("org/org-search.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org-search.tpl", $response);
         return $response;
     }
     
     public function orgEditBadge(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $org_id = $args['org_id'];
         $badge_id = $args['badge_id'];
 
@@ -2173,14 +2163,13 @@ class OrgRouteHandler
         $badge = $badgeDao->getBadge($badge_id);
         $template_data = array_merge($template_data, array('badge' => $badge, 'org_id' => $org_id));
         
-        UserRouteHandler::render("org/org.edit-badge.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.edit-badge.tpl", $response);
         return $response;
     }
 
     public function orgTaskComplete(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $orgId = $args['org_id'];
         $taskId = $args['task_id'];
 
@@ -2211,14 +2200,13 @@ class OrgRouteHandler
         );
 
         $template_data = array_merge($template_data, $viewData);
-        UserRouteHandler::render("org/org.task-complete.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.task-complete.tpl", $response);
         return $response;
     }
 
     public function orgTaskReview(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $orgId = $args['org_id'];
         $taskId = $args['task_id'];
 
@@ -2337,14 +2325,13 @@ class OrgRouteHandler
                     'formAction'=> $formAction
         ));
 
-        UserRouteHandler::render("org/org.task-review.tpl", $template_data, $response);
+        UserRouteHandler::render("org/org.task-review.tpl", $response);
         return $response;
     }
 
     public function orgTaskReviews(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $orgId = $args['org_id'];
         $taskId = $args['task_id'];
 
@@ -2438,7 +2425,7 @@ class OrgRouteHandler
         $viewData['extra_scripts'] = $extra_scripts;
 
         $template_data = array_merge($template_data, $viewData);
-        UserRouteHandler::render('org/org.task-reviews.tpl', $template_data, $response);
+        UserRouteHandler::render('org/org.task-reviews.tpl', $response);
         return $response;
     }
 }

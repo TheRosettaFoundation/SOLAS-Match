@@ -177,7 +177,7 @@ class TaskRouteHandler
 
     public function archivedTasks(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $page_no = $args['page_no'];
 
         $userDao = new DAO\UserDao();
@@ -229,14 +229,13 @@ class TaskRouteHandler
                                     "taskTypeColours" => $taskTypeColours,
                                     "archivedTasksCount" => $archivedTasksCount
         ));
-        UserRouteHandler::render("task/archived-tasks.tpl", $template_data, $response);
+        UserRouteHandler::render("task/archived-tasks.tpl", $response);
         return $response;
     }
 
     public function claimedTasks(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
         $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
@@ -473,14 +472,13 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        UserRouteHandler::render('task/claimed-tasks.tpl', $template_data, $response);
+        UserRouteHandler::render('task/claimed-tasks.tpl', $response);
         return $response;
     }
 
     public function recentTasks(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
         $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
 
@@ -603,7 +601,7 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        UserRouteHandler::render('task/recent-tasks.tpl', $template_data, $response);
+        UserRouteHandler::render('task/recent-tasks.tpl', $response);
         return $response;
     }
 
@@ -767,8 +765,7 @@ class TaskRouteHandler
      */
     public function taskClaim(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -831,13 +828,13 @@ class TaskRouteHandler
                     "taskMetadata"  => $taskMetaData
         ));
 
-        UserRouteHandler::render("task/task.claim.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.claim.tpl", $response);
         return $response;
     }
 
     public function taskClaimed(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -857,7 +854,7 @@ class TaskRouteHandler
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
-        UserRouteHandler::render("task/task.claimed.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.claimed.tpl", $response);
         return $response;
     }
 
@@ -887,8 +884,7 @@ class TaskRouteHandler
 
     public function task(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1156,15 +1152,14 @@ class TaskRouteHandler
             'taskStatusTexts' => $taskStatusTexts
         ));
 
-        UserRouteHandler::render("task/task.view.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.view.tpl", $response);
         return $response;
         }
     }
 
     public function taskSimpleUpload(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1437,14 +1432,13 @@ class TaskRouteHandler
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
-        UserRouteHandler::render("task/task-simple-upload.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task-simple-upload.tpl", $response);
         return $response;
     }
 
     public function taskChunkComplete(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1565,13 +1559,13 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
         ));
 
-        UserRouteHandler::render('task/task-chunk-complete.tpl', $template_data, $response);
+        UserRouteHandler::render('task/task-chunk-complete.tpl', $response);
         return $response;
     }
 
     public function taskUploaded(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1589,13 +1583,13 @@ class TaskRouteHandler
             "tip"      => $tip
         ));
 
-        UserRouteHandler::render("task/task.uploaded.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.uploaded.tpl", $response);
         return $response;
     }
 
     public function taskChunkCompleted(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1613,14 +1607,13 @@ class TaskRouteHandler
             'tip'      => $tip
         ));
 
-        UserRouteHandler::render('task/task-chunk-completed.tpl', $template_data, $response);
+        UserRouteHandler::render('task/task-chunk-completed.tpl', $response);
         return $response;
     }
 
     public function taskAlter(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1914,14 +1907,13 @@ class TaskRouteHandler
             "taskTypeColours"     => $taskTypeColours
         ));
 
-        UserRouteHandler::render("task/task.alter.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.alter.tpl", $response);
         return $response;
     }
 
     public function taskView(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2105,13 +2097,13 @@ class TaskRouteHandler
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
-        UserRouteHandler::render("task/task.view.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.view.tpl", $response);
         return $response;
     }
 
     public function task_search_translators(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $task_id = $args['task_id'];
 
         $taskDao    = new DAO\TaskDao();
@@ -2210,7 +2202,7 @@ class TaskRouteHandler
             'all_users'       => $all_users,
         ));
 
-        UserRouteHandler::render("task/task.search_translators.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.search_translators.tpl", $response);
         return $response;
     }
 
@@ -2256,8 +2248,7 @@ class TaskRouteHandler
 
     public function taskCreate(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $project_id = $args['project_id'];
 
         $projectDao = new DAO\ProjectDao();
@@ -2414,13 +2405,13 @@ class TaskRouteHandler
             "taskTypeColours" => $taskTypeColours
         ));
 
-        UserRouteHandler::render("task/task.create.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.create.tpl", $response);
         return $response;
     }
 
     public function taskCreated(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2430,14 +2421,13 @@ class TaskRouteHandler
                 "task_id"    => $task->getId()
         ));
 
-        UserRouteHandler::render("task/task.created.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.created.tpl", $response);
         return $response;
     }
 
     public function taskOrgFeedback(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $task_id = $args['task_id'];
 
         $userDao = new DAO\UserDao();
@@ -2542,14 +2532,13 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        UserRouteHandler::render("task/task.org-feedback.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.org-feedback.tpl", $response);
         return $response;
     }
 
     public function taskUserFeedback(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2639,14 +2628,13 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        UserRouteHandler::render("task/task.user-feedback.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.user-feedback.tpl", $response);
         return $response;
     }
 
     public function taskReview(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2875,7 +2863,7 @@ class TaskRouteHandler
             'action'        => $action
         ));
 
-        UserRouteHandler::render("task/task.review.tpl", $template_data, $response);
+        UserRouteHandler::render("task/task.review.tpl", $response);
         return $response;
     }
 }

@@ -179,8 +179,7 @@ class UserRouteHandler
 
     public function home(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
@@ -416,14 +415,13 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-        UserRouteHandler::render('index-home.tpl', $template_data, $response);
+        UserRouteHandler::render('index-home.tpl', $response);
         return $response;
     }
 
     public function register(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
 
         $userDao = new DAO\UserDao();
@@ -529,14 +527,13 @@ class UserRouteHandler
         if ($error !== null) {
             $template_data = array_merge($template_data, array("error" => $error));
         }
-        UserRouteHandler::render("user/register.tpl", $template_data, $response);
+        UserRouteHandler::render("user/register.tpl", $response);
         return $response;
     }
 
     public function changeEmail(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -574,14 +571,13 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
-        UserRouteHandler::render("user/change-email.tpl", $template_data, $response);
+        UserRouteHandler::render("user/change-email.tpl", $response);
         return $response;
     }
 
     public function emailVerification(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $uuid = $args['uuid'];
 
         $userDao = new DAO\UserDao();
@@ -607,14 +603,13 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array('uuid' => $uuid));
 
-        UserRouteHandler::render("user/email.verification.tpl", $template_data, $response);
+        UserRouteHandler::render("user/email.verification.tpl", $response);
         return $response;
     }
 
     public function passwordReset(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $uid = $args['uid'];
 
         $userDao = new DAO\UserDao();
@@ -649,14 +644,13 @@ class UserRouteHandler
                 UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-        UserRouteHandler::render("user/password-reset.tpl", $template_data, $response);
+        UserRouteHandler::render("user/password-reset.tpl", $response);
         return $response;
     }
 
     public function passResetRequest(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         if ($request->getMethod() === 'POST') {
@@ -694,7 +688,7 @@ class UserRouteHandler
                 }
             }
         }
-        UserRouteHandler::render("user/user.reset-password.tpl", $template_data, $response);
+        UserRouteHandler::render("user/user.reset-password.tpl", $response);
         return $response;
     }
 
@@ -708,8 +702,7 @@ class UserRouteHandler
 
     public function login(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
@@ -882,7 +875,7 @@ class UserRouteHandler
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
 
-        UserRouteHandler::render("user/login.tpl", $template_data, $response);
+        UserRouteHandler::render("user/login.tpl", $response);
         return $response;
     }
 
@@ -980,8 +973,7 @@ class UserRouteHandler
 
     public function googleregister(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1037,15 +1029,14 @@ class UserRouteHandler
             </script>';
             $template_data = array_merge($template_data, array("extra_scripts" => $extra_scripts));
             $template_data = array_merge($template_data, array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
-            UserRouteHandler::render('user/googleregister.tpl', $template_data, $response);
+            UserRouteHandler::render('user/googleregister.tpl', $response);
             return $response;
         }
     }
 
     public static function userPrivateProfile(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1752,7 +1743,7 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-private-profile.tpl', $template_data, $response);
+        UserRouteHandler::render('user/user-private-profile.tpl', $response);
         return $response;
     }
 
@@ -1774,8 +1765,7 @@ class UserRouteHandler
 
     public static function userCodeOfConduct(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1852,14 +1842,13 @@ class UserRouteHandler
             'sesskey'           => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-code-of-conduct.tpl', $template_data, $response);
+        UserRouteHandler::render('user/user-code-of-conduct.tpl', $response);
         return $response;
     }
 
     public static function userUploads(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
         $cert_id = $args['cert_id'];
 
@@ -1911,7 +1900,7 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-uploads.tpl', $template_data, $response);
+        UserRouteHandler::render('user/user-uploads.tpl', $response);
         return $response;
     }
 
@@ -1941,21 +1930,19 @@ class UserRouteHandler
 
     public function users_review(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $all_users = $userDao->users_review();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        UserRouteHandler::render('user/users_review.tpl', $template_data, $response);
+        UserRouteHandler::render('user/users_review.tpl', $response);
         return $response;
     }
 
     public function users_new(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1976,7 +1963,7 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
-        UserRouteHandler::render('user/users_new.tpl', $template_data, $response);
+        UserRouteHandler::render('user/users_new.tpl', $response);
         return $response;
     }
 
@@ -2016,19 +2003,17 @@ class UserRouteHandler
 
     public function users_tracked(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        UserRouteHandler::render('user/users_tracked.tpl', $template_data, $response);
+        UserRouteHandler::render('user/users_tracked.tpl', $response);
         return $response;
     }
 
     public function add_tracking_code(Request $request, Response $response)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2046,7 +2031,7 @@ class UserRouteHandler
             'sesskey'  => $sesskey,
             'referers' => $userDao->get_referers(),
         ));
-        UserRouteHandler::render('user/add_tracking_code.tpl', $template_data, $response);
+        UserRouteHandler::render('user/add_tracking_code.tpl', $response);
         return $response;
     }
 
@@ -2099,8 +2084,7 @@ class UserRouteHandler
 
     public static function userPublicProfile(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2468,14 +2452,13 @@ class UserRouteHandler
             'show_create_memsource_user'      => $show_create_memsource_user,
         ));
 
-        UserRouteHandler::render("user/user-public-profile.tpl", $template_data, $response);
+        UserRouteHandler::render("user/user-public-profile.tpl", $response);
         return $response;
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $key = $args['key'];
 
         $key = hex2bin($key);
@@ -2516,14 +2499,13 @@ class UserRouteHandler
             'show_create_memsource_user' => 0,
         ));
 
-        UserRouteHandler::render('user/user-public-profile.tpl', $template_data, $response);
+        UserRouteHandler::render('user/user-public-profile.tpl', $response);
         return $response;
     }
 
     public function editTaskStreamNotification(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $userId = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2589,14 +2571,13 @@ class UserRouteHandler
             "user" => $user
         ));
 
-        UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $template_data, $response);
+        UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $response);
         return $response;
     }
 
     public function userTaskReviews(Request $request, Response $response, $args)
     {
-        global $app;
-        $template_data = [];
+        global $app, $template_data;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2628,7 +2609,7 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts
         ));
 
-        UserRouteHandler::render("user/user.task-reviews.tpl", $template_data, $response);
+        UserRouteHandler::render("user/user.task-reviews.tpl", $response);
         return $response;
     }
 

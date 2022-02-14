@@ -35,7 +35,7 @@ class TagRouteHandler
 
     public function tagsList(Request $request, Response $response)
     {
-        $template_data = [];
+        global $template_data;
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
 
@@ -75,13 +75,13 @@ class TagRouteHandler
                     "nameErr"  => $nameErr
             ));
         }
-        UserRouteHandler::render("tag/tag-list.tpl", $template_data, $response);
+        UserRouteHandler::render("tag/tag-list.tpl", $response);
         return $response;
     }
 
     public function tagSubscribe(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $id = $args['id'];
         $subscribe = $args['subscribe'];
         $sesskey = $args['sesskey'];
@@ -129,7 +129,7 @@ class TagRouteHandler
 
     public function tagDetails(Request $request, Response $response, $args)
     {
-        $template_data = [];
+        global $template_data;
         $id = $args['id'];
 
         $tagDao = new DAO\TagDao();
@@ -196,7 +196,7 @@ class TagRouteHandler
             "top_tags" => $top_tags,
             "taskTypeColours" => $taskTypeColours
         ));
-        UserRouteHandler::render("tag/tag.tpl", $template_data, $response);
+        UserRouteHandler::render("tag/tag.tpl", $response);
         return $response;
     }
 }
