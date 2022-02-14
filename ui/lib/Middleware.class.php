@@ -151,57 +151,32 @@ class Middleware
         return $response;
     }
 
-[[FROM MW...
     public function authUserIsLoggedIn(Request $request, RequestHandler $handler)
     {
-// https://www.slimframework.com/docs/v4/concepts/middleware.html
         global $app;
-        error_log('TOP middleware');
 
+        $this->isUserBanned();
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
-            error_log('Referer set to: ' . $_SESSION['ref']);
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'test common_login_required_to_access_page');
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
-        } elseif ($_SESSION['profile_completed'] == 1) {
-            error_log('authUserIsLoggedIn() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
-        }
-
-        $response = $handler->handle($request);
-//        error_log('Body as of middleware: ' . $response->getBody());
-
-        return $response;
-    }
-]]
-    public function authUserIsLoggedIn()
-    {
-        $app = \Slim\Slim::getInstance();
-        
-        $this->isUserBanned();
-        if (!Common\Lib\UserSession::getCurrentUserID()) {
-            Common\Lib\UserSession::setReferer(
-                $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
-            );
-            $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
-        }
-
-        if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
-                $app->flash('error', 'You must fill in your profile before continuing');
-                $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
+                \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
+                return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
         } elseif ($_SESSION['profile_completed'] == 1) {
             error_log('authUserIsLoggedIn() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
-            $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
-            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
-        return true;
+        $response = $handler->handle($request);
+
+        return $response;
     }
 
     public function authUserIsLoggedInNoProfile()
