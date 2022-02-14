@@ -2194,6 +2194,7 @@ error_log(print_r($result, true));//(**)
                 $result = $db->query("SELECT name,email,wordstranslated,taskscompleted from badges where kpid=".$decoded);
                 */
                 //$decoded = 25124;
+               // $user_id = 3297;
                 $db->query("SET NAMES utf8");
 
                 $result = $db->query(" SELECT

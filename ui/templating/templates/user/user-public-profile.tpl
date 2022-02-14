@@ -479,12 +479,12 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                         <div class="containerBox">
                             <div class="text-box">
                                 <h4 class="name">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
-                                <p class="recognition_points">{$user_badges['recognition_points']} RECOGNITION POINTS <br/> of which <br/>
+                                <p class="recognition_points1">{$user_badges['recognition_points']} RECOGNITION POINTS <br/> of which <br/>
                                 {$user_badges['strategic_points']} POINTS <br/>
                                 IN STRATEGIC LANGUAGES
                                 </p>
                             </div>
-                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="75%" />
+                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="80%" />
                         </div>
                         </tr>
                         {/if}
