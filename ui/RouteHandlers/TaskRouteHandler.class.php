@@ -697,7 +697,7 @@ class TaskRouteHandler
         global $app;
 
         try {
-            $this->downloadTaskVersion(Request $request, $response, $args);
+            $this->downloadTaskVersion($request, $response, $args);
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
                 "error",
