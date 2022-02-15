@@ -2637,9 +2637,9 @@ class UserRouteHandler
         global $template_data, $flash_messages;
 
         $smarty = new \Smarty();
-        $smarty->setTemplateDir('/repo/SOLAS-Match/v4/templating/templates');
-        $smarty->setCompileDir('/repo/SOLAS-Match/v4/templating/templates_compiled');
-        $smarty->setCacheDir('/repo/SOLAS-Match/v4/templating/cache');
+        $smarty->setTemplateDir('/repo/SOLAS-Match/ui/templating/templates');
+        $smarty->setCompileDir('/repo/SOLAS-Match/ui/templating/templates_compiled');
+        $smarty->setCacheDir('/repo/SOLAS-Match/ui/templating/cache');
         $smarty->registerClass('Settings',                 '\SolasMatch\Common\Lib\Settings');
         $smarty->registerClass('UserSession',              '\SolasMatch\Common\Lib\UserSession');
         $smarty->registerClass('TemplateHelper',           '\SolasMatch\UI\Lib\TemplateHelper');
