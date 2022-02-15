@@ -37,7 +37,7 @@ class OrgRouteHandler
         $app->get(
             '/org/{org_id}/request[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgRequestMembership')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn)
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('org-request-membership');
 
         $app->map(['GET', 'POST'],
