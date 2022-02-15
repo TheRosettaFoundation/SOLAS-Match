@@ -27,7 +27,7 @@ class TaskRouteHandler
         $app->map(['GET', 'POST'],
             '/user/{user_id}/claimed/tasks[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:claimedTasks')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn)
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('claimed-tasks');
         
         $app->get(
