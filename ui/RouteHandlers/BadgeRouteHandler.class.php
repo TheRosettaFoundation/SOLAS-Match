@@ -45,8 +45,7 @@ class BadgeRouteHandler
                 "org_list"      => $org_list
         ));
         
-        UserRouteHandler::render("badge/badge-list.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("badge/badge-list.tpl", $response);
     }
 }
 

@@ -75,8 +75,7 @@ class TagRouteHandler
                     "nameErr"  => $nameErr
             ));
         }
-        UserRouteHandler::render("tag/tag-list.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("tag/tag-list.tpl", $response);
     }
 
     public function tagSubscribe(Request $request, Response $response, $args)
@@ -196,8 +195,7 @@ class TagRouteHandler
             "top_tags" => $top_tags,
             "taskTypeColours" => $taskTypeColours
         ));
-        UserRouteHandler::render("tag/tag.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("tag/tag.tpl", $response);
     }
 }
 

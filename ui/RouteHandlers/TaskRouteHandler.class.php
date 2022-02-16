@@ -229,8 +229,7 @@ class TaskRouteHandler
                                     "taskTypeColours" => $taskTypeColours,
                                     "archivedTasksCount" => $archivedTasksCount
         ));
-        UserRouteHandler::render("task/archived-tasks.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/archived-tasks.tpl", $response);
     }
 
     public function claimedTasks(Request $request, Response $response, $args)
@@ -472,8 +471,7 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        UserRouteHandler::render('task/claimed-tasks.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('task/claimed-tasks.tpl', $response);
     }
 
     public function recentTasks(Request $request, Response $response, $args)
@@ -601,8 +599,7 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        UserRouteHandler::render('task/recent-tasks.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('task/recent-tasks.tpl', $response);
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)
@@ -723,7 +720,7 @@ class TaskRouteHandler
             if (!empty($headerArr)) {
                 $headerArr = unserialize($headerArr);
                 foreach ($headerArr as $key => $val) {
-                    $response->withHeader($key, $val);
+                    $response = $response->withHeader($key, $val);
                 }
             }
             return $response;
@@ -828,8 +825,7 @@ class TaskRouteHandler
                     "taskMetadata"  => $taskMetaData
         ));
 
-        UserRouteHandler::render("task/task.claim.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.claim.tpl", $response);
     }
 
     public function taskClaimed(Request $request, Response $response, $args)
@@ -854,8 +850,7 @@ class TaskRouteHandler
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
-        UserRouteHandler::render("task/task.claimed.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.claimed.tpl", $response);
     }
 
     public function downloadTaskVersion(Request $request, Response $response, $args)
@@ -876,7 +871,7 @@ class TaskRouteHandler
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
             foreach ($headerArr as $key => $val) {
-                $response->withHeader($key, $val);
+                $response = $response->withHeader($key, $val);
             }
         }
         return $response;
@@ -1152,8 +1147,7 @@ class TaskRouteHandler
             'taskStatusTexts' => $taskStatusTexts
         ));
 
-        UserRouteHandler::render("task/task.view.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.view.tpl", $response);
         }
     }
 
@@ -1432,8 +1426,7 @@ class TaskRouteHandler
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
-        UserRouteHandler::render("task/task-simple-upload.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task-simple-upload.tpl", $response);
     }
 
     public function taskChunkComplete(Request $request, Response $response, $args)
@@ -1559,8 +1552,7 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
         ));
 
-        UserRouteHandler::render('task/task-chunk-complete.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('task/task-chunk-complete.tpl', $response);
     }
 
     public function taskUploaded(Request $request, Response $response, $args)
@@ -1583,8 +1575,7 @@ class TaskRouteHandler
             "tip"      => $tip
         ));
 
-        UserRouteHandler::render("task/task.uploaded.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.uploaded.tpl", $response);
     }
 
     public function taskChunkCompleted(Request $request, Response $response, $args)
@@ -1607,8 +1598,7 @@ class TaskRouteHandler
             'tip'      => $tip
         ));
 
-        UserRouteHandler::render('task/task-chunk-completed.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('task/task-chunk-completed.tpl', $response);
     }
 
     public function taskAlter(Request $request, Response $response, $args)
@@ -1907,8 +1897,7 @@ class TaskRouteHandler
             "taskTypeColours"     => $taskTypeColours
         ));
 
-        UserRouteHandler::render("task/task.alter.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.alter.tpl", $response);
     }
 
     public function taskView(Request $request, Response $response, $args)
@@ -2097,8 +2086,7 @@ class TaskRouteHandler
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
-        UserRouteHandler::render("task/task.view.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.view.tpl", $response);
     }
 
     public function task_search_translators(Request $request, Response $response, $args)
@@ -2202,8 +2190,7 @@ class TaskRouteHandler
             'all_users'       => $all_users,
         ));
 
-        UserRouteHandler::render("task/task.search_translators.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.search_translators.tpl", $response);
     }
 
     public function task_invites_sent(Request $request, Response $response, $args)
@@ -2405,8 +2392,7 @@ class TaskRouteHandler
             "taskTypeColours" => $taskTypeColours
         ));
 
-        UserRouteHandler::render("task/task.create.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.create.tpl", $response);
     }
 
     public function taskCreated(Request $request, Response $response, $args)
@@ -2421,8 +2407,7 @@ class TaskRouteHandler
                 "task_id"    => $task->getId()
         ));
 
-        UserRouteHandler::render("task/task.created.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.created.tpl", $response);
     }
 
     public function taskOrgFeedback(Request $request, Response $response, $args)
@@ -2532,8 +2517,7 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        UserRouteHandler::render("task/task.org-feedback.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.org-feedback.tpl", $response);
     }
 
     public function taskUserFeedback(Request $request, Response $response, $args)
@@ -2628,8 +2612,7 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        UserRouteHandler::render("task/task.user-feedback.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.user-feedback.tpl", $response);
     }
 
     public function taskReview(Request $request, Response $response, $args)
@@ -2863,8 +2846,7 @@ class TaskRouteHandler
             'action'        => $action
         ));
 
-        UserRouteHandler::render("task/task.review.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("task/task.review.tpl", $response);
     }
 }
 

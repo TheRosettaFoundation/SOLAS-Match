@@ -1132,8 +1132,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 
-        UserRouteHandler::render("project/project.view.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
     private function addChunkTask(
@@ -1461,8 +1460,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'sesskey'        => $sesskey,
         ));
 
-        UserRouteHandler::render("project/project.alter.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("project/project.alter.tpl", $response);
     }
 
     public function projectCreate(Request $request, Response $response, $args)
@@ -1931,8 +1929,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
         ));
-        UserRouteHandler::render("project/project.create.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("project/project.create.tpl", $response);
     }
 
     private function addProjectTask(
@@ -2099,8 +2096,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "project_id" => $project_id
         ));
 
-        UserRouteHandler::render("project/project.created.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("project/project.created.tpl", $response);
     }
 
     public function archiveProject(Request $request, Response $response, $args)
@@ -2171,7 +2167,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $response->withHeader($key, $val);
+                    $response = $response->withHeader($key, $val);
                 }
             }
             return $response;
@@ -2192,7 +2188,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     {
         global $app;
         $projectId = $args['project_id'];
-error_log("$projectId: $projectId");
 
         $projectDao = new DAO\ProjectDao();
 
@@ -2202,8 +2197,7 @@ error_log("$projectId: $projectId");
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $response->withHeader($key, $val);
-error_log("HEADER... $key: $val");
+                    $response = $response->withHeader($key, $val);
                 }
             }
             return $response;

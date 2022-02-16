@@ -415,8 +415,7 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-        UserRouteHandler::render('index-home.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)
@@ -527,8 +526,7 @@ class UserRouteHandler
         if ($error !== null) {
             $template_data = array_merge($template_data, array("error" => $error));
         }
-        UserRouteHandler::render("user/register.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/register.tpl", $response);
     }
 
     public function changeEmail(Request $request, Response $response, $args)
@@ -571,8 +569,7 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
-        UserRouteHandler::render("user/change-email.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/change-email.tpl", $response);
     }
 
     public function emailVerification(Request $request, Response $response, $args)
@@ -603,8 +600,7 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array('uuid' => $uuid));
 
-        UserRouteHandler::render("user/email.verification.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/email.verification.tpl", $response);
     }
 
     public function passwordReset(Request $request, Response $response, $args)
@@ -644,8 +640,7 @@ class UserRouteHandler
                 UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-        UserRouteHandler::render("user/password-reset.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/password-reset.tpl", $response);
     }
 
     public function passResetRequest(Request $request, Response $response)
@@ -688,8 +683,7 @@ class UserRouteHandler
                 }
             }
         }
-        UserRouteHandler::render("user/user.reset-password.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/user.reset-password.tpl", $response);
     }
 
     public function logout(Request $request, Response $response)
@@ -875,8 +869,7 @@ class UserRouteHandler
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
 
-        UserRouteHandler::render("user/login.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/login.tpl", $response);
     }
 
     public function login_proz(Request $request, Response $response)
@@ -1029,8 +1022,7 @@ class UserRouteHandler
             </script>';
             $template_data = array_merge($template_data, array("extra_scripts" => $extra_scripts));
             $template_data = array_merge($template_data, array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
-            UserRouteHandler::render('user/googleregister.tpl', $response);
-            return $response;
+            return UserRouteHandler::render('user/googleregister.tpl', $response);
         }
     }
 
@@ -1743,8 +1735,7 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-private-profile.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/user-private-profile.tpl', $response);
     }
 
     public function native_languages(Request $request, Response $response, $args)
@@ -1843,8 +1834,7 @@ class UserRouteHandler
             'sesskey'           => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-code-of-conduct.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/user-code-of-conduct.tpl', $response);
     }
 
     public static function userUploads(Request $request, Response $response, $args)
@@ -1901,8 +1891,7 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        UserRouteHandler::render('user/user-uploads.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/user-uploads.tpl', $response);
     }
 
     public static function userDownload(Request $request, Response $response, $args)
@@ -1937,8 +1926,7 @@ class UserRouteHandler
         $all_users = $userDao->users_review();
 
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        UserRouteHandler::render('user/users_review.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/users_review.tpl', $response);
     }
 
     public function users_new(Request $request, Response $response)
@@ -1964,8 +1952,7 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
-        UserRouteHandler::render('user/users_new.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/users_new.tpl', $response);
     }
 
     public function download_users_new(Request $request, Response $response, $args)
@@ -2008,8 +1995,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
         $template_data = array_merge($template_data, array('all_users' => $all_users));
-        UserRouteHandler::render('user/users_tracked.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/users_tracked.tpl', $response);
     }
 
     public function add_tracking_code(Request $request, Response $response)
@@ -2032,8 +2018,7 @@ class UserRouteHandler
             'sesskey'  => $sesskey,
             'referers' => $userDao->get_referers(),
         ));
-        UserRouteHandler::render('user/add_tracking_code.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/add_tracking_code.tpl', $response);
     }
 
     public function download_users_tracked(Request $request, Response $response)
@@ -2453,8 +2438,7 @@ class UserRouteHandler
             'show_create_memsource_user'      => $show_create_memsource_user,
         ));
 
-        UserRouteHandler::render("user/user-public-profile.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
@@ -2500,8 +2484,7 @@ class UserRouteHandler
             'show_create_memsource_user' => 0,
         ));
 
-        UserRouteHandler::render('user/user-public-profile.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('user/user-public-profile.tpl', $response);
     }
 
     public function editTaskStreamNotification(Request $request, Response $response, $args)
@@ -2572,8 +2555,7 @@ class UserRouteHandler
             "user" => $user
         ));
 
-        UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $response);
     }
 
     public function userTaskReviews(Request $request, Response $response, $args)
@@ -2610,8 +2592,7 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts
         ));
 
-        UserRouteHandler::render("user/user.task-reviews.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("user/user.task-reviews.tpl", $response);
     }
 
     public static function flash($key, $value)
@@ -2655,8 +2636,8 @@ class UserRouteHandler
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
-        $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
         $response->getBody()->write($smarty->fetch($template));
+        return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
 

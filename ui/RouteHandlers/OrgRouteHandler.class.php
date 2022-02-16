@@ -417,8 +417,7 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        UserRouteHandler::render("org/create-org.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/create-org.tpl", $response);
     }
 
     public function orgDashboard(Request $request, Response $response)
@@ -526,8 +525,7 @@ class OrgRouteHandler
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
-        UserRouteHandler::render("org/org.dashboard.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.dashboard.tpl", $response);
     }
 
     public function org_orgDashboard(Request $request, Response $response, $args)
@@ -597,8 +595,7 @@ class OrgRouteHandler
             'beyond_3_months' => 1,
             'current_page'    => 'org-dashboard'
         ));
-        UserRouteHandler::render('org/org.dashboard.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('org/org.dashboard.tpl', $response);
     }
 
     public function orgRequestMembership(Request $request, Response $response, $args)
@@ -704,8 +701,7 @@ class OrgRouteHandler
         
         $template_data = array_merge($template_data, array('org' => $org, 'user_list' => $user_list, 'sesskey' => $sesskey));
         
-        UserRouteHandler::render("org/org.request_queue.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.request_queue.tpl", $response);
     }
 
     public function orgPrivateProfile(Request $request, Response $response, $args)
@@ -1025,8 +1021,7 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        UserRouteHandler::render("org/org-private-profile.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org-private-profile.tpl", $response);
     }
 
     private function possibleActivitys()
@@ -2010,8 +2005,7 @@ class OrgRouteHandler
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 
-        UserRouteHandler::render("org/org-public-profile.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org-public-profile.tpl", $response);
     }
 
     public function orgManageBadge(Request $request, Response $response, $args)
@@ -2083,8 +2077,7 @@ class OrgRouteHandler
             "user_list" => $user_list
         ));
         
-        UserRouteHandler::render("org/org.manage-badge.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.manage-badge.tpl", $response);
     }
 
     public function orgCreateBadge(Request $request, Response $response, $args)
@@ -2118,8 +2111,7 @@ class OrgRouteHandler
             'org_id'  => $org_id,
             'sesskey' => $sesskey,
         ));
-        UserRouteHandler::render("org/org.create-badge.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.create-badge.tpl", $response);
     }
 
     public function orgSearch(Request $request, Response $response)
@@ -2148,8 +2140,7 @@ class OrgRouteHandler
                     'foundOrgs'     => $foundOrgs
         ));
 
-        UserRouteHandler::render("org/org-search.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org-search.tpl", $response);
     }
     
     public function orgEditBadge(Request $request, Response $response, $args)
@@ -2163,8 +2154,7 @@ class OrgRouteHandler
         $badge = $badgeDao->getBadge($badge_id);
         $template_data = array_merge($template_data, array('badge' => $badge, 'org_id' => $org_id));
         
-        UserRouteHandler::render("org/org.edit-badge.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.edit-badge.tpl", $response);
     }
 
     public function orgTaskComplete(Request $request, Response $response, $args)
@@ -2200,8 +2190,7 @@ class OrgRouteHandler
         );
 
         $template_data = array_merge($template_data, $viewData);
-        UserRouteHandler::render("org/org.task-complete.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.task-complete.tpl", $response);
     }
 
     public function orgTaskReview(Request $request, Response $response, $args)
@@ -2325,8 +2314,7 @@ class OrgRouteHandler
                     'formAction'=> $formAction
         ));
 
-        UserRouteHandler::render("org/org.task-review.tpl", $response);
-        return $response;
+        return UserRouteHandler::render("org/org.task-review.tpl", $response);
     }
 
     public function orgTaskReviews(Request $request, Response $response, $args)
@@ -2425,8 +2413,7 @@ class OrgRouteHandler
         $viewData['extra_scripts'] = $extra_scripts;
 
         $template_data = array_merge($template_data, $viewData);
-        UserRouteHandler::render('org/org.task-reviews.tpl', $response);
-        return $response;
+        return UserRouteHandler::render('org/org.task-reviews.tpl', $response);
     }
 }
 
