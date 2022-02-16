@@ -14,7 +14,6 @@ class Middleware
 {
     public function SessionCookie(Request $request, RequestHandler $handler)
     {
-$aaaa = $secret;
         if (session_id() === '') {
             session_start();
         }
