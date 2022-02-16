@@ -15,7 +15,6 @@ class Middleware
     public function SessionCookie(Request $request, RequestHandler $handler)
     {
         if (session_id() === '') {
-            error_log('session_start()');
             session_start();
         }
 

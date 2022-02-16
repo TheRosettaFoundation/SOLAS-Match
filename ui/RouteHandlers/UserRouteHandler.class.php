@@ -185,12 +185,6 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        error_log("---------------------------");
-        error_log("currentScrollPage: $currentScrollPage");
-        error_log("selectedTaskType: $selectedTaskType");
-        error_log("selectedSourceLanguageCode: $selectedSourceLanguageCode");
-        error_log("selectedTargetLanguageCode: $selectedTargetLanguageCode");
-
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -421,7 +415,6 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-error_log("Before render currentScrollPage: $currentScrollPage");
         return UserRouteHandler::render('index-home.tpl', $response);
     }
 
