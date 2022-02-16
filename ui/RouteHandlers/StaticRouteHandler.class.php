@@ -67,6 +67,7 @@ class StaticRouteHandler
             return $response->withStatus(302)->withHeader('Location', $request->getUri());
         } else {
             $response->getBody()->write(Common\Lib\UserSession::getUserLanguage());
+            return $response;
         }
     }
 
@@ -75,16 +76,19 @@ class StaticRouteHandler
         if (!is_null(Common\Lib\UserSession::getAccessToken())) {
             $response->getBody()->write(Common\Lib\UserSession::getAccessToken()->getToken());
         }
+        return $response;
     }
     
     public function getDefaultStrings(Request $request, Response $response)
     {
         $response->getBody()->write(Lib\Localisation::getDefaultStrings());
+        return $response;
     }
 
     public function getUserStrings(Request $request, Response $response)
     {
         $response->getBody()->write(Lib\Localisation::getUserStrings());
+        return $response;
     }
 }
 

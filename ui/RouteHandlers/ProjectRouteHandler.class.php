@@ -2818,7 +2818,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         }
         if (empty($word_count) || $word_count == 1) $word_count = '-';
 
-        return $response->getBody()->write($word_count);
+        $response->getBody()->write($word_count);
+        return $response;
     }
 }
 
