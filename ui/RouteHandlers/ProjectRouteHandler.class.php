@@ -2192,6 +2192,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     {
         global $app;
         $projectId = $args['project_id'];
+error_log("$projectId: $projectId");
 
         $projectDao = new DAO\ProjectDao();
 
@@ -2202,6 +2203,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
                     $response->withHeader($key, $val);
+error_log("HEADER... $key: $val");
                 }
             }
             return $response;
