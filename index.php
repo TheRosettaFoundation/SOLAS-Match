@@ -44,10 +44,6 @@ function gc($maxlifetime)
     return true;
 }
 
-
-header('Content-Type: text/html;charset=UTF-8');
-//header('Content-Type:application/xhtml+xml;charset=UTF-8');
-
 require_once __DIR__ . '/ui/vendor/autoload.php';
 
 require_once 'Common/lib/Settings.class.php';

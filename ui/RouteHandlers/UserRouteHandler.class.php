@@ -1759,6 +1759,7 @@ class UserRouteHandler
             $name = $language->getName();
             if (mb_stripos($name, $term) !== false) $results[] = ['id' => $language->getCode(), 'text' => $name];
         }
+        header('Content-Type: application/json');
         echo json_encode(['results' => $results]);
         die;
     }
@@ -2654,6 +2655,7 @@ class UserRouteHandler
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
+        $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
         $response->getBody()->write($smarty->fetch($template));
     }
 }
