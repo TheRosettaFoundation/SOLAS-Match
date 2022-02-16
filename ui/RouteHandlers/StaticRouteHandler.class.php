@@ -87,7 +87,8 @@ class StaticRouteHandler
 
     public function getUserStrings(Request $request, Response $response)
     {
-        $response->getBody()->write(Lib\Localisation::getUserStrings());
+        $strings = Lib\Localisation::getUserStrings();
+        if ($strings != null) $response->getBody()->write($strings);
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
