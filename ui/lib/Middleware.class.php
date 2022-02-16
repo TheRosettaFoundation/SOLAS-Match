@@ -20,8 +20,8 @@ class Middleware
         }
 
         $cookies = $request->getCookieParams();
+        $secret = Common\Lib\Settings::get('session.site_key');
         if (!empty($cookies['slim_session'])) {
-            $secret = Common\Lib\Settings::get('session.site_key');
             $value = explode('|', $cookies['slim_session']);
             if (count($value) === 3 && ((int)$value[0] === 0 || (int)$value[0] > time())) {
                 $key = hash_hmac('sha1', $value[0], $secret);
