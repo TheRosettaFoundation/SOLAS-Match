@@ -22,38 +22,38 @@ class Admins
                 /* Routes starting /v0/admins */
                 $app->get(
                     '/v0/admins/getOrgAdmin/:userId/:orgId',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getOrgAdmin'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/getOrgAdmins/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getOrgAdmins'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->put(
                     '/v0/admins/createOrgAdmin/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
                     '\SolasMatch\API\V0\Admins::createOrgAdmin'
+                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
                 );
 
                 $app->get(
                     '/v0/admins/isOrgAdmin/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::isOrgAdmin'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/isSiteAdmin/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::isSiteAdmin'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/getBannedUser/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getBannedUser'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
@@ -63,88 +63,88 @@ class Admins
 
                 $app->get(
                     '/v0/admins/getBannedOrg/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getBannedOrg'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/isOrgBanned/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::isOrgBanned'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/getBannedUsers/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getBannedUsers'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->get(
                     '/v0/admins/getBannedOrgs/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getBannedOrgs'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->post(
                     '/v0/admins/banUser/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Admins::banUser'
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
 
                 $app->post(
                     '/v0/admins/banOrg/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Admins::banOrg'
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
 
                 $app->get(
                     '/v0/admins/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::getSiteAdmin'
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 );
 
                 $app->put(
                     '/v0/admins/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Admins::createSiteAdmin'
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
 
                 $app->delete(
                         '/v0/admins/removeOrgAdmin/:orgId/:userId/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
                         '\SolasMatch\API\V0\Admins::deleteOrgAdmin'
+                        '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
                 );
                 
                 $app->delete(
                         '/v0/admins/revokeTask/:taskId/:userId/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                         '\SolasMatch\API\V0\Admins::revokeTaskFromUser'
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
                 
                 $app->delete(
                         '/v0/admins/unBanUser/:userId/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                         '\SolasMatch\API\V0\Admins::unBanUser'
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
                 
                 $app->delete(
                         '/v0/admins/unBanOrg/:orgId/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                         '\SolasMatch\API\V0\Admins::unBanOrg'
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
                 
                 $app->delete(
                     '/v0/admins/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Admins::deleteSiteAdmin'
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 );
             });
 
             /* Routes starting /v0 */
             $app->get(
                 '/v0/admins/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\Admins::getSiteAdmins'
+                '\SolasMatch\API\Lib\Middleware::isloggedIn',
             );
         });
     }
