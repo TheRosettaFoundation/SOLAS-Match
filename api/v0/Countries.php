@@ -17,35 +17,28 @@ class Countries
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/countries', function () use ($app) {
+        $app->get(
+            '/v0/countries/getByCode/:code/',
+            '\SolasMatch\API\V0\Countries::getCountryByCode'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                /* Routes starting /v0/countries */
-                $app->get(
-                    '/getByCode/:code/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Countries::getCountryByCode'
-                );
-                
-                $app->get(
-                    '/getByPattern/:pattern/',
-                    '\SolasMatch\API\V0\Countries::getCountriesByPattern'
-                );
+        $app->get(
+            '/v0/countries/getByPattern/:pattern/',
+            '\SolasMatch\API\V0\Countries::getCountriesByPattern'
+        );
 
-                $app->get(
-                    '/:countryId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Countries::getCountry'
-                );
-            });
+        $app->get(
+            '/v0/countries/:countryId/',
+            '\SolasMatch\API\V0\Countries::getCountry'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/countries/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Countries::getCountries'
-            );
-        });
+        $app->get(
+            '/v0/countries/',
+            '\SolasMatch\API\V0\Countries::getCountries'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
     }
 
     public static function getCountryByCode($code)
