@@ -20,172 +20,147 @@ class Orgs
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/orgs', function () use ($app) {
-                $app->group('/:orgId', function () use ($app) {
-                    $app->group('/archivedProjects', function () use ($app) {
+        $app->get(
+            '/v0/orgs/:orgId/archivedProjects/:projectId/tasks/',
+            '\SolasMatch\API\V0\Orgs::getOrgArchivedProjectTasks'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                        /* Routes starting /v0/orgs/:orgId/archivedProjects */
-                        $app->get(
-                            '/:projectId/tasks/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::getOrgArchivedProjectTasks'
-                        );
+        $app->get(
+            '/v0/orgs/:orgId/archivedProjects/:projectId/',
+            '\SolasMatch\API\V0\Orgs::getOrgArchivedProject'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                        $app->get(
-                            '/:projectId/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::getOrgArchivedProject'
-                        );
-                    });
+        $app->post(
+            '/v0/orgs/:orgId/requests/:uid/',
+            '\SolasMatch\API\V0\Orgs::createMembershipRequests'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->group('/requests', function () use ($app) {
+        $app->put(
+            '/v0/orgs/:orgId/requests/:uid/',
+            '\SolasMatch\API\V0\Orgs::acceptMembershipRequests'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
+        );
 
-                        /* Routes starting /v0/orgs/:orgId/requests */
-                        $app->post(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::createMembershipRequests'
-                        );
+        $app->delete(
+            '/v0/orgs/:orgId/requests/:uid/',
+            '\SolasMatch\API\V0\Orgs::rejectMembershipRequests'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
+        );
 
-                        $app->put(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                            '\SolasMatch\API\V0\Orgs::acceptMembershipRequests'
-                        );
+        $app->get(
+            '/v0/orgs/:orgId/projects/',
+            '\SolasMatch\API\V0\Orgs::getOrgProjects'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                        $app->delete(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                            '\SolasMatch\API\V0\Orgs::rejectMembershipRequests'
-                        );
-                    });
+        $app->get(
+            '/v0/orgs/:orgId/archivedProjects/',
+            '\SolasMatch\API\V0\Orgs::getOrgArchivedProjects'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    /* Routes starting /v0/orgs/:orgId */
-                    $app->get(
-                        '/projects/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgProjects'
-                    );
+        $app->get(
+            '/v0/orgs/:orgId/badges/',
+            '\SolasMatch\API\V0\Orgs::getOrgBadges'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/archivedProjects/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgArchivedProjects'
-                    );
+        $app->get(
+            '/v0/orgs/:orgId/members/',
+            '\SolasMatch\API\V0\Orgs::getOrgMembers'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/badges/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgBadges'
-                    );
+        $app->get(
+            '/v0/orgs/:orgId/requests/',
+            '\SolasMatch\API\V0\Orgs::getMembershipRequests'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/members/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgMembers'
-                    );
+        $app->get(
+            '/v0/orgs/:orgId/trackingUsers/',
+            '\SolasMatch\API\V0\Orgs::getUsersTrackingOrg'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
+        );
 
-                    $app->get(
-                        '/requests/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getMembershipRequests'
-                    );
+        $app->put(
+            '/v0/orgs/addMember/:email/:orgId/',
+            '\SolasMatch\API\V0\Orgs::addMember'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
+        );
 
-                    $app->get(
-                        '/trackingUsers/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                        '\SolasMatch\API\V0\Orgs::getUsersTrackingOrg'
-                    );
-                });
+        $app->get(
+            '/v0/orgs/isMember/:orgId/:userId/',
+            '\SolasMatch\API\V0\Orgs::isMember'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                /* Routes starting /v0/orgs */
-                $app->put(
-                    '/addMember/:email/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                    '\SolasMatch\API\V0\Orgs::addMember'
-                );
+        $app->get(
+            '/v0/orgs/getByName/:name/',
+            '\SolasMatch\API\V0\Orgs::getOrgByName'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->get(
-                    '/isMember/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::isMember'
-                );
+        $app->get(
+            '/v0/orgs/searchByName/:name/',
+            '\SolasMatch\API\V0\Orgs::searchByName'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->get(
-                    '/getByName/:name/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::getOrgByName'
-                );
+        $app->get(
+            '/v0/orgs/:orgId/',
+            '\SolasMatch\API\V0\Orgs::getOrg'
+        );
 
-                $app->get(
-                    '/searchByName/:name/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::searchByName'
-                );
+        $app->put(
+            '/v0/orgs/:orgId/',
+            '\SolasMatch\API\V0\Orgs::updateOrg'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+        );
 
-                $app->get(
-                    '/:orgId/',
-                    '\SolasMatch\API\V0\Orgs::getOrg'
-                );
+        $app->delete(
+            '/v0/orgs/:orgId/',
+            '\SolasMatch\API\V0\Orgs::deleteOrg'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+        );
 
-                $app->put(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateOrg'
-                );
+        $app->get(
+            '/v0/orgextended/:orgId/',
+            '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
+        );
 
-                $app->delete(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::deleteOrg'
-                );
-            });
+        $app->put(
+            '/v0/orgextended/:orgId/',
+            '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+        );
 
-            $app->group('/orgextended', function () use ($app) {
+        $app->get(
+            '/v0/subscription/:org_id/',
+            '\SolasMatch\API\V0\Orgs::getSubscription'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                /* Routes starting /v0/orgextended */
-                $app->get(
-                    '/:orgId/',
-                    '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
-                );
+        $app->post(
+            '/v0/subscription/:org_id/level/:level/spare/:spare/start_date/:start_date/',
+            '\SolasMatch\API\V0\Orgs::updateSubscription'
+            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+        );
 
-                $app->put(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
-                );
-            });
+        $app->get(
+            '/v0/orgs/',
+            '\SolasMatch\API\V0\Orgs::getOrgs'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-            $app->group('/subscription', function () use ($app) {
-
-                /* Routes starting /v0/subscription */
-                $app->get(
-                    '/:org_id/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::getSubscription'
-                );
-
-                $app->post(
-                    '/:org_id/level/:level/spare/:spare/start_date/:start_date/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateSubscription'
-                );
-            });
-
-            /* Routes starting /v0 */
-            $app->get(
-                '/orgs/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Orgs::getOrgs'
-            );
-
-            $app->post(
-                '/orgs/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Orgs::createOrg'
-            );
-        });
+        $app->post(
+            '/v0/orgs/',
+            '\SolasMatch\API\V0\Orgs::createOrg'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
     }
 
     public static function getOrgArchivedProjectTasks($orgId, $projectId)
