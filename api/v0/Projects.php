@@ -38,47 +38,47 @@ class Projects
                     );
 
                     $app->post(
-                        '/calculateDeadlines(:format)/',
+                        '/calculateDeadlines/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Projects::calculateProjectDeadlines'
                     );
 
                     $app->get(
-                        '/reviews(:format)/',
+                        '/reviews/',
                         '\SolasMatch\API\Lib\Middleware::authenticateUserOrOrgForProjectTask',
                         '\SolasMatch\API\V0\Projects::getProjectTaskReviews'
                     );
 
                     $app->get(
-                        '/tasks(:format)/',
+                        '/tasks/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Projects::getProjectTasks'
                     );
 
                     $app->get(
-                        '/tags(:format)/',
+                        '/tags/',
                         '\SolasMatch\API\V0\Projects::getProjectTags'
                     );
 
                     $app->get(
-                        '/info(:format)/',
+                        '/info/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Projects::getProjectFileInfo'
                     );
 
                     $app->get(
-                        '/file(:format)/',
+                        '/file/',
                         '\SolasMatch\API\V0\Projects::getProjectFile'
                     );
 
                     $app->get(
-                        '/archivedTasks(:format)/',
+                        '/archivedTasks/',
                         '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\Projects::getArchivedProjectTasks'
                     );
 
                     $app->delete(
-                        '/deleteTags(:format)/',
+                        '/deleteTags/',
                         '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\Projects::deleteProjectTags'
                     );
@@ -134,192 +134,144 @@ class Projects
             );
 
             $app->get(
-                '/projects(:format)/',
+                '/projects/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\Projects::getProjects'
             );
 
             $app->post(
-                '/projects(:format)/',
+                '/projects/',
                 '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
                 '\SolasMatch\API\V0\Projects::createProject'
             );
 
             $app->get(
-                '/archivedProjects(:format)/',
+                '/archivedProjects/',
                 '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                 '\SolasMatch\API\V0\Projects::getArchivedProjects'
             );
         });
     }
 
-    public static function updateProjectWordCount($projectId, $newWordCount, $format = ".json")
+    public static function updateProjectWordCount($projectId, $newWordCount)
     {
-        if (!is_numeric($newWordCount) && strstr($newWordCount, '.')) {
-            $newWordCount = explode('.', $newWordCount);
-            $format = '.'.$newWordCount[1];
-            $newWordCount = $newWordCount[0];
-        }
-
         $ret = null;
         $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function setImageApprovalStatus($projectId, $imageStatus, $format = ".json")
+    public static function setImageApprovalStatus($projectId, $imageStatus)
     {
-        if (!is_numeric($imageStatus) && strstr($imageStatus, '.')) {
-            $imageStatus = explode('.', $imageStatus);
-            $format = '.'.$imageStatus[1];
-            $imageStatus = $imageStatus[0];
-        }
-
         $ret = null;
         $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function calculateProjectDeadlines($projectId, $format = '.json')
+    public static function calculateProjectDeadlines($projectId)
     {
         $ret = null;
         $ret = DAO\ProjectDao::calculateProjectDeadlines($projectId);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getProjectTaskReviews($projectId, $format = '.json')
+    public static function getProjectTaskReviews($projectId)
     {
         $reviews = DAO\TaskDao::getTaskReviews($projectId);
-        API\Dispatcher::sendResponse(null, $reviews, null, $format);
+        API\Dispatcher::sendResponse(null, $reviews, null);
     }
 
-    public static function getProjectTasks($projectId, $format = '.json')
+    public static function getProjectTasks($projectId)
     {
         $data = DAO\ProjectDao::getProjectTasks($projectId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjectTags($projectId, $format = ".json")
+    public static function getProjectTags($projectId)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getTags($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getTags($projectId), null);
     }
 
-    public static function getProjectFileInfo($projectId, $format = ".json")
+    public static function getProjectFileInfo($projectId)
     {
         API\Dispatcher::sendResponse(
             null,
             DAO\ProjectDao::getProjectFileInfo($projectId, null, null, null, null),
-            null,
-            $format
+            null
         );
     }
 
-    public static function getProjectFile($projectId, $format = ".json")
+    public static function getProjectFile($projectId)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectFile($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectFile($projectId), null);
     }
 
-    public static function getArchivedProjectTasks($projectId, $format = ".json")
+    public static function getArchivedProjectTasks($projectId)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null);
     }
 
-    public static function deleteProjectTags($projectId, $format = ".json")
+    public static function deleteProjectTags($projectId)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::deleteProjectTags($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::deleteProjectTags($projectId), null);
     }
 
-    public static function archiveProject($projectId, $userId, $format = ".json")
+    public static function archiveProject($projectId, $userId)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::archiveProject($projectId, $userId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::archiveProject($projectId, $userId), null);
     }
 
-    public static function getProjectGraph($projectId, $format = '.json')
+    public static function getProjectGraph($projectId)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
         $builder = new Lib\APIWorkflowBuilder();
         $graph = $builder->buildProjectGraph($projectId);
-        API\Dispatcher::sendResponse(null, $graph, null, $format);
+        API\Dispatcher::sendResponse(null, $graph, null);
     }
 
-    public static function getProject($projectId, $format = '.json')
+    public static function getProject($projectId)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null);
     }
 
-    public static function getProjectByName($format = ".json")
+    public static function getProjectByName()
     {
         $title = API\Dispatcher::getDispatcher()->request()->getBody();
 
         $data = DAO\ProjectDao::getProjectByName($title);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjectByNameAndOrganisation($title, $orgId, $format = ".json")
+    public static function getProjectByNameAndOrganisation($title, $orgId)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectByNameAndOrganisation($title, $orgId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectByNameAndOrganisation($title, $orgId), null);
     }
 
-    public static function updateProject($projectId, $format = '.json')
+    public static function updateProject($projectId)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::save($data), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::save($data), null);
 
         if (!DAO\ProjectDao::get_memsource_project($data->getId())) DAO\ProjectDao::calculateProjectDeadlines($data->getId());
     }
 
-    public static function deleteProject($projectId, $format = ".json")
+    public static function deleteProject($projectId)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::delete($projectId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::delete($projectId), null);
     }
 
-    public static function getArchivedProject($projectId, $format = '.json')
+    public static function getArchivedProject($projectId)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
         $data = DAO\ProjectDao::getArchivedProject($projectId);
         if ($data && is_array($data)) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjects($format = '.json')
+    public static function getProjects()
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjects(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjects(), null);
     }
 
     private static function addTrackProjectForUsers($userIds, $projectId)
@@ -348,30 +300,29 @@ class Projects
         return $result;
     }
 
-    public static function createProject($format = '.json')
+    public static function createProject()
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         $project = DAO\ProjectDao::save($data);
         if (!is_null($project) && $project->getId() > 0) {
             // Auto track the project for admins
             $admins = self::getAutoFollowAdminIds();
             self::addTrackProjectForUsers($admins, $project->getId());
-            API\Dispatcher::sendResponse(null, $project, null, $format);
+            API\Dispatcher::sendResponse(null, $project, null);
         } else {
             API\Dispatcher::sendResponse(
                 null,
                 "Project details conflict with existing data",
-                Common\Enums\HttpStatusEnum::CONFLICT,
-                $format
+                Common\Enums\HttpStatusEnum::CONFLICT
             );
         }
     }
 
-    public static function getArchivedProjects($format = '.json')
+    public static function getArchivedProjects()
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(), null);
     }
 }
 

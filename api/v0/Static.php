@@ -39,59 +39,49 @@ class StaticAPI
 
                 /* Routes starting /v0/static */
                 $app->get(
-                    '/dart/conf(:format)/',
+                    '/dart/conf/',
                     '\SolasMatch\API\V0\StaticAPI::getDartConf'
                 );
 
                 $app->get(
-                    '/notFound(:format)/',
+                    '/notFound/',
                     '\SolasMatch\API\V0\StaticAPI::notFound'
                 );
             });
 
             /* Routes starting /v0 */
             $app->get(
-                '/localisation/siteLanguages(:format)/',
+                '/localisation/siteLanguages/',
                 '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                 '\SolasMatch\API\V0\StaticAPI::getSiteLanguagesDart'
             );
             
             $app->get(
-                '/stats(:format)/',
+                '/stats/',
                 '\SolasMatch\API\V0\StaticAPI::getStatistics'
             );
 
             $app->get(
-                '/tips(:format)/',
+                '/tips/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\StaticAPI::getTip'
             );
         });
     }
 
-    public static function getLoginCount($startDate, $endDate, $format = '.json')
+    public static function getLoginCount($startDate, $endDate)
     {
-        if (strstr($endDate, '.')) {
-            $endDate = explode('.', $endDate);
-            $format = '.'.$endDate[1];
-            $endDate = $endDate[0];
-        }
         $data = DAO\StatDao::getLoginCount($startDate, $endDate);
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getStatisticByName($name, $format = ".json")
+    public static function getStatisticByName($name)
     {
-        if (!is_numeric($name) && strstr($name, '.')) {
-            $name = explode('.', $name);
-            $format = '.'.$name[1];
-            $name = $name[0];
-        }
         $data = DAO\StatDao::getStatistics($name);
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getDartConf($format = ".json")
+    public static function getDartConf()
     {
         $siteLocation = Common\Lib\Settings::get('site.location');
         $siteAPI = Common\Lib\Settings::get('site.api');
@@ -123,27 +113,27 @@ class StaticAPI
             )
         );
         $data = json_encode($arr, JSON_UNESCAPED_SLASHES);
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function notFound($format = '.json')
+    public static function notFound()
     {
-        Dispatcher::sendResponse(null, "404 Not Found", 404, $format);
+        Dispatcher::sendResponse(null, "404 Not Found", 404);
     }
 
-    public static function getStatistics($format = ".json")
+    public static function getStatistics()
     {
         $data = DAO\StatDao::getStatistics('');
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getTip($format = ".json")
+    public static function getTip()
     {
         $data = API\Lib\TipSelector::selectTip();
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
     
-    public static function getSiteLanguagesDart($format = ".json")
+    public static function getSiteLanguagesDart()
     {
         $matches = array();
         $locales = array();
@@ -159,7 +149,7 @@ class StaticAPI
             );
             $locales[] = $lang;
         }
-        API\Dispatcher::sendResponse(null, $locales, null, $format);
+        API\Dispatcher::sendResponse(null, $locales, null);
     }
 }
 
