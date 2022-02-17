@@ -94,7 +94,7 @@
    height: 100%;
    vertical-align: middle;
 }
-h4 {
+.containerBox h4 {
    display: inline-block;
    font-size: 20px; /*or whatever you want*/
    color: #143878; 
@@ -127,6 +127,25 @@ display: inline-block;
     top: -170px;
     left: -55px; 
 
+}
+
+.first_badge{
+       display: inline-block;
+   font-weight: bold; /*or whatever you want*/
+   font-size: 18px;
+   color: #e8991c; 
+   position: relative;
+    top: -130px;
+    left: -150px;  
+}
+
+.name_top{
+    display: inline-block;
+    font-size: 20px;
+    color: #143878;
+    position: relative;
+    top: -60px;
+    left: -140px;
 }
     </style>
     </head>

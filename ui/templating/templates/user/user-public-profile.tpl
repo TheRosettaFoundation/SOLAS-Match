@@ -278,15 +278,24 @@ alert('You have already requested to take a test in order to become a Kató Veri
                     <tbody align="left" width="48%"> 
                      
                         {if !empty($certificate)}
-                        <tr>
+                        <!-- <tr>
                             <td>
                                 <img src="{$certificate}" width="50%" />
                             </td>
                         </tr>
                         <tr>
                             <td style="padding-bottom: 10px"/>
-                        </tr>
+                        </tr> -->
                         {/if}
+                         <tr>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="name_top">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
+                                <p class="first_badge"><span class="badge_value">{$user_badges['words_translated']}</span><br/> Words donated</p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="50%" />
+                        </div>
+                        </tr>
 
                         <tr>
                             <td>
@@ -423,7 +432,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         <div class="containerBox">
                             <div class="text-box">
                                 <h4 class="">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
-                                <h5 class="recognition_points">{$user_badges['recognition_points']}<br/> RECOGNITION POINTS</h5>
+                                <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> RECOGNITION POINTS</h5>
                             </div>
                             <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="50%" />
                         </div>
@@ -479,8 +488,8 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                         <div class="containerBox">
                             <div class="text-box">
                                 <h4 class="name">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
-                                <p class="recognition_points1">{$user_badges['recognition_points']} RECOGNITION POINTS <br/> of which <br/>
-                                {$user_badges['strategic_points']} POINTS <br/>
+                                <p class="recognition_points1"><span class="badge_value">{$user_badges['recognition_points']}</span> RECOGNITION POINTS <br/> of which <br/>
+                                <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS <br/>
                                 IN STRATEGIC LANGUAGES
                                 </p>
                             </div>

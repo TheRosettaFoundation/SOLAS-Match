@@ -2386,8 +2386,6 @@ class UserRouteHandler
 
             //$badges = 'https://dev2.translatorswb.org/badge.php?volunteer_id=aXFxMjJmUmdyTFQvWVVjZ0NOWHA4dz09OjrJZ8k%2F5Utc99BmuYAHzf8z';
             $user_badges = $userDao->getbadges($user_id);
-
-           // echo '<pre>',print_r($user_badges,1),'</pre>';die;
             
 
         }
