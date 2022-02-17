@@ -732,13 +732,18 @@ class UserRouteHandler
                     }
                     unset($_SESSION['return_to_SAML_url']);
 
-                    //Set site language to user's preferred language if it is not already
-                    $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                     $userInfo = $userDao->getUserPersonalInformation($user->getId());
                     $langPrefId = $userInfo->getLanguagePreference();
                     $preferredLang = $langDao->getLanguage($langPrefId);
-                    if ($currentSiteLang != $preferredLang) {
+                    // Set site language to user's preferred language if it is not already
+                    $user_language = Common\Lib\UserSession::getUserLanguage();
+                    if (empty($user_language)) {
                         Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    } else {
+                        $currentSiteLang = $langDao->getLanguageByCode($user_language);
+                        if ($currentSiteLang != $preferredLang) {
+                            Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                        }
                     }
 
                     $userDao->setRequiredProfileCompletedinSESSION($user->getId());
@@ -820,13 +825,18 @@ class UserRouteHandler
                 }
                 unset($_SESSION['return_to_SAML_url']);
 
-                //Set site language to user's preferred language if it is not already
-                $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                 $userInfo = $userDao->getUserPersonalInformation($user->getId());
                 $langPrefId = $userInfo->getLanguagePreference();
                 $preferredLang = $langDao->getLanguage($langPrefId);
-                if ($currentSiteLang != $preferredLang) {
+                // Set site language to user's preferred language if it is not already
+                $user_language = Common\Lib\UserSession::getUserLanguage();
+                if (empty($user_language)) {
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                } else {
+                    $currentSiteLang = $langDao->getLanguageByCode($user_language);
+                    if ($currentSiteLang != $preferredLang) {
+                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    }
                 }
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
