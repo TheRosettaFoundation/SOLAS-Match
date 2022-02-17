@@ -27,472 +27,432 @@ class Users
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/users', function () use ($app) {
-                $app->group('/:userId', function () use ($app) {
-                    $app->group('/trackedTasks', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/trackedTasks */
-                        $app->put(
-                            '/v0/users/:userId/trackedTasks/:taskId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::addUserTrackedTasksById'
-                        );
-
-                        $app->delete(
-                            '/v0/users/:userId/trackedTasks/:taskId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::deleteUserTrackedTasksById'
-                        );
-                    });
-                    $app->group('/badges', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/badges */
-                        $app->put(
-                            '/v0/users/:userId/badges/:badgeId/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
-                            '\SolasMatch\API\V0\Users::addUserbadgesByID'
-                        );
-
-                        $app->delete(
-                            '/v0/users/:userId/badges/:badgeId/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateUserOrOrgForOrgBadge',
-                            '\SolasMatch\API\V0\Users::deleteUserbadgesByID'
-                        );
-                    });
-
-                    $app->group('/tasks', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/tasks */
-                        $app->get(
-                            '/v0/users/:userId/tasks/:taskId/review/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
-                            '\SolasMatch\API\V0\Users::getUserTaskReview'
-                        );
-                        
-                        $app->post(
-                            '/v0/users/:userId/tasks/:taskId/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Users::userClaimTask'
-                        );
-                        
-                        $app->delete(
-                            '/v0/users/:userId/tasks/:taskId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
-                            '\SolasMatch\API\V0\Users::userUnClaimTask'
-                        );
-                    });
-
-                    $app->group('/tags', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/tags */
-                        $app->put(
-                            '/v0/users/:userId/tags/:tagId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::addUserTagById'
-                        );
-
-                        $app->delete(
-                            '/v0/users/:userId/tags/:tagId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::deleteUserTagById'
-                        );
-                    });
-
-                    $app->group('/projects', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/projects */
-                        $app->get(
-                            '/v0/users/:userId/projects/:projectId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::userTrackProject'
-                        );
-
-                        $app->delete(
-                            '/v0/users/:userId/projects/:projectId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::userUnTrackProject'
-                        );
-
-                        $app->put(
-                            '/v0/users/:userId/projects/:projectId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::userTrackProject'
-                        );
-                    });
-
-                    $app->group('/organisations', function () use ($app) {
-
-                        /* Routes starting /v0/users/:userId/organisations */
-                        $app->put(
-                            '/v0/users/:userId/organisations/:organisationId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::userTrackOrganisation'
-                        );
-
-                        $app->delete(
-                            '/v0/users/:userId/organisations/:organisationId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                            '\SolasMatch\API\V0\Users::userUnTrackOrganisation'
-                        );
-                    });
-
-                    /* Routes starting /v0/users/:userId */
-                    $app->get(
-                        '/v0/users/:userId/filteredClaimedTasks/:orderBy/:limit/:offset/:taskType/:taskStatus/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasks'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/filteredClaimedTasksCount/:taskType/:taskStatus/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasksCount'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/:userId/recentTasks/:limit/:offset/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserRecentTasks'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/:userId/recentTasksCount/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserRecentTasksCount'
-                    );
-
-                    $app->put(
-                        '/v0/users/:userId/requestReference/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::userRequestReference'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/realName/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
-                        '\SolasMatch\API\V0\Users::getUserRealName'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/verified/',
-                        '\SolasMatch\API\V0\Users::isUserVerified'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/orgs/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserOrgs'
-                    );
-
-                    $app->post(
-                        '/v0/users/:userId/badges/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::addUserbadges'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/tags/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserTags'
-                    );
-
-                    $app->post(
-                        '/v0/users/:userId/tags/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::addUserTag'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/taskStreamNotification/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserTaskStreamNotification'
-                    );
-
-                    $app->delete(
-                        '/v0/users/:userId/taskStreamNotification/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::removeUserTaskStreamNotification'
-                    );
-
-                    $app->put(
-                        '/v0/users/:userId/taskStreamNotification/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::updateTaskStreamNotification'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/tasks/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserTasks'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/topTasksCount/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserTopTasksCount'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/:userId/topTasks/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserTopTasks'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/:userId/archivedTasks/:limit/:offset/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserArchivedTasks'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/:userId/archivedTasksCount/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserArchivedTasksCount'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/trackedTasks/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserTrackedTasks'
-                    );
-
-                    $app->post(
-                        '/v0/users/:userId/trackedTasks/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::addUserTrackedTasks'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/projects/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserTrackedProjects'
-                    );
-
-                    $app->post(
-                        '/v0/users/:userId/personalInfo/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::createUserPersonalInfo'
-                    );
-
-                    $app->put(
-                        '/v0/users/:userId/personalInfo/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::updateUserPersonalInfo'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/secondaryLanguages/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getSecondaryLanguages'
-                    );
-
-                    $app->post(
-                        '/v0/users/:userId/secondaryLanguages/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::createSecondaryLanguage'
-                    );
-
-                    $app->get(
-                        '/v0/users/:userId/organisations/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserTrackedOrganisations'
-                    );
-                });
-
-                $app->group('/:uuid', function () use ($app) {
-
-                    /* Routes starting /v0/users/:uuid */
-                    $app->get(
-                        '/v0/users/:uuid/registered/',
-                        '\SolasMatch\API\V0\Users::getRegisteredUser'
-                    );
-
-                    $app->post(
-                        '/v0/users/:uuid/finishRegistration/',
-                        '\SolasMatch\API\V0\Users::finishRegistration'
-                    );
-
-                    $app->post(
-                        '/v0/users/:uuid/manuallyFinishRegistration/',
-                        '\SolasMatch\API\V0\Users::finishRegistrationManually'
-                    );
-                });
-
-                $app->group('/email/:email', function () use ($app) {
-
-                    /* Routes starting /v0/users/email/:email */
-                    $app->get(
-                        '/v0/users/email/:email/passwordResetRequest/time/',
-                        '\SolasMatch\API\V0\Users::getPasswordResetRequestTime'
-                    );
-
-                    $app->get(
-                        '/v0/users/email/:email/passwordResetRequest/',
-                        '\SolasMatch\API\V0\Users::hasUserRequestedPasswordReset'
-                    );
-                    
-                    $app->get(
-                        '/v0/users/email/:email/getBannedComment/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateIsUserBanned',
-                        '\SolasMatch\API\V0\Users::getBannedComment'
-                    );
-
-                    $app->post(
-                        '/v0/users/email/:email/passwordResetRequest/',
-                        '\SolasMatch\API\V0\Users::createPasswordResetRequest'
-                    );
-                });
-
-                /* Routes starting /v0/users */
-                $app->delete(
-                    '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::deleteSecondaryLanguage'
-                );
-
-                $app->get(
-                    '/v0/users/subscribedToOrganisation/:userId/:organisationId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::userSubscribedToOrganisation'
-                );
-
-                $app->delete(
-                    '/v0/users/leaveOrg/:userId/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOrAdminForOrg',
-                    '\SolasMatch\API\V0\Users::userLeaveOrg'
-                );
-
-                $app->get(
-                    '/v0/users/:email/auth/code/',
-                    '\SolasMatch\API\V0\Users::getAuthCode'
-                );
-
-                $app->get(
-                    '/v0/users/subscribedToTask/:userId/:taskId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::userSubscribedToTask'
-                );
-
-                $app->get(
-                    '/v0/users/subscribedToProject/:userId/:projectId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::userSubscribedToProject'
-                );
-
-                $app->get(
-                    '/v0/users/isBlacklistedForTask/:userId/:taskId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::isBlacklistedForTask'
-                );
-                
-                $app->get(
-                        '/v0/users/isBlacklistedForTaskByAdmin/:userId/:taskId/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::isBlacklistedForTaskByAdmin'
-                );
-
-                $app->put(
-                    '/v0/users/assignBadge/:email/:badgeId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
-                    '\SolasMatch\API\V0\Users::assignBadge'
-                );
-
-                $app->put(
-                    '/v0/users/NotifyRegistered/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::NotifyRegistered'
-                );
-
-                $app->get(
-                    '/v0/users/getClaimedTasksCount/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::getUserClaimedTasksCount'
-                );
-
-                $app->post(
-                    '/v0/users/authCode/login/',
-                    '\SolasMatch\API\V0\Users::getAccessToken'
-                );
-
-                $app->get(
-                    '/v0/users/getByEmail/:email/email/',
-                    '\SolasMatch\API\Lib\Middleware::registerValidation',
-                    '\SolasMatch\API\V0\Users::getUserByEmail'
-                );
-
-                $app->get(
-                    '/v0/users/passwordReset/:key/',
-                    '\SolasMatch\API\V0\Users::getResetRequest'
-                );
-
-                $app->get(
-                    '/v0/users/getCurrentUser/',
-                    '\SolasMatch\API\V0\Users::getCurrentUser'
-                );
-
-                $app->get(
-                    '/v0/users/login/',
-                    '\SolasMatch\API\V0\Users::getLoginTemplate'
-                );
-
-                $app->post(
-                    '/v0/users/login/',
-                    '\SolasMatch\API\V0\Users::login'
-                );
-
-                $app->get(
-                    '/v0/users/passwordReset/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::getResetTemplate'
-                );
-
-                $app->post(
-                    '/v0/users/passwordReset/',
-                    '\SolasMatch\API\V0\Users::resetPassword'
-                );
-
-                $app->get(
-                    '/v0/users/register/',
-                    '\SolasMatch\API\V0\Users::getRegisterTemplate'
-                );
-
-                $app->post(
-                    '/v0/users/register/',
-                    '\SolasMatch\API\V0\Users::register'
-                );
-
-                $app->post(
-                    '/v0/users/changeEmail/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Users::changeEmail'
-                );
-
-                $app->put(
-                    '/v0/users/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::updateUser'
-                );
-
-                $app->delete(
-                    '/v0/users/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                    '\SolasMatch\API\V0\Users::deleteUser'
-                );
-            });
-
-            /* Routes starting /v0 */
-            $app->get(
-                '/v0/users/',
-                '\SolasMatch\API\V0\Users::getUsers'
-            );
-
-            // From cron
-            $app->get(
-                '/v0/dequeue_claim_task/',
-                '\SolasMatch\API\V0\Users::dequeue_claim_task'
-            );
-        });
+        $app->put(
+            '/v0/users/:userId/trackedTasks/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::addUserTrackedTasksById'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/trackedTasks/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::deleteUserTrackedTasksById'
+        );
+
+        $app->put(
+            '/v0/users/:userId/badges/:badgeId/',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
+            '\SolasMatch\API\V0\Users::addUserbadgesByID'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/badges/:badgeId/',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserOrOrgForOrgBadge',
+            '\SolasMatch\API\V0\Users::deleteUserbadgesByID'
+        );
+
+        $app->get(
+            '/v0/users/:userId/tasks/:taskId/review/',
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
+            '\SolasMatch\API\V0\Users::getUserTaskReview'
+        );
+
+        $app->post(
+            '/v0/users/:userId/tasks/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::userClaimTask'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/tasks/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
+            '\SolasMatch\API\V0\Users::userUnClaimTask'
+        );
+
+        $app->put(
+            '/v0/users/:userId/tags/:tagId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::addUserTagById'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/tags/:tagId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::deleteUserTagById'
+        );
+
+        $app->get(
+            '/v0/users/:userId/projects/:projectId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userTrackProject'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/projects/:projectId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userUnTrackProject'
+        );
+
+        $app->put(
+            '/v0/users/:userId/projects/:projectId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userTrackProject'
+        );
+
+        $app->put(
+            '/v0/users/:userId/organisations/:organisationId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userTrackOrganisation'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/organisations/:organisationId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userUnTrackOrganisation'
+        );
+
+        $app->get(
+            '/v0/users/:userId/filteredClaimedTasks/:orderBy/:limit/:offset/:taskType/:taskStatus/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/filteredClaimedTasksCount/:taskType/:taskStatus/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasksCount'
+        );
+
+        $app->get(
+            '/v0/users/:userId/recentTasks/:limit/:offset/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserRecentTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/recentTasksCount/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserRecentTasksCount'
+        );
+
+        $app->put(
+            '/v0/users/:userId/requestReference/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userRequestReference'
+        );
+
+        $app->get(
+            '/v0/users/:userId/realName/',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
+            '\SolasMatch\API\V0\Users::getUserRealName'
+        );
+
+        $app->get(
+            '/v0/users/:userId/verified/',
+            '\SolasMatch\API\V0\Users::isUserVerified'
+        );
+
+        $app->get(
+            '/v0/users/:userId/orgs/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserOrgs'
+        );
+
+        $app->post(
+            '/v0/users/:userId/badges/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::addUserbadges'
+        );
+
+        $app->get(
+            '/v0/users/:userId/tags/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserTags'
+        );
+
+        $app->post(
+            '/v0/users/:userId/tags/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::addUserTag'
+        );
+
+        $app->get(
+            '/v0/users/:userId/taskStreamNotification/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserTaskStreamNotification'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/taskStreamNotification/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::removeUserTaskStreamNotification'
+        );
+
+        $app->put(
+            '/v0/users/:userId/taskStreamNotification/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::updateTaskStreamNotification'
+        );
+
+        $app->get(
+            '/v0/users/:userId/tasks/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/topTasksCount/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserTopTasksCount'
+        );
+
+        $app->get(
+            '/v0/users/:userId/topTasks/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserTopTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/archivedTasks/:limit/:offset/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserArchivedTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/archivedTasksCount/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getUserArchivedTasksCount'
+        );
+
+        $app->get(
+            '/v0/users/:userId/trackedTasks/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserTrackedTasks'
+        );
+
+        $app->post(
+            '/v0/users/:userId/trackedTasks/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::addUserTrackedTasks'
+        );
+
+        $app->get(
+            '/v0/users/:userId/projects/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserTrackedProjects'
+        );
+
+        $app->post(
+            '/v0/users/:userId/personalInfo/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::createUserPersonalInfo'
+        );
+
+        $app->put(
+            '/v0/users/:userId/personalInfo/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::updateUserPersonalInfo'
+        );
+
+        $app->get(
+            '/v0/users/:userId/secondaryLanguages/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getSecondaryLanguages'
+        );
+
+        $app->post(
+            '/v0/users/:userId/secondaryLanguages/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::createSecondaryLanguage'
+        );
+
+        $app->get(
+            '/v0/users/:userId/organisations/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserTrackedOrganisations'
+        );
+
+        $app->get(
+            '/v0/users/:uuid/registered/',
+            '\SolasMatch\API\V0\Users::getRegisteredUser'
+        );
+
+        $app->post(
+            '/v0/users/:uuid/finishRegistration/',
+            '\SolasMatch\API\V0\Users::finishRegistration'
+        );
+
+        $app->post(
+            '/v0/users/:uuid/manuallyFinishRegistration/',
+            '\SolasMatch\API\V0\Users::finishRegistrationManually'
+        );
+
+        $app->get(
+            '/v0/users/email/:email/passwordResetRequest/time/',
+            '\SolasMatch\API\V0\Users::getPasswordResetRequestTime'
+        );
+
+        $app->get(
+            '/v0/users/email/:email/passwordResetRequest/',
+            '\SolasMatch\API\V0\Users::hasUserRequestedPasswordReset'
+        );
+
+        $app->get(
+            '/v0/users/email/:email/getBannedComment/',
+            '\SolasMatch\API\Lib\Middleware::authenticateIsUserBanned',
+            '\SolasMatch\API\V0\Users::getBannedComment'
+        );
+
+        $app->post(
+            '/v0/users/email/:email/passwordResetRequest/',
+            '\SolasMatch\API\V0\Users::createPasswordResetRequest'
+        );
+
+        $app->delete(
+            '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::deleteSecondaryLanguage'
+        );
+
+        $app->get(
+            '/v0/users/subscribedToOrganisation/:userId/:organisationId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userSubscribedToOrganisation'
+        );
+
+        $app->delete(
+            '/v0/users/leaveOrg/:userId/:orgId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOrAdminForOrg',
+            '\SolasMatch\API\V0\Users::userLeaveOrg'
+        );
+
+        $app->get(
+            '/v0/users/:email/auth/code/',
+            '\SolasMatch\API\V0\Users::getAuthCode'
+        );
+
+        $app->get(
+            '/v0/users/subscribedToTask/:userId/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userSubscribedToTask'
+        );
+
+        $app->get(
+            '/v0/users/subscribedToProject/:userId/:projectId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::userSubscribedToProject'
+        );
+
+        $app->get(
+            '/v0/users/isBlacklistedForTask/:userId/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::isBlacklistedForTask'
+        );
+
+        $app->get(
+            '/v0/users/isBlacklistedForTaskByAdmin/:userId/:taskId/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::isBlacklistedForTaskByAdmin'
+        );
+
+        $app->put(
+            '/v0/users/assignBadge/:email/:badgeId/',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
+            '\SolasMatch\API\V0\Users::assignBadge'
+        );
+
+        $app->put(
+            '/v0/users/NotifyRegistered/:userId/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::NotifyRegistered'
+        );
+
+        $app->get(
+            '/v0/users/getClaimedTasksCount/:userId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::getUserClaimedTasksCount'
+        );
+
+        $app->post(
+            '/v0/users/authCode/login/',
+            '\SolasMatch\API\V0\Users::getAccessToken'
+        );
+
+        $app->get(
+            '/v0/users/getByEmail/:email/email/',
+            '\SolasMatch\API\Lib\Middleware::registerValidation',
+            '\SolasMatch\API\V0\Users::getUserByEmail'
+        );
+
+        $app->get(
+            '/v0/users/passwordReset/:key/',
+            '\SolasMatch\API\V0\Users::getResetRequest'
+        );
+
+        $app->get(
+            '/v0/users/getCurrentUser/',
+            '\SolasMatch\API\V0\Users::getCurrentUser'
+        );
+
+        $app->get(
+            '/v0/users/login/',
+            '\SolasMatch\API\V0\Users::getLoginTemplate'
+        );
+
+        $app->post(
+            '/v0/users/login/',
+            '\SolasMatch\API\V0\Users::login'
+        );
+
+        $app->get(
+            '/v0/users/passwordReset/',
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+            '\SolasMatch\API\V0\Users::getResetTemplate'
+        );
+
+        $app->post(
+            '/v0/users/passwordReset/',
+            '\SolasMatch\API\V0\Users::resetPassword'
+        );
+
+        $app->get(
+            '/v0/users/register/',
+            '\SolasMatch\API\V0\Users::getRegisterTemplate'
+        );
+
+        $app->post(
+            '/v0/users/register/',
+            '\SolasMatch\API\V0\Users::register'
+        );
+
+        $app->post(
+            '/v0/users/changeEmail/',
+            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+            '\SolasMatch\API\V0\Users::changeEmail'
+        );
+
+        $app->put(
+            '/v0/users/:userId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::updateUser'
+        );
+
+        $app->delete(
+            '/v0/users/:userId/',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+            '\SolasMatch\API\V0\Users::deleteUser'
+        );
+
+        $app->get(
+            '/v0/users/',
+            '\SolasMatch\API\V0\Users::getUsers'
+        );
+
+        // From cron
+        $app->get(
+            '/v0/dequeue_claim_task/',
+            '\SolasMatch\API\V0\Users::dequeue_claim_task'
+        );
     }
 
     public static function addUserTrackedTasksById($userId, $taskId)
