@@ -94,26 +94,7 @@ class MessagingClient
 
     public function createMessageFromProto($proto)
     {
-        $apiFormat = Common\Lib\Settings::get('ui.api_format');
-        $serializer = null;
-        
-        switch ($apiFormat) {
-        	case '.json' : $serializer = new Common\Lib\JSONSerializer();
-                return new AMQPMessage($serializer->serializeToString($proto));
-        	   break;
-//        	case '.html' : $serializer = new Common\Lib\HTMLSerializer();
-//        	   break;
-//        	case '.php' : $serializer = new Common\Lib\PHPSerializer();
-//        	   break;
-//        	case '.proto' : $serializer = new Common\Lib\ProtobufSerializer();
-//        	   break;
-//        	case '.xml' : $serializer = new Common\Lib\XMLSerializer();
-//        	   break;
-        	default : throw new Common\Exceptions\SolasMatchException(
-        	   "Error: No API format specified or unsupported format."
-            );
-        }
-        
-        return new AMQPMessage($serializer->serialize($proto));
+        $serializer = new Common\Lib\JSONSerializer();
+        return new AMQPMessage($serializer->serializeToString($proto));
     }
 }

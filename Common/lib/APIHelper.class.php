@@ -28,8 +28,8 @@ class APIHelper
         $query_args = array(),
         $file = null,
         $headers = array()
-    ){
-        $url = $url.$this->serializer->getFormat()."/?";
+    ) {
+        $url = "$url/?";
         if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
