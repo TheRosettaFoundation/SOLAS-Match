@@ -66,7 +66,7 @@ class StaticRouteHandler
             }
             return $response->withStatus(302)->withHeader('Location', $request->getUri());
         } else {
-            $user_language = Common\Lib\UserSession::getUserLanguage()
+            $user_language = Common\Lib\UserSession::getUserLanguage();
             if (!empty($user_language)) $response->getBody()->write($user_language);
             return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
         }
