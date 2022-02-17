@@ -16,56 +16,49 @@ class Tags
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/tags', function () use ($app) {
+        $app->get(
+            '/v0/tags/getByLabel/:tagLabel/',
+            '\SolasMatch\API\V0\Tags::getTagByLabel'
+        );
 
-                /* Routes starting /v0/tags */
-                $app->get(
-                    '/getByLabel/:tagLabel/',
-                    '\SolasMatch\API\V0\Tags::getTagByLabel'
-                );
+        $app->get(
+            '/v0/tags/search/:tagName/',
+            '\SolasMatch\API\V0\Tags::searchForTag'
+        );
 
-                $app->get(
-                    '/search/:tagName/',
-                    '\SolasMatch\API\V0\Tags::searchForTag'
-                );
+        $app->get(
+            '/v0/tags/:tagId/tasks/',
+            '\SolasMatch\API\V0\Tags::getTaskForTag'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->get(
-                    '/:tagId/tasks/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tags::getTaskForTag'
-                );
+        $app->get(
+            '/v0/tags/:tagId/',
+            '\SolasMatch\API\V0\Tags::getTag'
+        );
 
-                $app->get(
-                    '/:tagId/',
-                    '\SolasMatch\API\V0\Tags::getTag'
-                );
+        $app->put(
+            '/v0/tags/:tagId/',
+            '\SolasMatch\API\V0\Tags::updateTag'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->put(
-                    '/:tagId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tags::updateTag'
-                );
+        $app->delete(
+            '/v0/tags/:tagId/',
+            '\SolasMatch\API\V0\Tags::deleteTag'
+            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+        );
 
-                $app->delete(
-                    '/:tagId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Tags::deleteTag'
-                );
-            });
+        $app->get(
+            '/v0/tags/',
+            '\SolasMatch\API\V0\Tags::getTags'
+        );
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/tags/',
-                '\SolasMatch\API\V0\Tags::getTags'
-            );
-
-            $app->post(
-                '/tags/',
-                '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                '\SolasMatch\API\V0\Tags::createTag'
-            );
-        });
+        $app->post(
+            '/v0/tags/',
+            '\SolasMatch\API\V0\Tags::createTag'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
+        );
     }
 
     public static function getTagByLabel($tagLabel)
