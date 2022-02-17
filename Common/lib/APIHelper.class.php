@@ -42,16 +42,19 @@ class APIHelper
             }
         }
         $re = curl_init($url);
+error_log("url: $url");
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
         if (!is_null($data) && "null" != $data) {
             $data = $this->serializer->serialize($data);
+error_log("data: $data");
             curl_setopt($re, CURLOPT_POSTFIELDS, $data);
             $length = strlen($data);
         }
         
         if (!is_null($file)) {
             $length = strlen($file);
+error_log("file length: $length");
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
 
@@ -75,6 +78,7 @@ class APIHelper
         }
         if (!is_null($headers)) {
             $httpHeaders = array_merge($httpHeaders, $headers);
+error_log(print_r($httpHeaders, true));
         }
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
