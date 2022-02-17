@@ -42,73 +42,73 @@ class Tasks
 
                     /* Routes starting /v0/tasks/:taskId */
                     $app->put(
-                        '/orgFeedback(:format)/',
+                        '/orgFeedback/',
                         '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\Tasks::sendOrgFeedback'
                     );
 
                     $app->put(
-                        '/sendOrgFeedbackDeclined(:format)/',
+                        '/sendOrgFeedbackDeclined/',
                         '\SolasMatch\API\V0\Tasks::sendOrgFeedbackDeclined'
                     );
 
                     $app->put(
-                        '/userFeedback(:format)/',
+                        '/userFeedback/',
                         '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::sendUserFeedback'
                     );
                     
                     $app->get(
-                        '/alsoViewedTasks/:limit/:offset(:format)/',
+                        '/alsoViewedTasks/:limit/:offset/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getAlsoViewedTasks'
                     );
 
                     $app->get(
-                        '/prerequisites(:format)/',
+                        '/prerequisites/',
                         '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::getTaskPreReqs'
                     );
                     
 
                     $app->get(
-                        '/reviews(:format)/',
+                        '/reviews/',
                         '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::getTaskReview'
                     );
 
                     $app->get(
-                        '/tags(:format)/',
+                        '/tags/',
                         '\SolasMatch\API\V0\Tasks::getTasksTags'
                     );
                     
                 
                     $app->get(
-                        '/version(:format)/',
+                        '/version/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getTaskVersion'
                     );
 
                     $app->get(
-                        '/info(:format)/',
+                        '/info/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getTaskInfo'
                     );
 
                     $app->get(
-                        '/claimed(:format)/',
+                        '/claimed/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getTaskClaimed'
                     );
 
                     $app->get(
-                        '/user(:format)/',
+                        '/user/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getUserClaimedTask'
                     );
 
                     $app->get(
-                        '/timeClaimed(:format)/',
+                        '/timeClaimed/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getClaimedTime'
                     );
@@ -135,18 +135,18 @@ class Tasks
                 );
 
                 $app->post(
-                    '/reviews(:format)/',
+                    '/reviews/',
                     '\SolasMatch\API\Lib\Middleware::authenticateUserToSubmitReview',
                     '\SolasMatch\API\V0\Tasks::submitReview'
                 );
                 
                 $app->get(
-                    '/topTasksCount(:format)/',
+                    '/topTasksCount/',
                     '\SolasMatch\API\V0\Tasks::getTopTasksCount'
                 );
                 
                 $app->get(
-                    '/topTasks(:format)/',
+                    '/topTasks/',
                     '\SolasMatch\API\V0\Tasks::getTopTasks'
                 );
 
@@ -170,53 +170,43 @@ class Tasks
 
             /* Routes starting /v0 */
             $app->get(
-                '/tasks(:format)/',
+                '/tasks/',
                 '\SolasMatch\API\V0\Tasks::getTasks'
             );
 
             $app->post(
-                '/tasks(:format)/',
+                '/tasks/',
                 '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreation',
                 '\SolasMatch\API\V0\Tasks::createTask'
             );
         });
     }
 
-    public static function addTaskPreReq($taskId, $preReqId, $format = ".json")
+    public static function addTaskPreReq($taskId, $preReqId)
     {
-        if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
-            $preReqId = explode('.', $preReqId);
-            $format = '.'.$preReqId[1];
-            $preReqId = $preReqId[0];
-        }
-        API\Dispatcher::sendResponse(null, Lib\Upload::addTaskPreReq($taskId, $preReqId), null, $format);
+        API\Dispatcher::sendResponse(null, Lib\Upload::addTaskPreReq($taskId, $preReqId), null);
     }
 
-    public static function removeTaskPreReq($taskId, $preReqId, $format = ".json")
+    public static function removeTaskPreReq($taskId, $preReqId)
     {
-        if (!is_numeric($preReqId) && strstr($preReqId, '.')) {
-            $preReqId = explode('.', $preReqId);
-            $format = '.'.$preReqId[1];
-            $preReqId = $preReqId[0];
-        }
-        API\Dispatcher::sendResponse(null, Lib\Upload::removeTaskPreReq($taskId, $preReqId), null, $format);
+        API\Dispatcher::sendResponse(null, Lib\Upload::removeTaskPreReq($taskId, $preReqId), null);
     }
 
     // Org Feedback, feedback sent from the organisation to the user who claimed the task
-    public static function sendOrgFeedback($taskId, $format = ".json")
+    public static function sendOrgFeedback($taskId)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\OrgFeedback");
         Lib\Notify::sendOrgFeedback($feedbackData);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        API\Dispatcher::sendResponse(null, null, null);
     }
 
     // If DECLINED status comes from Memsource, notify claimant
-    public static function sendOrgFeedbackDeclined($taskId, $format = ".json")
+    public static function sendOrgFeedbackDeclined($taskId)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Emails\OrgFeedback');
         $task_id     = $feedbackData->getTaskId();
         $claimant_id = $feedbackData->getClaimantId();
@@ -232,31 +222,24 @@ class Tasks
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        API\Dispatcher::sendResponse(null, null, null);
     }
 
     // User Feedback, feedback sent from the user who claimed the task to the organisation
-    public static function sendUserFeedback($taskId, $format = ".json")
+    public static function sendUserFeedback($taskId)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\UserFeedback");
         Lib\Notify::sendUserFeedback($feedbackData);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        API\Dispatcher::sendResponse(null, null, null);
     }
     
     public static function getAlsoViewedTasks(
             $taskId,
             $limit,
-            $offset,
-            $format = ".json"
+            $offset
     ) {
-        if (!is_numeric($offset) && strstr($offset, '.')) {
-            $offset = explode('.', $offset);
-            $format = '.'.$offset[1];
-            $offset = $offset[0];
-        }
-
         API\Dispatcher::sendResponse(
             null,
             DAO\TaskDao::getAlsoViewedTasks(
@@ -264,44 +247,43 @@ class Tasks
                 $limit,
                 $offset
             ),
-            null,
-            $format
+            null
         );
     }
     
-    public static function getTaskPreReqs($taskId, $format = ".json")
+    public static function getTaskPreReqs($taskId)
     {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTaskPreReqs($taskId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTaskPreReqs($taskId), null);
     }
 
-    public static function getTaskReview($taskId, $format = '.json')
+    public static function getTaskReview($taskId)
     {
         $review = DAO\TaskDao::getTaskReviews(null, $taskId);
-        API\Dispatcher::sendResponse(null, $review, null, $format);
+        API\Dispatcher::sendResponse(null, $review, null);
     }
 
-    public static function getTasksTags($taskId, $format = ".json")
+    public static function getTasksTags($taskId)
     {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTags($taskId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTags($taskId), null);
     }
 
-    public static function getTaskVersion($taskId, $format = ".json")
+    public static function getTaskVersion($taskId)
     {
         $userId = API\Dispatcher::clenseArgs('userId', Common\Enums\HttpMethodEnum::GET, null);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestFileVersion($taskId, $userId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestFileVersion($taskId, $userId), null);
     }
 
-    public static function getTaskInfo($taskId, $format = ".json")
+    public static function getTaskInfo($taskId)
     {
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
         $taskMetadata = Common\Lib\ModelFactory::buildModel(
             "TaskMetadata",
             DAO\TaskDao::getTaskFileInfo($taskId, $version)
         );
-        API\Dispatcher::sendResponse(null, $taskMetadata, null, $format);
+        API\Dispatcher::sendResponse(null, $taskMetadata, null);
     }
 
-    public static function getTaskClaimed($taskId, $format = ".json")
+    public static function getTaskClaimed($taskId)
     {
         $data = null;
         $userId = API\Dispatcher::clenseArgs('userId', Common\Enums\HttpMethodEnum::GET, null);
@@ -310,115 +292,85 @@ class Tasks
         } else {
             $data = DAO\TaskDao::taskIsClaimed($taskId);
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserClaimedTask($taskId, $format = ".json")
+    public static function getUserClaimedTask($taskId)
     {
         $data = DAO\TaskDao::getUserClaimedTask($taskId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getClaimedTime($taskId, $format = ".json")
+    public static function getClaimedTime($taskId)
     {
         $data = DAO\TaskDao::getClaimedTime($taskId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function archiveTask($taskId, $userId, $format = ".json")
+    public static function archiveTask($taskId, $userId)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null);
     }
 
-    public static function recordTaskView($taskId, $userId, $format = ".json")
+    public static function recordTaskView($taskId, $userId)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null);
     }   
     
-    public static function getProofreadTask($taskId, $format = ".json")
+    public static function getProofreadTask($taskId)
     {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
-            $taskId = explode('.', $taskId);
-            $format = '.'.$taskId[1];
-            $taskId = $taskId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getProofreadTask($taskId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getProofreadTask($taskId), null);
     }   
     
-    public static function submitReview($format = '.json')
+    public static function submitReview()
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $review = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\TaskReview");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::submitReview($review), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::submitReview($review), null);
     }
 
-    public static function getTopTasks($format = ".json")
+    public static function getTopTasks()
     {
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 15);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null);
     }
     
-    public static function getTopTasksCount($format = ".json")
+    public static function getTopTasksCount()
     {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasksCount(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasksCount(), null);
     }
 
-    public static function getTask($taskId, $format = ".json")
+    public static function getTask($taskId)
     {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
-            $taskId = explode('.', $taskId);
-            $format = '.'.$taskId[1];
-            $taskId = $taskId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTask($taskId), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTask($taskId), null);
     }
 
-    public static function updateTask($taskId, $format = ".json")
-    {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
-            $taskId = explode('.', $taskId);
-            $format = '.'.$taskId[1];
-            $taskId = $taskId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null, $format);
-    }
-
-    public static function deleteTask($taskId, $format = ".json")
-    {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
-            $taskId = explode('.', $taskId);
-            $format = '.'.$taskId[1];
-            $taskId = $taskId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::delete($taskId), null, $format);
-    }
-
-    public static function getTasks($format = ".json")
-    {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasks(), null, $format);
-    }
-
-    public static function createTask($format = ".json")
+    public static function updateTask($taskId)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null);
+    }
+
+    public static function deleteTask($taskId)
+    {
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::delete($taskId), null);
+    }
+
+    public static function getTasks()
+    {
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasks(), null);
+    }
+
+    public static function createTask()
+    {
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper('.json');
+        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null);
     }
 }
 Tasks::init();
