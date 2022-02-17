@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 use \SolasMatch\API\DAO as DAO;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__.'/../DataAccessObjects/CountryDao.class.php';
 
@@ -13,7 +15,7 @@ class Countries
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $app->group('/v0', function () use ($app) {
             $app->group('/countries', function () use ($app) {

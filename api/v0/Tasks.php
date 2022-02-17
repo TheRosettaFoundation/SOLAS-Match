@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../../Common/protobufs/models/TaskMetadata.php";
@@ -19,7 +21,7 @@ class Tasks
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $app->group('/v0', function () use ($app) {
             $app->group('/tasks', function () use ($app) {
