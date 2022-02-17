@@ -26,7 +26,7 @@ class Countries
                 );
                 
                 $app->get(
-                    '/getByPattern/:pattern(:format)/',
+                    '/getByPattern/:pattern/',
                     '\SolasMatch\API\V0\Countries::getCountriesByPattern'
                 );
 
@@ -39,54 +39,39 @@ class Countries
 
             /* Routes starting /v0 */
             $app->get(
-                '/countries(:format)/',
+                '/countries/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\Countries::getCountries'
             );
         });
     }
 
-    public static function getCountryByCode($code, $format = ".json")
+    public static function getCountryByCode($code)
     {
-        if (!is_numeric($code) && strstr($code, '.')) {
-            $code = explode('.', $code);
-            $format = '.'.$code[1];
-            $code = $code[0];
-        }
         $data = DAO\CountryDao::getCountry(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getCountry($countryId, $format = ".json")
+    public static function getCountry($countryId)
     {
-        if (!is_numeric($countryId) && strstr($countryId, '.')) {
-            $countryId = explode('.', $countryId);
-            $format = '.'.$countryId[1];
-            $countryId = $countryId[0];
-        }
         $data = DAO\CountryDao::getCountry($countryId);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getCountries($format = ".json")
+    public static function getCountries()
     {
-        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountryList(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountryList(), null);
     }
     
-    public static function getCountriesByPattern($pattern, $format = ".json")
+    public static function getCountriesByPattern($pattern)
     {
-        if (strstr($pattern, '.')) {
-            $pattern = explode('.', $pattern);
-            $format = '.'.$pattern[1];
-            $pattern = $pattern[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountriesByPattern($pattern), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountriesByPattern($pattern), null);
     }
 }
 

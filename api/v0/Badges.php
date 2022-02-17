@@ -19,7 +19,7 @@ class Badges
                 $app->group('/:badgeId', function () use ($app) {
                     /* Routes beginning /v0/badges/:badgeId */
                     $app->get(
-                        '/users(:format)/',
+                        '/users/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Badges::getUsersWithBadge'
                     );
@@ -53,84 +53,64 @@ class Badges
 
             /* Routes beginning /v0 */
             $app->get(
-                '/badges(:format)/',
+                '/badges/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\Badges::getBadges'
             );
 
             $app->post(
-                '/badges(:format)/',
+                '/badges/',
                 '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
                 '\SolasMatch\API\V0\Badges::createBadge'
             );
         });
     }
 
-    public static function getUsersWithBadge($badgeId, $format = '.json')
+    public static function getUsersWithBadge($badgeId)
     {
         $data = DAO\UserDao::getUsersWithBadge($badgeId);
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userHasBadge($badgeId, $userId, $format = '.json')
+    public static function userHasBadge($badgeId, $userId)
     {
-        if (!is_numeric($userId)&& strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
         $data = DAO\UserDao::userHasBadge($badgeId, $userId);
         if (is_array($data)) {
             $data = $data[0];
         }
-        Dispatcher::sendResponse(null, $data, null, $format);
+        Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getBadge($badgeId, $format = '.json')
+    public static function getBadge($badgeId)
     {
-        if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
-            $badgeId = explode('.', $badgeId);
-            $format = '.'.$badgeId[1];
-            $badgeId = $badgeId[0];
-        }
-        Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge($badgeId), null, $format);
+        Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge($badgeId), null);
     }
 
-    public static function updateBadge($badgeId, $format = '.json')
+    public static function updateBadge($badgeId)
     {
-        if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
-            $badgeId = explode('.', $badgeId);
-            $format = '.'.$badgeId[1];
-            $badgeId = $badgeId[0];
-        }
         $data = Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
-        Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
+        Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null);
     }
 
-    public static function deleteBadge($badgeId, $format = '.json')
+    public static function deleteBadge($badgeId)
     {
-        if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
-            $badgeId = explode('.', $badgeId);
-            $format = '.'.$badgeId[1];
-            $badgeId = $badgeId[0];
-        }
-        Dispatcher::sendResponse(null, DAO\BadgeDao::deleteBadge($badgeId), null, $format);
+        Dispatcher::sendResponse(null, DAO\BadgeDao::deleteBadge($badgeId), null);
     }
 
-    public static function getBadges($format = '.json')
+    public static function getBadges()
     {
-        Dispatcher::sendResponse(null, DAO\BadgeDao::getBadges(), null, $format);
+        Dispatcher::sendResponse(null, DAO\BadgeDao::getBadges(), null);
     }
 
-    public static function createBadge($format = '.json')
+    public static function createBadge()
     {
         $data = Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
         $data->setId("");
-        Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
+        Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null);
     }
 }
 
