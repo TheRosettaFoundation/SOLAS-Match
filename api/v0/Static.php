@@ -22,53 +22,42 @@ class StaticAPI
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/stats', function () use ($app) {
+        $app->get(
+            '/v0/stats/getLoginCount/:startDate/:endDate/',
+            '\SolasMatch\API\V0\StaticAPI::getLoginCount'
+        );
 
-                /* Routes starting /v0/stats */
-                $app->get(
-                    '/getLoginCount/:startDate/:endDate/',
-                    '\SolasMatch\API\V0\StaticAPI::getLoginCount'
-                );
+        $app->get(
+            '/v0/stats/:name/',
+            '\SolasMatch\API\V0\StaticAPI::getStatisticByName'
+        );
 
-                $app->get(
-                    '/:name/',
-                    '\SolasMatch\API\V0\StaticAPI::getStatisticByName'
-                );
-            });
+        $app->get(
+            '/v0/static/dart/conf/',
+            '\SolasMatch\API\V0\StaticAPI::getDartConf'
+        );
 
-            $app->group('/static', function () use ($app) {
+        $app->get(
+            '/v0/static/notFound/',
+            '\SolasMatch\API\V0\StaticAPI::notFound'
+        );
 
-                /* Routes starting /v0/static */
-                $app->get(
-                    '/dart/conf/',
-                    '\SolasMatch\API\V0\StaticAPI::getDartConf'
-                );
+        $app->get(
+            '/v0/localisation/siteLanguages/',
+            '\SolasMatch\API\V0\StaticAPI::getSiteLanguagesDart'
+            '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+        );
 
-                $app->get(
-                    '/notFound/',
-                    '\SolasMatch\API\V0\StaticAPI::notFound'
-                );
-            });
+        $app->get(
+            '/v0/stats/',
+            '\SolasMatch\API\V0\StaticAPI::getStatistics'
+        );
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/localisation/siteLanguages/',
-                '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                '\SolasMatch\API\V0\StaticAPI::getSiteLanguagesDart'
-            );
-            
-            $app->get(
-                '/stats/',
-                '\SolasMatch\API\V0\StaticAPI::getStatistics'
-            );
-
-            $app->get(
-                '/tips/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\StaticAPI::getTip'
-            );
-        });
+        $app->get(
+            '/v0/tips/',
+            '\SolasMatch\API\V0\StaticAPI::getTip'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
     }
 
     public static function getLoginCount($startDate, $endDate)
