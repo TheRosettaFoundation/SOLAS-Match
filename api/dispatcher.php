@@ -106,11 +106,11 @@ class Dispatcher
         return self::$oauthServer;
     }
     
-    public static function sendResponse($headers, $body, $code = 200, $format = ".json", $oauthToken = null)
+    public static function sendResponse($headers, $body, $code = 200, $oauthToken = null)
     {
         header('Access-Control-Allow-Origin: *');
         $response = self::getDispatcher()->response();
-        $apiHelper = new Common\Lib\APIHelper($format);
+        $apiHelper = new Common\Lib\APIHelper('.json');
         $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
         $token = $apiHelper->serialize($oauthToken);
