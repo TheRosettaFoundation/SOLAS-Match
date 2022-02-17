@@ -17,42 +17,35 @@ class Langs
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/languages', function () use ($app) {
+        $app->get(
+            '/v0/languages/getActiveLanguages/',
+            '\SolasMatch\API\V0\Langs::getActiveLanguages'
+        );
 
-                /* Routes starting /v0/languages */
-                $app->get(
-                    '/getActiveLanguages/',
-                    '\SolasMatch\API\V0\Langs::getActiveLanguages'
-                );
+        $app->get(
+            '/v0/languages/getActiveSourceLanguages/',
+            '\SolasMatch\API\V0\Langs::getActiveSourceLanguages'
+        );
 
-                $app->get(
-                    '/getActiveSourceLanguages/',
-                    '\SolasMatch\API\V0\Langs::getActiveSourceLanguages'
-                );
+        $app->get(
+            '/v0/languages/getActiveTargetLanguages/',
+            '\SolasMatch\API\V0\Langs::getActiveTargetLanguages'
+        );
 
-                $app->get(
-                    '/getActiveTargetLanguages/',
-                    '\SolasMatch\API\V0\Langs::getActiveTargetLanguages'
-                );
+        $app->get(
+            '/v0/languages/getByCode/:code/',
+            '\SolasMatch\API\V0\Langs::getLanguageByCode'
+        );
 
-                $app->get(
-                    '/getByCode/:code/',
-                    '\SolasMatch\API\V0\Langs::getLanguageByCode'
-                );
+        $app->get(
+            '/v0/languages/:languageId/',
+            '\SolasMatch\API\V0\Langs::getLanguage'
+        );
 
-                $app->get(
-                    '/:languageId/',
-                    '\SolasMatch\API\V0\Langs::getLanguage'
-                );
-            });
-
-            /* Routes starting /v0 */
-            $app->get(
-                '/languages/',
-                '\SolasMatch\API\V0\Langs::getLanguages'
-            );
-        });
+        $app->get(
+            '/v0/languages/',
+            '\SolasMatch\API\V0\Langs::getLanguages'
+        );
     }
 
     public static function getActiveLanguages()
