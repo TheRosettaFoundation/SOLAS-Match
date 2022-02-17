@@ -23,165 +23,150 @@ class Tasks
     {
         global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/tasks', function () use ($app) {
-                $app->group('/:taskId', function () use ($app) {
-                    $app->group('/prerequisites', function () use ($app) {
+        $app->put(
+            '/v0/tasks/:taskId/prerequisites/:preReqId/',
+            '\SolasMatch\API\V0\Tasks::addTaskPreReq'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
+        );
 
-                        /* Routes starting /v0/tasks/:taskId/prerequisites */
-                        $app->put(
-                            '/:preReqId/',
-                            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
-                            '\SolasMatch\API\V0\Tasks::addTaskPreReq'
-                        );
+        $app->delete(
+            '/v0/tasks/:taskId/prerequisites/:preReqId/',
+            '\SolasMatch\API\V0\Tasks::removeTaskPreReq'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
+        );
 
-                        $app->delete(
-                            '/:preReqId/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                            '\SolasMatch\API\V0\Tasks::removeTaskPreReq'
-                        );
-                    });
+        $app->put(
+            '/v0/tasks/:taskId/orgFeedback/',
+            '\SolasMatch\API\V0\Tasks::sendOrgFeedback'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
+        );
 
-                    /* Routes starting /v0/tasks/:taskId */
-                    $app->put(
-                        '/orgFeedback/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                        '\SolasMatch\API\V0\Tasks::sendOrgFeedback'
-                    );
+        $app->put(
+            '/v0/tasks/:taskId/sendOrgFeedbackDeclined/',
+            '\SolasMatch\API\V0\Tasks::sendOrgFeedbackDeclined'
+        );
 
-                    $app->put(
-                        '/sendOrgFeedbackDeclined/',
-                        '\SolasMatch\API\V0\Tasks::sendOrgFeedbackDeclined'
-                    );
+        $app->put(
+            '/v0/tasks/:taskId/userFeedback/',
+            '\SolasMatch\API\V0\Tasks::sendUserFeedback'
+            '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
+        );
 
-                    $app->put(
-                        '/userFeedback/',
-                        '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
-                        '\SolasMatch\API\V0\Tasks::sendUserFeedback'
-                    );
-                    
-                    $app->get(
-                        '/alsoViewedTasks/:limit/:offset/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getAlsoViewedTasks'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/alsoViewedTasks/:limit/:offset/',
+            '\SolasMatch\API\V0\Tasks::getAlsoViewedTasks'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/prerequisites/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
-                        '\SolasMatch\API\V0\Tasks::getTaskPreReqs'
-                    );
-                    
+        $app->get(
+            '/v0/tasks/:taskId/prerequisites/',
+            '\SolasMatch\API\V0\Tasks::getTaskPreReqs'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
+        );
 
-                    $app->get(
-                        '/reviews/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
-                        '\SolasMatch\API\V0\Tasks::getTaskReview'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/reviews/',
+            '\SolasMatch\API\V0\Tasks::getTaskReview'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
+        );
 
-                    $app->get(
-                        '/tags/',
-                        '\SolasMatch\API\V0\Tasks::getTasksTags'
-                    );
-                    
-                
-                    $app->get(
-                        '/version/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getTaskVersion'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/tags/',
+            '\SolasMatch\API\V0\Tasks::getTasksTags'
+        );
 
-                    $app->get(
-                        '/info/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getTaskInfo'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/version/',
+            '\SolasMatch\API\V0\Tasks::getTaskVersion'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/claimed/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getTaskClaimed'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/info/',
+            '\SolasMatch\API\V0\Tasks::getTaskInfo'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/user/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getUserClaimedTask'
-                    );
+        $app->get(
+            '/v0/tasks/:taskId/claimed/',
+            '\SolasMatch\API\V0\Tasks::getTaskClaimed'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                    $app->get(
-                        '/timeClaimed/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Tasks::getClaimedTime'
-                    );
-                });
+        $app->get(
+            '/v0/tasks/:taskId/user/',
+            '\SolasMatch\API\V0\Tasks::getUserClaimedTask'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                /* Routes starting /v0/tasks */
-                $app->put(
-                    '/archiveTask/:taskId/user/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Tasks::archiveTask'
-                );
-                
-                $app->put(
-                    '/recordView/:taskId/user/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tasks::recordTaskView'
-                );
-            
-               
-                $app->get(
-                    '/proofreadTask/:taskId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tasks::getProofreadTask'
-                );
+        $app->get(
+            '/v0/tasks/:taskId/timeClaimed/',
+            '\SolasMatch\API\V0\Tasks::getClaimedTime'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->post(
-                    '/reviews/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateUserToSubmitReview',
-                    '\SolasMatch\API\V0\Tasks::submitReview'
-                );
-                
-                $app->get(
-                    '/topTasksCount/',
-                    '\SolasMatch\API\V0\Tasks::getTopTasksCount'
-                );
-                
-                $app->get(
-                    '/topTasks/',
-                    '\SolasMatch\API\V0\Tasks::getTopTasks'
-                );
+        $app->put(
+            '/v0/tasks/archiveTask/:taskId/user/:userId/',
+            '\SolasMatch\API\V0\Tasks::archiveTask'
+            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+        );
 
-                $app->get(
-                    '/:taskId/',
-                    '\SolasMatch\API\V0\Tasks::getTask'
-                );
+        $app->put(
+            '/v0/tasks/recordView/:taskId/user/:userId/',
+            '\SolasMatch\API\V0\Tasks::recordTaskView'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-                $app->put(
-                    '/:taskId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
-                    '\SolasMatch\API\V0\Tasks::updateTask'
-                );
 
-                $app->delete(
-                    '/:taskId/',
-                    '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
-                    '\SolasMatch\API\V0\Tasks::deleteTask'
-                );
-            });
+        $app->get(
+            '/v0/tasks/proofreadTask/:taskId/',
+            '\SolasMatch\API\V0\Tasks::getProofreadTask'
+            '\SolasMatch\API\Lib\Middleware::isloggedIn',
+        );
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/tasks/',
-                '\SolasMatch\API\V0\Tasks::getTasks'
-            );
+        $app->post(
+            '/v0/tasks/reviews/',
+            '\SolasMatch\API\V0\Tasks::submitReview'
+            '\SolasMatch\API\Lib\Middleware::authenticateUserToSubmitReview',
+        );
 
-            $app->post(
-                '/tasks/',
-                '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreation',
-                '\SolasMatch\API\V0\Tasks::createTask'
-            );
-        });
+        $app->get(
+            '/v0/tasks/topTasksCount/',
+            '\SolasMatch\API\V0\Tasks::getTopTasksCount'
+        );
+
+        $app->get(
+            '/v0/tasks/topTasks/',
+            '\SolasMatch\API\V0\Tasks::getTopTasks'
+        );
+
+        $app->get(
+            '/v0/tasks/:taskId/',
+            '\SolasMatch\API\V0\Tasks::getTask'
+        );
+
+        $app->put(
+            '/v0/tasks/:taskId/',
+            '\SolasMatch\API\V0\Tasks::updateTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
+        );
+
+        $app->delete(
+            '/v0/tasks/:taskId/',
+            '\SolasMatch\API\V0\Tasks::deleteTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreationPassingTaskId',
+        );
+
+        $app->get(
+            '/v0/tasks/',
+            '\SolasMatch\API\V0\Tasks::getTasks'
+        );
+
+        $app->post(
+            '/v0/tasks/',
+            '\SolasMatch\API\V0\Tasks::createTask'
+            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTaskCreation',
+        );
     }
 
     public static function addTaskPreReq($taskId, $preReqId)
