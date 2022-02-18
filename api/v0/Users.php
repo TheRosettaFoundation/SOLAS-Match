@@ -381,41 +381,52 @@ class Users
             '\SolasMatch\API\V0\Users:dequeue_claim_task');
     }
 
-    public static function addUserTrackedTasksById($userId, $taskId)
+    public static function addUserTrackedTasksById(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         $data = DAO\UserDao::trackTask($userId, $taskId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function deleteUserTrackedTasksById($userId, $taskId)
+    public static function deleteUserTrackedTasksById(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         $data = DAO\UserDao::ignoreTask($userId, $taskId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function deleteUserbadgesByID($userId, $badgeId)
+    public static function deleteUserbadgesByID(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $badgeId = $args['badgeId'];
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::removeUserBadge($userId, $badgeId), null);
     }
 
-    public static function addUserbadgesByID($userId, $badgeId)
+    public static function addUserbadgesByID(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $badgeId = $args['badgeId'];
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null);
     }
 
-    public static function NotifyRegistered($userId)
+    public static function NotifyRegistered(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::NotifyRegistered($userId), null);
     }
 
-    public static function getUserTags($userId)
+    public static function getUserTags(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, null);
         API\Dispatcher::sendResponse(null, DAO\UserDao::getUserTags($userId, $limit), null);
     }
 
-    public static function addUserTag($userId)
+    public static function addUserTag(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Tag');
@@ -426,20 +437,25 @@ class Users
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserTaskStreamNotification($userId)
+    public static function getUserTaskStreamNotification(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getUserTaskStreamNotification($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserTaskReview($userId, $taskId)
+    public static function getUserTaskReview(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         $reviews = DAO\TaskDao::getTaskReviews(null, $taskId, $userId);
         API\Dispatcher::sendResponse(null, $reviews[0], null);
     }
 
-    public static function userUnClaimTask($userId, $taskId)
+    public static function userUnClaimTask(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         $feedback = API\Dispatcher::getDispatcher()->request()->getBody();
         $feedback = trim($feedback);
         if ($feedback != '') {
@@ -450,8 +466,10 @@ class Users
         Lib\Notify::sendTaskRevokedNotifications($taskId, $userId);
     }
 
-    public static function addUserTagById($userId, $tagId)
+    public static function addUserTagById(Request $request, Response $response, $args)
     {
+        $userId= $args['userId'];
+        $tagId = $args['tagId'];
         $data = DAO\UserDao::likeTag($userId, $tagId);
         if (is_array($data)) {
             $data = $data[0];
@@ -459,8 +477,10 @@ class Users
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function deleteUserTagById($userId, $tagId)
+    public static function deleteUserTagById(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $tagId = $args['tagId'];
         $data = DAO\UserDao::removeTag($userId, $tagId);
         if (is_array($data)) {
             $data = $data[0];
@@ -468,68 +488,83 @@ class Users
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userTrackProject($userId, $projectId)
+    public static function userTrackProject(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $projectId = $args['projectId'];
         $data = DAO\UserDao::trackProject($projectId, $userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userUnTrackProject($userId, $projectId)
+    public static function userUnTrackProject(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $projectId = $args['projectId'];
         $data = DAO\UserDao::unTrackProject($projectId, $userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userTrackOrganisation($userId, $organisationId)
+    public static function userTrackOrganisation(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $organisationId = $args['organisationId'];
         $data = DAO\UserDao::trackOrganisation($userId, $organisationId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userUnTrackOrganisation($userId, $organisationId)
+    public static function userUnTrackOrganisation(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $organisationId = $args['organisationId'];
         $data = DAO\UserDao::unTrackOrganisation($userId, $organisationId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userRequestReference($userId)
+    public static function userRequestReference(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         DAO\UserDao::requestReference($userId);
         API\Dispatcher::sendResponse(null, null, null);
     }
 
-    public static function getUserRealName($userId)
+    public static function getUserRealName(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::getUserRealName($userId), null);
     }
 
-    public static function isUserVerified($userId)
+    public static function isUserVerified(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $ret = DAO\UserDao::isUserVerified($userId);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getUserOrgs($userId)
+    public static function getUserOrgs(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null);
     }
 
-    public static function addUserbadges($userId)
+    public static function addUserbadges(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Badge');
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $data->getId()), null);
     }
 
-    public static function removeUserTaskStreamNotification($userId)
+    public static function removeUserTaskStreamNotification(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $ret = DAO\UserDao::removeTaskStreamNotification($userId);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function updateTaskStreamNotification($userId)
+    public static function updateTaskStreamNotification(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification');
@@ -537,22 +572,27 @@ class Users
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getUserTasks($userId)
+    public static function getUserTasks(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 10);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null);
     }
 
-    public static function userClaimTask($userId, $taskId)
+    public static function userClaimTask(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
+
 error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, 1, null); // Don't claim here, return 1, just do notifications...
         Lib\Notify::notifyUserClaimedTask($userId, $taskId);
         Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
     }
 
-    public static function dequeue_claim_task()
+    public static function dequeue_claim_task(Request $request, Response $response)
     {
         $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
         foreach ($queue_claim_tasks as $queue_claim_task) {
@@ -574,8 +614,9 @@ error_log("userClaimTask($userId, $taskId)");
         }
     }
 
-    public static function getUserTopTasks($userId)
+    public static function getUserTopTasks(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
         $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
@@ -607,8 +648,9 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserTopTasksCount($userId)
+    public static function getUserTopTasksCount(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
         $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
         $filters = Common\Lib\APIHelper::parseFilterString($filter);
@@ -635,16 +677,15 @@ error_log("userClaimTask($userId, $taskId)");
         );
         API\Dispatcher::sendResponse(null, $data, null);
     }
-    
-    
-    public static function getFilteredUserClaimedTasks(
-            $userId,
-            $orderBy,
-            $limit,
-            $offset,
-            $taskType,
-            $taskStatus
-    ) {
+
+    public static function getFilteredUserClaimedTasks(Request $request, Response $response, $args)
+    {
+        $userId = $args['userId'];
+        $orderBy = $args['orderBy'];
+        $limit = $args['limit'];
+        $offset = $args['offset'];
+        $taskType = $args['taskType'];
+        $taskStatus = $args['taskStatus'];
         API\Dispatcher::sendResponse(
             null,
             DAO\TaskDao::getFilteredUserClaimedTasks(
@@ -659,11 +700,11 @@ error_log("userClaimTask($userId, $taskId)");
         );
     }
 
-    public static function getFilteredUserClaimedTasksCount(
-            $userId,
-            $taskType,
-            $taskStatus
-    ) {
+    public static function getFilteredUserClaimedTasksCount(Request $request, Response $response, $args)
+    {
+        $userId = $args['userId'];
+        $taskType = $args['taskType'];
+        $taskStatus = $args['taskStatus'];
         API\Dispatcher::sendResponse(
             null,
             DAO\TaskDao::getFilteredUserClaimedTasksCount(
@@ -675,11 +716,11 @@ error_log("userClaimTask($userId, $taskId)");
         );
     }
     
-    public static function getUserRecentTasks(
-            $userId,
-            $limit,
-            $offset
-    ) {
+    public static function getUserRecentTasks(Request $request, Response $response, $args)
+    {
+        $userId = $args['userId'];
+        $limit = $args['limit'];
+        $offset = $args['offset'];
         API\Dispatcher::sendResponse(
         null,
         DAO\TaskDao::getUserRecentTasks(
@@ -691,9 +732,9 @@ error_log("userClaimTask($userId, $taskId)");
         );
     }
 
-    public static function getUserRecentTasksCount(
-            $userId
-    ) {
+    public static function getUserRecentTasksCount(Request $request, Response $response, $args)
+    {
+        $userId = $args['userId'];
         API\Dispatcher::sendResponse(
         null,
         DAO\TaskDao::getUserRecentTasksCount(
@@ -703,26 +744,32 @@ error_log("userClaimTask($userId, $taskId)");
         );
     }
 
-    public static function getUserArchivedTasks($userId, $limit, $offset)
+    public static function getUserArchivedTasks(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $limit = $args['limit'];
+        $offset = $args['offset'];
         $data = DAO\TaskDao::getUserArchivedTasks($userId, $limit, $offset);
         API\Dispatcher::sendResponse(null, $data, null);
     }
     
-    public static function getUserArchivedTasksCount($userId)
+    public static function getUserArchivedTasksCount(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\TaskDao::getUserArchivedTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserTrackedTasks($userId)
+    public static function getUserTrackedTasks(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getTrackedTasks($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function addUserTrackedTasks($userId)
+    public static function addUserTrackedTasks(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Task');
@@ -730,22 +777,25 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getUserTrackedProjects($userId)
+    public static function getUserTrackedProjects(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getTrackedProjects($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function createUserPersonalInfo($userId)
+    public static function createUserPersonalInfo(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation");
         API\Dispatcher::sendResponse(null, DAO\UserDao::savePersonalInfo($data), null);
     }
 
-    public static function updateUserPersonalInfo($userId)
+    public static function updateUserPersonalInfo(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserPersonalInformation');
@@ -753,34 +803,39 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getSecondaryLanguages($userId)
+    public static function getSecondaryLanguages(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getSecondaryLanguages($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function createSecondaryLanguage($userId)
+    public static function createSecondaryLanguage(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Locale");
         API\Dispatcher::sendResponse(null, DAO\UserDao::createSecondaryLanguage($userId, $data), null);
     }
 
-    public static function getUserTrackedOrganisations($userId)
+    public static function getUserTrackedOrganisations(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getTrackedOrganisations($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getRegisteredUser($uuid)
+    public static function getRegisteredUser(Request $request, Response $response, $args)
     {
+        $uuid = $args['uuid'];
         $user = DAO\UserDao::getRegisteredUser($uuid);
         API\Dispatcher::sendResponse(null, $user, null);
     }
 
-    public static function finishRegistration($uuid)
+    public static function finishRegistration(Request $request, Response $response, $args)
     {
+        $uuid = $args['uuid'];
         $user = DAO\UserDao::getRegisteredUser($uuid);
         if ($user != null) {
             error_log("finishRegistration($uuid) " . $user->getId());
@@ -791,27 +846,31 @@ error_log("userClaimTask($userId, $taskId)");
         }
     }
 
-    public static function finishRegistrationManually($email)
+    public static function finishRegistrationManually(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         error_log("finishRegistrationManually($email)");
         $ret = DAO\UserDao::finishRegistrationManually($email);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getPasswordResetRequestTime($email)
+    public static function getPasswordResetRequestTime(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $resetRequest = DAO\UserDao::getPasswordResetRequests($email);
         API\Dispatcher::sendResponse(null, $resetRequest->getRequestTime(), null);
     }
 
-    public static function hasUserRequestedPasswordReset($email)
+    public static function hasUserRequestedPasswordReset(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $data = DAO\UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function createPasswordResetRequest($email)
+    public static function createPasswordResetRequest(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $user = DAO\UserDao::getUser(null, $email);
         if ($user) {
             API\Dispatcher::sendResponse(null, DAO\UserDao::createPasswordReset($user), null);
@@ -821,14 +880,19 @@ error_log("userClaimTask($userId, $taskId)");
         }
     }
 
-    public static function deleteSecondaryLanguage($userId, $languageCode, $countryCode)
+    public static function deleteSecondaryLanguage(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $languageCode = $args['languageCode'];
+        $countryCode = $args['countryCode'];
         $data = DAO\UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userSubscribedToOrganisation($userId, $organisationId)
+    public static function userSubscribedToOrganisation(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $organisationId = $args['organisationId'];
         API\Dispatcher::sendResponse(
             null,
             DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId),
@@ -836,8 +900,10 @@ error_log("userClaimTask($userId, $taskId)");
         );
     }
 
-    public static function userLeaveOrg($userId, $orgId)
+    public static function userLeaveOrg(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $orgId = $args['orgId'];
         $data = DAO\OrganisationDao::revokeMembership($orgId, $userId);
         if (is_array($data)) {
             $data = $data[0];
@@ -845,8 +911,9 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getAuthCode($email)
+    public static function getAuthCode(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $user = DAO\UserDao::getUser(null, $email);
         if (!$user) {
             error_log("apiRegister($email) in getAuthCode()");
@@ -894,41 +961,52 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::getDispatcher()->redirect($params['redirect_uri']."?code=$authCode");
     }
 
-    public static function userSubscribedToTask($userId, $taskId)
+    public static function userSubscribedToTask(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::isSubscribedToTask($userId, $taskId), null);
     }
 
-    public static function userSubscribedToProject($userId, $projectId)
+    public static function userSubscribedToProject(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::isSubscribedToProject($userId, $projectId), null);
     }
 
-    public static function isBlacklistedForTask($userId, $taskId)
+    public static function isBlacklistedForTask(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTask($userId, $taskId), null);
     }
     
-    public static function isBlacklistedForTaskByAdmin($userId, $taskId)
+    public static function isBlacklistedForTaskByAdmin(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
+        $taskId = $args['taskId'];
         API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTaskByAdmin($userId, $taskId), null);
     }
 
-    public static function assignBadge($email, $badgeId)
+    public static function assignBadge(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
+        $badgeId = $args['badgeId'];
         $ret = false;
         $user = DAO\UserDao::getUser(null, $email);
         $ret = DAO\BadgeDao::assignBadge($user->getId(), $badgeId);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getUserClaimedTasksCount($userId)
+    public static function getUserClaimedTasksCount(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\TaskDao::getUserTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getAccessToken()
+    public static function getAccessToken(Request $request, Response $response)
     {
         try {
             $server = API\Dispatcher::getOauthserver();
@@ -954,25 +1032,27 @@ error_log("userClaimTask($userId, $taskId)");
         }
     }
 
-    public static function getUserByEmail($email)
+    public static function getUserByEmail(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $data = DAO\UserDao::getUser(null, $email);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getResetRequest($key)
+    public static function getResetRequest(Request $request, Response $response, $args)
     {
+        $key = $args['key'];
         $data = DAO\UserDao::getPasswordResetRequests(null, $key);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getCurrentUser()
+    public static function getCurrentUser(Request $request, Response $response)
     {
         $user = DAO\UserDao::getLoggedInUser();
         API\Dispatcher::sendResponse(null, $user, null);
     }
 
-    public static function getLoginTemplate()
+    public static function getLoginTemplate(Request $request, Response $response)
     {
         $data = new Common\Protobufs\Models\Login();
         $data->setEmail("sample@example.com");
@@ -980,7 +1060,7 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function login()
+    public static function login(Request $request, Response $response)
     {
         $body = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
@@ -1010,13 +1090,13 @@ error_log("userClaimTask($userId, $taskId)");
         }
     }
 
-    public static function getResetTemplate()
+    public static function getResetTemplate(Request $request, Response $response)
     {
         $data = Common\Lib\ModelFactory::buildModel("PasswordReset", array());
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function resetPassword()
+    public static function resetPassword(Request $request, Response $response)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
@@ -1025,7 +1105,7 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $result, null);
     }
 
-    public static function getRegisterTemplate()
+    public static function getRegisterTemplate(Request $request, Response $response)
     {
         $data = new Common\Protobufs\Models\Register();
         $data->setPassword("test");
@@ -1033,7 +1113,7 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function register()
+    public static function register(Request $request, Response $response)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
@@ -1054,7 +1134,7 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $registered, null);
     }
 
-    public static function changeEmail()
+    public static function changeEmail(Request $request, Response $response)
     {
         $user = DAO\UserDao::getLoggedInUser();
         if (!is_null($user) && DAO\AdminDao::isAdmin($user->getId(), null)) {
@@ -1071,8 +1151,9 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $registered, null);
     }
 
-    public static function getUser($userId)
+    public static function getUser(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = DAO\UserDao::getUser($userId);
         if (!is_null($data)) {
             $data->setPassword("");
@@ -1081,8 +1162,9 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function updateUser($userId)
+    public static function updateUser(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\User');
@@ -1091,20 +1173,22 @@ error_log("userClaimTask($userId, $taskId)");
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function deleteUser($userId)
+    public static function deleteUser(Request $request, Response $response, $args)
     {
+        $userId = $args['userId'];
         error_log("deleteUser($userId)");
         DAO\UserDao::deleteUser($userId);
         API\Dispatcher::sendResponse(null, null, null);
     }
 
-    public static function getUsers()
+    public static function getUsers(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, "display all users", null);
     }
     
-    public static function getBannedComment($email)
+    public static function getBannedComment(Request $request, Response $response, $args)
     {
+        $email = $args['email'];
         $client = new Common\Lib\APIHelper('.json');
         
         $user = DAO\UserDao::getUser(null, $email);

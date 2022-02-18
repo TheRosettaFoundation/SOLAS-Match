@@ -53,19 +53,22 @@ class StaticAPI
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
 
-    public static function getLoginCount($startDate, $endDate)
+    public static function getLoginCount(Request $request, Response $response, $args)
     {
+        $startDate = $args['startDate'];
+        $endDate = $args['endDate'];
         $data = DAO\StatDao::getLoginCount($startDate, $endDate);
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getStatisticByName($name)
+    public static function getStatisticByName(Request $request, Response $response, $args)
     {
+        $name = $args['name'];
         $data = DAO\StatDao::getStatistics($name);
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getDartConf()
+    public static function getDartConf(Request $request, Response $response)
     {
         $siteLocation = Common\Lib\Settings::get('site.location');
         $siteAPI = Common\Lib\Settings::get('site.api');
@@ -100,24 +103,24 @@ class StaticAPI
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function notFound()
+    public static function notFound(Request $request, Response $response)
     {
         Dispatcher::sendResponse(null, "404 Not Found", 404);
     }
 
-    public static function getStatistics()
+    public static function getStatistics(Request $request, Response $response)
     {
         $data = DAO\StatDao::getStatistics('');
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getTip()
+    public static function getTip(Request $request, Response $response)
     {
         $data = API\Lib\TipSelector::selectTip();
         Dispatcher::sendResponse(null, $data, null);
     }
     
-    public static function getSiteLanguagesDart()
+    public static function getSiteLanguagesDart(Request $request, Response $response)
     {
         $matches = array();
         $locales = array();

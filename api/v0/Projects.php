@@ -123,46 +123,55 @@ class Projects
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
     }
 
-    public static function updateProjectWordCount($projectId, $newWordCount)
+    public static function updateProjectWordCount(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $newWordCount = $args['newWordCount'];
         $ret = null;
         $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function setImageApprovalStatus($projectId, $imageStatus)
+    public static function setImageApprovalStatus(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $imageStatus = $args['imageStatus'];
         $ret = null;
         $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function calculateProjectDeadlines($projectId)
+    public static function calculateProjectDeadlines(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $ret = null;
         $ret = DAO\ProjectDao::calculateProjectDeadlines($projectId);
         API\Dispatcher::sendResponse(null, $ret, null);
     }
 
-    public static function getProjectTaskReviews($projectId)
+    public static function getProjectTaskReviews(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $reviews = DAO\TaskDao::getTaskReviews($projectId);
         API\Dispatcher::sendResponse(null, $reviews, null);
     }
 
-    public static function getProjectTasks($projectId)
+    public static function getProjectTasks(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $data = DAO\ProjectDao::getProjectTasks($projectId);
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjectTags($projectId)
+    public static function getProjectTags(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getTags($projectId), null);
     }
 
-    public static function getProjectFileInfo($projectId)
+    public static function getProjectFileInfo(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(
             null,
             DAO\ProjectDao::getProjectFileInfo($projectId, null, null, null, null),
@@ -170,39 +179,46 @@ class Projects
         );
     }
 
-    public static function getProjectFile($projectId)
+    public static function getProjectFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectFile($projectId), null);
     }
 
-    public static function getArchivedProjectTasks($projectId)
+    public static function getArchivedProjectTasks(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null);
     }
 
-    public static function deleteProjectTags($projectId)
+    public static function deleteProjectTags(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::deleteProjectTags($projectId), null);
     }
 
-    public static function archiveProject($projectId, $userId)
+    public static function archiveProject(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $userId = $args['userId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::archiveProject($projectId, $userId), null);
     }
 
-    public static function getProjectGraph($projectId)
+    public static function getProjectGraph(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $builder = new Lib\APIWorkflowBuilder();
         $graph = $builder->buildProjectGraph($projectId);
         API\Dispatcher::sendResponse(null, $graph, null);
     }
 
-    public static function getProject($projectId)
+    public static function getProject(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null);
     }
 
-    public static function getProjectByName()
+    public static function getProjectByName(Request $request, Response $response)
     {
         $title = API\Dispatcher::getDispatcher()->request()->getBody();
 
@@ -210,13 +226,16 @@ class Projects
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjectByNameAndOrganisation($title, $orgId)
+    public static function getProjectByNameAndOrganisation(Request $request, Response $response, $args)
     {
+        $title = $args['title'];
+        $orgId = $args['orgId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectByNameAndOrganisation($title, $orgId), null);
     }
 
-    public static function updateProject($projectId)
+    public static function updateProject(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
@@ -225,13 +244,15 @@ class Projects
         if (!DAO\ProjectDao::get_memsource_project($data->getId())) DAO\ProjectDao::calculateProjectDeadlines($data->getId());
     }
 
-    public static function deleteProject($projectId)
+    public static function deleteProject(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::delete($projectId), null);
     }
 
-    public static function getArchivedProject($projectId)
+    public static function getArchivedProject(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $data = DAO\ProjectDao::getArchivedProject($projectId);
         if ($data && is_array($data)) {
             $data = $data[0];
@@ -239,7 +260,7 @@ class Projects
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getProjects()
+    public static function getProjects(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjects(), null);
     }
@@ -270,7 +291,7 @@ class Projects
         return $result;
     }
 
-    public static function createProject()
+    public static function createProject(Request $request, Response $response)
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
@@ -290,7 +311,7 @@ class Projects
         }
     }
 
-    public static function getArchivedProjects()
+    public static function getArchivedProjects(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(), null);
     }

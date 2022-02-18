@@ -42,23 +42,24 @@ class Langs
             '\SolasMatch\API\V0\Langs:getLanguages');
     }
 
-    public static function getActiveLanguages()
+    public static function getActiveLanguages(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveLanguages(), null);
     }
 
-    public static function getActiveSourceLanguages()
+    public static function getActiveSourceLanguages(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveSourceLanguages(), null);
     }
 
-    public static function getActiveTargetLanguages()
+    public static function getActiveTargetLanguages(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveTargetLanguages(), null);
     }
 
-    public static function getLanguageByCode($code)
+    public static function getLanguageByCode(Request $request, Response $response, $args)
     {
+        $code = $args['code'];
         $data = DAO\LanguageDao::getLanguage(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
@@ -66,8 +67,9 @@ class Langs
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getLanguage($languageId)
+    public static function getLanguage(Request $request, Response $response, $args)
     {
+        $languageId = $args['languageId'];
         $data = DAO\LanguageDao::getLanguage($languageId, null);
         if (is_array($data)) {
             $data = $data[0];
@@ -75,7 +77,7 @@ class Langs
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getLanguages()
+    public static function getLanguages(Request $request, Response $response)
     {
         $data = DAO\LanguageDao::getLanguageList();
         $result = null;

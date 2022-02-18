@@ -11,8 +11,6 @@ mb_internal_encoding("UTF-8");
 
 require __DIR__."/vendor/autoload.php";
 
-//\DrSlump\Protobuf::autoload();
-
 require_once __DIR__."/lib/Middleware.php";
 require_once __DIR__."/OAuth2/Client.php";
 require_once __DIR__."/OAuth2/Scope.php";
@@ -73,19 +71,10 @@ class Dispatcher
         $path = $path[1];
         $providerNames = self::readProviders("$path/");
         self::autoRequire($providerNames, "$path/");
-        self::initUnitTests();
         self::initOAuth();
         self::getDispatcher()->run();
     }
 
-    private static function initUnitTests()
-    {
-        $headers = self::getDispatcher()->request()->headers;
-        if ($headers->get('X-UNIT-TESTING') == '1') {
-            Lib\PDOWrapper::$unitTesting = true;
-        }
-    }
-    
     private static function initOAuth()
     {
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
@@ -127,72 +116,7 @@ class Dispatcher
         
         $response->body($body);
     }
-    
-    public static function register($httpMethod, $url, $function, $middleware = null)
-    {
-        switch ($httpMethod) {
-            case Common\Enums\HttpMethodEnum::DELETE:
-                self::getDispatcher()->delete($url, $middleware, $function);
-                break;
-            
-            case Common\Enums\HttpMethodEnum::GET:
-                self::getDispatcher()->get($url, $middleware, $function);
-                break;
 
-            
-            case Common\Enums\HttpMethodEnum::POST:
-                self::getDispatcher()->post($url, $middleware, $function);
-                break;
-            
-            case Common\Enums\HttpMethodEnum::PUT:
-                self::getDispatcher()->put($url, $middleware, $function);
-                break;
-        }
-    }
-    
-    public static function registerNamed(
-        $httpMethod,
-        $url,
-        $function,
-        $name,
-        $middleware = "\SolasMatch\API\Lib\Middleware::isloggedIn"
-    ) {
-        switch ($httpMethod) {
-            case Common\Enums\HttpMethodEnum::DELETE:
-                if ($middleware!=null) {
-                       self::getDispatcher()->delete($url, $middleware, $function)->name($name);
-                } else {
-                    self::getDispatcher()->delete($url, $function)->name($name);
-                }
-                
-                break;
-            
-            case Common\Enums\HttpMethodEnum::GET:
-                if ($middleware!=null) {
-                       self::getDispatcher()->get($url, $middleware, $function)->name($name);
-                } else {
-                                   self::getDispatcher()->get($url, $function)->name($name);
-                }
-                break;
-            
-            case Common\Enums\HttpMethodEnum::POST:
-                if ($middleware!=null) {
-                       self::getDispatcher()->post($url, $middleware, $function)->name($name);
-                } else {
-                                   self::getDispatcher()->post($url, $function)->name($name);
-                }
-                break;
-            
-            case Common\Enums\HttpMethodEnum::PUT:
-                if ($middleware!=null) {
-                       self::getDispatcher()->put($url, $middleware, $function)->name($name);
-                } else {
-                                   self::getDispatcher()->put($url, $function)->name($name);
-                }
-                break;
-        }
-    }
-    
     public static function clenseArgs($index, $httpMethod = null, $default = null)
     {
         $req = self::getDispatcher()->request();

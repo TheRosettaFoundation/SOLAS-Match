@@ -10,7 +10,6 @@ require_once __DIR__."/JSONSerializer.class.php";
 
 class APIHelper
 {
-    public static $UNIT_TESTING = false;
     private $serializer;
     private $responseCode;
     private $outputHeaders;
@@ -72,9 +71,6 @@ error_log("file length: $length");
         );
         if (!is_null($token = UserSession::getAccessToken())) {
             $httpHeaders[] = 'Authorization: Bearer '.$token->getToken();
-        }
-        if (self::$UNIT_TESTING) {
-            $headers[] = 'X-UNIT-TESTING: 1';
         }
         if (!is_null($headers)) {
             $httpHeaders = array_merge($httpHeaders, $headers);

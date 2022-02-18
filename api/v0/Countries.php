@@ -37,8 +37,9 @@ class Countries
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
 
-    public static function getCountryByCode($code)
+    public static function getCountryByCode(Request $request, Response $response, $args)
     {
+        $code = $args['code'];
         $data = DAO\CountryDao::getCountry(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
@@ -46,8 +47,9 @@ class Countries
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getCountry($countryId)
+    public static function getCountry(Request $request, Response $response, $args)
     {
+        $countryId = $args['countryId'];
         $data = DAO\CountryDao::getCountry($countryId);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
@@ -55,13 +57,14 @@ class Countries
         API\Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getCountries()
+    public static function getCountries(Request $request, Response $response)
     {
         API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountryList(), null);
     }
     
-    public static function getCountriesByPattern($pattern)
+    public static function getCountriesByPattern(Request $request, Response $response, $args)
     {
+        $pattern = $args['pattern'];
         API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountriesByPattern($pattern), null);
     }
 }

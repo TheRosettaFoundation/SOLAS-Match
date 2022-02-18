@@ -52,14 +52,18 @@ class Badges
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
     }
 
-    public static function getUsersWithBadge($badgeId)
+    public static function getUsersWithBadge(Request $request, Response $response, $args)
     {
+        $badgeId = $args['badgeId'];
         $data = DAO\UserDao::getUsersWithBadge($badgeId);
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function userHasBadge($badgeId, $userId)
+    public static function userHasBadge(Request $request, Response $response, $args)
     {
+        $badgeId = $args['badgeId'];
+        $userId = $args['userId'];
+
         $data = DAO\UserDao::userHasBadge($badgeId, $userId);
         if (is_array($data)) {
             $data = $data[0];
@@ -67,30 +71,33 @@ class Badges
         Dispatcher::sendResponse(null, $data, null);
     }
 
-    public static function getBadge($badgeId)
+    public static function getBadge(Request $request, Response $response, $args)
     {
+        $badgeId = $args['badgeId'];
         Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge($badgeId), null);
     }
 
-    public static function updateBadge($badgeId)
+    public static function updateBadge(Request $request, Response $response, $args)
     {
+        $badgeId = $args['badgeId'];
         $data = Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
         Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null);
     }
 
-    public static function deleteBadge($badgeId)
+    public static function deleteBadge(Request $request, Response $response, $args)
     {
+        $badgeId = $args['badgeId'];
         Dispatcher::sendResponse(null, DAO\BadgeDao::deleteBadge($badgeId), null);
     }
 
-    public static function getBadges()
+    public static function getBadges(Request $request, Response $response)
     {
         Dispatcher::sendResponse(null, DAO\BadgeDao::getBadges(), null);
     }
 
-    public static function createBadge()
+    public static function createBadge(Request $request, Response $response)
     {
         $data = Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');

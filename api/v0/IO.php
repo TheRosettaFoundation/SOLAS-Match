@@ -74,16 +74,19 @@ class IO
             '\SolasMatch\API\V0\IO:sendTaskUploadNotifications');
     }
 
-    public static function getMimeFromFileContent($filename)
+    public static function getMimeFromFileContent(Request $request, Response $response, $args)
     {
+        $filename = $args['filename'];
         $filename = urldecode($filename);
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
 
         API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null);
     }
 
-    public static function downloadProjectImageFile ($projectId)
+    public static function downloadProjectImageFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (isset($imageFileList[0]))
         {
@@ -97,8 +100,10 @@ class IO
         }
     }
 
-    public static function removeProjectImage($orgId, $projectId)
+    public static function removeProjectImage(Request $request, Response $response, $args)
     {
+        $orgId = $args['orgId'];
+        $projectId = $args['projectId'];
         $project = DAO\ProjectDao::getProject($projectId);
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (!empty($imageFileList) && count($imageFileList) > 0) {
@@ -117,8 +122,9 @@ class IO
         }
     }
 
-    public static function downloadProjectFile($projectId)
+    public static function downloadProjectFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
         $fileInfo = DAO\ProjectDao::getProjectFileInfo($projectId);
         if (!is_null($fileInfo)) {
             $fileName = $fileInfo->getFilename();
@@ -136,8 +142,9 @@ class IO
 
     }
 
-    public static function downloadTaskFile($taskId)
+    public static function downloadTaskFile(Request $request, Response $response, $args)
     {
+        $taskId = $args['taskId'];
         $helper = new Common\Lib\APIHelper(".json");
 
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
@@ -172,8 +179,10 @@ class IO
         return $headerArray;
     }
 
-    public static function saveTaskFile($taskId, $userId)
+    public static function saveTaskFile(Request $request, Response $response, $args)
     {
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
@@ -188,8 +197,10 @@ class IO
         API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveTaskFileFromProject($taskId, $userId)
+    public static function saveTaskFileFromProject(Request $request, Response $response, $args)
     {
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
@@ -204,8 +215,10 @@ class IO
         API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveOutputFile($taskId, $userId)
+    public static function saveOutputFile(Request $request, Response $response, $args)
     {
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
@@ -227,8 +240,11 @@ if (!empty($task) && $task->getTaskType() == 3) {
         API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveProjectFile($projectId, $filename, $userId)
+    public static function saveProjectFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $filename = $args['filename'];
+        $userId = $args['userId'];
         error_log("saveProjectFile($projectId, $filename, $userId...)");
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         try {
@@ -241,8 +257,11 @@ if (!empty($task) && $task->getTaskType() == 3) {
         }
     }
 
-    public static function saveProjectImageFile($projectId, $filename, $userId)
+    public static function saveProjectImageFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $filename = $args['filename'];
+        $userId = $args['userId'];
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
 
         try {
@@ -461,8 +480,10 @@ if (!empty($task) && $task->getTaskType() == 3) {
         return $ret;
     }
 
-    public static function sendTaskUploadNotifications($taskId, $type)
+    public static function sendTaskUploadNotifications(Request $request, Response $response, $args)
     {
+        $taskId = $args['taskId'];
+        $type = $args['type'];
         try {
             Lib\Notify::sendTaskUploadNotifications($taskId, $type);
             error_log("sendTaskUploadNotifications($taskId, $type)");
