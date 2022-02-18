@@ -24,124 +24,103 @@ class Projects
 
         $app->put(
             '/v0/projects/:projectId/updateWordCount/:newWordCount/',
-            '\SolasMatch\API\V0\Projects::updateProjectWordCount'
-            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-        );
+            '\SolasMatch\API\V0\Projects:updateProjectWordCount')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->put(
             '/v0/projects/:projectId/setImageApprovalStatus/:imageStatus/',
-            '\SolasMatch\API\V0\Projects::setImageApprovalStatus'
-            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-        );
+            '\SolasMatch\API\V0\Projects:setImageApprovalStatus')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->post(
             '/v0/projects/:projectId/calculateDeadlines/',
-            '\SolasMatch\API\V0\Projects::calculateProjectDeadlines'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Projects:calculateProjectDeadlines')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/projects/:projectId/reviews/',
-            '\SolasMatch\API\V0\Projects::getProjectTaskReviews'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserOrOrgForProjectTask',
-        );
+            '\SolasMatch\API\V0\Projects:getProjectTaskReviews')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserOrOrgForProjectTask');
 
         $app->get(
             '/v0/projects/:projectId/tasks/',
-            '\SolasMatch\API\V0\Projects::getProjectTasks'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Projects:getProjectTasks')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/projects/:projectId/tags/',
-            '\SolasMatch\API\V0\Projects::getProjectTags'
-        );
+            '\SolasMatch\API\V0\Projects:getProjectTags');
 
         $app->get(
             '/v0/projects/:projectId/info/',
-            '\SolasMatch\API\V0\Projects::getProjectFileInfo'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Projects:getProjectFileInfo')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/projects/:projectId/file/',
-            '\SolasMatch\API\V0\Projects::getProjectFile'
-        );
+            '\SolasMatch\API\V0\Projects:getProjectFile');
 
         $app->get(
             '/v0/projects/:projectId/archivedTasks/',
-            '\SolasMatch\API\V0\Projects::getArchivedProjectTasks'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:getArchivedProjectTasks')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->delete(
             '/v0/projects/:projectId/deleteTags/',
-            '\SolasMatch\API\V0\Projects::deleteProjectTags'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:deleteProjectTags')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->put(
             '/v0/projects/archiveProject/:projectId/user/:userId/',
-            '\SolasMatch\API\V0\Projects::archiveProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:archiveProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->get(
             '/v0/projects/buildGraph/:projectId/',
-            '\SolasMatch\API\V0\Projects::getProjectGraph'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Projects:getProjectGraph')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->post(
                 '/v0/projects/getProjectByName/',
-                '\SolasMatch\API\V0\Projects::getProjectByName'
-        );
+                '\SolasMatch\API\V0\Projects:getProjectByName');
 
         $app->get(
                 '/v0/projects/getProjectByNameAndOrganisation/:title/organisation/:orgId/',
-                '\SolasMatch\API\V0\Projects::getProjectByNameAndOrganisation'
-        );
+                '\SolasMatch\API\V0\Projects:getProjectByNameAndOrganisation');
 
         $app->get(
             '/v0/projects/:projectId/',
-            '\SolasMatch\API\V0\Projects::getProject'
-        );
+            '\SolasMatch\API\V0\Projects:getProject');
 
         $app->put(
             '/v0/projects/:projectId/',
-            '\SolasMatch\API\V0\Projects::updateProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:updateProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->delete(
             '/v0/projects/:projectId/',
-            '\SolasMatch\API\V0\Projects::deleteProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:deleteProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->get(
             '/v0/archivedProjects/:projectId/',
-            '\SolasMatch\API\V0\Projects::getArchivedProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\Projects:getArchivedProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->get(
             '/v0/projects/',
-            '\SolasMatch\API\V0\Projects::getProjects'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Projects:getProjects')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->post(
             '/v0/projects/',
-            '\SolasMatch\API\V0\Projects::createProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
-        );
+            '\SolasMatch\API\V0\Projects:createProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
 
         $app->get(
             '/v0/archivedProjects/',
-            '\SolasMatch\API\V0\Projects::getArchivedProjects'
-            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-        );
+            '\SolasMatch\API\V0\Projects:getArchivedProjects')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
     }
 
     public static function updateProjectWordCount($projectId, $newWordCount)

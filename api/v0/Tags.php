@@ -18,47 +18,39 @@ class Tags
 
         $app->get(
             '/v0/tags/getByLabel/:tagLabel/',
-            '\SolasMatch\API\V0\Tags::getTagByLabel'
-        );
+            '\SolasMatch\API\V0\Tags:getTagByLabel');
 
         $app->get(
             '/v0/tags/search/:tagName/',
-            '\SolasMatch\API\V0\Tags::searchForTag'
-        );
+            '\SolasMatch\API\V0\Tags:searchForTag');
 
         $app->get(
             '/v0/tags/:tagId/tasks/',
-            '\SolasMatch\API\V0\Tags::getTaskForTag'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Tags:getTaskForTag')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/tags/:tagId/',
-            '\SolasMatch\API\V0\Tags::getTag'
-        );
+            '\SolasMatch\API\V0\Tags:getTag');
 
         $app->put(
             '/v0/tags/:tagId/',
-            '\SolasMatch\API\V0\Tags::updateTag'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Tags:updateTag')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->delete(
             '/v0/tags/:tagId/',
-            '\SolasMatch\API\V0\Tags::deleteTag'
-            '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-        );
+            '\SolasMatch\API\V0\Tags:deleteTag')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->get(
             '/v0/tags/',
-            '\SolasMatch\API\V0\Tags::getTags'
-        );
+            '\SolasMatch\API\V0\Tags:getTags');
 
         $app->post(
             '/v0/tags/',
-            '\SolasMatch\API\V0\Tags::createTag'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-        );
+            '\SolasMatch\API\V0\Tags:createTag')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
     }
 
     public static function getTagByLabel($tagLabel)

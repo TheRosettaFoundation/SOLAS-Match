@@ -19,33 +19,27 @@ class Langs
 
         $app->get(
             '/v0/languages/getActiveLanguages/',
-            '\SolasMatch\API\V0\Langs::getActiveLanguages'
-        );
+            '\SolasMatch\API\V0\Langs:getActiveLanguages');
 
         $app->get(
             '/v0/languages/getActiveSourceLanguages/',
-            '\SolasMatch\API\V0\Langs::getActiveSourceLanguages'
-        );
+            '\SolasMatch\API\V0\Langs:getActiveSourceLanguages');
 
         $app->get(
             '/v0/languages/getActiveTargetLanguages/',
-            '\SolasMatch\API\V0\Langs::getActiveTargetLanguages'
-        );
+            '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
 
         $app->get(
             '/v0/languages/getByCode/:code/',
-            '\SolasMatch\API\V0\Langs::getLanguageByCode'
-        );
+            '\SolasMatch\API\V0\Langs:getLanguageByCode');
 
         $app->get(
             '/v0/languages/:languageId/',
-            '\SolasMatch\API\V0\Langs::getLanguage'
-        );
+            '\SolasMatch\API\V0\Langs:getLanguage');
 
         $app->get(
             '/v0/languages/',
-            '\SolasMatch\API\V0\Langs::getLanguages'
-        );
+            '\SolasMatch\API\V0\Langs:getLanguages');
     }
 
     public static function getActiveLanguages()

@@ -19,26 +19,22 @@ class Countries
 
         $app->get(
             '/v0/countries/getByCode/:code/',
-            '\SolasMatch\API\V0\Countries::getCountryByCode'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Countries:getCountryByCode')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/countries/getByPattern/:pattern/',
-            '\SolasMatch\API\V0\Countries::getCountriesByPattern'
-        );
+            '\SolasMatch\API\V0\Countries:getCountriesByPattern');
 
         $app->get(
             '/v0/countries/:countryId/',
-            '\SolasMatch\API\V0\Countries::getCountry'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Countries:getCountry')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/countries/',
-            '\SolasMatch\API\V0\Countries::getCountries'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Countries:getCountries')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
 
     public static function getCountryByCode($code)

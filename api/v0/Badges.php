@@ -18,45 +18,38 @@ class Badges
 
         $app->get(
             '/v0/badges/:badgeId/users/',
-            '\SolasMatch\API\V0\Badges::getUsersWithBadge'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Badges:getUsersWithBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/badges/:badgeId/:userId/',
-            '\SolasMatch\API\V0\Badges::userHasBadge'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Badges:userHasBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
             '/v0/badges/:badgeId/',
-            '\SolasMatch\API\V0\Badges::getBadge'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Badges:getBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->put(
             '/v0/badges/:badgeId/',
-            '\SolasMatch\API\V0\Badges::updateBadge'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
-        );
+            '\SolasMatch\API\V0\Badges:updateBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgBadge');
 
         $app->delete(
             '/v0/badges/:badgeId/',
-            '\SolasMatch\API\V0\Badges::deleteBadge'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
-        );
+            '\SolasMatch\API\V0\Badges:deleteBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgBadge');
 
         $app->get(
             '/v0/badges/',
-            '\SolasMatch\API\V0\Badges::getBadges'
-            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-        );
+            '\SolasMatch\API\V0\Badges:getBadges')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->post(
             '/v0/badges/',
-            '\SolasMatch\API\V0\Badges::createBadge'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership',
-        );
+            '\SolasMatch\API\V0\Badges:createBadge')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
     }
 
     public static function getUsersWithBadge($badgeId)

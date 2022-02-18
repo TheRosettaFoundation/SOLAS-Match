@@ -22,67 +22,56 @@ class IO
 
         $app->delete(
             '/v0/io/projectImage/:orgId/:projectId/',
-            '\SolasMatch\API\V0\IO::removeProjectImage'
-            '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-        );
+            '\SolasMatch\API\V0\IO:removeProjectImage')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
         $app->post(
             '/v0/io/contentMime/:filename/',
-            '\SolasMatch\API\V0\IO::getMimeFromFileContent'
-            '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-        );
+            '\SolasMatch\API\V0\IO:getMimeFromFileContent')
+            ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
 
         $app->get(
             '/v0/io/download/projectImage/:projectId/',
-            '\SolasMatch\API\V0\IO::downloadProjectImageFile'
-            '\SolasMatch\API\Lib\Middleware::authUserForProjectImage',
-        );
+            '\SolasMatch\API\V0\IO:downloadProjectImageFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authUserForProjectImage');
 
         $app->get(
             '/v0/io/download/project/:projectId/',
-            '\SolasMatch\API\V0\IO::downloadProjectFile'
-            '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-        );
+            '\SolasMatch\API\V0\IO:downloadProjectFile')
+            ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
 
         $app->get(
             '/v0/io/download/task/:taskId/',
-            '\SolasMatch\API\V0\IO::downloadTaskFile'
-        );
+            '\SolasMatch\API\V0\IO:downloadTaskFile');
 
         $app->put(
             '/v0/io/upload/project/:projectId/file/:filename/:userId/',
-            '\SolasMatch\API\V0\IO::saveProjectFile'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\IO:saveProjectFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->put(
             '/v0/io/upload/project/:projectId/image/:filename/:userId/',
-            '\SolasMatch\API\V0\IO::saveProjectImageFile'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-        );
+            '\SolasMatch\API\V0\IO:saveProjectImageFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->put(
             '/v0/io/upload/task/:taskId/:userId/',
-            '\SolasMatch\API\V0\IO::saveTaskFile'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-        );
+            '\SolasMatch\API\V0\IO:saveTaskFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
 
         $app->put(
             '/v0/io/upload/taskfromproject/:taskId/:userId/',
-            '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
-            '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-        );
+            '\SolasMatch\API\V0\IO:saveTaskFileFromProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
 
         $app->put(
             '/v0/io/upload/taskOutput/:taskId/:userId/',
-            '\SolasMatch\API\V0\IO::saveOutputFile'
-            '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
-        );
+            '\SolasMatch\API\V0\IO:saveOutputFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authUserForClaimedTask');
 
         $app->put(
             '/v0/io/upload/sendTaskUploadNotifications/:taskId/:type/',
-            '\SolasMatch\API\V0\IO::sendTaskUploadNotifications'
-        );
+            '\SolasMatch\API\V0\IO:sendTaskUploadNotifications');
     }
 
     public static function getMimeFromFileContent($filename)
