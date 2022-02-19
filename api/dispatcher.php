@@ -8,10 +8,6 @@ use Slim\Factory\AppFactory;
 use \SolasMatch\Common as Common;
 
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-
 mb_internal_encoding('UTF-8');
 
 require __DIR__ . '/vendor/autoload.php';
@@ -29,6 +25,9 @@ require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
 require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
 
 $app = AppFactory::create();
+
+$app->addRoutingMiddleware();
+$errorMiddleware = $app->addErrorMiddleware(false, true, true);
 
 require_once 'v0/Admins.php';
 require_once 'v0/Badges.php';
@@ -69,33 +68,28 @@ class Dispatcher
         return self::$oauthServer;
     }
     
-    public static function sendResponse($headers, $body, $code = 200, $oauthToken = null)
+    public static function sendResponse(Response $response, $body, $code = 200, $oauthToken = null)
     {
-        header('Access-Control-Allow-Origin: *');
-        $response = self::getDispatcher()->response();
+        $response = $response->withHeader('Access-Control-Allow-Origin',  '*');
+        $response = $response->withHeader('Access-Control-Allow-Headers', 'Content-Type');
+        $response = $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+        $response = $response->withHeader('Content-Type', 'application/json; charset=utf-8');
+
         $apiHelper = new Common\Lib\APIHelper('.json');
-        $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
+
         $token = $apiHelper->serialize($oauthToken);
-        $response["X-Custom-Token"] = base64_encode($token);
-        if ($headers != null) {
-            foreach ($headers as $key => $val) {
-                $response[$key] = $val;
-            }
-        }
+        $response = $response->withHeader('X-Custom-Token', base64_encode($token));
         
-        if ($code != null) {
-            $response->status($code);
-        }
+        if ($code != null) $response = $response->withStatus($code);
         
-        $response->body($body);
+        return $response->getBody()->write($body);
     }
 
-    public static function clenseArgs($index, $default = null)
+    public static function clenseArgs(Request $request, $index, $default = null)
     {
-        $req = self::getDispatcher()->request();
-        $result = $req->get($index);
-        return is_null($result) ? $default : $result;
+        $parms = $request->getQueryParams();
+        return isset($parms[$index]) ? $parms[$index] : $default;
     }
 }
 
