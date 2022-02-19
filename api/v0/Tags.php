@@ -70,7 +70,7 @@ class Tags
     public static function getTaskForTag(Request $request, Response $response, $args)
     {
         $tagId = $args['tagId'];
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
+        $limit = API\Dispatcher::clenseArgs('limit', 5);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasksWithTag($tagId, $limit), null);
     }
 
@@ -97,8 +97,8 @@ class Tags
 
     public static function getTags(Request $request, Response $response)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
-        $topTags = API\Dispatcher::clenseArgs('topTags', Common\Enums\HttpMethodEnum::GET, false);
+        $limit = API\Dispatcher::clenseArgs('limit', 30);
+        $topTags = API\Dispatcher::clenseArgs('topTags', false);
         if ($topTags) {
             API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags(10), null);
         } else {

@@ -147,7 +147,7 @@ class IO
         $taskId = $args['taskId'];
         $helper = new Common\Lib\APIHelper(".json");
 
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
+        $version = API\Dispatcher::clenseArgs('version', 0);
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
@@ -184,7 +184,7 @@ class IO
         $taskId = $args['taskId'];
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
+        $version = API\Dispatcher::clenseArgs('version', null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
@@ -202,7 +202,7 @@ class IO
         $taskId = $args['taskId'];
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
+        $version = API\Dispatcher::clenseArgs('version', null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();

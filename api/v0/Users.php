@@ -420,7 +420,7 @@ class Users
     public static function getUserTags(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, null);
+        $limit = API\Dispatcher::clenseArgs('limit', null);
         API\Dispatcher::sendResponse(null, DAO\UserDao::getUserTags($userId, $limit), null);
     }
 
@@ -576,8 +576,8 @@ class Users
     {
         $userId = $args['userId'];
 
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 10);
-        $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
+        $limit = API\Dispatcher::clenseArgs('limit', 10);
+        $offset = API\Dispatcher::clenseArgs('offset', 0);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null);
     }
 
@@ -617,10 +617,10 @@ error_log("userClaimTask($userId, $taskId)");
     public static function getUserTopTasks(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
-        $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
-        $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
-        $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
+        $limit = API\Dispatcher::clenseArgs('limit', 5);
+        $offset = API\Dispatcher::clenseArgs('offset', 0);
+        $filter = API\Dispatcher::clenseArgs('filter', '');
+        $strict = API\Dispatcher::clenseArgs('strict', false);
         $filters = Common\Lib\APIHelper::parseFilterString($filter);
         $filter = "";
         $taskType = '';
@@ -651,8 +651,8 @@ error_log("userClaimTask($userId, $taskId)");
     public static function getUserTopTasksCount(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
-        $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
+        $filter = API\Dispatcher::clenseArgs('filter', '');
+        $strict = API\Dispatcher::clenseArgs('strict', false);
         $filters = Common\Lib\APIHelper::parseFilterString($filter);
         $filter = "";
         $taskType = '';
@@ -1066,8 +1066,8 @@ error_log("userClaimTask($userId, $taskId)");
         $client = new Common\Lib\APIHelper('.json');
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
         $params = array();
-        $params['client_id'] = API\Dispatcher::clenseArgs('client_id', Common\Enums\HttpMethodEnum::GET, null);
-        $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', Common\Enums\HttpMethodEnum::GET, null);
+        $params['client_id'] = API\Dispatcher::clenseArgs('client_id', null);
+        $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', null);
         $params['username'] = $loginData->getEmail();
         $params['password'] = $loginData->getPassword();
         try {

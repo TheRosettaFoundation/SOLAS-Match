@@ -242,14 +242,14 @@ class Tasks
     public static function getTaskVersion(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $userId = API\Dispatcher::clenseArgs('userId', Common\Enums\HttpMethodEnum::GET, null);
+        $userId = API\Dispatcher::clenseArgs('userId', null);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestFileVersion($taskId, $userId), null);
     }
 
     public static function getTaskInfo(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
+        $version = API\Dispatcher::clenseArgs('version', 0);
         $taskMetadata = Common\Lib\ModelFactory::buildModel(
             "TaskMetadata",
             DAO\TaskDao::getTaskFileInfo($taskId, $version)
@@ -261,7 +261,7 @@ class Tasks
     {
         $taskId = $args['taskId'];
         $data = null;
-        $userId = API\Dispatcher::clenseArgs('userId', Common\Enums\HttpMethodEnum::GET, null);
+        $userId = API\Dispatcher::clenseArgs('userId', null);
         if (is_numeric($userId)) {
             $data = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
         } else {
@@ -314,8 +314,8 @@ class Tasks
 
     public static function getTopTasks(Request $request, Response $response)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 15);
-        $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
+        $limit = API\Dispatcher::clenseArgs('limit', 15);
+        $offset = API\Dispatcher::clenseArgs('offset', 0);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null);
     }
     

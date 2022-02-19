@@ -1,15 +1,20 @@
 <?php
-
 namespace SolasMatch\API;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
+
 use \SolasMatch\Common as Common;
+
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-mb_internal_encoding("UTF-8");
 
-require __DIR__."/vendor/autoload.php";
+mb_internal_encoding('UTF-8');
+
+require __DIR__ . '/vendor/autoload.php';
 
 require_once __DIR__."/lib/Middleware.php";
 require_once __DIR__."/OAuth2/Client.php";
@@ -23,58 +28,27 @@ require_once __DIR__."/../Common/lib/UserSession.class.php";
 require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
 require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
 
+$app = AppFactory::create();
+
+require_once 'v0/Admins.php';
+require_once 'v0/Badges.php';
+require_once 'v0/Countries.php';
+require_once 'v0/IO.php';
+require_once 'v0/Langs.php';
+require_once 'v0/Orgs.php';
+require_once 'v0/Projects.php';
+require_once 'v0/Static.php';
+require_once 'v0/Tags.php';
+require_once 'v0/Tasks.php';
+require_once 'v0/Users.php';
+
+Dispatcher::initOAuth();
 
 class Dispatcher
 {
-    
-    private static $apiDispatcher = null;
     private static $oauthServer = null;
     private static $oauthRequest = null;
             
-    public static function getDispatcher()
-    {
-        if (self::$apiDispatcher == null) {
-            self::$apiDispatcher = new \Slim\Slim(array(
-                 'debug' => true
-                ,'mode' => 'development' // default is development. TODO get from config file, or set
-                // in environment...... $_ENV['SLIM_MODE'] = 'production';
-            ));
-            $app = self::$apiDispatcher;
-            self::$apiDispatcher->configureMode('production', function () use ($app) {
-                $app->config(array(
-                    'log.enable' => true,
-                    'log.path' => '../../logs', // Need to set this...
-                    'debug' => false
-                ));
-            });
-
-            $app->configureMode('development', function () use ($app) {
-                $app->config(array(
-                    'log.enable' => false,
-                    'debug' => true,
-                    'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
-                    'cookies.encrypt' => true,
-                    'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-                    'cookies.cipher' => '',
-                    'cookies.cipher_mode' => ''
-                ));
-            });
-        }
-        return self::$apiDispatcher;
-    }
-    
-
-    public static function init()
-    {
-        $path = self::getDispatcher()->request()->getResourceUri();
-        $path = explode("/", $path);
-        $path = $path[1];
-        $providerNames = self::readProviders("$path/");
-        self::autoRequire($providerNames, "$path/");
-        self::initOAuth();
-        self::getDispatcher()->run();
-    }
-
     private static function initOAuth()
     {
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
@@ -117,42 +91,12 @@ class Dispatcher
         $response->body($body);
     }
 
-    public static function clenseArgs($index, $httpMethod = null, $default = null)
+    public static function clenseArgs($index, $default = null)
     {
         $req = self::getDispatcher()->request();
-        switch ($httpMethod){
-            case Common\Enums\HttpMethodEnum::GET :
-                 $result = $req->get($index);
-                 return is_null($result) ? $default : $result;
-            case Common\Enums\HttpMethodEnum::POST :
-                $result = $req->post($index);
-                return is_null($result) ? $default : $result;
-            case Common\Enums\HttpMethodEnum::PUT :
-                $result = $req->put($index);
-                return is_null($result) ? $default : $result;
-            default:
-                $result = $req->params($index);
-                return is_null($result) ? $default : $result;
-        }
-    }
-    
-    private static function autoRequire(array $providers, $root = "providers")
-    {
-        foreach ($providers as $provider) {
-            require_once $root.$provider.".php";
-        }
-    }
-    
-    private static function readProviders($root)
-    {
-        $temp = scandir($root);
-        $ret = array();
-        foreach ($temp as $provider) {
-            if ($provider != "." && $provider != ".." && strncmp($provider, ".", 1)) {
-                $ret[] = substr($provider, 0, -4);
-            }
-        }
-        return $ret;
+        $result = $req->get($index);
+        return is_null($result) ? $default : $result;
     }
 }
-Dispatcher::init();
+
+$app->run();
