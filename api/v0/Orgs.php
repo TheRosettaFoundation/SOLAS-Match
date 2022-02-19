@@ -143,7 +143,7 @@ class Orgs
     {
         $orgId = $args['orgId'];
         $projectId = $args['projectId'];
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null);
+        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedTask($projectId), null);
     }
 
     public static function getOrgArchivedProject(Request $request, Response $response, $args)
@@ -151,37 +151,36 @@ class Orgs
         $orgId = $args['orgId'];
         $projectId = $args['projectId'];
         $data=DAO\ProjectDao::getArchivedProject($projectId, $orgId);
-        API\Dispatcher::sendResponse(null, $data[0], null);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
     public static function createMembershipRequests(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $uid = $args['uid'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::requestMembership($uid, $orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::requestMembership($uid, $orgId), null);
     }
 
     public static function acceptMembershipRequests(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $uid = $args['uid'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null);
         Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null);
     }
 
     public static function rejectMembershipRequests(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $uid = $args['uid'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null);
         Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null);
     }
 
     public static function getOrgProjects(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(
-            null,
+        return API\Dispatcher::sendResponse($response,
             DAO\ProjectDao::getProjects(null, null, null, null, null, $orgId),
             null
         );
@@ -190,14 +189,14 @@ class Orgs
     public static function getOrgArchivedProjects(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(null, $orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedProject(null, $orgId), null);
     }
 
     public static function getUsersTrackingOrg(Request $request, Response $response, $args)
     {
         $organisationId = $args['organisationId'];
         $data = DAO\OrganisationDao::getUsersTrackingOrg($organisationId);
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function addMember(Request $request, Response $response, $args)
@@ -210,7 +209,7 @@ class Orgs
             $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
             DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
         }
-        API\Dispatcher::sendResponse(null, $ret, null);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function isMember(Request $request, Response $response, $args)
@@ -218,7 +217,7 @@ class Orgs
         $orgId = $args['orgId'];
         $userId = $args['userId'];
         $data = DAO\OrganisationDao::isMember($orgId, $userId);
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getOrgByName(Request $request, Response $response, $args)
@@ -226,7 +225,7 @@ class Orgs
         $name = $args['name'];
         $data= DAO\OrganisationDao::getOrgs(null, urldecode($name));
         $data = $data[0];
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function searchByName(Request $request, Response $response, $args)
@@ -236,39 +235,39 @@ class Orgs
         if (!is_array($data) && !is_null($data)) {
             $data = array($data);
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getOrgBadges(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\BadgeDao::getOrgBadges($orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\BadgeDao::getOrgBadges($orgId), null);
     }
 
     public static function getOrgMembers(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgMembers($orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgMembers($orgId), null);
     }
 
     public static function getMembershipRequests(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getMembershipRequests($orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getMembershipRequests($orgId), null);
     }
 
     public static function getOrg(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $org = DAO\OrganisationDao::getOrg($orgId);
-        API\Dispatcher::sendResponse(null, $org, null);
+        return API\Dispatcher::sendResponse($response, $org, null);
     }
 
     public static function getOrganisationExtendedProfile(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $org = DAO\OrganisationDao::getOrganisationExtendedProfile($orgId);
-        API\Dispatcher::sendResponse(null, $org, null);
+        return API\Dispatcher::sendResponse($response, $org, null);
     }
 
     public static function updateOrg(Request $request, Response $response, $args)
@@ -281,9 +280,9 @@ class Orgs
         
         $organisation = DAO\OrganisationDao::getOrg(null, $data->getName());
         if ($organisation != null && $organisation->getId() != $data->getId()) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdate($data), null);
     }
 
     public static function updateOrgExtendedProfile(Request $request, Response $response, $args)
@@ -293,18 +292,18 @@ class Orgs
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
         $data->setId($orgId);
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null);
     }
 
     public static function deleteOrg(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::delete($orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::delete($orgId), null);
     }
 
     public static function getOrgs(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgs(), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgs(), null);
     }
 
     public static function createOrg(Request $request, Response $response)
@@ -317,21 +316,16 @@ class Orgs
         $name = $data->getName();
         //Is org name already in use?
         if (DAO\OrganisationDao::getOrg(null, $name) != null) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         } else {
             $org = DAO\OrganisationDao::insertAndUpdate($data);
             $user = DAO\UserDao::getLoggedInUser();
             if (!is_null($org) && $org->getId() > 0) {
                 error_log('Calling addOrgAdmin(' . $user->getId() . ', ' . $org->getId() . ')');
                 DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
-                /*if (!DAO\AdminDao::isAdmin($user->getId(), $org->getId())) {
-                    DAO\OrganisationDao::delete($org->getId());
-                }*/
-            }
-            API\Dispatcher::sendResponse(null, $org, null);
-            if (!is_null($org) && $org->getId() > 0) {
                 Lib\Notify::sendOrgCreatedNotifications($org->getId());
             }
+            return API\Dispatcher::sendResponse($response, $org, null);
         }
     }
 
@@ -339,7 +333,7 @@ class Orgs
     {
         $org_id = $args['org_id'];
         $ret = DAO\OrganisationDao::getSubscription($org_id);
-        API\Dispatcher::sendResponse(null, $ret, null);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function updateSubscription(Request $request, Response $response, $args)
@@ -350,7 +344,7 @@ class Orgs
         $start_date = $args['start_date'];
         $comment = API\Dispatcher::getDispatcher()->request()->getBody();
         $comment = trim($comment);
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null);
     }
 }
 

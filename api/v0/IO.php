@@ -80,7 +80,7 @@ class IO
         $filename = urldecode($filename);
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
 
-        API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null);
+        return API\Dispatcher::sendResponse($response, self::detectMimeType($fileContent, $filename), null);
     }
 
     public static function downloadProjectImageFile(Request $request, Response $response, $args)
@@ -94,9 +94,9 @@ class IO
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
             $mime = finfo_file($finfo, $imageFilePath);
             finfo_close($finfo);
-            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($imageFilePath, $mime), null);
+            return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($imageFilePath, $mime), null);
         } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
     }
 
@@ -118,8 +118,8 @@ class IO
             $project->setImageApproved(0);
             DAO\ProjectDao::save($project);
             Lib\Notify::sendProjectImageRemoved($projectId);
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::OK);
         }
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::OK);
     }
 
     public static function downloadProjectFile(Request $request, Response $response, $args)
@@ -129,17 +129,12 @@ class IO
         if (!is_null($fileInfo)) {
             $fileName = $fileInfo->getFilename();
             $mime = $fileInfo->getMime();
-            //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
             $absoluteFilePath = DAO\ProjectDao::getPhysicalProjectFilePath($projectId, $fileName);
             if (file_exists($absoluteFilePath)) {
-                API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null);
-            } else {
-                API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+                return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($absoluteFilePath, $mime), null);
             }
-        } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
-
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
     }
 
     public static function downloadTaskFile(Request $request, Response $response, $args)
@@ -147,7 +142,7 @@ class IO
         $taskId = $args['taskId'];
         $helper = new Common\Lib\APIHelper(".json");
 
-        $version = API\Dispatcher::clenseArgs('version', 0);
+        $version = API\Dispatcher::clenseArgs($request, 'version', 0);
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
@@ -157,9 +152,9 @@ class IO
 
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
-            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null);
+            return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($absoluteFilePath, $mime), null);
         } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
     }
 
@@ -184,17 +179,16 @@ class IO
         $taskId = $args['taskId'];
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', null);
+        $version = API\Dispatcher::clenseArgs($request, 'version', null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
             self::uploadFile($task, $data, $version, $userId, $filename);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function saveTaskFileFromProject(Request $request, Response $response, $args)
@@ -202,17 +196,16 @@ class IO
         $taskId = $args['taskId'];
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', null);
+        $version = API\Dispatcher::clenseArgs($request, 'version', null);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
             self::uploadFile($task, $data, $version, $userId, $filename, true);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function saveOutputFile(Request $request, Response $response, $args)
@@ -234,10 +227,9 @@ if (!empty($task) && $task->getTaskType() == 3) {
 }
         } catch (Common\Exceptions\SolasMatchException $e) {
             error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function saveProjectFile(Request $request, Response $response, $args)
@@ -250,10 +242,10 @@ if (!empty($task) && $task->getTaskType() == 3) {
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
             error_log('CREATED');
-            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED);
+            return API\Dispatcher::sendResponse($response, $token, Common\Enums\HttpStatusEnum::CREATED);
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
     }
 
@@ -266,9 +258,9 @@ if (!empty($task) && $task->getTaskType() == 3) {
 
         try {
             self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
         } catch (Exception $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
     }
 
@@ -442,7 +434,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
         }
 
         if ($taskFileMime != $projectFileMime) {
-            //API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
             //throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
             // Previous code "API\" allowed the flow to proceed even though it gave an error, but there may be mismatches so we need to proceed uninterrupted 20180919
         }
@@ -488,10 +480,9 @@ if (!empty($task) && $task->getTaskType() == 3) {
             Lib\Notify::sendTaskUploadNotifications($taskId, $type);
             error_log("sendTaskUploadNotifications($taskId, $type)");
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     private static function detectMimeType($file, $filename)

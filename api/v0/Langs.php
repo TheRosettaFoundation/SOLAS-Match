@@ -44,17 +44,17 @@ class Langs
 
     public static function getActiveLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveLanguages(), null);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveLanguages(), null);
     }
 
     public static function getActiveSourceLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveSourceLanguages(), null);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveSourceLanguages(), null);
     }
 
     public static function getActiveTargetLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveTargetLanguages(), null);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveTargetLanguages(), null);
     }
 
     public static function getLanguageByCode(Request $request, Response $response, $args)
@@ -64,7 +64,7 @@ class Langs
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getLanguage(Request $request, Response $response, $args)
@@ -74,14 +74,13 @@ class Langs
         if (is_array($data)) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getLanguages(Request $request, Response $response)
     {
         $data = DAO\LanguageDao::getLanguageList();
-        $result = null;
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 }
 

@@ -58,14 +58,14 @@ class StaticAPI
         $startDate = $args['startDate'];
         $endDate = $args['endDate'];
         $data = DAO\StatDao::getLoginCount($startDate, $endDate);
-        Dispatcher::sendResponse(null, $data, null);
+        Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getStatisticByName(Request $request, Response $response, $args)
     {
         $name = $args['name'];
         $data = DAO\StatDao::getStatistics($name);
-        Dispatcher::sendResponse(null, $data, null);
+        Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getDartConf(Request $request, Response $response)
@@ -100,24 +100,24 @@ class StaticAPI
             )
         );
         $data = json_encode($arr, JSON_UNESCAPED_SLASHES);
-        Dispatcher::sendResponse(null, $data, null);
+        Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function notFound(Request $request, Response $response)
     {
-        Dispatcher::sendResponse(null, "404 Not Found", 404);
+        Dispatcher::sendResponse($response, "404 Not Found", 404);
     }
 
     public static function getStatistics(Request $request, Response $response)
     {
         $data = DAO\StatDao::getStatistics('');
-        Dispatcher::sendResponse(null, $data, null);
+        Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getTip(Request $request, Response $response)
     {
         $data = API\Lib\TipSelector::selectTip();
-        Dispatcher::sendResponse(null, $data, null);
+        Dispatcher::sendResponse($response, $data, null);
     }
     
     public static function getSiteLanguagesDart(Request $request, Response $response)
@@ -136,7 +136,7 @@ class StaticAPI
             );
             $locales[] = $lang;
         }
-        API\Dispatcher::sendResponse(null, $locales, null);
+        return API\Dispatcher::sendResponse($response, $locales, null);
     }
 }
 

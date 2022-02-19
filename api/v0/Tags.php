@@ -57,27 +57,27 @@ class Tags
     {
         $tagLabel = $args['tagLabel'];
         $data = DAO\TagsDao::getTag(null, $tagLabel);
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function searchForTag(Request $request, Response $response, $args)
     {
         $tagName = $args['tagName'];
         $ret = DAO\TagsDao::searchForTag($tagName);
-        API\Dispatcher::sendResponse(null, $ret, null);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function getTaskForTag(Request $request, Response $response, $args)
     {
         $tagId = $args['tagId'];
-        $limit = API\Dispatcher::clenseArgs('limit', 5);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasksWithTag($tagId, $limit), null);
+        $limit = API\Dispatcher::clenseArgs($request, 'limit', 5);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTasksWithTag($tagId, $limit), null);
     }
 
     public static function getTag(Request $request, Response $response, $args)
     {
         $tagId = $args['tagId'];
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::getTag($tagId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTag($tagId), null);
     }
 
     public static function updateTag(Request $request, Response $response, $args)
@@ -86,23 +86,23 @@ class Tags
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
     }
 
     public static function deleteTag(Request $request, Response $response, $args)
     {
         $tagId = $args['tagId'];
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::delete($tagId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::delete($tagId), null);
     }
 
     public static function getTags(Request $request, Response $response)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', 30);
-        $topTags = API\Dispatcher::clenseArgs('topTags', false);
+        $limit = API\Dispatcher::clenseArgs($request, 'limit', 30);
+        $topTags = API\Dispatcher::clenseArgs($request, 'topTags', false);
         if ($topTags) {
-            API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags(10), null);
+            return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTopTags(10), null);
         } else {
-            API\Dispatcher::sendResponse(null, DAO\TagsDao::getTags(null, null, $limit), null);
+            return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTags(null, null, $limit), null);
         }
     }
 
@@ -112,7 +112,7 @@ class Tags
         $client = new Common\Lib\APIHelper('.json');
         $data=$client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
         $data->setId("");
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
     }
 }
 

@@ -127,13 +127,13 @@ class Admins
     {
         $userId = $args['userId'];
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId, $orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId, $orgId), null);
     }
 
     public static function getOrgAdmins(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(null, $orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(null, $orgId), null);
     }
 
     public static function createOrgAdmin(Request $request, Response $response, $args)
@@ -141,7 +141,7 @@ class Admins
         $orgId = $args['orgId'];
         $userId = $args['userId'];
         DAO\AdminDao::addOrgAdmin($userId, $orgId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function deleteOrgAdmin(Request $request, Response $response, $args)
@@ -149,7 +149,7 @@ class Admins
         $orgId = $args['orgId'];
         $userId = $args['userId'];
         DAO\AdminDao::removeOrgAdmin($userId, $orgId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function isOrgAdmin(Request $request, Response $response, $args)
@@ -161,7 +161,7 @@ class Admins
         if (is_null($orgId)) {
             $ret = 0;
         }
-        API\Dispatcher::sendResponse(null, $ret, null);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function isSiteAdmin(Request $request, Response $response, $args)
@@ -169,20 +169,20 @@ class Admins
         $userId = $args['userId'];
         $ret = false;
         $ret = DAO\AdminDao::isAdmin($userId, null);
-        API\Dispatcher::sendResponse(null, $ret, null);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function getBannedUser(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
         $data = DAO\AdminDao::getBannedUser($userId);
-        API\Dispatcher::sendResponse(null, $data[0], null);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
     public static function isUserBanned(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::isUserBanned($userId), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::isUserBanned($userId), null);
     }
 
     public static function getBannedOrg(Request $request, Response $response, $args)
@@ -190,37 +190,37 @@ class Admins
         $orgId = $args['orgId'];
 
         $data = DAO\AdminDao::getBannedOrg($orgId);
-        API\Dispatcher::sendResponse(null, $data[0], null);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
     public static function isOrgBanned(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::isOrgBanned($orgId), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::isOrgBanned($orgId), null);
     }
 
     public static function unBanUser(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
         DAO\AdminDao::unBanUser($userId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function unBanOrg(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         DAO\AdminDao::unBanOrg($orgId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function getBannedUsers(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedUser(), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getBannedUser(), null);
     }
 
     public static function getBannedOrgs(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedOrg(), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getBannedOrg(), null);
     }
 
     public static function banUser(Request $request, Response $response)
@@ -229,8 +229,8 @@ class Admins
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedUser');
         DAO\AdminDao::saveBannedUser($data);
-        API\Dispatcher::sendResponse(null, null, null);
         Lib\Notify::sendBannedLoginEmail($data->getUserId());
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function banOrg(Request $request, Response $response)
@@ -239,39 +239,39 @@ class Admins
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedOrganisation');
         DAO\AdminDao::saveBannedOrg($data);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function getSiteAdmin(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId), null);
     }
 
     public static function createSiteAdmin(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
         DAO\AdminDao::addSiteAdmin($userId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function deleteSiteAdmin(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
         DAO\AdminDao::removeAdmin($userId);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function getSiteAdmins(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(), null);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(), null);
     }
     
     public static function revokeTaskFromUser(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $userId = $args['userId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, true), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::unClaimTask($taskId, $userId, true), null);
     }
 }
 

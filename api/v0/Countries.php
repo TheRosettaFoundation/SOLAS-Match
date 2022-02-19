@@ -44,7 +44,7 @@ class Countries
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getCountry(Request $request, Response $response, $args)
@@ -54,18 +54,18 @@ class Countries
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getCountries(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountryList(), null);
+        return API\Dispatcher::sendResponse($response, DAO\CountryDao::getCountryList(), null);
     }
     
     public static function getCountriesByPattern(Request $request, Response $response, $args)
     {
         $pattern = $args['pattern'];
-        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountriesByPattern($pattern), null);
+        return API\Dispatcher::sendResponse($response, DAO\CountryDao::getCountriesByPattern($pattern), null);
     }
 }
 

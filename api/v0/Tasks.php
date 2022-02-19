@@ -148,14 +148,14 @@ class Tasks
     {
         $taskId = $args['taskId'];
         $preReqId = $args['preReqId'];
-        API\Dispatcher::sendResponse(null, Lib\Upload::addTaskPreReq($taskId, $preReqId), null);
+        return API\Dispatcher::sendResponse($response, Lib\Upload::addTaskPreReq($taskId, $preReqId), null);
     }
 
     public static function removeTaskPreReq(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $preReqId = $args['preReqId'];
-        API\Dispatcher::sendResponse(null, Lib\Upload::removeTaskPreReq($taskId, $preReqId), null);
+        return API\Dispatcher::sendResponse($response, Lib\Upload::removeTaskPreReq($taskId, $preReqId), null);
     }
 
     // Org Feedback, feedback sent from the organisation to the user who claimed the task
@@ -166,7 +166,7 @@ class Tasks
         $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\OrgFeedback");
         Lib\Notify::sendOrgFeedback($feedbackData);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     // If DECLINED status comes from Memsource, notify claimant
@@ -190,7 +190,7 @@ class Tasks
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     // User Feedback, feedback sent from the user who claimed the task to the organisation
@@ -201,7 +201,7 @@ class Tasks
         $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\UserFeedback");
         Lib\Notify::sendUserFeedback($feedbackData);
-        API\Dispatcher::sendResponse(null, null, null);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
     
     public static function getAlsoViewedTasks(Request $request, Response $response, $args)
@@ -209,8 +209,7 @@ class Tasks
         $taskId = $args['taskId'];
         $limit = $args['limit'];
         $offset = $args['offset'];
-        API\Dispatcher::sendResponse(
-            null,
+        return API\Dispatcher::sendResponse($response,
             DAO\TaskDao::getAlsoViewedTasks(
                 $taskId,
                 $limit,
@@ -223,85 +222,85 @@ class Tasks
     public static function getTaskPreReqs(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTaskPreReqs($taskId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTaskPreReqs($taskId), null);
     }
 
     public static function getTaskReview(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $review = DAO\TaskDao::getTaskReviews(null, $taskId);
-        API\Dispatcher::sendResponse(null, $review, null);
+        return API\Dispatcher::sendResponse($response, $review, null);
     }
 
     public static function getTasksTags(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTags($taskId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTags($taskId), null);
     }
 
     public static function getTaskVersion(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $userId = API\Dispatcher::clenseArgs('userId', null);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestFileVersion($taskId, $userId), null);
+        $userId = API\Dispatcher::clenseArgs($request, 'userId', null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getLatestFileVersion($taskId, $userId), null);
     }
 
     public static function getTaskInfo(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $version = API\Dispatcher::clenseArgs('version', 0);
+        $version = API\Dispatcher::clenseArgs($request, 'version', 0);
         $taskMetadata = Common\Lib\ModelFactory::buildModel(
             "TaskMetadata",
             DAO\TaskDao::getTaskFileInfo($taskId, $version)
         );
-        API\Dispatcher::sendResponse(null, $taskMetadata, null);
+        return API\Dispatcher::sendResponse($response, $taskMetadata, null);
     }
 
     public static function getTaskClaimed(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $data = null;
-        $userId = API\Dispatcher::clenseArgs('userId', null);
+        $userId = API\Dispatcher::clenseArgs($request, 'userId', null);
         if (is_numeric($userId)) {
             $data = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
         } else {
             $data = DAO\TaskDao::taskIsClaimed($taskId);
         }
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getUserClaimedTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $data = DAO\TaskDao::getUserClaimedTask($taskId);
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getClaimedTime(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $data = DAO\TaskDao::getClaimedTime($taskId);
-        API\Dispatcher::sendResponse(null, $data, null);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function archiveTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $userId = $args['userId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null);
     }
 
     public static function recordTaskView(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         $userId = $args['userId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::recordTaskView($taskId, $userId), null);
     }   
     
     public static function getProofreadTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getProofreadTask($taskId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getProofreadTask($taskId), null);
     }   
     
     public static function submitReview(Request $request, Response $response)
@@ -309,25 +308,25 @@ class Tasks
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $review = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\TaskReview");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::submitReview($review), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::submitReview($review), null);
     }
 
     public static function getTopTasks(Request $request, Response $response)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', 15);
-        $offset = API\Dispatcher::clenseArgs('offset', 0);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null);
+        $limit = API\Dispatcher::clenseArgs($request, 'limit', 15);
+        $offset = API\Dispatcher::clenseArgs($request, 'offset', 0);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null);
     }
     
     public static function getTopTasksCount(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasksCount(), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getLatestAvailableTasksCount(), null);
     }
 
     public static function getTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTask($taskId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTask($taskId), null);
     }
 
     public static function updateTask(Request $request, Response $response, $args)
@@ -336,18 +335,18 @@ class Tasks
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
     }
 
     public static function deleteTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::delete($taskId), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::delete($taskId), null);
     }
 
     public static function getTasks(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasks(), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTasks(), null);
     }
 
     public static function createTask(Request $request, Response $response)
@@ -355,7 +354,7 @@ class Tasks
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
     }
 }
 Tasks::init();
