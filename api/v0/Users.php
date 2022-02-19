@@ -943,17 +943,12 @@ error_log("userClaimTask($userId, $taskId)");
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
             error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
-                API\Dispatcher::getDispatcher()->redirect(
-                    API\Dispatcher::getDispatcher()->request()->getReferrer().
-                    "?error=auth_failed&error_message={$e->getMessage()}"
-                );
+                return $response->withStatus(302)->withHeader('Location', $request->getUri() . "?error=auth_failed&error_message={$e->getMessage()}");
             } else {
-                API\Dispatcher::getDispatcher()->redirect(
-                    $params['redirect_uri']."?error=auth_failed&error_message={$e->getMessage()}"
-                );
+                return $response->withStatus(302)->withHeader('Location', $params['redirect_uri'] . "?error=auth_failed&error_message={$e->getMessage()}");
             }
         }
-        API\Dispatcher::getDispatcher()->redirect($params['redirect_uri']."?code=$authCode");
+        return $response->withStatus(302)->withHeader('Location', $params['redirect_uri'] . "?code=$authCode");
     }
 
     public static function userSubscribedToTask(Request $request, Response $response, $args)
