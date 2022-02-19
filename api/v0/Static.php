@@ -35,10 +35,6 @@ class StaticAPI
             '\SolasMatch\API\V0\StaticAPI:getDartConf');
 
         $app->get(
-            '/v0/static/notFound/',
-            '\SolasMatch\API\V0\StaticAPI:notFound');
-
-        $app->get(
             '/v0/localisation/siteLanguages/',
             '\SolasMatch\API\V0\StaticAPI:getSiteLanguagesDart')
             ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
@@ -101,11 +97,6 @@ class StaticAPI
         );
         $data = json_encode($arr, JSON_UNESCAPED_SLASHES);
         Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function notFound(Request $request, Response $response)
-    {
-        Dispatcher::sendResponse($response, "404 Not Found", 404);
     }
 
     public static function getStatistics(Request $request, Response $response)

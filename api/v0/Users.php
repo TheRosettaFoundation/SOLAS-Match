@@ -1062,14 +1062,14 @@ error_log("userClaimTask($userId, $taskId)");
         $params['password'] = $loginData->getPassword();
         try {
             $server = API\Dispatcher::getOauthServer();
-            $response = $server->getGrantType('password')->completeFlow($params);
+            $response_oauth = $server->getGrantType('password')->completeFlow($params);
             $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
-            $oAuthResponse->setToken($response['access_token']);
-            $oAuthResponse->setTokenType($response['token_type']);
-            $oAuthResponse->setExpires($response['expires']);
-            $oAuthResponse->setExpiresIn($response['expires_in']);
+            $oAuthResponse->setToken($response_oauth['access_token']);
+            $oAuthResponse->setTokenType($response_oauth['token_type']);
+            $oAuthResponse->setExpires($response_oauth['expires']);
+            $oAuthResponse->setExpiresIn($response_oauth['expires_in']);
 
-            $user = DAO\UserDao::getLoggedInUser($response['access_token']);
+            $user = DAO\UserDao::getLoggedInUser($response_oauth['access_token']);
             $user->setPassword("");
             $user->setNonce("");
             return API\Dispatcher::sendResponse($response, $user, null, $oAuthResponse);
