@@ -80,7 +80,7 @@ class Badges
     public static function updateBadge(Request $request, Response $response, $args)
     {
         $badgeId = $args['badgeId'];
-        $data = Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
         Dispatcher::sendResponse($response, DAO\BadgeDao::insertAndUpdateBadge($data), null);
@@ -99,7 +99,7 @@ class Badges
 
     public static function createBadge(Request $request, Response $response)
     {
-        $data = Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
         $data->setId("");

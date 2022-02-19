@@ -273,7 +273,7 @@ class Orgs
     public static function updateOrg(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId($orgId);
@@ -288,7 +288,7 @@ class Orgs
     public static function updateOrgExtendedProfile(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
         $data->setId($orgId);
@@ -308,7 +308,7 @@ class Orgs
 
     public static function createOrg(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId("");
@@ -342,7 +342,7 @@ class Orgs
         $level = $args['level'];
         $spare = $args['spare'];
         $start_date = $args['start_date'];
-        $comment = API\Dispatcher::getDispatcher()->request()->getBody();
+        $comment = (string)$request->getBody();
         $comment = trim($comment);
         return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null);
     }

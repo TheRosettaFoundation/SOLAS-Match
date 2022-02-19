@@ -225,7 +225,7 @@ class Admins
 
     public static function banUser(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedUser');
         DAO\AdminDao::saveBannedUser($data);
@@ -235,7 +235,7 @@ class Admins
 
     public static function banOrg(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedOrganisation');
         DAO\AdminDao::saveBannedOrg($data);

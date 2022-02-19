@@ -162,7 +162,7 @@ class Tasks
     public static function sendOrgFeedback(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\OrgFeedback");
         Lib\Notify::sendOrgFeedback($feedbackData);
@@ -173,7 +173,7 @@ class Tasks
     public static function sendOrgFeedbackDeclined(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Emails\OrgFeedback');
         $task_id     = $feedbackData->getTaskId();
@@ -197,7 +197,7 @@ class Tasks
     public static function sendUserFeedback(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\UserFeedback");
         Lib\Notify::sendUserFeedback($feedbackData);
@@ -305,7 +305,7 @@ class Tasks
     
     public static function submitReview(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $review = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\TaskReview");
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::submitReview($review), null);
@@ -332,7 +332,7 @@ class Tasks
     public static function updateTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
@@ -351,7 +351,7 @@ class Tasks
 
     public static function createTask(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);

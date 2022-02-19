@@ -78,7 +78,7 @@ class IO
     {
         $filename = $args['filename'];
         $filename = urldecode($filename);
-        $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
+        $fileContent = (string)$request->getBody();
 
         return API\Dispatcher::sendResponse($response, self::detectMimeType($fileContent, $filename), null);
     }
@@ -180,7 +180,7 @@ class IO
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs($request, 'version', null);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
@@ -197,7 +197,7 @@ class IO
         $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs($request, 'version', null);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
@@ -215,7 +215,7 @@ class IO
         $task = DAO\TaskDao::getTask($taskId);
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         try {
             error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
         self::uploadOutputFile($task, $data, $userId, $filename);
@@ -238,7 +238,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
         $filename = $args['filename'];
         $userId = $args['userId'];
         error_log("saveProjectFile($projectId, $filename, $userId...)");
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
             error_log('CREATED');
@@ -254,7 +254,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
         $projectId = $args['projectId'];
         $filename = $args['filename'];
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
 
         try {
             self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);

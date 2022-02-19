@@ -219,7 +219,7 @@ class Projects
 
     public static function getProjectByName(Request $request, Response $response)
     {
-        $title = API\Dispatcher::getDispatcher()->request()->getBody();
+        $title = (string)$request->getBody();
 
         $data = DAO\ProjectDao::getProjectByName($title);
         return API\Dispatcher::sendResponse($response, $data, null);
@@ -235,7 +235,7 @@ class Projects
     public static function updateProject(Request $request, Response $response, $args)
     {
         $projectId = $args['projectId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         if (!DAO\ProjectDao::get_memsource_project($data->getId())) DAO\ProjectDao::calculateProjectDeadlines($data->getId());
@@ -291,7 +291,7 @@ class Projects
 
     public static function createProject(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         $project = DAO\ProjectDao::save($data);

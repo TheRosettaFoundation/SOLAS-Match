@@ -83,7 +83,7 @@ class Tags
     public static function updateTag(Request $request, Response $response, $args)
     {
         $tagId = $args['tagId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
         return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
@@ -108,7 +108,7 @@ class Tags
 
     public static function createTag(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data=$client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
         $data->setId("");

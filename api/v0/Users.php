@@ -427,7 +427,7 @@ class Users
     public static function addUserTag(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Tag');
         $data = DAO\UserDao::likeTag($userId, $data->getId());
@@ -456,7 +456,7 @@ class Users
     {
         $userId = $args['userId'];
         $taskId = $args['taskId'];
-        $feedback = API\Dispatcher::getDispatcher()->request()->getBody();
+        $feedback = (string)$request->getBody();
         $feedback = trim($feedback);
         Lib\Notify::sendTaskRevokedNotifications($taskId, $userId);
         if ($feedback != '') {
@@ -549,7 +549,7 @@ class Users
     public static function addUserbadges(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Badge');
         return API\Dispatcher::sendResponse($response, DAO\BadgeDao::assignBadge($userId, $data->getId()), null);
@@ -565,7 +565,7 @@ class Users
     public static function updateTaskStreamNotification(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification');
         $ret = DAO\UserDao::requestTaskStreamNotification($data);
@@ -766,7 +766,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function addUserTrackedTasks(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Task');
         $data = DAO\UserDao::trackTask($userId, $data->getId());
@@ -783,7 +783,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function createUserPersonalInfo(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation");
         return API\Dispatcher::sendResponse($response, DAO\UserDao::savePersonalInfo($data), null);
@@ -792,7 +792,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function updateUserPersonalInfo(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserPersonalInformation');
         $data = DAO\UserDao::savePersonalInfo($data);
@@ -809,7 +809,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function createSecondaryLanguage(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Locale");
         return API\Dispatcher::sendResponse($response, DAO\UserDao::createSecondaryLanguage($userId, $data), null);
@@ -1057,7 +1057,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function login(Request $request, Response $response)
     {
-        $body = API\Dispatcher::getDispatcher()->request()->getBody();
+        $body = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
         $params = array();
@@ -1093,7 +1093,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function resetPassword(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\PasswordReset');
         $result = DAO\UserDao::passwordReset($data->getPassword(), $data->getKey());
@@ -1110,7 +1110,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function register(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
         error_log("apiRegister() in register() " . $data->getEmail());
@@ -1133,7 +1133,7 @@ error_log("userClaimTask($userId, $taskId)");
     {
         $user = DAO\UserDao::getLoggedInUser();
         if (!is_null($user) && DAO\AdminDao::isAdmin($user->getId(), null)) {
-            $data = API\Dispatcher::getDispatcher()->request()->getBody();
+            $data = (string)$request->getBody();
             $client = new Common\Lib\APIHelper('.json');
             $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
 
@@ -1160,7 +1160,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function updateUser(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\User');
         $data->setId($userId);
