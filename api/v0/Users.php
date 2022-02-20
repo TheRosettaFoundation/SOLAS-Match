@@ -368,7 +368,7 @@ class Users
 
         $app->delete(
             '/v0/users/:userId/',
-            '\SolasMatch\API\V0\Users:deleteUser'
+            '\SolasMatch\API\V0\Users:deleteUser')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
