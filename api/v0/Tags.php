@@ -17,29 +17,29 @@ class Tags
         global $app;
 
         $app->get(
-            '/api/v0/tags/getByLabel/:tagLabel/',
+            '/api/v0/tags/getByLabel/{tagLabel}/',
             '\SolasMatch\API\V0\Tags:getTagByLabel');
 
         $app->get(
-            '/api/v0/tags/search/:tagName/',
+            '/api/v0/tags/search/{tagName}/',
             '\SolasMatch\API\V0\Tags:searchForTag');
 
         $app->get(
-            '/api/v0/tags/:tagId/tasks/',
+            '/api/v0/tags/{tagId}/tasks/',
             '\SolasMatch\API\V0\Tags:getTaskForTag')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/tags/:tagId/',
+            '/api/v0/tags/{tagId}/',
             '\SolasMatch\API\V0\Tags:getTag');
 
         $app->put(
-            '/api/v0/tags/:tagId/',
+            '/api/v0/tags/{tagId}/',
             '\SolasMatch\API\V0\Tags:updateTag')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->delete(
-            '/api/v0/tags/:tagId/',
+            '/api/v0/tags/{tagId}/',
             '\SolasMatch\API\V0\Tags:deleteTag')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 

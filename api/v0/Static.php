@@ -23,11 +23,11 @@ class StaticAPI
         global $app;
 
         $app->get(
-            '/api/v0/stats/getLoginCount/:startDate/:endDate/',
+            '/api/v0/stats/getLoginCount/{startDate}/{endDate}/',
             '\SolasMatch\API\V0\StaticAPI:getLoginCount');
 
         $app->get(
-            '/api/v0/stats/:name/',
+            '/api/v0/stats/{name}/',
             '\SolasMatch\API\V0\StaticAPI:getStatisticByName');
 
         $app->get(

@@ -18,16 +18,16 @@ class Countries
         global $app;
 
         $app->get(
-            '/api/v0/countries/getByCode/:code/',
+            '/api/v0/countries/getByCode/{code}/',
             '\SolasMatch\API\V0\Countries:getCountryByCode')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/countries/getByPattern/:pattern/',
+            '/api/v0/countries/getByPattern/{pattern}/',
             '\SolasMatch\API\V0\Countries:getCountriesByPattern');
 
         $app->get(
-            '/api/v0/countries/:countryId/',
+            '/api/v0/countries/{countryId}/',
             '\SolasMatch\API\V0\Countries:getCountry')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
