@@ -100,7 +100,7 @@ error_log(print_r($body, true));
 if (is_null($body)) error_log("Body is null");
         $body = $apiHelper->serialize($body);
 error_log(print_r($body, true));
-if (is_null($body)) error_log("Body is null");
+if (is_null($body)) error_log("Body is null transformed");
 error_log($body);
 
         $token = $apiHelper->serialize($oauthToken);
