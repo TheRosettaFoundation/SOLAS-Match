@@ -96,7 +96,9 @@ class Dispatcher
         $response = $response->withHeader('Content-Type', 'application/json; charset=utf-8');
 
         $apiHelper = new Common\Lib\APIHelper('.json');
+error_log(print_r($body, true));
         $body = $apiHelper->serialize($body);
+error_log(print_r($body, true));
 
         $token = $apiHelper->serialize($oauthToken);
         $response = $response->withHeader('X-Custom-Token', base64_encode($token));
