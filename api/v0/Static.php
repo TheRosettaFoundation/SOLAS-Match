@@ -60,9 +60,7 @@ class StaticAPI
     public static function getStatisticByName(Request $request, Response $response, $args)
     {
         $name = $args['name'];
-error_log("name: $name");
         $data = DAO\StatDao::getStatistics($name);
-error_log(print_r($data, true));
         Dispatcher::sendResponse($response, $data, null);
     }
 
@@ -103,7 +101,9 @@ error_log(print_r($data, true));
 
     public static function getStatistics(Request $request, Response $response)
     {
+error_log("before getStatistics");
         $data = DAO\StatDao::getStatistics('');
+error_log(print_r($data, true));
         Dispatcher::sendResponse($response, $data, null);
     }
 
