@@ -24,6 +24,7 @@ class StatisticsDao extends BaseDao
             Common\Enums\TimeToLiveEnum::HOUR,
             function ($args) {
                 $request = "{$args[1]}v0/stats";
+error_log("request: $request");
                 return $args[0]->call(array("\SolasMatch\Common\Protobufs\Models\Statistic"), $request);
             },
             array($this->client, $this->siteApi)
