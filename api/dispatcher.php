@@ -1,4 +1,5 @@
 <?php
+error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
 namespace SolasMatch\API;
 
 use Psr\Http\Message\ResponseInterface as Response;
