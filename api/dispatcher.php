@@ -104,6 +104,7 @@ class Dispatcher
         if ($code != null) $response = $response->withStatus($code);
         
         return $response->getBody()->write($body);
+        return $response;
     }
 
     public static function clenseArgs(Request $request, $index, $default = null)
