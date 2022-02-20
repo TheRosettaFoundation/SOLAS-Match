@@ -29,7 +29,6 @@ class APIHelper
         $headers = array()
     ) {
         $url = "$url/?";
-error_log("url: $url");
         if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
@@ -41,6 +40,7 @@ error_log("url: $url");
                 $url .= "$key=$val";
             }
         }
+error_log("url: $url");
         $re = curl_init($url);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
@@ -87,11 +87,10 @@ error_log("url: $url");
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
         curl_close($re);
-        
-        if (in_array($this->responseCode, $success)) {
-            $response_data = $this->serializer->deserialize($res, $destination);
-        } else {
-            throw new Exceptions\SolasMatchException($res, $this->responseCode);
+
+        $response_data = $this->serializer->deserialize($res, $destination);
+        if (!in_array($this->responseCode, $success)) {
+            throw new Exceptions\SolasMatchException($response_data, $this->responseCode);
         }
         return $response_data;
     }

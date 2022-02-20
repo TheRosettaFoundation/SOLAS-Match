@@ -71,6 +71,7 @@ class Dispatcher
             
     public static function initOAuth()
     {
+error_log("initOAuth()");//(**)
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
         self::$oauthServer = new \League\OAuth2\Server\Authorization(
             new \League\OAuth2\Server\Storage\PDO\Client(),
@@ -82,6 +83,7 @@ class Dispatcher
         $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
         self::$oauthServer->addGrantType($passwordGrant);
         self::$oauthServer->addGrantType(new \League\OAuth2\Server\Grant\AuthCode());
+error_log("initOAuth() END");//(**)
     }
     
     public static function getOauthServer()

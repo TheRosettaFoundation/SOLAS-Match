@@ -135,6 +135,7 @@ class UserDao
 
     public static function apiLogin($email, $clear_password)
     {
+error_log("apiLogin()");//(**)
         $user = self::getUsers(null, $email);
         
         if (is_array($user)) {
@@ -175,6 +176,7 @@ class UserDao
         
         self::logLoginAttempt($user->getId(), $email, 1);
 
+error_log("apiLogin() END");//(**)
         return $user->getId();
     }
 
