@@ -999,6 +999,7 @@ error_log("userClaimTask($userId, $taskId)");
 error_log("getAccessToken top");//(**)
             $server = API\Dispatcher::getOauthserver();
             $authCodeGrant = $server->getGrantType('authorization_code');
+error_log(print_r($authCodeGrant, true));//(**)
 error_log("getAccessToken 2");//(**)
             $accessToken = $authCodeGrant->completeFlow();
 error_log("getAccessToken 3");//(**)
