@@ -373,7 +373,7 @@ class Users
 
         // From cron
         $app->get(
-            '/api/v0/dequeue_claim_task/',
+            '/api/v0/dequeue_claim_task',
             '\SolasMatch\API\V0\Users:dequeue_claim_task');
     }
 
