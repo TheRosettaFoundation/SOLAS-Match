@@ -996,19 +996,24 @@ error_log("userClaimTask($userId, $taskId)");
     public static function getAccessToken(Request $request, Response $response)
     {
         try {
+error_log("getAccessToken top");//(**)
             $server = API\Dispatcher::getOauthserver();
             $authCodeGrant = $server->getGrantType('authorization_code');
+error_log("getAccessToken 2");//(**)
             $accessToken = $authCodeGrant->completeFlow();
+error_log("getAccessToken 3");//(**)
 
             $oAuthToken = new Common\Protobufs\Models\OAuthResponse();
             $oAuthToken->setToken($accessToken['access_token']);
             $oAuthToken->setTokenType($accessToken['token_type']);
             $oAuthToken->setExpires($accessToken['expires']);
             $oAuthToken->setExpiresIn($accessToken['expires_in']);
+error_log(print_r($oAuthToken, true));//(**)
 
             $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
             $user->setPassword("");
             $user->setNonce("");
+error_log(print_r($user, true));//(**)
 
             DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
 
