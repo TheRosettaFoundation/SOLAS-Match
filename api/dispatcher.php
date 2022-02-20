@@ -12,17 +12,21 @@ mb_internal_encoding('UTF-8');
 
 require __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__."/lib/Middleware.php";
-require_once __DIR__."/OAuth2/Client.php";
-require_once __DIR__."/OAuth2/Scope.php";
-require_once __DIR__."/OAuth2/Session.php";
-require_once __DIR__."/../Common/lib/Settings.class.php";
-require_once __DIR__."/../Common/lib/ModelFactory.class.php";
-require_once __DIR__."/../Common/Enums/BadgeTypes.class.php";
-require_once __DIR__."/../Common/lib/APIHelper.class.php";
-require_once __DIR__."/../Common/lib/UserSession.class.php";
-require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
-require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
+require_once __DIR__ . '/lib/Middleware.php";
+$a12 = get_included_files();
+error_log(print_r($a12, true));
+$a12 = get_declared_classes();
+error_log(print_r($a12, true));
+require_once __DIR__ . '/OAuth2/Client.php';
+require_once __DIR__ . '/OAuth2/Scope.php';
+require_once __DIR__ . '/OAuth2/Session.php';
+require_once __DIR__ . '/../Common/lib/Settings.class.php';
+require_once __DIR__ . '/../Common/lib/ModelFactory.class.php';
+require_once __DIR__ . '/../Common/Enums/BadgeTypes.class.php';
+require_once __DIR__ . '/../Common/lib/APIHelper.class.php';
+require_once __DIR__ . '/../Common/lib/UserSession.class.php';
+require_once __DIR__ . '/../Common/Enums/HttpMethodEnum.class.php';
+require_once __DIR__ . '/../Common/Enums/HttpStatusEnum.class.php';
 
 $app = AppFactory::create();
 
