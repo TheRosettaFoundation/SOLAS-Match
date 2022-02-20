@@ -1,5 +1,4 @@
 <?php
-
 namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\UI\DAO as DAO;
@@ -310,7 +309,6 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-
     public function authUserForOrgTask(Request $request, RequestHandler $handler)
     {
         global $app;
@@ -347,7 +345,6 @@ class Middleware
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
-    
 
     public function authUserForOrgProject(Request $request, RequestHandler $handler)
     {

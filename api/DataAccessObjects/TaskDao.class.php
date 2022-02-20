@@ -831,23 +831,6 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
         return $result[0]['result'];
     }
 
-    //! Determine if a specified User has claimed a Segmentation Task for the specified Project
-    /*!
-      Determine if the User has claimed a Segmentation Task as part of the specified Project. This can be used to
-      determine if the User should be able to create new Tasks for that project (even though they are not an Org
-      member).
-      @param int $userId is the id of a User
-      @param int $projectId is the id of a Project
-      @return Returns 1 if the User has claimed a segmentation Task in the specified Project, 0 otherwise
-    */
-    public static function hasUserClaimedSegmentationTask($userId, $projectId)
-    {
-        $args = Lib\PDOWrapper::cleanse($userId).",".
-            Lib\PDOWrapper::cleanse($projectId);
-        $result = Lib\PDOWrapper::call("hasUserClaimedSegmentationTask", $args);
-        return $result[0]['result'];
-    }
-    
     //! Determine if a Task has already been claimed
     /*!
       Determine if a Task has already been claimed.
