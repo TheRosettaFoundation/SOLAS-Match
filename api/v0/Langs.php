@@ -30,7 +30,7 @@ class Langs
             '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
 
         $app->get(
-            '/api/v0/languages/getByCode/:code/',
+            '/api/v0/languages/getByCode/{code}/',
             '\SolasMatch\API\V0\Langs:getLanguageByCode')->setName('lang');
 
         $app->get(
