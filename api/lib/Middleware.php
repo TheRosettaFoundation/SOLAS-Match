@@ -30,7 +30,7 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $email = $route->getArgument('email');
-        if (!empty($email)) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
+        if (!empty($email) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
             $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
             $openidHash = md5($email.substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             if ($headerHash != $openidHash) {
