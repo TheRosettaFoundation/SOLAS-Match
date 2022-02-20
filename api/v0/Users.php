@@ -262,7 +262,7 @@ class Users
 
         $app->delete(
             '/v0/users/removeSecondaryLanguage/:userId/:languageCode/:countryCode/',
-            '\SolasMatch\API\V0\Users:deleteSecondaryLanguage'
+            '\SolasMatch\API\V0\Users:deleteSecondaryLanguage')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
