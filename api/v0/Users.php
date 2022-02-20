@@ -1167,11 +1167,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function getUsers(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, "display all users", null);
-    }
-    
     public static function getBannedComment(Request $request, Response $response, $args)
     {
         $email = $args['email'];
