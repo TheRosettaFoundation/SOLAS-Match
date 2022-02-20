@@ -57,7 +57,7 @@ require_once __DIR__ . '/../Common/Enums/HttpStatusEnum.class.php';
 $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
-$errorMiddleware = $app->addErrorMiddleware(false, true, true);
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 require_once 'v0/Admins.php';
 require_once 'v0/Badges.php';
