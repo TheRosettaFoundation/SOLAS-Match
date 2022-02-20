@@ -97,8 +97,11 @@ class Dispatcher
 
         $apiHelper = new Common\Lib\APIHelper('.json');
 error_log(print_r($body, true));
+if (is_null($body)) error_log("Body is null");
         $body = $apiHelper->serialize($body);
 error_log(print_r($body, true));
+if (is_null($body)) error_log("Body is null");
+error_log($body);
 
         $token = $apiHelper->serialize($oauthToken);
         $response = $response->withHeader('X-Custom-Token', base64_encode($token));
