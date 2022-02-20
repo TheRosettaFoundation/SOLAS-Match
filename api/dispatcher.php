@@ -78,7 +78,7 @@ class Dispatcher
     private static $oauthServer = null;
     private static $oauthRequest = null;
             
-    private static function initOAuth()
+    public static function initOAuth()
     {
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
         self::$oauthServer = new \League\OAuth2\Server\Authorization(
