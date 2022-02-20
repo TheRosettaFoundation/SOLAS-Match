@@ -13,10 +13,10 @@ mb_internal_encoding('UTF-8');
 require __DIR__ . '/vendor/autoload.php';
 
 require_once __DIR__ . '/lib/Middleware.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidAccessTokenException.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidGrantTypeException.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/ClientException.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/OAuth2Exception.php';
+require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/ClientException.php';
+require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidGrantTypeException.php';
+require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidAccessTokenException.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/GrantTrait.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Storage/ClientInterface.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Storage/SessionInterface.php';
