@@ -99,8 +99,7 @@ class Admins
         $app->delete(
             '/v0/admins/revokeTask/:taskId/:userId/',
             '\SolasMatch\API\V0\Admins:revokeTaskFromUser')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin',
-       );
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->delete(
             '/v0/admins/unBanUser/:userId/',
