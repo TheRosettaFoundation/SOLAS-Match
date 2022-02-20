@@ -588,7 +588,7 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, 1, null); // Don't claim here, return 1, just do notifications...
     }
 
-    public static function dequeue_claim_task(Request $request, Response $response)
+    public static function dequeue_claim_task()
     {
         $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
         foreach ($queue_claim_tasks as $queue_claim_task) {
@@ -608,6 +608,7 @@ error_log("userClaimTask($userId, $taskId)");
                 }
             }
         }
+        die;
     }
 
     public static function getUserTopTasks(Request $request, Response $response, $args)
