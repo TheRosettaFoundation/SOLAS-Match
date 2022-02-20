@@ -103,7 +103,7 @@ class Dispatcher
         
         if ($code != null) $response = $response->withStatus($code);
         
-        return $response->getBody()->write($body);
+        $response->getBody()->write($body);
         return $response;
     }
 
