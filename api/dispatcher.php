@@ -17,6 +17,9 @@ $a12 = get_included_files();
 error_log(print_r($a12, true));
 $a12 = get_declared_classes();
 error_log(print_r($a12, true));
+foreach($a12 as $b12) {
+    if (strpos($b12, 'ModelFactory') !== false) error_log("Class: $b12");
+}
 require_once __DIR__ . '/OAuth2/Client.php';
 require_once __DIR__ . '/OAuth2/Scope.php';
 require_once __DIR__ . '/OAuth2/Session.php';
