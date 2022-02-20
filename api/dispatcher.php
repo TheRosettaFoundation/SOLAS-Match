@@ -12,7 +12,7 @@ mb_internal_encoding('UTF-8');
 
 require __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/lib/Middleware.php";
+require_once __DIR__ . '/lib/Middleware.php';
 $a12 = get_included_files();
 error_log(print_r($a12, true));
 $a12 = get_declared_classes();
