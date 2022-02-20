@@ -18,7 +18,10 @@ error_log(print_r($a12, true));
 $a12 = get_declared_classes();
 error_log(print_r($a12, true));
 foreach($a12 as $b12) {
-    if (strpos($b12, 'ModelFactory') !== false) error_log("Class: $b12");
+    if (strpos($b12, 'League') !== false) error_log("Class: $b12");
+    if (strpos($b12, 'OAuth2') !== false) error_log("Class: $b12");
+    if (strpos($b12, 'Storage') !== false) error_log("Class: $b12");
+    if (strpos($b12, 'ClientInterface') !== false) error_log("Class: $b12");
 }
 require_once __DIR__ . '/OAuth2/Client.php';
 require_once __DIR__ . '/OAuth2/Scope.php';
