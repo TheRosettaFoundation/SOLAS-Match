@@ -114,8 +114,4 @@ class Dispatcher
     }
 }
 
-$h = (string)$app->getRouteCollector()->getRouteParser()->urlFor("home");
-error_log("route home: $h");
-$h = (string)$app->getRouteCollector()->getRouteParser()->urlFor("lang", array("code" => 'fr'));
-error_log("route lang: $h");
 $app->run();

@@ -18,27 +18,27 @@ class Langs
         global $app;
 
         $app->get(
-            '/v0/languages/getActiveLanguages/',
+            '/api/v0/languages/getActiveLanguages/',
             '\SolasMatch\API\V0\Langs:getActiveLanguages');
 
         $app->get(
-            '/v0/languages/getActiveSourceLanguages/',
+            '/api/v0/languages/getActiveSourceLanguages/',
             '\SolasMatch\API\V0\Langs:getActiveSourceLanguages');
 
         $app->get(
-            '/v0/languages/getActiveTargetLanguages/',
+            '/api/v0/languages/getActiveTargetLanguages/',
             '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
 
         $app->get(
             '/api/v0/languages/getByCode/{code}/',
-            '\SolasMatch\API\V0\Langs:getLanguageByCode')->setName('lang');
+            '\SolasMatch\API\V0\Langs:getLanguageByCode');
 
         $app->get(
-            '/v0/languages/:languageId/',
+            '/api/v0/languages/:languageId/',
             '\SolasMatch\API\V0\Langs:getLanguage');
 
         $app->get(
-            '/v0/languages/',
+            '/api/v0/languages/',
             '\SolasMatch\API\V0\Langs:getLanguages');
     }
 

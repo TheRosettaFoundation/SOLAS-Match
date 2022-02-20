@@ -17,37 +17,37 @@ class Badges
         global $app;
 
         $app->get(
-            '/v0/badges/:badgeId/users/',
+            '/api/v0/badges/:badgeId/users/',
             '\SolasMatch\API\V0\Badges:getUsersWithBadge')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/v0/badges/:badgeId/:userId/',
+            '/api/v0/badges/:badgeId/:userId/',
             '\SolasMatch\API\V0\Badges:userHasBadge')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/v0/badges/:badgeId/',
+            '/api/v0/badges/:badgeId/',
             '\SolasMatch\API\V0\Badges:getBadge')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->put(
-            '/v0/badges/:badgeId/',
+            '/api/v0/badges/:badgeId/',
             '\SolasMatch\API\V0\Badges:updateBadge')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgBadge');
 
         $app->delete(
-            '/v0/badges/:badgeId/',
+            '/api/v0/badges/:badgeId/',
             '\SolasMatch\API\V0\Badges:deleteBadge')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgBadge');
 
         $app->get(
-            '/v0/badges/',
+            '/api/v0/badges/',
             '\SolasMatch\API\V0\Badges:getBadges')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->post(
-            '/v0/badges/',
+            '/api/v0/badges/',
             '\SolasMatch\API\V0\Badges:createBadge')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
     }

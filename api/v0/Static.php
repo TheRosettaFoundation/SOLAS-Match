@@ -23,28 +23,28 @@ class StaticAPI
         global $app;
 
         $app->get(
-            '/v0/stats/getLoginCount/:startDate/:endDate/',
+            '/api/v0/stats/getLoginCount/:startDate/:endDate/',
             '\SolasMatch\API\V0\StaticAPI:getLoginCount');
 
         $app->get(
-            '/v0/stats/:name/',
+            '/api/v0/stats/:name/',
             '\SolasMatch\API\V0\StaticAPI:getStatisticByName');
 
         $app->get(
-            '/v0/static/dart/conf/',
+            '/api/v0/static/dart/conf/',
             '\SolasMatch\API\V0\StaticAPI:getDartConf');
 
         $app->get(
-            '/v0/localisation/siteLanguages/',
+            '/api/v0/localisation/siteLanguages/',
             '\SolasMatch\API\V0\StaticAPI:getSiteLanguagesDart')
             ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
 
         $app->get(
-            '/v0/stats/',
+            '/api/v0/stats/',
             '\SolasMatch\API\V0\StaticAPI:getStatistics');
 
         $app->get(
-            '/v0/tips/',
+            '/api/v0/tips/',
             '\SolasMatch\API\V0\StaticAPI:getTip')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
