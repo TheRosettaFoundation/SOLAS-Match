@@ -113,4 +113,6 @@ class Dispatcher
     }
 }
 
+$h = (string)$app->getRouteCollector()->getRouteParser()->urlFor("home")
+error_log("route home: $h");
 $app->run();

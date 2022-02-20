@@ -373,7 +373,7 @@ class Users
 
         $app->get(
             '/v0/users/',
-            '\SolasMatch\API\V0\Users:getUsers');
+            '\SolasMatch\API\V0\Users:getUsers')->setName('home');
 
         // From cron
         $app->get(
