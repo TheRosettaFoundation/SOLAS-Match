@@ -26,10 +26,6 @@ class UserDao extends BaseDao
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
         $this->memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
-        $this->host = Common\Lib\Settings::get('database.server');
-        $this->username = Common\Lib\Settings::get('database.username1');
-        $this->pass = Common\Lib\Settings::get('database.password1');
-        $this->database = Common\Lib\Settings::get('database.database');
     }
     
     public function getUserDart($userId)
@@ -132,8 +128,6 @@ class UserDao extends BaseDao
         }
         return $ret;
     }
-
-    
 
     public function getUserTags($userId, $limit = null)
     {
@@ -2157,7 +2151,7 @@ error_log(print_r($result, true));//(**)
     public function get_users_by_month()
     {
         $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
-        if (empty($result)) 0;
+        if (empty($result)) return 0;
         return $result[0]['users_joined'];
     }
 
@@ -2166,73 +2160,10 @@ error_log(print_r($result, true));//(**)
         return LibAPI\PDOWrapper::call('user_has_strategic_languages', LibAPI\PDOWrapper::cleanse($user_id));
     }
 
-    public function getbadges($user_id)
+    public function get_points_for_badges($user_id)
     {
-
-                // New Connection
-
-                $db = new \mysqli($this->host,$this->username,$this->pass,$this->database);
-
-                // Check for errors
-                if(mysqli_connect_errno()){
-                echo mysqli_connect_error();
-                }
-                /*
-                $key = Common\Lib\Settings::get('badge.key');
-
-                function my_decrypt($data, $key) {
-                    $encryption_key = base64_decode($key);
-                    list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
-                    return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
-                }*/
-
-                //$decoded = my_decrypt($_REQUEST['volunteer_id'],$key);
-
-                //error_log($_REQUEST['volunteer_id']);
-                /*
-                $db->query("SET NAMES utf8");
-                $result = $db->query("SELECT name,email,wordstranslated,taskscompleted from badges where kpid=".$decoded);
-                */
-                //$decoded = 25124;
-               // $user_id = 3297;
-                $db->query("SET NAMES utf8");
-
-                $result = $db->query(" SELECT
-                        u.id AS user_id,
-                        u.email,
-                        IFNULL(i.`first-name`, '') AS first_name,
-                        IFNULL(i.`last-name`,  '') AS last_name,
-                        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-                        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
-                        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
-                        SUM(t.`word-count`) AS wordstranslated,
-                        ROUND(
-                            SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) +
-                            SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))*0.5 +
-                            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) +
-                            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
-                        ) AS recognition_points,
-                        ROUND(
-                            SUM(IF(t.`task-type_id`=2 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
-                            SUM(IF(t.`task-type_id`=3 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5
-                        ) AS strategic_points,
-                        0 AS taskscompleted
-                    FROM Tasks       t
-                    JOIN TaskClaims tc ON t.id=tc.task_id
-                    JOIN Users       u ON tc.user_id=u.id
-                    JOIN UserPersonalInformation i ON u.id=i.user_id
-                    JOIN Languages  l1 ON t.`language_id-source`=l1.id
-                    JOIN Languages  l2 ON t.`language_id-target`=l2.id
-                    JOIN Countries  c1 ON t.`country_id-source` =c1.id
-                    JOIN Countries  c2 ON t.`country_id-target` =c2.id
-                    WHERE
-                        u.id=$user_id AND
-                        t.`task-status_id`=4 AND
-                    (t.`task-type_id`=2 OR
-                        t.`task-type_id`=3)
-                    GROUP BY u.id
-                ");
-                $result_set = mysqli_fetch_array($result);
-                return $result_set;
+        $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0];
+        return $result[0];
     }
 }
