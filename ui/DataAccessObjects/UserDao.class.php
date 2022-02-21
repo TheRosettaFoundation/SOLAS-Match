@@ -2132,12 +2132,19 @@ error_log(print_r($result, true));//(**)
     public function get_users_by_month()
     {
         $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
-        if (empty($result)) 0;
+        if (empty($result)) return 0;
         return $result[0]['users_joined'];
     }
 
     public function user_has_strategic_languages($user_id)
     {
         return LibAPI\PDOWrapper::call('user_has_strategic_languages', LibAPI\PDOWrapper::cleanse($user_id));
+    }
+
+    public function get_points_for_badges($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0];
+        return $result[0];
     }
 }

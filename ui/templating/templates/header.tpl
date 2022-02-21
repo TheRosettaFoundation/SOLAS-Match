@@ -77,6 +77,76 @@
         pointer-events: none;
         cursor: default;
     }
+    .containerBox {
+    position: relative;
+    display: inline-block;
+}
+.text-box {
+    position: absolute;    
+    height: 100%;
+    text-align: center;    
+    width: 100%;
+
+}
+.text-box:before {
+   content: '';
+   display: inline-block;
+   height: 100%;
+   vertical-align: middle;
+}
+.containerBox h4 {
+   display: inline-block;
+   font-size: 20px; /*or whatever you want*/
+   color: #143878; 
+   position: relative;
+    top: -50px;
+    left: -150px;  
+}
+ .containerBox h5 {
+   display: inline-block;
+   font-size: 20px; /*or whatever you want*/
+   color: #e8991c; 
+   position: relative;
+    top: -135px;
+    left: -150px;  
+}
+.text-box .name{
+display: inline-block;
+    font-size: 20px;
+    color: #143878;
+    position: relative;
+    top: -65px;
+    left: -70px;
+}
+.recognition_points1{
+      display: inline-block;
+   font-weight: bold; /*or whatever you want*/
+   font-size: 18px;
+   color: #e8991c; 
+   position: relative;
+    top: -170px;
+    left: -55px; 
+
+}
+
+.first_badge{
+       display: inline-block;
+   font-weight: bold; /*or whatever you want*/
+   font-size: 18px;
+   color: #e8991c; 
+   position: relative;
+    top: -130px;
+    left: -150px;  
+}
+
+.name_top{
+    display: inline-block;
+    font-size: 20px;
+    color: #143878;
+    position: relative;
+    top: -60px;
+    left: -140px;
+}
     </style>
     </head>
 

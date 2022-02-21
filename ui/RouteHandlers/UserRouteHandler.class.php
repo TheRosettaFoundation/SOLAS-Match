@@ -2404,15 +2404,6 @@ class UserRouteHandler
             ));
         }
 
-        $certificate = '';
-        if ($private_access || $isSiteAdmin) {
-            $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-            $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-            $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
-            $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
-
-        }
-
         $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
@@ -2426,9 +2417,8 @@ class UserRouteHandler
         }
 
         $template_data = array_merge($template_data, array(
-            'certificate'            => $certificate,
-            'recognition'            => $recognition,
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
+            'user_badges'            => $userDao->get_points_for_badges($user_id),
             'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
@@ -2468,19 +2458,13 @@ class UserRouteHandler
         $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-        $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
-        $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
-
         $template_data = array_merge($template_data, array(
             'current_page' => 'user-profile',
             'this_user' => $user,
             'userPersonalInfo' => $userPersonalInfo,
             'userQualifiedPairs' => $userQualifiedPairs,
-            'certificate' => $certificate,
-            'recognition' => $recognition,
             'user_has_strategic_languages' => 0,
+            'user_badges'            => $userDao->get_points_for_badges($user_id),
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,

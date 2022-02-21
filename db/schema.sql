@@ -1194,6 +1194,25 @@ CREATE TABLE IF NOT EXISTS `master_kato_tm_tasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `prozdata` (
+  `id` int(8) NOT NULL,
+  `name` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sourcelang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `targlang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wordstranslated` int(8) NOT NULL,
+  `taskscompleted` int(8) NOT NULL,
+  `org` tinyint(2) NOT NULL,
+  `kpid` int(8) NOT NULL,
+  `prozid` int(8) NOT NULL,
+  `profilelink` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`),
+  KEY `email2` (`email2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9065,6 +9084,48 @@ BEGIN
             uqp.user_id=userID AND
             uqp.language_code_target IN
             ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0');
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_points_for_badges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges`(IN uID INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
+        SUM(t.`word-count`) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS recognition_points,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS strategic_points,
+        0 AS taskscompleted
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    WHERE
+        u.id=uID AND
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id;
 END//
 DELIMITER ;
 
