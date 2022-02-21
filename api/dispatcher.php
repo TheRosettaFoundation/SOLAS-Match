@@ -1,12 +1,6 @@
 <?php
 namespace SolasMatch\API;
 error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);//(**)
-if (strpos($_SERVER['REQUEST_URI'], 'authCode')) {
-    error_log(print_r($_SERVER, true));
-    error_log(print_r($_REQUEST, true));
-    foreach ($_REQUEST as $kx => $rx) error_log("$kx => $rx");
-    error_log(print_r($_POST, true));
-}
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -77,7 +71,6 @@ class Dispatcher
             
     public static function initOAuth()
     {
-error_log("initOAuth()");//(**)
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
         self::$oauthServer = new \League\OAuth2\Server\Authorization(
             new \League\OAuth2\Server\Storage\PDO\Client(),
@@ -89,7 +82,6 @@ error_log("initOAuth()");//(**)
         $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
         self::$oauthServer->addGrantType($passwordGrant);
         self::$oauthServer->addGrantType(new \League\OAuth2\Server\Grant\AuthCode());
-error_log("initOAuth() END");//(**)
     }
     
     public static function getOauthServer()

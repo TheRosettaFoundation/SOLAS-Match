@@ -996,25 +996,19 @@ error_log("userClaimTask($userId, $taskId)");
     public static function getAccessToken(Request $request, Response $response)
     {
         try {
-error_log("getAccessToken top");//(**)
             $server = API\Dispatcher::getOauthserver();
             $authCodeGrant = $server->getGrantType('authorization_code');
-error_log(print_r($authCodeGrant, true));//(**)
-error_log("getAccessToken 2");//(**)
             $accessToken = $authCodeGrant->completeFlow();
-error_log("getAccessToken 3");//(**)
 
             $oAuthToken = new Common\Protobufs\Models\OAuthResponse();
             $oAuthToken->setToken($accessToken['access_token']);
             $oAuthToken->setTokenType($accessToken['token_type']);
             $oAuthToken->setExpires($accessToken['expires']);
             $oAuthToken->setExpiresIn($accessToken['expires_in']);
-error_log(print_r($oAuthToken, true));//(**)
 
             $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
             $user->setPassword("");
             $user->setNonce("");
-error_log(print_r($user, true));//(**)
 
             DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
 
@@ -1056,7 +1050,6 @@ error_log(print_r($user, true));//(**)
     public static function login(Request $request, Response $response)
     {
         $body = (string)$request->getBody();
-error_log("login $body");//(**)
         $client = new Common\Lib\APIHelper('.json');
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
         $params = array();
@@ -1064,7 +1057,6 @@ error_log("login $body");//(**)
         $params['client_secret'] = API\Dispatcher::clenseArgs($request, 'client_secret', null);
         $params['username'] = $loginData->getEmail();
         $params['password'] = $loginData->getPassword();
-error_log(print_r($params, true));//(**)
         try {
             $server = API\Dispatcher::getOauthServer();
             $response_oauth = $server->getGrantType('password')->completeFlow($params);
@@ -1073,12 +1065,10 @@ error_log(print_r($params, true));//(**)
             $oAuthResponse->setTokenType($response_oauth['token_type']);
             $oAuthResponse->setExpires($response_oauth['expires']);
             $oAuthResponse->setExpiresIn($response_oauth['expires_in']);
-error_log(print_r($oAuthResponse, true));//(**)
 
             $user = DAO\UserDao::getLoggedInUser($response_oauth['access_token']);
             $user->setPassword("");
             $user->setNonce("");
-error_log(print_r($user, true));//(**)
             return API\Dispatcher::sendResponse($response, $user, null, $oAuthResponse);
         } catch (Common\Exceptions\SolasMatchException $e) {
             return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
