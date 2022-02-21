@@ -90,9 +90,10 @@ error_log(print_r($httpHeaders, true));//(**)
 
         curl_close($re);
 
-        $response_data = $this->serializer->deserialize($res, $destination);
-        if (!in_array($this->responseCode, $success)) {
-            throw new Exceptions\SolasMatchException($response_data, $this->responseCode);
+        if (in_array($this->responseCode, $success)) {
+            $response_data = $this->serializer->deserialize($res, $destination);
+        } else {
+            throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
         return $response_data;
     }
