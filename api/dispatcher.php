@@ -1,6 +1,11 @@
 <?php
 namespace SolasMatch\API;
-error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
+error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);//(**)
+if (strpos($_SERVER['REQUEST_URI'], 'authCode')) {
+    error_log(print_r($_SERVER, true));
+    error_log(print_r($_REQUEST, true));
+    error_log(print_r($_POST, true));
+}
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
