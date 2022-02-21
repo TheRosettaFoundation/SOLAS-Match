@@ -9068,6 +9068,48 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_points_for_badges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges`(IN uID INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
+        SUM(t.`word-count`) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS recognition_points,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS strategic_points,
+        0 AS taskscompleted
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    WHERE
+        u.id=uID AND
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
