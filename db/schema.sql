@@ -1194,6 +1194,25 @@ CREATE TABLE IF NOT EXISTS `master_kato_tm_tasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `prozdata` (
+  `id` int(8) NOT NULL,
+  `name` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sourcelang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `targlang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wordstranslated` int(8) NOT NULL,
+  `taskscompleted` int(8) NOT NULL,
+  `org` tinyint(2) NOT NULL,
+  `kpid` int(8) NOT NULL,
+  `prozid` int(8) NOT NULL,
+  `profilelink` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`),
+  KEY `email2` (`email2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
