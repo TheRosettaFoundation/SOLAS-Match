@@ -276,26 +276,15 @@ alert('You have already requested to take a test in order to become a Kató Veri
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody align="left" width="48%"> 
-                     
-                        {if !empty($certificate)}
-                        <!-- <tr>
-                            <td>
-                                <img src="{$certificate}" width="50%" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-bottom: 10px"/>
-                        </tr> -->
-                        {/if}
-                         <tr>
+                        <tr><td>
                         <div class="containerBox">
                             <div class="text-box">
-                                <h4 class="name_top">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
-                                <p class="first_badge"><span class="badge_value">{$user_badges['words_translated']}</span><br/> Words donated</p>
+                                <h4 class="name_top">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4><br/><br/>
+                                <p class="first_badge"><span class="badge_value">{$user_badges['words_donated']}</span><br/> Words donated</p>
                             </div>
                             <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="50%" />
                         </div>
-                        </tr>
+                        </td></tr>
 
                         <tr>
                             <td>
@@ -377,6 +366,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
     </tr>
 </table>
 
+{if $private_access || $isSiteAdmin}
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
 </div>
@@ -390,9 +380,11 @@ alert('You have already requested to take a test in order to become a Kató Veri
             <div>
                 <h2>
                     <span style="color: #9e6100;">Rewards chart</span>
+                    <!--
                     <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
                         <i class="icon-list icon-white"></i> Request reward
                     </a>
+                    -->
                 </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
@@ -427,17 +419,17 @@ alert('You have already requested to take a test in order to become a Kató Veri
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody align="left" width="48%"> 
-                    {if !empty($user_badges['recognition_points'])}  
-                        <tr>
+                        <tr><td>
+                        {if !empty($user_badges['recognition_points'])}  
                         <div class="containerBox">
                             <div class="text-box">
-                                <h4 class="">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
+                                <h4 class="">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4><br/><br/>
                                 <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> RECOGNITION POINTS</h5>
                             </div>
                             <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="50%" />
                         </div>
-                        </tr>
-                          {/if}        
+                        {/if}
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
@@ -457,9 +449,11 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
             <div>
                 <h2>
                     <span style="color: #9e6100;">Rewards chart for work in strategic languages</span>
+                    <!--
                     <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="pull-right btn btn-primary">
                         <i class="icon-list icon-white"></i> Request reward
                     </a>
+                    -->
                 </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
@@ -479,15 +473,15 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
 
       
         <td style="width: 4%"> </td>
-        <td style="width: 48%">
+        <td style="width: 36%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody align="left" width="48%">
-                      {if !empty($user_badges['recognition_points'])}
-                        <tr>
+                        <tr><td>
+                        {if !empty($user_badges['recognition_points'])}
                         <div class="containerBox">
                             <div class="text-box">
-                                <h4 class="name">{$user_badges['first_name']} {$user_badges['last_name']}</h4><br/><br/>
+                                <h4 class="name">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4><br/><br/>
                                 <p class="recognition_points1"><span class="badge_value">{$user_badges['recognition_points']}</span> RECOGNITION POINTS <br/> of which <br/>
                                 <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS <br/>
                                 IN STRATEGIC LANGUAGES
@@ -495,14 +489,15 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                             </div>
                             <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="80%" />
                         </div>
-                        </tr>
                         {/if}
+                        </td></tr>
                     </tbody>
                 </table>
             </div>
         </td>
     </tr>
 </table>
+{/if}
 {/if}
 
 {if $isSiteAdmin}
