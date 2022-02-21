@@ -4,6 +4,7 @@ error_log('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);//(**)
 if (strpos($_SERVER['REQUEST_URI'], 'authCode')) {
     error_log(print_r($_SERVER, true));
     error_log(print_r($_REQUEST, true));
+    foreach ($_REQUEST as $kx => $rx) error_log("$kx => $rx");
     error_log(print_r($_POST, true));
 }
 
