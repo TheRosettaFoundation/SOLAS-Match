@@ -518,7 +518,7 @@ function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, f
 {
   $.ajax(
     {
-      url: siteAPI + "v0/projects/getProjectByName",
+      url: siteAPI + "v0/projects/getProjectByName/",
       method: "POST",
       headers: {
         "Authorization": "Bearer " + userHash
@@ -556,7 +556,7 @@ function DAOcheckProjectByNameAndOrganisationNotExist(title, orgId, functionNotE
 {
   $.ajax(
     {
-      url: siteAPI + "v0/projects/getProjectByNameAndOrganisation/" + title + "/organisation/" + orgId,
+      url: siteAPI + "v0/projects/getProjectByNameAndOrganisation/" + title + "/organisation/" + orgId + "/",
       method: "GET",
       headers: {
         "Authorization": "Bearer " + userHash
@@ -608,7 +608,7 @@ function DAOdeleteProjectImage(projectId, orgId, functionOnSuccess, functionOnFa
 {
   $.ajax(
     {
-      url: siteAPI + "v0/io/projectImage/" + orgId + "/" + projectId,
+      url: siteAPI + "v0/io/projectImage/" + orgId + "/" + projectId + "/",
       method: "DELETE",
       headers: {
         "Authorization": "Bearer " + userHash
@@ -644,7 +644,7 @@ function DAOupdateProjectWordCount(projectId, newWordCount, functionOnSuccess, f
 {
   $.ajax(
     {
-      url: siteAPI + "v0/projects/" + projectId + "/updateWordCount/" + newWordCount,
+      url: siteAPI + "v0/projects/" + projectId + "/updateWordCount/" + newWordCount + "/",
       method: "PUT",
       headers: {
         "Authorization": "Bearer " + userHash

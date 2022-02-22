@@ -117,7 +117,7 @@ function DAOdeleteUser(userId, functionOnSuccess, functionOnFail)
 {
   $.ajax(
     {
-      url: siteAPI + "v0/users/" + userId,
+      url: siteAPI + "v0/users/" + userId + "/",
       method: "DELETE",
       headers: {
         "Authorization": "Bearer " + userHash

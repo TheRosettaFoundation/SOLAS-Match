@@ -854,7 +854,7 @@ function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, f
 {
   $.ajax(
     {
-      url: siteAPI + "v0/projects/getProjectByName",
+      url: siteAPI + "v0/projects/getProjectByName/",
       method: "POST",
       headers: {
         "Authorization": "Bearer " + userHash
@@ -892,7 +892,7 @@ function DAOcheckProjectByNameAndOrganisationNotExist(title, orgId, functionNotE
 {
   $.ajax(
     {
-      url: siteAPI + "v0/projects/getProjectByNameAndOrganisation/" + title + "/organisation/" + orgId,
+      url: siteAPI + "v0/projects/getProjectByNameAndOrganisation/" + title + "/organisation/" + orgId + "/",
       method: "GET",
       headers: {
         "Authorization": "Bearer " + userHash
