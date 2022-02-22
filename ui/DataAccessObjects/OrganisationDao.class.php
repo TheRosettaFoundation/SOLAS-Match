@@ -36,7 +36,6 @@ class OrganisationDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/subscription/$org_id";
         $ret = $this->client->call(null, $request);
-        if (empty($ret)) return null;
         return unserialize($ret);
     }
 
