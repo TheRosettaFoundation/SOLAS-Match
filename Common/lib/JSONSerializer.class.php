@@ -14,7 +14,7 @@ class JSONSerializer extends Serializer
     // Use PHP serialize() to replace Protobufs
     public function serialize($data)
     {
-        if (is_object($data) || is_array($data) || is_null($data)) return serialize($data);
+        if (is_object($data) || is_array($data)) return serialize($data);
         return $data;
     }
 
