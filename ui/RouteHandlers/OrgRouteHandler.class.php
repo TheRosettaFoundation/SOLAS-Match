@@ -2152,7 +2152,7 @@ class OrgRouteHandler
         $badgeDao = new DAO\BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
-        $template_data = array_merge($template_data, array('badge' => $badge, 'org_id' => $org_id));
+        $template_data = array_merge($template_data, ['badge' => $badge, 'org_id' => $org_id, 'sesskey' => Common\Lib\UserSession::getCSRFKey()]);
         
         return UserRouteHandler::render("org/org.edit-badge.tpl", $response);
     }
