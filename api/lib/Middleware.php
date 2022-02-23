@@ -443,7 +443,7 @@ class Middleware
             return $handler->handle($request);
         }
         $userId = $user->getId();
-error_log("user: $user");
+error_log("userId: $userId");
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
