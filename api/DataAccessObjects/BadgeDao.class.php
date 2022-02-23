@@ -78,6 +78,7 @@ class BadgeDao
             Lib\PDOWrapper::cleanseNull($badge->getOwnerId()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getDescription());
+error_log("args: $args");
         $result = Lib\PDOWrapper::call("badgeInsertAndUpdate", $args);
         if ($result) {
             return Common\Lib\ModelFactory::buildModel("Badge", $result[0]);
