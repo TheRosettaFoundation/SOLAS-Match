@@ -74,6 +74,7 @@ class BadgeDao
     */
     public static function insertAndUpdateBadge($badge)
     {
+        if ($badge->getId() < 100) return null; // Don't allow edit of system badges
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getId()).",".
             Lib\PDOWrapper::cleanseNull($badge->getOwnerId()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getTitle()).",".

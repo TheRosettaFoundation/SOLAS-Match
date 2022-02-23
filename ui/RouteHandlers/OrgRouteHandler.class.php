@@ -1748,7 +1748,7 @@ class OrgRouteHandler
                     $badge->setId($post['badge_id']);
                     $badge->setTitle($post['title']);
                     $badge->setDescription($post['description']);
-                    $badge->setOwnerId("");
+                    $badge->setOwnerId($org_id);
                     $badgeDao->updateBadge($badge);
 error_log("description: {$post['description']}");
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
