@@ -270,7 +270,7 @@ class ProjectDao extends BaseDao
     public function downloadProjectFile($projectId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/io/download/project/$projectId";
+        $request = "{$this->siteApi}v0/io/download/project/$projectId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
 
         switch ($this->client->getResponseCode()) {
@@ -284,7 +284,7 @@ class ProjectDao extends BaseDao
     public function downloadProjectImageFile($projectId)
     {
         $ret = null;
-        $request = "{$this->siteApi}/v0/io/download/projectImage/$projectId";
+        $request = "{$this->siteApi}v0/io/download/projectImage/$projectId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
 
         switch ($this->client->getResponseCode()) {

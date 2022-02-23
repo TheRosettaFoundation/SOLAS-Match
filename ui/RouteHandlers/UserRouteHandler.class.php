@@ -938,7 +938,7 @@ class UserRouteHandler
                     if (!empty($response_data->email)) {
                         error_log("ProZ SSO, Login: {$response_data->email}");
                         return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($response_data->email));
-                        // Redirects to API /v0/users/$email/auth/code/
+                        // Redirects to API v0/users/$email/auth/code/
                         // which starts "normal" Trommons authorization process
                         // (and may register a user if the email is new),
                         // which then redirects to /login URL with a different Trommons 'code',
