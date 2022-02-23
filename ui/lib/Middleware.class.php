@@ -152,13 +152,13 @@ class Middleware
     {
         global $app;
 
-        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
+
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
             $userDao = new DAO\UserDao();
@@ -179,13 +179,13 @@ class Middleware
     {
         global $app;
 
-        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
+
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos((string)$request->getUri(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
@@ -200,13 +200,13 @@ class Middleware
     {
         global $app;
 
-        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
+
+        if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
             $userDao = new DAO\UserDao();
