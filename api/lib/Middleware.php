@@ -443,21 +443,17 @@ class Middleware
             return $handler->handle($request);
         }
         $userId = $user->getId();
-error_log("userId: $userId");
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $badgeId = $route->getArgument('badgeId');
-error_log("badgeId: $badgeId");
         $badge = DAO\BadgeDao::getBadge($badgeId);
 
         $orgId = $badge->getOwnerId();
-error_log("orgId: $orgId");
                     
         // cases where the orgId is null signify a system badge
         // badge ids 6, 7, 8... refer to the user controlled system badges
         if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
-error_log("Handle it");
             return $handler->handle($request);
         } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8, 10, 11, 12, 13))) {
             return $handler->handle($request);

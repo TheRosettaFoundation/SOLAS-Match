@@ -83,7 +83,6 @@ class Badges
         $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
-error_log(print_r($data, true));
         return Dispatcher::sendResponse($response, DAO\BadgeDao::insertAndUpdateBadge($data), null);
     }
 
