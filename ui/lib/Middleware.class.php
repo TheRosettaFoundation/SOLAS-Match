@@ -394,13 +394,11 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $project_id = $route->getArgument('project_id');
-error_log("authUserForProjectImage project_id: $project_id");
         $projectDao = new DAO\ProjectDao();
         
         if (!empty($project_id)) {
             $project = $projectDao->getProject($project_id);
             $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
-if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: TRUE");
 
             if ($projectImageApprovedAndUploaded) {
                 return $handler->handle($request);
