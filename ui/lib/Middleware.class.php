@@ -254,14 +254,15 @@ class Middleware
         }
 
         $taskDao = new DAO\TaskDao();
-        $params = $request->getQueryParams();
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $task_id = $route->getArgument('task_id');
 
         if ($ret = $this->user_not_logged_in($request)) return $ret;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $claimant = null;
-        if (!empty($params['task_id'])) {
-            $task_id = $params['task_id'];
+        if (!empty($task_id)) {
             $claimant = $taskDao->getUserClaimedTask($task_id);
         }
         if ($claimant) {
@@ -286,9 +287,10 @@ class Middleware
         $orgDao = new DAO\OrganisationDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $params = $request->getQueryParams();
-        if (!empty($params['org_id'])) {
-            $org_id = $params['org_id'];
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $org_id = $route->getArgument('org_id');
+        if (!empty($org_id)) {
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
                 if (!is_null($user_orgs)) {
@@ -321,9 +323,10 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
 
-        $params = $request->getQueryParams();
-        if (!empty($params['task_id'])) {
-            $task_id = $params['task_id'];
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $task_id = $route->getArgument('task_id');
+        if (!empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject($task->getProjectId());
             
@@ -354,13 +357,14 @@ class Middleware
             return $handler->handle($request);
         }
 
-        $params = $request->getQueryParams();
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $project_id = $route->getArgument('project_id');
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         
-        if (!empty($params['project_id'])) {
+        if (!empty($project_id)) {
             $user_id = Common\Lib\UserSession::getCurrentUserID();
-            $project_id = $params['project_id'];
             $userOrgs = $userDao->getUserOrgs($user_id);
             $project = $projectDao->getProject($project_id);
             $project_orgid = $project->getOrganisationId();
@@ -386,16 +390,16 @@ class Middleware
             return $handler->handle($request);
         }
         
-        $params = $request->getQueryParams();
-error_log("authUserForProjectImage: " . print_r($params, true));
-        $userDao = new DAO\UserDao();
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $project_id = $route->getArgument('project_id');
+error_log("authUserForProjectImage project_id: $project_id");
         $projectDao = new DAO\ProjectDao();
         
-        if (!empty($params['project_id'])) {
-            $project_id = $params['project_id'];
+        if (!empty($project_id)) {
             $project = $projectDao->getProject($project_id);
             $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
-if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: " . print_r($params, true));
+if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: TRUE");
 
             if ($projectImageApprovedAndUploaded) {
                 return $handler->handle($request);
@@ -418,9 +422,10 @@ if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: " . pr
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
 
-        $params = $request->getQueryParams();
-        if (!empty($params['task_id'])) {
-            $task_id = $params['task_id'];
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $task_id = $route->getArgument('task_id');
+        if (!empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             if ($taskDao->getUserClaimedTask($task_id)) {
                 return $handler->handle($request);
@@ -463,9 +468,10 @@ if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: " . pr
 
         if ($ret = $this->user_not_logged_in($request)) return $ret;
 
-            $params = $request->getQueryParams();
-            if (!empty($params['task_id'])) {
-                $taskId = $params['task_id'];
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $taskId = $route->getArgument('task_id');
+            if (!empty($taskId)) {
                 $userId = Common\Lib\UserSession::getCurrentUserID();
                 $userDao = new DAO\UserDao();
                 $isBlackListed = $userDao->isBlacklistedForTask($userId, $taskId);
