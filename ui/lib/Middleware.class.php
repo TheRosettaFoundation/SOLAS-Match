@@ -387,6 +387,7 @@ class Middleware
         }
         
         $params = $request->getQueryParams();
+error_log("authUserForProjectImage: " . print_r($params, true));
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         
@@ -394,7 +395,8 @@ class Middleware
             $project_id = $params['project_id'];
             $project = $projectDao->getProject($project_id);
             $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
-            
+if ($projectImageApprovedAndUploaded) error_log("authUserForProjectImage: " . print_r($params, true));
+
             if ($projectImageApprovedAndUploaded) {
                 return $handler->handle($request);
             }
