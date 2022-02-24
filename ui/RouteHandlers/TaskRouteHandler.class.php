@@ -37,7 +37,7 @@ class TaskRouteHandler
             ->setName('recent-tasks-paged');
         
         $app->get(
-            '/user/{user_id}/recent/tasks',
+            '/user/{user_id}/recent/tasks[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:recentTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('recent-tasks');
