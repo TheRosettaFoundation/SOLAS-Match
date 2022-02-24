@@ -58,13 +58,14 @@ class StaticRouteHandler
         return UserRouteHandler::render("static/terms.tpl", $response);
     }
     
+    // Was: $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
     public function siteLanguage(Request $request, Response $response)
     {
         if ($post = $request->getParsedBody()) {
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);
             }
-            return $response->withStatus(302)->withHeader('Location', $request->getUri());
+            return $response->withStatus(302)->withHeader('Location', $request->getHeaderLine('REFERER')); // Not tested or secure?
         } else {
             $user_language = Common\Lib\UserSession::getUserLanguage();
             if (!empty($user_language)) $response->getBody()->write($user_language);
