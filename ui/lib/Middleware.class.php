@@ -150,8 +150,10 @@ class Middleware
 
     public function authUserIsLoggedIn(Request $request, RequestHandler $handler)
     {
-error_log("authUserIsLoggedIn");
         global $app;
+error_log("authUserIsLoggedIn");
+error_log("authUserIsLoggedIn _SESSION['user_id']: " . $_SESSION['user_id']);
+error_log("authUserIsLoggedIn userid: " . Common\Lib\UserSession::getCurrentUserID());
 
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
