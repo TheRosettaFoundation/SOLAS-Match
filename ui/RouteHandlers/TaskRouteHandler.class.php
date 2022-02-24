@@ -194,7 +194,7 @@ class TaskRouteHandler
         if ($page_no < 1) {
             $page_no = 1;
         } elseif ($page_no > $totalPages) {
-            return $response->withStatus(404);
+            $response = $response->withStatus(404);
         }
 
         $top = 0;
