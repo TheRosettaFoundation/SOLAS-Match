@@ -124,6 +124,8 @@ class TagRouteHandler
         }
 
 error_log("getUri(): " . (string)$request->getUri());
+error_log("Common\Lib\UserSession::getReferer(): " . Common\Lib\UserSession::getReferer());
+error_log("request->getHeaderLine('REFERER'): " . $request->getHeaderLine('REFERER'));
         return $response->withStatus(302)->withHeader('Location', (string)$request->getUri());
     }
 
