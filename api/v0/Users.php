@@ -98,7 +98,7 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
-            '/api/v0/users/{userId}/filteredClaimedTasks/orderBy/{limit}/{offset}/{taskType}/{taskStatus}/',
+            '/api/v0/users/{userId}/filteredClaimedTasks/{orderBy}/{limit}/{offset}/{taskType}/{taskStatus}/',
             '\SolasMatch\API\V0\Users:getFilteredUserClaimedTasks')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
