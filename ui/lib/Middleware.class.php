@@ -150,6 +150,7 @@ class Middleware
 
     public function authUserIsLoggedIn(Request $request, RequestHandler $handler)
     {
+error_log("authUserIsLoggedIn");
         global $app;
 
         if (!Common\Lib\UserSession::getCurrentUserID()) {
@@ -161,8 +162,10 @@ class Middleware
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
+error_log("authUserIsLoggedIn empty(_SESSION['profile_completed'])");
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+error_log("authUserIsLoggedIn not Admin... " . $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
