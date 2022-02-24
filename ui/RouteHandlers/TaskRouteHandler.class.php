@@ -194,7 +194,7 @@ class TaskRouteHandler
         if ($page_no < 1) {
             $page_no = 1;
         } elseif ($page_no > $totalPages) {
-            header('HTTP/1.0 404 Not Found');
+            return $response->withStatus(404);
         }
 
         $top = 0;

@@ -187,7 +187,6 @@ class Middleware
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
-error_log("(string)request->getUri() compare /googleregister: " . (string)$request->getUri());
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos((string)$request->getUri(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
