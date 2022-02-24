@@ -940,7 +940,7 @@ error_log("userClaimTask($userId, $taskId)");
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
             error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
-                return $response->withStatus(302)->withHeader('Location', $request->getUri() . "?error=auth_failed&error_message={$e->getMessage()}");
+                return $response->withStatus(302)->withHeader('Location', $request->getHeaderLine('REFERER') . "?error=auth_failed&error_message={$e->getMessage()}");
             } else {
                 return $response->withStatus(302)->withHeader('Location', $params['redirect_uri'] . "?error=auth_failed&error_message={$e->getMessage()}");
             }
