@@ -163,6 +163,7 @@ error_log("authUserIsLoggedIn userid: " . Common\Lib\UserSession::getCurrentUser
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
+error_log("authUserIsLoggedIn _SESSION['profile_completed']: " . $_SESSION['profile_completed']);
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
 error_log("authUserIsLoggedIn empty(_SESSION['profile_completed'])");
             $userDao = new DAO\UserDao();
