@@ -299,8 +299,11 @@ class TaskRouteHandler
         $selectedOrdering   = (int)$selectedOrdering;
 
         try {
+error_log("getFilteredUserClaimedTasks($user_id, $selectedOrdering, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedTaskStatus)");
             $topTasks      = $userDao->getFilteredUserClaimedTasks($user_id, $selectedOrdering, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedTaskStatus);
+error_log("getFilteredUserClaimedTasksCount($user_id, $selectedTaskType, $selectedTaskStatus)");
             $topTasksCount = $userDao->getFilteredUserClaimedTasksCount($user_id, $selectedTaskType, $selectedTaskStatus);
+error_log("topTasksCount: $topTasksCount");
         } catch (\Exception $e) {
             $topTasks = array();
             $topTasksCount = 0;
