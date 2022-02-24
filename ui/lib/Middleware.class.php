@@ -151,9 +151,6 @@ class Middleware
     public function authUserIsLoggedIn(Request $request, RequestHandler $handler)
     {
         global $app;
-error_log("authUserIsLoggedIn");
-error_log("authUserIsLoggedIn _SESSION['user_id']: " . $_SESSION['user_id']);
-error_log("authUserIsLoggedIn userid: " . Common\Lib\UserSession::getCurrentUserID());
 
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
@@ -163,12 +160,9 @@ error_log("authUserIsLoggedIn userid: " . Common\Lib\UserSession::getCurrentUser
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
-error_log("authUserIsLoggedIn _SESSION['profile_completed']: " . $_SESSION['profile_completed']);
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
-error_log("authUserIsLoggedIn empty(_SESSION['profile_completed'])");
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
-error_log("authUserIsLoggedIn not Admin... " . $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
@@ -193,6 +187,7 @@ error_log("authUserIsLoggedIn not Admin... " . $app->getRouteCollector()->getRou
 
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
+error_log("(string)request->getUri() compare /googleregister: " . (string)$request->getUri());
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos((string)$request->getUri(), '/googleregister')) {
             error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
