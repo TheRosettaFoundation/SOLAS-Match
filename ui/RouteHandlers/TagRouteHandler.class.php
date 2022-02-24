@@ -122,8 +122,9 @@ class TagRouteHandler
                 );
             }
         }
-        
-        return $response->withStatus(302)->withHeader('Location', $request->getUri());
+
+error_log("getUri(): " . (string)$request->getUri());
+        return $response->withStatus(302)->withHeader('Location', (string)$request->getUri());
     }
 
     public function tagDetails(Request $request, Response $response, $args)
