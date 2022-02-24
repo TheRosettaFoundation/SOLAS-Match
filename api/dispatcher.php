@@ -104,7 +104,7 @@ class Dispatcher
         
         if ($code != null) $response = $response->withStatus($code);
         
-        if ($body != null) $response->getBody()->write($body);
+        if ($body != null) $response->getBody()->write((string)$body);
         return $response;
     }
 
