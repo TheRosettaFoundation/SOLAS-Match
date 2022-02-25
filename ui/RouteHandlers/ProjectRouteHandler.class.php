@@ -2282,7 +2282,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         curl_close($re);
     }
 
-    public function project_cron_1_minute()
+    public function project_cron_1_minute(Request $request)
     {
       $matecat_api = Common\Lib\Settings::get('matecat.url');
 
@@ -2585,6 +2585,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       }
       fclose($fp_for_lock);
 
+error_log("project_cron_1_minute uri: " . (string)$request->getUri());//(**)
+      if (strpos((string)$request->getUri(), '/getwordcount')) return;
+error_log("project_cron_1_minute did not return, will die;");//(**)
       die;
     }
 
@@ -2812,7 +2815,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         $project = $projectDao->getProject($project_id);
 
         if (!empty($project)) {
-        $this->project_cron_1_minute(); // Trigger update
+        $this->project_cron_1_minute($request); // Trigger update
 
         $word_count = $project->getWordCount();
         }
