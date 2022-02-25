@@ -72,7 +72,7 @@ class UserRouteHandler
             ->setName('login');
 
         $app->map(['GET', 'POST'],
-            '/loggedin[/]',
+            '/loggedin',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login_proz')
             ->setName('loggedin');
 
