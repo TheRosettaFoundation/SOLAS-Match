@@ -2234,6 +2234,7 @@ error_log("topTasksCount: $topTasksCount");
                 if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
             }
         }
+        return $response->withStatus(200);
     }
 
     public function taskCreate(Request $request, Response $response, $args)
