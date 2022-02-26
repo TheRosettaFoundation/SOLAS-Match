@@ -640,7 +640,7 @@ class TaskRouteHandler
                 die;
             } else {
                 $args['version'] = $latest_version;
-                $this->downloadTaskVersion($request, $response, $args);
+                return $this->downloadTaskVersion($request, $response, $args);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
@@ -694,7 +694,7 @@ class TaskRouteHandler
         global $app;
 
         try {
-            $this->downloadTaskVersion($request, $response, $args);
+            return $this->downloadTaskVersion($request, $response, $args);
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
                 "error",
