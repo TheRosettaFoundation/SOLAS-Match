@@ -1426,7 +1426,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter1.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter2.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
