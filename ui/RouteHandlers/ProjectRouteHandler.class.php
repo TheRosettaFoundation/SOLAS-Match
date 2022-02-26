@@ -2585,9 +2585,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       }
       fclose($fp_for_lock);
 
-error_log("project_cron_1_minute uri: " . (string)$request->getUri());//(**)
       if (strpos((string)$request->getUri(), '/getwordcount')) return;
-error_log("project_cron_1_minute did not return, will die;");//(**)
       die;
     }
 
