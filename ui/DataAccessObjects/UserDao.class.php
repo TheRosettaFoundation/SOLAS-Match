@@ -647,7 +647,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             'termBaseDeleteOther' => true,
             'termBaseExportOther' => true,
             'termBaseImportOther' => true,
-            'termBaseApproveOther' => false,
+            'termBaseApproveOther' => true,
             'userCreate' => false,
             'userViewOther' => true,
             'userEditOther' => false,
