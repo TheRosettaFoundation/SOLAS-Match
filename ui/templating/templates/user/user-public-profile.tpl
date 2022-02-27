@@ -426,14 +426,14 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 <h4 class="">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4><br/><br/>
                                 <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> RECOGNITION POINTS</h5>
                             {else}
-                                <h4 class="name">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4>
+                                <h4 class="name">{TemplateHelper::uiCleanseHTML($user_badges['first_name'])} {TemplateHelper::uiCleanseHTML($user_badges['last_name'])}</h4><br/><br/>
                                 <p class="recognition_points1"><span class="badge_value">{$user_badges['recognition_points']}</span> RECOGNITION POINTS <br/> of which <br/>
                                 <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS <br/>
                                 IN STRATEGIC LANGUAGES
                                 </p>
                             {/if}
                             </div>
-                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="60%" />
+                            <img src="{urlFor name='home'}ui/img/badge_mockup.jpg" width="80%" />
                         </div>
                         </td></tr>
                     </tbody>
