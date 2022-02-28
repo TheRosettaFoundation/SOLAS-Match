@@ -273,6 +273,22 @@ Tweet</a>
             <input type="hidden" name="unpublish_all_revisions" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
+        {if !empty($all_as_paid)}
+        <form id="all_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            {if $all_as_paid == 2}
+                <a class="btn btn-small btn-inverse" onclick="$('#all_as_paid').submit();">
+                    <i class="icon-remove-circle icon-white"></i> Mark all Tasks as Unpaid
+                </a>
+                <input type="hidden" name="all_as_paid" value="1" />
+            {else}
+                <a class="btn btn-small" onclick="$('#all_as_paid').submit();">
+                    <i class="icon-check icon-black"></i> Mark all Tasks as Paid
+                </a>
+                <input type="hidden" name="all_as_paid" value="2" />
+            {/if}
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        {/if}
         </div>
         {/if}
     </h1> 
