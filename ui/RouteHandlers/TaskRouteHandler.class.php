@@ -1996,10 +1996,10 @@ class TaskRouteHandler
 
             if (isset($post['paid_status'])) {
                 if ($post['paid_status'] == 2) {
-                    $taskDao->set_paid_status($task_id, 2);
+                    $taskDao->set_paid_status($task_id);
                     UserRouteHandler::flashNow('success', '<b>Success:</b> The task is now marked as paid.');
                 } else {
-                    $taskDao->set_paid_status($task_id, 1);
+                    $taskDao->clear_paid_status($task_id);
                     UserRouteHandler::flashNow('success', '<b>Success:</b> The task is now marked as unpaid.');
                 }
             }

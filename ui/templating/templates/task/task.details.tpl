@@ -168,7 +168,7 @@
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
-            {if !empty($isSiteAdmin) && isset($paid_status) && $paid_status > 0}<th>Paid?</th>{/if}
+            {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
         </thead>
         <tr align="center">
             <td>
@@ -206,11 +206,11 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
-            {if !empty($isSiteAdmin) && isset($paid_status) && $paid_status > 0}
+            {if !empty($isSiteAdmin) && isset($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
-                    {if $paid_status == 1}
+                    {if $paid_status == 0}
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
                             <i class="icon-check icon-black"></i> Make Paid
