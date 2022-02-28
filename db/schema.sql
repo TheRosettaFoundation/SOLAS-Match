@@ -1213,6 +1213,14 @@ CREATE TABLE IF NOT EXISTS `prozdata` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `TaskPaids` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  level      INT(10) UNSIGNED NOT NULL,
+  UNIQUE KEY FK_TaskPaid (task_id),
+  CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9126,6 +9134,60 @@ BEGIN
        (t.`task-type_id`=2 OR
         t.`task-type_id`=3)
     GROUP BY u.id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_status`(IN tID BIGINT)
+BEGIN
+    SELECT * FROM TaskPaids WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_paid_status`(IN tID BIGINT)
+BEGIN
+    INSERT INTO TaskPaids VALUES (tID, 1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `clear_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_paid_status`(IN tID BIGINT)
+BEGIN
+    DELETE FROM TaskPaids WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_as_paid`(IN pID INT)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM Tasks JOIN TaskPaids ON id=task_id WHERE project_id=pID) THEN
+        SELECT 1 AS result;
+    ELSEIF 1 = (SELECT MIN(IF(task_id IS NULL, 0, 1)) FROM Tasks LEFT JOIN TaskPaids ON id=task_id WHERE project_id=pID) THEN
+        SELECT 2 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_all_as_paid`(IN pID INT)
+BEGIN
+    INSERT INTO TaskPaids (SELECT id, 1 FROM Tasks WHERE project_id=pID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `clear_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_all_as_paid`(IN pID INT)
+BEGIN
+    DELETE FROM TaskPaids WHERE task_id IN (SELECT id FROM Tasks WHERE project_id=pID);
 END//
 DELIMITER ;
 
