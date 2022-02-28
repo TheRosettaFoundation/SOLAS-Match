@@ -716,10 +716,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['all_as_paid'])) {
                 if ($post['all_as_paid'] == 2) {
                     $taskDao->set_all_as_paid($project_id);
-                    UserRouteHandler::flashNow('success', '<b>Success:</b> All tasks now marked as paid.');
+                    UserRouteHandler::flashNow('success', 'All tasks now marked as paid.');
                 } else {
                     $taskDao->clear_all_as_paid($project_id);
-                    UserRouteHandler::flashNow('success', '<b>Success:</b> All tasks now marked as unpaid.');
+                    UserRouteHandler::flashNow('success', 'All tasks now marked as unpaid.');
                 }
             }
 
