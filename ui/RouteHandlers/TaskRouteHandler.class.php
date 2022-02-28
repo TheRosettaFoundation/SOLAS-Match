@@ -1994,6 +1994,16 @@ class TaskRouteHandler
                 }
             }
 
+            if (isset($post['paid_status'])) {
+                if ($post['paid_status'] == 2) {
+                    $taskDao->set_paid_status($task_id, 2);
+                    UserRouteHandler::flashNow('success', '<b>Success:</b> The task is now marked as paid.');
+                } else {
+                    $taskDao->set_paid_status($task_id, 1);
+                    UserRouteHandler::flashNow('success', '<b>Success:</b> The task is now marked as unpaid.');
+                }
+            }
+
             if (isset($post['trackOrganisation'])) {
                 $org_id = $project->getOrganisationId();
                 if ($post['trackOrganisation']) {
@@ -2083,6 +2093,7 @@ class TaskRouteHandler
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 'this_is_id' => 0,
+                'paid_status' => $taskDao->get_paid_status($task_id),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
