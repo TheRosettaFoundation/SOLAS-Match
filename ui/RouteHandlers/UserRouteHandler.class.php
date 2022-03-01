@@ -2391,6 +2391,7 @@ class UserRouteHandler
         $app->view()->appendData(array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'user_badges'            => $userDao->get_points_for_badges($user_id),
+            'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName()." ".$userPersonalInfo->getLastName(), 20, "\n"),
             'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
@@ -2428,6 +2429,9 @@ class UserRouteHandler
         $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
+         
+        
+
         $app->view()->appendData(array(
             'current_page' => 'user-profile',
             'this_user' => $user,
@@ -2435,6 +2439,7 @@ class UserRouteHandler
             'userQualifiedPairs' => $userQualifiedPairs,
             'user_has_strategic_languages' => 0,
             'user_badges'            => $userDao->get_points_for_badges($user_id),
+            'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName()." ".$userPersonalInfo->getLastName(), 20, "\n"),
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,

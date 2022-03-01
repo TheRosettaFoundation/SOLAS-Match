@@ -94,21 +94,33 @@
    height: 100%;
    vertical-align: middle;
 }
+/*
 .containerBox h4 {
    display: inline-block;
-   font-size: 20px; /*or whatever you want*/
+   font-size: 20px; 
    color: #143878; 
    position: relative;
-    top: -50px;
+    top: -80px;
     left: -150px;  
+}*/
+
+.second_badge_name{
+      display: inline-block;
+   font-size: 20px; 
+   color: #143878; 
+   position: relative;
+    top: -80px;
+    left: -80px;  
+
 }
+
  .containerBox h5 {
    display: inline-block;
    font-size: 20px; /*or whatever you want*/
    color: #e8991c; 
    position: relative;
-    top: -135px;
-    left: -150px;  
+    top: -200px;
+    left: -65px;  
 }
 .text-box .name{
 display: inline-block;
@@ -124,16 +136,23 @@ display: inline-block;
    font-size: 18px;
    color: #e8991c; 
    position: relative;
-    top: -170px;
+    top: -200px;
     left: -55px; 
 
 }
 
+.badge_text{
+ color: #000000;
+   text-transform:uppercase; 
+}
+.badge_value{
+   color: #e8991c;   
+}
+
 .first_badge{
-       display: inline-block;
+   display: inline-block;
    font-weight: bold; /*or whatever you want*/
    font-size: 18px;
-   color: #e8991c; 
    position: relative;
     top: -130px;
     left: -150px;  
@@ -144,7 +163,7 @@ display: inline-block;
     font-size: 20px;
     color: #143878;
     position: relative;
-    top: -60px;
+    top: -50px;
     left: -140px;
 }
     </style>
