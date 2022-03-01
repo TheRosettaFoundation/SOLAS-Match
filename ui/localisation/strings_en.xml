@@ -15,7 +15,7 @@
 	<string name="common_month">Month</string>
 	<string name="common_year">Year</string>
 	<string name="common_permanent">Permanent</string>
-	<string name="common_ban_organisation">Ban Organisation</string>
+	<string name="common_ban_organisation">Ban Organization</string>
 	<string name="common_note">Note</string>
 	<string name="common_denotes_a_required_field">Note: <span style="color: red">*</span> denotes a required field.</string>
 	<string name="common_address">Address</string>
@@ -31,9 +31,9 @@
 	<string name="common_europe">Europe</string>
 	<string name="common_north_america">North America</string>
 	<string name="common_south_america">South America</string>
-	<string name="common_organisation_profile">Organisation Profile</string>
+	<string name="common_organisation_profile">Organization Profile</string>
 	<string name="common_name">Name</string>
-	<string name="common_organisation_name">Organisation Name</string>
+	<string name="common_organisation_name">Organization Name</string>
 	<string name="common_warning">Warning</string>
 	<string name="common_description">Description</string>
 	<string name="common_title">Title</string>
@@ -58,8 +58,8 @@
 	<string name="common_create_project">Create Project</string>
 	<string name="common_what_happens_now">What happens now?</string>
 	<string name="common_edit_project">Edit Project</string>
-	<string name="common_organisation">Organisation</string>
-	<string name="common_organisations">Organisations</string>
+	<string name="common_organisation">Organization</string>
+	<string name="common_organisations">Organizations</string>
 	<string name="common_type">Task Type</string>
 	<string name="common_waiting">Waiting</string>
 	<string name="common_unclaimed">Unclaimed</string>
@@ -149,14 +149,14 @@
   <string name="common_change_email">Change User email Address</string>
   <string name="common_new_email">New email Address</string>
   <string name="common_new_email_already_used">The new email address has already been registered by another user.</string>
-	<string name="common_search_for_organisations">Search for Organisations</string>
+	<string name="common_search_for_organisations">Search for Organizations</string>
 	<string name="common_task_type">Task Type</string>
    	<string name="common_create_administrator">Create Administrator</string>
 	<string name="common_list_all">List All</string>
 	<string name="common_reference">Reference</string>
 	<string name="common_there_are_no_tags_associated_with_this_project">There are no tags associated with this project.</string>
 	<string name="common_password">Password</string>
-	<string name="common_create_organisation">Create Organisation</string>
+	<string name="common_create_organisation">Create Organization</string>
 	<string name="common_success">Success</string>
 	<string name="common_if_checked_tasks_will_appear_in_the_tasks_stream">If checked, tasks will appear in the task stream.</string>
 	<string name="common_here_is_what_will_now_happen">Here is what will now happen</string>
@@ -203,7 +203,7 @@
     <string name="common_error_server_failed_write_disk">Server failed to write the file to disk.</string>
     <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
     <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
-    <string name="common_error_org_name_not_set"><strong>Organisation name</strong> must be set.</string>
+    <string name="common_error_org_name_not_set"><strong>Organization name</strong> must be set.</string>
     <string name="common_error_org_name_in_use">An organization named <strong>%s</strong> is already registered. Please use a different name.</string>
     <string name="common_error_file_not_found">We could not find the requested file on our system. Requested file type: %s. Please contact us at %s with details of this problem.</string>
     <!-- The 3 strings below are used for the error above -->
@@ -240,8 +240,8 @@
     <string name="common_project_image_not_approved">The currently uploaded image is pending approval by the administrators.</string>
     <string name="common_project_image_not_uploaded">No image has been uploaded for this project.</string>
      
-	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
-	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organisation and its members?</string>
+	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organizations of %s.</string>
+	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organization and its members?</string>
 
 	<string name="admin_banned_users_list_all_banned_users_of">All banned Users of %s.</string>
 	<string name="admin_banned_users_list_user_display_name">User Display Name</string>
@@ -261,7 +261,7 @@
 	<string name="site_admin_dashboard_sitewide_user_ban">Apply a site-wide ban to a user.</string>
 	<string name="site_admin_dashboard_sitewide_org_ban">Apply a site-wide ban to an organization.</string>
 	<string name="site_admin_dashboard_will_ban_all_members">All organization members will be banned!</string>
-	<string name="site_admin_dashboard_organisation_name_goes_here">Organisation name goes here.</string>
+	<string name="site_admin_dashboard_organisation_name_goes_here">Organization name goes here.</string>
 	<string name="site_admin_dashboard_ban_reason">Ban Reason</string>
 	<string name="site_admin_dashboard_ban_user">Ban User</string>
 	<string name="site_admin_dashboard_user_email_address">User E-Mail Address</string>
@@ -284,9 +284,9 @@
   <string name="badge_list_all_available_badges_of">All available achievements of %s.</string>
   <string name="badge_list_badge">%s Achievement:</string>
 
-	<string name="create_org_create_an_organisation">Create an Organisation</string>
+	<string name="create_org_create_an_organisation">Create an Organization</string>
 	<string name="create_org_create_your_own_organisation">Create your own organization.</string>
-    <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
+    <string name="create_org_invalid_name">Organization names cannot contain invalid characters.</string>
     <string name="create_org_created">The organization <strong>%s</strong> has been created.</string>
 
     <string name="thank_registering_organisation">Thank you for your interest in registering as an organization on Kató Platform</string>
@@ -300,19 +300,19 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="org_private_profile_public_profile">Public Profile</string>
 	<string name="org_private_profile_your_organisation_name">Your organization name.</string>
 	<string name="org_private_profile_organisationexamplecom">organisation@example.com</string>
-	<string name="org_private_profile_enter_organisation_biography_here">Enter Organisation biography here.</string>
-	<string name="org_private_profile_update_organisation_details">Update Organisation Details</string>
+	<string name="org_private_profile_enter_organisation_biography_here">Enter Organization biography here.</string>
+	<string name="org_private_profile_update_organisation_details">Update Organization Details</string>
     <string name="org_private_profile_confirm_delete">Are you sure you want to delete this organization?</string>
-	<string name="org_private_profile_delete_organisation">Delete Organisation</string>
+	<string name="org_private_profile_delete_organisation">Delete Organization</string>
     <string name="org_private_profile_delete_success">Successfully deleted the organization %s</string>        
     <string name="org_private_profile_delete_fail">Unable to delete organization. Please try again later.</string> 
 
     <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Kató Platform</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Kató Platform Administrators only</string>
-    <string name="org_private_profile_organisation_overview">Overview of Organisation including Vision, Mission<br />and Target Beneficiary Communities</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organization Members and Kató Platform Administrators only</string>
+    <string name="org_private_profile_organisation_overview">Overview of Organization including Vision, Mission<br />and Target Beneficiary Communities</string>
     <string name="org_private_profile_organisation_activity">Area of Activity</string>
     <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
-    <string name="org_private_profile_organisation_website">Organisation's Website</string>
+    <string name="org_private_profile_organisation_website">Organization's Website</string>
     <string name="org_private_profile_organisation_facebook">Facebook</string>
     <string name="org_private_profile_organisation_linkedin">LinkedIn</string>
     <string name="org_private_profile_organisation_twitter">Twitter</string>
@@ -321,9 +321,9 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_private_profile_organisation_primary_contact_email">Primary Contact email</string>
     <string name="org_private_profile_organisation_primary_contact_phone">Primary Contact Phone</string>
     <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
-    <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
-    <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
-    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organisation's Impact<br />or Social Responsibility/Impact report</string>
+    <string name="org_private_profile_organisation_structure">Organizational Structure, Leadership Team, Board and Locations</string>
+    <string name="org_private_profile_organisation_affiliations">Organizational Affiliations and Awards</string>
+    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organization's Impact<br />or Social Responsibility/Impact report</string>
     <string name="org_private_profile_organisation_employee">Number of Employees</string>
     <string name="org_private_profile_organisation_funding">Your Funding Sources</string>
     <string name="org_private_profile_organisation_find">How did you find us?</string>
@@ -335,14 +335,14 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_private_profile_organisation_source">What are the most frequent source languages?</string>
     <string name="org_private_profile_organisation_target">What are the most frequent target languages?</string>
     <string name="org_private_profile_organisation_often">How often do you require translations?</string>
-    <string name="org_private_profile_organisation_error_overview_not_set"><strong>Overview of Organisation</strong> must be set.</string>
+    <string name="org_private_profile_organisation_error_overview_not_set"><strong>Overview of Organization</strong> must be set.</string>
     <string name="org_private_profile_organisation_error_name_not_set"><strong>Primary Contact Given Name and Family Name</strong> must be set.</string>
     <string name="org_private_profile_organisation_error_email_not_set"><strong>Primary Contact email</strong> must be set.</string>
 	<string name="org_public_profile_an_organisation_of">An organization of %s.</string>
-	<string name="org_public_profile_edit_organisation_details">Edit Organisation Details</string>
+	<string name="org_public_profile_edit_organisation_details">Edit Organization Details</string>
 	<string name="org_public_profile_request_membership">Request Membership</string>
-	<string name="org_public_profile_track_organisation">Track Organisation</string>
-	<string name="org_public_profile_untrack_organisation">Untrack Organisation</string>
+	<string name="org_public_profile_track_organisation">Track Organization</string>
+	<string name="org_public_profile_untrack_organisation">Untrack Organization</string>
 	<string name="org_public_profile_org_track_success">You are now tracking this organization and will receive email notifications related to its activities.</string>
     <string name="org_public_profile_org_track_error">Unable to register for notifications for this organization.</string>
     <string name="org_public_profile_org_untrack_success">You are no longer tracking this organization and will receive no further emails.</string>
@@ -365,7 +365,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="org_public_profile_accept">Accept</string>
 	<string name="org_public_profile_deny">Deny</string>
 	<string name="org_public_profile_no_membership_requests_associated">There are no membership requests associated with this organization.</string>
-	<string name="org_public_profile_organisation_members">Organisation Members</string>
+	<string name="org_public_profile_organisation_members">Organization Members</string>
 	<string name="org_public_profile_member_list">A list of users that are a member of this organization.</string>
 	<string name="org_public_profile_member_type">Member Type</string>
 	<string name="org_public_profile_username">Username</string>
@@ -391,21 +391,21 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_public_profile_27">Unable to revoke membership from user <a href="%s">%s</a>.</string>        
     <string name="org_public_profile_28">Unable to find the user in the system.</string> 
 
-	<string name="org_search_organisation_search">Organisation Search</string>
+	<string name="org_search_organisation_search">Organization Search</string>
 	<string name="org_search_0">Search for organizations by name.</string>
 	<string name="org_search_search">Search</string>
 	<string name="org_search_search_results">Search Results: Found %s result(s)!</string>
     <string name="org_search_34">No organizations found.</string>
 
-  <string name="org_create_badge_create_organisation_badge">Create Organisation Achievement</string>
+  <string name="org_create_badge_create_organisation_badge">Create Organization Achievement</string>
   <string name="org_create_badge_badge_title">Achievement Title</string>
   <string name="org_create_badge_0">Create an achievement for your organization.</string>
   <string name="org_create_badge_create_badge">Create Achievement</string>
-    <string name="org_create_badge_33">Successfully created new Organisation Achievement.</string>
+    <string name="org_create_badge_33">Successfully created new Organization Achievement.</string>
 
-	<string name="org_dashboard_organisation_dashboard">Organisation Dashboard</string>
+	<string name="org_dashboard_organisation_dashboard">Organization Dashboard</string>
 	<string name="org_dashboard_0">Overview of projects created by your organizations.</string>
-	<string name="org_dashboard_edit_organisation">Edit Organisation</string>
+	<string name="org_dashboard_edit_organisation">Edit Organization</string>
 	<string name="org_dashboard_1">Warning: Archiving a project removes it and all its tasks from the system and stores it in our database. Once the project has been archived no further work can be done to it. Are you sure you want to archive this project?</string>
 	<string name="org_dashboard_archive_project">Archive Project</string>
     <string name="org_dashboard_3">This organization has no projects listed.</string>
@@ -635,9 +635,9 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="terms_terms_and_conditions">Terms and Conditions</string>	
 	<string name="terms_terms">Terms</string>
 	<string name="terms_0">By accessing this web site, you are agreeing to be bound by the website Terms and Conditions, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this web site are protected by applicable copyright and trade mark law.</string>
-	<string name="terms_organisation_use_of">Organisation Use of %s</string>
-	<string name="terms_3">Permission is granted to Organisations to publish content subject to the terms of the following licence.</string>
-	<string name="terms_organisation_use_license">Organisation Use License</string>
+	<string name="terms_organisation_use_of">Organization Use of %s</string>
+	<string name="terms_3">Permission is granted to Organizations to publish content subject to the terms of the following licence.</string>
+	<string name="terms_organisation_use_license">Organization Use License</string>
 	<string name="terms_4">This is the grant of a license, not a transfer of title, and under this license you may not:</string>
 	<string name="terms_5">use %s to publish any commercial for-profit content;</string>
 	<string name="terms_6">attempt to decompile or reverse engineer any software contained on %s's web site;</string>
@@ -687,7 +687,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="terms_56">We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.</string>
 
 	<string name="videos_volunteer_videos">Volunteer Videos</string>
-	<string name="videos_organisation_videos">Organisation Videos</string>
+	<string name="videos_organisation_videos">Organization Videos</string>
 
 	<string name="tag_list_tag_list">Tag List</string>
 	<string name="tag_list_all_tags_in">All tags in %s.</string>
@@ -962,7 +962,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_uploaded_5">Correct Translations - They Matter!</string>
 	<string name="task_uploaded_find_a_new_task">Find A New Task</string>
 
-	<string name="task_user_feedback_organisation_feedback">Organisation Feedback</string>
+	<string name="task_user_feedback_organisation_feedback">Organization Feedback</string>
 	<string name="task_user_feedback_provide_direct_feedback">You can provide direct feedback to the organization who owns this task here.</string>
 	<string name="task_user_feedback_if_accidental_claim"> Alternatively, if you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision and unclaim the task in this form.</string>
 	<string name="task_user_feedback_2">Unclaim Task and Submit Feedback</string>
@@ -1071,7 +1071,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="user_public_profile_search_for_tags">Search For Tags</string>
 	<string name="user_public_profile_9">You are not subscribed to any Tags on the system at the moment.</string>
 	<string name="user_public_profile_10">A list of organizations you belong to.</string>
-	<string name="user_public_profile_leave_organisation">Leave Organisation</string>
+	<string name="user_public_profile_leave_organisation">Leave Organization</string>
 	<string name="user_public_profile_11">Are you sure you want to leave the organization?</string>
 	<string name="user_public_profile_14">A list of tasks you have worked on in the past.</string>
 	<string name="user_public_profile_list_all_archived_tasks">List All Archived Tasks</string>
