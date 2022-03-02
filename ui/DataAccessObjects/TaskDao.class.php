@@ -1242,6 +1242,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         LibAPI\PDOWrapper::call('set_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
     }
 
+    public function set_revision_as_paid($project_id)
+    {
+        LibAPI\PDOWrapper::call('set_revision_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
+    }
+
     public function clear_all_as_paid($project_id)
     {
         LibAPI\PDOWrapper::call('clear_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));

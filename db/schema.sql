@@ -9184,6 +9184,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_revision_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_revision_as_paid`(IN pID INT)
+BEGIN
+    INSERT INTO TaskPaids (SELECT id, 1 FROM Tasks WHERE project_id=pID AND `task-type_id`=3);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `clear_all_as_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_all_as_paid`(IN pID INT)

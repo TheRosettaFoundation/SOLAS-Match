@@ -288,6 +288,15 @@ Tweet</a>
             {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
+        {if $all_as_paid == 1}
+        <form id="revision_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class="btn btn-small" onclick="$('#revision_as_paid').submit();">
+                <i class="icon-check icon-black"></i> Mark all Tasks as Paid
+            </a>
+            <input type="hidden" name="all_as_paid" value="3" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        {/if}
         {/if}
         </div>
         {/if}
