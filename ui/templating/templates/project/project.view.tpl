@@ -273,6 +273,7 @@ Tweet</a>
             <input type="hidden" name="unpublish_all_revisions" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
+        </div>
         {if !empty($all_as_paid)}
         <form id="all_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             {if $all_as_paid == 2}
@@ -298,7 +299,6 @@ Tweet</a>
         </form>
         {/if}
         {/if}
-        </div>
         {/if}
     </h1> 
             
