@@ -275,6 +275,7 @@ Tweet</a>
         </form>
         </div>
         {if !empty($all_as_paid)}
+        <div>
         <div class="pull-right">
         <form id="all_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             {if $all_as_paid == 2}
@@ -299,6 +300,7 @@ Tweet</a>
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
         {/if}
+        </div>
         </div>
         {/if}
         {/if}
