@@ -145,7 +145,7 @@ display: inline-block;
    font-weight: bold; /*or whatever you want*/
    font-size: 18px;
    position: relative;
-    top: -110px;
+    top: -105px;
     left: -150px;  
 }
 
@@ -154,7 +154,7 @@ display: inline-block;
     font-size: 20px;
     color: #143878;
     position: relative;
-    top: -40px;
+    top: -20px;
     left: -140px;
 }
     </style>
