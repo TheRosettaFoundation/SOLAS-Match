@@ -9107,7 +9107,7 @@ BEGIN
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
         SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
         SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
-        SUM(t.`word-count`) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
+        SUM(IF(tp.task_id IS NULL, t.`word-count`, 0)) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
         ROUND(
             SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL, t.`word-count`, 0)) +
             SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL, t.`word-count`, 0))*0.5 +
