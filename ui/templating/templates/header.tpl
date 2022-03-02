@@ -94,15 +94,6 @@
    height: 100%;
    vertical-align: middle;
 }
-/*
-.containerBox h4 {
-   display: inline-block;
-   font-size: 20px; 
-   color: #143878; 
-   position: relative;
-    top: -80px;
-    left: -150px;  
-}*/
 
 .second_badge_name{
       display: inline-block;
