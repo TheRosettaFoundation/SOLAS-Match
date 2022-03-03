@@ -462,6 +462,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                 </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
+{if $user_has_strategic_languages[0]['nigeria'] == 0}
                         <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;">Points in strategic languages</td><td align="center" style="border:2px solid #e8991c; color: #576e82;">Status</td> <td align="center" style="border:2px solid #e8991c; color: #576e82;">Recognition reward</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                         <td align="center" style="border:2px solid #e8991c">TWB New Community Member</td><td align="center" style="border:2px solid #e8991c">100 USD phone top-up or online voucher, where applicable</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">25,000</td>                                        <td align="center" style="border:2px solid #e8991c">TWB Traveler</td>            <td align="center" style="border:2px solid #e8991c">100 USD bank transfer</td></tr>
@@ -471,7 +472,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                         <tr><td align="center" style="border:2px solid #e8991c">300,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Voyager</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">400,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Trailblazer</td>         <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">500,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Pioneer</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
-
+{else}
 <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;">Threshold</td><td align="center" style="border:2px solid #e8991c; color: #576e82;">Status</td> <td align="center" style="border:2px solid #e8991c; color: #576e82;">Recognition reward</td></tr>
 <tr><td align="center" style="border:2px solid #e8991c"><strong>First task delivered</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Translator</strong></td><td align="center" style="border:2px solid #e8991c"><strong>US$5 phone top up + Status certificate</strong></td></tr>
 <tr><td align="center" style="border:2px solid #e8991c">2,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">US$5 phone top up</td></tr>
@@ -514,6 +515,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
 <tr><td align="center" style="border:2px solid #e8991c">95,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">US$20 phone top up</td></tr>
 <tr><td align="center" style="border:2px solid #e8991c">97,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">US$20 phone top up</td></tr>
 <tr><td align="center" style="border:2px solid #e8991c"><strong>100,000 points</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Explorer</strong></td><td align="center" style="border:2px solid #e8991c"><strong>US$20 phone top up + Status certificate + Reference letter</strong></td></tr>
+{/if}
                     </tbody>
                 </table>
             </div>

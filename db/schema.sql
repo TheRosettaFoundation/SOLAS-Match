@@ -9086,12 +9086,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_strategic_languages`(IN `userID` INT)
 BEGIN
         SELECT
-            uqp.*
+            uqp.*,
+            IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) AS nigeria
         FROM UserQualifiedPairs uqp
         WHERE
             uqp.user_id=userID AND
             uqp.language_code_target IN
-            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0');
+            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
+        ORDER BY IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) DESC, uqp.language_code_target ASC;
 END//
 DELIMITER ;
 
