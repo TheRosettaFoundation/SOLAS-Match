@@ -460,6 +460,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
                     </a>
                     -->
                 </h2>
+                {if $user_has_strategic_languages[0]['nigeria'] == 1}<div style="overflow: auto; max-height: 300px;">{/if}
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
 {if $user_has_strategic_languages[0]['nigeria'] == 0}
@@ -518,6 +519,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
 {/if}
                     </tbody>
                 </table>
+                {if $user_has_strategic_languages[0]['nigeria'] == 1}</div>{/if}
             </div>
         </td>
 
