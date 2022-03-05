@@ -1322,6 +1322,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
                     error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
+
+                  // If Sync has happened after this task was claimed, perhaps creating new split tasks in other workflow...
+                  $user_id = $this->getUserClaimedTask($task_id);
+                  if ($user_id) $taskDao->DenyOtherWorkflow($task_id, $user_id, $memsource_task);
+
                   if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
@@ -1342,6 +1347,10 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
+          // If Sync has happened after this task was claimed, perhaps creating new split tasks in other workflow...
+          $user_id = $this->getUserClaimedTask($task_id);
+          if ($user_id) $taskDao->DenyOtherWorkflow($task_id, $user_id, $memsource_task);
+
           if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
             $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
             $taskDao->sendTaskUploadNotifications($task_id, 1);
@@ -1352,7 +1361,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
                     if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
                         $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                    $user_id = $this->getUserClaimedTask($task_id);
                     if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
                 }
             }
