@@ -2181,7 +2181,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $response = $response->withHeader($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
             return $response;
@@ -2211,7 +2211,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $response = $response->withHeader($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
             return $response;

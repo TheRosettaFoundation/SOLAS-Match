@@ -720,7 +720,7 @@ class TaskRouteHandler
             if (!empty($headerArr)) {
                 $headerArr = unserialize($headerArr);
                 foreach ($headerArr as $key => $val) {
-                    $response = $response->withHeader($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
             return $response;
@@ -871,7 +871,7 @@ class TaskRouteHandler
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
             foreach ($headerArr as $key => $val) {
-                $response = $response->withHeader($key, $val);
+                if (!empty($val)) $response = $response->withHeader($key, $val);
             }
         }
         return $response;
