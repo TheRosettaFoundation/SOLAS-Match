@@ -1126,6 +1126,30 @@ error_log("queue_asana_project($project_id)");//(**)
                     }
                 }
         }
+
+        $project_tasks = $this->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $memsource_task) {
+            if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS || $memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::COMPLETE) {
+                // If Sync has happened after this task was claimed, perhaps creating new split tasks in other workflow...
+                $task_id = $memsource_task['task_id'];
+                if ($user_id = $this->getUserClaimedTask($task_id)) {
+                    // If either workflow split, add corresponding task(s) to deny list for translator
+                    $top_level = $this->get_top_level($memsource_task['internalId']);
+                    foreach ($project_tasks as $project_task) {
+                        if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                            if (strpos($memsource_task['internalId'], '.') || strpos($project_task['internalId'], '.')) { // Make sure is split
+                                if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                                    if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                        error_log("Adding $user_id to Deny List for {$project_task['id']} {$project_task['internalId']} (maybe new split tasks in other workflow)");
+                                        $this->addUserToTaskBlacklist($user_id, $project_task['id']);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return 0;
     }
 
