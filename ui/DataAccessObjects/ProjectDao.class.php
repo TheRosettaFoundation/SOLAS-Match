@@ -1346,7 +1346,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
                     error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
-
                   if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
