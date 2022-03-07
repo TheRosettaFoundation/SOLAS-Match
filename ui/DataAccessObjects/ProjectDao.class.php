@@ -1141,7 +1141,7 @@ error_log("queue_asana_project($project_id)");//(**)
                                 if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
                                     if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                         error_log("Adding $user_id to Deny List for {$project_task['id']} {$project_task['internalId']} (maybe new split tasks in other workflow)");
-                                        $this->addUserToTaskBlacklist($user_id, $project_task['id']);
+                                        $taskDao->addUserToTaskBlacklist($user_id, $project_task['id']);
                                     }
                                 }
                             }
