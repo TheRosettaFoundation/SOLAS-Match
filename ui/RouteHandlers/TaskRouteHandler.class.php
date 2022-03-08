@@ -439,7 +439,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             'current_page' => 'claimed-tasks',
@@ -579,7 +579,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             'current_page' => 'recent-tasks',
@@ -1108,7 +1108,7 @@ class TaskRouteHandler
         $list_qualified_translators = array();
         if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($taskId);
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
             var member = ".$isMember.";
@@ -2074,7 +2074,7 @@ class TaskRouteHandler
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $alsoViewedTasksCount = 0; 
 
         $template_data = array_merge($template_data, array(
@@ -2170,7 +2170,7 @@ class TaskRouteHandler
             }
         }
 
-        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView2.js");
         $extra_scripts .= "
     <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
     <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
