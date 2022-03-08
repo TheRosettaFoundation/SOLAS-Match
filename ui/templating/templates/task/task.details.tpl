@@ -30,7 +30,7 @@
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
             </td>
             <td>
-                <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
                 <span class="hidden">

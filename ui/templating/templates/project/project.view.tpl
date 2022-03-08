@@ -104,7 +104,7 @@ Tweet</a>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div><br />{$pm}
                 </td>  
                 <td>
-                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getDeadline()}</div>
+                    <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$project->getDeadline()}</div>
                 </td>
                 {if isset($userSubscribedToProject)}
                     <td>
@@ -395,7 +395,7 @@ Tweet</a>
                                         </strong>
                                     </td>
                                     <td>
-                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
                                     <td>
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
@@ -560,7 +560,7 @@ Tweet</a>
                                         </strong>
                                     </td>
                                     <td>
-                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task['deadline']}</div>
+                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task['deadline']}</div>
                                     </td>
                                 </tr>
                             {/foreach}
