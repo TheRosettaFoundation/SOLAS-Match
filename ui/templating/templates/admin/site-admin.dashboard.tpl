@@ -33,14 +33,18 @@
     <p><a href="{urlFor name="project_source_file_scores"}" target="_blank">Project Source File Scores</a> <a href="{urlFor name="download_project_source_file_scores"}">[Download]</a></p>
     <p><a href="{urlFor name="language_work_requested"}" target="_blank">List language pairs with translation work requested in those pairs.</a> <a href="{urlFor name="download_language_work_requested"}">[Download]</a></p>
     <p><a href="{urlFor name="translators_for_language_pairs"}" target="_blank">List language pairs with number of translators who have that pair.</a> <a href="{urlFor name="download_translators_for_language_pairs"}">[Download]</a></p>
+<!--
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <p><a href="{urlFor name="org_stats"}">[Download NGO report]</a></p>
+-->
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
     <p><a href="{urlFor name="matecat_analyse_status"}">List projects with MateCat analyse status</a></p>
     <p><a href="{urlFor name="list_memsource_projects"}">List memsource projects</a></p>
     <p><a href="{urlFor name="users_review"}">List user certificates to be reviewed</a></p>
+<!--
     <p><a href="{urlFor name="users_new"}">List new users</a> <a href="{urlFor name="download_users_new"}">[Download]</a> <a href="{urlFor name="download_users_new_unreviewed"}">[Download Unreviewed]</a></p>
     <p><a href="{urlFor name="users_tracked"}">List tracked Registrations</a> <a href="{urlFor name="download_users_tracked"}">[Download]</a> <a href="{urlFor name="add_tracking_code"}" target="_blank">Add a new tracking code</a></p>
+-->
     <p><a href="{urlFor name="download_covid_projects"}">[Download covid projects]</a></p>
     <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
     <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
