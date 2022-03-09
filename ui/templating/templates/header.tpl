@@ -208,12 +208,6 @@ display: inline-block;
                             <li>
                                 <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
                             </li>
-                            <li>
-                                <a href="{Settings::get('site.dashboard_task_link')}" target="_blank">Task</a>
-                            </li>
-                            <li>
-                                <a href="{Settings::get('site.dashboard_project_link')}" target="_blank">Project</a>
-                            </li>
                         {/if}
                         {if !isset($site_admin)}
                             <li>
