@@ -282,7 +282,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 <h4 class="name_top">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="badge_value">{$user_badges['words_donated']}</span><br/> <span class="badge_text">Words donated</span></p>
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="50%" />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
                         </td></tr>
 
@@ -426,12 +426,12 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> <span class="badge_text">RECOGNITION POINTS</span></h5>
                             {else}
                                 <h4 class="name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
-                                <p class="recognition_points1"><span class="badge_value">{$user_badges['recognition_points']}</span> <br/><span class="badge_text">RECOGNITION POINTS</span> <br/><br/> of which <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS <br/>
+                                <p class="recognition_points1"><span class="badge_value_strategic">{$user_badges['recognition_points']}</span> <br/><span class="badge_text">RECOGNITION POINTS</span> <br/><br/> <span class="strategic_text"> of which <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS </span> <br/>
                                 <span class="badge_text">IN STRATEGIC LANGUAGES</span>
                                 </p>
                             {/if}
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="80%" />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
                         </td></tr>
                     </tbody>

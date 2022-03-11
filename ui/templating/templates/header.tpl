@@ -98,9 +98,9 @@
 .second_badge_name{
       display: inline-block;
    font-size: 20px; 
-   color: #143878; 
+   color: #000000; 
    position: relative;
-    top: -80px;
+    top: -35px;
     left: -80px;  
 
 }
@@ -110,34 +110,62 @@
    font-size: 20px; /*or whatever you want*/
    color: #e8991c; 
    position: relative;
-    top: -200px;
-    left: -65px;  
+    top: -135px;
+    left: -90px;  
 }
 .text-box .name{
 display: inline-block;
     font-size: 20px;
-    color: #143878;
+    color: #000000;
     position: relative;
     top: -65px;
-    left: -70px;
+    left: -85px;
 }
 .recognition_points1{
-      display: inline-block;
-   font-weight: bold; /*or whatever you want*/
-   font-size: 18px;
-   color: #e8991c; 
-   position: relative;
+    display: inline-block;
+    font-weight: bold; /*or whatever you want*/
+    font-size: 18px;
+    color: #e8991c; 
+    position: relative;
     top: -200px;
     left: -55px; 
 
 }
 
 .badge_text{
- color: #000000;
+   color: #576E82;
    text-transform:uppercase; 
+   
+}
+.recognition_points1 .badge_text{
+   color: #576E82;
+   text-transform:uppercase; 
+   position:relative;
+   top:20px;
+   left:-35px;
+   
 }
 .badge_value{
-   color: #e8991c;   
+   color: #E8991C;   
+   font-size:25px;
+   position: relative;
+    top: -10px;
+}
+
+.strategic_text .badge_value{
+   color: #E8991C;   
+   font-size:25px;
+   position: relative;
+    top: 1px;
+}
+
+.badge_value_strategic{
+   color: #E8991C;   
+   font-size:25px;
+   position: relative;
+    
+    top: 15px;
+    left: -37px;
 }
 
 .first_badge{
@@ -145,17 +173,22 @@ display: inline-block;
    font-weight: bold; /*or whatever you want*/
    font-size: 18px;
    position: relative;
-    top: -105px;
-    left: -150px;  
+    top: -125px;
+    left: -102px;  
 }
 
 .name_top{
     display: inline-block;
     font-size: 20px;
-    color: #143878;
+    color: #000000;
     position: relative;
-    top: -20px;
-    left: -140px;
+    top: -22px;
+    left: -100px;
+}
+.strategic_text{
+    position: relative;
+    top: 10px;
+    left: -40px;
 }
     </style>
     </head>
