@@ -5,276 +5,277 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AdminRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
-                          
-        $app->get(
-            "/admin/",
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, "adminDashboard")
-        )->via("POST")->name("site-admin-dashboard");
+        global $app;
+
+        $app->map(['GET', 'POST'],
+            '/admin[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:adminDashboard')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('site-admin-dashboard');
+
+        $app->map(['GET', 'POST'],
+            '/all_users[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_users')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('all_users');
+
+        $app->map(['GET', 'POST'],
+            '/all_users_plain[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_users_plain')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('all_users_plain');
+
+        $app->map(['GET', 'POST'],
+            '/active_now[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_now')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('active_now');
+
+        $app->map(['GET', 'POST'],
+            '/active_now_matecat[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_now_matecat')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('active_now_matecat');
+
+        $app->map(['GET', 'POST'],
+            '/testing_center[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:testing_center')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('testing_center');
+
+        $app->map(['GET', 'POST'],
+            '/download_testing_center[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_testing_center')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_testing_center');
+
+        $app->map(['GET', 'POST'],
+            '/matecat_analyse_status[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:matecat_analyse_status')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('matecat_analyse_status');
 
         $app->get(
-            '/all_users/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'all_users')
-        )->via('POST')->name('all_users');
+            '/list_memsource_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:list_memsource_projects')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('list_memsource_projects');
+
+        $app->map(['GET', 'POST'],
+            '/download_covid_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_covid_projects')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_covid_projects');
+
+        $app->map(['GET', 'POST'],
+            '/download_afghanistan_2021_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_afghanistan_2021_projects')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_afghanistan_2021_projects');
+
+        $app->map(['GET', 'POST'],
+            '/download_haiti_2021_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_haiti_2021_projects')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_haiti_2021_projects');
+
+        $app->map(['GET', 'POST'],
+            '/late_matecat[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:late_matecat')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('late_matecat');
+
+        $app->map(['GET', 'POST'],
+            '/complete_matecat[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:complete_matecat')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('complete_matecat');
+
+        $app->map(['GET', 'POST'],
+            '/user_task_reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_reviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('user_task_reviews');
 
         $app->get(
-            '/all_users_plain/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'all_users_plain')
-        )->via('POST')->name('all_users_plain');
+            '/peer_to_peer_vetting[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:peer_to_peer_vetting')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('peer_to_peer_vetting');
 
         $app->get(
-            '/active_now/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'active_now')
-        )->via('POST')->name('active_now');
+            '/submitted_task_reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:submitted_task_reviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('submitted_task_reviews');
 
         $app->get(
-            '/active_now_matecat/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'active_now_matecat')
-        )->via('POST')->name('active_now_matecat');
+            '/tasks_no_reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:tasks_no_reviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('tasks_no_reviews');
 
         $app->get(
-            '/testing_center/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'testing_center')
-        )->via('POST')->name('testing_center');
+            '/project_source_file_scores[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:project_source_file_scores')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('project_source_file_scores');
 
         $app->get(
-            '/download_testing_center/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_testing_center')
-        )->via('POST')->name('download_testing_center');
+            '/download_submitted_task_reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_submitted_task_reviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_submitted_task_reviews');
 
         $app->get(
-            '/matecat_analyse_status/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'matecat_analyse_status')
-        )->via('POST')->name('matecat_analyse_status');
+            '/download_tasks_no_reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_tasks_no_reviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_tasks_no_reviews');
 
         $app->get(
-            '/list_memsource_projects/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'list_memsource_projects')
-        )->name('list_memsource_projects');
+            '/download_project_source_file_scores[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_project_source_file_scores')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_project_source_file_scores');
+
+        $app->map(['GET', 'POST'],
+            '/first_completed_task[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:first_completed_task')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('first_completed_task');
+
+        $app->map(['GET', 'POST'],
+            '/active_users[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_users')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('active_users');
+
+        $app->map(['GET', 'POST'],
+            '/active_users_unique[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_users_unique')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('active_users_unique');
+
+        $app->map(['GET', 'POST'],
+            '/unclaimed_tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:unclaimed_tasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('unclaimed_tasks');
+
+        $app->map(['GET', 'POST'],
+            '/search_users_by_language_pair[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:search_users_by_language_pair')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('search_users_by_language_pair');
+
+        $app->map(['GET', 'POST'],
+            '/user_languages/{code}',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_languages')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('user_languages');
 
         $app->get(
-            '/download_covid_projects/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_covid_projects')
-        )->via('POST')->name('download_covid_projects');
+            '/download_user_languages[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_languages')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_user_languages');
+
+        $app->map(['GET', 'POST'],
+            '/user_task_languages/{code}',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_languages')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('user_task_languages');
+
+        $app->map(['GET', 'POST'],
+            '/user_words_by_language[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_words_by_language')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('user_words_by_language');
 
         $app->get(
-            '/download_afghanistan_2021_projects/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_afghanistan_2021_projects')
-        )->via('POST')->name('download_afghanistan_2021_projects');
+            '/download_user_words_by_language[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_words_by_language')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_user_words_by_language');
 
         $app->get(
-            '/download_haiti_2021_projects/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_haiti_2021_projects')
-        )->via('POST')->name('download_haiti_2021_projects');
+            '/download_user_task_languages[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_task_languages')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_user_task_languages');
 
         $app->get(
-            '/late_matecat/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'late_matecat')
-        )->via('POST')->name('late_matecat');
+            '/download_all_users[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_all_users')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_all_users');
 
         $app->get(
-            '/complete_matecat/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'complete_matecat')
-        )->via('POST')->name('complete_matecat');
+            '/download_active_users[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_active_users')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_active_users');
 
         $app->get(
-            '/user_task_reviews/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'user_task_reviews')
-        )->via('POST')->name('user_task_reviews');
+            '/community_stats[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:community_stats')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('community_stats');
 
         $app->get(
-            '/peer_to_peer_vetting/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'peer_to_peer_vetting')
-        )->name('peer_to_peer_vetting');
+            '/org_stats[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:org_stats')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('org_stats');
 
         $app->get(
-            '/submitted_task_reviews/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'submitted_task_reviews')
-        )->name('submitted_task_reviews');
+            '/community_dashboard[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:community_dashboard')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('community_dashboard');
 
         $app->get(
-            '/tasks_no_reviews/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'tasks_no_reviews')
-        )->name('tasks_no_reviews');
+            '/language_work_requested[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:language_work_requested')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('language_work_requested');
 
         $app->get(
-            '/project_source_file_scores/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'project_source_file_scores')
-        )->name('project_source_file_scores');
+            '/download_language_work_requested[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_language_work_requested')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_language_work_requested');
 
         $app->get(
-            '/download_submitted_task_reviews/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_submitted_task_reviews')
-        )->name('download_submitted_task_reviews');
+            '/translators_for_language_pairs[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:translators_for_language_pairs')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('translators_for_language_pairs');
 
         $app->get(
-            '/download_tasks_no_reviews/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_tasks_no_reviews')
-        )->name('download_tasks_no_reviews');
-
-        $app->get(
-            '/download_project_source_file_scores/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_project_source_file_scores')
-        )->name('download_project_source_file_scores');
-
-        $app->get(
-            '/first_completed_task/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'first_completed_task')
-        )->via('POST')->name('first_completed_task');
-
-        $app->get(
-            '/active_users/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'active_users')
-        )->via('POST')->name('active_users');
-
-        $app->get(
-            '/active_users_unique/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'active_users_unique')
-        )->via('POST')->name('active_users_unique');
-
-        $app->get(
-            '/unclaimed_tasks/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'unclaimed_tasks')
-        )->via('POST')->name('unclaimed_tasks');
-
-        $app->get(
-            '/search_users_by_language_pair/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'search_users_by_language_pair')
-        )->via('POST')->name('search_users_by_language_pair');
-
-        $app->get(
-            '/user_languages/:code',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'user_languages')
-        )->via('POST')->name('user_languages');
-
-        $app->get(
-            '/download_user_languages/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_user_languages')
-        )->name('download_user_languages');
-
-        $app->get(
-            '/user_task_languages/:code',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'user_task_languages')
-        )->via('POST')->name('user_task_languages');
-
-        $app->get(
-            '/user_words_by_language/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'user_words_by_language')
-        )->via('POST')->name('user_words_by_language');
-
-        $app->get(
-            '/download_user_words_by_language/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_user_words_by_language')
-        )->name('download_user_words_by_language');
-
-        $app->get(
-            '/download_user_task_languages/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_user_task_languages')
-        )->name('download_user_task_languages');
-
-        $app->get(
-            '/download_all_users/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_all_users')
-        )->name('download_all_users');
-
-        $app->get(
-            '/download_active_users/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_active_users')
-        )->name('download_active_users');
-
-        $app->get(
-            '/community_stats/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'community_stats')
-        )->name('community_stats');
-
-        $app->get(
-            '/org_stats/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'org_stats')
-        )->name('org_stats');
-
-        $app->get(
-            '/community_dashboard/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'community_dashboard')
-        )->name('community_dashboard');
-
-        $app->get(
-            '/language_work_requested/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'language_work_requested')
-        )->name('language_work_requested');
-
-        $app->get(
-            '/download_language_work_requested/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_language_work_requested')
-        )->name('download_language_work_requested');
-
-        $app->get(
-            '/translators_for_language_pairs/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'translators_for_language_pairs')
-        )->name('translators_for_language_pairs');
-
-        $app->get(
-            '/download_translators_for_language_pairs/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_translators_for_language_pairs')
-        )->name('download_translators_for_language_pairs');
+            '/download_translators_for_language_pairs[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_translators_for_language_pairs')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_translators_for_language_pairs');
     }
     
-    public function adminDashboard()
+    public function adminDashboard(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
-        if ($post = $app->request()->post()) {
-            Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard');
+        if ($post = $request->getParsedBody()) {
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
@@ -284,35 +285,35 @@ class AdminRouteHandler
             if (!empty($post['search_user'])) {
                 $items_found = $statsDao->search_user($post['search_user']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_user_results', $items_found);
+                    UserRouteHandler::flashNow('search_user_results', $items_found);
                 } else {
-                    $app->flashNow('search_user_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_user_fail', 'Not Found');
                 }
             }
 
             if (!empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_organisation_results', $items_found);
+                    UserRouteHandler::flashNow('search_organisation_results', $items_found);
                 } else {
-                    $app->flashNow('search_organisation_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_organisation_fail', 'Not Found');
                 }
             }
 
             if (!empty($post['search_project'])) {
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_project_results', $items_found);
+                    UserRouteHandler::flashNow('search_project_results', $items_found);
                 } else {
-                    $app->flashNow('search_project_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_project_fail', 'Not Found');
                 }
             }
 
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
-                    $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
+                    UserRouteHandler::flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
                 } else {
-                    $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
+                    UserRouteHandler::flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
                 }
             }
 
@@ -362,12 +363,12 @@ class AdminRouteHandler
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "deleteSuccess",
                         Lib\Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "deleteError",
                         Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found')
                     );
@@ -381,19 +382,19 @@ class AdminRouteHandler
                     $claimantId = $taskDao->getUserClaimedTask($taskId)->getId();
                     if ($claimantId != $userToRevokeFrom->getId()) {
                         //user specified did not claim the task specified
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "revokeTaskError",
                             Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_no_claim')
                         );
                     } else {
                         $adminDao->revokeTaskFromUser($taskId, $userId);
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "revokeTaskSuccess",
                             Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_success'));
                     }
                 } else {
                     //Invalid input supplied for user email and/or task id
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "revokeTaskError",
                         Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
                 }
@@ -435,7 +436,7 @@ class AdminRouteHandler
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey'       => $sesskey,
                     "adminUserId"   => $userId,
                     "adminList"     => $adminList,
@@ -450,65 +451,65 @@ class AdminRouteHandler
                     "extra_scripts" => $extra_scripts
         ));
 
-        $app->render("admin/site-admin.dashboard.tpl");
+        return UserRouteHandler::render("admin/site-admin.dashboard.tpl", $response);
     }
 
-    public function all_users()
+    public function all_users(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/all_users.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/all_users.tpl', $response);
     }
 
-    public function all_users_plain()
+    public function all_users_plain(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/all_users_plain.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/all_users_plain.tpl', $response);
     }
 
-    public function active_now()
+    public function active_now(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/active_now.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/active_now.tpl', $response);
     }
 
-    public function active_now_matecat()
+    public function active_now_matecat(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/active_now_matecat.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/active_now_matecat.tpl', $response);
     }
 
-    public function testing_center()
+    public function testing_center(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->testing_center();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/testing_center.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/testing_center.tpl', $response);
     }
 
-    public function download_testing_center()
+    public function download_testing_center(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
 
@@ -544,51 +545,51 @@ class AdminRouteHandler
         die;
     }
 
-    public function late_matecat()
+    public function late_matecat(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->late_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/late_matecat.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/late_matecat.tpl', $response);
     }
 
-    public function complete_matecat()
+    public function complete_matecat(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/complete_matecat.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/complete_matecat.tpl', $response);
     }
 
-    public function user_task_reviews()
+    public function user_task_reviews(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_task_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/user_task_reviews.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/user_task_reviews.tpl', $response);
     }
 
-    public function submitted_task_reviews()
+    public function submitted_task_reviews(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->submitted_task_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/submitted_task_reviews.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/submitted_task_reviews.tpl', $response);
     }
 
-    public function download_submitted_task_reviews()
+    public function download_submitted_task_reviews(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->submitted_task_reviews();
@@ -619,7 +620,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function peer_to_peer_vetting()
+    public function peer_to_peer_vetting(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->peer_to_peer_vetting();
@@ -649,18 +650,18 @@ class AdminRouteHandler
         die;
     }
 
-    public function tasks_no_reviews()
+    public function tasks_no_reviews(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->tasks_no_reviews();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/tasks_no_reviews.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/tasks_no_reviews.tpl', $response);
     }
 
-    public function download_tasks_no_reviews()
+    public function download_tasks_no_reviews(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->tasks_no_reviews();
@@ -684,18 +685,18 @@ class AdminRouteHandler
         die;
     }
 
-    public function project_source_file_scores()
+    public function project_source_file_scores(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->project_source_file_scores();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/project_source_file_scores.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/project_source_file_scores.tpl', $response);
     }
 
-    public function download_project_source_file_scores()
+    public function download_project_source_file_scores(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->project_source_file_scores();
@@ -724,9 +725,9 @@ class AdminRouteHandler
         die;
     }
 
-    public function first_completed_task()
+    public function first_completed_task(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
@@ -747,24 +748,24 @@ class AdminRouteHandler
             }
         }
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/first_completed_task.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/first_completed_task.tpl', $response);
     }
 
-    public function active_users()
+    public function active_users(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/active_users.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/active_users.tpl', $response);
     }
 
-    public function active_users_unique()
+    public function active_users_unique(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
@@ -773,54 +774,56 @@ class AdminRouteHandler
             $all_users_unique[$all_user['email']] = array('email' => $all_user['email'], 'display_name' => $all_user['display_name']);
         }
 
-        $app->view()->appendData(array('all_users' => $all_users_unique));
-        $app->render('admin/active_users_unique.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users_unique));
+        return UserRouteHandler::render('admin/active_users_unique.tpl', $response);
     }
 
-    public function unclaimed_tasks()
+    public function unclaimed_tasks(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->unclaimed_tasks();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/unclaimed_tasks.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/unclaimed_tasks.tpl', $response);
     }
 
-    public function search_users_by_language_pair()
+    public function search_users_by_language_pair(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if (!empty($_POST['search_users_language_pair'])) {
-            Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair');
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $source_target = explode('-', $_POST['search_users_language_pair']);
             if (!empty($source_target) && count($source_target) == 2) {
                 $all_users = $statsDao->search_users_by_language_pair($source_target[0], $source_target[1]);
-                $app->view()->appendData(array('all_users' => $all_users));
+                $template_data = array_merge($template_data, array('all_users' => $all_users));
             }
         }
 
-        $app->render('admin/search_users_by_language_pair.tpl');
+        return UserRouteHandler::render('admin/search_users_by_language_pair.tpl', $response);
     }
 
-    public function user_languages($code)
+    public function user_languages(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $code = $args['code'];
+
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
         $all_users = $statsDao->user_languages($code);
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/user_languages.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/user_languages.tpl', $response);
     }
 
-    public function download_user_languages()
+    public function download_user_languages(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_languages(null);
@@ -841,30 +844,32 @@ class AdminRouteHandler
         die;
     }
 
-    public function user_task_languages($code)
+    public function user_task_languages(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $code = $args['code'];
+
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
         $all_users = $statsDao->user_task_languages($code);
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/user_task_languages.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/user_task_languages.tpl', $response);
     }
 
-    public function user_words_by_language()
+    public function user_words_by_language(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_words_by_language();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/user_words_by_language.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/user_words_by_language.tpl', $response);
     }
 
-    public function download_user_words_by_language()
+    public function download_user_words_by_language(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_words_by_language();
@@ -885,7 +890,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_user_task_languages()
+    public function download_user_task_languages(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_task_languages(null);
@@ -915,7 +920,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_all_users()
+    public function download_all_users(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->getUsers();
@@ -945,7 +950,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_active_users()
+    public function download_active_users(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->active_users();
@@ -969,7 +974,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function community_stats()
+    public function community_stats(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users0                 = $statsDao->community_stats();
@@ -1020,7 +1025,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function org_stats()
+    public function org_stats(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_orgs0           = $statsDao->all_orgs();
@@ -1121,7 +1126,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function community_dashboard()
+    public function community_dashboard(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $users_active               = $statsDao->users_active();
@@ -1263,9 +1268,9 @@ class AdminRouteHandler
         die;
     }
 
-    public function language_work_requested()
+    public function language_work_requested(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
 
@@ -1298,12 +1303,11 @@ class AdminRouteHandler
             $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
         }
 
-        $app->view()->appendData(array('words' => $words, 'years' => $years));
-        $app->render('admin/language_work_requested.tpl');
-
+        $template_data = array_merge($template_data, array('words' => $words, 'years' => $years));
+        return UserRouteHandler::render('admin/language_work_requested.tpl', $response);
     }
 
-    public function download_language_work_requested()
+    public function download_language_work_requested(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
@@ -1363,9 +1367,9 @@ class AdminRouteHandler
         die;
     }
 
-    public function translators_for_language_pairs()
+    public function translators_for_language_pairs(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
 
@@ -1381,11 +1385,11 @@ class AdminRouteHandler
             }
         }
 
-        $app->view()->appendData(array('totals' => $totals, 'breakdown' => $breakdown));
-        $app->render('admin/translators_for_language_pairs.tpl');
+        $template_data = array_merge($template_data, array('totals' => $totals, 'breakdown' => $breakdown));
+        return UserRouteHandler::render('admin/translators_for_language_pairs.tpl', $response);
     }
 
-    public function download_translators_for_language_pairs()
+    public function download_translators_for_language_pairs(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
@@ -1422,29 +1426,29 @@ class AdminRouteHandler
         die;
     }
 
-    public function matecat_analyse_status()
+    public function matecat_analyse_status(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->matecat_analyse_status();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/matecat_analyse_status.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/matecat_analyse_status.tpl', $response);
     }
 
-    public function list_memsource_projects()
+    public function list_memsource_projects(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->list_memsource_projects();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/list_memsource_projects.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('admin/list_memsource_projects.tpl', $response);
     }
 
-    public function download_covid_projects()
+    public function download_covid_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->covid_projects();
@@ -1473,7 +1477,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_afghanistan_2021_projects()
+    public function download_afghanistan_2021_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->afghanistan_2021_projects();
@@ -1503,7 +1507,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_haiti_2021_projects()
+    public function download_haiti_2021_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->haiti_2021_projects();

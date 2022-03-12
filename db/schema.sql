@@ -1194,6 +1194,33 @@ CREATE TABLE IF NOT EXISTS `master_kato_tm_tasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `prozdata` (
+  `id` int(8) NOT NULL,
+  `name` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sourcelang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `targlang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wordstranslated` int(8) NOT NULL,
+  `taskscompleted` int(8) NOT NULL,
+  `org` tinyint(2) NOT NULL,
+  `kpid` int(8) NOT NULL,
+  `prozid` int(8) NOT NULL,
+  `profilelink` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`),
+  KEY `email2` (`email2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `TaskPaids` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  level      INT(10) UNSIGNED NOT NULL,
+  UNIQUE KEY FK_TaskPaid (task_id),
+  CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9051,6 +9078,127 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWillBeDeletedUser`(IN uID INT)
 BEGIN
     INSERT INTO WillBeDeletedUsers (user_id, date_warned) VALUES (uID, NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `user_has_strategic_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_strategic_languages`(IN `userID` INT)
+BEGIN
+        SELECT
+            uqp.*,
+            IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) AS nigeria
+        FROM UserQualifiedPairs uqp
+        WHERE
+            uqp.user_id=userID AND
+            uqp.language_code_target IN
+            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
+        ORDER BY IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) DESC, uqp.language_code_target ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_points_for_badges`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges`(IN uID INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(tp.task_id IS NULL, t.`word-count`, 0)) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL, t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS recognition_points,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5 +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS strategic_points,
+        0 AS taskscompleted
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    WHERE
+        u.id=uID AND
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_status`(IN tID BIGINT)
+BEGIN
+    SELECT * FROM TaskPaids WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_paid_status`(IN tID BIGINT)
+BEGIN
+    INSERT INTO TaskPaids VALUES (tID, 1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `clear_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_paid_status`(IN tID BIGINT)
+BEGIN
+    DELETE FROM TaskPaids WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_as_paid`(IN pID INT)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM Tasks JOIN TaskPaids ON id=task_id WHERE project_id=pID) THEN
+        SELECT 1 AS result;
+    ELSEIF 1 = (SELECT MIN(IF(task_id IS NULL, 0, 1)) FROM Tasks LEFT JOIN TaskPaids ON id=task_id WHERE project_id=pID) THEN
+        SELECT 2 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_all_as_paid`(IN pID INT)
+BEGIN
+    INSERT INTO TaskPaids (SELECT id, 1 FROM Tasks WHERE project_id=pID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_revision_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_revision_as_paid`(IN pID INT)
+BEGIN
+    INSERT INTO TaskPaids (SELECT id, 1 FROM Tasks WHERE project_id=pID AND `task-type_id`=3);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `clear_all_as_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_all_as_paid`(IN pID INT)
+BEGIN
+    DELETE FROM TaskPaids WHERE task_id IN (SELECT id FROM Tasks WHERE project_id=pID);
 END//
 DELIMITER ;
 

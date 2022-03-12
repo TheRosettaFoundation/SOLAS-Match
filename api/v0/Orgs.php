@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 require_once __DIR__."/../DataAccessObjects/OrganisationDao.class.php";
@@ -16,445 +18,333 @@ class Orgs
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/orgs', function () use ($app) {
-                $app->group('/:orgId', function () use ($app) {
-                    $app->group('/archivedProjects', function () use ($app) {
+        $app->get(
+            '/api/v0/orgs/{orgId}/archivedProjects/{projectId}/tasks/',
+            '\SolasMatch\API\V0\Orgs:getOrgArchivedProjectTasks')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                        /* Routes starting /v0/orgs/:orgId/archivedProjects */
-                        $app->get(
-                            '/:projectId/tasks(:format)/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::getOrgArchivedProjectTasks'
-                        );
+        $app->get(
+            '/api/v0/orgs/{orgId}/archivedProjects/{projectId}/',
+            '\SolasMatch\API\V0\Orgs:getOrgArchivedProject')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                        $app->get(
-                            '/:projectId/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::getOrgArchivedProject'
-                        );
-                    });
+        $app->post(
+            '/api/v0/orgs/{orgId}/requests/{uid}/',
+            '\SolasMatch\API\V0\Orgs:createMembershipRequests')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                    $app->group('/requests', function () use ($app) {
+        $app->put(
+            '/api/v0/orgs/{orgId}/requests/{uid}/',
+            '\SolasMatch\API\V0\Orgs:acceptMembershipRequests')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
-                        /* Routes starting /v0/orgs/:orgId/requests */
-                        $app->post(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                            '\SolasMatch\API\V0\Orgs::createMembershipRequests'
-                        );
+        $app->delete(
+            '/api/v0/orgs/{orgId}/requests/{uid}/',
+            '\SolasMatch\API\V0\Orgs:rejectMembershipRequests')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
-                        $app->put(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                            '\SolasMatch\API\V0\Orgs::acceptMembershipRequests'
-                        );
+        $app->get(
+            '/api/v0/orgs/{orgId}/projects/',
+            '\SolasMatch\API\V0\Orgs:getOrgProjects')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                        $app->delete(
-                            '/:uid/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                            '\SolasMatch\API\V0\Orgs::rejectMembershipRequests'
-                        );
-                    });
+        $app->get(
+            '/api/v0/orgs/{orgId}/archivedProjects/',
+            '\SolasMatch\API\V0\Orgs:getOrgArchivedProjects')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                    /* Routes starting /v0/orgs/:orgId */
-                    $app->get(
-                        '/projects(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgProjects'
-                    );
+        $app->get(
+            '/api/v0/orgs/{orgId}/badges/',
+            '\SolasMatch\API\V0\Orgs:getOrgBadges')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                    $app->get(
-                        '/archivedProjects(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgArchivedProjects'
-                    );
+        $app->get(
+            '/api/v0/orgs/{orgId}/members/',
+            '\SolasMatch\API\V0\Orgs:getOrgMembers')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                    $app->get(
-                        '/badges(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgBadges'
-                    );
+        $app->get(
+            '/api/v0/orgs/{orgId}/requests/',
+            '\SolasMatch\API\V0\Orgs:getMembershipRequests')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                    $app->get(
-                        '/members(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getOrgMembers'
-                    );
+        $app->get(
+            '/api/v0/orgs/{orgId}/trackingUsers/',
+            '\SolasMatch\API\V0\Orgs:getUsersTrackingOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
-                    $app->get(
-                        '/requests(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Orgs::getMembershipRequests'
-                    );
+        $app->put(
+            '/api/v0/orgs/addMember/{email}/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:addMember')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
-                    $app->get(
-                        '/trackingUsers(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                        '\SolasMatch\API\V0\Orgs::getUsersTrackingOrg'
-                    );
-                });
+        $app->get(
+            '/api/v0/orgs/isMember/{orgId}/{userId}/',
+            '\SolasMatch\API\V0\Orgs:isMember')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                /* Routes starting /v0/orgs */
-                $app->put(
-                    '/addMember/:email/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgMember',
-                    '\SolasMatch\API\V0\Orgs::addMember'
-                );
+        $app->get(
+            '/api/v0/orgs/getByName/{name}/',
+            '\SolasMatch\API\V0\Orgs:getOrgByName')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/isMember/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::isMember'
-                );
+        $app->get(
+            '/api/v0/orgs/searchByName/{name}/',
+            '\SolasMatch\API\V0\Orgs:searchByName')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/getByName/:name/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::getOrgByName'
-                );
+        $app->get(
+            '/api/v0/orgs/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:getOrg');
 
-                $app->get(
-                    '/searchByName/:name/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::searchByName'
-                );
+        $app->put(
+            '/api/v0/orgs/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:updateOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-                $app->get(
-                    '/:orgId/',
-                    '\SolasMatch\API\V0\Orgs::getOrg'
-                );
+        $app->delete(
+            '/api/v0/orgs/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:deleteOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-                $app->put(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateOrg'
-                );
+        $app->get(
+            '/api/v0/orgextended/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:getOrganisationExtendedProfile');
 
-                $app->delete(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::deleteOrg'
-                );
-            });
+        $app->put(
+            '/api/v0/orgextended/{orgId}/',
+            '\SolasMatch\API\V0\Orgs:updateOrgExtendedProfile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-            $app->group('/orgextended', function () use ($app) {
+        $app->get(
+            '/api/v0/subscription/{org_id}/',
+            '\SolasMatch\API\V0\Orgs:getSubscription')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                /* Routes starting /v0/orgextended */
-                $app->get(
-                    '/:orgId/',
-                    '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
-                );
+        $app->post(
+            '/api/v0/subscription/{org_id}/level/{level}/spare/{spare}/start_date/{start_date}/',
+            '\SolasMatch\API\V0\Orgs:updateSubscription')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-                $app->put(
-                    '/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
-                );
-            });
+        $app->get(
+            '/api/v0/orgs/',
+            '\SolasMatch\API\V0\Orgs:getOrgs')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-            $app->group('/subscription', function () use ($app) {
-
-                /* Routes starting /v0/subscription */
-                $app->get(
-                    '/:org_id/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Orgs::getSubscription'
-                );
-
-                $app->post(
-                    '/:org_id/level/:level/spare/:spare/start_date/:start_date/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateSubscription'
-                );
-            });
-
-            /* Routes starting /v0 */
-            $app->get(
-                '/orgs(:format)/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Orgs::getOrgs'
-            );
-
-            $app->post(
-                '/orgs(:format)/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Orgs::createOrg'
-            );
-        });
+        $app->post(
+            '/api/v0/orgs/',
+            '\SolasMatch\API\V0\Orgs:createOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
 
-    public static function getOrgArchivedProjectTasks($orgId, $projectId, $format = '.json')
+    public static function getOrgArchivedProjectTasks(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null, $format);
+        $orgId = $args['orgId'];
+        $projectId = $args['projectId'];
+        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedTask($projectId), null);
     }
 
-    public static function getOrgArchivedProject($orgId, $projectId, $format = '.json')
+    public static function getOrgArchivedProject(Request $request, Response $response, $args)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
+        $orgId = $args['orgId'];
+        $projectId = $args['projectId'];
         $data=DAO\ProjectDao::getArchivedProject($projectId, $orgId);
-        API\Dispatcher::sendResponse(null, $data[0], null, $format);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
-    public static function createMembershipRequests($orgId, $uid, $format = ".json")
+    public static function createMembershipRequests(Request $request, Response $response, $args)
     {
-        if (!is_numeric($uid) && strstr($uid, '.')) {
-            $uid = explode('.', $uid);
-            $format = '.'.$uid[1];
-            $uid = $uid[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::requestMembership($uid, $orgId), null, $format);
+        $orgId = $args['orgId'];
+        $uid = $args['uid'];
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::requestMembership($uid, $orgId), null);
     }
 
-    public static function acceptMembershipRequests($orgId, $uid, $format = ".json")
+    public static function acceptMembershipRequests(Request $request, Response $response, $args)
     {
-        if (!is_numeric($uid)&& strstr($uid, '.')) {
-            $uid = explode('.', $uid);
-            $format = '.'.$uid[1];
-            $uid = $uid[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null, $format);
+        $orgId = $args['orgId'];
+        $uid = $args['uid'];
         Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null);
     }
 
-    public static function rejectMembershipRequests($orgId, $uid, $format = ".json")
+    public static function rejectMembershipRequests(Request $request, Response $response, $args)
     {
-        if (!is_numeric($uid) && strstr($uid, '.')) {
-            $uid = explode('.', $uid);
-            $format = '.'.$uid[1];
-            $uid = $uid[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null, $format);
+        $orgId = $args['orgId'];
+        $uid = $args['uid'];
         Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null);
     }
 
-    public static function getOrgProjects($orgId, $format = '.json')
+    public static function getOrgProjects(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(
-            null,
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response,
             DAO\ProjectDao::getProjects(null, null, null, null, null, $orgId),
-            null,
-            $format
+            null
         );
     }
 
-    public static function getOrgArchivedProjects($orgId, $format = '.json')
+    public static function getOrgArchivedProjects(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(null, $orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedProject(null, $orgId), null);
     }
 
-    public static function getUsersTrackingOrg($organisationId, $format = ".json")
+    public static function getUsersTrackingOrg(Request $request, Response $response, $args)
     {
+        $organisationId = $args['organisationId'];
         $data = DAO\OrganisationDao::getUsersTrackingOrg($organisationId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function addMember($email, $orgId, $format = ".json")
+    public static function addMember(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
+        $email = $args['email'];
+        $orgId = $args['orgId'];
         $ret = false;
         $user = DAO\UserDao::getUser(null, $email);
         if (!is_null($user)) {
             $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
             DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
         }
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function isMember($orgId, $userId, $format = ".json")
+    public static function isMember(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $orgId = $args['orgId'];
+        $userId = $args['userId'];
         $data = DAO\OrganisationDao::isMember($orgId, $userId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getOrgByName($name, $format = ".json")
+    public static function getOrgByName(Request $request, Response $response, $args)
     {
-        if (!is_numeric($name) && strstr($name, '.')) {
-            $temp = explode('.', $name);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $name = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $name = "{$name}.{$temp[$i]}";
-                }
-            }
-        }
+        $name = $args['name'];
         $data= DAO\OrganisationDao::getOrgs(null, urldecode($name));
         $data = $data[0];
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function searchByName($name, $format = ".json")
+    public static function searchByName(Request $request, Response $response, $args)
     {
-        if (!is_numeric($name) && strstr($name, '.')) {
-            $temp = array();
-            $temp = explode('.', $name);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $name = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $name = "{$name}.{$temp[$i]}";
-                }
-            }
-        }
+        $name = $args['name'];
         $data= DAO\OrganisationDao::searchForOrg(urldecode($name));
         if (!is_array($data) && !is_null($data)) {
             $data = array($data);
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getOrgBadges($orgId, $format = ".json")
+    public static function getOrgBadges(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(null, DAO\BadgeDao::getOrgBadges($orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\BadgeDao::getOrgBadges($orgId), null);
     }
 
-    public static function getOrgMembers($orgId, $format = ".json")
+    public static function getOrgMembers(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgMembers($orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgMembers($orgId), null);
     }
 
-    public static function getMembershipRequests($orgId, $format = ".json")
+    public static function getMembershipRequests(Request $request, Response $response, $args)
     {
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getMembershipRequests($orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getMembershipRequests($orgId), null);
     }
 
-    public static function getOrg($orgId, $format = ".json")
+    public static function getOrg(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
+        $orgId = $args['orgId'];
         $org = DAO\OrganisationDao::getOrg($orgId);
-        API\Dispatcher::sendResponse(null, $org, null, $format);
+        return API\Dispatcher::sendResponse($response, $org, null);
     }
 
-    public static function getOrganisationExtendedProfile($orgId, $format = ".json")
+    public static function getOrganisationExtendedProfile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
+        $orgId = $args['orgId'];
         $org = DAO\OrganisationDao::getOrganisationExtendedProfile($orgId);
-        API\Dispatcher::sendResponse(null, $org, null, $format);
+        return API\Dispatcher::sendResponse($response, $org, null);
     }
 
-    public static function updateOrg($orgId, $format = ".json")
+    public static function updateOrg(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $orgId = $args['orgId'];
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId($orgId);
         
         $organisation = DAO\OrganisationDao::getOrg(null, $data->getName());
         if ($organisation != null && $organisation->getId() != $data->getId()) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdate($data), null);
     }
 
-    public static function updateOrgExtendedProfile($orgId, $format = ".json")
+    public static function updateOrgExtendedProfile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $orgId = $args['orgId'];
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
         $data->setId($orgId);
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null);
     }
 
-    public static function deleteOrg($orgId, $format = ".json")
+    public static function deleteOrg(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::delete($orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::delete($orgId), null);
     }
 
-    public static function getOrgs($format = ".json")
+    public static function getOrgs(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgs(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgs(), null);
     }
 
-    public static function createOrg($format = ".json")
+    public static function createOrg(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId("");
         $org = null;
         $name = $data->getName();
         //Is org name already in use?
         if (DAO\OrganisationDao::getOrg(null, $name) != null) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         } else {
             $org = DAO\OrganisationDao::insertAndUpdate($data);
             $user = DAO\UserDao::getLoggedInUser();
             if (!is_null($org) && $org->getId() > 0) {
                 error_log('Calling addOrgAdmin(' . $user->getId() . ', ' . $org->getId() . ')');
                 DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
-                /*if (!DAO\AdminDao::isAdmin($user->getId(), $org->getId())) {
-                    DAO\OrganisationDao::delete($org->getId());
-                }*/
-            }
-            API\Dispatcher::sendResponse(null, $org, null, $format);
-            if (!is_null($org) && $org->getId() > 0) {
                 Lib\Notify::sendOrgCreatedNotifications($org->getId());
             }
+            return API\Dispatcher::sendResponse($response, $org, null);
         }
     }
 
-    public static function getSubscription($org_id, $format = ".json")
+    public static function getSubscription(Request $request, Response $response, $args)
     {
-        if (!is_numeric($org_id) && strstr($org_id, '.')) {
-            $org_id = explode('.', $org_id);
-            $format = '.'.$org_id[1];
-            $org_id = $org_id[0];
-        }
+        $org_id = $args['org_id'];
         $ret = DAO\OrganisationDao::getSubscription($org_id);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function updateSubscription($org_id, $level, $spare, $start_date, $format = ".json")
+    public static function updateSubscription(Request $request, Response $response, $args)
     {
-        if (strstr($start_date, '.')) {
-            $start_date = explode('.', $start_date);
-            $format = '.'.$start_date[1];
-            $start_date = $start_date[0];
-        }
-        $comment = API\Dispatcher::getDispatcher()->request()->getBody();
+        $org_id = $args['org_id'];
+        $level = $args['level'];
+        $spare = $args['spare'];
+        $start_date = $args['start_date'];
+        $comment = (string)$request->getBody();
         $comment = trim($comment);
-        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null);
     }
 }
 

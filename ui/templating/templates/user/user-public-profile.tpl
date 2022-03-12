@@ -275,17 +275,16 @@ alert('You have already requested to take a test in order to become a Kató Veri
         <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                    <tbody align="left" width="48%">
-                        {if !empty($certificate)}
-                        <tr>
-                            <td>
-                                <img src="{$certificate}" width="50%" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-bottom: 10px"/>
-                        </tr>
-                        {/if}
+                    <tbody align="left" width="48%"> 
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="name_top">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="first_badge"><span class="badge_value">{$user_badges['words_donated']}</span><br/> <span class="badge_text">Words donated</span></p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
+                        </div>
+                        </td></tr>
 
                         <tr>
                             <td>
@@ -366,6 +365,168 @@ alert('You have already requested to take a test in order to become a Kató Veri
         </td>
     </tr>
 </table>
+
+{if $private_access || $isSiteAdmin}
+<div class="page-header">
+    <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
+</div>
+<p>Translators without Borders believe it is important to acknowledge the value and impact of the support that our community members provide. As part of our Community Recognition Program, our volunteers can receive rewards depending on their level of contribution. Please remember that when you join our TWB Community, you agree to abide by TWB’s <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">Code of conduct</a> and commit to deliver the highest standard of professional translations, and only undertake work you are competent to perform in the languages and subject areas for which you are qualified.</p>
+<p>Deliver tasks on the TWB platform to build up points. Once you reach the thresholds described in the rewards chart, you can request the respective rewards.</p>
+<p style="margin-bottom:50px;" />
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 48%">
+            <div>
+                <h2>
+                    <span style="color: #9e6100;">Rewards chart</span>
+                    <!--
+                    <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
+                    -->
+                </h2>
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Reward</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                   <td align="center" style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">15,000</td>                                  <td align="center" style="border:2px solid #e8991c">Reference letter</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">30,000</td>                                  <td align="center" style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-bottom:20px;" />
+                <h2 style="color: #9e6100;">How do I earn points?</h2>
+                The points are calculated as follows:
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Type of task</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Unit</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points accrued per unit</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                                   <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                                 <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Voice recording</td>                               <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation if subtitles</td>                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision of subtitles</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Terminology</td>                                   <td align="center" style="border:2px solid #e8991c">1 term</td>                                <td align="center" style="border:2px solid #e8991c">10</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+
+        <td style="width: 4%"> </td>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                            {if empty($user_badges['strategic_points'])}
+                                <h4 class="second_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> <span class="badge_text">RECOGNITION POINTS</span></h5>
+                            {else}
+                                <h4 class="name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="recognition_points1"><span class="badge_value_strategic">{$user_badges['recognition_points']}</span> <br/><span class="badge_text">RECOGNITION POINTS</span> <br/><br/> <span class="strategic_text"> of which <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS </span> <br/>
+                                <span class="badge_text">IN STRATEGIC LANGUAGES</span>
+                                </p>
+                            {/if}
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
+                        </div>
+                        </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{if !empty($user_has_strategic_languages)}
+<p style="margin-bottom:20px;" />
+<p>Your work in strategic languages for TWB allows you to access further special rewards. These do not constitute payments, but support towards expenses incurred while volunteering for TWB, such as connectivity costs.</p>
+<p>This is our current list of strategic languages:<br />
+Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara, Burmese, Rohingyalish, Bengali, Chittagonian, Amharic, Haitian Creole, Dari, Kurdish, Lingala, Luganda/Ganda, Mongo, Nande, Ngombe, Oromo, Pashto, Shi, Somali, Swahili, Tigrinya</p>
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 60%">
+            <div>
+                <h2>
+                    <span style="color: #9e6100;">Rewards chart for work in strategic languages</span>
+                    <!--
+                    <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
+                    -->
+                </h2>
+                {if $user_has_strategic_languages[0]['nigeria'] == 1}<div style="overflow: auto; max-height: 300px;">{/if}
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+{if $user_has_strategic_languages[0]['nigeria'] == 0}
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Points in strategic languages</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Status</strong></td> <td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Recognition reward</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                         <td align="center" style="border:2px solid #e8991c">TWB New Community Member</td><td align="center" style="border:2px solid #e8991c">100 USD phone top-up or online voucher, where applicable</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">25,000</td>                                        <td align="center" style="border:2px solid #e8991c">TWB Traveler</td>            <td align="center" style="border:2px solid #e8991c">100 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">50,000</td>                                        <td align="center" style="border:2px solid #e8991c">TWB Pathfinder</td>          <td align="center" style="border:2px solid #e8991c">150 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">100,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Explorer</td>            <td align="center" style="border:2px solid #e8991c">400 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">200,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Navigator</td>           <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">300,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Voyager</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">400,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Trailblazer</td>         <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">500,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Pioneer</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+{else}
+<tr><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Threshold</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Status</strong></td> <td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Recognition reward</strong></td></tr>
+<tr><td align="center" style="border:2px solid #e8991c"><strong>First task delivered</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Translator</strong></td><td align="center" style="border:2px solid #e8991c"><strong>5 USD bank transfer</strong></td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">2,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">5 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">5,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">7,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c"><strong>10,000 points</strong></td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c"><strong>10 USD bank transfer</strong></td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">12,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">15,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">17,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">20,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">22,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">10 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c"><strong>25,000 points</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Traveller</strong></td><td align="center" style="border:2px solid #e8991c"><strong>10 USD bank transfer</strong></td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">27,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">30,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">32,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">35,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">37,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">40,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">42,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">45,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">47,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">15 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c"><strong>50,000 points</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Pathfinder</strong></td><td align="center" style="border:2px solid #e8991c"><strong>15 USD bank transfer</strong></td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">52,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">55,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">57,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">60,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">62,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">65,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">67,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">70,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">72,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">75,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">77,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">80,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">82,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">85,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">87,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">90,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">92,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">95,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c">97,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
+<tr><td align="center" style="border:2px solid #e8991c"><strong>100,000 points</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Explorer</strong></td><td align="center" style="border:2px solid #e8991c"><strong>20 USD bank transfer</strong></td></tr>
+{/if}
+                    </tbody>
+                </table>
+                {if $user_has_strategic_languages[0]['nigeria'] == 1}</div>{/if}
+            </div>
+        </td>
+
+        <td style="width: 40%"></td>
+    </tr>
+</table>
+{/if}
+{/if}
 
 {if $isSiteAdmin}
 <hr/>

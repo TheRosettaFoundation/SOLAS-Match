@@ -30,7 +30,7 @@
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
             </td>
             <td>
-                <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
                 <span class="hidden">
@@ -168,6 +168,7 @@
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
+            {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
         </thead>
         <tr align="center">
             <td>
@@ -205,6 +206,25 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
+            {if !empty($isSiteAdmin) && isset($paid_status)}
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    {if $paid_status == 0}
+                        <input type="hidden" name="paid_status" value="2" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                            <i class="icon-check icon-black"></i> Make Paid
+                        </a>
+                    {else}
+                        <input type="hidden" name="paid_status" value="1" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
+                            <i class="icon-remove-circle icon-white"></i> Make Unpaid
+                        </a>
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            {/if}
         </tr>
     </table>
 {/if}

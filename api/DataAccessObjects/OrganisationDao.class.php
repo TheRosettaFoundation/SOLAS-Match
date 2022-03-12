@@ -364,13 +364,9 @@ class OrganisationDao
 
     public static function getSubscription($org_id)
     {
-        $subscription = null;
-
         $result = Lib\PDOWrapper::call('getSubscription', Lib\PDOWrapper::cleanse($org_id));
-        if (!empty($result)) {
-            $subscription = $result[0];
-        }
-        return $subscription;
+        if (empty($result)) return [];
+        return $result[0];
     }
 
     public static function updateSubscription($org_id, $level, $spare, $start_date, $comment)

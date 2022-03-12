@@ -1,16 +1,50 @@
 <?php
-
 namespace SolasMatch\UI;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
 
 use \SolasMatch\Common as Common;
 
-mb_internal_encoding("UTF-8");
 
-header("Content-Type:application/xhtml+xml;charset=UTF-8");
+mb_internal_encoding('UTF-8');
 
-require_once __DIR__."/ui/vendor/autoload.php";
+/**
+ * We must start a native PHP session to initialize the $_SESSION superglobal.
+ * However, we won't be using the native session store for persistence, so we
+ * disable the session cookie and cache limiter. We also set the session
+ * handler to avoid PHP's native session file locking.
+ */
+ini_set('session.use_cookies', 0);
+session_cache_limiter(false);
+session_set_save_handler('SolasMatch\UI\open', 'SolasMatch\UI\close', 'SolasMatch\UI\read', 'SolasMatch\UI\write', 'SolasMatch\UI\destroy', 'SolasMatch\UI\gc');
+function open($savePath, $sessionName)
+{
+    return true;
+}
+function close()
+{
+    return true;
+}
+function read($id)
+{
+    return '';
+}
+function write($id, $data)
+{
+    return true;
+}
+function destroy($id)
+{
+    return true;
+}
+function gc($maxlifetime)
+{
+    return true;
+}
 
-//\DrSlump\Protobuf::autoload();
+require_once __DIR__ . '/ui/vendor/autoload.php';
 
 require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
@@ -57,72 +91,42 @@ require_once 'ui/DataAccessObjects/SubscriptionDao.class.php';
 require_once 'ui/DataAccessObjects/ProjectDao.class.php';
 require_once 'ui/DataAccessObjects/TipDao.class.php';
 
-/**
- * Initiate the app. must be done before routes are required
- */
+$template_data = [];
+$flash_messages = [];
 
-$app = new \Slim\Slim(array(
-    'debug' => false,
-    'view' => new \Slim\Views\Smarty(),
-    'mode' => 'development' // default is development.
-));
+$app = AppFactory::create();
 
-$view = $app->view();
-$view->parserDirectory = 'ui/vendor/smarty/smarty/distribution/libs';
-$view->parserCompileDirectory = 'ui/templating/templates_compiled';
-$view->parserCacheDirectory = 'ui/templating/cache';
-$view->parserExtensions = array( 'ui/vendor/slim/views/Slim/Views/SmartyPlugins',);
-$view->setTemplatesDirectory('ui/templating/templates');
+$app->addRoutingMiddleware();
 
-$app->configureMode('production', function () use ($app) {
-    $app->config(array(
-        'log.enable' => true,
-        'log.path' => '../logs', // Need to set this...
-        'debug' => false,
-        'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
-        'cookies.encrypt' => true,
-        'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => '',
-        'cookies.cipher_mode' => ''
-    ));
-});
+$app->add('\SolasMatch\UI\Lib\Middleware:Flash');
+$app->add('\SolasMatch\UI\Lib\Middleware:beforeDispatch');
+$app->add('\SolasMatch\UI\Lib\Middleware:SessionCookie');
 
-$app->configureMode('development', function () use ($app) {
-    $app->config(array(
-        'log.enable' => false,
-        'debug' => false,
-        'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
-        'cookies.encrypt' => true,
-        'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => '',
-        'cookies.cipher_mode' => ''
-    ));
-});
+$customErrorHandler = function (
+    Request $request,
+    \Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails,
+    ?LoggerInterface $logger = null
+) use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+    $response->getBody()->write('<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
+<head></head>
+<body>
+<h4>' . $request->getUri() . '<br />' . $exception->getMessage() . str_replace('#', '<br />', $exception->getTraceAsString()) . '</h4>
+</body>
+</html>');
+    error_log('ERROR on: ' . $request->getUri() . ', ' . $exception->getMessage());
+    error_log($exception->getTraceAsString());
+    return $response;
+};
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
-$app->add(new \Slim\Middleware\SessionCookie(array(
-    'expires' => Common\Lib\Settings::get('site.cookie_timeout'),
-    'path' => '/',
-    'domain' => null,
-    'secure' => false,
-    'httponly' => false,
-    'name' => 'slim_session',
-    'encrypt' => true,
-    'secret' => Common\Lib\Settings::get('session.site_key'),
-    'cipher' => '',
-    'cipher_mode' => ''
-)));
+require_once('/repo/SOLAS-Match/v4/vendor/smarty/smarty/libs/Smarty.class.php');
 
-// Register static classes so they can be used in smarty templates
-Lib\Localisation::registerWithSmarty();
-Lib\TemplateHelper::registerWithSmarty();
-Common\Enums\BanTypeEnum::registerWithSmarty();
-Common\Enums\NotificationIntervalEnum::registerWithSmarty();
-Common\Enums\TaskStatusEnum::registerWithSmarty();
-Common\Enums\TaskTypeEnum::registerWithSmarty();
-Common\Lib\Settings::registerWithSmarty();
-Common\Lib\UserSession::registerWithSmarty();
-
-// Include and initialize RouteHandlers
 require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
 require_once 'ui/RouteHandlers/OrgRouteHandler.class.php';
@@ -131,64 +135,5 @@ require_once 'ui/RouteHandlers/TagRouteHandler.class.php';
 require_once 'ui/RouteHandlers/BadgeRouteHandler.class.php';
 require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
 require_once 'ui/RouteHandlers/StaticRouteHandler.class.php';
-
-//Custom Slim Errors
-$app->error(function (\Exception $e) use ($app) {
-    $extra_scripts = "<script type='text/javascript' src='{$app->urlFor("home")}ui/js/slimError.showHide.js'></script>";
-    $trace = str_replace('#', '<br \>', $e->getTraceAsString());
-	
-    $app->view()->appendData(array(
-        "exception" => $e,
-        "trace" => $trace,
-        "extra_scripts" => $extra_scripts,
-        "referrer" => $app->request()->getReferrer()
-    ));
-    
-    $app->render('SlimError.tpl');
-});
-
-function isValidPost(&$app)
-{
-    return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
-}
-
-$app->hook('slim.before.dispatch', function () use ($app) {
-    if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
-        Common\Lib\UserSession::clearCurrentUserID();
-    }
-    $userDao = new DAO\UserDao();
-    if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
-        $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
-        if (!is_null($current_user)) {
-            $app->view()->appendData(array('user' => $current_user));
-            $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
-            if ($org_array && count($org_array) > 0) {
-                $app->view()->appendData(array(
-                    'user_is_organisation_member' => true
-                ));
-            }
-
-            $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
-            if ($tasks && count($tasks) > 0) {
-                $app->view()->appendData(array(
-                    "user_has_active_tasks" => true
-                ));
-            }
-            $adminDao = new DAO\AdminDao();
-            $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-            if ($isAdmin) {
-                $app->view()->appendData(array(
-                    'site_admin' => true
-                ));
-            }
-        } else {
-            Common\Lib\UserSession::clearCurrentUserID();
-            Common\Lib\UserSession::clearAccessToken();
-        }
-    }
-    $app->view()->appendData(array(
-        'locs' => Lib\Localisation::loadTranslationFiles()
-    ));
-});
 
 $app->run();

@@ -104,7 +104,7 @@ Tweet</a>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div><br />{$pm}
                 </td>  
                 <td>
-                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getDeadline()}</div>
+                    <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$project->getDeadline()}</div>
                 </td>
                 {if isset($userSubscribedToProject)}
                     <td>
@@ -274,6 +274,33 @@ Tweet</a>
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
         </div>
+        {if !empty($all_as_paid)}
+        <div>
+        <form id="all_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            {if $all_as_paid == 2}
+                <a class="btn btn-small btn-inverse" onclick="$('#all_as_paid').submit();">
+                    <i class="icon-remove-circle icon-white"></i> Mark all Tasks as Unpaid
+                </a>
+                <input type="hidden" name="all_as_paid" value="1" />
+            {else}
+                <a class="btn btn-small" onclick="$('#all_as_paid').submit();">
+                    <i class="icon-check icon-black"></i> Mark all Tasks as Paid
+                </a>
+                <input type="hidden" name="all_as_paid" value="2" />
+            {/if}
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        {if $all_as_paid == 1}
+        <form id="revision_as_paid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class="btn btn-small" onclick="$('#revision_as_paid').submit();">
+                <i class="icon-check icon-black"></i> Mark all Revision Tasks as Paid
+            </a>
+            <input type="hidden" name="all_as_paid" value="3" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        {/if}
+        </div>
+        {/if}
         {/if}
     </h1> 
             
@@ -368,7 +395,7 @@ Tweet</a>
                                         </strong>
                                     </td>
                                     <td>
-                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
                                     <td>
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
@@ -533,7 +560,7 @@ Tweet</a>
                                         </strong>
                                     </td>
                                     <td>
-                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task['deadline']}</div>
+                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task['deadline']}</div>
                                     </td>
                                 </tr>
                             {/foreach}

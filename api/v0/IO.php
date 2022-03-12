@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
@@ -16,106 +18,75 @@ class IO
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/io', function () use ($app) {
-                /* Routes starting with v0/io */
-                $app->delete(
-	                '/projectImage/:orgId/:projectId(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\IO::removeProjectImage'
-                );
+        $app->delete(
+            '/api/v0/io/projectImage/{orgId}/{projectId}/',
+            '\SolasMatch\API\V0\IO:removeProjectImage')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-                $app->post(
-                    '/contentMime/:filename(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                    '\SolasMatch\API\V0\IO::getMimeFromFileContent'
-                );
+        $app->post(
+            '/api/v0/io/contentMime/{filename}/',
+            '\SolasMatch\API\V0\IO:getMimeFromFileContent')
+            ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
 
-                /* Routes starting with /v0/io/download */
-                $app->group('/download', function () use ($app) {
+        $app->get(
+            '/api/v0/io/download/projectImage/{projectId}/',
+            '\SolasMatch\API\V0\IO:downloadProjectImageFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authUserForProjectImage');
 
-                    $app->get(
-                        '/projectImage/:projectId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserForProjectImage',
-                        '\SolasMatch\API\V0\IO::downloadProjectImageFile'
-                    );
+        $app->get(
+            '/api/v0/io/download/project/{projectId}/',
+            '\SolasMatch\API\V0\IO:downloadProjectFile')
+            ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
 
-                    $app->get(
-                        '/project/:projectId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                        '\SolasMatch\API\V0\IO::downloadProjectFile'
-                    );
+        $app->get(
+            '/api/v0/io/download/task/{taskId}/',
+            '\SolasMatch\API\V0\IO:downloadTaskFile');
 
-                    $app->get(
-                        '/task/:taskId(:format)/',
-                        '\SolasMatch\API\V0\IO::downloadTaskFile'
-                    );
-                });
-                /* Routes starting with /v0/io/upload */
-                $app->group('/upload', function () use ($app) {
-                    $app->put(
-                        '/project/:projectId/file/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-                        '\SolasMatch\API\V0\IO::saveProjectFile'
-                    );
+        $app->put(
+            '/api/v0/io/upload/project/{projectId}/file/{filename}/{userId}/',
+            '\SolasMatch\API\V0\IO:saveProjectFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
-                    $app->put(
-                        '/project/:projectId/image/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-                        '\SolasMatch\API\V0\IO::saveProjectImageFile'
-                    );
+        $app->put(
+            '/api/v0/io/upload/project/{projectId}/image/{filename}/{userId}/',
+            '\SolasMatch\API\V0\IO:saveProjectImageFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
-                    $app->put(
-                        '/task/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                        '\SolasMatch\API\V0\IO::saveTaskFile'
-                    );
+        $app->put(
+            '/api/v0/io/upload/task/{taskId}/{userId}/',
+            '\SolasMatch\API\V0\IO:saveTaskFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
 
-                    $app->put(
-                        '/taskfromproject/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                        '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
-                    );
+        $app->put(
+            '/api/v0/io/upload/taskfromproject/{taskId}/{userId}/',
+            '\SolasMatch\API\V0\IO:saveTaskFileFromProject')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
 
-                    $app->put(
-                        '/taskOutput/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
-                        '\SolasMatch\API\V0\IO::saveOutputFile'
-                    );
+        $app->put(
+            '/api/v0/io/upload/taskOutput/{taskId}/{userId}/',
+            '\SolasMatch\API\V0\IO:saveOutputFile')
+            ->add('\SolasMatch\API\Lib\Middleware:authUserForClaimedTask');
 
-                    $app->put(
-                        '/sendTaskUploadNotifications/:taskId/:type/',
-                        '\SolasMatch\API\V0\IO::sendTaskUploadNotifications'
-                    );
-                });
-            });
-        });
+        $app->put(
+            '/api/v0/io/upload/sendTaskUploadNotifications/{taskId}/{type}/',
+            '\SolasMatch\API\V0\IO:sendTaskUploadNotifications');
     }
 
-    public static function getMimeFromFileContent($filename, $format = ".json")
+    public static function getMimeFromFileContent(Request $request, Response $response, $args)
     {
+        $filename = $args['filename'];
         $filename = urldecode($filename);
+        $fileContent = (string)$request->getBody();
 
-        if (!is_null($format) && $format != '') {
-            $dotPos = strrpos($filename, '.');
-            $format = substr($filename, $dotPos);
-            $filename = substr($filename, 0, $dotPos);
-        }
-
-        $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
-
-        API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);
+        return API\Dispatcher::sendResponse($response, self::detectMimeType($fileContent, $filename), null);
     }
 
-    public static function downloadProjectImageFile ($projectId, $format = ".json")
+    public static function downloadProjectImageFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
+        $projectId = $args['projectId'];
+
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (isset($imageFileList[0]))
         {
@@ -123,20 +94,16 @@ class IO
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
             $mime = finfo_file($finfo, $imageFilePath);
             finfo_close($finfo);
-            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($imageFilePath, $mime), null, $format);
+            return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($imageFilePath, $mime), null);
         } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
     }
 
-    public static function removeProjectImage($orgId, $projectId, $format = ".json")
+    public static function removeProjectImage(Request $request, Response $response, $args)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
-
+        $orgId = $args['orgId'];
+        $projectId = $args['projectId'];
         $project = DAO\ProjectDao::getProject($projectId);
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (!empty($imageFileList) && count($imageFileList) > 0) {
@@ -151,47 +118,31 @@ class IO
             $project->setImageApproved(0);
             DAO\ProjectDao::save($project);
             Lib\Notify::sendProjectImageRemoved($projectId);
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::OK);
         }
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::OK);
     }
 
-    public static function downloadProjectFile($projectId, $format = ".json")
+    public static function downloadProjectFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($projectId) && strstr($projectId, '.')) {
-            $projectId = explode('.', $projectId);
-            $format = '.'.$projectId[1];
-            $projectId = $projectId[0];
-        }
-
+        $projectId = $args['projectId'];
         $fileInfo = DAO\ProjectDao::getProjectFileInfo($projectId);
         if (!is_null($fileInfo)) {
             $fileName = $fileInfo->getFilename();
             $mime = $fileInfo->getMime();
-            //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
             $absoluteFilePath = DAO\ProjectDao::getPhysicalProjectFilePath($projectId, $fileName);
             if (file_exists($absoluteFilePath)) {
-                API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
-            } else {
-                API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+                return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($absoluteFilePath, $mime), null);
             }
-        } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
-
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
     }
 
-    public static function downloadTaskFile($taskId, $format = ".json")
+    public static function downloadTaskFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
-            $taskId = explode('.', $taskId);
-            $format = '.'.$taskId[1];
-            $taskId = $taskId[0];
-        }
-
+        $taskId = $args['taskId'];
         $helper = new Common\Lib\APIHelper(".json");
 
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
-        $convert = API\Dispatcher::clenseArgs('convertToXliff', Common\Enums\HttpMethodEnum::GET, false);
+        $version = API\Dispatcher::clenseArgs($request, 'version', 0);
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
@@ -201,9 +152,9 @@ class IO
 
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
-            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
+            return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($absoluteFilePath, $mime), null);
         } else {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
     }
 
@@ -223,65 +174,51 @@ class IO
         return $headerArray;
     }
 
-    public static function saveTaskFile($taskId, $userId, $format = ".json")
+    public static function saveTaskFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $version = API\Dispatcher::clenseArgs($request, 'version', null);
+        $data = (string)$request->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
-            self::uploadFile($task, $convert, $data, $version, $userId, $filename);
+            self::uploadFile($task, $data, $version, $userId, $filename);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveTaskFileFromProject($taskId, $userId, $format = ".json")
+    public static function saveTaskFileFromProject(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $version = API\Dispatcher::clenseArgs($request, 'version', null);
+        $data = (string)$request->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
-            self::uploadFile($task, false, $data, $version, $userId, $filename, true);
+            self::uploadFile($task, $data, $version, $userId, $filename, true);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveOutputFile($taskId, $userId, $format = ".json")
+    public static function saveOutputFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
         $task = DAO\TaskDao::getTask($taskId);
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         try {
             error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
-        self::uploadOutputFile($task, $convert, $data, $userId, $filename);
+        self::uploadOutputFile($task, $data, $userId, $filename);
             error_log("After uploadOutputFile($taskId..., $userId, $filename)");
 $task = DAO\TaskDao::getTask($taskId + 1);
 if (!empty($task) && $task->getTaskType() == 3) {
@@ -290,74 +227,58 @@ if (!empty($task) && $task->getTaskType() == 3) {
 }
         } catch (Common\Exceptions\SolasMatchException $e) {
             error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
+    public static function saveProjectFile(Request $request, Response $response, $args)
     {
+        $projectId = $args['projectId'];
+        $filename = $args['filename'];
+        $userId = $args['userId'];
         error_log("saveProjectFile($projectId, $filename, $userId...)");
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $data = (string)$request->getBody();
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
             error_log('CREATED');
-            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
+            return API\Dispatcher::sendResponse($response, $token, Common\Enums\HttpStatusEnum::CREATED);
         } catch (Exception $e) {
             error_log('Exception: ' . $e->getMessage());
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
     }
 
-    public static function saveProjectImageFile($projectId, $filename, $userId, $format = ".json")
+    public static function saveProjectImageFile(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $projectId = $args['projectId'];
+        $filename = $args['filename'];
+        $userId = $args['userId'];
+        $data = (string)$request->getBody();
 
         try {
             self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED, $format);
+            return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
         } catch (Exception $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
     }
 
     //! Upload a Task file
     /*!
-     Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
-    be converted to XLIFF before being saved.
+     Used to store Task file upload details and save the file to the filesystem.
     @param Task $task is a Task object
-    @param bool $convert determines if the file should be converted to XLIFF
     @param String $file is the contents of the file (passed as reference)
     @param int $version is the version of the file being uploaded
     @param int $userId is the id of the User uploading the file
     @param String $filename is the name of the uploaded file
     @return No return
     */
-    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
+    private static function uploadFile($task, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
     {
         $success = null;
-        if ($convert) {
-            $success = self::saveTaskFileToFs(
-                $task,
-                $userId,
-                Lib\FormatConverter::convertFromXliff($file),
-                $filename,
-                $version
-            );
-        } else {
-            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
-        }
+        $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
+
         if (!$success) {
             throw new Common\Exceptions\SolasMatchException(
                 "Failed to write file data.",
@@ -372,15 +293,14 @@ if (!empty($task) && $task->getTaskType() == 3) {
      This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
     dependant on this Task.
     @param Task $task is a Task object
-    @param bool $convert determines if the file should be converted to XLIFF before being saved
     @param String $file is the contents of the uploaded file (passed as reference)
     @param int $userId is the id of the User uploading the file
     @param String filename is the name of the file
     @return No Return
     */
-    private static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
+    private static function uploadOutputFile($task, &$file, $userId, $filename)
     {
-        $physical_pointer = self::uploadFile($task, $convert, $file, null, $userId, $filename);
+        $physical_pointer = self::uploadFile($task, $file, null, $userId, $filename);
         $graphBuilder = new Lib\APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
         if ($graph) {
@@ -390,9 +310,9 @@ if (!empty($task) && $task->getTaskType() == 3) {
                 $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 if ($physical_pointer) {
-                    self::uploadFile($nextTask, false, $physical_pointer, 0, $userId, $filename, true);
+                    self::uploadFile($nextTask, $physical_pointer, 0, $userId, $filename, true);
                 } else {
-                    self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
+                    self::uploadFile($nextTask, $file, 0, $userId, $filename);
                 }
             }
         }
@@ -418,7 +338,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
         $mime = self::detectMimeType($file, $filename);
         error_log("detectMimeType: $mime");
 
-        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $apiHelper = new Common\Lib\APIHelper('.json');
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
         error_log("getCanonicalMime: $canonicalMime");
 
@@ -468,7 +388,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
             mkdir($destination, 0755);
         }
         $mime = self::detectMimeType($file, $filename);
-        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $apiHelper = new Common\Lib\APIHelper('.json');
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the image file you are trying to upload does not";
@@ -514,7 +434,7 @@ if (!empty($task) && $task->getTaskType() == 3) {
         }
 
         if ($taskFileMime != $projectFileMime) {
-            //API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
             //throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
             // Previous code "API\" allowed the flow to proceed even though it gave an error, but there may be mismatches so we need to proceed uninterrupted 20180919
         }
@@ -552,22 +472,17 @@ if (!empty($task) && $task->getTaskType() == 3) {
         return $ret;
     }
 
-    public static function sendTaskUploadNotifications($taskId, $type, $format = ".json")
+    public static function sendTaskUploadNotifications(Request $request, Response $response, $args)
     {
-        if (!is_numeric($type) && strstr($type, '.')) {
-            $type = explode('.', $type);
-            $format = '.'.$type[1];
-            $type = $type[0];
-        }
-
+        $taskId = $args['taskId'];
+        $type = $args['type'];
         try {
             Lib\Notify::sendTaskUploadNotifications($taskId, $type);
             error_log("sendTaskUploadNotifications($taskId, $type)");
         } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
+            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
         }
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     private static function detectMimeType($file, $filename)

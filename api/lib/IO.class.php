@@ -104,24 +104,4 @@ class IO
         }
         return $print;
     }
-    
-    public static function downloadConvertedFile($absoluteFilePath, $contentType, $taskID)
-    {
-        if ($fd = fopen($absoluteFilePath, "r")) {
-            $fsize = filesize($absoluteFilePath);
-            $path_parts = pathinfo($absoluteFilePath);
-            header('Content-type: '.$contentType);
-            header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
-            header("Content-length: $fsize");
-            header("X-Frame-Options: ALLOWALL");
-            header("Cache-control: private"); //use this to open files directly
-//          header("X-Sendfile: ".realpath($absoluteFilePath));
-            $file = file_get_contents($absoluteFilePath);
-            echo FormatConverter::convertToXliff($file, $taskID, $path_parts["basename"]);
-            die; // TODO -> this die is to get around Slim's $app->reponse() header/body response.
-            // Is there a cleaner way to download files?
-        }
-        fclose($fd);
-        return;
-    }
 }

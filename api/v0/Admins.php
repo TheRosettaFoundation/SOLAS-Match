@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 
@@ -13,347 +15,262 @@ class Admins
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/admins', function () use ($app) {
-                /* Routes starting /v0/admins */
-                $app->get(
-                    '/getOrgAdmin/:userId/:orgId',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getOrgAdmin'
-                );
+        $app->get(
+            '/api/v0/admins/getOrgAdmin/{userId}/{orgId}',
+            '\SolasMatch\API\V0\Admins:getOrgAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/getOrgAdmins/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getOrgAdmins'
-                );
+        $app->get(
+            '/api/v0/admins/getOrgAdmins/{orgId}/',
+            '\SolasMatch\API\V0\Admins:getOrgAdmins')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->put(
-                    '/createOrgAdmin/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Admins::createOrgAdmin'
-                );
+        $app->put(
+            '/api/v0/admins/createOrgAdmin/{orgId}/{userId}/',
+            '\SolasMatch\API\V0\Admins:createOrgAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-                $app->get(
-                    '/isOrgAdmin/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::isOrgAdmin'
-                );
+        $app->get(
+            '/api/v0/admins/isOrgAdmin/{orgId}/{userId}/',
+            '\SolasMatch\API\V0\Admins:isOrgAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/isSiteAdmin/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::isSiteAdmin'
-                );
+        $app->get(
+            '/api/v0/admins/isSiteAdmin/{userId}/',
+            '\SolasMatch\API\V0\Admins:isSiteAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/getBannedUser/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getBannedUser'
-                );
+        $app->get(
+            '/api/v0/admins/getBannedUser/{userId}/',
+            '\SolasMatch\API\V0\Admins:getBannedUser')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/isUserBanned/:userId/',
-                    '\SolasMatch\API\V0\Admins::isUserBanned'
-                );
+        $app->get(
+            '/api/v0/admins/isUserBanned/{userId}/',
+            '\SolasMatch\API\V0\Admins:isUserBanned');
 
-                $app->get(
-                    '/getBannedOrg/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getBannedOrg'
-                );
+        $app->get(
+            '/api/v0/admins/getBannedOrg/{orgId}/',
+            '\SolasMatch\API\V0\Admins:getBannedOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/isOrgBanned/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::isOrgBanned'
-                );
+        $app->get(
+            '/api/v0/admins/isOrgBanned/{orgId}/',
+            '\SolasMatch\API\V0\Admins:isOrgBanned')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/getBannedUsers(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getBannedUsers'
-                );
+        $app->get(
+            '/api/v0/admins/getBannedUsers/',
+            '\SolasMatch\API\V0\Admins:getBannedUsers')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/getBannedOrgs(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getBannedOrgs'
-                );
+        $app->get(
+            '/api/v0/admins/getBannedOrgs/',
+            '\SolasMatch\API\V0\Admins:getBannedOrgs')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->post(
-                    '/banUser(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::banUser'
-                );
+        $app->post(
+            '/api/v0/admins/banUser/',
+            '\SolasMatch\API\V0\Admins:banUser')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-                $app->post(
-                    '/banOrg(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::banOrg'
-                );
+        $app->post(
+            '/api/v0/admins/banOrg/',
+            '\SolasMatch\API\V0\Admins:banOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-                $app->get(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Admins::getSiteAdmin'
-                );
+        $app->get(
+            '/api/v0/admins/{userId}/',
+            '\SolasMatch\API\V0\Admins:getSiteAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->put(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::createSiteAdmin'
-                );
+        $app->put(
+            '/api/v0/admins/{userId}/',
+            '\SolasMatch\API\V0\Admins:createSiteAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-                $app->delete(
-                        '/removeOrgAdmin/:orgId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                        '\SolasMatch\API\V0\Admins::deleteOrgAdmin'
-                );
-                
-                $app->delete(
-                        '/revokeTask/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                        '\SolasMatch\API\V0\Admins::revokeTaskFromUser'
-                );
-                
-                $app->delete(
-                        '/unBanUser/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                        '\SolasMatch\API\V0\Admins::unBanUser'
-                );
-                
-                $app->delete(
-                        '/unBanOrg/:orgId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                        '\SolasMatch\API\V0\Admins::unBanOrg'
-                );
-                
-                $app->delete(
-                    '/:userId(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::deleteSiteAdmin'
-                );
-            });
+        $app->delete(
+            '/api/v0/admins/removeOrgAdmin/{orgId}/{userId}/',
+            '\SolasMatch\API\V0\Admins:deleteOrgAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/admins(:format)/',
-                '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                '\SolasMatch\API\V0\Admins::getSiteAdmins'
-            );
-        });
+        $app->delete(
+            '/api/v0/admins/revokeTask/{taskId}/{userId}/',
+            '\SolasMatch\API\V0\Admins:revokeTaskFromUser')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
+
+        $app->delete(
+            '/api/v0/admins/unBanUser/{userId}/',
+            '\SolasMatch\API\V0\Admins:unBanUser')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
+
+        $app->delete(
+            '/api/v0/admins/unBanOrg/{orgId}/',
+            '\SolasMatch\API\V0\Admins:unBanOrg')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
+
+        $app->delete(
+            '/api/v0/admins/{userId}/',
+            '\SolasMatch\API\V0\Admins:deleteSiteAdmin')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
+
+        $app->get(
+            '/api/v0/admins/',
+            '\SolasMatch\API\V0\Admins:getSiteAdmins')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
     }
 
-    public static function getOrgAdmin($userId, $orgId, $format = '.json')
+    public static function getOrgAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId, $orgId), null, $format);
+        $userId = $args['userId'];
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId, $orgId), null);
     }
 
-    public static function getOrgAdmins($orgId, $format = '.json')
+    public static function getOrgAdmins(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(null, $orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(null, $orgId), null);
     }
 
-    public static function createOrgAdmin($orgId, $userId, $format = '.json')
+    public static function createOrgAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $orgId = $args['orgId'];
+        $userId = $args['userId'];
         DAO\AdminDao::addOrgAdmin($userId, $orgId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function deleteOrgAdmin($orgId, $userId, $format = '.json')
+    public static function deleteOrgAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $orgId = $args['orgId'];
+        $userId = $args['userId'];
         DAO\AdminDao::removeOrgAdmin($userId, $orgId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function isOrgAdmin($orgId, $userId, $format = '.json')
+    public static function isOrgAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $orgId = $args['orgId'];
+        $userId = $args['userId'];
         $ret = 0;
         $ret = DAO\AdminDao::isAdmin($userId, $orgId);
         if (is_null($orgId)) {
             $ret = 0;
         }
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function isSiteAdmin($userId, $format = '.json')
+    public static function isSiteAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $userId = $args['userId'];
         $ret = false;
         $ret = DAO\AdminDao::isAdmin($userId, null);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function getBannedUser($userId, $format = '.json')
+    public static function getBannedUser(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $userId = $args['userId'];
         $data = DAO\AdminDao::getBannedUser($userId);
-        API\Dispatcher::sendResponse(null, $data[0], null, $format);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
-    public static function isUserBanned($userId, $format = ".json")
+    public static function isUserBanned(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId)&& strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::isUserBanned($userId), null, $format);
+        $userId = $args['userId'];
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::isUserBanned($userId), null);
     }
 
-    public static function getBannedOrg($orgId, $format = ".json")
+    public static function getBannedOrg(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId) && strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
+        $orgId = $args['orgId'];
+
         $data = DAO\AdminDao::getBannedOrg($orgId);
-        API\Dispatcher::sendResponse(null, $data[0], null, $format);
+        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
-    public static function isOrgBanned($orgId, $format = ".json")
+    public static function isOrgBanned(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId)&& strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::isOrgBanned($orgId), null, $format);
+        $orgId = $args['orgId'];
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::isOrgBanned($orgId), null);
     }
 
-    public static function unBanUser($userId, $format = '.json')
+    public static function unBanUser(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId)&& strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $userId = $args['userId'];
         DAO\AdminDao::unBanUser($userId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function unBanOrg($orgId, $format = '.json')
+    public static function unBanOrg(Request $request, Response $response, $args)
     {
-        if (!is_numeric($orgId)&& strstr($orgId, '.')) {
-            $orgId = explode('.', $orgId);
-            $format = '.'.$orgId[1];
-            $orgId = $orgId[0];
-        }
+        $orgId = $args['orgId'];
         DAO\AdminDao::unBanOrg($orgId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function getBannedUsers($format = ".json")
+    public static function getBannedUsers(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedUser(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getBannedUser(), null);
     }
 
-    public static function getBannedOrgs($format = ".json")
+    public static function getBannedOrgs(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedOrg(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getBannedOrg(), null);
     }
 
-    public static function banUser($format = '.json')
+    public static function banUser(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedUser');
         DAO\AdminDao::saveBannedUser($data);
-        API\Dispatcher::sendResponse(null, null, null, $format);
         Lib\Notify::sendBannedLoginEmail($data->getUserId());
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function banOrg($format = '.json')
+    public static function banOrg(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedOrganisation');
         DAO\AdminDao::saveBannedOrg($data);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function getSiteAdmin($userId, $format = '.json')
+    public static function getSiteAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId), null, $format);
+        $userId = $args['userId'];
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId), null);
     }
 
-    public static function createSiteAdmin($userId, $format = '.json')
+    public static function createSiteAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $userId = $args['userId'];
         DAO\AdminDao::addSiteAdmin($userId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function deleteSiteAdmin($userId, $format = '.json')
+    public static function deleteSiteAdmin(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
+        $userId = $args['userId'];
         DAO\AdminDao::removeAdmin($userId);
-        API\Dispatcher::sendResponse(null, null, null, $format);
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function getSiteAdmins($format = '.json')
+    public static function getSiteAdmins(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(), null);
     }
     
-    public static function revokeTaskFromUser($taskId, $userId, $format = ".json")
+    public static function revokeTaskFromUser(Request $request, Response $response, $args)
     {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, true), null, $format);
+        $taskId = $args['taskId'];
+        $userId = $args['userId'];
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::unClaimTask($taskId, $userId, true), null);
     }
 }
 

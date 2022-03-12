@@ -6,6 +6,8 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 use \SolasMatch\API\DAO as DAO;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__.'/../DataAccessObjects/LanguageDao.class.php';
 
@@ -13,94 +15,72 @@ class Langs
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/languages', function () use ($app) {
+        $app->get(
+            '/api/v0/languages/getActiveLanguages/',
+            '\SolasMatch\API\V0\Langs:getActiveLanguages');
 
-                /* Routes starting /v0/languages */
-                $app->get(
-                    '/getActiveLanguages(:format)/',
-                    '\SolasMatch\API\V0\Langs::getActiveLanguages'
-                );
+        $app->get(
+            '/api/v0/languages/getActiveSourceLanguages/',
+            '\SolasMatch\API\V0\Langs:getActiveSourceLanguages');
 
-                $app->get(
-                    '/getActiveSourceLanguages(:format)/',
-                    '\SolasMatch\API\V0\Langs::getActiveSourceLanguages'
-                );
+        $app->get(
+            '/api/v0/languages/getActiveTargetLanguages/',
+            '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
 
-                $app->get(
-                    '/getActiveTargetLanguages(:format)/',
-                    '\SolasMatch\API\V0\Langs::getActiveTargetLanguages'
-                );
+        $app->get(
+            '/api/v0/languages/getByCode/{code}/',
+            '\SolasMatch\API\V0\Langs:getLanguageByCode');
 
-                $app->get(
-                    '/getByCode/:code/',
-                    '\SolasMatch\API\V0\Langs::getLanguageByCode'
-                );
+        $app->get(
+            '/api/v0/languages/{languageId}/',
+            '\SolasMatch\API\V0\Langs:getLanguage');
 
-                $app->get(
-                    '/:languageId/',
-                    '\SolasMatch\API\V0\Langs::getLanguage'
-                );
-            });
-
-            /* Routes starting /v0 */
-            $app->get(
-                '/languages(:format)/',
-                '\SolasMatch\API\V0\Langs::getLanguages'
-            );
-        });
+        $app->get(
+            '/api/v0/languages/',
+            '\SolasMatch\API\V0\Langs:getLanguages');
     }
 
-    public static function getActiveLanguages($format = '.json')
+    public static function getActiveLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveLanguages(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveLanguages(), null);
     }
 
-    public static function getActiveSourceLanguages($format = '.json')
+    public static function getActiveSourceLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveSourceLanguages(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveSourceLanguages(), null);
     }
 
-    public static function getActiveTargetLanguages($format = '.json')
+    public static function getActiveTargetLanguages(Request $request, Response $response)
     {
-        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveTargetLanguages(), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveTargetLanguages(), null);
     }
 
-    public static function getLanguageByCode($code, $format = ".json")
+    public static function getLanguageByCode(Request $request, Response $response, $args)
     {
-        if (!is_numeric($code) && strstr($code, '.')) {
-            $code = explode('.', $code);
-            $format = '.'.$code[1];
-            $code = $code[0];
-        }
+        $code = $args['code'];
         $data = DAO\LanguageDao::getLanguage(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getLanguage($languageId, $format = ".json")
+    public static function getLanguage(Request $request, Response $response, $args)
     {
-        if (!is_numeric($languageId) && strstr($languageId, '.')) {
-            $languageId = explode('.', $languageId);
-            $format = '.'.$languageId[1];
-            $languageId = $languageId[0];
-        }
+        $languageId = $args['languageId'];
         $data = DAO\LanguageDao::getLanguage($languageId, null);
         if (is_array($data)) {
             $data = $data[0];
         }
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getLanguages($format = ".json")
+    public static function getLanguages(Request $request, Response $response)
     {
         $data = DAO\LanguageDao::getLanguageList();
-        $result = null;
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 }
 

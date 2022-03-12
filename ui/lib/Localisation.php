@@ -128,9 +128,4 @@ class Localisation
         }
         return $locales;
     }
-
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('Localisation', __NAMESPACE__.'\Localisation');
-    }
 }

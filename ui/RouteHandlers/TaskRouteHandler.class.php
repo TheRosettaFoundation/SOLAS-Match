@@ -6,6 +6,8 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use SolasMatch\Common\Lib\APIHelper;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -14,176 +16,170 @@ class TaskRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
 
         $app->get(
-            "/tasks/archive/p/:page_no/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "archivedTasks")
-        )->name("archived-tasks");
+            '/tasks/archive/p/{page_no}[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:archivedTasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('archived-tasks');
 
-        $app->get(
-            "/user/:user_id/claimed/tasks/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "claimedTasks")
-        )->via("POST")->name("claimed-tasks");
-        
+        $app->map(['GET', 'POST'],
+            '/user/{user_id}/claimed/tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:claimedTasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('claimed-tasks');
         
         $app->get(
-            "/user/:user_id/recent/tasks/paged/:page_no/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "recentTasks")
-        )->name("recent-tasks-paged");
+            '/user/{user_id}/recent/tasks/paged/{page_no}[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:recentTasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('recent-tasks-paged');
         
         $app->get(
-            "/user/:user_id/recent/tasks",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "recentTasks")
-        )->name("recent-tasks");
+            '/user/{user_id}/recent/tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:recentTasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('recent-tasks');
         
-        
         $app->get(
-            "/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "claimedTasks")
-        )->name("claimed-tasks-paged");
+            '/user/{user_id}/claimed/tasks/paged/{page_no}/tt/{tt}/ts/{ts}/o/{o}[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:claimedTasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('claimed-tasks-paged');
 
         $app->get(
-            "/task/:task_id/download-task-latest-file/",
-            array($middleware, "authUserForTaskDownload"),
-            array($this, "downloadTaskLatestVersion")
-        )->name("download-task-latest-version");
+            '/task/{task_id}/download-task-latest-file[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTaskLatestVersion')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForTaskDownload')
+            ->setName('download-task-latest-version');
 
         $app->get(
-            "/task/:task_id/mark-archived/",
-            array($middleware, "authUserForOrgTask"),
-            array($this, "archiveTask")
-        )->name("archive-task");
+            '/task/{task_id}/mark-archived[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:archiveTask')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
+            ->setName('archive-task');
 
         $app->get(
-            "/task/:task_id/download-file-user/",
-            array($this, "downloadTask")
-        )->name("download-task");
+            '/task/{task_id}/download-file-user[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTask')
+            ->setName('download-task');
 
         $app->get(
-            '/task/:task_id/download-task-external/',
-            array($this, 'downloadTaskExternal')
-        )->name('download-task-external');
+            '/task/{task_id}/download-task-external[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTaskExternal')
+            ->setName('download-task-external');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/claim[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskClaim')
+            ->add('\SolasMatch\UI\Lib\Middleware:isBlackListed')
+            ->setName('task-claim-page');
 
         $app->get(
-            "/task/:task_id/claim/",
-            array($middleware, "isBlackListed"),
-            array($this, "taskClaim")
-        )->via("POST")->name("task-claim-page");
+            '/task/{task_id}/claimed[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskClaimed')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-claimed');
 
         $app->get(
-            "/task/:task_id/claimed/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "taskClaimed")
-        )->name("task-claimed");
+            '/task/{task_id}/download-file/v/{version}[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTaskVersion')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForTaskDownload')
+            ->setName('download-task-version');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/id[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('task');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/simple-upload[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskSimpleUpload')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-simple-upload');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/chunk-complete[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskChunkComplete')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-chunk-complete');
 
         $app->get(
-            "/task/:task_id/download-file/v/:version/",
-            array($middleware, "authUserForTaskDownload"),
-            array($this, "downloadTaskVersion")
-        )->name("download-task-version");
+            '/task/{task_id}/uploaded[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskUploaded')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-uploaded');
 
         $app->get(
-            "/task/:task_id/id/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "task")
-        )->via("POST")->name("task");
+            '/task/{task_id}/chunk-completed[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskChunkCompleted')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-chunk-completed');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/alter[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskAlter')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
+            ->setName('task-alter');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/view[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskView')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('task-view');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/search_translators[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('task-search_translators');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/task_invites_sent/{sesskey}[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_invites_sent')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('task-invites_sent');
+
+        $app->map(['GET', 'POST'],
+            '/project/{project_id}/create-task[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskCreate')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('task-create');
 
         $app->get(
-            "/task/:task_id/simple-upload/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($middleware, 'authenticateUserForTask'),
-            array($this, "taskSimpleUpload")
-        )->via("POST")->name("task-simple-upload");
+            '/task/{task_id}/created[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskCreated')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-created');
 
-        $app->get(
-            '/task/:task_id/chunk-complete/',
-            array($middleware, 'authUserIsLoggedIn'),
-            array($middleware, 'authenticateUserForTask'),
-            array($this, 'taskChunkComplete')
-        )->via('POST')->name('task-chunk-complete');
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/org-feedback[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskOrgFeedback')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
+            ->setName('task-org-feedback');
 
-        $app->get(
-            "/task/:task_id/uploaded/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "taskUploaded")
-        )->name("task-uploaded");
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/user-feedback[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskUserFeedback')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-user-feedback');
 
-        $app->get(
-            '/task/:task_id/chunk-completed/',
-            array($middleware, 'authenticateUserForTask'),
-            array($this, 'taskChunkCompleted')
-        )->name('task-chunk-completed');
-
-        $app->get(
-            "/task/:task_id/alter/",
-            array($middleware, "authUserForOrgTask"),
-            array($this, "taskAlter")
-        )->via("POST")->name("task-alter");
-
-        $app->get(
-            "/task/:task_id/view/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "taskView")
-        )->via("POST")->name("task-view");
-
-        $app->get(
-            "/task/:task_id/search_translators/",
-            array($middleware, "authIsSiteAdmin"),
-            array($this, "task_search_translators")
-        )->via("POST")->name("task-search_translators");
-
-        $app->get(
-            "/task/:task_id/task_invites_sent/:sesskey/",
-            array($middleware, "authIsSiteAdmin"),
-            array($this, "task_invites_sent")
-        )->via("POST")->name("task-invites_sent");
-
-        $app->get(
-            "/project/:project_id/create-task/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "taskCreate")
-        )->via("POST")->name("task-create");
-
-        $app->get(
-            "/task/:task_id/created/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "taskCreated")
-        )->name("task-created");
-
-        $app->get(
-            "/task/:task_id/org-feedback/",
-            array($middleware, "authUserForOrgTask"),
-            array($this, "taskOrgFeedback")
-        )->via("POST")->name("task-org-feedback");
-
-        $app->get(
-            "/task/:task_id/user-feedback/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "taskUserFeedback")
-        )->via("POST")->name("task-user-feedback");
-
-        $app->get(
-            "/task/:task_id/review/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "taskReview")
-        )->via("POST")->name("task-review");
-
-        $app->get(
-            Common\Lib\Settings::get("site.api"),
-            array($middleware, "authUserForOrgTask")
-        )->name("api");
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/review[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskReview')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task-review');
     }
 
-    public function archivedTasks($page_no)
+    public function archivedTasks(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $page_no = $args['page_no'];
+
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
@@ -198,7 +194,7 @@ class TaskRouteHandler
         if ($page_no < 1) {
             $page_no = 1;
         } elseif ($page_no > $totalPages) {
-            header('HTTP/1.0 404 Not Found');
+            $response = $response->withStatus(404);
         }
 
         $top = 0;
@@ -224,8 +220,8 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $app->view()->setData("archivedTasks", $archivedTasks);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
+                                    'archivedTasks' => $archivedTasks,
                                     "page_no" => $page_no,
                                     "last" => $totalPages,
                                     "top" => $top,
@@ -233,12 +229,18 @@ class TaskRouteHandler
                                     "taskTypeColours" => $taskTypeColours,
                                     "archivedTasksCount" => $archivedTasksCount
         ));
-        $app->render("task/archived-tasks.tpl");
+        return UserRouteHandler::render("task/archived-tasks.tpl", $response);
     }
 
-    public function claimedTasks($user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 0)
+    public function claimedTasks(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+        $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedTaskStatus = !empty($args['ts'])      ? $args['ts'] : 3;
+        $selectedOrdering   = !empty($args['o'])       ? $args['o'] : 0;
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -250,8 +252,8 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', 'You are not authorized to view this page');
-                $app->redirect($app->urlFor('home'));
+                UserRouteHandler::flash('error', 'You are not authorized to view this page');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
 
@@ -278,8 +280,8 @@ class TaskRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
@@ -435,11 +437,11 @@ class TaskRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'claimed-tasks',
             'thisUser' => $user,
             'user_id' => $user_id,
@@ -469,12 +471,15 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        $app->render('task/claimed-tasks.tpl');
+        return UserRouteHandler::render('task/claimed-tasks.tpl', $response);
     }
 
-    public function recentTasks($user_id, $currentScrollPage = 1)
+    public function recentTasks(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+        $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -486,8 +491,8 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', "You are not authorized to view this page"); //need to move to strings.xml
-                $app->redirect($app->urlFor('home'));
+                UserRouteHandler::flash('error', "You are not authorized to view this page"); //need to move to strings.xml
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
 
@@ -572,11 +577,11 @@ class TaskRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($recentTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $recentTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'recent-tasks',
             'thisUser' => $user,
             'user_id' => $user_id,
@@ -594,12 +599,14 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        $app->render('task/recent-tasks.tpl');
+        return UserRouteHandler::render('task/recent-tasks.tpl', $response);
     }
 
-    public function downloadTaskLatestVersion($task_id)
+    public function downloadTaskLatestVersion(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -610,15 +617,15 @@ class TaskRouteHandler
             if ($memsource_task) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($task_id, $user_id)) {
-                    $app->flash('error', 'You are not authorized to view this page');
-                    $app->redirect($app->urlFor('home'));
+                    UserRouteHandler::flash('error', 'You are not authorized to view this page');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $userDao = new DAO\UserDao();
                 $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                 if (empty($file)) {
-                    $app->flash('error', 'Could not retrieve file');
-                    $app->redirect($app->urlFor('home'));
+                    UserRouteHandler::flash('error', 'Could not retrieve file');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
                 $task_file_info = $taskDao->getTaskInfo($task_id, 0);
                 $filename = $task_file_info->getFilename();
@@ -632,10 +639,11 @@ class TaskRouteHandler
                 echo $file;
                 die;
             } else {
-                $this->downloadTaskVersion($task_id, $latest_version);
+                $args['version'] = $latest_version;
+                return $this->downloadTaskVersion($request, $response, $args);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -643,13 +651,14 @@ class TaskRouteHandler
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
-    public function archiveTask($task_id)
+    public function archiveTask(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -658,7 +667,7 @@ class TaskRouteHandler
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
         $result = $taskDao->archiveTask($task_id, $userId);
         if ($result) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "success",
                 sprintf(
                     Lib\Localisation::getTranslation('project_view_17'),
@@ -667,7 +676,7 @@ class TaskRouteHandler
                 )
             );
         } else {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('project_view_18'),
@@ -677,18 +686,17 @@ class TaskRouteHandler
             );
         }
 
-        $app->redirect($ref = $app->request()->getReferrer());
+        return $response->withStatus(302)->withHeader('Location', $request->getHeaderLine('REFERER'));
     }
 
-    public function downloadTask($taskId)
+    public function downloadTask(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
-        $convert = $app->request()->get("convertToXliff");
+        global $app;
 
         try {
-            $this->downloadTaskVersion($taskId, 0, $convert);
+            return $this->downloadTaskVersion($request, $response, $args);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -696,26 +704,28 @@ class TaskRouteHandler
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
-    public function downloadTaskExternal($taskId)
+    public function downloadTaskExternal(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
-        $convert = $app->request()->get("convertToXliff");
 
         try {
-            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0);
             if (!empty($headerArr)) {
                 $headerArr = unserialize($headerArr);
                 foreach ($headerArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -723,7 +733,7 @@ class TaskRouteHandler
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
@@ -750,9 +760,11 @@ class TaskRouteHandler
     /*
      *  Claim and download a task
      */
-    public function taskClaim($taskId)
+    public function taskClaim(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
@@ -762,40 +774,33 @@ class TaskRouteHandler
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if ($taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
         }
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
         $task = $taskDao->getTask($taskId);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $user_id = Common\Lib\UserSession::getCurrentUserID();
 
             $taskDao->record_task_if_translated_in_matecat($task);
             $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId(), $task);
             if ($success == 1) {
-                $app->redirect($app->urlFor('task-claimed', array('task_id' => $taskId)));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-claimed', array('task_id' => $taskId)));
             } elseif ($success == -1) {
-                $app->flashNow('error', 'Unable to create user in Memsource.');
+                UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
             } else {
-                $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
             }
-        }
-
-        $convert = $app->request()->get("convertToXliff");
-        if (!is_null($convert)) {
-            $app->view()->setData("convert", $convert);
-        } else {
-            $app->view()->setData("convert", "false");
         }
 
         $sourcelocale = $task->getSourceLocale();
@@ -805,38 +810,39 @@ class TaskRouteHandler
         $taskMetaData = $taskDao->getTaskInfo($taskId);
 
         // Used in proofreading page, link to original project file
-        $projectFileDownload = $app->urlFor("home")."project/".$task->getProjectId()."/file";
+        $projectFileDownload = $app->getRouteCollector()->getRouteParser()->urlFor("home")."project/".$task->getProjectId()."/file";
 
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey' => $sesskey,
                     "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
-//                    'matecat_url'   => $taskDao->get_matecat_url($task),
                     'matecat_url'   => '',
                     'allow_download'=> $taskDao->get_allow_download($task, $memsource_task),
                     'memsource_task'=> $memsource_task,
                     "taskMetadata"  => $taskMetaData
         ));
 
-        $app->render("task/task.claim.tpl");
+        return UserRouteHandler::render("task/task.claim.tpl", $response);
     }
 
-    public function taskClaimed($task_id)
+    public function taskClaimed(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
 
         $task = $taskDao->getTask($task_id);
-        $app->view()->setData("task", $task);
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
+            'task' => $task,
             'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
             'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
             'memsource_task' => $memsource_task,
@@ -844,32 +850,38 @@ class TaskRouteHandler
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
-        $app->render("task/task.claimed.tpl");
+        return UserRouteHandler::render("task/task.claimed.tpl", $response);
     }
 
-    public function downloadTaskVersion($taskId, $version, $convert = 0)
+    public function downloadTaskVersion(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $taskId = $args['task_id'];
+        $version = !empty($args['version']) ? $args['version'] : 0;
+
         $taskDao = new DAO\TaskDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
-        $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
+        $headerArr = $taskDao->downloadTaskVersion($taskId, $version);
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
             foreach ($headerArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+                if (!empty($val)) $response = $response->withHeader($key, $val);
             }
         }
+        return $response;
     }
 
-    public function task($taskId)
+    public function task(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -883,13 +895,13 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
-            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
-            $app->redirect($app->urlFor("home"));
+            UserRouteHandler::flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
         if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
@@ -897,9 +909,9 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'task');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'task')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_id=$project->getOrganisationId();
@@ -908,12 +920,12 @@ class TaskRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_error')
                         );
@@ -921,12 +933,12 @@ class TaskRouteHandler
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -935,26 +947,26 @@ class TaskRouteHandler
             }
         }
         if ($taskClaimed) {
-            $app->flashKeep();
+            UserRouteHandler::flashKeep();
 
-           if ($memsource_task) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
+           if ($memsource_task) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
 
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                    // $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
-                    $app->redirect($app->urlFor('home'));
+                    // return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-desegmentation", array("task_id" => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
                   if ($taskDao->get_allow_download($task, $memsource_task)) {
-                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-simple-upload", array("task_id" => $taskId)));
                   } else {
-                    $app->redirect($app->urlFor('task-chunk-complete', array('task_id' => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-complete', array('task_id' => $taskId)));
                   }
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                    // $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
-                    $app->redirect($app->urlFor('home'));
+                    // return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-segmentation", array("task_id" => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     break;
             }
         } else {
@@ -966,18 +978,18 @@ class TaskRouteHandler
                 if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
                     $userToBeAssigned = $userDao->getUser($emailOrUserId);
                     if (is_null($userToBeAssigned)) {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_id_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_assign_id_error'));
                         $errorOccured = True;
                     }
                 } else if (Lib\Validator::validateEmail($emailOrUserId)) {
                     $userToBeAssigned = $userDao->getUserByEmail($emailOrUserId);
                     if (is_null($userToBeAssigned)) {
                         $errorOccured = True;
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_email_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_assign_email_error'));
                     }
                 } else {
                     $errorOccured = True;
-                    $app->flashNow("error",Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
+                    UserRouteHandler::flashNow("error",Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
                 }
 
                 if (!$errorOccured && !is_null($userToBeAssigned))
@@ -987,17 +999,17 @@ class TaskRouteHandler
                     $isUserBlackListedForTask = $userDao->isBlacklistedForTask($assgneeId, $taskId);
                     if ($isUserBlackListedForTask)
                     {
-                        $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
+                        UserRouteHandler::flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
                         $taskDao->record_task_if_translated_in_matecat($task);
                         $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId(), $task);
                         if ($success == 1) {
-                            $app->flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
-                            $app->redirect($app->urlFor('project-view', array('project_id' => $task->getProjectId())));
+                            UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $task->getProjectId())));
                         } elseif ($success == -1) {
-                            $app->flashNow('error', 'Unable to create user in Memsource.');
+                            UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
                         } else {
-                            $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                            UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                         }
                     }
                 }
@@ -1008,10 +1020,10 @@ class TaskRouteHandler
                 if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
                 else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
                 if (empty($remove_deny_user)) {
-                    $app->flashNow('error', 'User does not exist.');
+                    UserRouteHandler::flashNow('error', 'User does not exist.');
                 } else {
                     $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $taskId);
-                    $app->flashNow('success', 'Removed (assuming was actually in deny list)');
+                    UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
 
@@ -1096,7 +1108,7 @@ class TaskRouteHandler
         $list_qualified_translators = array();
         if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($taskId);
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
             var member = ".$isMember.";
@@ -1107,7 +1119,7 @@ class TaskRouteHandler
         });
         </script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "extra_scripts" => $extra_scripts,
             "taskTypeColours" => $taskTypeColours,
@@ -1135,14 +1147,16 @@ class TaskRouteHandler
             'taskStatusTexts' => $taskStatusTexts
         ));
 
-        $app->render("task/task.view.tpl");
+        return UserRouteHandler::render("task/task.view.tpl", $response);
         }
     }
 
-    public function taskSimpleUpload($taskId)
+    public function taskSimpleUpload(Request $request, Response $response, $args)
     {
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1151,7 +1165,7 @@ class TaskRouteHandler
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
         }
 
         $fieldName = "fileUpload";
@@ -1162,12 +1176,12 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($taskId); // $memsource_task should never be set, protect against this
         if ($memsource_task || !$taskDao->get_allow_download($task, $memsource_task)) {
-            $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $taskId)));
         }
 
-        if ($app->request()->isPost()) {
-          $post = $app->request()->post();
-          Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
+        if ($request->getMethod() === 'POST') {
+          $post = $request->getParsedBody();
+          if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
           if (!empty($post['copy_from_matecat'])) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
@@ -1237,9 +1251,9 @@ class TaskRouteHandler
                 $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
                 $siteApi = Common\Lib\Settings::get("site.api");
                 $filename = urlencode($_FILES[$fieldName]["name"]);
-                $request = $siteApi."v0/io/contentMime/$filename";
+                $request_url = $siteApi . "v0/io/contentMime/$filename";
                 $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::POST, null, null, $data);
+                $fileUploadMime = $helper->call(null, $request_url, Common\Enums\HttpMethodEnum::POST, null, null, $data);
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
@@ -1276,9 +1290,9 @@ class TaskRouteHandler
           }
 
           if (is_null($errorMessage)) {
-              $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
+              return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-review", array("task_id" => $taskId)));
           } else {
-              $app->flashNow("error", $errorMessage);
+              UserRouteHandler::flashNow("error", $errorMessage);
           }
         }
 
@@ -1394,7 +1408,7 @@ class TaskRouteHandler
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "extra_scripts" => $extra_scripts,
             "task"          => $task,
@@ -1412,13 +1426,15 @@ class TaskRouteHandler
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
-        $app->render("task/task-simple-upload.tpl");
+        return UserRouteHandler::render("task/task-simple-upload.tpl", $response);
     }
 
-    public function taskChunkComplete($taskId)
+    public function taskChunkComplete(Request $request, Response $response, $args)
     {
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
@@ -1426,7 +1442,7 @@ class TaskRouteHandler
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
         }
 
         $task = $taskDao->getTask($taskId);
@@ -1434,23 +1450,23 @@ class TaskRouteHandler
 
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
         if (empty($matecat_tasks)) {
-            $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
         }
 
         if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::IN_PROGRESS) {
-            $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!empty($post['copy_from_matecat'])) {
                 error_log("Setting Task COMPLETE for: $taskId");
                 $taskDao->setTaskStatus($taskId, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($taskId, 1);
                 $taskDao->set_task_complete_date($taskId);
-                $app->redirect($app->urlFor('task-review', array('task_id' => $taskId)));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-review', array('task_id' => $taskId)));
             }
         }
 
@@ -1522,11 +1538,11 @@ class TaskRouteHandler
                 }
             }
         }
-        if (empty($matecat_url)) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
+        if (empty($matecat_url)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
@@ -1536,12 +1552,14 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
         ));
 
-        $app->render('task/task-chunk-complete.tpl');
+        return UserRouteHandler::render('task/task-chunk-complete.tpl', $response);
     }
 
-    public function taskUploaded($task_id)
+    public function taskUploaded(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1552,17 +1570,19 @@ class TaskRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "org_name" => $org->getName(),
             "tip"      => $tip
         ));
 
-        $app->render("task/task.uploaded.tpl");
+        return UserRouteHandler::render("task/task.uploaded.tpl", $response);
     }
 
-    public function taskChunkCompleted($task_id)
+    public function taskChunkCompleted(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1573,17 +1593,19 @@ class TaskRouteHandler
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org_name' => $org->getName(),
             'tip'      => $tip
         ));
 
-        $app->render('task/task-chunk-completed.tpl');
+        return UserRouteHandler::render('task/task-chunk-completed.tpl', $response);
     }
 
-    public function taskAlter($task_id)
+    public function taskAlter(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
@@ -1596,8 +1618,8 @@ class TaskRouteHandler
         $deadlineError = "";
 
         $extra_scripts = "
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -1646,11 +1668,11 @@ class TaskRouteHandler
         $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
         $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
-        $app->view()->setData("task", $task);
+        $template_data = array_merge($template_data, ['task' => $task]);
 
-        if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter');
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
@@ -1778,7 +1800,7 @@ class TaskRouteHandler
                         $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                     }
 
-                    $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
                     $deadlockError = Lib\Localisation::getTranslation('task_alter_9');
@@ -1792,7 +1814,7 @@ class TaskRouteHandler
                 if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
-                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
           }
         }
 
@@ -1853,7 +1875,7 @@ class TaskRouteHandler
             $restrictTaskStatus = 'checked';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'             => $sesskey,
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
@@ -1875,12 +1897,14 @@ class TaskRouteHandler
             "taskTypeColours"     => $taskTypeColours
         ));
 
-        $app->render("task/task.alter.tpl");
+        return UserRouteHandler::render("task/task.alter.tpl", $response);
     }
 
-    public function taskView($task_id)
+    public function taskView(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -1893,8 +1917,8 @@ class TaskRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $task = $taskDao->getTask($task_id);
@@ -1919,16 +1943,16 @@ class TaskRouteHandler
             $chunked_message = '';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "file_preview_path" => $file_path,
             'chunked_message' => $chunked_message,
             "filename" => $task_file_info->getFilename()
         ));
 
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskView');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['published'])) {
                 if ($post['published']) {
@@ -1939,34 +1963,44 @@ class TaskRouteHandler
                 error_log("taskView");
                 if ($taskDao->updateTask($task)) {
                     if ($post['published']) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
                     } else {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_2'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_2'));
                     }
                 } else {
                     if ($post['published']) {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_3'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_3'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_4'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_4'));
                     }
                 }
             }
 
             if (isset($post['track'])) {
                 if ($post['track'] == "Ignore") {
-                    $response = $userDao->untrackTask($user_id, $task->getId());
-                    if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
+                    $response_dao = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response_dao) {
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $task->getId());
-                    if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
+                    $response_dao = $userDao->trackTask($user_id, $task->getId());
+                    if ($response_dao) {
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
                     }
+                }
+            }
+
+            if (isset($post['paid_status'])) {
+                if ($post['paid_status'] == 2) {
+                    $taskDao->set_paid_status($task_id);
+                    UserRouteHandler::flashNow('success', 'The task is now marked as paid.');
+                } else {
+                    $taskDao->clear_paid_status($task_id);
+                    UserRouteHandler::flashNow('success', 'The task is now marked as unpaid.');
                 }
             }
 
@@ -1975,12 +2009,12 @@ class TaskRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_error')
                         );
@@ -1988,12 +2022,12 @@ class TaskRouteHandler
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -2007,7 +2041,7 @@ class TaskRouteHandler
                     $recorded_status = 'approved';
                 }
                 $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $recorded_status);
-                $app->flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
+                UserRouteHandler::flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
             }
         }
 
@@ -2021,7 +2055,7 @@ class TaskRouteHandler
         }
         $taskMetaData[$task_id] = $metaData;
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                      "task" => $task,
                      "taskMetaData" => $taskMetaData
         ));
@@ -2036,14 +2070,14 @@ class TaskRouteHandler
 
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if ($isOrgMember || $isSiteAdmin) {
-            $app->view()->appendData(array("isOrgMember" => $isOrgMember));
+            $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $alsoViewedTasksCount = 0; 
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
@@ -2059,15 +2093,18 @@ class TaskRouteHandler
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 'this_is_id' => 0,
+                'paid_status' => $taskDao->get_paid_status($task_id),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
-        $app->render("task/task.view.tpl");
+        return UserRouteHandler::render("task/task.view.tpl", $response);
     }
 
-    public function task_search_translators($task_id)
+    public function task_search_translators(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $task       = $taskDao->getTask($task_id);
@@ -2133,7 +2170,7 @@ class TaskRouteHandler
             }
         }
 
-        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView2.js");
         $extra_scripts .= "
     <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
     <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
@@ -2147,7 +2184,7 @@ class TaskRouteHandler
       });
     </script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
@@ -2164,17 +2201,19 @@ class TaskRouteHandler
             'all_users'       => $all_users,
         ));
 
-        $app->render("task/task.search_translators.tpl");
+        return UserRouteHandler::render("task/task.search_translators.tpl", $response);
     }
 
-    public function task_invites_sent($task_id, $sesskey)
+    public function task_invites_sent(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        $task_id = $args['task_id'];
+        $sesskey = $args['sesskey'];
+
         $taskDao = new DAO\TaskDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-        $user_ids = $app->request()->getBody();
+        $user_ids = (string)$request->getBody();
         $insert = '';
         $comma = '';
         if (!empty($user_ids)) {
@@ -2203,18 +2242,21 @@ class TaskRouteHandler
                 if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
             }
         }
+        return $response->withStatus(200);
     }
 
-    public function taskCreate($project_id)
+    public function taskCreate(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $project_id = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if ($projectDao->get_memsource_project($project_id)) $app->redirect($app->urlFor('project-view', ['project_id' => $project_id]));
+        if ($projectDao->get_memsource_project($project_id)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', ['project_id' => $project_id]));
 
         $titleError = null;
         $wordCountError = null;
@@ -2225,8 +2267,8 @@ class TaskRouteHandler
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
 
-        if ($post = $app->request()->post()) {
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate');
+        if ($post = $request->getParsedBody()) {
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['title'])) {
                 $task->setTitle(mb_substr($post['title'], 0, 128));
@@ -2312,10 +2354,10 @@ class TaskRouteHandler
                 }
 
                 if (is_null($upload_error)) {
-                    $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-created", array("task_id" => $newTaskId)));
                 } else {
                     $taskDao->deleteTask($newTaskId);
-                    $app->view()->appendData(array("upload_error" => $upload_error));
+                    $template_data = array_merge($template_data, array("upload_error" => $upload_error));
                 }
             }
         }
@@ -2338,14 +2380,14 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
 
         $task_word_count = $task->getWordCount();
         if (empty($task_word_count) && $project->getWordCount() > 1) $task->setWordCount($project->getWordCount());
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "project"       => $project,
             "task"          => $task,
@@ -2362,25 +2404,29 @@ class TaskRouteHandler
             "taskTypeColours" => $taskTypeColours
         ));
 
-        $app->render("task/task.create.tpl");
+        return UserRouteHandler::render("task/task.create.tpl", $response);
     }
 
-    public function taskCreated($taskId)
+    public function taskCreated(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "project_id" => $task->getProjectId(),
                 "task_id"    => $task->getId()
         ));
 
-        $app->render("task/task.created.tpl");
+        return UserRouteHandler::render("task/task.created.tpl", $response);
     }
 
-    public function taskOrgFeedback($task_id)
+    public function taskOrgFeedback(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $task_id = $args['task_id'];
+
         $userDao = new DAO\UserDao();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
@@ -2402,19 +2448,19 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != "") {
                     if ($claimant != null) {
                         $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('task_org_feedback_6'),
-                                $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                 $claimant->getDisplayName()
                             )
                         );
@@ -2430,49 +2476,49 @@ class TaskRouteHandler
                         }
                         if ($taskRevoke) {
                             if ($claimant != null) {
-                                $app->flash(
+                                UserRouteHandler::flash(
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
-                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                         $task->getTitle(),
-                                        $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                         $claimant->getDisplayName()
                                     )
                                 );
                             } else {
-                                $app->flash(
+                                UserRouteHandler::flash(
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
-                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                         $task->getTitle(),
                                         '',
                                         ''
                                     )
                                 );
                             }
-                            $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_org_feedback_4'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle(),
-                                    $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
                                     $claimant->getDisplayName()
                                 )
                             );
                         }
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('task_org_feedback_5'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "project" => $project,
             "task" => $task,
@@ -2483,12 +2529,14 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        $app->render("task/task.org-feedback.tpl");
+        return UserRouteHandler::render("task/task.org-feedback.tpl", $response);
     }
 
-    public function taskUserFeedback($task_id)
+    public function taskUserFeedback(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -2504,9 +2552,9 @@ class TaskRouteHandler
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != '') {
@@ -2522,28 +2570,28 @@ class TaskRouteHandler
                             $taskRevoke = true;
                         }
                         if ($taskRevoke) {
-                            $app->flash(
+                            UserRouteHandler::flash(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_3'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle()
                                 )
                             );
-                            $app->redirect($app->urlFor("home"));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_4'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
+                                    $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)),
                                     $task->getTitle()
                                 )
                             );
                         }
                     } else {
-                        $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
-                        $app->flash(
+                        $orgProfile = $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
+                        UserRouteHandler::flash(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('task_org_feedback_6'),
@@ -2551,10 +2599,10 @@ class TaskRouteHandler
                                 $organisation->getName()
                             )
                         );
-                        $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $task_id)));
                     }
                 } else {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('task_user_feedback_5'));
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_user_feedback_5'));
                 }
             }
         }
@@ -2565,7 +2613,7 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "org" => $organisation,
             "project" => $project,
@@ -2576,12 +2624,14 @@ class TaskRouteHandler
             "task_tags" => $task_tags
         ));
 
-        $app->render("task/task.user-feedback.tpl");
+        return UserRouteHandler::render("task/task.user-feedback.tpl", $response);
     }
 
-    public function taskReview($taskId)
+    public function taskReview(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
@@ -2673,12 +2723,12 @@ class TaskRouteHandler
         }
 
         if (!empty($reviews) && count($reviews) > 0) {
-            $app->flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
+            UserRouteHandler::flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskReview');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskReview')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['submitReview'])) {
                 $i = 0;
@@ -2745,30 +2795,30 @@ class TaskRouteHandler
                         }
                     } else {
                         if ($error != null) {
-                            $app->flashNow("error", $error);
+                            UserRouteHandler::flashNow("error", $error);
                         }
                     }
                 }
                 if ($error == null) {
-                    $app->flash(
+                    UserRouteHandler::flash(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('task_review_10'), $tasks_titles)
                     );
                     if ($taskDao->getTaskChunk($taskId)) {
-                        $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
                     } else {
-                        $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-uploaded', array("task_id" => $taskId)));
                     }
                 } else {
-                    $app->flashNow("error", $error);
+                    UserRouteHandler::flashNow("error", $error);
                 }
             }
 
             if (isset($post['skip'])) {
                 if ($taskDao->getTaskChunk($taskId)) {
-                    $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
                 } else {
-                    $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-uploaded', array("task_id" => $taskId)));
                 }
             }
         }
@@ -2789,15 +2839,15 @@ class TaskRouteHandler
         }
         $extra_scripts .= "</script>";
 
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
+        $formAction = $app->getRouteCollector()->getRouteParser()->urlFor("task-review", array('task_id' => $taskId));
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,
@@ -2808,7 +2858,7 @@ class TaskRouteHandler
             'action'        => $action
         ));
 
-        $app->render("task/task.review.tpl");
+        return UserRouteHandler::render("task/task.review.tpl", $response);
     }
 }
 

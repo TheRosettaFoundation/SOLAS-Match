@@ -1,11 +1,5 @@
-php_flag display_errors on
-
-#DirectoryIndex index.php
-
 RewriteEngine On
 XSendFile on
-
-# RewriteBase /~demomatc/ # <- option required on server with temp URL
 
 # Help us refresh the cached stylesheet when necessary by incrementing the variable in the URL.
 RewriteRule ^resources/css/style.([0-9]+).css$ resources/css/style.css
@@ -16,11 +10,8 @@ RewriteRule ^(.*)$ index.php [QSA,L]
 # Disable listing of directory contents
 IndexIgnore *
 
-
 # Protect the README.md file
 <Files README.md>
 	Order Deny,Allow
 	Deny from all
 </Files>
-
-

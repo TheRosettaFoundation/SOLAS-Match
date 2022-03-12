@@ -96,7 +96,7 @@ function renderTaskDetails()
       if (mi < 10) {
         mi = "0" + mi;
       }
-      $(this).html(parameters.getTranslation("common_due_by").replace("%s", deadline.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00"));
+      $(this).html(parameters.getTranslation("common_due_by").replace("%s", deadline.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00") + " " + Intl.DateTimeFormat().resolvedOptions().timeZone);
       $(this).css("visibility", "visible");
     }
   );

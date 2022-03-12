@@ -8,9 +8,4 @@ class TaskStatusEnum
     const PENDING_CLAIM             = 2;
     const IN_PROGRESS               = 3;
     const COMPLETE                  = 4;
-
-    public static function registerWithSmarty()
-    {
-        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('TaskStatusEnum', __NAMESPACE__.'\TaskStatusEnum');
-    }
 }

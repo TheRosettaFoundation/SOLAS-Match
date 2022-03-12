@@ -28,13 +28,6 @@ class UserDao extends BaseDao
         $this->memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
     }
     
-    public function getUserDart($userId)
-    {
-        $ret = null;
-        $helper = new Common\Lib\APIHelper(Common\Enums\FormatEnum::JSON);
-        return $helper->serialize($this->getUser($userId));
-    }
-    
     public function getUser($userId)
     {
         $ret = null;
@@ -853,25 +846,28 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function requestAuthCode($email)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $redirectUri = 'https://';
         } else {
             $redirectUri = 'http://';
         }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
 
         $request = "{$this->siteApi}v0/users/$email/auth/code/?".
             'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             "redirect_uri=$redirectUri&".
             'response_type=code';
-        $app->redirect($request);
+
+        return $request;
     }
     
     public function loginWithAuthCode($authCode)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+
         $request = "{$this->siteApi}v0/users/authCode/login";
 
         $redirectUri = '';
@@ -880,7 +876,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         } else {
             $redirectUri = 'http://';
         }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
 
         $postArgs = 'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             'client_secret='.Common\Lib\Settings::get('oauth.client_secret').'&'.
@@ -1450,21 +1446,6 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     public function deleteCertification($id)
     {
         LibAPI\PDOWrapper::call('deleteCertification', LibAPI\PDOWrapper::cleanse($id));
-    }
-
-    public function userDownload($certification)
-    {
-        $app = \Slim\Slim::getInstance();
-
-        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
-
-        $app->response->headers->set('Content-type', $certification['mimetype']);
-        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
-        $app->response->headers->set('Content-length', filesize($destination));
-        $app->response->headers->set('X-Frame-Options', 'ALLOWALL');
-        $app->response->headers->set('Pragma', 'no-cache');
-        $app->response->headers->set('Cache-control', 'no-cache, must-revalidate, no-transform');
-        $app->response->headers->set('X-Sendfile', realpath($destination));
     }
 
     public function detectMimeType($file, $filename)
@@ -2151,7 +2132,19 @@ error_log(print_r($result, true));//(**)
     public function get_users_by_month()
     {
         $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
-        if (empty($result)) 0;
+        if (empty($result)) return 0;
         return $result[0]['users_joined'];
+    }
+
+    public function user_has_strategic_languages($user_id)
+    {
+        return LibAPI\PDOWrapper::call('user_has_strategic_languages', LibAPI\PDOWrapper::cleanse($user_id));
+    }
+
+    public function get_points_for_badges($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0];
+        return $result[0];
     }
 }

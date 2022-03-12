@@ -5,6 +5,8 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../lib/Validator.php";
 
@@ -12,97 +14,96 @@ class OrgRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
+
+        $app->map(['GET', 'POST'],
+            '/org/create[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:createOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('create-org');
+
+        $app->map(['GET', 'POST'],
+            '/org/dashboard[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgDashboard')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('org-dashboard');
 
         $app->get(
-            "/org/create/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "createOrg")
-        )->via("POST")->name("create-org");
+            '/org/{org_id}/org_dashboard[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:org_orgDashboard')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('org-projects');
 
         $app->get(
-            "/org/dashboard/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "orgDashboard")
-        )->via("POST")->name("org-dashboard");
+            '/org/{org_id}/request[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgRequestMembership')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('org-request-membership');
 
-        $app->get(
-            '/org/:org_id/org_dashboard/',
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, 'org_orgDashboard')
-        )->name('org-projects');
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/request/queue[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgRequestQueue')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-request-queue');
 
-        $app->get(
-            "/org/:org_id/request/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "orgRequestMembership")
-        )->name("org-request-membership");
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/private[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPrivateProfile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-private-profile');
 
-        $app->get(
-            "/org/:org_id/request/queue/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgRequestQueue")
-        )->via("POST")->name("org-request-queue");
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/profile[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPublicProfile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('org-public-profile');
 
-        $app->get(
-            "/org/:org_id/private/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgPrivateProfile")
-        )->via("POST")->name("org-private-profile");
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/manage/{badge_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgManageBadge')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-manage-badge');
 
-        $app->get(
-            "/org/:org_id/profile/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "orgPublicProfile")
-        )->via("POST")->name("org-public-profile");
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/create/badge[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgCreateBadge')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-create-badge');
 
-        $app->get(
-            "/org/:org_id/manage/:badge_id/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgManageBadge")
-        )->via("POST")->name("org-manage-badge");
-
-        $app->get(
-            "/org/:org_id/create/badge/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgCreateBadge")
-        )->via("POST")->name("org-create-badge");
-
-        $app->get(
-            "/org/search/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "orgSearch")
-        )->via("POST")->name("org-search");
+        $app->map(['GET', 'POST'],
+            '/org/search[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgSearch')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('org-search');
         
-        $app->get(
-            "/org/:org_id/edit/:badge_id/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgEditBadge")
-        )->via("POST")->name("org-edit-badge");
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/edit/{badge_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgEditBadge')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-edit-badge');
 
         $app->get(
-            "/org/:org_id/task/:task_id/complete/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgTaskComplete")
-        )->name("org-task-complete");
+            '/org/{org_id}/task/{task_id}/complete[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskComplete')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-task-complete');
+
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/task/{task_id}/review[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskReview')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-task-review');
 
         $app->get(
-            "/org/:org_id/task/:task_id/review/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgTaskReview")
-        )->via("POST")->name("org-task-review");
-
-        $app->get(
-            "/org/:org_id/task/:task_id/reviews/",
-            array($middleware, "authUserForOrg"),
-            array($this, "orgTaskReviews")
-        )->name("org-task-reviews");
+            '/org/{org_id}/task/{task_id}/reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskReviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('org-task-reviews');
     }
 
-    public function createOrg()
+    public function createOrg(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -138,7 +139,7 @@ class OrgRouteHandler
         $org = null;
         $errorOccured = null;
         $errorList = array();
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             $org = new Common\Protobufs\Models\Organisation();
 
             if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
@@ -355,7 +356,7 @@ class OrgRouteHandler
                         $org_name = $org->getName();
                         $org_biography = $org->getBiography();
                         error_log("Called createOrg() for: $org_name");
-                        $app->flash(
+                        UserRouteHandler::flash(
                             'success',
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
                         );
@@ -380,7 +381,7 @@ class OrgRouteHandler
                         $res = json_decode($result, true);
                         $projectDao->set_memsource_client($new_org->getId(), $res['id'], $res['uid']);
 
-                        $app->redirect($app->urlFor('org-dashboard'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     }
                 } catch (Common\Exceptions\SolasMatchException $ex) {
                     $org_name = $org->getName();
@@ -396,7 +397,7 @@ class OrgRouteHandler
         $adminDao = new DAO\AdminDao();
         $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org'  => $org,
             'org2' => $org2,
             'activitys'    => $this->generateOptions($this->possibleActivitys(), $org2->getActivitys()),
@@ -416,12 +417,12 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        $app->render("org/create-org.tpl");
+        return UserRouteHandler::render("org/create-org.tpl", $response);
     }
 
-    public function orgDashboard()
+    public function orgDashboard(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -435,9 +436,9 @@ class OrgRouteHandler
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
         
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['track'])) {
                 $project_id = $post['project_id'];
@@ -452,12 +453,12 @@ class OrgRouteHandler
                 if ($post['track'] == "Ignore") {
                     $success = $userDao->untrackProject($current_user_id, $project_id);
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_5'), $project_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_6'), $project_title)
                         );
@@ -465,12 +466,12 @@ class OrgRouteHandler
                 } elseif ($post['track'] == "Track") {
                     $success = $userDao->trackProject($current_user_id, $project_id);
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_7'), $project_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_8'), $project_title)
                         );
@@ -491,10 +492,6 @@ class OrgRouteHandler
                     foreach ($my_org_projects as $project) {
                         $temp = array();
                         $temp['project'] = $project;
-                        //$temp['userSubscribedToProject'] = $userDao->isSubscribedToProject(
-                        //    Common\Lib\UserSession::getCurrentUserID(),
-                        //    $project->getId()
-                        //);
                         $taskData[]=$temp;
                     }
                 } else {
@@ -511,7 +508,7 @@ class OrgRouteHandler
                 }
             }
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "orgs" => $orgs,
                 'adminForOrg' => $adminForOrg,
                 "templateData" => $templateData
@@ -522,18 +519,20 @@ class OrgRouteHandler
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             "isSiteAdmin"   => $isSiteAdmin,
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
-        $app->render("org/org.dashboard.tpl");
+        return UserRouteHandler::render("org/org.dashboard.tpl", $response);
     }
 
-    public function org_orgDashboard($org_id)
+    public function org_orgDashboard(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -579,7 +578,7 @@ class OrgRouteHandler
                 }
             }
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'orgs'         => $orgs,
                 'adminForOrg'  => $adminForOrg,
                 'templateData' => $templateData
@@ -589,19 +588,21 @@ class OrgRouteHandler
         $extra_scripts = file_get_contents(__DIR__ . '/../js/TaskView.js');
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'isSiteAdmin'     => $isSiteAdmin,
             'extra_scripts'   => $extra_scripts,
             'beyond_3_months' => 1,
             'current_page'    => 'org-dashboard'
         ));
-        $app->render('org/org.dashboard.tpl');
+        return UserRouteHandler::render('org/org.dashboard.tpl', $response);
     }
 
-    public function orgRequestMembership($org_id)
+    public function orgRequestMembership(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $org_id = $args['org_id'];
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
@@ -611,31 +612,33 @@ class OrgRouteHandler
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $requestMembership = $orgDao->createMembershipRequest($org_id, $userId);
             if ($requestMembership) {
-                $app->flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
             } else {
-                $app->flash(
+                UserRouteHandler::flash(
                     "error",
                     Lib\Localisation::getTranslation('org_public_profile_membership_already_requested')
                 );
             }
         } else {
-            $app->flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
         }
-        $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
-    public function orgRequestQueue($org_id)
+    public function orgRequestQueue(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $org = $orgDao->getOrganisation($org_id);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -644,7 +647,7 @@ class OrgRouteHandler
                     {
                         $success = $orgDao->addMember($post['email'], $org_id);
                         if ($success) {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('common_successfully_added_member'),
@@ -653,26 +656,26 @@ class OrgRouteHandler
                                 )
                             );
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $post['email'])
                             );
                         }
                     } else {
                         $email = $post['email'];
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['accept'])) {
                 if ($user_id = $post['user_id']) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('org_request_queue_7'), $user_id)
                     );
@@ -681,7 +684,7 @@ class OrgRouteHandler
                 if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('org_request_queue_7'), $user_id)
                     );
@@ -696,15 +699,15 @@ class OrgRouteHandler
             }
         }
         
-        $app->view()->setData("org", $org);
-        $app->view()->appendData(array("user_list" => $user_list, 'sesskey' => $sesskey));
+        $template_data = array_merge($template_data, array('org' => $org, 'user_list' => $user_list, 'sesskey' => $sesskey));
         
-        $app->render("org/org.request_queue.tpl");
+        return UserRouteHandler::render("org/org.request_queue.tpl", $response);
     }
 
-    public function orgPrivateProfile($org_id)
+    public function orgPrivateProfile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -747,7 +750,7 @@ class OrgRouteHandler
         $errorOccured = null;
         $errorList=array();
         
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
 
             if (isset($post['updateOrgDetails'])) {
                 if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
@@ -953,7 +956,7 @@ class OrgRouteHandler
                 }
 
                 if (!is_null($errorOccured)) {
-                    $app->view()->appendData(array(
+                    $template_data = array_merge($template_data, array(
                     "errorOccured" => $errorOccured,
                     "errorList" => $errorList
                     ));
@@ -962,10 +965,10 @@ class OrgRouteHandler
                     try {
                         $orgDao->updateOrg($org);
                         $orgDao->updateOrgExtendedProfile($org2);
-                        $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(
                                 Lib\Localisation::getTranslation('common_error_org_name_in_use'),
@@ -980,16 +983,16 @@ class OrgRouteHandler
                 $deleteId = $post['deleteId'];
                 if ($deleteId) {
                     if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
-                        $app->flash(
+                        UserRouteHandler::flash(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_private_profile_delete_success'),
                                 $org->getName()
                             )
                         );
-                        $app->redirect($app->urlFor("home"));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
                     }
                 }
             }
@@ -998,10 +1001,10 @@ class OrgRouteHandler
         $adminDao = new DAO\AdminDao();
         //if ($adminDao->isOrgAdmin($org->getId(), $userId) || $adminDao->isSiteAdmin($userId)) { [}]
         if ($adminDao->isSiteAdmin($userId)) {
-            $app->view()->appendData(array('orgAdmin' => true));
+            $template_data = array_merge($template_data, array('orgAdmin' => true));
         }
         
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'org'  => $org,
             'org2' => $org2,
             'activitys'    => $this->generateOptions($this->possibleActivitys(), $org2->getActivitys()),
@@ -1018,7 +1021,7 @@ class OrgRouteHandler
             'sesskey'      => $sesskey,
         ));
 
-        $app->render("org/org-private-profile.tpl");
+        return UserRouteHandler::render("org/org-private-profile.tpl", $response);
     }
 
     private function possibleActivitys()
@@ -1673,9 +1676,11 @@ class OrgRouteHandler
         );
     }
 
-    public function orgPublicProfile($org_id)
+    public function orgPublicProfile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
         $adminDao = new DAO\AdminDao();
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
@@ -1688,8 +1693,8 @@ class OrgRouteHandler
         $start_dateError = '';
         if ($isSiteAdmin) {
             $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/start_datePicker.js\"></script>";
+            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/start_datePicker.js\"></script>";
         } else {
             $extra_scripts = '';
         }
@@ -1727,9 +1732,9 @@ class OrgRouteHandler
 
         $memberIsAdmin = array();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
                    
             if (isset($post['deleteBadge'])) {
                 $badgeDao->deleteBadge($post['badge_id']);
@@ -1737,15 +1742,15 @@ class OrgRouteHandler
             
             if (isset($post['title']) && isset($post['description'])) {
                 if ($post['title'] == "" || $post['description'] == "") {
-                    $app->flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
+                    UserRouteHandler::flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
                 } else {
                     $badge = new Common\Protobufs\Models\Badge();
                     $badge->setId($post['badge_id']);
                     $badge->setTitle($post['title']);
                     $badge->setDescription($post['description']);
-                    $badge->setOwnerId("");
+                    $badge->setOwnerId($org_id);
                     $badgeDao->updateBadge($badge);
-                    $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
             }
             
@@ -1767,7 +1772,7 @@ class OrgRouteHandler
                             } else {
                                 $org_name = "Organisation $org_id";
                             }
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('common_successfully_added_member'),
@@ -1776,20 +1781,20 @@ class OrgRouteHandler
                                 )
                             );
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $user_name)
                             );
                         }
                     } else {
                         $email = $post['email'];
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['accept'])) {
                 if ($user_id = $post['user_id']) {
@@ -1797,21 +1802,21 @@ class OrgRouteHandler
                         $user = $userDao->getUser($user_id);
                         $user_name = $user->getDisplayName();
                         $org_name = $org->getName();
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_23'),
-                                $app->urlFor("user-public-profile", array("user_id" => $user_id)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $user_id)),
                                 $user_name,
                                 $org_name
                             )
                         );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_24'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_24'));
                     }
 
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('common_invalid_userid'), $user_id)
                     );
@@ -1821,16 +1826,16 @@ class OrgRouteHandler
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                     $user = $userDao->getUser($user_id);
                     $user_name = $user->getDisplayName();
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "success",
                         sprintf(
                             Lib\Localisation::getTranslation('org_public_profile_25'),
-                            $app->urlFor("user-public-profile", array("user_id" => $user_id)),
+                            $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $user_id)),
                             $user_name
                         )
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('common_invalid_userid'), $user_id)
                     );
@@ -1841,26 +1846,26 @@ class OrgRouteHandler
                 if ($user) {
                     $userName = $user->getDisplayName();
                     if ($userDao->leaveOrganisation($userId, $org_id)) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_26'),
-                                $app->urlFor("user-public-profile", array("user_id" => $userId)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
                                 $userName
                             )
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_27'),
-                                $app->urlFor("user-public-profile", array("user_id" => $userId)),
+                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
                                 $userName
                             )
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
                 }
             } elseif (isset($post['revokeOrgAdmin'])) {
                 $userId = $post['revokeOrgAdmin'];
@@ -1875,22 +1880,22 @@ class OrgRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
                     }
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -1968,8 +1973,8 @@ class OrgRouteHandler
         }
 
         $siteName = Common\Lib\Settings::get("site.name");
-        $app->view()->setData("current_page", "org-public-profile");
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
+                'current_page' => 'org-public-profile',
                 'sesskey' => $sesskey,
                 "org" => $org,
                 'org2' => $org2,
@@ -2000,35 +2005,38 @@ class OrgRouteHandler
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 
-        $app->render("org/org-public-profile.tpl");
+        return UserRouteHandler::render("org/org-public-profile.tpl", $response);
     }
 
-    public function orgManageBadge($org_id, $badge_id)
+    public function orgManageBadge(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+        $badge_id = $args['badge_id'];
+
         $badgeDao = new DAO\BadgeDao();
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $badge = $badgeDao->getBadge($badge_id);
-        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
+        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-        $app->view()->setData("badge", $badge);
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
+                    'badge'         => $badge,
                     "org_id"        => $org_id,
                     "extra_scripts" =>$extra_scripts
         ));
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if (isset($post['email']) && $post['email'] != "") {
                 if (Lib\Validator::validateEmail($post['email'])) {
                     $success = $userDao->assignBadge($post['email'], $badge->getId());
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_manage_badge_29'),
@@ -2037,13 +2045,13 @@ class OrgRouteHandler
                             )
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_manage_badge_30'), $post['email'])
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['user_id']) && $post['user_id'] != "") {
                 $user_id = $post['user_id'];
@@ -2055,7 +2063,7 @@ class OrgRouteHandler
                 } else {
                     $user_name = $user->getEmail();
                 }
-                $app->flashNow(
+                UserRouteHandler::flashNow(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('org_manage_badge_32'), $user_name)
                 );
@@ -2064,27 +2072,29 @@ class OrgRouteHandler
     
         $user_list = $badgeDao->getUserWithBadge($badge_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "user_list" => $user_list
         ));
         
-        $app->render("org/org.manage-badge.tpl");
+        return UserRouteHandler::render("org/org.manage-badge.tpl", $response);
     }
 
-    public function orgCreateBadge($org_id)
+    public function orgCreateBadge(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
         $badgeDao = new DAO\BadgeDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge');
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             
             if ($post['title'] == "" || $post['description'] == "") {
-                $app->flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
+                UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
             } else {
                 $badge = new Common\Protobufs\Models\Badge();
                 $badge->setTitle($post['title']);
@@ -2092,33 +2102,33 @@ class OrgRouteHandler
                 $badge->setOwnerId($org_id);
                 $badgeDao->createBadge($badge);
                 
-                $app->flash("success", Lib\Localisation::getTranslation('org_create_badge_33'));
-                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('org_create_badge_33'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
             }
         }
         
-        $app->view()->setData("org_id", $org_id);
-        $app->view()->appendData(array(
-            'sesskey'       => $sesskey,
+        $template_data = array_merge($template_data, array(
+            'org_id'  => $org_id,
+            'sesskey' => $sesskey,
         ));
-        $app->render("org/org.create-badge.tpl");
+        return UserRouteHandler::render("org/org.create-badge.tpl", $response);
     }
 
-    public function orgSearch()
+    public function orgSearch(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (empty($foundOrgs)) {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
                 }
-                $app->view()->appendData(array('searchedText' => $post['search_name']));
+                $template_data = array_merge($template_data, array('searchedText' => $post['search_name']));
             }
 
             if (isset($post['allOrgs'])) {
@@ -2126,28 +2136,33 @@ class OrgRouteHandler
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'foundOrgs'     => $foundOrgs
         ));
 
-        $app->render("org/org-search.tpl");
+        return UserRouteHandler::render("org/org-search.tpl", $response);
     }
     
-    public function orgEditBadge($org_id, $badge_id)
+    public function orgEditBadge(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+        $badge_id = $args['badge_id'];
+
         $badgeDao = new DAO\BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
-        $app->view()->setData("badge", $badge);
-        $app->view()->appendData(array("org_id" => $org_id));
+        $template_data = array_merge($template_data, ['badge' => $badge, 'org_id' => $org_id, 'sesskey' => Common\Lib\UserSession::getCSRFKey()]);
         
-        $app->render("org/org.edit-badge.tpl");
+        return UserRouteHandler::render("org/org.edit-badge.tpl", $response);
     }
 
-    public function orgTaskComplete($orgId, $taskId)
+    public function orgTaskComplete(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -2155,7 +2170,7 @@ class OrgRouteHandler
         $claimant = $taskDao->getUserClaimedTask($taskId);
         $claimantProfile = "";
         if ($claimant != null) {
-            $claimantProfile = $app->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
+            $claimantProfile = $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
             $userName = $userDao->getUserRealName($claimant->getId());
             if (is_null($userName) || $userName == '') {
                 $userName = $claimant->getDisplayName();
@@ -2174,13 +2189,16 @@ class OrgRouteHandler
                 "orgId"             => $orgId
         );
 
-        $app->view()->appendData($viewData);
-        $app->render("org/org.task-complete.tpl");
+        $template_data = array_merge($template_data, $viewData);
+        return UserRouteHandler::render("org/org.task-complete.tpl", $response);
     }
 
-    public function orgTaskReview($orgId, $taskId)
+    public function orgTaskReview(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
@@ -2189,9 +2207,9 @@ class OrgRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['submitReview'])) {
                 $review = new Common\Protobufs\Models\TaskReview();
@@ -2245,32 +2263,32 @@ class OrgRouteHandler
                 }
 
                 if ($error != '') {
-                    $app->flashNow("error", $error);
+                    UserRouteHandler::flashNow("error", $error);
                 } else {
-                    $app->flash(
+                    UserRouteHandler::flash(
                         "success",
                         sprintf(
                             Lib\Localisation::getTranslation('org_task_review_40'),
                             $task->getTitle()
                         )
                     );
-                    $app->redirect($app->urlFor('project-view', array("project_id" => $task->getProjectId())));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array("project_id" => $task->getProjectId())));
                 }
             }
 
             if (isset($post['skip'])) {
-                $app->redirect($app->urlFor("project-view", array('project_id' => $task->getProjectId())));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("project-view", array('project_id' => $task->getProjectId())));
             }
         }
 
         $taskReview = $userDao->getUserTaskReviews($userId, $taskId);
         if (!is_null($taskReview)) {
-            $app->flashNow("info", Lib\Localisation::getTranslation('org_task_review_41'));
+            UserRouteHandler::flashNow("info", Lib\Localisation::getTranslation('org_task_review_41'));
         }
 
         $translator = $taskDao->getUserClaimedTask($taskId);
 
-        $formAction = $app->urlFor("org-task-review", array(
+        $formAction = $app->getRouteCollector()->getRouteParser()->urlFor("org-task-review", array(
                     'org_id'    => $orgId,
                     'task_id'   => $taskId
         ));
@@ -2281,13 +2299,13 @@ class OrgRouteHandler
         $extra_scripts .= "taskIds[0] = $taskId;";
         $extra_scripts .= "</script>";
         
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                     'sesskey' => $sesskey,
                     'extra_scripts' => $extra_scripts,
                     'task'      => $task,
@@ -2296,12 +2314,15 @@ class OrgRouteHandler
                     'formAction'=> $formAction
         ));
 
-        $app->render("org/org.task-review.tpl");
+        return UserRouteHandler::render("org/org.task-review.tpl", $response);
     }
 
-    public function orgTaskReviews($orgId, $taskId)
+    public function orgTaskReviews(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $viewData = array();
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
@@ -2384,15 +2405,15 @@ class OrgRouteHandler
             $reviews[$taskId] = $taskReviews;
         }
 
-        $extra_scripts = "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
 
         $viewData['task'] = $task;
         $viewData['reviews'] = $reviews;
         $viewData['extra_scripts'] = $extra_scripts;
 
-        $app->view()->appendData($viewData);
-        $app->render('org/org.task-reviews.tpl');
+        $template_data = array_merge($template_data, $viewData);
+        return UserRouteHandler::render('org/org.task-reviews.tpl', $response);
     }
 }
 

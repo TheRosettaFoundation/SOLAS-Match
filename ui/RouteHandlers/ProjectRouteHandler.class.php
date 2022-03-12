@@ -5,6 +5,8 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
@@ -15,82 +17,79 @@ class ProjectRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
+
+        $app->map(['GET', 'POST'],
+            '/project/{project_id}/view[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectView')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('project-view');
+
+        $app->map(['GET', 'POST'],
+            '/project/{project_id}/alter[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('project-alter');
+
+        $app->map(['GET', 'POST'],
+            '/project/{org_id}/create[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreate')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('project-create');
 
         $app->get(
-            "/project/:project_id/view/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "projectView")
-        )->via("POST")->name("project-view");
+            '/project/id/{project_id}/created[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreated')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('project-created');
 
         $app->get(
-            "/project/:project_id/alter/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "projectAlter")
-        )->via("POST")->name("project-alter");
+            '/project/id/{project_id}/mark-archived/{sesskey}[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:archiveProject')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('archive-project');
 
         $app->get(
-            "/project/:org_id/create/",
-            array($middleware, "authUserForOrg"),
-            array($this, "projectCreate")
-        )->via("GET", "POST")->name("project-create");
+            '/project/{project_id}/file[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:downloadProjectFile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('download-project-file');
 
         $app->get(
-            "/project/id/:project_id/created/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "projectCreated")
-        )->name("project-created");
+            '/project/{project_id}/image[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:downloadProjectImageFile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForProjectImage')
+            ->setName('download-project-image');
 
         $app->get(
-            "/project/id/:project_id/mark-archived/:sesskey/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "archiveProject")
-        )->name("archive-project");
+            '/project_cron_1_minute',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_cron_1_minute')
+            ->setName('project_cron_1_minute');
 
         $app->get(
-            "/project/:project_id/file/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "downloadProjectFile")
-        )->name("download-project-file");
+            '/task_cron_1_minute',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:task_cron_1_minute')
+            ->setName('task_cron_1_minute');
 
         $app->get(
-            "/project/:project_id/image/",
-            array($middleware, "authUserForProjectImage"),
-            array($this, "downloadProjectImageFile")
-        )->name("download-project-image");
+            '/project/{project_id}/getwordcount[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_get_wordcount')
+            ->setName('project_get_wordcount');
 
-        $app->get("/project/:project_id/test/", array($this, "test"));
-
-        $app->get(
-            '/project_cron_1_minute/',
-            array($this, 'project_cron_1_minute')
-        )->name('project_cron_1_minute');
-
-        $app->get(
-            '/task_cron_1_minute/',
-            array($this, 'task_cron_1_minute')
-        )->name('task_cron_1_minute');
-
-        $app->get(
-            '/project/:project_id/getwordcount/',
-            array($this, 'project_get_wordcount')
-        )->name('project_get_wordcount');
-
-        $app->get(
-            '/memsource_hook/',
-            array($this, 'memsourceHook')
-        )->via("POST")->name('memsource_hook');
+        $app->map(['GET', 'POST'],
+            '/memsource_hook',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:memsourceHook')
+            ->setName('memsource_hook');
     }
 
-    public function memsourceHook()
+    public function memsourceHook(Request $request)
     {
-        $app = \Slim\Slim::getInstance();
-        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
+        global $app;
+        if ($request->getHeaderLine('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
             error_log('X-Memsource-Token does not match!');
             die;
         }
-        $body = $app->request()->getBody();
+        $body = (string)$request->getBody();
         $hook = json_decode($body, true);
         if (empty($hook)) {
             error_log("Hook not decoded: $body");
@@ -612,51 +611,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function test($projectId)
+    public function projectView(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
-        $extra_scripts = "";
+        global $app, $template_data;
+        $project_id = $args['project_id'];
 
-        $time = microtime();
-        $time = explode(" ", $time);
-        $time = $time[1] + $time[0];
-        $time1 = $time;
-
-        $projectDao = new DAO\ProjectDao();
-        $graph = $projectDao->getProjectGraph($projectId);
-        $viewer = new Lib\GraphViewer($graph);
-        $body = $viewer->constructView();
-
-        $extra_scripts .= $viewer->generateDataScript();
-        $extra_scripts .=
-            "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
-        $extra_scripts .= "<script>
-                $(window).load(runStartup);
-                function runStartup()
-                {
-                    prepareGraph();
-                    $( \"#tabs\" ).tabs();
-                }
-            </script>";
-
-        $time = microtime();
-        $time = explode(" ", $time);
-        $time = $time[1] + $time[0];
-        $time2 = $time;
-
-        $totaltime = ($time2 - $time1);
-        $body .= "<br />Running Time: $totaltime seconds.";
-        $app->view()->appendData(array(
-                    "body"          => $body,
-                    "extra_scripts" => $extra_scripts
-        ));
-        $app->render("empty.tpl");
-    }
-
-    public function projectView($project_id)
-    {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
@@ -668,21 +628,21 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
-            $app->flash('error', 'That project does not exist!');
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', 'That project does not exist!');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
-            $app->flash('error', 'You cannot access this project!');
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', 'You cannot access this project!');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
         $reload_for_wordcount = 0;
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'projectView');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $task = null;
             if (isset($post['task_id'])) {
@@ -705,16 +665,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($userTrackProject) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('project_view_8'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('project_view_8'));
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($userUntrackProject) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('project_view_10'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('project_view_10'));
                     }
                 }
             } elseif (isset($post['trackTask'])) {
@@ -725,27 +685,27 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!$post['trackTask']) {
-                    $response = $userDao->untrackTask($user_id, $task->getId());
-                    if ($response) {
-                        $app->flashNow(
+                    $response_dao = $userDao->untrackTask($user_id, $task->getId());
+                    if ($response_dao) {
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('project_view_11'), $task_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('project_view_12'), $task_title)
                         );
                     }
                 } else {
-                    $response = $userDao->trackTask($user_id, $post['task_id']);
-                    if ($response) {
-                        $app->flashNow(
+                    $response_dao = $userDao->trackTask($user_id, $post['task_id']);
+                    if ($response_dao) {
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('project_view_13'), $task_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('project_view_14'), $task_title)
                         );
@@ -753,9 +713,22 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
+            if (isset($post['all_as_paid'])) {
+                if ($post['all_as_paid'] == 2) {
+                    $taskDao->set_all_as_paid($project_id);
+                    UserRouteHandler::flashNow('success', 'All tasks now marked as paid.');
+                } elseif ($post['all_as_paid'] == 3) {
+                    $taskDao->set_revision_as_paid($project_id);
+                    UserRouteHandler::flashNow('success', 'All revision tasks now marked as paid.');
+                } else {
+                    $taskDao->clear_all_as_paid($project_id);
+                    UserRouteHandler::flashNow('success', 'All tasks now marked as unpaid.');
+                }
+            }
+
             if (isset($post['deleteTask'])) {
                 $taskDao->deleteTask($post['task_id']);
-                $app->flashNow(
+                UserRouteHandler::flashNow(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('project_view_15'), $task->getTitle())
                 );
@@ -763,7 +736,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if (isset($post['archiveTask'])) {
                 $taskDao->archiveTask($post['task_id'], $user_id);
-                $app->flashNow(
+                UserRouteHandler::flashNow(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
@@ -773,12 +746,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $project->getOrganisationId());
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_error')
                         );
@@ -786,12 +759,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $project->getOrganisationId());
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -805,12 +778,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $result = $projectDao->setProjectImageStatus($project_id, 1);
                     if ($result)
                     {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('project_view_image_approve_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('project_view_image_approve_failed')
                         );
@@ -820,12 +793,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $result = $projectDao->setProjectImageStatus($project_id, 0);
                     if ($result)
                     {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('project_view_image_disapprove_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('project_view_image_approve_failed')
                         );
@@ -1029,29 +1002,29 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                                     }
                                                 }
                                             } else {
-                                                $app->flashNow('error', "Could not find parent translation or revising task for chunks (Job id: $matecat_id_job)");
+                                                UserRouteHandler::flashNow('error', "Could not find parent translation or revising task for chunks (Job id: $matecat_id_job)");
                                             }
                                         }
                                     } else {
-                                        $app->flashNow('error', 'No chunks or id found for job');
+                                        UserRouteHandler::flashNow('error', 'No chunks or id found for job');
                                     }
                                 }
                             } else {
-                                $app->flashNow('error', 'No jobs found');
+                                UserRouteHandler::flashNow('error', 'No jobs found');
                             }
                         } else {
-                            $app->flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
+                            UserRouteHandler::flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
                         }
                     } else {
-                        $app->flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
+                        UserRouteHandler::flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
                     }
                 } else {
-                    $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
+                    UserRouteHandler::flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
                 }
             }
             if (!empty($post['copyChunks']) && !empty($memsource_project)) {
                 $error = $projectDao->sync_split_jobs($memsource_project);
-                if ($error) $app->flashNow('error', $error);
+                if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
             if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
@@ -1096,8 +1069,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
                     $task_id = $task->getId();
                     $metaData = array();
-                    $response = $userDao->isSubscribedToTask($user_id, $task_id);
-                    if ($response == 1) {
+                    $response_dao = $userDao->isSubscribedToTask($user_id, $task_id);
+                    if ($response_dao == 1) {
                         $metaData['tracking'] = true;
                         $userSubscribedToProject = 1; // For self service projects, $userSubscribedToProject will not have been set (other projects are not initially tracked for creator)
                     } else {
@@ -1116,11 +1089,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $extra_scripts .= $viewer->generateDataScript();
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
-            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView1.js");
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView2.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                     "org" => $org,
                     "graph" => $graphView,
                     "extra_scripts" => $extra_scripts,
@@ -1137,11 +1110,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $volunteerTaskLanguageMap[$task['target_language_code'] . ',' . $task['target_country_code']][] = $task;
             }
 
-            $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+            $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 'volunteerTaskLanguageMap' => $volunteerTaskLanguageMap,
@@ -1157,7 +1130,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         if ($reload_for_wordcount) $project = $projectDao->getProject($project_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
@@ -1169,10 +1142,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
                 'pm' => $pm,
                 'project' => $project,
+                'all_as_paid' => $taskDao->get_all_as_paid($project_id),
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
-                //'allow_downloads'     => $allow_downloads,
-        $app->render("project/project.view.tpl");
+
+        return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
     private function addChunkTask(
@@ -1218,10 +1192,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return $task_id;
     }
 
-    public function projectAlter($project_id)
+    public function projectAlter(Request $request, Response $response, $args)
     {
+        global $app, $template_data;
+        $project_id = $args['project_id'];
+
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
@@ -1236,13 +1212,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
-                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
+                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
 
@@ -1275,7 +1251,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $project = null;
                 }
                 if (empty($project) || $project->getId() <= 0) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
                     if (false) { // Code copied from Project Create
                     } else {
@@ -1357,7 +1333,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 }
                             }
                             if ($image_failed) {
-                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
+                                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
 
@@ -1369,14 +1345,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             $matecat_id_project = $matches[2];
                                             $matecat_id_project_pass = $matches[3];
                                             $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
-                                            $app->flash('success', 'Matecat Project ID/Password updated!');
+                                            UserRouteHandler::flash('success', 'Matecat Project ID/Password updated!');
                                         } else {
-                                            $app->flash('error', 'URL did not match project and expected pattern!');
+                                            UserRouteHandler::flash('error', 'URL did not match project and expected pattern!');
                                         }
                                     }
                                 }
                                 try {
-                                     $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                 }
                             }
@@ -1463,10 +1439,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $userIsAdmin = 0;
         }
 
-        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectAlter1.js\"></script>";
+        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter2.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "siteAPI"               => Common\Lib\Settings::get('site.api'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
@@ -1498,12 +1474,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'sesskey'        => $sesskey,
         ));
 
-        $app->render("project/project.alter.tpl");
+        return UserRouteHandler::render("project/project.alter.tpl", $response);
     }
 
-    public function projectCreate($org_id)
+    public function projectCreate(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $adminDao = new DAO\AdminDao();
@@ -1520,14 +1498,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $create_memsource = 1; // This org uses memsource
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     ) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
-                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
+                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
@@ -1567,11 +1545,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $project = null;
                 }
                 if (empty($project) || $project->getId() <= 0) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
                     if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
-                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                         error_log('Project Upload Error: ' . $post['project_title']);
                         try {
                             $projectDao->deleteProject($project->getId());
@@ -1605,7 +1583,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                         }
                         if (!$success) {
-                            $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
+                            UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
                             try {
                                 $projectDao->deleteProject($project->getId());
                             } catch (\Exception $e) {
@@ -1700,7 +1678,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 }
                             }
                             if ($image_failed) {
-                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
+                                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
                                 try {
                                     $projectDao->deleteProject($project->getId());
                                 } catch (\Exception $e) {
@@ -1802,7 +1780,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             }
                                         }
                                     }
-                                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                                    UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                     try {
                                         $projectDao->deleteProject($project->getId());
                                     } catch (\Exception $e) {
@@ -1885,12 +1863,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
                                         try {
-                                            $app->flash('success', 'It may take a while for all Tasks to appear below, please refresh the page until they all appear');
-                                            $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                            UserRouteHandler::flash('success', 'It may take a while for all Tasks to appear below, please refresh the page until they all appear');
+                                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                         }
                                     } catch (\Exception $e) {
-                                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                         try {
                                             error_log('projectCreate deleteProject(' . $project->getId() . ")");
                                             $projectDao->deleteProject($project->getId());
@@ -1936,10 +1914,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $minute_list[$i] = $i;
         }
 
-        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate9.js\"></script>";
+        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate10.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "siteAPI"               => Common\Lib\Settings::get('site.api'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
@@ -1965,7 +1943,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
         ));
-        $app->render("project/project.create.tpl");
+        return UserRouteHandler::render("project/project.create.tpl", $response);
     }
 
     private function addProjectTask(
@@ -2118,56 +2096,63 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return $string;
     }
 
-    public function projectCreated($project_id)
+    public function projectCreated(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $project_id = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
         $org_id = $project->getOrganisationId();
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "org_id" => $org_id,
                 "project_id" => $project_id
         ));
 
-        $app->render("project/project.created.tpl");
+        return UserRouteHandler::render("project/project.created.tpl", $response);
     }
 
-    public function archiveProject($project_id, $sesskey)
+    public function archiveProject(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $project_id = $args['project_id'];
+        $sesskey    = $args['sesskey'];
+
         $projectDao = new DAO\ProjectDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
         $project = $projectDao->getProject($project_id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);
 
         if ($archivedProject) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "success",
                 sprintf(Lib\Localisation::getTranslation('org_dashboard_9'), $project->getTitle())
             );
         } else {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(Lib\Localisation::getTranslation('org_dashboard_10'), $project->getTitle())
             );
         }
 
-        $app->redirect($ref = $app->request()->getReferrer());
+        return $response->withStatus(302)->withHeader('Location', $request->getHeaderLine('REFERER'));
     }
 
-    public function downloadProjectFile($projectId)
+    public function downloadProjectFile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $projectId = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
         if ($taskDao->isUserRestrictedFromProject($projectId, Common\Lib\UserSession::getCurrentUserID())) {
-            $app->flash('error', 'You cannot access this project!');
-            $app->redirect($app->urlFor('home'));
+            UserRouteHandler::flash('error', 'You cannot access this project!');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $project_tasks = $projectDao->get_tasks_for_project($projectId); // Is a memsource project if any memsource jobs
@@ -2185,10 +2170,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if ($title_0 !== $title) $unitary = 0; // Not a unitary project with a single source file (1 => probably it is)
                 }
                 if (!$unitary) {
-                    $app->flash('error', 'We could not find a matching file.');
-                    $app->redirect($app->urlFor('home'));
+                    UserRouteHandler::flash('error', 'We could not find a matching file.');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
-                $headArr = $taskDao->downloadTaskVersion($task_id, 0, 0); // Download an original Task file as "Project" file
+                $headArr = $taskDao->downloadTaskVersion($task_id, 0); // Download an original Task file as "Project" file
             } else {
             $headArr = $projectDao->downloadProjectFile($projectId);
             }
@@ -2196,11 +2181,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -2208,13 +2194,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
-    public function downloadProjectImageFile($projectId)
+    public function downloadProjectImageFile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+        $projectId = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
 
         try {
@@ -2223,11 +2211,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    if (!empty($val)) $response = $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -2235,13 +2224,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $project = $projectDao->getProject($projectId);
@@ -2307,7 +2296,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         curl_close($re);
     }
 
-    public function project_cron_1_minute()
+    public function project_cron_1_minute(Request $request)
     {
       $matecat_api = Common\Lib\Settings::get('matecat.url');
 
@@ -2610,11 +2599,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       }
       fclose($fp_for_lock);
 
-        //$app = \Slim\Slim::getInstance();
-        //$app->view()->appendData(array(
-        //    'body' => 'Dummy',
-        //));
-        //$app->render('nothing.tpl');
+      if (strpos((string)$request->getUri(), '/getwordcount')) return;
       die;
     }
 
@@ -2693,7 +2678,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             }
 
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
-error_log('get_queue_asana_projects');//(**)
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
@@ -2834,19 +2818,22 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         return '';
     }
 
-    public function project_get_wordcount($project_id)
+    public function project_get_wordcount(Request $request, Response $response, $args)
     {
+        $project_id = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
 
         if (!empty($project)) {
-        $this->project_cron_1_minute(); // Trigger update
+        $this->project_cron_1_minute($request); // Trigger update
 
         $word_count = $project->getWordCount();
         }
         if (empty($word_count) || $word_count == 1) $word_count = '-';
 
-        \Slim\Slim::getInstance()->response()->body($word_count);
+        $response->getBody()->write((string)$word_count);
+        return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
 

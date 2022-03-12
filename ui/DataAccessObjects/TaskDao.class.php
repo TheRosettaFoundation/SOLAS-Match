@@ -332,15 +332,12 @@ error_log("createTaskDirectly: $args");
         return $response;
     }
 
-    public function saveTaskFile($taskId, $userId, $fileData, $version = null, $convert = null)
+    public function saveTaskFile($taskId, $userId, $fileData, $version = null)
     {
         $request = "{$this->siteApi}v0/io/upload/task/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
-        }
-        if (!is_null($convert)) {
-            $args['convertFromXliff'] = $convert ? 1 : 0;
         }
 
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
@@ -375,15 +372,12 @@ error_log("createTaskDirectly: $args");
         }
     }
 
-    public function saveTaskFileFromProject($taskId, $userId, $fileData, $version = null, $convert = null)
+    public function saveTaskFileFromProject($taskId, $userId, $fileData, $version = null)
     {
         $request = "{$this->siteApi}v0/io/upload/taskfromproject/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
-        }
-        if (!is_null($convert)) {
-            $args['convertFromXliff'] = $convert ? 1 : 0;
         }
 
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
@@ -418,14 +412,11 @@ error_log("createTaskDirectly: $args");
         }
     }
 
-    public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
+    public function uploadOutputFile($taskId, $userId, $fileData)
     {
         $request = "{$this->siteApi}v0/io/upload/taskOutput/$taskId/$userId";
 
         $args = null;
-        if ($convert) {
-            $args= array('convertFromXliff' => $convert);
-        }
         
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
     }
@@ -444,15 +435,12 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
     
-    public function downloadTaskVersion($taskId, $version, $convert)
+    public function downloadTaskVersion($taskId, $version)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/io/download/task/$taskId";
         $args = array();
         $args['version'] = $version;
-        if ($convert) {
-            $args['convertToXliff'] = $convert;
-        }
         
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
 
@@ -1224,5 +1212,43 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         $result = LibAPI\PDOWrapper::call('getVolunteerProjectTasks', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) $result = array();
         return $result;
+    }
+
+    public function get_paid_status($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_paid_status', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+        return 1;
+    }
+
+    public function set_paid_status($task_id)
+    {
+        LibAPI\PDOWrapper::call('set_paid_status', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function clear_paid_status($task_id)
+    {
+        LibAPI\PDOWrapper::call('clear_paid_status', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function get_all_as_paid($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result[0]['result'];
+    }
+
+    public function set_all_as_paid($project_id)
+    {
+        LibAPI\PDOWrapper::call('set_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
+    }
+
+    public function set_revision_as_paid($project_id)
+    {
+        LibAPI\PDOWrapper::call('set_revision_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
+    }
+
+    public function clear_all_as_paid($project_id)
+    {
+        LibAPI\PDOWrapper::call('clear_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
     }
 }

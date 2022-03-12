@@ -1,51 +1,8 @@
 {
-    "name": "rosetta-foundation/solas-match",
-    "description": "A translation platform for NGOs",
-
-    "repositories": [
-        {
-            "source": {
-                "name": "slim/slim",
-                "url": "https://github.com/codeguy/Slim.git",
-                "type": "git",
-                "reference": "master"
-            },
-            "type": "package",
-            "package": {
-                "name": "drslump/protobuf-php",
-                "version": "0.9.4",
-                "type": "git",
-                "source": {
-                    "url": "https://github.com/drslump/Protobuf-PHP.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "files": ["library/DrSlump/Protobuf.php"]
-                }
-            }
-        }
-    ],
-
-    "require-dev": {
-            "phpunit/phpunit": "3.7.*"
-    },
-
     "require": {
-        "slim/slim": "2.4.0",
-        "videlalvaro/php-amqplib": "dev-master",
-        "drslump/protobuf-php": "*",
-        "league/oauth2-server": "3.*"
-    },
-
-    "autoload": {
-        "classmap": ["vendor/slim/slim/Slim/View.php"]
-    },
-
-    "authors": [
-        {
-            "name": "spaceindaver",
-            "email": "spaceindaver0@gmail.com"
-        }
-    ]
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.4",
+        "league/oauth2-server": "dev-master#54ffa58e7b4553a16e889ef15b29b0c1e0323b24",
+        "videlalvaro/php-amqplib": "dev-master#2e0548069731bba38335bcf29318865b8e4d1b27"
+    }
 }

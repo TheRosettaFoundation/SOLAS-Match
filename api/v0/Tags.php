@@ -5,6 +5,8 @@ namespace SolasMatch\API\V0;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API as API;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/TagsDao.class.php";
 
@@ -12,153 +14,105 @@ class Tags
 {
     public static function init()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
-        $app->group('/v0', function () use ($app) {
-            $app->group('/tags', function () use ($app) {
+        $app->get(
+            '/api/v0/tags/getByLabel/{tagLabel}/',
+            '\SolasMatch\API\V0\Tags:getTagByLabel');
 
-                /* Routes starting /v0/tags */
-                $app->get(
-                    '/getByLabel/:tagLabel/',
-                    '\SolasMatch\API\V0\Tags::getTagByLabel'
-                );
+        $app->get(
+            '/api/v0/tags/search/{tagName}/',
+            '\SolasMatch\API\V0\Tags:searchForTag');
 
-                $app->get(
-                    '/search/:tagName/',
-                    '\SolasMatch\API\V0\Tags::searchForTag'
-                );
+        $app->get(
+            '/api/v0/tags/{tagId}/tasks/',
+            '\SolasMatch\API\V0\Tags:getTaskForTag')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->get(
-                    '/:tagId/tasks(:format)/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tags::getTaskForTag'
-                );
+        $app->get(
+            '/api/v0/tags/{tagId}/',
+            '\SolasMatch\API\V0\Tags:getTag');
 
-                $app->get(
-                    '/:tagId/',
-                    '\SolasMatch\API\V0\Tags::getTag'
-                );
+        $app->put(
+            '/api/v0/tags/{tagId}/',
+            '\SolasMatch\API\V0\Tags:updateTag')
+            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-                $app->put(
-                    '/:tagId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tags::updateTag'
-                );
+        $app->delete(
+            '/api/v0/tags/{tagId}/',
+            '\SolasMatch\API\V0\Tags:deleteTag')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-                $app->delete(
-                    '/:tagId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Tags::deleteTag'
-                );
-            });
+        $app->get(
+            '/api/v0/tags/',
+            '\SolasMatch\API\V0\Tags:getTags');
 
-            /* Routes starting /v0 */
-            $app->get(
-                '/tags(:format)/',
-                '\SolasMatch\API\V0\Tags::getTags'
-            );
-
-            $app->post(
-                '/tags(:format)/',
-                '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
-                '\SolasMatch\API\V0\Tags::createTag'
-            );
-        });
+        $app->post(
+            '/api/v0/tags/',
+            '\SolasMatch\API\V0\Tags:createTag')
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
     }
 
-    public static function getTagByLabel($tagLabel, $format = ".json")
+    public static function getTagByLabel(Request $request, Response $response, $args)
     {
-        if (!is_numeric($tagLabel) && strstr($tagLabel, '.')) {
-            $temp = array();
-            $temp = explode('.', $tagLabel);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $tagLabel = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $tagLabel = "{$tagLabel}.{$temp[$i]}";
-                }
-            }
-        }
+        $tagLabel = $args['tagLabel'];
         $data = DAO\TagsDao::getTag(null, $tagLabel);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function searchForTag($tagName, $format = '.json')
+    public static function searchForTag(Request $request, Response $response, $args)
     {
-        if (!is_numeric($tagName) && strstr($tagName, '.')) {
-            $temp = array();
-            $temp = explode('.', $tagName);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $tagName = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $tagName = "{$tagName}.{$temp[$i]}";
-                }
-            }
-        }
+        $tagName = $args['tagName'];
         $ret = DAO\TagsDao::searchForTag($tagName);
-        API\Dispatcher::sendResponse(null, $ret, null, $format);
+        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function getTaskForTag($tagId, $format = ".json")
+    public static function getTaskForTag(Request $request, Response $response, $args)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasksWithTag($tagId, $limit), null, $format);
+        $tagId = $args['tagId'];
+        $limit = API\Dispatcher::clenseArgs($request, 'limit', 5);
+        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTasksWithTag($tagId, $limit), null);
     }
 
-    public static function getTag($tagId, $format = ".json")
+    public static function getTag(Request $request, Response $response, $args)
     {
-        if (!is_numeric($tagId) && strstr($tagId, '.')) {
-            $tagId = explode('.', $tagId);
-            $format = '.'.$tagId[1];
-            $tagId = $tagId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::getTag($tagId), null, $format);
+        $tagId = $args['tagId'];
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTag($tagId), null);
     }
 
-    public static function updateTag($tagId, $format = ".json")
+    public static function updateTag(Request $request, Response $response, $args)
     {
-        if (!is_numeric($tagId) && strstr($tagId, '.')) {
-            $tagId = explode('.', $tagId);
-            $format = '.'.$tagId[1];
-            $tagId = $tagId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $tagId = $args['tagId'];
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
     }
 
-    public static function deleteTag($tagId, $format = ".json")
+    public static function deleteTag(Request $request, Response $response, $args)
     {
-        if (!is_numeric($tagId) && strstr($tagId, '.')) {
-            $tagId = explode('.', $tagId);
-            $format = '.'.$tagId[1];
-            $tagId = $tagId[0];
-        }
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::delete($tagId), null, $format);
+        $tagId = $args['tagId'];
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::delete($tagId), null);
     }
 
-    public static function getTags($format = ".json")
+    public static function getTags(Request $request, Response $response)
     {
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
-        $topTags = API\Dispatcher::clenseArgs('topTags', Common\Enums\HttpMethodEnum::GET, false);
+        $limit = API\Dispatcher::clenseArgs($request, 'limit', 30);
+        $topTags = API\Dispatcher::clenseArgs($request, 'topTags', false);
         if ($topTags) {
-            API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags(10), null, $format);
+            return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTopTags(10), null);
         } else {
-            API\Dispatcher::sendResponse(null, DAO\TagsDao::getTags(null, null, $limit), null, $format);
+            return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTags(null, null, $limit), null);
         }
     }
 
-    public static function createTag($format = ".json")
+    public static function createTag(Request $request, Response $response)
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
+        $data = (string)$request->getBody();
+        $client = new Common\Lib\APIHelper('.json');
         $data=$client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
         $data->setId("");
-        API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
+        return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
     }
 }
 

@@ -5,6 +5,8 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
@@ -17,178 +19,172 @@ class UserRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
+
+        $app->map(['GET', 'POST'],
+            '[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
+            ->setName('home');
+
+        $app->map(['GET', 'POST'],
+            '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
+            ->setName('home-paged');
+
+        $app->map(['GET', 'POST'],
+            '/register[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
+            ->setName('register');
+
+        $app->map(['GET', 'POST'],
+            '/register_track/{track_code}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
+            ->setName('register_track');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/change_email[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:changeEmail')
+            ->setName('change-email');
+
+        $app->map(['GET', 'POST'],
+            '/user/{uuid}/verification[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:emailVerification')
+            ->setName('email-verification');
+
+        $app->map(['GET', 'POST'],
+            '/{uid}/password/reset[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
+            ->setName('password-reset');
+
+        $app->map(['GET', 'POST'],
+            '/password/reset[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passResetRequest')
+            ->setName('password-reset-request');
 
         $app->get(
-            "/",
-            array($this, "home")
-        )->via("POST")->name("home");
+            '/logout[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
+            ->setName('logout');
+
+        $app->map(['GET', 'POST'],
+            '/login[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login')
+            ->setName('login');
+
+        $app->map(['GET', 'POST'],
+            '/loggedin',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login_proz')
+            ->setName('loggedin');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/profile[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPublicProfile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('user-public-profile');
 
         $app->get(
-            "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
-            array($this, "home")
-        )->via("POST")->name("home-paged");
+            '/{key}/key[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:profile_shared_with_key')
+            ->setName('shared_with_key');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/privateProfile[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
+            ->setName('user-private-profile');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/googleregister[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:googleregister')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
+            ->setName('googleregister');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/user-code-of-conduct[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userCodeOfConduct')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
+            ->setName('user-code-of-conduct');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/user-uploads/{cert_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
+            ->setName('user-uploads');
 
         $app->get(
-            "/register/",
-            array($this, "register")
-        )->via("GET", "POST")->name("register");
+            '/{id}/user-download[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('user-download');
 
         $app->get(
-            '/register_track/:track_code/',
-            array($this, 'register')
-        )->via('GET', 'POST')->name('register_track');
+            '/users_review[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_review')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('users_review');
+
+        $app->map(['GET', 'POST'],
+            '/users_new[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('users_new');
 
         $app->get(
-            "/:user_id/change_email/",
-            array($this, "changeEmail")
-        )->via("GET", "POST")->name("change-email");
+            '/users_tracked[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('users_tracked');
+
+        $app->map(['GET', 'POST'],
+            '/add_tracking_code[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('add_tracking_code');
 
         $app->get(
-            "/user/:uuid/verification/",
-            array($this, 'emailVerification')
-        )->via('POST')->name('email-verification');
+            '/download_users_tracked[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_users_tracked');
 
         $app->get(
-            "/:uid/password/reset/",
-            array($this, "passwordReset")
-        )->via("POST")->name("password-reset");
+            '/download_users_new[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_users_new');
 
         $app->get(
-            "/password/reset/",
-            array($this, "passResetRequest")
-        )->via("POST")->name("password-reset-request");
+            '/download_users_new_unreviewed[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('download_users_new_unreviewed');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/notification/stream[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:editTaskStreamNotification')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('stream-notification-edit');
+
+        $app->map(['GET', 'POST'],
+            '/user/task/{task_id}/reviews[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userTaskReviews')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('user-task-reviews');
 
         $app->get(
-            "/logout/",
-            array($this, "logout")
-        )->name("logout");
-
-        $app->get(
-            "/login/",
-            array($this, "login")
-        )->via("GET", "POST")->name("login");
-
-        $app->get(
-            '/loggedin/',
-            array($this, "login_proz")
-        )->via('GET', 'POST')->name('loggedin');
-
-        $app->get(
-            "/:user_id/profile/",
-            array($middleware, 'authUserIsLoggedIn'),
-            array($this, "userPublicProfile")
-        )->via("POST")->name("user-public-profile");
-
-        $app->get(
-            '/:key/key/',
-            array($this, "profile_shared_with_key")
-        )->name('shared_with_key');
-
-        $app->get(
-            "/:user_id/privateProfile/",
-            array($middleware, "authUserIsLoggedInNoProfile"),
-            array($this, "userPrivateProfile")
-        )->via("POST")->name("user-private-profile");
-
-        $app->get(
-            "/:user_id/googleregister/",
-            array($middleware, "authUserIsLoggedInNoProfile"),
-            array($this, "googleregister")
-        )->via("POST")->name("googleregister");
-
-        $app->get(
-            '/:user_id/user-code-of-conduct/',
-            array($middleware, 'authUserIsLoggedInNoProfile'),
-            array($this, 'userCodeOfConduct')
-        )->via("POST")->name('user-code-of-conduct');
-
-        $app->get(
-            '/:user_id/user-uploads/:cert_id/',
-            array($middleware, 'authUserIsLoggedInNoProfile'),
-            array($this, 'userUploads')
-        )->via("POST")->name('user-uploads');
-
-        $app->get(
-            '/:id/user-download/',
-            array($middleware, 'authUserIsLoggedIn'),
-            array($this, 'userDownload')
-        )->name('user-download');
-
-        $app->get(
-            '/users_review/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'users_review')
-        )->name('users_review');
-
-        $app->get(
-            '/users_new/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'users_new')
-        )->via('POST')->name('users_new');
-
-        $app->get(
-            '/users_tracked/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'users_tracked')
-        )->name('users_tracked');
-
-        $app->get(
-            '/add_tracking_code/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'add_tracking_code')
-        )->via('POST')->name('add_tracking_code');
-
-        $app->get(
-            '/download_users_tracked/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_users_tracked')
-        )->name('download_users_tracked');
-
-        $app->get(
-            '/download_users_new/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_users_new')
-        )->name('download_users_new');
-
-        $app->get(
-            '/download_users_new_unreviewed/',
-            array($middleware, 'authIsSiteAdmin'),
-            array($this, 'download_users_new_unreviewed')
-        )->name('download_users_new_unreviewed');
-
-        $app->get(
-            "/:user_id/notification/stream/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "editTaskStreamNotification")
-        )->via("POST")->name("stream-notification-edit");
-
-        $app->get(
-            "/user/task/:task_id/reviews/",
-            array($middleware, "authenticateUserForTask"),
-            array($this, "userTaskReviews")
-        )->via('POST')->name('user-task-reviews');
-
-        $app->get(
-            '/no_application/',
-            array($this, 'no_application')
-        )->name('no_application');
-
-        $app->get(
-            '/no_application_error/',
-            array($this, 'no_application_error')
-        )->name('no_application_error');
-
-        $app->get(
-            '/native_languages/:term/search/',
-            array($this, 'native_languages')
-        )->name('native_languages');
+            '/native_languages/{term}/search[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
+            ->setName('native_languages');
     }
 
-    public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
+    public function home(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -253,10 +249,10 @@ class UserRouteHandler
             } elseif ($maintenanceCustomMsg == 'y') {
                 $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
             }
-            $app->flashNow('warning', $msg);
+            UserRouteHandler::flashNow('warning', $msg);
         }
 
-        $app->view()->appendData($viewData);
+        $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
@@ -264,8 +260,8 @@ class UserRouteHandler
         $topTasksCount = 0;
 
         $filter = array();
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
@@ -357,9 +353,9 @@ class UserRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
@@ -395,7 +391,7 @@ class UserRouteHandler
             $org_admin = $userDao->is_admin_or_org_member($user_id);
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
             'activeSourceLanguages' => $activeSourceLanguages,
             'activeTargetLanguages' => $activeTargetLanguages,
@@ -419,21 +415,14 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-        $app->render('index-home.tpl');
+        return UserRouteHandler::render('index-home.tpl', $response);
     }
 
-    public function videos()
+    public function register(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
-        $app->view()->appendData(array('current_page' => 'videos'));
-        $app->render("videos.tpl");
-    }
+        global $app, $template_data;
+        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
 
-    public function register($track_code = '')
-    {
-        if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
-
-        $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
@@ -495,11 +484,11 @@ class UserRouteHandler
            
         });
         </script>';
-        $app->view()->appendData(array('extra_scripts' => $extra_scripts));
+        $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
         $error = null;
-        if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
+            $post = $request->getParsedBody();
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
@@ -508,7 +497,7 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor("login"));
                 } else {
                     $error = "User is not verified";
                     // notify user that they are not yet verified an resent verification email
@@ -522,12 +511,12 @@ class UserRouteHandler
             if (is_null($error)) {
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "success",
-                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
+                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         'error',
                         'Failed to register'
                     );
@@ -535,14 +524,16 @@ class UserRouteHandler
             }
         }
         if ($error !== null) {
-            $app->view()->appendData(array("error" => $error));
+            $template_data = array_merge($template_data, array("error" => $error));
         }
-        $app->render("user/register.tpl");
+        return UserRouteHandler::render("user/register.tpl", $response);
     }
 
-    public function changeEmail($user_id)
+    public function changeEmail(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
@@ -551,9 +542,9 @@ class UserRouteHandler
 
         $error = null;
         $warning = null;
-        if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail');
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
@@ -564,98 +555,101 @@ class UserRouteHandler
             if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
                 $user = $userDao->getUser($user_id);
                 if ($userDao->changeEmail($user_id, $post['email'], $user->getEmail())) {
-                    $app->flashNow('success', '');
+                    UserRouteHandler::flashNow('success', '');
                 } else {
-                    $app->flashNow('error', '');
+                    UserRouteHandler::flashNow('error', '');
                 }
             }
         }
         if ($error !== null) {
-            $app->view()->appendData(array("error" => $error));
+            $template_data = array_merge($template_data, array("error" => $error));
         }
         if ($warning !== null) {
-            $app->view()->appendData(array("warning" => $warning));
+            $template_data = array_merge($template_data, array("warning" => $warning));
         }
 
-        $app->view()->appendData(array('user_id' => $user_id, 'sesskey' => $sesskey));
-        $app->render("user/change-email.tpl");
+        $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
+        return UserRouteHandler::render("user/change-email.tpl", $response);
     }
 
-    public function emailVerification($uuid)
+    public function emailVerification(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $uuid = $args['uuid'];
+
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('email_verification_7'));
-            $app->redirect($app->urlFor("home"));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('email_verification_7'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
-                    $app->flash('success', Lib\Localisation::getTranslation('email_verification_8'));
+                    UserRouteHandler::flash('success', Lib\Localisation::getTranslation('email_verification_8'));
                 } else {
-                    $app->flash('error', 'Failed to finish registration');  // TODO: remove inline text
+                    UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
                 }
-                $app->redirect($app->urlFor('login'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
             }
         }
 
-        $app->view()->appendData(array('uuid' => $uuid));
+        $template_data = array_merge($template_data, array('uuid' => $uuid));
 
-        $app->render("user/email.verification.tpl");
+        return UserRouteHandler::render("user/email.verification.tpl", $response);
     }
 
-    public function passwordReset($uid)
+    public function passwordReset(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $uid = $args['uid'];
+
         $userDao = new DAO\UserDao();
 
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", Lib\Localisation::getTranslation('password_reset_1'));
-            $app->redirect($app->urlFor("home"));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
         $user_id = $reset_request->getUserId();
-        $app->view()->setData("uid", $uid);
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        $template_data = array_merge($template_data, ['uid' => $uid]);
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
                 if (
                     isset($post['confirmation_password']) &&
                     $post['confirmation_password'] == $post['new_password']
                 ) {
-
-                    $response = $userDao->resetPassword($post['new_password'], $uid);
-                    if ($response) {
-                        $app->flash("success", Lib\Localisation::getTranslation('password_reset_2'));
-                        $app->redirect($app->urlFor("home"));
+                    $response_dao = $userDao->resetPassword($post['new_password'], $uid);
+                    if ($response_dao) {
+                        UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                 }
             } else {
-                $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-        $app->render("user/password-reset.tpl");
+        return UserRouteHandler::render("user/password-reset.tpl", $response);
     }
 
-    public function passResetRequest()
+    public function passResetRequest(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
                     $email = $post['email_address'];
@@ -664,52 +658,52 @@ class UserRouteHandler
                     if (!$hasUserRequestedPwReset) {
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
-                            $app->flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
-                            $app->redirect($app->urlFor("home"));
+                            UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 "Failed to request password reset, are you sure you entered your email " .
                                     "address correctly?"
                             );
                         }
                     } else {
-                        //get request time
-                        $response = $userDao->getPasswordResetRequestTime($email);
-                        if ($response != null) {
-                            $app->flashNow(
+                        $response_dao = $userDao->getPasswordResetRequestTime($email);
+                        if ($response_dao != null) {
+                            UserRouteHandler::flashNow(
                                 "info",
                                 Lib\Localisation::getTranslation('user_reset_password_3'),
-                                $response
+                                $response_dao
                             );
-                            //Send request
                             $userDao->requestPasswordReset($email);
                         }
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }
             }
         }
-        $app->render("user/user.reset-password.tpl");
+        return UserRouteHandler::render("user/user.reset-password.tpl", $response);
     }
 
-    public function logout()
+    public function logout(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
+
         Common\Lib\UserSession::destroySession();
-        $app->redirect($app->urlFor("home"));
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
     }
 
-    public function login()
+    public function login(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
         $error = null;
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['login'])) {
                 $user = null;
@@ -718,56 +712,61 @@ class UserRouteHandler
                 } catch (Common\Exceptions\SolasMatchException $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
-                        $app->urlFor("login"),
-                        $app->urlFor("register"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
                         $e->getMessage()
                     );
-                    $app->flashNow('error', $error);
+                    UserRouteHandler::flashNow('error', $error);
                 }
                 if (!is_null($user)) {
                     error_log("Password, Login: {$post['email']}");
                     Common\Lib\UserSession::setSession($user->getId());
-                    $request = Common\Lib\UserSession::getReferer();
+                    $request_url = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
 
                     // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                    if (!$request) {
+                    if (!$request_url) {
                         if (!empty($_SESSION['return_to_SAML_url'])) {
-                            $request = $_SESSION['return_to_SAML_url'];
+                            $request_url = $_SESSION['return_to_SAML_url'];
                         }
                     }
                     unset($_SESSION['return_to_SAML_url']);
 
-                    //Set site language to user's preferred language if it is not already
-                    $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                     $userInfo = $userDao->getUserPersonalInformation($user->getId());
                     $langPrefId = $userInfo->getLanguagePreference();
                     $preferredLang = $langDao->getLanguage($langPrefId);
-                    if ($currentSiteLang != $preferredLang) {
+                    // Set site language to user's preferred language if it is not already
+                    $user_language = Common\Lib\UserSession::getUserLanguage();
+                    if (empty($user_language)) {
                         Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    } else {
+                        $currentSiteLang = $langDao->getLanguageByCode($user_language);
+                        if ($currentSiteLang != $preferredLang) {
+                            Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                        }
                     }
 
                     $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
-                    if ($request) {
-                        $app->redirect($request);
+                    if ($request_url) {
+                        return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
                         if ($userDao->is_admin_or_org_member($user->getId())) {
-                            $app->redirect($app->urlFor('home'));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
                             if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                                $app->redirect($app->urlFor("home"));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                             } else {
-                                $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                             }
                         }
                     }
                 }
             } elseif (isset($post['password_reset'])) {
-                $app->redirect($app->urlFor("password-reset-request"));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
             } elseif (isset($post['credential'])) { // Google Sign-In
                 if (empty($post['g_csrf_token']))    $error = 'No CSRF token in post body.';
                 if (empty($_COOKIE['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
@@ -784,19 +783,20 @@ class UserRouteHandler
                             $email = $payload['email'];
                             if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
                             error_log("Google Sign-In, Login: $email");
-                            $userDao->requestAuthCode($email); // Does a redirect
+                            return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                         }
                     } else {
                         $error = 'Invalid ID token';
                     }
                 }
 
-                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
-                $app->flash('error', $error);
-                $app->redirect($app->urlFor('home'));
+                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), "[$error]");
+                UserRouteHandler::flash('error', $error);
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         } else {
-            $authCode = $app->request()->get('code');
+            $parms = $request->getQueryParams();
+            $authCode = !empty($parms['code']) ? $parms['code'] : null;
             if (!is_null($authCode)) {
                 // Exchange auth code for access token
                 $user = null;
@@ -805,87 +805,94 @@ class UserRouteHandler
                 } catch (\Exception $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
-                        $app->urlFor("login"),
-                        $app->urlFor("register"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
+                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
                         $e->getMessage()
                     );
-                    $app->flash('error', $error);
-                    $app->redirect($app->urlFor('login'));
+                    UserRouteHandler::flash('error', $error);
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
                 Common\Lib\UserSession::setSession($user->getId());
-                $request = Common\Lib\UserSession::getReferer();
+                $request_url = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
 
                 // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                if (!$request) {
+                if (!$request_url) {
                     if (!empty($_SESSION['return_to_SAML_url'])) {
-                        $request = $_SESSION['return_to_SAML_url'];
+                        $request_url = $_SESSION['return_to_SAML_url'];
                     }
                 }
                 unset($_SESSION['return_to_SAML_url']);
 
-                //Set site language to user's preferred language if it is not already
-                $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                 $userInfo = $userDao->getUserPersonalInformation($user->getId());
                 $langPrefId = $userInfo->getLanguagePreference();
                 $preferredLang = $langDao->getLanguage($langPrefId);
-                if ($currentSiteLang != $preferredLang) {
+                // Set site language to user's preferred language if it is not already
+                $user_language = Common\Lib\UserSession::getUserLanguage();
+                if (empty($user_language)) {
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                } else {
+                    $currentSiteLang = $langDao->getLanguageByCode($user_language);
+                    if ($currentSiteLang != $preferredLang) {
+                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    }
                 }
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
-                if ($request) {
-                    $app->redirect($request);
+                if ($request_url) {
+                    return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     if ($userDao->is_admin_or_org_member($user->getId())) {
-                        $app->redirect($app->urlFor('home'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                            $app->redirect($app->urlFor("home"));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
                             if ($userDao->terms_accepted($user->getId()) == 1) {
                                 // Since they are logged in (via Google)...
-                                $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             }
-                            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                         }
                     }
                 }
             }
 
-            $return_to_SAML_url = $app->request()->get('ReturnTo');
+            $parms = $request->getQueryParams();
+            $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
             }
 
-            $error = $app->request()->get('error');
+            $error = !empty($parms['error']) ? $parms['error'] : null;
             if (!is_null($error)) {
-                $app->flashNow('error', $app->request()->get('error_message'));
+                UserRouteHandler::flashNow('error', !empty($parms['error_message']) ? $parms['error_message'] : '');
             }
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'extra_scripts' => self::createGooglePlusJavaScript(),
             'client_id'    => Common\Lib\Settings::get('proz.client_id'),
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
 
-        $app->render("user/login.tpl");
+        return UserRouteHandler::render("user/login.tpl", $response);
     }
 
-    public function login_proz()
+    public function login_proz(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         error_log("login_proz() Redirect from ProZ");
 
         $bad_message = '';
 
-        $code = $app->request()->get('code');
+        $parms = $request->getQueryParams();
+        $code = !empty($parms['code']) ? $parms['code'] : null;
         if (!empty($code)) {
             // Exchange the authorization code for an access token
             $client_id = Common\Lib\Settings::get('proz.client_id');
@@ -930,9 +937,8 @@ class UserRouteHandler
 
                     if (!empty($response_data->email)) {
                         error_log("ProZ SSO, Login: {$response_data->email}");
-                        $userDao->requestAuthCode($response_data->email);
-                        // This does not return,
-                        // it redirects to API /v0/users/$email/auth/code
+                        return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($response_data->email));
+                        // Redirects to API v0/users/$email/auth/code/
                         // which starts "normal" Trommons authorization process
                         // (and may register a user if the email is new),
                         // which then redirects to /login URL with a different Trommons 'code',
@@ -953,14 +959,14 @@ class UserRouteHandler
 
         $error = sprintf(
             Lib\Localisation::getTranslation('proz_error'),
-            $app->urlFor('login'),
-            $app->urlFor('register'),
+            $app->getRouteCollector()->getRouteParser()->urlFor('login'),
+            $app->getRouteCollector()->getRouteParser()->urlFor('register'),
             "[$bad_message]"
         );
         error_log($bad_message);
 
-        $app->flash('error', $error);
-        $app->redirect($app->urlFor('home'));
+        UserRouteHandler::flash('error', $error);
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
     private static function createGooglePlusJavaScript()
@@ -968,17 +974,19 @@ class UserRouteHandler
         return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
 
-    public function googleregister($user_id)
+    public function googleregister(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
         if ($user_id != $loggedInUserId && !$isSiteAdmin) {
-            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
+            UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
         $user_info = $userDao->getUser($user_id);
@@ -988,16 +996,16 @@ class UserRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'googleregister');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'googleregister')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $user_personal_info->setFirstName($post['first_name']);
             $user_personal_info->setLastName($post['last_name']);
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
             if ($userDao->terms_accepted($user_id) < 2) $userDao->update_terms_accepted($user_id, 2);
-            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
             $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
@@ -1022,15 +1030,16 @@ class UserRouteHandler
             $(".logout").hide();
         });
             </script>';
-            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
-            $app->render('user/googleregister.tpl');
+            $template_data = array_merge($template_data, array("extra_scripts" => $extra_scripts));
+            $template_data = array_merge($template_data, array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
+            return UserRouteHandler::render('user/googleregister.tpl', $response);
         }
     }
 
-    public static function userPrivateProfile($user_id)
+    public static function userPrivateProfile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1052,8 +1061,8 @@ class UserRouteHandler
         Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
         }
 
         $userPersonalInfo = null;
@@ -1095,9 +1104,9 @@ class UserRouteHandler
             $isSiteAdmin = false;
         }
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
                 // error_log("POST" . print_r($post, true));
                 $user->setDisplayName($post['displayName']);
@@ -1264,16 +1273,16 @@ class UserRouteHandler
                     $userDao->update_terms_accepted($user_id, 3);
                     if ($notify) $userDao->NotifyRegistered($user_id);
 
-                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', 'Failed to Update');
+                    UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
             }
         }
 
         $notifData = $userDao->getUserTaskStreamNotification($user_id);
         if ($notifData) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'intervalId' => $notifData->getInterval(),
             ));
         }
@@ -1307,10 +1316,10 @@ class UserRouteHandler
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>';
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile5.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
             $(".countclick").hide();
@@ -1707,7 +1716,7 @@ class UserRouteHandler
         });
         </script>';
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
             'siteAPI'          => Common\Lib\Settings::get('site.api'),
             'isSiteAdmin'      => $isSiteAdmin,
@@ -1736,11 +1745,13 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        $app->render('user/user-private-profile.tpl');
+        return UserRouteHandler::render('user/user-private-profile.tpl', $response);
     }
 
-    public function native_languages($term)
+    public function native_languages(Request $request, Response $response, $args)
     {
+        $term = $args['term'];
+
         $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
 
@@ -1749,19 +1760,21 @@ class UserRouteHandler
             $name = $language->getName();
             if (mb_stripos($name, $term) !== false) $results[] = ['id' => $language->getCode(), 'text' => $name];
         }
+        header('Content-Type: application/json');
         echo json_encode(['results' => $results]);
         die;
     }
 
-    public static function userCodeOfConduct($user_id)
+    public static function userCodeOfConduct(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
         if (!$userDao->is_admin_or_org_member($user_id)) {
-            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         }
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -1773,8 +1786,8 @@ class UserRouteHandler
         Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
         }
 
         $userPersonalInfo = null;
@@ -1790,9 +1803,9 @@ class UserRouteHandler
             $isSiteAdmin = false;
         }
 
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
                 $user->setDisplayName($post['displayName']);
                 $userPersonalInfo->setFirstName($post['firstName']);
@@ -1808,17 +1821,17 @@ class UserRouteHandler
                     $userDao->update_terms_accepted($user_id, 3);
                     $userDao->NotifyRegistered($user_id);
 
-                    $app->redirect($app->urlFor('org-dashboard'));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', 'Failed to Update');
+                    UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
             }
         }
 
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
             'siteAPI'           => Common\Lib\Settings::get('site.api'),
             'isSiteAdmin'       => $isSiteAdmin,
@@ -1831,12 +1844,14 @@ class UserRouteHandler
             'sesskey'           => $sesskey,
         ));
 
-        $app->render('user/user-code-of-conduct.tpl');
+        return UserRouteHandler::render('user/user-code-of-conduct.tpl', $response);
     }
 
-    public static function userUploads($user_id, $cert_id)
+    public static function userUploads(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+        $cert_id = $args['cert_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1847,19 +1862,19 @@ class UserRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return;
+        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return $response;
 
         $user = $userDao->getUser($user_id);
 
         $extra_scripts = '';
 
         $upload_pending = 1;
-        if ($post = $app->request()->post()) {
+        if ($post = $request->getParsedBody()) {
             if (
                 empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                 || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)
             ) {
-                $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
+                UserRouteHandler::flashNow('error', 'Could not upload file, you must specify a file and a note');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
@@ -1870,14 +1885,14 @@ class UserRouteHandler
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $upload_pending = 0;
-                // $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
-                $app->flashNow('success', 'Certificate uploaded sucessfully, please close this window to get back to your profile page');
+                // UserRouteHandler::flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+                UserRouteHandler::flashNow('success', 'Certificate uploaded sucessfully, please close this window to get back to your profile page');
             }
         }
 
         $certification_list = $userDao->getCertificationList($user_id);
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'user'          => $user,
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
@@ -1886,45 +1901,56 @@ class UserRouteHandler
             'sesskey'       => $sesskey,
         ));
 
-        $app->render('user/user-uploads.tpl');
+        return UserRouteHandler::render('user/user-uploads.tpl', $response);
     }
 
-    public static function userDownload($id)
+    public static function userDownload(Request $request, Response $response, $args)
     {
+        $id = $args['id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
         $certification = $userDao->getUserCertificationByID($id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return $response;
 
-        $userDao->userDownload($certification);
+        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
+
+        header('Content-type: ' . $certification['mimetype']);
+        header("Content-Disposition: attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
+        header('Content-length: ' . filesize($destination));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        header('X-Sendfile: ' . realpath($destination));
+        die;
     }
 
-    public function users_review()
+    public function users_review(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $all_users = $userDao->users_review();
 
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('user/users_review.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('user/users_review.tpl', $response);
     }
 
-    public function users_new()
+    public function users_new(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $all_users = $userDao->users_new();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'users_new');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'users_new')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if (!empty($post['max_user_id'])) {
                 foreach ($all_users as $user_row) {
                     if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
@@ -1935,16 +1961,16 @@ class UserRouteHandler
             }
         }
 
-        $app->view()->appendData(array('all_users' => $all_users, 'sesskey' => $sesskey));
-        $app->render('user/users_new.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
+        return UserRouteHandler::render('user/users_new.tpl', $response);
     }
 
-    public function download_users_new()
+    public function download_users_new(Request $request, Response $response, $args)
     {
-        $this->download_users_new_unreviewed(true);
+        $this->download_users_new_unreviewed($request, $response, $args, true);
     }
 
-    public function download_users_new_unreviewed($all = false)
+    public function download_users_new_unreviewed(Request $request, Response $response, $args, $all = false)
     {
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_new();
@@ -1973,39 +1999,39 @@ class UserRouteHandler
         die;
     }
 
-    public function users_tracked()
+    public function users_tracked(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
-        $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('user/users_tracked.tpl');
+        $template_data = array_merge($template_data, array('all_users' => $all_users));
+        return UserRouteHandler::render('user/users_tracked.tpl', $response);
     }
 
-    public function add_tracking_code()
+    public function add_tracking_code(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (!empty($post['tracking_code'])) {
                 $url = $userDao->record_referer($post['tracking_code']);
-                $app->flashNow('success', "Added Tracking Code (if not already present), URL: $url");
+                UserRouteHandler::flashNow('success', "Added Tracking Code (if not already present), URL: $url");
             }
         }
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey'  => $sesskey,
             'referers' => $userDao->get_referers(),
         ));
-        $app->render('user/add_tracking_code.tpl');
+        return UserRouteHandler::render('user/add_tracking_code.tpl', $response);
     }
 
-    public function download_users_tracked()
+    public function download_users_tracked(Request $request, Response $response)
     {
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
@@ -2052,9 +2078,11 @@ class UserRouteHandler
         return $string;
     }
 
-    public static function userPublicProfile($user_id)
+    public static function userPublicProfile(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
@@ -2067,10 +2095,10 @@ class UserRouteHandler
 
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-            $app->view()->setData('isSiteAdmin', $isSiteAdmin);
+            $template_data = array_merge($template_data, ['isSiteAdmin' => $isSiteAdmin]);
         } else {
             $isSiteAdmin = 0;
-            $app->view()->setData('isSiteAdmin', 0);
+            $template_data = array_merge($template_data, ['isSiteAdmin' => 0]);
         }
 
         $private_access = 0;
@@ -2083,8 +2111,8 @@ class UserRouteHandler
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
+            UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
         $userPersonalInfo = null;
         $receive_credit = 0;
@@ -2100,9 +2128,9 @@ class UserRouteHandler
 
         $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
@@ -2116,12 +2144,12 @@ class UserRouteHandler
 
             if (isset($post['referenceRequest'])) {
                 $userDao->requestReferenceEmail($user_id);
-                $app->view()->appendData(array("requestSuccess" => true));
+                $template_data = array_merge($template_data, array("requestSuccess" => true));
             }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
-                    $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
+                    UserRouteHandler::flashNow('error', 'You must enter a comment and a score between 1 and 5');
                 } else {
                     $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
                 }
@@ -2133,7 +2161,7 @@ class UserRouteHandler
 
             if ($isSiteAdmin && !empty($post['mark_adjust_points'])) {
                 if (empty($post['comment']) || !is_numeric($post['points'])) {
-                    $app->flashNow('error', 'You must enter a comment and integer points');
+                    UserRouteHandler::flashNow('error', 'You must enter a comment and integer points');
                 } else {
                     $userDao->insert_adjust_points($user_id, $loggedInUserId, (int)$post['points'], $post['comment']);
                 }
@@ -2149,9 +2177,9 @@ class UserRouteHandler
 
             if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
                 if ($memsource_user_uid = $userDao->create_memsource_user($user_id)) {
-                    $app->flashNow('success', "Memsource user $memsource_user_uid created");
+                    UserRouteHandler::flashNow('success', "Memsource user $memsource_user_uid created");
                     $show_create_memsource_user = 0;
-                } else $app->flashNow('error', "Unable to create Memsource user for $user_id");
+                } else UserRouteHandler::flashNow('error', "Unable to create Memsource user for $user_id");
             }
 
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
@@ -2191,7 +2219,7 @@ class UserRouteHandler
                         $test_number = ($test_number + 1) % $n;
                     }
                     if ($i < 0) {
-                        $app->flashNow('error', "Unable to create test project for $user_id, no projects");
+                        UserRouteHandler::flashNow('error', "Unable to create test project for $user_id, no projects");
                         error_log("Unable to create test project for $user_id, no projects");
                     } else {
                         $project_to_copy_id = $projects_to_copy[$test_number];
@@ -2213,7 +2241,7 @@ class UserRouteHandler
 
                         $project = $projectDao->createProjectDirectly($project);
                         if (empty($project)) {
-                            $app->flashNow('error', "Unable to create test project for $user_id");
+                            UserRouteHandler::flashNow('error', "Unable to create test project for $user_id");
                             error_log("Unable to create test project for $user_id");
                         } else {
                             $project_id = $project->getId();
@@ -2280,7 +2308,7 @@ class UserRouteHandler
                             }
                             curl_close($re);
 
-                            $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            UserRouteHandler::flashNow('success', '<a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $translation_task_id]) .
                                 '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
                         }
                     }
@@ -2308,7 +2336,7 @@ class UserRouteHandler
 
         $org_creation = Common\Lib\Settings::get("site.organisation_creation");
 
-        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
+        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
 
@@ -2326,7 +2354,7 @@ class UserRouteHandler
             $langPrefName = '';
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "badges" => $badges,
             "orgList" => $orgList,
@@ -2369,18 +2397,11 @@ class UserRouteHandler
 
                 $strict = $notifData->getStrict();
             }
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "interval"       => $interval,
                 "lastSent"       => $lastSent,
                 "strict"         => $strict,
             ));
-        }
-
-        $certificate = '';
-        if ($private_access || $isSiteAdmin) {
-            $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-            $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-            $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
 
         $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
@@ -2395,8 +2416,10 @@ class UserRouteHandler
             $howheard = $howheard[0];
         }
 
-        $app->view()->appendData(array(
-            'certificate'            => $certificate,
+        $template_data = array_merge($template_data, array(
+            'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
+            'user_badges'            => $userDao->get_points_for_badges($user_id),
+            'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n'),
             'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
@@ -2416,34 +2439,34 @@ class UserRouteHandler
             'show_create_memsource_user'      => $show_create_memsource_user,
         ));
 
-        $app->render("user/user-public-profile.tpl");
+        return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
 
-    public static function profile_shared_with_key($key)
+    public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
+        global $app, $template_data;
+        $key = $args['key'];
+
         $key = hex2bin($key);
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $user_id -= 999999; // Ensure we don't use identical key to word count badge
 
-        $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-        $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
-
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'current_page' => 'user-profile',
             'this_user' => $user,
             'userPersonalInfo' => $userPersonalInfo,
             'userQualifiedPairs' => $userQualifiedPairs,
-            'certificate' => $certificate,
+            'user_has_strategic_languages' => 0,
+            'user_badges'            => $userDao->get_points_for_badges($user_id),
+            'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n'),
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,
@@ -2457,21 +2480,23 @@ class UserRouteHandler
             'show_create_memsource_user' => 0,
         ));
 
-        $app->render('user/user-public-profile.tpl');
+        return UserRouteHandler::render('user/user-public-profile.tpl', $response);
     }
 
-    public function editTaskStreamNotification($userId)
+    public function editTaskStreamNotification(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $userId = $args['user_id'];
+
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user = $userDao->getUser($userId);
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification');
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if (isset($post['interval'])) {
                 $success = false;
@@ -2485,8 +2510,8 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
-                $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }
 
@@ -2513,7 +2538,7 @@ class UserRouteHandler
 
             $strict = $notifData->getStrict();
 
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "interval"  => $interval,
                 "intervalId" => $notifData->getInterval(),
                 "lastSent"  => $lastSent,
@@ -2521,17 +2546,19 @@ class UserRouteHandler
             ));
         }
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "user" => $user
         ));
 
-        $app->render("user/user.task-stream-notification-edit.tpl");
+        return UserRouteHandler::render("user/user.task-stream-notification-edit.tpl", $response);
     }
 
-    public function userTaskReviews($taskId)
+    public function userTaskReviews(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
 
@@ -2540,9 +2567,9 @@ class UserRouteHandler
         if (!empty($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) $isSiteAdmin = true;
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        if ($isSiteAdmin && $app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews');
+        if ($isSiteAdmin && $request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if (!empty($post['user_id'])) $taskDao->delete_review($taskId, $post['user_id']);
         }
 
@@ -2550,10 +2577,10 @@ class UserRouteHandler
         $reviews = $taskDao->getTaskReviews($taskId);
 
         $extra_scripts = "";
-        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
+        $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>" . file_get_contents(__DIR__ . "/../js/RateIt/src/jquery.rateit.min.js") . "</script>";
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'task'          => $task,
             'reviews'       => $reviews,
             'isSiteAdmin'   => $isSiteAdmin,
@@ -2561,19 +2588,52 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts
         ));
 
-        $app->render("user/user.task-reviews.tpl");
+        return UserRouteHandler::render("user/user.task-reviews.tpl", $response);
     }
 
-    public function no_application()
+    public static function flash($key, $value)
     {
-        $app = \Slim\Slim::getInstance();
-        $app->render('user/no_application.tpl');
+        global $flash_messages;
+        $flash_messages['next'][$key] = $value;
     }
 
-    public function no_application_error()
+    public static function flashNow($key, $value)
     {
-        $app = \Slim\Slim::getInstance();
-        $app->render('user/no_application_error.tpl');
+        global $flash_messages;
+        $flash_messages['now'][$key] = $value;
+    }
+
+    public static function flashKeep()
+    {
+        global $flash_messages;
+        foreach ($flash_messages['prev'] as $key => $val) {
+            $flash_messages['next'][$key] = $val;
+        }
+    }
+
+    public static function render($template, Response $response) {
+        global $template_data, $flash_messages;
+
+        $smarty = new \Smarty();
+        $smarty->setTemplateDir('/repo/SOLAS-Match/ui/templating/templates');
+        $smarty->setCompileDir('/repo/SOLAS-Match/ui/templating/templates_compiled');
+        $smarty->setCacheDir('/repo/SOLAS-Match/ui/templating/cache');
+        $smarty->registerClass('Settings',                 '\SolasMatch\Common\Lib\Settings');
+        $smarty->registerClass('UserSession',              '\SolasMatch\Common\Lib\UserSession');
+        $smarty->registerClass('TemplateHelper',           '\SolasMatch\UI\Lib\TemplateHelper');
+        $smarty->registerClass('Localisation',             '\SolasMatch\UI\Lib\Localisation');
+        $smarty->registerClass('TaskTypeEnum',             '\SolasMatch\Common\Enums\TaskTypeEnum');
+        $smarty->registerClass('TaskStatusEnum',           '\SolasMatch\Common\Enums\TaskStatusEnum');
+        $smarty->registerClass('NotificationIntervalEnum', '\SolasMatch\Common\Enums\NotificationIntervalEnum');
+        $smarty->registerClass('BanTypeEnum',              '\SolasMatch\Common\Enums\BanTypeEnum');
+        $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
+
+        foreach ($template_data as $key => $item) $smarty->assign($key, $item);
+
+        $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
+
+        $response->getBody()->write($smarty->fetch($template));
+        return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
 
@@ -2581,3 +2641,22 @@ $route_handler = new UserRouteHandler();
 $route_handler->init();
 unset($route_handler);
 
+function smarty_function_urlFor($params, $template)
+{
+    global $app;
+
+    $name = isset($params['name']) ? $params['name'] : '';
+
+    if (isset($params['options'])) {
+        $options = explode('|', $params['options']);
+        $options_array = [];
+        foreach ($options as $option) {
+            list($key, $value) = explode('.', $option);
+            $options_array[$key] = $value;
+        }
+        $url = $app->getRouteCollector()->getRouteParser()->urlFor($name, $options_array);
+    } else {
+        $url = $app->getRouteCollector()->getRouteParser()->urlFor($name);
+    }
+    return $url;
+}

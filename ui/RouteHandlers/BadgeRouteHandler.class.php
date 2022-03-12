@@ -5,24 +5,25 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class BadgeRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
         
         $app->get(
-            "/badge/list/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "badgeList")
-        )->name("badge-list");
+            '/badge/list[/]',
+            '\SolasMatch\UI\RouteHandlers\BadgeRouteHandler:badgeList')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('badge-list');
     }
 
-    public function badgeList()
+    public function badgeList(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
 
         $org_list = array();
         $orgDao = new DAO\OrganisationDao();
@@ -37,14 +38,14 @@ class BadgeRouteHandler
 
         $siteName = Common\Lib\Settings::get('site.name');
 
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
                 "current_page"  => "badge-list",
                 "badgeList"     => $badgeList,
                 'siteName'      => $siteName,
                 "org_list"      => $org_list
         ));
         
-        $app->render("badge/badge-list.tpl");
+        return UserRouteHandler::render("badge/badge-list.tpl", $response);
     }
 }
 

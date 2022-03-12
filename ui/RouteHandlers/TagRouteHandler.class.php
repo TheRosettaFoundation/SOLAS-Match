@@ -5,36 +5,37 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class TagRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
 
-        $app->get(
-            "/all/tags/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "tagsList")
-        )->via("POST")->name("tags-list");
+        $app->map(['GET', 'POST'],
+            '/all/tags[/]',
+            '\SolasMatch\UI\RouteHandlers\TagRouteHandler:tagsList')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('tags-list');
 
-        $app->get(
-            "/tag/:id/:subscribe/:sesskey/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "tagSubscribe")
-        )->via("POST")->name("tag-subscribe");
+        $app->map(['GET', 'POST'],
+            '/tag/{id}/{subscribe}/{sesskey}[/]',
+            '\SolasMatch\UI\RouteHandlers\TagRouteHandler:tagSubscribe')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('tag-subscribe');
         
-        $app->get(
-            "/tag/:id/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "tagDetails")
-        )->via("POST")->name("tag-details");
+        $app->map(['GET', 'POST'],
+            '/tag/{id}[/]',
+            '\SolasMatch\UI\RouteHandlers\TagRouteHandler:tagDetails')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('tag-details');
     }
 
-    public function tagsList()
+    public function tagsList(Request $request, Response $response)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
 
@@ -44,8 +45,8 @@ class TagRouteHandler
         $name = "";
         $nameErr = null;
 
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
             if (isset($post['search'])) {
                 $name = $post['searchName'];
@@ -62,28 +63,32 @@ class TagRouteHandler
         }
         
         if (is_null($nameErr)) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 "user_tags" => $user_tags,
                 "foundTags" => $foundTags,
                 'searchedText'  => $name
             ));
         } else {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                     "user_tags" => $user_tags,
                     "foundTags" => $foundTags,
                     "nameErr"  => $nameErr
             ));
         }
-        $app->render("tag/tag-list.tpl");
+        return UserRouteHandler::render("tag/tag-list.tpl", $response);
     }
 
-    public function tagSubscribe($id, $subscribe, $sesskey)
+    public function tagSubscribe(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app, $template_data;
+        $id = $args['id'];
+        $subscribe = $args['subscribe'];
+        $sesskey = $args['sesskey'];
+
         $tagDao = new DAO\TagDao();
         $userDao = new DAO\UserDao();
 
-        Common\Lib\UserSession::checkCSRFKey($sesskey, 'tagSubscribe');
+        if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($sesskey, 'tagSubscribe')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
         $tag = $tagDao->getTag($id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -94,9 +99,9 @@ class TagRouteHandler
         if ($subscribe == "true") {
             $userLikeTag = $userDao->addUserTagById($user_id, $id);
             if ($userLikeTag) {
-                $app->flash("success", sprintf(Lib\Localisation::getTranslation('tag_4'), $tag->getLabel()));
+                UserRouteHandler::flash("success", sprintf(Lib\Localisation::getTranslation('tag_4'), $tag->getLabel()));
             } else {
-                $app->flash(
+                UserRouteHandler::flash(
                     "error",
                     sprintf(Lib\Localisation::getTranslation('tag_5'), $tag->getLabel(), $displayName)
                 );
@@ -106,24 +111,26 @@ class TagRouteHandler
         if ($subscribe == "false") {
             $removedTag = $userDao->removeUserTag($user_id, $id);
             if ($removedTag) {
-                $app->flash(
+                UserRouteHandler::flash(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('tag_6'), $tag->getLabel(), $displayName)
                 );
             } else {
-                $app->flash(
+                UserRouteHandler::flash(
                     "error",
                     sprintf(Lib\Localisation::getTranslation('tag_7'), $tag->getLabel(), $displayName)
                 );
             }
         }
-        
-        $app->response()->redirect($app->request()->getReferer());
+
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('tag-details', ['id' => $id]));
     }
 
-    public function tagDetails($id)
+    public function tagDetails(Request $request, Response $response, $args)
     {
-        $app = \Slim\Slim::getInstance();
+        global $template_data;
+        $id = $args['id'];
+
         $tagDao = new DAO\TagDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -147,24 +154,26 @@ class TagRouteHandler
             $taskOrgs[$currId] = $orgDao->getOrganisation($currTaskProj->getOrganisationId());
         }
 
-        $app->view()->setData('tasks', $tasks);
-        $app->view()->setData('taskTags', $taskTags);
-        $app->view()->setData('taskProjTitles', $taskProjTitles);
-        $app->view()->setData('taskOrgs', $taskOrgs);
+        $template_data = array_merge($template_data, [
+            'tasks' => $tasks,
+            'taskTags' => $taskTags,
+            'taskProjTitles' => $taskProjTitles,
+            'taskOrgs' => $taskOrgs
+        ]);
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             "user_id" => $user_id
         ));
 
         $user_tags = $userDao->getUserTags($user_id);
         if ($user_tags && count($user_tags) > 0) {
-            $app->view()->appendData(array(
+            $template_data = array_merge($template_data, array(
                 'user_tags' => $user_tags
             ));
             foreach ($user_tags as $userTag) {
                 if ($label == $userTag->getLabel()) {
-                    $app->view()->appendData(array(
+                    $template_data = array_merge($template_data, array(
                         'subscribed' => true
                     ));
                 }
@@ -180,13 +189,13 @@ class TagRouteHandler
 
         $top_tags= $tagDao->getTopTags(30);
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        $app->view()->appendData(array(
+        $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "tag" => $tag,
             "top_tags" => $top_tags,
             "taskTypeColours" => $taskTypeColours
         ));
-        $app->render("tag/tag.tpl");
+        return UserRouteHandler::render("tag/tag.tpl", $response);
     }
 }
 
