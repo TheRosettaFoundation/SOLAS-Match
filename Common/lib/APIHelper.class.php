@@ -40,7 +40,7 @@ class APIHelper
                 $url .= "$key=$val";
             }
         }
-error_log("url: $url");//(**)
+        //error_log("url: $url");
         $re = curl_init($url);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
