@@ -125,7 +125,7 @@ $customErrorHandler = function (
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
-require_once('/repo/SOLAS-Match/v4/vendor/smarty/smarty/libs/Smarty.class.php');
+require_once('/repo/SOLAS-Match/ui/vendor/smarty/smarty/libs/Smarty.class.php');
 
 require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
 require_once 'ui/RouteHandlers/UserRouteHandler.class.php';
