@@ -107,7 +107,7 @@
 
  .containerBox h5 {
    display: inline-block;
-   font-size: 20px; /*or whatever you want*/
+   font-size: 17px; /*or whatever you want*/
    color: #e8991c; 
    position: relative;
     top: -135px;
@@ -124,7 +124,7 @@ display: inline-block;
 .recognition_points1{
     display: inline-block;
     font-weight: bold; /*or whatever you want*/
-    font-size: 18px;
+    font-size: 17px;
     color: #e8991c; 
     position: relative;
     top: -200px;
@@ -149,7 +149,7 @@ display: inline-block;
    color: #E8991C;   
    font-size:25px;
    position: relative;
-    top: -10px;
+    top: -15px;
 }
 
 .strategic_text .badge_value{
@@ -157,6 +157,11 @@ display: inline-block;
    font-size:25px;
    position: relative;
     top: 1px;
+}
+
+.strategic_text{
+    color: #576E82;
+    text-transform:uppercase; 
 }
 
 .badge_value_strategic{
@@ -173,7 +178,7 @@ display: inline-block;
    font-weight: bold; /*or whatever you want*/
    font-size: 18px;
    position: relative;
-    top: -125px;
+    top: -135px;
     left: -102px;  
 }
 
@@ -182,7 +187,7 @@ display: inline-block;
     font-size: 20px;
     color: #000000;
     position: relative;
-    top: -22px;
+    top: -35px;
     left: -100px;
 }
 .strategic_text{
