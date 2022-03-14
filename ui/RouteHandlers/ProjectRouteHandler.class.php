@@ -1209,6 +1209,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $project = $projectDao->getProject($project_id);
+        if (empty($project)) {
+            UserRouteHandler::flash('error', 'That project does not exist!');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
