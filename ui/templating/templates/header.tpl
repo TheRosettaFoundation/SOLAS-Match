@@ -182,6 +182,12 @@ display: inline-block;
     left: -102px;  
 }
 
+.first_badge_text {
+   color: #576E82;
+   top: -10px;
+   text-transform: uppercase;
+}
+
 .name_top{
     display: inline-block;
     font-size: 20px;
