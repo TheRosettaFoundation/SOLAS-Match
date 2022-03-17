@@ -184,6 +184,7 @@ display: inline-block;
 
 .first_badge_text {
    color: #576E82;
+   position: relative;
    top: -10px;
    text-transform: uppercase;
 }
