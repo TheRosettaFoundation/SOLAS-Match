@@ -95,7 +95,7 @@
    vertical-align: middle;
 }
 
-.name_top {
+.first_badge_name {
     display: inline-block;
     font-size: 20px;
     color: #000000;
@@ -127,25 +127,36 @@
     text-transform: uppercase;
 }
 
-.second_badge_name{
-      display: inline-block;
-   font-size: 20px; 
-   color: #000000; 
-   position: relative;
+.recognition_name {
+    display: inline-block;
+    font-size: 20px;
+    color: #000000;
+    position: relative;
     top: -35px;
     left: -80px;  
-
 }
 
- .containerBox h5 {
-   display: inline-block;
-   font-size: 17px; /*or whatever you want*/
-   color: #e8991c; 
-   position: relative;
+.recognition {
+    display: inline-block;
+    font-size: 17px;
+    color: #e8991c;
+    position: relative;
     top: -135px;
     left: -90px;  
 }
-.text-box .name{
+/* 2 following contained in above */
+.recognition_number {
+     color: #E8991C;
+    font-size: 25px;
+    position: relative;
+    top: -15px;
+}
+.recognition_desc {
+    color: #576E82;
+    text-transform: uppercase;
+}
+
+.strategic_name {
 display: inline-block;
     font-size: 20px;
     color: #000000;
@@ -153,59 +164,44 @@ display: inline-block;
     top: -65px;
     left: -85px;
 }
-.recognition_points1{
+
+.strategic {
     display: inline-block;
-    font-weight: bold; /*or whatever you want*/
+    font-weight: bold;
     font-size: 17px;
-    color: #e8991c; 
+    color: #e8991c;
     position: relative;
     top: -200px;
     left: -55px; 
-
 }
-
-.badge_text{
-   color: #576E82;
-   text-transform:uppercase; 
-   
-}
-.recognition_points1 .badge_text{
-   color: #576E82;
-   text-transform:uppercase; 
-   position:relative;
-   top:20px;
-   left:-35px;
-   
-}
-.badge_value{
-   color: #E8991C;   
-   font-size:25px;
-   position: relative;
-    top: -15px;
-}
-
-.strategic_text .badge_value{
-   color: #E8991C;   
-   font-size:25px;
-   position: relative;
+/* 2 following contained in above */
+HOW COME TWO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+.strategic_number {
+    color: #E8991C;
+    font-size: 25px;
+    position: relative;
     top: 1px;
 }
-
-.strategic_text{
-    color: #576E82;
-    text-transform:uppercase; 
-}
-
-.badge_value_strategic{
-   color: #E8991C;   
-   font-size:25px;
-   position: relative;
-    
+.strategic_number {
+    color: #E8991C;
+    font-size:25px;
+    position: relative;
     top: 15px;
     left: -37px;
 }
-
-.strategic_text{
+.strategic_desc {
+    color: #576E82;
+    text-transform: uppercase;
+    position: relative;
+    top: 20px;
+    left: -35px;
+}
+HOW COME TWO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+.strategic_desc2 {
+    color: #576E82;
+    text-transform:uppercase;
+}
+.strategic_desc2 {
     position: relative;
     top: 10px;
     left: -40px;

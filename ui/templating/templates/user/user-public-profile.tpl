@@ -279,7 +279,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         <tr><td>
                         <div class="containerBox">
                             <div class="text-box">
-                                <h4 class="name_top">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
@@ -422,12 +422,21 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         <div class="containerBox">
                             <div class="text-box">
                             {if empty($user_badges['strategic_points'])}
-                                <h4 class="second_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
-                                <h5 class="recognition_points"><span class="badge_value">{$user_badges['recognition_points']}</span><br/> <span class="badge_text">RECOGNITION POINTS</span></h5>
+                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <h5 class="recognition">
+                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="recognition_desc">RECOGNITION POINTS</span>
+                                </h5>
                             {else}
-                                <h4 class="name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
-                                <p class="recognition_points1"><span class="badge_value_strategic">{$user_badges['recognition_points']}</span> <br/><span class="badge_text">RECOGNITION POINTS</span> <br/><br/> <span class="strategic_text"> of which <span class="badge_value">{$user_badges['strategic_points']}</span> POINTS </span> <br/>
-                                <span class="badge_text">IN STRATEGIC LANGUAGES</span>
+                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <p class="strategic">
+                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
+                                    <span class="strategic_desc2"> of which
+                                        <span class="strategic_number">{$user_badges['strategic_points']}</span>
+                                        POINTS
+                                    </span><br />
+                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
                                 </p>
                             {/if}
                             </div>
