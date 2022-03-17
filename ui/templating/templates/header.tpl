@@ -123,7 +123,7 @@
     display: inline-block;
     color: #576E82;
     position: relative;
-    top: 20px;
+    top: 5px;
     text-transform: uppercase;
 }
 
