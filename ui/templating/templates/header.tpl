@@ -95,6 +95,38 @@
    vertical-align: middle;
 }
 
+.name_top {
+    display: inline-block;
+    font-size: 20px;
+    color: #000000;
+    position: relative;
+    top: -35px;
+    left: -100px;
+}
+
+.first_badge {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    top: -135px;
+    left: -102px;
+}
+/* 2 following contained in above */
+.first_badge_number {
+    color: #E8991C;
+    font-size:25px;
+    position: relative;
+    top: -15px;
+}
+.first_badge_desc {
+    display: inline-block;
+    color: #576E82;
+    position: relative;
+    top: 20px;
+    text-transform: uppercase;
+}
+
 .second_badge_name{
       display: inline-block;
    font-size: 20px; 
@@ -173,23 +205,6 @@ display: inline-block;
     left: -37px;
 }
 
-.first_badge{
-   display: inline-block;
-   font-weight: bold; /*or whatever you want*/
-   font-size: 18px;
-   position: relative;
-    top: -135px;
-    left: -102px;  
-}
-
-.name_top{
-    display: inline-block;
-    font-size: 20px;
-    color: #000000;
-    position: relative;
-    top: -35px;
-    left: -100px;
-}
 .strategic_text{
     position: relative;
     top: 10px;
