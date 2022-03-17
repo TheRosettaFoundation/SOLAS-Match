@@ -280,7 +280,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         <div class="containerBox">
                             <div class="text-box">
                                 <h4 class="name_top">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
-                                <p class="first_badge"><span class="badge_value">{$user_badges['words_donated']}</span><br/> <span class="first_badge_text">Words donated</span></p>
+                                <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
