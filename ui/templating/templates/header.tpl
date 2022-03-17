@@ -117,7 +117,7 @@
     color: #E8991C;
     font-size:25px;
     position: relative;
-    top: -15px;
+    top: -10px;
 }
 .first_badge_desc {
     display: inline-block;
