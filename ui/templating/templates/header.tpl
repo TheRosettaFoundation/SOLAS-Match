@@ -178,7 +178,7 @@ display: inline-block;
    font-weight: bold; /*or whatever you want*/
    font-size: 18px;
    position: relative;
-   top: -125px;
+    top: -135px;
     left: -102px;  
 }
 
