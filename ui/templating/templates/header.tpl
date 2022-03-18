@@ -149,7 +149,7 @@
     color: #E8991C;
     font-size: 25px;
     position: relative;
-    top: -15px;
+    top: -10px;
 }
 .recognition_desc {
     color: #576E82;
