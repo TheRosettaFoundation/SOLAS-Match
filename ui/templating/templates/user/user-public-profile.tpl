@@ -433,7 +433,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                     <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
                                     <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
                                     <span class="strategic_desc2"> of which
-                                        <span class="strategic_number">{$user_badges['strategic_points']}</span>
+                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
                                         POINTS
                                     </span><br />
                                     <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>

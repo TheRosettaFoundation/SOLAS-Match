@@ -146,7 +146,7 @@
 }
 /* 2 following contained in above */
 .recognition_number {
-     color: #E8991C;
+    color: #E8991C;
     font-size: 25px;
     position: relative;
     top: -15px;
@@ -157,7 +157,7 @@
 }
 
 .strategic_name {
-display: inline-block;
+    display: inline-block;
     font-size: 20px;
     color: #000000;
     position: relative;
@@ -174,14 +174,7 @@ display: inline-block;
     top: -200px;
     left: -55px; 
 }
-/* 2 following contained in above */
-HOW COME TWO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-.strategic_number {
-    color: #E8991C;
-    font-size: 25px;
-    position: relative;
-    top: 1px;
-}
+/* 4 following contained in above */
 .strategic_number {
     color: #E8991C;
     font-size:25px;
@@ -196,15 +189,16 @@ HOW COME TWO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     top: 20px;
     left: -35px;
 }
-HOW COME TWO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-.strategic_desc2 {
-    color: #576E82;
-    text-transform:uppercase;
-}
 .strategic_desc2 {
     position: relative;
     top: 10px;
     left: -40px;
+}
+.strategic_number2 {
+    color: #E8991C;
+    font-size: 25px;
+    position: relative;
+    top: 1px;
 }
     </style>
     </head>
