@@ -162,7 +162,7 @@
     color: #000000;
     position: relative;
     top: -65px;
-    left: -100px;
+    left: -85px;
 }
 
 .strategic {
@@ -172,7 +172,7 @@
     color: #e8991c;
     position: relative;
     top: -200px;
-    left: -60px;
+    left: -55px;
 }
 /* 4 following contained in above */
 .strategic_number {

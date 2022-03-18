@@ -421,7 +421,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         <tr><td>
                         <div class="containerBox">
                             <div class="text-box">
-                            {if empty($user_badges['strategic_points'])}
+                            {if true || empty($user_badges['strategic_points'])}
                                 <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
                                 <h5 class="recognition">
                                     <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
