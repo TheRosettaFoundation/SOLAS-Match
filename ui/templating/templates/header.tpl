@@ -162,7 +162,7 @@
     color: #000000;
     position: relative;
     top: -65px;
-    left: -90px;
+    left: -100px;
 }
 
 .strategic {
