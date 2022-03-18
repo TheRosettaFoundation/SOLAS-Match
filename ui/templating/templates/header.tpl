@@ -190,6 +190,8 @@
     left: -35px;
 }
 .strategic_desc2 {
+    color: #576E82;
+    text-transform: uppercase;
     position: relative;
     top: 10px;
     left: -40px;
