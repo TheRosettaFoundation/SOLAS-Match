@@ -133,7 +133,7 @@
     color: #000000;
     position: relative;
     top: -35px;
-    left: -80px;  
+    left: -95px;
 }
 
 .recognition {
