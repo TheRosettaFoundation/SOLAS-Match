@@ -1196,6 +1196,7 @@ CREATE TABLE IF NOT EXISTS `master_kato_tm_tasks` (
 
 CREATE TABLE IF NOT EXISTS `prozdata` (
   `id` int(8) NOT NULL,
+   user_id INT(10) UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1209,7 +1210,8 @@ CREATE TABLE IF NOT EXISTS `prozdata` (
   `profilelink` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `email` (`email`),
-  KEY `email2` (`email2`)
+  KEY `email2` (`email2`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
