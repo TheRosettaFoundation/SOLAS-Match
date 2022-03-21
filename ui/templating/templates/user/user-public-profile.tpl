@@ -370,8 +370,17 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
 </div>
-<p>Translators without Borders believe it is important to acknowledge the value and impact of the support that our community members provide. As part of our Community Recognition Program, our volunteers can receive rewards depending on their level of contribution. Please remember that when you join our TWB Community, you agree to abide by TWB’s <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">Code of conduct</a> and commit to deliver the highest standard of professional translations, and only undertake work you are competent to perform in the languages and subject areas for which you are qualified.</p>
-<p>Deliver tasks on the TWB platform to build up points. Once you reach the thresholds described in the rewards chart, you can request the respective rewards.</p>
+<p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
+As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
+Deliver tasks on the TWB platform to build up points.
+Once you reach the point thresholds described in the chart below, please request the respective reward by sending an email at
+<a href="mailto:recognition@translatorswithoutborders.org?subject=Request reward" target="_blank">recognition@translatorswithoutborders.org</a>.
+Our staff will process your request and get back to you within 2 business days.
+The points are cumulative and never reset to zero, so you keep accruing points even if you claim any rewards.</p>
+<p>Please remember that the quality of the work we submit is of utmost importance,
+as it can influence the lives of people affected by humanitarian crises.
+Only work that meets our minimum quality standards (as described in <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">TWB’s Code of Conduct</a>)
+will qualify towards our Community Recognition Program.</p>
 <p style="margin-bottom:50px;" />
 
 <table border="0">
@@ -379,7 +388,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
         <td style="width: 48%">
             <div>
                 <h2>
-                    <span style="color: #9e6100;">Rewards chart</span>
+                    <span style="color: #9e6100;">Rewards offered</span>
                     <!--
                     <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
                         <i class="icon-list icon-white"></i> Request reward
@@ -452,16 +461,22 @@ alert('You have already requested to take a test in order to become a Kató Veri
 
 {if !empty($user_has_strategic_languages)}
 <p style="margin-bottom:20px;" />
-<p>Your work in strategic languages for TWB allows you to access further special rewards. These do not constitute payments, but support towards expenses incurred while volunteering for TWB, such as connectivity costs.</p>
-<p>This is our current list of strategic languages:<br />
-Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara, Burmese, Rohingyalish, Bengali, Chittagonian, Amharic, Haitian Creole, Dari, Kurdish, Lingala, Luganda/Ganda, Mongo, Nande, Ngombe, Oromo, Pashto, Shi, Somali, Swahili, Tigrinya</p>
+<p>We also offer monetary rewards for your work in some of the low-resource languages that are strategic to our work.
+We are aware that our TWB Community members who speak marginalized languages often offer their support from areas of the world where they face high connectivity costs.
+These monetary rewards aim to cover some of those expenses.
+Please remember that participating in this program is not a form of employment, and rewards do not constitute payment for services.
+You work with TWB  voluntarily and you can end your cooperation with us at any time.</p>
+<p>Currently, the languages for which we can offer monetary rewards are
+Amharic, Bengali, Bura-Pabir, Burmese, Chadian Arabic, Chittagonian, Dari, Fulfulde, Ganda, Haitian Creole, Hausa, Kanuri, Kibaku, Kurdish, Lingala,
+Mandara, Marghi, Mongo, Nande, Ngombe, Oromo, Pashto, Rohingya, Shi, Somali, Swahili, Tigrinya, Waha.
+This list may vary depending on our organization’s strategic needs and budgetary constraints.</p>
 
 <table border="0">
     <tr valign="top">
         <td style="width: 60%">
             <div>
                 <h2>
-                    <span style="color: #9e6100;">Rewards chart for work in strategic languages</span>
+                    <span style="color: #9e6100;">Rewards offered for work in strategic languages</span>
                     <!--
                     <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="pull-right btn btn-primary">
                         <i class="icon-list icon-white"></i> Request reward
