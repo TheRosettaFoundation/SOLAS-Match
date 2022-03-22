@@ -1024,6 +1024,19 @@ CREATE TABLE IF NOT EXISTS `adjust_points` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `adjust_points_strategic` (
+  id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       INT(10) UNSIGNED NOT NULL,
+  admin_id      INT(10) UNSIGNED NOT NULL,
+  points        INT(10) SIGNED NOT NULL,
+  created       datetime NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_adjust_points_Users` (`user_id`),
+  CONSTRAINT `FK_adjust_points_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE IF NOT EXISTS `TrackCodes` (
   id INT(10) UNSIGNED NOT NULL,
   track_code VARCHAR(255) NOT NULL,
@@ -8342,6 +8355,37 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `adjust_points_strategic`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_points_strategic`(IN uID INT)
+BEGIN
+    SELECT
+        ap.*,
+         u.email AS admin_email
+    FROM adjust_points_strategic ap
+    JOIN Users                    u ON ap.admin_id=u.id
+    WHERE ap.user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_adjust_points_strategic`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_adjust_points_strategic`(IN uID INT, IN aID INT, IN point INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO adjust_points_strategic
+               (user_id, admin_id, points, created, admin_comment)
+        VALUES (    uID,      aID,  point,   NOW(),       comment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_adjust_points_strategic`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_adjust_points_strategic`(IN primaryID INT)
+BEGIN
+    DELETE FROM adjust_points_strategic WHERE id=primaryID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `covid_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `covid_projects`()
@@ -9121,7 +9165,7 @@ BEGIN
         ROUND(
             SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
             SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5 +
-            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
         ) AS strategic_points,
         0 AS taskscompleted
     FROM Tasks       t
