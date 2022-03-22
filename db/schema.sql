@@ -1033,7 +1033,7 @@ CREATE TABLE IF NOT EXISTS `adjust_points_strategic` (
   admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_adjust_points_Users` (`user_id`),
-  CONSTRAINT `FK_adjust_points_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_adjust_points_strategic_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
