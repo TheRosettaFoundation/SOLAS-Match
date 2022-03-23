@@ -459,7 +459,7 @@ will qualify towards our Community Recognition Program.</p>
     </tr>
 </table>
 
-{if !empty($user_has_strategic_languages)}
+{if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
 <p>We also offer monetary rewards for your work in some of the low-resource languages that are strategic to our work.
 We are aware that our TWB Community members who speak marginalized languages often offer their support from areas of the world where they face high connectivity costs.
