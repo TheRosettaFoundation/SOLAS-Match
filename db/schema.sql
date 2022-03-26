@@ -9585,5 +9585,86 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 
 /*---------------------------------------end of triggers-------------------------------------------*/
+
+
+/* Recognition SQL for Metabase Report, given to Manuel
+SELECT
+    main.user_id,
+    main.email,
+    main.first_name,
+    main.last_name,
+    main.name,
+    main.words_translated,
+    main.words_proofread,
+    IFNULL(proz.words_proz, 0) AS words_proz,
+    IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
+    main.words_donated_unadjusted + IFNULL(proz.words_proz, 0) AS words_donated,
+    main.points_recognition_unadjusted + IFNULL(proz.words_proz, 0) + IFNULL(adjust.points_adjustment, 0) AS points_recognition,
+    main.points_strategic_unadjusted + IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_strategic
+FROM
+(
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(tp.task_id IS NULL, t.`word-count`, 0)) AS words_donated_unadjusted,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL, t.`word-count`, 0))*0.5
+        ) AS points_recognition_unadjusted,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5
+        ) AS points_strategic_unadjusted
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id
+) AS main
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(pd.wordstranslated) AS words_proz
+    FROM Users     u
+    JOIN prozdata pd ON u.id=pd.user_id
+    GROUP BY u.id
+) AS proz ON main.user_id=proz.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment
+    FROM Users     u
+    JOIN adjust_points ap ON u.id=ap.user_id
+    GROUP BY u.id
+) AS adjust ON main.user_id=adjust.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment_strategic
+    FROM Users                    u
+    JOIN adjust_points_strategic ap ON u.id=ap.user_id
+    GROUP BY u.id
+) AS adjust_strategic ON main.user_id=adjust_strategic.user_id;
+*/
+
+
 SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
