@@ -9133,13 +9133,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_strategic_languages`(IN `u
 BEGIN
         SELECT
             uqp.*,
-            IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) AS nigeria
+            IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0') OR uqp.language_code_source IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) AS nigeria
         FROM UserQualifiedPairs uqp
         WHERE
             uqp.user_id=userID AND
+            (
             uqp.language_code_target IN
             ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
-        ORDER BY IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) DESC, uqp.language_code_target ASC;
+            OR
+            uqp.language_code_source IN
+            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
+            )
+        ORDER BY IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0') OR uqp.language_code_source IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) DESC, uqp.language_code_target ASC;
 END//
 DELIMITER ;
 
@@ -9153,18 +9158,34 @@ BEGIN
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`,  '') AS last_name,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
-        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
-        SUM(IF(tp.task_id IS NULL, t.`word-count`, 0)) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) AS words_donated,
+        IFNULL(SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_translated,
+        IFNULL(SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_proofread,
+        IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL, t.`word-count`, 0))*0.5 +
-            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE (u.email=pd.email OR u.email=pd.email2)) +
+            IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0) +
+            IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0)*0.5 +
+            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5 +
+            IFNULL(SUM(
+                IF(
+                    t.`task-type_id`=2 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
+                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    t.`word-count`, 0)
+            ), 0) +
+            IFNULL(SUM(
+                IF(
+                    t.`task-type_id`=3 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
+                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    t.`word-count`, 0)
+            ), 0)*0.5 +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
         ) AS strategic_points,
         0 AS taskscompleted
@@ -9178,10 +9199,34 @@ BEGIN
     JOIN Countries  c2 ON t.`country_id-target` =c2.id
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
     WHERE
+        u.id=uID
+    GROUP BY u.id
+
+UNION
+
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        0 AS words_translated,
+        0 AS words_proofread,
+        (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+        ROUND(
+            (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
+        ) AS recognition_points,
+        ROUND(
+            (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
+        ) AS strategic_points,
+        0 AS taskscompleted
+    FROM Users                        u
+    JOIN      UserPersonalInformation i ON u.id=i.user_id
+    LEFT JOIN TaskClaims             tc ON u.id=tc.user_id
+    WHERE
         u.id=uID AND
-        t.`task-status_id`=4 AND
-       (t.`task-type_id`=2 OR
-        t.`task-type_id`=3)
+        tc.user_id IS NULL
     GROUP BY u.id;
 END//
 DELIMITER ;
@@ -9599,6 +9644,8 @@ SELECT
     IFNULL(proz.words_proz, 0) AS words_proz,
     IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
     IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
+    main.words_paid_uncounted,
+    main.words_not_complete_uncounted,
     main.words_donated_unadjusted + IFNULL(proz.words_proz, 0) AS words_donated,
     main.points_recognition_unadjusted + IFNULL(proz.words_proz, 0) + IFNULL(adjust.points_adjustment, 0) AS points_recognition,
     main.points_strategic_unadjusted + IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_strategic
@@ -9610,16 +9657,34 @@ FROM
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`,  '') AS last_name,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
-        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0)) AS words_proofread,
-        SUM(IF(tp.task_id IS NULL, t.`word-count`, 0)) AS words_donated_unadjusted,
+        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
+        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
+        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL, t.`word-count`, 0))*0.5
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5
         ) AS points_recognition_unadjusted,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083), t.`word-count`, 0))*0.5
+            SUM(
+                IF(
+                    t.`task-type_id`=2 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
+                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    t.`word-count`, 0)
+            ) +
+            SUM(
+                IF(
+                    t.`task-type_id`=3 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
+                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    t.`word-count`, 0)
+            )*0.5
         ) AS points_strategic_unadjusted
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id
@@ -9630,10 +9695,6 @@ FROM
     JOIN Countries  c1 ON t.`country_id-source` =c1.id
     JOIN Countries  c2 ON t.`country_id-target` =c2.id
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
-    WHERE
-        t.`task-status_id`=4 AND
-       (t.`task-type_id`=2 OR
-        t.`task-type_id`=3)
     GROUP BY u.id
 ) AS main
 LEFT JOIN
@@ -9645,6 +9706,67 @@ LEFT JOIN
     JOIN prozdata pd ON u.id=pd.user_id
     GROUP BY u.id
 ) AS proz ON main.user_id=proz.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment
+    FROM Users     u
+    JOIN adjust_points ap ON u.id=ap.user_id
+    GROUP BY u.id
+) AS adjust ON main.user_id=adjust.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment_strategic
+    FROM Users                    u
+    JOIN adjust_points_strategic ap ON u.id=ap.user_id
+    GROUP BY u.id
+) AS adjust_strategic ON main.user_id=adjust_strategic.user_id
+
+UNION
+
+SELECT
+    proz.user_id,
+    proz.email,
+    proz.first_name,
+    proz.last_name,
+    proz.name,
+    0 AS words_translated,
+    0 AS words_proofread,
+    IFNULL(proz.words_proz, 0) AS words_proz,
+    IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
+    0 AS words_paid_uncounted,
+    0 AS words_not_complete_uncounted,
+    IFNULL(proz.words_proz, 0) AS words_donated,
+    IFNULL(proz.words_proz, 0) + IFNULL(adjust.points_adjustment, 0) AS points_recognition,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_strategic
+FROM
+(
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(pd.wordstranslated) AS words_proz
+    FROM Users                   u
+    JOIN prozdata               pd ON u.id=pd.user_id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    GROUP BY u.id
+) AS proz
+JOIN
+(
+    SELECT
+        u.id AS user_id
+    FROM      Users       u
+    LEFT JOIN TaskClaims tc ON u.id=tc.user_id
+    WHERE
+        tc.user_id IS NULL
+    GROUP BY u.id
+) AS main ON proz.user_id=main.user_id
 LEFT JOIN
 (
     SELECT
