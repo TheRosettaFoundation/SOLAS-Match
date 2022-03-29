@@ -119,7 +119,7 @@ $customErrorHandler = function (
         $response->getBody()->write('<h4>Not found: ' . $request->getUri() . '<br /><a href="https://' . $_SERVER['SERVER_NAME'] . '">Click here to go to home page</a></h4>
 </body>
 </html>');
-        error_log('NOT FOUND: ' . $request->getUri();
+        error_log('NOT FOUND: ' . $request->getUri());
         return $response->withStatus(404);
     } else {
         $response->getBody()->write('<h4>' . $request->getUri() . '<br />' . $exception->getMessage() . str_replace('#', '<br />', $exception->getTraceAsString()) . '</h4>
