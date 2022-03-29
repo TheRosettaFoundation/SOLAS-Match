@@ -114,7 +114,7 @@ $customErrorHandler = function (
     $response->getBody()->write('<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
 <head></head>
-<body>';
+<body>');
     if ($exception->getMessage() === 'Not found.') {
         $response->getBody()->write('<h4>Not found: ' . $request->getUri() . '<br /><a href="https://' . $_SERVER['SERVER_NAME'] . '">Click here to go to home page</a></h4>
 </body>
