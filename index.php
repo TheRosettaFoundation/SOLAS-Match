@@ -114,13 +114,21 @@ $customErrorHandler = function (
     $response->getBody()->write('<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
 <head></head>
-<body>
-<h4>' . $request->getUri() . '<br />' . $exception->getMessage() . str_replace('#', '<br />', $exception->getTraceAsString()) . '</h4>
+<body>';
+    if ($exception->getMessage() === 'Not found.') {
+        $response->getBody()->write('<h4>Not found: ' . $request->getUri() . '<br /><a href="https://' . $_SERVER['SERVER_NAME'] . '">Click here to go to home page</a></h4>
 </body>
 </html>');
-    error_log('ERROR on: ' . $request->getUri() . ', ' . $exception->getMessage());
-    error_log($exception->getTraceAsString());
-    return $response;
+        error_log('NOT FOUND: ' . $request->getUri();
+        return $response->withStatus(404);
+    } else {
+        $response->getBody()->write('<h4>' . $request->getUri() . '<br />' . $exception->getMessage() . str_replace('#', '<br />', $exception->getTraceAsString()) . '</h4>
+</body>
+</html>');
+        error_log('ERROR on: ' . $request->getUri() . ', ' . $exception->getMessage());
+        error_log($exception->getTraceAsString());
+        return $response->withStatus(500);
+    }
 };
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
