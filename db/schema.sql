@@ -9680,8 +9680,8 @@ FROM
                     t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
                     t.`task-status_id`=4 AND
-                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
-                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
                     t.`word-count`, 0)
             ) +
             SUM(
@@ -9689,8 +9689,8 @@ FROM
                     t.`task-type_id`=3 AND
                     tp.task_id IS NULL AND
                     t.`task-status_id`=4 AND
-                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
-                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
                     t.`word-count`, 0)
             )*0.5
         ) AS points_strategic_unadjusted
@@ -9698,11 +9698,8 @@ FROM
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
-    JOIN Languages  l1 ON t.`language_id-source`=l1.id
-    JOIN Languages  l2 ON t.`language_id-target`=l2.id
-    JOIN Countries  c1 ON t.`country_id-source` =c1.id
-    JOIN Countries  c2 ON t.`country_id-target` =c2.id
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    LEFT JOIN strategic_cut_offs sco ON t.`language_id-source`=sco.`language_id-source` OR t.`language_id-target`=sco.`language_id-target`
     GROUP BY u.id
 ) AS main
 LEFT JOIN
