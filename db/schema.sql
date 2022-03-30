@@ -1236,6 +1236,23 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `strategic_cut_offs` (
+  `language_id-source` INT(10) UNSIGNED NOT NULL,
+  `language_id-target` INT(10) UNSIGNED NOT NULL,
+  `nigeria`            INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3)       NOT NULL,
+  language_code_target VARCHAR(3)       NOT NULL,
+  start                DATETIME         NOT NULL,
+  end                  DATETIME         NOT NULL,
+  KEY `FK_strategic_cut_offs_Languages_s` (`language_id-source`),
+  KEY `FK_strategic_cut_offs_Languages_t` (`language_id-target`),
+  KEY (language_code_source),
+  KEY (language_code_target),
+  CONSTRAINT `FK_strategic_cut_offs_Languages_s` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_strategic_cut_offs_Languages_t` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9131,20 +9148,14 @@ DROP PROCEDURE IF EXISTS `user_has_strategic_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_strategic_languages`(IN `userID` INT)
 BEGIN
-        SELECT
-            uqp.*,
-            IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0') OR uqp.language_code_source IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) AS nigeria
-        FROM UserQualifiedPairs uqp
-        WHERE
-            uqp.user_id=userID AND
-            (
-            uqp.language_code_target IN
-            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
-            OR
-            uqp.language_code_source IN
-            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0')
-            )
-        ORDER BY IF(uqp.language_code_target IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0') OR uqp.language_code_source IN ('bwr', 'ckl', 'ff', 'ha', 'hia', 'kr', 'mfi', 'mrt', 'shu', 'mf0'), 1, 0) DESC, uqp.language_code_target ASC;
+    SELECT
+        uqp.*,
+        sco.nigeria
+    FROM UserQualifiedPairs uqp
+    JOIN strategic_cut_offs sco ON uqp.language_code_source=sco.language_code_source OR uqp.language_code_target=sco.language_code_target
+    WHERE
+        uqp.user_id=userID
+    ORDER BY sco.nigeria DESC, uqp.language_code_target ASC;
 END//
 DELIMITER ;
 
@@ -9173,8 +9184,8 @@ BEGIN
                     t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
                     t.`task-status_id`=4 AND
-                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
-                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
                     t.`word-count`, 0)
             ), 0) +
             IFNULL(SUM(
@@ -9182,8 +9193,8 @@ BEGIN
                     t.`task-type_id`=3 AND
                     tp.task_id IS NULL AND
                     t.`task-status_id`=4 AND
-                    (t.`language_id-target` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083) OR
-                     t.`language_id-source` IN (242,  598, 1044, 1264, 1391, 1921, 2255, 2282, 2254, 2714, 3186, 3604, 3447, 3545, 7435, 3763, 4060,  995, 4369, 4519, 4830, 5127, 5177, 7432, 5549, 5552, 5703, 5844, 6083)),
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
                     t.`word-count`, 0)
             ), 0)*0.5 +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
@@ -9193,11 +9204,8 @@ BEGIN
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
-    JOIN Languages  l1 ON t.`language_id-source`=l1.id
-    JOIN Languages  l2 ON t.`language_id-target`=l2.id
-    JOIN Countries  c1 ON t.`country_id-source` =c1.id
-    JOIN Countries  c2 ON t.`country_id-target` =c2.id
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    LEFT JOIN strategic_cut_offs sco ON t.`language_id-source`=sco.`language_id-source` OR t.`language_id-target`=sco.`language_id-target`
     WHERE
         u.id=uID
     GROUP BY u.id
