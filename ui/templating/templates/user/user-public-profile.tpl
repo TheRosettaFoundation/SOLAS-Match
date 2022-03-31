@@ -366,7 +366,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
     </tr>
 </table>
 
-{if false && $private_access || $isSiteAdmin}
+{if $private_access || $isSiteAdmin}
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
 </div>
