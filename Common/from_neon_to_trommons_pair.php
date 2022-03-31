@@ -215,6 +215,8 @@ $from_neon_to_trommons_pair = array(
 
 'Tene Kan Dogon' => array('dtk', '--'),
 'Koyraboro Senni Songhay' => array('ses', '--'),
+
+'Romani' => array('rom', '--'),
 );
 
 $language_options_changes = [
