@@ -1126,7 +1126,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
-        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+        if (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
         if ($reload_for_wordcount) $project = $projectDao->getProject($project_id);
 
@@ -2257,7 +2257,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $creator = $taskDao->get_creator($projectId, $memsource_project);
         $pm = $creator['email'];
-        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+        if (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
         $title = str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle() . " $projectId"); // Discourse does not like duplicates
         $discourseapiparams = array(
@@ -2704,7 +2704,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
                 $memsource_project_id = $memsource_project['memsource_project_id'];
-                $self_service = strpos($pm, '@translatorswithoutborders.org') === false || $projectDao->get_memsource_self_service_project($memsource_project_id);
+                $self_service = (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
                 else               $asana_project = '1200067882657242';
 
