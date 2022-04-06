@@ -1102,12 +1102,21 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
         $result = curl_exec($ch);
         curl_close($ch);
-        if (empty($result)) return 0;
+        if (empty($result)) {
+            error_log("No data returned from Memsource in get_memsource_user_record($old_email)");
+            return 0;
+        }
         $response_data = json_decode($result, true);
-        if (empty($response_data['content'])) return 0;
+        if (empty($response_data['content'])) {
+            error_log("No ['content'] returned from Memsource in get_memsource_user_record($old_email)");
+            error_log(print_r($response_data, true));
+            return 0;
+        }
         foreach ($response_data['content'] as $user) {
             if ($user['email'] === $old_email) return $user;
         }
+        error_log("No matching email returned from Memsource in get_memsource_user_record($old_email)");
+        error_log(print_r($response_data, true));
         return 0;
     }
 
