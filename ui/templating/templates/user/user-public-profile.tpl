@@ -468,7 +468,7 @@ Please remember that participating in this program is not a form of employment, 
 You work with TWB  voluntarily and you can end your cooperation with us at any time.</p>
 <p>Currently, the languages for which we can offer monetary rewards are
 Amharic, Bengali, Bura-Pabir, Burmese, Chadian Arabic, Chittagonian, Dari, Fulfulde, Ganda, Haitian Creole, Hausa, Kanuri, Kibaku, Kurdish, Lingala,
-Mandara, Marghi, Mongo, Nande, Ngombe, Oromo, Pashto, Rohingya, Shi, Somali, Swahili, Tigrinya, Waha.
+Mandara, Marghi, Mongo, Nande, Ngombe, Oromo, Pashto, Rohingya, Romani, Shi, Somali, Swahili, Tigrinya, Ukrainian, Waha.
 This list may vary depending on our organization’s strategic needs and budgetary constraints.</p>
 
 <table border="0">
