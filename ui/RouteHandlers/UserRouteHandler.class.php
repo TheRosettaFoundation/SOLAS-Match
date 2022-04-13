@@ -87,6 +87,11 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:profile_shared_with_key')
             ->setName('shared_with_key');
 
+        $app->get(
+            '/{key}/bkey[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:badge_shared_with_key')
+            ->setName('badge_shared_with_key');
+
         $app->map(['GET', 'POST'],
             '/{user_id}/privateProfile[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
