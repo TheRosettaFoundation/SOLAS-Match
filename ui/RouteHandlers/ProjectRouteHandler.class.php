@@ -448,6 +448,10 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
             if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+
+            if ($self_service_project && $self_service_project['split']) {
+
+            }
         }
     }
 

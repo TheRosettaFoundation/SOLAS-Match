@@ -846,9 +846,9 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
-    public function set_memsource_self_service_project($memsource_project_id)
+    public function set_memsource_self_service_project($memsource_project_id, $split)
     {
-        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id));
+        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' . LibAPI\PDOWrapper::cleanse($split));
     }
 
     public function get_memsource_self_service_project($memsource_project_id)
@@ -857,7 +857,7 @@ $memsource_change_country_to_kp = [
 
         if (empty($result)) return 0;
 
-        return 1;
+        return $result[0];
     }
 
     public function get_memsource_project($project_id)

@@ -1132,6 +1132,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjectLanguages` (
 
 CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
   memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
+  split                    INT(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (memsource_project_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -8725,10 +8726,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_self_service_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceID BIGINT, IN sp INT)
 BEGIN
-    INSERT INTO MemsourceSelfServiceProjects (memsource_project_id)
-    VALUES                                   (         memsourceID);
+    INSERT INTO MemsourceSelfServiceProjects (memsource_project_id, split)
+    VALUES                                   (         memsourceID,    sp);
 END//
 DELIMITER ;
 
