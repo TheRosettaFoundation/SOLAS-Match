@@ -449,8 +449,26 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 
             if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
 
-            if ($self_service_project && $self_service_project['split']) {
-
+            if ($self_service_project && $self_service_project['split'] && $task->getWordCount() > 900) {
+                error_log("Splitting project_id: $project_id, task_id: $task_id");
+                $uid = $part['uid'];
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $memsource_project_uid = $memsource_project['memsource_project_uid'];
+                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$uid/split");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $data = [
+                    'wordCount' => 900,
+                ];
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get("memsource.memsource_api_token");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                $result_exec = curl_exec($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                error_log("responseCode: $responseCode");
+                $result = json_decode($result_exec, true);
+error_log(print_r($result, true));//(**)
             }
         }
     }
