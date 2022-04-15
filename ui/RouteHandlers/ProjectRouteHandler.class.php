@@ -286,6 +286,8 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         $memsource_project_sync = 0;
+        $parent_tasks_filter = [];
+        $split_uids_filter = [];
         foreach ($hook as $part) {
             $task = new Common\Protobufs\Models\Task();
 
@@ -467,12 +469,19 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
                 error_log("responseCode: $responseCode");
-                if ($responseCode == 200) $memsource_project_sync = $memsource_project;
-                $result = json_decode($result_exec, true);
+                if ($responseCode == 200) {
+                    $result = json_decode($result_exec, true);
 error_log(print_r($result, true));//(**)
+                    $memsource_project_sync = $memsource_project;
+                    // Add filters to manipulate only one language in Sync to stop possible race
+                    $parent_tasks_filter[] = $task_id;
+                    foreach ($result['jobs'] as $job) {
+                        $split_uids_filter[] = $job['uid'];
+                    }
+                }
             }
         }
-        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync);
+        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter);
     }
 
     private function update_task_status($hook)

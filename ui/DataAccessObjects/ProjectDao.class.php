@@ -1079,8 +1079,10 @@ $memsource_change_country_to_kp = [
         return $result[0]['id'];
     }
 
-    public function sync_split_jobs($memsource_project)
+    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false)
     {
+error_log('split_uids_filter:' . print_r($split_uids_filter, true));//(**)
+error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         $userDao = new UserDao();
         $taskDao = new TaskDao();
         $project_route_handler = new Route\ProjectRouteHandler();
@@ -1093,6 +1095,7 @@ $memsource_change_country_to_kp = [
         $memsource_project = $this->get_memsource_project($project_id); // Workflow could have been updated
 
         foreach ($jobs as $uid => $job) {
+            if ($split_uids_filter && !in_array($uid, $split_uids_filter)) continue;
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
             if ($full_job) {
@@ -1113,6 +1116,7 @@ $memsource_change_country_to_kp = [
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
                 if (empty($jobs[$uid])) {
+                    if ($parent_tasks_filter && !in_array($project_task['id'], $parent_tasks_filter)) continue;
                     $this->adjust_for_deleted_task($memsource_project, $project_task);
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
