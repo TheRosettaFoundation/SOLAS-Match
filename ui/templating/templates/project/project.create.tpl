@@ -11,7 +11,7 @@
         <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
         <div id="create_memsource">{$create_memsource}</div>
-        <div id="split">{if in_array($org_id, [860,])}1{else}0{/if}</div>
+        <div id="split">{if in_array($org_id, [860])}1{else}0{/if}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">
