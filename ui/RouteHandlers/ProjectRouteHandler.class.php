@@ -383,11 +383,15 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
                 $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
                 $now = time();
+                $total = $deadline - $now;
+                if ($total < 0) $total = 0;
                 if ($deadline_less_7_days < $now) { // We are squashed for time
-                    $total = $deadline - $now;
-                    if ($total < 0) $total = 0;
                     $deadline_less_4_days = $deadline - $total*4/7;
                     $deadline_less_1_days = $deadline - $total*1/7;
+                }
+                if ($self_service_project['split']) {
+                    $deadline_less_4_days = $deadline - $total*45/100;
+                    $deadline_less_1_days = $deadline - $total*5/100;
                 }
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
                 else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
@@ -459,7 +463,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$uid/split");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $data = [
-                    'wordCount' => 900,
+                    'partCount' => ceil($task->getWordCount()/900.),
                 ];
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -478,10 +482,11 @@ error_log(print_r($result, true));//(**)
                     foreach ($result['jobs'] as $job) {
                         $split_uids_filter[] = $job['uid'];
                     }
+                    $words_default = round($task->getWordCount()/$data['partCount']);
                 }
             }
         }
-        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter);
+        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter, $words_default);
     }
 
     private function update_task_status($hook)

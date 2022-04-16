@@ -1079,7 +1079,7 @@ $memsource_change_country_to_kp = [
         return $result[0]['id'];
     }
 
-    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false)
+    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false, $words_default = 0)
     {
 error_log('split_uids_filter:' . print_r($split_uids_filter, true));//(**)
 error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
@@ -1100,7 +1100,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
             if ($full_job) {
                 if (empty($memsource_task)) {
-                    if (!$error = $this->create_task($memsource_project, $full_job)) {
+                    if (!$error = $this->create_task($memsource_project, $full_job, $words_default)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                         $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
                         $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
@@ -1157,7 +1157,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         return 0;
     }
 
-    private function create_task($memsource_project, $job)
+    private function create_task($memsource_project, $job, $words_default)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
@@ -1205,6 +1205,9 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         }
         $task->setTaskType($taskType);
 
+error_log("words_default: $words_default");//(**)
+if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wordsCount]');//(**)
+        if ($words_default && (empty($job['wordsCount']) || $job['wordsCount'] == -1)) $job['wordsCount'] = $words_default;
         if (!empty($job['wordsCount'])) {
             if ($job['wordsCount'] == -1) {
                 error_log("Sync Memsource not ready (wordsCount: -1) in new job {$job['innerId']}/{$job['uid']} for: {$job['filename']}");
