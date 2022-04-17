@@ -461,15 +461,19 @@ will qualify towards our Community Recognition Program.</p>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
-<p>We also offer monetary rewards for your work in some of the low-resource languages that are strategic to our work.
-We are aware that our TWB Community members who speak marginalized languages often offer their support from areas of the world where they face high connectivity costs.
+<p>Our Community Recognition Program also includes monetary rewards for some marginalized languages.
+Speakers of marginalized languages often face high connectivity costs when offering their online support.
 These monetary rewards aim to cover some of those expenses.
-Please remember that participating in this program is not a form of employment, and rewards do not constitute payment for services.
-You work with TWB  voluntarily and you can end your cooperation with us at any time.</p>
+We hope that this will allow speakers of marginalized languages to volunteer more with us.</p>
+<p>We also offer monetary rewards for languages that are crucial to supporting ongoing humanitarian responses.
+When we advocate for language inclusion and collaborate with partner organizations on the ground, it generates more urgent and more frequent requests for relevant language communities.
+We are committed to recognizing the work of our volunteers who step up to support their communities in times of crisis.
+We hope that the rewards included in our Community Recognition Program may help community members who are personally affected.</p>
+<p>This program is not a form of employment, and rewards do not constitute payment for services.</p>
 <p>Currently, the languages for which we can offer monetary rewards are
-Amharic, Bengali, Bura-Pabir, Burmese, Chadian Arabic, Chittagonian, Dari, Fulfulde, Ganda, Haitian Creole, Hausa, Kanuri, Kibaku, Kurdish, Lingala,
-Mandara, Marghi, Mongo, Nande, Ngombe, Oromo, Pashto, Rohingya, Romani, Shi, Somali, Swahili, Tigrinya, Ukrainian, Waha.
-This list may vary depending on our organization’s strategic needs and budgetary constraints.</p>
+Amharic, Bengali, Bura-Pabir, Burmese, Chadian Arabic, Chittagonian, Dari, Fulfulde, Haitian Creole, Hausa, Kanuri, Kibaku, Kurdish, Lingala, Luganda, Mandara, Marghi, Mongo, Nande, Ngombe, Oromo, Pashto, Rohingya, Romani, Shi, Somali, Swahili, Tigrinya, Ukrainian, Waha.</p>
+<p>This list may change over time, depending on our strategic needs and budgetary constraints related to our crisis response work and international programs.
+If a language is to be removed from this list, the community will be informed beforehand.</p>
 
 <table border="0">
     <tr valign="top">

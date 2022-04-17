@@ -285,6 +285,9 @@ class ProjectRouteHandler
         $hook = $hook['jobParts'];
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
+        $memsource_project_sync = 0;
+        $parent_tasks_filter = [];
+        $split_uids_filter = [];
         foreach ($hook as $part) {
             $task = new Common\Protobufs\Models\Task();
 
@@ -380,14 +383,19 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
                 $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
                 $now = time();
+                $total = $deadline - $now;
+                if ($total < 0) $total = 0;
                 if ($deadline_less_7_days < $now) { // We are squashed for time
-                    $total = $deadline - $now;
-                    if ($total < 0) $total = 0;
                     $deadline_less_4_days = $deadline - $total*4/7;
                     $deadline_less_1_days = $deadline - $total*1/7;
                 }
+                if ($self_service_project['split']) {
+                    $deadline_less_4_days = $deadline - $total*45/100;
+                    $deadline_less_1_days = $deadline - $total*5/100;
+                }
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
                 else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
+                $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
             } else {
                 if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
                 else                          $task->setDeadline($project->getDeadline());
@@ -448,7 +456,38 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
             if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+
+            if ($self_service_project && $self_service_project['split'] && $task->getWordCount() > 900 && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                error_log("Splitting project_id: $project_id, task_id: $task_id");
+                $uid = $part['uid'];
+                $memsource_project_uid = $memsource_project['memsource_project_uid'];
+                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$uid/split");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $data = [
+                    'partCount' => ceil($task->getWordCount()/900.),
+                ];
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                $result_exec = curl_exec($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                error_log("responseCode: $responseCode");
+                if ($responseCode == 200) {
+                    $result = json_decode($result_exec, true);
+error_log(print_r($result, true));//(**)
+                    $memsource_project_sync = $memsource_project;
+                    // Add filters to manipulate only one language in Sync to stop possible race
+                    $parent_tasks_filter[] = $task_id;
+                    foreach ($result['jobs'] as $job) {
+                        $split_uids_filter[] = $job['uid'];
+                    }
+                    $words_default = round($task->getWordCount()/$data['partCount']);
+                }
+            }
         }
+        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter, $words_default);
     }
 
     private function update_task_status($hook)

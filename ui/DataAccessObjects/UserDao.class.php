@@ -1959,7 +1959,8 @@ error_log(print_r($project_result, true));//(**)
             empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
             $workflowLevels);
 
-        $projectDao->set_memsource_self_service_project($project_result['id']);
+        $split = in_array($project->getOrganisationId(), [860, $this->usernamePrefix === 'DEV_' ? 547 : 0]) ? 1 : 0;
+        $projectDao->set_memsource_self_service_project($project_result['id'], $split);
 
         if ($client) {
             // List clients's TMs

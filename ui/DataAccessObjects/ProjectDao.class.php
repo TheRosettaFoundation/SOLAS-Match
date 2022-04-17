@@ -846,9 +846,9 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
-    public function set_memsource_self_service_project($memsource_project_id)
+    public function set_memsource_self_service_project($memsource_project_id, $split)
     {
-        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id));
+        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' . LibAPI\PDOWrapper::cleanse($split));
     }
 
     public function get_memsource_self_service_project($memsource_project_id)
@@ -857,7 +857,7 @@ $memsource_change_country_to_kp = [
 
         if (empty($result)) return 0;
 
-        return 1;
+        return $result[0];
     }
 
     public function get_memsource_project($project_id)
@@ -1079,8 +1079,10 @@ $memsource_change_country_to_kp = [
         return $result[0]['id'];
     }
 
-    public function sync_split_jobs($memsource_project)
+    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false, $words_default = 0)
     {
+error_log('split_uids_filter:' . print_r($split_uids_filter, true));//(**)
+error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         $userDao = new UserDao();
         $taskDao = new TaskDao();
         $project_route_handler = new Route\ProjectRouteHandler();
@@ -1093,11 +1095,12 @@ $memsource_change_country_to_kp = [
         $memsource_project = $this->get_memsource_project($project_id); // Workflow could have been updated
 
         foreach ($jobs as $uid => $job) {
+            if ($split_uids_filter && !in_array($uid, $split_uids_filter)) continue;
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
             if ($full_job) {
                 if (empty($memsource_task)) {
-                    if (!$error = $this->create_task($memsource_project, $full_job)) {
+                    if (!$error = $this->create_task($memsource_project, $full_job, $words_default)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                         $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
                         $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
@@ -1113,6 +1116,7 @@ $memsource_change_country_to_kp = [
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
                 if (empty($jobs[$uid])) {
+                    if ($parent_tasks_filter && !in_array($project_task['id'], $parent_tasks_filter)) continue;
                     $this->adjust_for_deleted_task($memsource_project, $project_task);
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
@@ -1153,7 +1157,7 @@ $memsource_change_country_to_kp = [
         return 0;
     }
 
-    private function create_task($memsource_project, $job)
+    private function create_task($memsource_project, $job, $words_default)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
@@ -1201,6 +1205,9 @@ $memsource_change_country_to_kp = [
         }
         $task->setTaskType($taskType);
 
+error_log("words_default: $words_default");//(**)
+if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wordsCount]');//(**)
+        if ($words_default && (empty($job['wordsCount']) || $job['wordsCount'] == -1)) $job['wordsCount'] = $words_default;
         if (!empty($job['wordsCount'])) {
             if ($job['wordsCount'] == -1) {
                 error_log("Sync Memsource not ready (wordsCount: -1) in new job {$job['innerId']}/{$job['uid']} for: {$job['filename']}");
@@ -1451,6 +1458,19 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     public function delete_task_directly($task_id)
     {
         LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function set_dateDue_in_memsource_when_new($memsource_project_uid, $memsource_task_uid, $deadline)
+    {
+        $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z', 'status' => 'NEW']));
+        curl_exec($ch);
+        curl_close($ch);
+        error_log("set_dateDue_in_memsource_when_new($memsource_project_uid, $memsource_task_uid, $deadline)");
     }
 
     public function delete_not_accepted_user()
