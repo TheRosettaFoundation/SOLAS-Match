@@ -2794,6 +2794,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 "1200067882657251" => $targetLocale,
                                 "1200269602122255" => $targetLocale_code,
                                 "1200226775862070" => $project_url,
+                                '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
                                 "1200269602122257" => "$projectId"
                             ),
                             "due_at" => $objDateTime->format('c'),
