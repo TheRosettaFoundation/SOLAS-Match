@@ -286,6 +286,15 @@ alert('You have already requested to take a test in order to become a Kató Veri
                         </div>
                         </td></tr>
 
+                        {if $private_access || $isSiteAdmin}
+                        <tr><td>
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                        </td></tr>
+                        <tr><td>
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$bkey}"}</span></a>
+                        </td></tr>
+                        {/if}
+
                         <tr>
                             <td>
                                 <h3>Supported NGOs</h3>

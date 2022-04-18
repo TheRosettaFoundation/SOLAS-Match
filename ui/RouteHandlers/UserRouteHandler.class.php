@@ -2425,6 +2425,9 @@ class UserRouteHandler
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $key = bin2hex("$encrypted::$iv");
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $bkey = bin2hex("$encrypted::$iv");
 
         $howheard = $userDao->getUserHowheards($user_id);
         if (empty($howheard)) {
@@ -2438,6 +2441,7 @@ class UserRouteHandler
             'user_badges'            => $userDao->get_points_for_badges($user_id),
             'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n'),
             'key'                    => $key,
+            'bkey'                   => $bkey,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
@@ -2499,6 +2503,45 @@ class UserRouteHandler
         ));
 
         return UserRouteHandler::render('user/user-public-profile.tpl', $response);
+    }
+
+    public static function badge_shared_with_key(Request $request, Response $response, $args)
+    {
+        $key = $args['key'];
+
+        $key = hex2bin($key);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $userDao = new DAO\UserDao();
+        $user_badges = $userDao->get_points_for_badges($user_id);
+
+        header('Content-type: image/png');
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+
+        $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/TWB_Community_members_badge_BG-01.png');
+        $size = 60;
+        $angle = 0;
+        $left = 950;
+        $top = 740;
+        $color = imagecolorallocate($logo, 232, 153, 28);
+        $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
+        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $user_badges['words_donated']);
+        $left = 750;
+        $top = 840;
+        $color = imagecolorallocate($logo, 87, 110, 130);
+        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, 'WORDS DONATED');
+        $size = 70;
+        $left = 595;
+        $top = 522;
+        $color = imagecolorallocate($logo, 0, 0, 0);
+        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, mb_strtoupper(wordwrap($user_badges['name'], 20, "\n")));
+
+        imagepng($logo);
+        imagedestroy($logo);
+        die;
     }
 
     public function editTaskStreamNotification(Request $request, Response $response, $args)
