@@ -2508,11 +2508,13 @@ class UserRouteHandler
     public static function badge_shared_with_key(Request $request, Response $response, $args)
     {
         $key = $args['key'];
+error_log("key: $key");
 
         $key = hex2bin($key);
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+error_log("user_id: $user_id");
         $userDao = new DAO\UserDao();
         $user_badges = $userDao->get_points_for_badges($user_id);
 
