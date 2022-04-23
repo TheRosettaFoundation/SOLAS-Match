@@ -393,6 +393,10 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     $deadline_less_4_days = $deadline - $total*45/100;
                     $deadline_less_1_days = $deadline - $total*5/100;
                 }
+
+                // If there is only 1 workflow, give all the time to that
+                if (!empty($part['project']['lastWorkflowLevel']) && $part['project']['lastWorkflowLevel'] == 1) $deadline_less_4_days = $deadline_less_1_days;
+
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
                 else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
                 $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
