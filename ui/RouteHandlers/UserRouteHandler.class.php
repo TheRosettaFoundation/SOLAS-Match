@@ -519,10 +519,11 @@ class UserRouteHandler
         $context  = stream_context_create($options);
         $response = file_get_contents($url, false, $context);
         $response_keys = json_decode($response,true);
+        $ip = $_SERVER['REMOTE_ADDR'];
        
         if(!$response_keys["success"]) {
             $error = 'Spam Detected!';
-            error_log("$error: $_SERVER['REMOTE_ADDR'] Google_response: $response_keys ");
+            error_log("$error: $ip Google_response: $response_keys");
            
         } 
 

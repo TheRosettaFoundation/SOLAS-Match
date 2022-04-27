@@ -92,10 +92,7 @@
             <input type="hidden" name="g-recaptcha-response" id="g_response">
             
             <p class="reg_btn ">
-                <button type="submit"  class="btn btn-primary" name="submit" 
-                data-sitekey="{Settings::get('google.captcha_site_key')}" 
-                data-callback='onSubmit' 
-                data-action='submit' >
+                <button type="submit"  class="btn btn-primary" name="submit">
                      {Localisation::getTranslation('common_register')}
                 </button>
             </p>
