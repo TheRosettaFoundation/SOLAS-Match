@@ -89,11 +89,17 @@
             <input name="newsletter_consent" id="newsletter_consent"  type="checkbox"> Subscribe to the TWB email newsletter.
             <small>You can unsubscribe at any time</small>
             </label>
+            <input type="hidden" name="g-recaptcha-response" id="g_response">
+            
             <p class="reg_btn ">
-                <button type="submit" class="btn btn-primary " name="submit">
+                <button type="submit"  class="btn btn-primary" name="submit" 
+                data-sitekey="{Settings::get('google.captcha_site_key')}" 
+                data-callback='onSubmit' 
+                data-action='submit' >
                      {Localisation::getTranslation('common_register')}
                 </button>
             </p>
+            
       </form>
 
       <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center">
