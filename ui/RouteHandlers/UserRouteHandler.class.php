@@ -520,12 +520,16 @@ class UserRouteHandler
         $response = file_get_contents($url, false, $context);
         $response_keys = json_decode($response,true);
         $ip = $_SERVER['REMOTE_ADDR'];
+
+        
        
-        if(!$response_keys["success"]) {
+        if($response_keys["success"] != 1) {
             $error = 'Spam Detected!';
-            error_log("$error: $ip Google_response: $response_keys");
+            //Get exact response message why it has been flagged as spam
+            $g_response = $response_keys["error-codes"][0];
+            error_log("$error: $ip Google_response: $g_response");
            
-        } 
+        }
 
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
