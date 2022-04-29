@@ -431,11 +431,17 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
+        $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');  
+        $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');    
+
         $extra_scripts  = self::createGooglePlusJavaScript();
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
+ 
+        $extra_scripts .= '<script src="https://www.google.com/recaptcha/api.js?render=' . $google_site_key . '" type="text/javascript"></script>';
         $extra_scripts .= '<script type="text/javascript">
         $().ready(function() {
+        
             $("#registerform").validate({
                 rules: {
                     first_name: "required",
@@ -485,15 +491,51 @@ class UserRouteHandler
             });
 
             $("#tool").tooltip();
-
            
         });
+        
+        </script>';
+        $extra_scripts .= '<script type="text/javascript">        
+        grecaptcha.ready(function () {
+            grecaptcha.execute("' . $google_site_key . '", { action: "kp_registration"}).then(function (token) {
+                document.getElementById("g_response").value = token;
+            });
+            });
+
         </script>';
         $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
         $error = null;
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
+            
+        // post request to server
+        $captcha = $post['g-recaptcha-response'];
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = array('secret' => $google_secret_key, 'response' => $captcha);
+
+        $options = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        )
+        );
+        $context  = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $response_keys = json_decode($response,true);
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        
+       
+        if($response_keys["success"] != 1) {
+            $error = 'Spam Detected!';
+            //Get exact response message why it has been flagged as spam
+            $g_response = $response_keys["error-codes"][0];
+            error_log("$error: $ip Google_response: $g_response");
+           
+        }
+
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
