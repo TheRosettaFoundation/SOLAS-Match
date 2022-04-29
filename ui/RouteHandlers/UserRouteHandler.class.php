@@ -502,10 +502,9 @@ class UserRouteHandler
         $error = null;
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
-            // post request to server
-            $captcha = $post['g-recaptcha-response'];
-            $url = 'https://www.google.com/recaptcha/api/siteverify';
-            $data = array('secret' => $google_secret_key, 'response' => $captcha);
+            $ip = $_SERVER['REMOTE_ADDR'];
+            // post request to Google recaptcha server
+            $data = array('secret' => $google_secret_key, 'response' => $post['g-recaptcha-response']);
             $options = array(
                 'http' => array(
                     'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -513,15 +512,19 @@ class UserRouteHandler
                     'content' => http_build_query($data)
                 )
             );
-            $context  = stream_context_create($options);
-            $response = file_get_contents($url, false, $context);
-            $response_keys = json_decode($response,true);
-            $ip = $_SERVER['REMOTE_ADDR'];
-            if($response_keys["success"] != 1) {
-                $error = 'Spam Detected!';
-                //Get exact response message why it has been flagged as spam
-                $g_response = $response_keys["error-codes"][0];
-                error_log("$error: $ip Google_response: $g_response");
+            $context = stream_context_create($options);
+            $google_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+            if (!empty($google_response)) {
+                $response_keys = json_decode($google_response, true);
+                if($response_keys['success'] != 1) {
+                    $error = 'Spam Detected!';
+                    // Get exact response message why it has been flagged as spam
+                    $g_response = $response_keys['error-codes'][0];
+                    error_log("$error: $ip Google_response: $g_response");
+                    UserRouteHandler::flashNow('error', $error);
+                }
+            } else {
+                error_log("Spam response from Google empty ip: $ip");
             }
 
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
