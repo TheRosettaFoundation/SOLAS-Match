@@ -113,7 +113,7 @@ $customErrorHandler = function (
     $response = $app->getResponseFactory()->createResponse();
     $response->getBody()->write('<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
-<head></head>
+<head><meta name="robots" content="noindex" /></head>
 <body>');
     if ($exception->getMessage() === 'Not found.') {
         $response->getBody()->write('
