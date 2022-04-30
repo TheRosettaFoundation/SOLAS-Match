@@ -65,20 +65,20 @@
                         </div>
                         <div>
                             <label for='firstName' class="clear_brand required">First name</label>
-                            <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" />
+                            <input type="text" name="firstName" value="{!empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() : ''|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" />
                         </div>
                         <div>
                             <label for='lastName' class="clear_brand required">Last name</label>
-                            <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" />
+                            <input type="text" name="lastName" value="{!empty($userPersonalInfo) ? $userPersonalInfo->getLastName() : ''|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" />
                         </div>
                         <div>
                             <label for='city' class="clear_brand">City</label>
-                            <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city" />
+                            <input type="text" name="city" id="city" value="{!empty($userPersonalInfo) ? $userPersonalInfo->getCity() : ''|escape:'html':'UTF-8'}" placeholder="Your city" />
                         </div>
                         <div>
                             <label class="clear_brand">Country</label>
                             <select name="country" id="country" class="country">
-                                <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
+                                <option value="{!empty($userPersonalInfo) ? $userPersonalInfo->getCountry() : ''|escape:'html':'UTF-8'}" selected="selected">{!empty($userPersonalInfo) ? $userPersonalInfo->getCountry() : ''|escape:'html':'UTF-8'}</option>
                                 {foreach $countries as $country}
                                     {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94' && $country->getCode() != '95' && $country->getCode() != '96'}
                                     <option value="{$country->getName()|escape:'html':'UTF-8'}" data-id="{$country->getCode()}">  {$country->getName()|escape:'html':'UTF-8'}</option>
@@ -90,7 +90,7 @@
                     
                         <div>
                             <label class="checkbox clear_brand">
-                            <input type="checkbox" name="receiveCredit" value="1" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            <input type="checkbox" name="receiveCredit" value="1" {if !empty($userPersonalInfo) ? $userPersonalInfo->getReceiveCredit() : false}checked="checked"{/if} /> Make my information including which nonprofits I contribute to visible to the TWB Community
                             </label>
                         </div>
                     </div>
