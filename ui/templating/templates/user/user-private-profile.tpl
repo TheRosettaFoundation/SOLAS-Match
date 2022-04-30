@@ -65,20 +65,34 @@
                         </div>
                         <div>
                             <label for='firstName' class="clear_brand required">First name</label>
+                            {if !empty($userPersonalInfo)}
                             <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" />
+                            {else}
+                            <input type="text" name="firstName" value="" id="firstName" placeholder="First name" />
+                            {/if}
                         </div>
                         <div>
                             <label for='lastName' class="clear_brand required">Last name</label>
+                            {if !empty($userPersonalInfo)}
                             <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" />
+                            {else}
+                            <input type="text" name="lastName" value="" id="lastName" placeholder="Last name" />
+                            {/if}
                         </div>
                         <div>
                             <label for='city' class="clear_brand">City</label>
+                            {if !empty($userPersonalInfo)}
                             <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city" />
+                            {else}
+                            <input type="text" name="city" id="city" value="" placeholder="Your city" />
+                            {/if}
                         </div>
                         <div>
                             <label class="clear_brand">Country</label>
                             <select name="country" id="country" class="country">
+                                {if !empty($userPersonalInfo)}
                                 <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
+                                {/if}
                                 {foreach $countries as $country}
                                     {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94' && $country->getCode() != '95' && $country->getCode() != '96'}
                                     <option value="{$country->getName()|escape:'html':'UTF-8'}" data-id="{$country->getCode()}">  {$country->getName()|escape:'html':'UTF-8'}</option>
@@ -90,7 +104,11 @@
                     
                         <div>
                             <label class="checkbox clear_brand">
+                            {if !empty($userPersonalInfo)}
                             <input type="checkbox" name="receiveCredit" value="1" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            {else}
+                            <input type="checkbox" name="receiveCredit" value="1" /> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            {/if}
                             </label>
                         </div>
                     </div>
