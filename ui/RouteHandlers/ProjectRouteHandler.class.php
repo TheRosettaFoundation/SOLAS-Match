@@ -632,7 +632,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 //(**)dev server                    $user_id = 3297;
                 }
 
+if (!empty($part['status']) && in_array($part['status'], ['NEW', 'EMAILED', 'DECLINED_BY_LINGUIST'])) error_log("Ignoring" . $part['status']);
                 if (!empty($part['status']) && in_array($part['status'], ['NEW', 'EMAILED', 'DECLINED_BY_LINGUIST'])) continue;
+error_log("AFTER Ignoring check" . $part['status']);
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
