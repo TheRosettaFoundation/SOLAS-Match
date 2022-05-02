@@ -769,6 +769,7 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
         $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -786,6 +787,11 @@ class TaskRouteHandler
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
         $task = $taskDao->getTask($taskId);
+        if (!$task->getPublished() && !$adminDao->isSiteAdmin($user_id)) {
+            UserRouteHandler::flash('error', 'This task is not published');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
+
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
