@@ -9302,6 +9302,170 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_points_for_badges_details`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges_details`(IN uID INT)
+BEGIN
+SELECT
+    main.user_id,
+    main.email,
+    main.first_name,
+    main.last_name,
+    main.name,
+    main.words_translated,
+    main.words_proofread,
+    IFNULL(proz.words_proz, 0) AS words_proz,
+    IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
+    main.words_paid_uncounted,
+    main.words_not_complete_uncounted,
+    main.words_donated_unadjusted + IFNULL(proz.words_proz, 0) AS words_donated,
+    main.points_recognition_unadjusted + IFNULL(proz.words_proz, 0) + IFNULL(adjust.points_adjustment, 0) AS points_recognition,
+    main.points_strategic_unadjusted + IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_strategic
+FROM
+(
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
+        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
+        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
+        ROUND(
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5
+        ) AS points_recognition_unadjusted,
+        ROUND(
+            SUM(
+                IF(
+                    t.`task-type_id`=2 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
+                    t.`word-count`, 0)
+            ) +
+            SUM(
+                IF(
+                    t.`task-type_id`=3 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
+                    t.`word-count`, 0)
+            )*0.5
+        ) AS points_strategic_unadjusted
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    LEFT JOIN strategic_cut_offs sco ON t.`language_id-source`=sco.`language_id-source` OR t.`language_id-target`=sco.`language_id-target`
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS main
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(pd.wordstranslated) AS words_proz
+    FROM Users     u
+    JOIN prozdata pd ON u.id=pd.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS proz ON main.user_id=proz.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment
+    FROM Users     u
+    JOIN adjust_points ap ON u.id=ap.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS adjust ON main.user_id=adjust.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment_strategic
+    FROM Users                    u
+    JOIN adjust_points_strategic ap ON u.id=ap.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS adjust_strategic ON main.user_id=adjust_strategic.user_id
+
+UNION
+
+SELECT
+    proz.user_id,
+    proz.email,
+    proz.first_name,
+    proz.last_name,
+    proz.name,
+    0 AS words_translated,
+    0 AS words_proofread,
+    IFNULL(proz.words_proz, 0) AS words_proz,
+    IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
+    0 AS words_paid_uncounted,
+    0 AS words_not_complete_uncounted,
+    IFNULL(proz.words_proz, 0) AS words_donated,
+    IFNULL(proz.words_proz, 0) + IFNULL(adjust.points_adjustment, 0) AS points_recognition,
+    IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_strategic
+FROM
+(
+    SELECT
+        u.id AS user_id,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
+        SUM(pd.wordstranslated) AS words_proz
+    FROM Users                   u
+    JOIN prozdata               pd ON u.id=pd.user_id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS proz
+JOIN
+(
+    SELECT
+        u.id AS user_id
+    FROM      Users       u
+    LEFT JOIN TaskClaims tc ON u.id=tc.user_id
+    WHERE
+        tc.user_id IS NULL
+        AND u.id=uID
+    GROUP BY u.id
+) AS main ON proz.user_id=main.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment
+    FROM Users     u
+    JOIN adjust_points ap ON u.id=ap.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS adjust ON main.user_id=adjust.user_id
+LEFT JOIN
+(
+    SELECT
+        u.id AS user_id,
+        SUM(ap.points) AS points_adjustment_strategic
+    FROM Users                    u
+    JOIN adjust_points_strategic ap ON u.id=ap.user_id
+    WHERE u.id=uID
+    GROUP BY u.id
+) AS adjust_strategic ON main.user_id=adjust_strategic.user_id;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
