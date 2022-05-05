@@ -107,8 +107,10 @@ class ProjectDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
         $project = null;
         if ($result) {
+error_log("call projectInsertAndUpdate($args): Success");//(**)
             $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
         }
+else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $project;
     }
 
