@@ -8276,6 +8276,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `supported_ngos_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos_paid`(IN uID INT)
+BEGIN
+    SELECT DISTINCT
+        o.name AS org_name,
+        o.id AS org_id
+    FROM TaskClaims   tc
+    JOIN TaskPaids    tp ON tc.task_id=tp.task_id
+    JOIN Tasks         t ON tc.task_id=t.id
+    JOIN Projects      p ON t.project_id=p.id
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE
+        tc.user_id=uID AND
+        t.`task-status_id`=4
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `quality_score`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)

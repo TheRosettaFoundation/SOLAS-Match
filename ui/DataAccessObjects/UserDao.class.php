@@ -1633,6 +1633,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $result;
     }
 
+    public function supported_ngos_paid($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('supported_ngos_paid', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function quality_score($user_id)
     {
         $result = LibAPI\PDOWrapper::call('quality_score', LibAPI\PDOWrapper::cleanse($user_id));
