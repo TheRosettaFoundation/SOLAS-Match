@@ -2101,7 +2101,7 @@ error_log("TM added: $result");//(**)
                 'lock100PercentMatches' => false,
                 'nonTranslatablesInEditors' => true,
             ],
-            'overwriteExistingTranslations' => false
+            'overwriteExistingTranslations' => false,
             'preTranslateOnJobCreation' => true,
             'setJobStatusCompleted' => false,
             'setJobStatusCompletedWhenConfirmed' => false,
