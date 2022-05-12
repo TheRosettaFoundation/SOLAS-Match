@@ -1031,9 +1031,9 @@ $memsource_change_country_to_kp = [
         return $results;
     }
 
-    public function get_user_id_from_memsource_user($memsource_user_id)
+    public function get_user_id_from_memsource_user($memsource_user_uid)
     {
-        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanse($memsource_user_id));
+        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid));
 
         if (empty($result)) return 0;
 
@@ -1344,16 +1344,16 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         if (!empty($job['dateDue'])) $this->update_task_due_date($task_id, substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
 
         if ($status == 'ACCEPTED') { // In Progress ('ASSIGNED' in Hook)
-            if (!empty($job['providers'][0]['id']) && count($job['providers']) == 1) {
-                $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['id']);
+            if (!empty($job['providers'][0]['uid']) && count($job['providers']) == 1) {
+                $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['uid']);
                 if (!$user_id) {
-                    error_log("Can't find user_id for {$job['providers'][0]['id']} in Sync status: ACCEPTED");
+                    error_log("Can't find user_id for {$job['providers'][0]['uid']} in Sync status: ACCEPTED");
                     return;
                 }
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
-                    error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
+                    error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['uid']}");
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
                   if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
