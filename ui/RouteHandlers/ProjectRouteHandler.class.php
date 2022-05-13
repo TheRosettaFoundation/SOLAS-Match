@@ -219,7 +219,7 @@ class ProjectRouteHandler
         // Create a topic in the Community forum (Discourse) and a project in Asana
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project_id, $target_languages, ['owner_id' => empty($hook['owner']['id']) ? 0 : $hook['owner']['id']]);
+            $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']]);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -266,8 +266,8 @@ class ProjectRouteHandler
             if ($found_something) $projectDao->update_memsource_project($memsource_project['project_id'], $workflowLevels);
         }
 
-        if (!empty($hook['owner']['id'])) {
-            $projectDao->update_memsource_project_owner($memsource_project['project_id'], $hook['owner']['id']);
+        if (!empty($hook['owner']['uid'])) {
+            $projectDao->update_memsource_project_owner($memsource_project['project_id'], $hook['owner']['uid']);
             $projectDao->queue_asana_project($memsource_project['project_id']);
         }
 
@@ -510,17 +510,17 @@ error_log(print_r($result, true));//(**)
 error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");//(**)
 
             if ($part['status'] == 'ASSIGNED') {
-                if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
-                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                if (!empty($part['assignedTo'][0]['linguist']['uid']) && count($part['assignedTo']) == 1) {
+                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['uid']);
                     if (!$user_id) {
-                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
+                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['uid']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
                         $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server                        $user_id = 3297;
                     }
 
                     if (!$taskDao->taskIsClaimed($task_id)) {
                         $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
-                        error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                        error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['uid']}");
                     } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
                       if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                         $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
@@ -617,7 +617,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         foreach ($hook as $part) {
-            if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
+            if (!empty($part['assignedTo'][0]['linguist']['uid']) && count($part['assignedTo']) == 1) {
                 $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid']);
                 if (empty($memsource_task)) {
                     error_log("Can't find memsource_task for {$part['uid']} in event JOB_ASSIGNED jobPart");
@@ -625,9 +625,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
                 $task_id = $memsource_task['task_id'];
 
-                $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['uid']);
                 if (!$user_id) {
-                    error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_ASSIGNED jobPart");
+                    error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['uid']} in event JOB_ASSIGNED jobPart");
                     $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server                    $user_id = 3297;
                 }
@@ -636,7 +636,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
-                    error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                    error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['uid']}");
                 }
             }
         }
@@ -2672,8 +2672,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
                 $memsource_project = $projectDao->get_memsource_project($project_id);
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
-                $owner_id              = $memsource_project['owner_id'];
-                $user_id = $projectDao->get_user_id_from_memsource_user($owner_id);
+                $owner_uid             = $memsource_project['owner_uid'];
+                $user_id = $projectDao->get_user_id_from_memsource_user($owner_uid);
                 if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server                if (!$user_id) $user_id = 3297;
 

@@ -826,11 +826,11 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
-    public function update_memsource_project_owner($project_id, $owner_id)
+    public function update_memsource_project_owner($project_id, $owner_uid)
     {
         LibAPI\PDOWrapper::call('update_memsource_project_owner',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($owner_id));
+            LibAPI\PDOWrapper::cleanseWrapStr($owner_uid));
     }
 
     public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)

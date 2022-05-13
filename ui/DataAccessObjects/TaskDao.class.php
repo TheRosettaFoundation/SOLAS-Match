@@ -292,7 +292,7 @@ error_log("createTaskDirectly: $args");
     public function sendOrgFeedbackDeclined($task_id, $claimant_id, $memsource_project)
     {
         $projectDao = new ProjectDao();
-        $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_id']);
+        $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_uid']);
         if (!$user_id) return;
         $result = $projectDao->get_user($user_id);
         if (empty($result)) return;
@@ -700,7 +700,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
     public function get_creator($project_id, $memsource_project = 0) {
         if ($memsource_project) {
             $projectDao = new ProjectDao();
-            $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_id']);
+            $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_uid']);
             if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server            if (!$user_id) $user_id = 3297;
             $result = $projectDao->get_user($user_id);
