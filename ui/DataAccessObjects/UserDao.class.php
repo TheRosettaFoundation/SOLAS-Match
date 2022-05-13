@@ -444,8 +444,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao->claimTask($taskId, $userId);
 
         if ($memsource_task) {
-            $memsource_user_id = $this->get_memsource_user($userId);
-            if (!$memsource_user_id) {
+            $memsource_user_uid = $this->get_memsource_user($userId);
+            if (!$memsource_user_uid) {
                 $ch = curl_init('https://cloud.memsource.com/web/api2/v3/users');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $user_personal_info = $this->getUserPersonalInformation($userId);
@@ -477,22 +477,15 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 curl_close($ch);
                 if (!empty($result['uid'])) {
                     $memsource_user_uid = $result['uid'];
-                    $record = $this->get_memsource_user_record($user_info->email);
-                    if (empty($record['id'])) {
-                        error_log("claimTask($userId...), can't find email in Memsource");
-                        return -1;
-                    } else {
-                        $memsource_user_id = $record['id'];
-                        $this->set_memsource_user($userId, $memsource_user_id, $memsource_user_uid);
-                        error_log("LINGUIST memsource user $memsource_user_id, $memsource_user_uid created for $userId");
-                    }
+                    $this->set_memsource_user($userId, 0, $memsource_user_uid);
+                    error_log("LINGUIST memsource user $memsource_user_uid created for $userId");
                 } else {
                     error_log("No memsource user created for $userId");
                     error_log(print_r($result, true));
                     return -1;
                 }
             }
-            if ($memsource_user_id) {
+            if ($memsource_user_uid) {
                 $projectDao = new ProjectDao();
                 $memsource_project = $projectDao->get_memsource_project($project_id);
                 $projectUid = $memsource_project['memsource_project_uid'];
@@ -508,7 +501,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                     'providers' => array(
                         array(
                             'type' => 'USER',
-                            'id' => $memsource_user_id
+                            'id' => $memsource_user_uid
                         )
                     )
                 );
@@ -576,19 +569,19 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
         if ($memsource_task) {
-            $memsource_user_id = 0;
+            $memsource_user_uid = 0;
             $taskDao = new TaskDao();
             $claimant = $taskDao->getUserClaimedTask($task->getId());
-            if (!empty($claimant)) $memsource_user_id = $this->get_memsource_user($claimant->getId());
+            if (!empty($claimant)) $memsource_user_uid = $this->get_memsource_user($claimant->getId());
             $projectDao = new ProjectDao();
             $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
             $url = $this->memsourceApiV1 . 'projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
             $ch = curl_init($url);
             $data = ['dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'];
-            if ($memsource_user_id) {
+            if ($memsource_user_uid) {
                 $data['status'] = 'ACCEPTED';
-                $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_id]];
+                $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
             } else {
                 $data['status'] = 'NEW';
             }
@@ -672,14 +665,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         curl_close($ch);
         if (!empty($result['uid'])) {
             $memsource_user_uid = $result['uid'];
-            $record = $this->get_memsource_user_record($user_info->email);
-            if (empty($record['id'])) {
-                error_log("create_memsource_user($user_id), can't find email in Memsource");
-                return 0;
-            }
-            $memsource_user_id = $record['id'];
-            $this->set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid);
-            error_log("PROJECT_MANAGER memsource user $memsource_user_id, $memsource_user_uid created for $user_id");
+            $this->set_memsource_user($user_id, 0, $memsource_user_uid);
+            error_log("PROJECT_MANAGER memsource user $memsource_user_uid created for $user_id");
             return $memsource_user_uid;
         } else {
             error_log("No PROJECT_MANAGER memsource user created for $user_id");
@@ -1751,7 +1738,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
         if (empty($result)) return 0;
 
-        return $result[0]['memsource_user_id'];
+        return $result[0]['memsource_user_uid'];
     }
 
     public function set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid)
@@ -1962,8 +1949,8 @@ error_log(print_r($project_result, true));//(**)
             }
         }
         $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
-            empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
-            empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
+            empty($project_result['createdBy']['uid']) ? '' : $project_result['createdBy']['uid'],
+            empty($project_result['owner']['uid']) ? '' : $project_result['owner']['uid'],
             $workflowLevels);
 
         $split = in_array($project->getOrganisationId(), [860, $this->usernamePrefix === 'DEV_' ? 547 : 0]) ? 1 : 0;

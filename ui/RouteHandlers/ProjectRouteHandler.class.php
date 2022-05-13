@@ -185,8 +185,8 @@ class ProjectRouteHandler
         }
 
         $projectDao->set_memsource_project($project_id, $hook['id'], $hook['uid'],
-            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
-            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+            empty($hook['createdBy']['uid']) ? '' : $hook['createdBy']['uid'],
+            empty($hook['owner']['uid']) ? '' : $hook['owner']['uid'],
             $workflowLevels);
 
         $target_languages = '';
