@@ -7120,7 +7120,7 @@ BEGIN
     FROM      MemsourceProjects mp
     JOIN      Projects           p ON mp.project_id=p.id
     JOIN      Organisations      o ON p.organisation_id=o.id
-    LEFT JOIN MemsourceUsers    mu ON mp.owner_id=memsource_user_id
+    LEFT JOIN MemsourceUsers    mu ON mp.owner_uid=memsource_user_uid
     LEFT JOIN Users              u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles      pf ON mp.project_id=pf.project_id
     LEFT JOIN Users             u2 ON pf.user_id=u2.id
@@ -8684,9 +8684,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_id_from_memsource_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceUID VARCHAR(30))
 BEGIN
-    SELECT * FROM MemsourceUsers WHERE memsource_user_id=memsourceID;
+    SELECT * FROM MemsourceUsers WHERE memsource_user_uid=memsourceUID;
 END//
 DELIMITER ;
 
