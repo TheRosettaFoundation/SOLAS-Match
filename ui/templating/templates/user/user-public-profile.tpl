@@ -266,6 +266,17 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 </td>
                             </tr>
                             {/if}
+                            {if $isSiteAdmin}
+                            <tr>
+                                <td>
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                        <i class="icon-list-alt icon-white"></i>
+                                        <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                    </form>
+                                </td>
+                            </tr>
+                            {/if}
                     </tbody>
                 </table>
             </div>
