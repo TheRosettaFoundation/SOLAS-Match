@@ -521,7 +521,6 @@ class UserRouteHandler
                     // Get exact response message why it has been flagged as spam
                     $g_response = $response_keys['error-codes'][0];
                     error_log("$error: $ip Google_response: $g_response");
-                    UserRouteHandler::flashNow('error', $error);
                 }
             } else {
                 error_log("Spam response from Google empty ip: $ip");
@@ -559,6 +558,8 @@ class UserRouteHandler
                         'Failed to register'
                     );
                 }
+            } else {
+                if ($error === 'Spam Detected!') UserRouteHandler::flashNow('error', $error);
             }
         }
         if ($error !== null) {
