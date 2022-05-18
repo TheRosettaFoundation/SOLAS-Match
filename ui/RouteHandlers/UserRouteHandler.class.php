@@ -2164,6 +2164,7 @@ class UserRouteHandler
 
         $testing_center_projects_by_code = [];
         $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
+        $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
         $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
 
@@ -2191,28 +2192,20 @@ class UserRouteHandler
                 $pm = $userDao->getUser($loggedInUserId);
                 $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
                 $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
+                $paid_work = '';
+                foreach ($supported_ngos_paid as $ngo) {
+                    $paid_work . = $ngo['org_name'] . '<br />';
+                }
                 $objDateTime = new \DateTime();
                 $objDateTime->add(DateInterval::createFromDateString('1 day'));
                 $data = ['data' => [
                     'name' => "Documentation for $full_name",
                     'projects' => ['1201514646699532'],
                     'due_at' => $objDateTime->format('c'),
-                    'notes' => "KP Project details per language pair, Project ID: $projectId",
-look format https://app.asana.com/0/1201514646699532/board
-
-
-
-
-
-'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . '<br />'
-
-
-Deadline (it can be in ~10 days from the creation date by default)
-List of partners the linguist worked for (so we can know if we are likely to have docs in the database or not)
-Name and KP profile of the linguist we need documents for
-
-"$full_name - " . $user->getEmail()
-
+                    'notes' =>
+                        'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . '<br />' .
+                        "Paid work: $paid_work" .
+                        "Linguist: $full_name - " . $user->getEmail() . " - https://kato.translatorswb.org/$user_id/profile/"
                 ]];
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -2522,7 +2515,7 @@ Name and KP profile of the linguist we need documents for
             'expertise_list'         => $userDao->getExpertiseList($user_id),
             'capability_list'        => $userDao->getCapabilityList($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
-            'supported_ngos_paid'    => $userDao->supported_ngos_paid($user_id),
+            'supported_ngos_paid'    => $supported_ngos_paid,
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'admin_comments_average' => $userDao->admin_comments_average($user_id),
