@@ -2192,12 +2192,12 @@ class UserRouteHandler
                 $pm = $userDao->getUser($loggedInUserId);
                 $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
                 $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
-                $paid_work = '';
+                $paid_work = '<br />';
                 foreach ($supported_ngos_paid as $ngo) {
                     $paid_work .= $ngo['org_name'] . '<br />';
                 }
                 $objDateTime = new \DateTime();
-                $objDateTime->add(\DateInterval::createFromDateString('1 day'));
+                $objDateTime->add(\DateInterval::createFromDateString('10 day'));
                 $data = ['data' => [
                     'name' => "Documentation for $full_name",
                     'projects' => ['1201514646699532'],
