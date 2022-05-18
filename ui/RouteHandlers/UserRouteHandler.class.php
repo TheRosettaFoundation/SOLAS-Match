@@ -2194,7 +2194,7 @@ class UserRouteHandler
                 $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
                 $paid_work = '';
                 foreach ($supported_ngos_paid as $ngo) {
-                    $paid_work . = $ngo['org_name'] . '<br />';
+                    $paid_work .= $ngo['org_name'] . '<br />';
                 }
                 $objDateTime = new \DateTime();
                 $objDateTime->add(DateInterval::createFromDateString('1 day'));
