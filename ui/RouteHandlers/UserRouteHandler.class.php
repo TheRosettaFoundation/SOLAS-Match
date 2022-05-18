@@ -2208,12 +2208,14 @@ class UserRouteHandler
                         "Linguist: $full_name - " . $user->getEmail() . " - https://kato.translatorswb.org/$user_id/profile/"
                 ]];
                 $payload = json_encode($data);
+error_log("payload: $payload");//(**)
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6'))];
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result = curl_exec($ch);
                 curl_close($ch);
+error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
