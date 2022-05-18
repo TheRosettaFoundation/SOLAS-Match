@@ -2188,18 +2188,31 @@ class UserRouteHandler
 
             if ($isSiteAdmin && isset($post['requestDocuments'])) {
                 $ch = curl_init('https://app.asana.com/api/1.0/tasks');
+                $pm = $userDao->getUser($loggedInUserId);
+                $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
+                $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
                 $objDateTime = new \DateTime();
                 $objDateTime->add(DateInterval::createFromDateString('1 day'));
                 $data = ['data' => [
-                    'name' => 'Documentation for ' . !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '',
+                    'name' => "Documentation for $full_name",
                     'projects' => ['1201514646699532'],
                     'due_at' => $objDateTime->format('c'),
                     'notes' => "KP Project details per language pair, Project ID: $projectId",
 look format https://app.asana.com/0/1201514646699532/board
-name/email address of the PM creating the request
+
+
+
+
+
+'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . '<br />'
+
+
 Deadline (it can be in ~10 days from the creation date by default)
 List of partners the linguist worked for (so we can know if we are likely to have docs in the database or not)
 Name and KP profile of the linguist we need documents for
+
+"$full_name - " . $user->getEmail()
+
                 ]];
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
