@@ -2187,102 +2187,28 @@ class UserRouteHandler
             }
 
             if ($isSiteAdmin && isset($post['requestDocuments'])) {
-
-
-post to...
-https://app.asana.com/0/1201514646699532/board
-LOOK AT THESE POSTS ALSO FOR FORMAT
-
-
+                $ch = curl_init('https://app.asana.com/api/1.0/tasks');
+                $objDateTime = new \DateTime();
+                $objDateTime->add(DateInterval::createFromDateString('1 day'));
+                $data = ['data' => [
+                    'name' => 'Documentation for ' . !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '',
+                    'projects' => ['1201514646699532'],
+                    'due_at' => $objDateTime->format('c'),
+                    'notes' => "KP Project details per language pair, Project ID: $projectId",
+look format https://app.asana.com/0/1201514646699532/board
 name/email address of the PM creating the request
 Deadline (it can be in ~10 days from the creation date by default)
 List of partners the linguist worked for (so we can know if we are likely to have docs in the database or not)
 Name and KP profile of the linguist we need documents for
-
-
-                            // Asana 4th Project
-                            $server_name = $_SERVER['SERVER_NAME'];
-                            $re = curl_init('https://app.asana.com/api/1.0/tasks');
-                            curl_setopt($re, CURLOPT_POSTFIELDS, array(
-                                'name' => "$language_code_source|$language_code_target, " . $project->getTitle() . ', ' . $user->getEmail(),
-                                'notes' => " https://$server_name/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . " https://$server_name/project/$project_id/view https://$server_name/task/$translation_task_id/view",
-                                'projects' => '1127940658676844'
-                            ));
-
-                            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-                            curl_setopt($re, CURLOPT_HEADER, true);
-                            curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
-                            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                            curl_exec($re);
-                            if ($error_number = curl_errno($re)) {
-                                error_log("Asana 4 API error ($error_number): " . curl_error($re));
-                            }
-                            curl_close($re);
-
-                            UserRouteHandler::flashNow('success', '<a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $translation_task_id]) .
-                                '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
-                        }
-[[[[[[[
-                        $create = true;
-                        $url = 'https://app.asana.com/api/1.0/tasks';
-                    } else {
-                        $create = false;
-                        $url = 'https://app.asana.com/api/1.0/tasks/' . $asana_tasks[$key]['asana_task_id'];
-                        error_log('Updating Asana task: ' . $asana_tasks[$key]['asana_task_id']);
-                    }
-                    $targetLocale = $project_lang_pair['targetLanguageName'];
-                    $targetLocale_code = $project_lang_pair['targetLanguageCode'];
-
-                    $ch = curl_init($url);
-
-                    $wordCount = $project_lang_pair['tWordCount'];
-                    if ($wordCount == 0) $wordCount = $project_lang_pair['rWordCount'];
-
-                    // https://developers.asana.com/docs/create-a-task
-                    // https://developers.asana.com/docs/update-a-task
-                    // https://app.asana.com/0/1200067882657242/board
-                    if ($create) {
-                        $data = array('data' => array(
-                            "name" => $project_name,
-                            "projects" => array(
-                                $asana_project
-                            ),
-                            "custom_fields" => array(
-                                "1200067882657247" => $wordCount,
-                                "1200067882657245" => $org_name,
-                                "1200068101079960" => $sourceLocale,
-                                "1200269602122253" => $sourceLocale_code,
-                                "1200067882657251" => $targetLocale,
-                                "1200269602122255" => $targetLocale_code,
-                                "1200226775862070" => $project_url,
-                                '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
-                                "1200269602122257" => "$projectId"
-                            ),
-                            "due_at" => $objDateTime->format('c'),
-                            "notes" => "KP Project details per language pair, Project ID: $projectId",
-                            ));
-                            if (!$self_service) $data['data']['assignee'] = $pm;
-                    } else {
-                        $data = array('data' => array(
-                            "custom_fields" => array(
-                                "1200067882657247" => $wordCount,
-                                "1200067882657245" => $org_name,
-                            ),
-                            "due_at" => $objDateTime->format('c'),
-                            ));
-                        if (!$self_service) $data['data']['assignee'] = $pm;
-                    }
-                    $payload = json_encode($data);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                    if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-                    else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                    $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-                    $result = curl_exec($ch);
-                    curl_close($ch);
-]]]]]]]
+                ]];
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6'))];
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch);
+                curl_close($ch);
+                UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
