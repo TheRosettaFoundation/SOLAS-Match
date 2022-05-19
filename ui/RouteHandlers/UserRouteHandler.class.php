@@ -2192,9 +2192,9 @@ class UserRouteHandler
                 $pm = $userDao->getUser($loggedInUserId);
                 $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
                 $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
-                $paid_work = '<br />';
+                $paid_work = "\n";
                 foreach ($supported_ngos_paid as $ngo) {
-                    $paid_work .= $ngo['org_name'] . '<br />';
+                    $paid_work .= $ngo['org_name'] . "\n";
                 }
                 $objDateTime = new \DateTime();
                 $objDateTime->add(\DateInterval::createFromDateString('3 day'));
@@ -2203,7 +2203,7 @@ class UserRouteHandler
                     'projects' => ['1201514646699532'],
                     'due_at' => $objDateTime->format('c'),
                     'notes' =>
-                        'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . '<br />' .
+                        'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . "\n" .
                         "Paid work: $paid_work" .
                         "Linguist: $full_name - " . $user->getEmail() . " - https://kato.translatorswb.org/$user_id/profile/"
                 ]];
