@@ -2197,7 +2197,7 @@ class UserRouteHandler
                     $paid_work .= $ngo['org_name'] . '<br />';
                 }
                 $objDateTime = new \DateTime();
-                $objDateTime->add(\DateInterval::createFromDateString('10 day'));
+                $objDateTime->add(\DateInterval::createFromDateString('3 day'));
                 $data = ['data' => [
                     'name' => "Documentation for $full_name",
                     'projects' => ['1201514646699532'],
