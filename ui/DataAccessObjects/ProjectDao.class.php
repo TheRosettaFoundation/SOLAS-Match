@@ -206,6 +206,18 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        if ($ret && $memsource_project = $this->get_memsource_project($projectId)) {
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['archived' => true]));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log($result);
+        }
         return $ret;
     }
 
