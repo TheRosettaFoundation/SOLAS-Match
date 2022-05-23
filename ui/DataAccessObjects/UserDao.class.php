@@ -376,14 +376,6 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function addUserBadgeById($userId, $badgeId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        return $ret;
-    }
-
     public function NotifyRegistered($userId)
     {
         $request = "{$this->siteApi}v0/users/NotifyRegistered/$userId";
@@ -1506,23 +1498,26 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     public function getCapabilityList($user_id)
     {
         $capability_list = [];
-        $capability_list['badge_id_6']  = ['desc' => 'Translation',         'state' => 0, 'id' =>  6];
-        $capability_list['badge_id_7']  = ['desc' => 'Revision',            'state' => 0, 'id' =>  7];
-        $capability_list['badge_id_10'] = ['desc' => 'Subtitling',          'state' => 0, 'id' => 10];
-        $capability_list['badge_id_11'] = ['desc' => 'Monolingual editing', 'state' => 0, 'id' => 11];
-        $capability_list['badge_id_12'] = ['desc' => 'DTP',                 'state' => 0, 'id' => 12];
-        $capability_list['badge_id_13'] = ['desc' => 'Voiceover',           'state' => 0, 'id' => 13];
-        $capability_list['badge_id_8']  = ['desc' => 'Interpretation',      'state' => 0, 'id' =>  8];
-        // If we add >13, then the code below will need to be changed as will authenticateUserForOrgBadge() and SQL for removeUserBadge
-        $badges = $this->getUserBadges($user_id);
-        if (!empty($badges)) {
-            foreach ($badges as $badge) {
-                if ($badge->getId() >= 6 && $badge->getId() != 9 && $badge->getId() <= 13) {
-                    $capability_list['badge_id_' . $badge->getId()]['state'] = 1;
-                }
-            }
+        $services = $this->get_user_services($user_id);
+        foreach ($services as $service) {
+            $capability_list['badge_id_' . $service['id']] = $service;
         }
         return $capability_list;
+    }
+
+    public function get_user_services($user_id)
+    {
+        return LibAPI\PDOWrapper::call('get_user_services', LibAPI\PDOWrapper::cleanse($user_id));
+    }
+
+    public function add_user_service($user_id, $service_id)
+    {
+        LibAPI\PDOWrapper::call('add_user_service', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($service_id));
+    }
+
+    public function remove_user_service($user_id, $service_id)
+    {
+        LibAPI\PDOWrapper::call('remove_user_service', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($service_id));
     }
 
     public function getExpertiseList($user_id)

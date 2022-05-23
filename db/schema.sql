@@ -1255,6 +1255,35 @@ CREATE TABLE IF NOT EXISTS `strategic_cut_offs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `Services` (
+  id    INT(10) NOT NULL AUTO_INCREMENT,
+  desc  VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  ord   INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*
+INSERT INTO Services (id, desc, ord) VALUES ( 6, 'Translation',         1);
+INSERT INTO Services (id, desc, ord) VALUES ( 7, 'Revision',            2);
+INSERT INTO Services (id, desc, ord) VALUES ( 8, 'Interpretation',      7);
+INSERT INTO Services (id, desc, ord) VALUES (10, 'Subtitling',          3);
+INSERT INTO Services (id, desc, ord) VALUES (11, 'Monolingual editing', 4);
+INSERT INTO Services (id, desc, ord) VALUES (12, 'DTP',                 5);
+INSERT INTO Services (id, desc, ord) VALUES (13, 'Voiceover',           6);
+*/
+
+
+CREATE TABLE IF NOT EXISTS `UserServices` (
+  user_id     INT(10) UNSIGNED NOT NULL,
+  service_id  INT(10) UNSIGNED NOT NULL,
+  approved    INT(10) UNSIGNED DEFAULT 0,
+  approved_by INT(10) UNSIGNED DEFAULT 0,
+  KEY FK_user_services_users    (user_id),
+  KEY FK_user_services_services (service_id),
+  CONSTRAINT FK_user_services_users    FOREIGN KEY (user_id)    REFERENCES Users    (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_user_services_services FOREIGN KEY (service_id) REFERENCES Services (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9483,6 +9512,36 @@ LEFT JOIN
     WHERE u.id=uID
     GROUP BY u.id
 ) AS adjust_strategic ON main.user_id=adjust_strategic.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_services`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_services`(IN user_id INT)
+BEGIN
+    SELECT
+        s.id,
+        s.desc,
+        IF(us.user_id IS NOT NULL, 1, 0) AS state
+    FROM      Services      s
+    LEFT JOIN UserServices us ON s.id=us.service_id
+    ORDER BY s.ord;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `add_user_service`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_user_service`(IN uID INT, IN sID INT)
+BEGIN
+    INSERT INTO UserServices (user_id, service_id) VALUES (uID, sID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_service`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_service`(IN uID INT, IN sID INT)
+BEGIN
+    DELETE FROM UserServices WHERE user_id=uID AND service_id=sID;
 END//
 DELIMITER ;
 

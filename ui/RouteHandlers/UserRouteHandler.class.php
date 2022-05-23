@@ -1288,9 +1288,9 @@ class UserRouteHandler
 
                     foreach ($capability_list as $name => $capability) {
                         if ($capability['state'] && empty($post[$name])) {
-                            $userDao->removeUserBadge($user_id, $capability['id']);
+                            $userDao->remove_user_service($user_id, $capability['id']);
                         } elseif (!$capability['state'] && !empty($post[$name])) {
-                            $userDao->addUserBadgeById($user_id, $capability['id']);
+                            $userDao->add_user_service($user_id, $capability['id']);
                         }
                     }
 

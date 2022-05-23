@@ -37,11 +37,6 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUserTrackedTasksById')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
-        $app->put(
-            '/api/v0/users/{userId}/badges/{badgeId}/',
-            '\SolasMatch\API\V0\Users:addUserbadgesByID')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgBadge');
-
         $app->delete(
             '/api/v0/users/{userId}/badges/{badgeId}/',
             '\SolasMatch\API\V0\Users:deleteUserbadgesByID')
@@ -398,13 +393,6 @@ class Users
         $userId = $args['userId'];
         $badgeId = $args['badgeId'];
         return API\Dispatcher::sendResponse($response, DAO\BadgeDao::removeUserBadge($userId, $badgeId), null);
-    }
-
-    public static function addUserbadgesByID(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $badgeId = $args['badgeId'];
-        return API\Dispatcher::sendResponse($response, DAO\BadgeDao::assignBadge($userId, $badgeId), null);
     }
 
     public static function NotifyRegistered(Request $request, Response $response, $args)
