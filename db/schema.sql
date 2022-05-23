@@ -1256,19 +1256,19 @@ CREATE TABLE IF NOT EXISTS `strategic_cut_offs` (
 
 
 CREATE TABLE IF NOT EXISTS `Services` (
-  id    INT(10) NOT NULL AUTO_INCREMENT,
-  desc  VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  ord   INT(10) UNSIGNED NOT NULL,
+  id     INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `desc` VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  ord    INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*
-INSERT INTO Services (id, desc, ord) VALUES ( 6, 'Translation',         1);
-INSERT INTO Services (id, desc, ord) VALUES ( 7, 'Revision',            2);
-INSERT INTO Services (id, desc, ord) VALUES ( 8, 'Interpretation',      7);
-INSERT INTO Services (id, desc, ord) VALUES (10, 'Subtitling',          3);
-INSERT INTO Services (id, desc, ord) VALUES (11, 'Monolingual editing', 4);
-INSERT INTO Services (id, desc, ord) VALUES (12, 'DTP',                 5);
-INSERT INTO Services (id, desc, ord) VALUES (13, 'Voiceover',           6);
+INSERT INTO Services (id, `desc`, ord) VALUES ( 6, 'Translation',         1);
+INSERT INTO Services (id, `desc`, ord) VALUES ( 7, 'Revision',            2);
+INSERT INTO Services (id, `desc`, ord) VALUES ( 8, 'Interpretation',      7);
+INSERT INTO Services (id, `desc`, ord) VALUES (10, 'Subtitling',          3);
+INSERT INTO Services (id, `desc`, ord) VALUES (11, 'Monolingual editing', 4);
+INSERT INTO Services (id, `desc`, ord) VALUES (12, 'DTP',                 5);
+INSERT INTO Services (id, `desc`, ord) VALUES (13, 'Voiceover',           6);
 */
 
 
