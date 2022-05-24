@@ -2037,13 +2037,16 @@ error_log("Language added: $result");//(**)
                       'dataPerContext' => [
                         'transMemories' => [
                             [
-                                'transMemory' => ['id' => $working_tm_uid],
+                                'transMemory' => ['uid' => $working_tm_uid],
                                 'readMode' => true,
                                 'writeMode' => true,
                                 'penalty' => 0,
-                                'applyPenaltyTo101Only' => false
+                                'applyPenaltyTo101Only' => false,
+                                'order' => 0
                             ]
                         ],
+                        'targetLang' => "",?????????????,
+                        'orderEnabled' => true
                       ]
                     ];
                     $payload = json_encode($data);
