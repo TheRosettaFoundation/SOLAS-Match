@@ -9517,14 +9517,14 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_services`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_services`(IN user_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_services`(IN uID INT)
 BEGIN
     SELECT
         s.id,
         s.desc,
         IF(us.user_id IS NOT NULL, 1, 0) AS state
     FROM      Services      s
-    LEFT JOIN UserServices us ON s.id=us.service_id
+    LEFT JOIN UserServices us ON s.id=us.service_id AND us.user_id=uID
     ORDER BY s.ord;
 END//
 DELIMITER ;
