@@ -521,7 +521,6 @@ class UserRouteHandler
                     // Get exact response message why it has been flagged as spam
                     $g_response = $response_keys['error-codes'][0];
                     error_log("$error: $ip Google_response: $g_response");
-                    UserRouteHandler::flashNow('error', $error);
                 }
             } else {
                 error_log("Spam response from Google empty ip: $ip");
@@ -559,6 +558,8 @@ class UserRouteHandler
                         'Failed to register'
                     );
                 }
+            } else {
+                if ($error === 'Spam Detected!') UserRouteHandler::flashNow('error', $error);
             }
         }
         if ($error !== null) {
@@ -1287,9 +1288,9 @@ class UserRouteHandler
 
                     foreach ($capability_list as $name => $capability) {
                         if ($capability['state'] && empty($post[$name])) {
-                            $userDao->removeUserBadge($user_id, $capability['id']);
+                            $userDao->remove_user_service($user_id, $capability['id']);
                         } elseif (!$capability['state'] && !empty($post[$name])) {
-                            $userDao->addUserBadgeById($user_id, $capability['id']);
+                            $userDao->add_user_service($user_id, $capability['id']);
                         }
                     }
 
@@ -2163,6 +2164,7 @@ class UserRouteHandler
 
         $testing_center_projects_by_code = [];
         $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
+        $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
         $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
 
@@ -2183,6 +2185,38 @@ class UserRouteHandler
             if (isset($post['referenceRequest'])) {
                 $userDao->requestReferenceEmail($user_id);
                 $template_data = array_merge($template_data, array("requestSuccess" => true));
+            }
+
+            if ($isSiteAdmin && isset($post['requestDocuments'])) {
+                $ch = curl_init('https://app.asana.com/api/1.0/tasks');
+                $pm = $userDao->getUser($loggedInUserId);
+                $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
+                $full_name = !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '';
+                $paid_work = "\n";
+                foreach ($supported_ngos_paid as $ngo) {
+                    $paid_work .= $ngo['org_name'] . "\n";
+                }
+                $objDateTime = new \DateTime();
+                $objDateTime->add(\DateInterval::createFromDateString('3 day'));
+                $data = ['data' => [
+                    'name' => "Documentation for $full_name",
+                    'projects' => ['1201514646699532'],
+                    'due_at' => $objDateTime->format('c'),
+                    'notes' =>
+                        'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . "\n" .
+                        "Paid work: $paid_work" .
+                        "Linguist: $full_name - " . $user->getEmail() . " - https://kato.translatorswb.org/$user_id/profile/"
+                ]];
+                $payload = json_encode($data);
+error_log("payload: $payload");//(**)
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch);
+                curl_close($ch);
+error_log("result: $result");//(**)
+                UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
@@ -2483,6 +2517,7 @@ class UserRouteHandler
             'expertise_list'         => $userDao->getExpertiseList($user_id),
             'capability_list'        => $userDao->getCapabilityList($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'supported_ngos_paid'    => $supported_ngos_paid,
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'admin_comments_average' => $userDao->admin_comments_average($user_id),
@@ -2530,6 +2565,7 @@ class UserRouteHandler
             'expertise_list'         => $userDao->getExpertiseList($user_id),
             'capability_list'        => $userDao->getCapabilityList($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'supported_ngos_paid'    => [],
             'quality_score'          => $userDao->quality_score($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'show_create_memsource_user' => 0,

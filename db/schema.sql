@@ -1080,7 +1080,6 @@ CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
   memsource_user_id BIGINT(20) UNSIGNED NOT NULL,
   memsource_user_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY FK_MemsourceUsers_user_id (user_id),
-  UNIQUE  KEY memsource_user_id         (memsource_user_id),
           KEY memsource_user_uid        (memsource_user_uid),
   CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1100,8 +1099,10 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   project_id            INT(10) UNSIGNED NOT NULL,
   memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
   memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  created_by_id         BIGINT(20) UNSIGNED NOT NULL,
-  owner_id              BIGINT(20) UNSIGNED NOT NULL,
+  created_by_uid        VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  owner_uid             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  created_by_id         BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  owner_id              BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   workflow_level_1      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_2      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_3      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1251,6 +1252,35 @@ CREATE TABLE IF NOT EXISTS `strategic_cut_offs` (
   KEY (language_code_target),
   CONSTRAINT `FK_strategic_cut_offs_Languages_s` FOREIGN KEY (`language_id-source`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_strategic_cut_offs_Languages_t` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `Services` (
+  id     INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `desc` VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  ord    INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*
+INSERT INTO Services (id, `desc`, ord) VALUES ( 6, 'Translation',         1);
+INSERT INTO Services (id, `desc`, ord) VALUES ( 7, 'Revision',            2);
+INSERT INTO Services (id, `desc`, ord) VALUES ( 8, 'Interpretation',      7);
+INSERT INTO Services (id, `desc`, ord) VALUES (10, 'Subtitling',          3);
+INSERT INTO Services (id, `desc`, ord) VALUES (11, 'Monolingual editing', 4);
+INSERT INTO Services (id, `desc`, ord) VALUES (12, 'DTP',                 5);
+INSERT INTO Services (id, `desc`, ord) VALUES (13, 'Voiceover',           6);
+*/
+
+
+CREATE TABLE IF NOT EXISTS `UserServices` (
+  user_id     INT(10) UNSIGNED NOT NULL,
+  service_id  INT(10) UNSIGNED NOT NULL,
+  approved    INT(10) UNSIGNED DEFAULT 0,
+  approved_by INT(10) UNSIGNED DEFAULT 0,
+  KEY FK_user_services_users    (user_id),
+  KEY FK_user_services_services (service_id),
+  CONSTRAINT FK_user_services_users    FOREIGN KEY (user_id)    REFERENCES Users    (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_user_services_services FOREIGN KEY (service_id) REFERENCES Services (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -7120,7 +7150,7 @@ BEGIN
     FROM      MemsourceProjects mp
     JOIN      Projects           p ON mp.project_id=p.id
     JOIN      Organisations      o ON p.organisation_id=o.id
-    LEFT JOIN MemsourceUsers    mu ON mp.owner_id=memsource_user_id
+    LEFT JOIN MemsourceUsers    mu ON mp.owner_uid=memsource_user_uid
     LEFT JOIN Users              u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles      pf ON mp.project_id=pf.project_id
     LEFT JOIN Users             u2 ON pf.user_id=u2.id
@@ -8276,6 +8306,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `supported_ngos_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos_paid`(IN uID INT)
+BEGIN
+    SELECT DISTINCT
+        o.name AS org_name,
+        o.id AS org_id
+    FROM TaskClaims   tc
+    JOIN TaskPaids    tp ON tc.task_id=tp.task_id
+    JOIN Tasks         t ON tc.task_id=t.id
+    JOIN Projects      p ON t.project_id=p.id
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE
+        tc.user_id=uID AND
+        t.`task-status_id`=4
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `quality_score`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)
@@ -8665,9 +8714,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_id_from_memsource_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceUID VARCHAR(30))
 BEGIN
-    SELECT * FROM MemsourceUsers WHERE memsource_user_id=memsourceID;
+    SELECT * FROM MemsourceUsers WHERE memsource_user_uid=memsourceUID;
 END//
 DELIMITER ;
 
@@ -8697,19 +8746,19 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdID BIGINT, IN ownerID BIGINT, IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdUID VARCHAR(30), IN ownerUID VARCHAR(30), IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
 BEGIN
-    INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3, workflow_level_4, workflow_level_5, workflow_level_6, workflow_level_7, workflow_level_8, workflow_level_9, workflow_level_10, workflow_level_11, workflow_level_12)
-    VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3,        workflow4,        workflow5,        workflow6,        workflow7,        workflow8,        workflow9,        workflow10,        workflow11,        workflow12);
+    INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_uid, owner_uid, workflow_level_1, workflow_level_2, workflow_level_3, workflow_level_4, workflow_level_5, workflow_level_6, workflow_level_7, workflow_level_8, workflow_level_9, workflow_level_10, workflow_level_11, workflow_level_12)
+    VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdUID,  ownerUID,        workflow1,        workflow2,        workflow3,        workflow4,        workflow5,        workflow6,        workflow7,        workflow8,        workflow9,        workflow10,        workflow11,        workflow12);
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_project_owner`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID BIGINT)
 BEGIN
     UPDATE MemsourceProjects
-    SET owner_id=ownerID
+    SET owner_uid=ownerUID
     WHERE project_id=projectID;
 END//
 DELIMITER ;
@@ -9463,6 +9512,36 @@ LEFT JOIN
     WHERE u.id=uID
     GROUP BY u.id
 ) AS adjust_strategic ON main.user_id=adjust_strategic.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_services`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_services`(IN uID INT)
+BEGIN
+    SELECT
+        s.id,
+        s.desc,
+        IF(us.user_id IS NOT NULL, 1, 0) AS state
+    FROM      Services      s
+    LEFT JOIN UserServices us ON s.id=us.service_id AND us.user_id=uID
+    ORDER BY s.ord;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `add_user_service`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_user_service`(IN uID INT, IN sID INT)
+BEGIN
+    INSERT INTO UserServices (user_id, service_id) VALUES (uID, sID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_service`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_service`(IN uID INT, IN sID INT)
+BEGIN
+    DELETE FROM UserServices WHERE user_id=uID AND service_id=sID;
 END//
 DELIMITER ;
 

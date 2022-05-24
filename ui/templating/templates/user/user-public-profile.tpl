@@ -266,6 +266,19 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 </td>
                             </tr>
                             {/if}
+                            {if $isSiteAdmin}
+                            <tr>
+                                <td style="padding-bottom: 10px" />
+                            </tr>
+                            <tr>
+                                <td>
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                        <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                    </form>
+                                </td>
+                            </tr>
+                            {/if}
                     </tbody>
                 </table>
             </div>
@@ -309,6 +322,23 @@ alert('You have already requested to take a test in order to become a Kató Veri
                             </ul>
                             </td>
                         </tr>
+
+                        {if $isSiteAdmin && !empty($supported_ngos_paid)}
+                        <tr>
+                            <td>
+                                <h3>NGOs supported with paid projects</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <ul>
+                            {foreach from=$supported_ngos_paid item=supported_ngo}
+                                <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
+                            {/foreach}
+                            </ul>
+                            </td>
+                        </tr>
+                        {/if}
 
                         <tr>
                             <td>

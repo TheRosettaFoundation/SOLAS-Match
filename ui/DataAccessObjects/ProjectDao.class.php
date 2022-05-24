@@ -204,8 +204,22 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
 
     public function archiveProject($projectId, $userId)
     {
+        $memsource_project = $this->get_memsource_project($projectId);
+
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        if ($ret && $memsource_project) {
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['archived' => true]));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log($result);
+        }
         return $ret;
     }
 
@@ -786,14 +800,14 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
-    public function set_memsource_project($project_id, $memsource_project_id, $memsource_project_uid, $created_by_id, $owner_id, $workflowLevels)
+    public function set_memsource_project($project_id, $memsource_project_id, $memsource_project_uid, $created_by_uid, $owner_uid, $workflowLevels)
     {
         LibAPI\PDOWrapper::call('set_memsource_project',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
-            LibAPI\PDOWrapper::cleanse($created_by_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($owner_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($created_by_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($owner_uid) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]) . ',' .
@@ -826,11 +840,11 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
-    public function update_memsource_project_owner($project_id, $owner_id)
+    public function update_memsource_project_owner($project_id, $owner_uid)
     {
         LibAPI\PDOWrapper::call('update_memsource_project_owner',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($owner_id));
+            LibAPI\PDOWrapper::cleanseWrapStr($owner_uid));
     }
 
     public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)
@@ -1031,9 +1045,9 @@ $memsource_change_country_to_kp = [
         return $results;
     }
 
-    public function get_user_id_from_memsource_user($memsource_user_id)
+    public function get_user_id_from_memsource_user($memsource_user_uid)
     {
-        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanse($memsource_user_id));
+        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid));
 
         if (empty($result)) return 0;
 
@@ -1344,16 +1358,16 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         if (!empty($job['dateDue'])) $this->update_task_due_date($task_id, substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
 
         if ($status == 'ACCEPTED') { // In Progress ('ASSIGNED' in Hook)
-            if (!empty($job['providers'][0]['id']) && count($job['providers']) == 1) {
-                $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['id']);
+            if (!empty($job['providers'][0]['uid']) && count($job['providers']) == 1) {
+                $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['uid']);
                 if (!$user_id) {
-                    error_log("Can't find user_id for {$job['providers'][0]['id']} in Sync status: ACCEPTED");
+                    error_log("Can't find user_id for {$job['providers'][0]['uid']} in Sync status: ACCEPTED");
                     return;
                 }
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
                     $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
-                    error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
+                    error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['uid']}");
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
                   if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
