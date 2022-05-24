@@ -2045,7 +2045,7 @@ error_log("Language added: $result");//(**)
                                 'order' => 0
                             ]
                         ],
-                        'targetLang' => "",?????????????,
+                        'targetLang' => $langs,
                         'orderEnabled' => true
                       ]
                     ];
