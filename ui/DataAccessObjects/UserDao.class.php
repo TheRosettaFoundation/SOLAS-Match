@@ -2035,7 +2035,8 @@ error_log("Language added: $result");//(**)
                     $ch = curl_init($url);
                     $data = [
                       'dataPerContext' => [
-                        'transMemories' => [
+                        [
+                          'transMemories' => [
                             [
                                 'transMemory' => ['uid' => $working_tm_uid],
                                 'readMode' => true,
@@ -2044,8 +2045,10 @@ error_log("Language added: $result");//(**)
                                 'applyPenaltyTo101Only' => false,
                                 'order' => 0
                             ]
-                        ],
-                        'orderEnabled' => true
+                          ],
+                          'targetLang' => implode(',', $langs),
+                          'orderEnabled' => true
+                        ]
                       ]
                     ];
                     $payload = json_encode($data);
