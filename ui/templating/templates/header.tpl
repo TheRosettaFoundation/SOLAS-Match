@@ -29,7 +29,15 @@
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
+		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
+        <!-- 
+        <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="180x180" href="{urlFor name="home"}ui/img/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="{urlFor name="home"}ui/img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="{urlFor name="home"}ui/img/favicon/favicon-16x16.png">
+        <link rel="manifest" href="{urlFor name="home"}ui/img/favicon/site.webmanifest"> 
+        -->
 		
         <!-- extra styles-->
         {if isset($extra_styles)}
@@ -209,7 +217,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" width="85%"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
                     <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
