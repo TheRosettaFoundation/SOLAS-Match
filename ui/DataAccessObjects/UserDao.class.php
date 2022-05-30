@@ -2031,18 +2031,24 @@ error_log("Language added: $result");//(**)
                     }
 
                     // Add TM to project
-                    $url = "https://cloud.memsource.com/web/api2/v2/projects/{$project_result['uid']}/transMemories";
+                    $url = "https://cloud.memsource.com/web/api2/v3/projects/{$project_result['uid']}/transMemories";
                     $ch = curl_init($url);
                     $data = [
-                        'transMemories' => [
+                      'dataPerContext' => [
+                        [
+                          'transMemories' => [
                             [
-                                'transMemory' => ['id' => $working_tm_uid],
+                                'transMemory' => ['uid' => $working_tm_uid],
                                 'readMode' => true,
                                 'writeMode' => true,
                                 'penalty' => 0,
-                                'applyPenaltyTo101Only' => false
+                                'applyPenaltyTo101Only' => false,
+                                'order' => 0
                             ]
-                        ],
+                          ],
+                          'orderEnabled' => true
+                        ]
+                      ]
                     ];
                     $payload = json_encode($data);
 error_log("Add TM to project $payload");//(**)
@@ -2064,27 +2070,35 @@ error_log("TM added: $result");//(**)
         }
 
         // Pre-Translate Settings
-        $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
+        $url = "https://cloud.memsource.com/web/api2/v3/projects/{$project_result['uid']}/preTranslateSettings";
         $ch = curl_init($url);
         $data = [
-            'translationMemory' => true,
-            'translationMemoryThreshold' => .7,
-            'autoPropagateRepetitions' => true,
-            'machineTranslation' => false,
-            'nonTranslatables' => true,
-            'repetitionsAsConfirmed' => true,
-            'matches100AsTranslated' => false,
-            'matches101AsTranslate' => true,
-            'nonTranslatablesAsTranslated' => false,
+            'translationMemorySettings' => [
+                'useTranslationMemory' => true,
+                'translationMemoryThreshold' => .7,
+                'confirm100PercentMatches' => false,
+                'confirm101PercentMatches' => true,
+                'lock100PercentMatches' => false,
+                'lock101PercentMatches' => false,
+            ],
+            'repetitionsSettings' => [
+                'autoPropagateRepetitions' => true,
+                'confirmRepetitions' => true,
+            ],
+            'machineTranslationSettings' => [
+                'machineTranslation' => false,
+            ],
+            'nonTranslatableSettings' => [
+                'preTranslateNonTranslatables' => true,
+                'confirm100PercentMatches' => false,
+                'lock100PercentMatches' => false,
+                'nonTranslatablesInEditors' => true,
+            ],
+            'overwriteExistingTranslations' => false,
             'preTranslateOnJobCreation' => true,
             'setJobStatusCompleted' => false,
             'setJobStatusCompletedWhenConfirmed' => false,
             'setProjectStatusCompleted' => false,
-            'lockNonTranslatables' => false,
-            'lock100' => false,
-            'lock101' => false,
-            'nonTranslatablesInEditors' => true,
-            'overwrite' => false
         ];
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
