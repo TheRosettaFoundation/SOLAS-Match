@@ -1004,7 +1004,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="email_verification_6">If your organization does not yet exist on the system you can create it on you public profile.</string>
 	<string name="email_verification_finish_registration">Finish Registration</string>
     <string name="email_verification_7">Invalid registration id. Please try to register again.</string>
-    <string name="email_verification_8">Registration complete, please sign in using your username and password below.</string>
+    <string name="email_verification_8">Registration complete, please sign in using your email and password below.</string>
 
 	<string name="login_log_in_to">Log In To</string>
 	<string name="login_reset_password">Reset Password</string>
