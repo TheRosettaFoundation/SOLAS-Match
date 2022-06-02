@@ -23,14 +23,11 @@
                                 <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
-                        {if $private_access && isset($org_creation)}
-                            {if $org_creation == 'y'}
+                        {if $isSiteAdmin}
                                 <a href="{urlFor name="create-org"}" class="btn btn-success"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
-                            {else if $org_creation == 'h'}
-                            {/if}
                         {/if} 
                         {if ($private_access && !$is_admin_or_org_member) || $isSiteAdmin}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>

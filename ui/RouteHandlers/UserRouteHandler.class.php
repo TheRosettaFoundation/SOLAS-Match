@@ -2418,8 +2418,6 @@ error_log("result: $result");//(**)
             }
         }
 
-        $org_creation = Common\Lib\Settings::get("site.organisation_creation");
-
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
@@ -2448,7 +2446,6 @@ error_log("result: $result");//(**)
             "user_tags" => $user_tags,
             "this_user" => $user,
             "extra_scripts" => $extra_scripts,
-            "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
