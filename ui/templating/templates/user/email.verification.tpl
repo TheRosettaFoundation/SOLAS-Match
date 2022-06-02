@@ -5,8 +5,8 @@
 </h1>
 
 <p>
-    {Localisation::getTranslation('email_verification_welcome_to')} {Settings::get('site.name')}. {Localisation::getTranslation('email_verification_1')}
-    {Localisation::getTranslation('email_verification_2')} {Localisation::getTranslation('email_verification_3')} {Localisation::getTranslation('email_verification_4')}
+    Welcome to the TWB Community. Once you click "Finish registration" below you will have access to the TWB Platform.
+    {Localisation::getTranslation('email_verification_2')}
 </p>
 
 <form method='post' action="{urlFor name="email-verification" options="uuid.$uuid"}">
