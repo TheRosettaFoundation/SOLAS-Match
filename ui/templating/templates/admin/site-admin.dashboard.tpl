@@ -87,7 +87,7 @@
         <table style="width: 40%">
             <tr>
                 <td>
-                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 95%"/>
+                    <input type="text" name="search_user" placeholder="User name or email." style="width: 95%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
@@ -120,7 +120,7 @@
         <table style="width: 40%">
             <tr>
                 <td>
-                    <input type="text" name="search_organisation" placeholder="Organisation name or e-mail." style="width: 95%"/>
+                    <input type="text" name="search_organisation" placeholder="Organisation name or email." style="width: 95%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_organisation_submit" value="1">

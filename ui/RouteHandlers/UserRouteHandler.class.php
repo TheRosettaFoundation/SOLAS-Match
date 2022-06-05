@@ -1343,9 +1343,9 @@ class UserRouteHandler
             $target_lang .= "<option value=$key>$language</option>";
         }
         $qualification_levels = [
-            1 => 'Kató Translator',
-            2 => 'Kató Verified Translator',
-            3 => 'Kató Senior Translator'
+            1 => 'TWB Translator',
+            2 => 'TWB Verified Translator',
+            3 => 'TWB Senior Translator'
         ];
         $qualification_level = '';
         foreach ($qualification_levels as $key => $qualification) {

@@ -25,7 +25,7 @@
 {/if}
 
 <div class="well alert-info">
-    <p><strong>Please take a few moments to accept the Translator Code of Conduct. You will need to fill in this form to continue accessing Kató Platform. Thank you!
+    <p><strong>Please take a few moments to accept the Translator Code of Conduct. You will need to fill in this form to continue accessing TWB Platform. Thank you!
 </div>
 
 <div class="well">

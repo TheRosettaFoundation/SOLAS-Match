@@ -1,8 +1,8 @@
 <resources>
     <!-- ¿áéíóú Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
-    <string name="common_forum">Kató Community</string>
-    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
+    <string name="common_forum">TWB Community</string>
+    <string name="common_discuss_on_community">Discuss this task on TWB Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -22,7 +22,7 @@
 	<string name="common_city">City</string>
 	<string name="common_country">Country</string>
 	<string name="common_home_page">Home Page</string>
-	<string name="common_email">E-Mail</string>
+	<string name="common_email">Email</string>
 	<string name="common_biography">Biography</string>
 	<string name="common_regional_focus">Regional Focus</string>
 	<string name="common_africa">Africa</string>
@@ -126,9 +126,9 @@
 	<string name="common_secondary_languages">Language Pair(s)</string>
     <string name="i_can_translate_from">I Can Translate From</string>
     <string name="qualification_level_for_above">Qualification Level for Above</string>
-    <string name="user_qualification_level_1">Kató Translator</string>
-    <string name="user_qualification_level_2">Kató Verified Translator</string>
-    <string name="user_qualification_level_3">Kató Senior Translator</string>
+    <string name="user_qualification_level_1">TWB Translator</string>
+    <string name="user_qualification_level_2">TWB Verified Translator</string>
+    <string name="user_qualification_level_3">TWB Senior Translator</string>
     <string name="required_qualification_level">Required Qualification Level For Translators</string>
     <string name="set_default_required_qualification_level">Set default qualification level for volunteers working on tasks for this organization (can be overridden on a per task basis).</string>
     <string name="update_required_qualification_level">Update Required Qualification Level</string>
@@ -139,9 +139,9 @@
 	<string name="common_job_title">Job Title</string>
   <string name="common_badges">Achievements</string>
   <string name="common_strict">Selected language pairs only</string>
-    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
-    <string name="common_no_emails_have_been_sent_yet">No notification e-mails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
-    <string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for TWB Platform email notifications</a>.</string>
+    <string name="common_no_emails_have_been_sent_yet">No notification emails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for TWB Platform email notifications</a>.</string>
+    <string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for TWB Platform email notifications</a>.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
     <string name="log_in_with_proz">Login with TWB Workspace</string>
@@ -187,7 +187,7 @@
     <string name="common_error_upload_invalid_content">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
     <string name="common_error_upload_internal_server_error">Internal server error. Please contact the administrators.</string>
     <string name="common_error_login_incorrect">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
-    <string name="common_error_login_unverified">Sorry, this user account has not been verified. Please check your e-mail.</string>
+    <string name="common_error_login_unverified">Sorry, this user account has not been verified. Please check your email.</string>
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
@@ -216,8 +216,8 @@
     <string name="common_download_file">Download File</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
-    <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
-    <string name="common_how_often_receiving_emails">How often am I receiving these e-mails?</string>        
+    <string name="common_what_type_of_emails">What type of emails am I receiving?</string>
+    <string name="common_how_often_receiving_emails">How often am I receiving these emails?</string>
     <string name="common_january">January</string>
     <string name="common_february">February</string>
     <string name="common_march">March</string>
@@ -256,7 +256,7 @@
 	<string name="site_admin_dashboard_administration_dashboard">Administration Dashboard</string>
 	<string name="site_admin_dashboard_the_site_administrators_dashboard">The site administrator's dashboard.</string>
     <string name="site_admin_dashboard_add_new_admin">Add new site administrator to %s.</string>
-	<string name="site_admin_dashboard_email_here">User e-mail address goes here.</string>
+	<string name="site_admin_dashboard_email_here">User email address goes here.</string>
 	<string name="site_admin_dashboard_add_admin">Add Admin</string>
 	<string name="site_admin_dashboard_sitewide_user_ban">Apply a site-wide ban to a user.</string>
 	<string name="site_admin_dashboard_sitewide_org_ban">Apply a site-wide ban to an organization.</string>
@@ -264,7 +264,7 @@
 	<string name="site_admin_dashboard_organisation_name_goes_here">Organization name goes here.</string>
 	<string name="site_admin_dashboard_ban_reason">Ban Reason</string>
 	<string name="site_admin_dashboard_ban_user">Ban User</string>
-	<string name="site_admin_dashboard_user_email_address">User E-Mail Address</string>
+	<string name="site_admin_dashboard_user_email_address">User Email Address</string>
 	<string name="site_admin_dashboard_ban_duration">Ban Duration</string>
 	<string name="site_admin_dashboard_delete_user">Delete User</string>
 	<string name="site_admin_dashboard_permanently"><strong>Permanently</strong> delete a user from %s.</string>
@@ -289,7 +289,7 @@
     <string name="create_org_invalid_name">Organization names cannot contain invalid characters.</string>
     <string name="create_org_created">The organization <strong>%s</strong> has been created.</string>
 
-    <string name="thank_registering_organisation">Thank you for your interest in registering as an organization on Kató Platform</string>
+    <string name="thank_registering_organisation">Thank you for your interest in registering as an organization on TWB Platform</string>
     <string name="registrations_twb">Registrations for non-profits are currently managed by Translators without Borders (TWB).<br />
 <br />
 Please click on <a href="https://translatorswithoutborders.org/non-profit-application/">this link to go to the Translators without Borders website</a>.<br />
@@ -307,8 +307,8 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_private_profile_delete_success">Successfully deleted the organization %s</string>        
     <string name="org_private_profile_delete_fail">Unable to delete organization. Please try again later.</string> 
 
-    <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Kató Platform</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible to Organization Members and Kató Platform Administrators only</string>
+    <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of TWB Platform</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organization Members and TWB Platform Administrators only</string>
     <string name="org_private_profile_organisation_overview">Overview of Organization including Vision, Mission<br />and Target Beneficiary Communities</string>
     <string name="org_private_profile_organisation_activity">Area of Activity</string>
     <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
@@ -351,7 +351,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="org_public_profile_no_address_listed">No address listed.</string>
 	<string name="org_public_profile_no_city_listed">No city listed.</string>
 	<string name="org_public_profile_no_country_listed">No country listed.</string>
-	<string name="org_public_profile_no_email_listed">No e-mail listed.</string>
+	<string name="org_public_profile_no_email_listed">No email listed.</string>
 	<string name="org_public_profile_no_biography_listed">No biography listed.</string>
 	<string name="org_public_profile_no_regional_focus_listed">No regional focus listed.</string>
   <string name="org_public_profile_badge_overview">Overview of achievements created by this organization.</string>
@@ -424,7 +424,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
                
     <string name="org_manage_badge_manage_badge">Manage Achievement '%s'</string>
   <string name="org_manage_badge_0">Assign/Remove an achievement to/from a user.</string>
-  <string name="org_manage_badge_3">Enter a user's e-mail address to assign the achievement to them.</string>
+  <string name="org_manage_badge_3">Enter a user's email address to assign the achievement to them.</string>
   <string name="org_manage_badge_users_with_this_badge">Users with this achievement.</string>
   <string name="org_manage_badge_4">A list of users who were assigned this achievement by an organization member.</string>
   <string name="org_manage_badge_remove_badge">Remove Achievement</string>
@@ -434,7 +434,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_manage_badge_32">Successfully removed achievement from user %s.</string>
 
 	<string name="org_request_queue_0">Add a user to your organization.</string>
-	<string name="org_request_queue_2">Enter the user's e-mail address to add them as a member of this organization.</string>   
+	<string name="org_request_queue_2">Enter the user's email address to add them as a member of this organization.</string>
     <string name="org_request_queue_7">Invalid User ID: %s</string> 
 
 	<string name="org_task_review_review_this_completed_task">Review this completed task.</string>
@@ -512,7 +512,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="project_create_9">Specify which task types you require for your workflow.</string>
 	<string name="project_create_10">Create a segmentation task for dividing large source files into managable segments of up to 4,000 words or less</string>
 	<string name="project_create_11">You have reached the maximum number of target translation fields allowed</string>
-    <string name="project_create_12">If checked, you will automatically track this project and receive e-mail notifications.</string>
+    <string name="project_create_12">If checked, you will automatically track this project and receive email notifications.</string>
     <string name="project_create_add_more_target_languages">Add More Target Languages</string>
     <string name="project_create_13"><strong>Failed to create segmentation task:</strong></string>
     <string name="project_create_14">Failed to create translation task</string>
@@ -680,7 +680,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="terms_49">Site Terms of Use Modifications</string>
 	<string name="terms_50">The Rosetta Foundataion may revise these terms of use for its web site at any time without notice. By using this web site you are agreeing to be bound by the then current version of these Terms and Conditions of Use.</string>
 	<string name="terms_governing_law">Governing Law</string>
-  <string name="terms_52">Any claim relating to the Kató web site shall be governed by the laws of the State of Ireland without regard to its conflict of law provisions.</string>
+  <string name="terms_52">Any claim relating to the TWB Platform web site shall be governed by the laws of the State of Ireland without regard to its conflict of law provisions.</string>
 	<string name="terms_53">General Terms and Conditions applicable to Use of a Web Site.</string>
 	<string name="terms_privacy_policy">Privacy Policy</string>
     <string name="terms_54">Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our <a href="%s">Privacy Policy</a>.</string>
@@ -904,7 +904,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_org_feedback_user_feedback">User Feedback</string>
 	<string name="task_org_feedback_1">You can provide direct feedback to the translator who claimed this task here</string>
 	<string name="task_org_feedback_2">Revoke Task and Submit Feedback</string>
-    <string name="task_org_feedback_3">The task <a href="%s">%s</a> has been revoked from <a href="%s">%s</a>. This user will be notified by e-mail and provided with your feedback.</string>
+    <string name="task_org_feedback_3">The task <a href="%s">%s</a> has been revoked from <a href="%s">%s</a>. This user will be notified by email and provided with your feedback.</string>
     <string name="task_org_feedback_4">Unable to revoke the task <a href="%s">%s</a> from <a href="%s">%s</a>. Please try again later.</string>
     <string name="task_org_feedback_5">The feedback form cannot be empty.</string>
     <string name="task_org_feedback_6">Feedback sent to <a href="%s">%s</a>.</string>
@@ -936,12 +936,12 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_review_0">How would you rate this task?</string>
 	<string name="task_review_1">Thank you for contributing to this project.</string>
   <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
-  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about TWB Kató (make sure to allow pop-ups):</string>
+  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about TWB (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_project_view">If you are on Twitter, click the following button to tell the world about your project (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_org_task_review">If you are on Twitter, click the following button to thank our volunteers (make sure to allow pop-ups):</string>
   <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TranslatorsWB #languagematters</string>
   <string name="task_twitter_2">We’ve joined TWB to connect with language volunteers @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_3">Translators @TranslatorsWB can you help with our project on Kató%3F #languagematters</string>
+  <string name="task_twitter_3">Translators @TranslatorsWB can you help with our TWB project%3F #languagematters</string>
   <string name="task_twitter_4">Thanks to volunteers @TranslatorsWB for helping with translations #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
 	<string name="task_review_3">based on the following criteria:</string>
@@ -966,7 +966,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_user_feedback_provide_direct_feedback">You can provide direct feedback to the organization who owns this task here.</string>
 	<string name="task_user_feedback_if_accidental_claim"> Alternatively, if you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision and unclaim the task in this form.</string>
 	<string name="task_user_feedback_2">Unclaim Task and Submit Feedback</string>
-    <string name="task_user_feedback_3">The task <a href="%s">%s</a> has been successfully unclaimed. The organization will be notified by e-mail and provided with your feedback.</string>
+    <string name="task_user_feedback_3">The task <a href="%s">%s</a> has been successfully unclaimed. The organization will be notified by email and provided with your feedback.</string>
     <string name="task_user_feedback_4">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
     <string name="task_user_feedback_5">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
 
@@ -1024,7 +1024,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="password_reset_4">The passwords entered do not match. Please try again.</string>
     <string name="password_reset_5">Please check the password provided and try again.</string>
 
-    <string name="register_register_on">You can only create your Kató Platform account after filling in the <a href="https://kato.translatorswb.org/signup.html">TWB Translators Application Form</a><br />or after being announced to TWB as the contact for a partner organization.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your Kató Platform account using one of the third-party account providers below,<br />if your email address with that provider is the same.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_register_on">You can only create your TWB Platform account after filling in the <a href="https://kato.translatorswb.org/signup.html">TWB Translators Application Form</a><br />or after being announced to TWB as the contact for a partner organization.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your TWB Platform account using one of the third-party account providers below,<br />if your email address with that provider is the same.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
 	<string name="register_your_email">Your email</string>
 	<string name="register_your_password">Your password</string>
     <string name="register_1">The email address you entered was not valid. Please try again.</string>
@@ -1064,7 +1064,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
   <string name="user_public_profile_remove_badge">Remove Achievement</string>
   <string name="user_public_profile_5">Are you sure you want to remove this achievement?</string>
 	<string name="user_public_profile_task_stream_notifications">Task Stream Notifications</string>
-  <string name="user_public_profile_6">How often do you receive task stream e-mail updates?</string>
+  <string name="user_public_profile_6">How often do you receive task stream email updates?</string>
 	<string name="user_public_profile_edit_notifications">Edit Notifications</string>
 	<string name="user_public_profile_7">No emails have been sent yet.</string>
 	<string name="user_public_profile_8">A list of tags you have subscribed to.</string>
@@ -1077,7 +1077,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="user_public_profile_list_all_archived_tasks">List All Archived Tasks</string>
     <string name="user_public_profile_reference_email">Reference Email</string>
     <string name="user_public_profile_request_reference">Request Reference</string>
-    <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on TWB Kató, click the button on the right.</string>
+    <string name="user_public_profile_15">To request a reference email summarising your completed work on TWB Platform, click the button on the right.</string>
     <string name="user_public_profile_16">Request an email outlining your work.</string>
     <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
     <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>
@@ -1096,7 +1096,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="user_task_reviews_3">We use any reviews provided to help match the best volunteer for each task.</string>
     <string name="user_task_reviews_4">There are currently no reviews available for this task.</string>
 
-	<string name="user_task_stream_notification_edit_0">Select how often you want to receive task stream e-mails.</string>
+	<string name="user_task_stream_notification_edit_0">Select how often you want to receive task stream emails.</string>
 	<string name="user_task_stream_notification_edit_1">This notification will periodically send you a list of the tasks that are most suited to your skills and areas of interest.</string>
 	<string name="user_task_stream_notification_edit_2">If you select strict notifications then you will only receive notifications for tasks that match a language you have expressed an interest in (i.e. by setting it as your native language or as a secondary language).</string>
     <string name="user_task_stream_notification_edit_5">What type of notifications would you like to receive?</string>
@@ -1112,7 +1112,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="footer_privacy_policy">Privacy Policy</string>
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
-    <string name="footer_powered_by">Kató Platform is powered by <a href="%s">%s</a></string>
+    <string name="footer_powered_by">TWB Platform is powered by <a href="%s">%s</a></string>
     <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
     <string name="footer_contact_us">Contact Us</string>
 
@@ -1125,7 +1125,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="header_notifications">Notifications:</string>
 	<string name="header_log_out">Log out</string>
 
-    <string name="index_translation_commons">TWB Kató</string>
+    <string name="index_translation_commons">TWB Platform</string>
     <string name="index_0">Empowering conversation in communities</string>
     <string name="index_translation_tasks">Translation tasks</string>
     <string name="index_1">Claim a task and translate it</string>
@@ -1155,7 +1155,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="statistics_tasks_archived">Tasks Archived:</string>
 		
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
-  <string name="slim_error_1">You can report this problem by E-Mailing us at <a>translators@translatorswithoutborders.org</a></string>
+  <string name="slim_error_1">You can report this problem by emailing us at <a>translators@translatorswithoutborders.org</a></string>
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
 	<string name="slim_error_3">Go </string>
 	<string name="slim_error_4">Back.</string>

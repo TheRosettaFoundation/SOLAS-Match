@@ -209,7 +209,7 @@
                                                     <input type="submit" class="add_click_handler btn btn-primary" name="btnSubmit" value="Get Verified" />
                                                 {else}
                                                     <input type="submit" class="btn btn-primary" name="btnSubmit" value="Get Verified" onclick="
-alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
+alert('You have already requested to take a test in order to become a TWB Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
                                                     return false;" />
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}

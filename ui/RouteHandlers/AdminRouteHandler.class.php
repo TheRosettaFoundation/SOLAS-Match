@@ -1198,7 +1198,7 @@ class AdminRouteHandler
             }
         }
 
-        $data = "\xEF\xBB\xBF" . '"Kató Platform Community"';
+        $data = "\xEF\xBB\xBF" . '"TWB Platform Community"';
         foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
         }
