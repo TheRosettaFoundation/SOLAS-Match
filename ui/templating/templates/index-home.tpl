@@ -184,10 +184,7 @@
 
  <div class="row-fluid">
  <br/>
-    <p class="btn-primary home_text">Translators without Borders is a global community that brings together over 60000 volunteers who offer their time, language skills and voices to support our mission - to help people get vital
-    information and be heard, whatever language they speak. Through translation, subtitling and the power of their speech, our volunteers provide a wide range of information from medical
-
-    content for farmers in Latin America to crisis relief information for people affected by earthquakes in Haiti, and resources for victims of gender-based violence and sexual abuse around the globe.
+    <p class="btn-primary home_text">Translators without Borders is a community that brings together volunteers from all over the globe who offer their time, language skills and voices to support our mission - to help people get vital information and be heard, whatever language they speak.
     <br/>
     <br/>
     You can volunteer with Translators without Borders if you are fluent in at least one language other than your native language.
