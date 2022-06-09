@@ -71,9 +71,11 @@
     .navbar .nav li a{
         color:#143878 !important;
     }
-     .main_nav li a:hover{
-        color:#FFFFFF !important;
+     
+    .social_media_icons{
+        width:50%;
     }
+    
     .header-link{
         margin-bottom:1%;
         margin-right:1%;
@@ -286,10 +288,10 @@
                             </li>
                         {else}
             
-                            <li><a href="https://facebook.com/translatorswithoutborders" target="_blank"><img style="width:50%;" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
-                            <li><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"><img style="width:50%;" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
-                            <li><a href="https://linkedin.com/company/translators-without-borders" target="_blank"><img style="width:50%;" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
-                            <li><a href="https://twitter.com/TranslatorsWB" target="_blank"><img style="width:50%;" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
+                            <li class="social_link"><a href="https://facebook.com/translatorswithoutborders" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a  href="https://linkedin.com/company/translators-without-borders" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a   href="https://twitter.com/TranslatorsWB" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
                             <br/>
 
                             <li><a href="{urlFor name="register"}">Join</a></li>
