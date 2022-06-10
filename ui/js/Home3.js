@@ -153,6 +153,12 @@ $(document).ready(function () {
 		window.open("/register", "_blank");
 		return false;
 	});
+	$(".btn-home-slider").on("click", function (event) {
+		event.preventDefault();
+		//window.location.href = "/register";
+		window.open("/register", "_blank");
+		return false;
+	});
 	$(".button").on("click", function (event) {
 		event.preventDefault();
 		//$("body").scrollTo("#learnmore");

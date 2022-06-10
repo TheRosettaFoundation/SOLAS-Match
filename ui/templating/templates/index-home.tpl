@@ -64,6 +64,7 @@ a:hover{
 }
 .button a{
     color:#FFFFFF;
+    font-weight:bold;
 }
 
 .button_join {
@@ -82,6 +83,7 @@ a:hover{
 
 .button_join a{
     color:#FFFFFF;
+    font-weight:bold;
 }
 
 .button1 {
