@@ -6,6 +6,9 @@
     <div id="siteLocation">{$siteLocation}</div>
 </span>
 <style>
+a:hover{
+    text-decoration:none !important;
+}
 .carousel {
     position: relative;
     margin-bottom: 20px;
@@ -26,7 +29,7 @@
   color:white;
 }
 .btn-block {
-    width: 100px !important;
+    width: 120px !important;
     
 }
 
@@ -35,6 +38,9 @@
     height: 30px;
 }
 
+
+
+
 #globe{
     color:white;
 }
@@ -42,6 +48,61 @@
     color:white !important;
     font-weight:bold;
     text-decoration:underline;
+}
+.button {
+  background-color: #143878; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button a{
+    color:#FFFFFF;
+}
+
+.button_join {
+  background-color: #f89406; 
+  border: none;
+  color: white;
+  padding: 5px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button_join a{
+    color:#FFFFFF;
+}
+
+.button1 {
+  background-color: #f89406; 
+  color: #FFF; 
+  border: 2px solid #f89406;
+}
+
+.button1:hover {
+  background-color: #cb7500;
+  color: white;
+}
+.button2 {
+  background-color: #143878; 
+  color: #FFFFFF; 
+  border: 2px solid #143878;
+}
+
+.button2:hover {
+  background-color: #0e2754;
+  color: white;
 }
 </style>
 
@@ -58,7 +119,7 @@
             </a>
             <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p> -->
-        
+      
         <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner">
                 
@@ -67,12 +128,11 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img">
                     <div class="top-left"><h2>We provide growth opportunities for<br/> our community members</h2><br/><h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                     <br/>
-                     <button class=" btn-white btn-block btn-home-slider" type="submit">
-	               <a href="{urlFor name='register'}"> Join</a>
-	            </button>
-                <button class=" btn-blue btn-block btn-home-slider" type="submit">
-	               <a style="color:white;" href="#learnmore"> Learn More</a>
-	            </button>
+                   
+                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
+                
+                
                 <br/> 
                 <br/>  
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
@@ -92,12 +152,10 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img">
                     <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                     <br/>
-                     <button class=" btn-white btn-block btn-home-slider" type="submit">
-	               <a href="{urlFor name='register'}"> Join</a>
-	            </button>
-                <button class=" btn-blue btn-block btn-home-slider" type="submit">
-	               <a style="color:white;" href="#learnmore"> Learn More</a>
-	            </button>
+                   
+                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
+               
                 <br/>
                 <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
@@ -117,12 +175,10 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img">
                     <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/><h3>Join to grow your professional profile and <br/>advance your career.</h3>
                     <br/>
-                     <button class=" btn-white btn-block btn-home-slider" type="submit">
-	               <a href="{urlFor name='register'}"> Join</a>
-	            </button>
-                <button class=" btn-blue btn-block btn-home-slider" type="submit">
-	               <a style="color:white;" href="#learnmore"> Learn More</a>
-	            </button>
+                   
+                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
+               
                 <br/>
                 <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
@@ -141,12 +197,10 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img">
                      <div class="top-left"><h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/><h3>Join to have a real-world impact.</h3>
                      <br/>
-                     <button class=" btn-white btn-block btn-home-slider" type="submit">
-	               <a href="{urlFor name='register'}"> Join</a>
-	            </button>
-                <button class=" btn-blue btn-block btn-home-slider" type="submit">
-	               <a style="color:white;" href="#learnmore"> Learn More</a>
-	            </button>
+                    
+                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
+                
                 <br/>
                 <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
@@ -184,10 +238,7 @@
 
  <div class="row-fluid">
  <br/>
-    <p class="btn-primary home_text">Translators without Borders is a global community that brings together over 60000 volunteers who offer their time, language skills and voices to support our mission - to help people get vital
-    information and be heard, whatever language they speak. Through translation, subtitling and the power of their speech, our volunteers provide a wide range of information from medical
-
-    content for farmers in Latin America to crisis relief information for people affected by earthquakes in Haiti, and resources for victims of gender-based violence and sexual abuse around the globe.
+    <p class="btn-primary home_text">Translators without Borders is a community that brings together volunteers from all over the globe who offer their time, language skills and voices to support our mission - to help people get vital information and be heard, whatever language they speak. Through translation, subtitling and the power of their speech, our volunteers provide a wide range of information from medical content for farmers in Latin America to crisis relief information for people affected by earthquakes in Haiti, and resources for victims of gender-based violence and sexual abuse around the globe.
     <br/>
     <br/>
     You can volunteer with Translators without Borders if you are fluent in at least one language other than your native language.
