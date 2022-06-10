@@ -1752,7 +1752,29 @@ class UserRouteHandler
                 placeholder: "--Select--",
                 width: "resolve"
             });
+           
         });
+        //Remove error messages
+        $(document).ready(function() {
+        $(".capabilities").change(function() {
+            if($(this).is(":checked")) {
+                $("#ch1").hide();
+            }
+            else {
+                $("#ch1").show(); 
+            }
+        });
+
+        $(".expertise").change(function() {
+            if($(this).is(":checked")) {
+                $("#ch").hide();
+            }
+            else {
+                $("#ch").show(); 
+            }
+        });
+    });        
+    
         </script>';
 
         $template_data = array_merge($template_data, array(
