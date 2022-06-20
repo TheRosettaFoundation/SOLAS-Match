@@ -150,7 +150,7 @@
                     </div>
                     <div class="span4">
                         <label class="clear_brand required label_space"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="Please choose the country of your native language dialect/variant."></i></label>
-                        <select name="nativeCountrySelect" class="variant">
+                        <select name="nativeCountrySelect" id="nativeCountrySelect" class="variant">
                             <option value="">--Select--</option>
                             {foreach $countries as $country}
                                 {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94' && $country->getCode() != '95' && $country->getCode() != '96'}

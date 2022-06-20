@@ -1378,6 +1378,11 @@ class UserRouteHandler
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
                 },
+                success: function(label,element) {
+                    label.parent().removeClass("error");
+                    label.remove(); 
+                	
+                },
                 messages: {
                     firstName: "Please enter your First name",
                     lastName: "Please enter your Last name",
@@ -1773,6 +1778,55 @@ class UserRouteHandler
                 $("#ch").show(); 
             }
         });
+
+        $("#nativeLanguageSelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#language_code_source_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_5", function(){
+            $(this).valid();
+        });
+
+        $("#language_code_target_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_5", function(){
+            $(this).valid();
+        });
+            
+        
     });        
     
         </script>';
