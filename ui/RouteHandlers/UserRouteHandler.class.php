@@ -1770,14 +1770,27 @@ class UserRouteHandler
             }
         });
 
-        $(".expertise").change(function() {
-            if($(this).is(":checked")) {
+        $(".capabilities").on("change", function() {
+            var capabilities_no = $("input.capabilities:checked").length;
+            if(capabilities_no == 0){
+                $("#ch1").show();
+            }else{
+                $("#ch1").hide();
+            }
+            
+        });
+
+       
+        $(".expertise").on("change", function() {
+            var expertise_no = $("input.expertise:checked").length;
+            if(expertise_no == 0){
+                $("#ch").show();
+            }else{
                 $("#ch").hide();
             }
-            else {
-                $("#ch").show(); 
-            }
+            
         });
+
 
         $("#nativeLanguageSelect").change(function(){
             $(this).valid();
