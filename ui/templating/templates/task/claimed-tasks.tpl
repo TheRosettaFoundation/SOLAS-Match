@@ -228,6 +228,6 @@
     {/if}
 </div>
 <br/>
-<div style="float:left">
+
     {include file='footer.tpl'}
-</div>
+
