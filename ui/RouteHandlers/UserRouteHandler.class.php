@@ -1378,6 +1378,11 @@ class UserRouteHandler
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
                 },
+                success: function(label,element) {
+                    label.parent().removeClass("error");
+                    label.remove(); 
+                	
+                },
                 messages: {
                     firstName: "Please enter your First name",
                     lastName: "Please enter your Last name",
@@ -1752,7 +1757,91 @@ class UserRouteHandler
                 placeholder: "--Select--",
                 width: "resolve"
             });
+           
         });
+        //Remove error messages
+        $(document).ready(function() {
+        $(".capabilities").change(function() {
+            if($(this).is(":checked")) {
+                $("#ch1").hide();
+            }
+            else {
+                $("#ch1").show(); 
+            }
+        });
+
+        $(".capabilities").on("change", function() {
+            var capabilities_no = $("input.capabilities:checked").length;
+            if(capabilities_no == 0){
+                $("#ch1").show();
+            }else{
+                $("#ch1").hide();
+            }
+            
+        });
+
+       
+        $(".expertise").on("change", function() {
+            var expertise_no = $("input.expertise:checked").length;
+            if(expertise_no == 0){
+                $("#ch").show();
+            }else{
+                $("#ch").hide();
+            }
+            
+        });
+
+
+        $("#nativeLanguageSelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#language_code_source_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_5", function(){
+            $(this).valid();
+        });
+
+        $("#language_code_target_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_5", function(){
+            $(this).valid();
+        });
+            
+        
+    });        
+    
         </script>';
 
         $template_data = array_merge($template_data, array(
