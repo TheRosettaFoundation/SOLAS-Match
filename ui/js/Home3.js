@@ -134,13 +134,13 @@ $(document).ready(function () {
 	$(".button_join").on("click", function (event) {
 		event.preventDefault();
 		//window.location.href = "/register";
-		window.open("/register", "_blank");
+		window.open("/register", "_self");
 		return false;
 	});
 	$(".btn-home-slider").on("click", function (event) {
 		event.preventDefault();
 		//window.location.href = "/register";
-		window.open("/register", "_blank");
+		window.open("/register", "_self");
 		return false;
 	});
 	$(".button").on("click", function (event) {
