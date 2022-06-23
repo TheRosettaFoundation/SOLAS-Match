@@ -67,14 +67,14 @@
         </div>  
         
                     <ul class="nav main_nav" style="margin-left: 240px;margin-top: 45px;">
-                    Maintained by <a class="sponsor" href="https://facebook.com/translatorswithoutborders" target="_blank">Translators without Borders</a>
+                    Maintained by <a class="sponsor" href="https://translatorswithoutborders.org" target="_blank">Translators without Borders</a>
                     </ul>
                     <ul class=" pull-right main_nav_right" style="max-height: 38px">
                             <a class="s_logo"  href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
                                     <img   alt="Solas Logo" style="border-width:0;margin-left:35px;" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
                                 </a>
                                 <br />
-                                TWB Platform is powered by <a class="sponsor" href="https://facebook.com/translatorswithoutborders" target="_blank">Solas</a>
+                                TWB Platform is powered by <a class="sponsor" href="https://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">Solas</a>
                             <br/>
 
                            
