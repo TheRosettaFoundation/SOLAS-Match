@@ -1180,6 +1180,7 @@ class UserRouteHandler
                     $userPersonalInfo->setReceiveCredit(false);
                 }
 
+error_log(">>>>BEFORE HANDLE POST");
                 try {
                     $i = 0;
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
@@ -1241,6 +1242,7 @@ class UserRouteHandler
                     foreach ($userQualifiedPairs as $userQualifiedPair) {
                         $i = 0;
                         $found = false;
+error_log("POST: " . print_r($post, true));
                         while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
 error_log(">>>>>>>i: $i");
 error_log("post[language_code_source_i]) && post[language_code_target_i]: " . $post["language_code_source_$i"] . " && " . $post["language_code_target_$i"]);
