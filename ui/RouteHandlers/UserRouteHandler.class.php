@@ -1180,10 +1180,9 @@ class UserRouteHandler
                     $userPersonalInfo->setReceiveCredit(false);
                 }
 
-error_log(">>>>BEFORE HANDLE POST");
                 try {
-                    $i = 0;
-                    while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                    for ($i = 0; $i < 121; $i++) {
+                      if (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                         list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                         list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
                         if (empty($post["qualification_level_$i"])) $post["qualification_level_$i"] = 1;
@@ -1236,35 +1235,26 @@ error_log(">>>>BEFORE HANDLE POST");
                                 $post["qualification_level_$i"]
                             );
                         }
-                        $i++;
+                      }
                     }
 
                     foreach ($userQualifiedPairs as $userQualifiedPair) {
-                        $i = 0;
                         $found = false;
-error_log("POST: " . print_r($post, true));
-                        while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
-error_log(">>>>>>>i: $i");
-error_log("post[language_code_source_i]) && post[language_code_target_i]: " . $post["language_code_source_$i"] . " && " . $post["language_code_target_$i"]);
+                        for ($i = 0; $i < 121; $i++) {
+                          if (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                             list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                             list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
 
-error_log("language_code_source == userQualifiedPair['language_code_source']: $language_code_source == {$userQualifiedPair['language_code_source']}");
-error_log("country_code_source  == userQualifiedPair['country_code_source']:  $country_code_source  == {$userQualifiedPair['country_code_source']}");
-error_log("language_code_target == userQualifiedPair['language_code_target']: $language_code_target == {$userQualifiedPair['language_code_target']}");
-error_log("country_code_target  == userQualifiedPair['country_code_target']:  $country_code_target  == {$userQualifiedPair['country_code_target']}");
                             if (($language_code_source == $userQualifiedPair['language_code_source']) &&
                                 ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
                                 ($language_code_target == $userQualifiedPair['language_code_target']) &&
                                 ($country_code_target  == $userQualifiedPair['country_code_target'])
                             ) {
-error_log("found = true;");
                                 $found = true;
                             }
-                            $i++;
+                          }
                         }
                         if (!$found) {
-error_log("!found");
                             $userDao->removeUserQualifiedPair(
                                 $user_id,
                                 $userQualifiedPair['language_code_source'],
