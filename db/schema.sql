@@ -1284,6 +1284,16 @@ CREATE TABLE IF NOT EXISTS `UserServices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `project_complete_dates` (
+  project_id    INT(10) UNSIGNED NOT NULL,
+  status        INT(10) UNSIGNED NOT NULL,
+  complete_date DATETIME NOT NULL,
+  PRIMARY KEY (project_id),
+  KEY key_complete_date (complete_date),
+  CONSTRAINT `FK_project_complete_dates_project_id` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -1778,6 +1788,8 @@ BEGIN
       );
 
 	    delete from Tasks where Tasks.id=id;
+
+      call update_project_complete_date(id);
 
     	select 1 as result;
     else
@@ -4366,6 +4378,8 @@ BEGIN
         INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id, image_uploaded, image_approved) 
         VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID,imageUploaded, imageApproved);
 
+        call insert_project_complete_date(LAST_INSERT_ID());
+
          call getProject(LAST_INSERT_ID(), NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     elseif EXISTS (select 1 FROM Projects p WHERE p.id = projectId) then
@@ -4820,6 +4834,10 @@ BEGIN
 	update Tasks 
 		set Tasks.`task-status_id`=sID
 		where Tasks.id=tID;
+
+  IF sID=3 THEN
+    call reset_project_complete(tID);
+  END IF;
 END//
 DELIMITER ;
 
@@ -5090,6 +5108,8 @@ BEGIN
 		 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 		 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
+     call reset_project_complete(LAST_INSERT_ID());
+
 	elseif EXISTS (select 1 from Tasks t where t.id=id) then
 
 		if projectID is not null 
@@ -5267,6 +5287,8 @@ BEGIN
             task_id=@bl_id_to_delete;
     END IF;
 
+    call reset_project_complete(tID);
+
 		select 1 as result;
 	else
 		select 0 as result;
@@ -5284,6 +5306,9 @@ BEGIN
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       UPDATE Tasks SET `task-status_id`=2 where id = tID;
     COMMIT;
+
+    call reset_project_complete(tID);
+
     SELECT 1 as result;
   ELSE
     SELECT 0 as result;
@@ -7510,6 +7535,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_complete_date`(IN `tID` INT)
 BEGIN
     REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (tID, now());
+    call update_project_complete_date(tID);
 END//
 DELIMITER ;
 
@@ -9077,6 +9103,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_task_directly`(IN taskID BIGINT)
 BEGIN
     DELETE FROM Tasks WHERE id=taskID;
+    call update_project_complete_date(taskID);
 END//
 DELIMITER ;
 
@@ -9542,6 +9569,48 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_service`(IN uID INT, IN sID INT)
 BEGIN
     DELETE FROM UserServices WHERE user_id=uID AND service_id=sID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_project_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_project_complete_date`(IN pID INT)
+BEGIN
+    INSERT INTO project_complete_dates (project_id, status, complete_date) VALUES (pID, 0, '1000-01-01 00:00:00');
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_complete_date`(IN tID BIGINT)
+BEGIN
+    SELECT project_id INTO @pID FROM Tasks WHERE id=tID;
+
+    SET @project_complete=0;
+
+    SELECT
+        MAX(tcd.complete_date),
+        MIN(IF(tcd.task_id IS NULL OR t.`task-status_id`!=4, 0, 1))
+        INTO @project_complete_date, @project_complete
+    FROM      Tasks             t
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    WHERE
+        t.project_id=@pID
+    GROUP BY t.project_id;
+
+    IF @project_complete THEN
+        UPDATE project_complete_dates SET status=@project_complete, complete_date=@project_complete_date WHERE project_id=@pID;
+    ELSE
+        UPDATE project_complete_dates SET status=@project_complete WHERE project_id=@pID;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `reset_project_complete`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_project_complete`(IN tID BIGINT)
+BEGIN
+    UPDATE project_complete_dates SET status=0 WHERE project_id=(SELECT project_id FROM Tasks WHERE id=tID LIMIT 1);
 END//
 DELIMITER ;
 
