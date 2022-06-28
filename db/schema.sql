@@ -4370,11 +4370,11 @@ BEGIN
         if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00'
         then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
 
-        	set @scID=null;
-			select c.id into @scID from Countries c where c.code=sourceCountryCode;
-			set @sID=null;
-			select l.id into @sID from Languages l where l.code=sourceLanguageCode;
-	
+                set @scID=null;
+                        select c.id into @scID from Countries c where c.code=sourceCountryCode;
+                        set @sID=null;
+                        select l.id into @sID from Languages l where l.code=sourceLanguageCode;
+
         INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id, image_uploaded, image_approved)
         VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID,imageUploaded, imageApproved);
 
