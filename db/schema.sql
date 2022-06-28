@@ -5074,132 +5074,132 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` bit(1))
 BEGIN
 
-	if id='' then set id=null;end if;
-	if projectID='' then set projectID=null;end if;
+        if id='' then set id=null;end if;
+        if projectID='' then set projectID=null;end if;
         if name='' then set name=null; end if;
-	if sCode='' then set sCode=null;end if;
-	if tCode='' then set tCode=null;end if;
-	if wordCount='' then set wordCount=null;end if;
+        if sCode='' then set sCode=null;end if;
+        if tCode='' then set tCode=null;end if;
+        if wordCount='' then set wordCount=null;end if;
         if taskComment is null then set taskComment=""; end if;
-	if sCode='' then set sCode=null;end if;
-	if tCode='' then set tCode=null;end if;
-	if dLine='' then set dLine=null;end if;
-	if taskType='' then set taskType=null;end if;
-	if tStatus='' then set tStatus=null;end if;
-	if pub is null then set pub=1;end if;
+        if sCode='' then set sCode=null;end if;
+        if tCode='' then set tCode=null;end if;
+        if dLine='' then set dLine=null;end if;
+        if taskType='' then set taskType=null;end if;
+        if tStatus='' then set tStatus=null;end if;
+        if pub is null then set pub=1;end if;
 
-	if id is null then
-	        if taskComment is null then set taskComment="";end if;
-	        if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+        if id is null then
+                if taskComment is null then set taskComment="";end if;
+                if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
 
-	        set @scid=null;
+                set @scid=null;
                 select c.id into @scid from Countries c where c.code=sCC;
 
-	        set @tcid=null;
+                set @tcid=null;
                 select c.id into @tcid from Countries c where c.code=tCC;
-	
-	        set @sID=null;
+
+                set @sID=null;
                 select l.id into @sID from Languages l where l.code=sCode;
 
-	        set @tID=null;
+                set @tID=null;
                 select l.id into @tID from Languages l where l.code=tCode;
 
-        	insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
-		 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
-		 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
+                insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
+                 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+                 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
-     call reset_project_complete(LAST_INSERT_ID());
+                call reset_project_complete(LAST_INSERT_ID());
 
-	elseif EXISTS (select 1 from Tasks t where t.id=id) then
+        elseif EXISTS (select 1 from Tasks t where t.id=id) then
 
-		if projectID is not null 
+                if projectID is not null
                 and projectID != (SELECT t.project_id FROM Tasks t WHERE  t.id = id)
                 or (select t.project_id from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.project_id = projectID WHERE t.id = id;
-		end if;
+                end if;
 
-                if name is not null 
+                if name is not null
                 and name != (SELECT t.title FROM Tasks t WHERE  t.id = id)
                 or (select t.title from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.title = name WHERE t.id = id;
-		end if;
+                end if;
 
-                if sCode is not null 
+                if sCode is not null
                 and (select l.id from Languages l where l.code = sCode) != (SELECT t.`language_id-source` FROM Tasks t WHERE  t.id = id)
                 or (select t.`language_id-source` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`language_id-source` = (select l.id from Languages l where l.code = sCode) WHERE t.id = id;
-		end if;
+                end if;
 
-                if tCode is not null 
+                if tCode is not null
                 and (select l.id from Languages l where l.code = tCode) != (SELECT t.`language_id-target` FROM Tasks t WHERE  t.id = id)
                 or (select t.`language_id-target` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`language_id-target` = (select l.id from Languages l where l.code = tCode) WHERE t.id = id;
-		end if;
-                
-                if sCC is not null 
+                end if;
+
+                if sCC is not null
                 and (select c.id from Countries c where c.code = sCC) != (SELECT t.`country_id-source` FROM Tasks t WHERE  t.id = id)
                 or (select t.`country_id-source` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`country_id-source` = (select c.id from Countries c where c.code = sCC) WHERE t.id = id;
-		end if;
-                
-                if tCC is not null 
+                end if;
+
+                if tCC is not null
                 and (select c.id from Countries c where c.code = tCC) != (SELECT t.`country_id-target` FROM Tasks t WHERE  t.id = id)
                 or (select t.`country_id-target` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`country_id-target` = (select c.id from Countries c where c.code = tCC) WHERE t.id = id;
                 end if;
 
-                if wordCount is not null 
+                if wordCount is not null
                 and wordCount != (SELECT t.`word-count` FROM Tasks t WHERE  t.id = id)
                 or (select t.`word-count` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`word-count` = wordCount WHERE t.id = id;
-		end if;
-		
-                if taskComment is not null 
+                end if;
+
+                if taskComment is not null
                 and taskComment != (SELECT t.comment FROM Tasks t WHERE  t.id = id)
                 or (select t.comment from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.comment = taskComment WHERE t.id = id;
-		end if;
-                
+                end if;
+
                 if dLine is not null and dLine != '0000-00-00 00:00:00'
                 and dLine != (SELECT t.`deadline` FROM Tasks t WHERE  t.id = id)
                 or (select t.`deadline` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`deadline` = dLine WHERE t.id = id;
-		end if;
+                end if;
 
-                if taskType is not null 
+                if taskType is not null
                 and taskType != (SELECT t.`task-type_id` FROM Tasks t WHERE  t.id = id)
                 or (select t.`task-type_id` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`task-type_id` = taskType WHERE t.id = id;
-		end if;
-                
-                if tStatus is not null 
+                end if;
+
+                if tStatus is not null
                 and tStatus != (SELECT t.`task-status_id` FROM Tasks t WHERE  t.id = id)
                 or (select t.`task-status_id` from Tasks t WHERE t.id = id) is null
 
                     then update Tasks t SET t.`task-status_id` = tStatus WHERE t.id = id;
-		end if;
-                
+                end if;
+
                 if pub is not null then
-                    if (pub=1) then 
+                    if (pub=1) then
                         update Tasks t SET t.`published` = 1 WHERE t.id = id;
                     else
                         update Tasks t SET t.`published` = 0 WHERE t.id = id;
-                    end if; 
-		end if;
-		
-		call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
+                    end if;
+                end if;
 
-	end if;	
+                call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
+
+        end if;
 
 END//
 DELIMITER ;
