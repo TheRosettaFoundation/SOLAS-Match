@@ -457,11 +457,6 @@ class UserRouteHandler
                         required: true,
                         email: true
                     },
-                    email2: {
-                        required: true,
-                        email: true,
-                        equalTo: "#email"
-                    },
                     age_consent: "required",
                     conduct_consent: "required",
                    
@@ -479,10 +474,6 @@ class UserRouteHandler
                         equalTo: "Please enter the same password as above"
                     },
                     email: "Please enter a valid email address",
-                    email2: {
-                        required:"Please enter a valid email address",
-                        equalTo: "Please enter the same email address as above"
-                    },
                     age_consent: "Please ensure you are above 18 years of age",
                     conduct_consent: "You need to agree to this to proceed",
                 }
