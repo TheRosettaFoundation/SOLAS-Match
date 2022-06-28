@@ -15,12 +15,12 @@ SET FOREIGN_KEY_CHECKS=0;
 
 
 CREATE TABLE IF NOT EXISTS `Admins` (
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`organisation_id` INT(10) UNSIGNED NULL,
-	UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
-	INDEX `FK_Admins_Organisations` (`organisation_id`),
-	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `organisation_id` INT(10) UNSIGNED NULL,
+  UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+  INDEX `FK_Admins_Organisations` (`organisation_id`),
+  CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -154,10 +154,10 @@ CREATE TABLE IF NOT EXISTS `BannedTypes` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
-	(1, 'Day'),
+  (1, 'Day'),
     (2, 'Week'),
-	(3, 'Month'),
-	(4, 'Permanent'),
+  (3, 'Month'),
+  (4, 'Permanent'),
     (5, 'Hour');
 
 
@@ -218,9 +218,9 @@ CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
-	(1, "Daily"),
-	(2, "Weekly"),
-	(3, "Monthly");
+  (1, "Daily"),
+  (2, "Weekly"),
+  (3, "Monthly");
 
 
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
@@ -235,17 +235,17 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 
 
 CREATE TABLE IF NOT EXISTS `Organisations` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`biography` VARCHAR(4096) NULL COLLATE 'utf8mb4_unicode_ci',
-	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`e-mail` VARCHAR(128) NULL,
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `name` (`name`)
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `biography` VARCHAR(4096) NULL COLLATE 'utf8mb4_unicode_ci',
+  `home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  `e-mail` VARCHAR(128) NULL,
+  `address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  `city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  `country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  `regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -325,26 +325,26 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 
 
 CREATE TABLE IF NOT EXISTS `Projects` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-	`deadline` DATETIME NOT NULL,
-	`organisation_id` INT(10) UNSIGNED NOT NULL,
-	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
-	`word-count` INT(10) UNSIGNED NOT NULL,
-	`created` DATETIME NOT NULL,
-	`language_id` INT(10) UNSIGNED NOT NULL,
-	`country_id` INT(10) UNSIGNED NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `deadline` DATETIME NOT NULL,
+  `organisation_id` INT(10) UNSIGNED NOT NULL,
+  `reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+  `word-count` INT(10) UNSIGNED NOT NULL,
+  `created` DATETIME NOT NULL,
+  `language_id` INT(10) UNSIGNED NOT NULL,
+  `country_id` INT(10) UNSIGNED NOT NULL,
     `image_uploaded` BIT(1) DEFAULT 0 NOT NULL,
     `image_approved` BIT(1) DEFAULT 0 NOT NULL,
-	PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`),
     KEY `key_organisation_id` (`organisation_id`),
-	INDEX `FK_Projects_Languages` (`language_id`),
-	INDEX `FK_Projects_Countries` (`country_id`),
-	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  INDEX `FK_Projects_Languages` (`language_id`),
+  INDEX `FK_Projects_Countries` (`country_id`),
+  CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -517,10 +517,10 @@ CREATE TABLE IF NOT EXISTS `TaskStatus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
-	(1, "Waiting PreReqs"),
-	(2, "Pending Claim"),
-	(3, "In Progress"),
-	(4, "Complete");
+  (1, "Waiting PreReqs"),
+  (2, "Pending Claim"),
+  (3, "In Progress"),
+  (4, "Complete");
 
 
 CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
@@ -542,10 +542,10 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
-	(1, "Segmentation"),
-	(2, "Translation"),
-	(3, "Proofreading"),
-	(4, "Desegmentation");
+  (1, "Segmentation"),
+  (2, "Translation"),
+  (3, "Proofreading"),
+  (4, "Desegmentation");
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
@@ -637,15 +637,15 @@ CREATE TABLE IF NOT EXISTS `Users` (
 
 
 CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`language_id` INT(10) UNSIGNED NOT NULL,
-	`country_id` INT(10) UNSIGNED NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
-	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `language_id` INT(10) UNSIGNED NOT NULL,
+  `country_id` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_id` (`user_id`, `language_id`, `country_id`),
+  CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -701,22 +701,22 @@ CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
 
 
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`Project_id` INT(10) UNSIGNED NOT NULL,
-	UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
-	INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
-	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `Project_id` INT(10) UNSIGNED NOT NULL,
+  UNIQUE INDEX `user_id` (`user_id`, `Project_id`),
+  INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
+  CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`task_id` BIGINT(20) UNSIGNED NOT NULL,
-	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
-	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
-	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  UNIQUE INDEX `user_id` (`user_id`, `task_id`),
+  INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
+  CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -1307,12 +1307,12 @@ BEGIN
                     FROM OrganisationMembers
                     WHERE user_id = uID
                     AND organisation_id = orgID) then
-    	INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
+      INSERT INTO OrganisationMembers (user_id, organisation_id) VALUES (uID,orgID);
         if EXISTS (SELECT user_id
                 FROM OrgRequests
                 WHERE user_id = uID
                 AND org_id = orgID) then
-    	    call removeMembershipRequest(uID,orgID);
+          call removeMembershipRequest(uID,orgID);
         else
             SELECT 1 as result;
         end if;
@@ -1327,11 +1327,11 @@ DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	IF orgId = '' THEN SET orgId=NULL; END IF;
+  IF orgId = '' THEN SET orgId=NULL; END IF;
 
-	IF NOT EXISTS (SELECT 1 FROM Admins a WHERE a.user_id=userId and a.organisation_id=orgId) THEN	
-		INSERT INTO Admins (user_id,organisation_id) VALUES(userId,orgId);
-	END IF;	
+  IF NOT EXISTS (SELECT 1 FROM Admins a WHERE a.user_id=userId and a.organisation_id=orgId) THEN
+    INSERT INTO Admins (user_id,organisation_id) VALUES(userId,orgId);
+  END IF;
 END//
 DELIMITER ;
 
@@ -1341,10 +1341,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addBadge`(IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` VARCHAR(50))
 BEGIN
 if not exists (select 1 from Badges b where b.title=name and b.description=disc and b.owner_id=ownerID) then
-	insert into Badges (owner_id,title,description) values (ownerID,name,disc);
-	select 1 as result;
+  insert into Badges (owner_id,title,description) values (ownerID,name,disc);
+  select 1 as result;
 else
-	select 0 as result;
+  select 0 as result;
 end if;
 
 END//
@@ -1366,12 +1366,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectFile`(IN `pID` INT, IN `uID` INT, IN `fname` VARCHAR(128), IN `token` VARCHAR(128), IN `mime` varCHAR(128))
     MODIFIES SQL DATA
 BEGIN
-	if not exists (select 1 from ProjectFiles pf where pf.project_id=pID) then
-		insert into ProjectFiles (project_id,user_id,filename,`file-token`, `mime-type`) values(pID,uID,fName,token, mime);
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
+  if not exists (select 1 from ProjectFiles pf where pf.project_id=pID) then
+    insert into ProjectFiles (project_id,user_id,filename,`file-token`, `mime-type`) values(pID,uID,fName,token, mime);
+    select 1 as result;
+  else
+    select 0 as result;
+  end if;
 END//
 DELIMITER ;
 
@@ -1394,10 +1394,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectTag`(IN `projectID` INT, 
     MODIFIES SQL DATA
 BEGIN
     if not exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagID) then
-	    insert into ProjectTags  (project_id,tag_id) values (projectID,tagID);
-    	select 1 as result;
+      insert into ProjectTags  (project_id,tag_id) values (projectID,tagID);
+      select 1 as result;
     else
-	    select 0 as result;
+      select 0 as result;
     end if;
 END//
 DELIMITER ;
@@ -1408,12 +1408,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
     MODIFIES SQL DATA
 BEGIN
-	if not exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
+  if not exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
        INSERT INTO TaskPrerequisites (`task_id`, `task_id-prerequisite`)
             VALUES (taskId, preReqId);
-       	select 1 as "result";
+         select 1 as "result";
     else
-   	    select 0 as "result";
+         select 0 as "result";
     end if;
 END//
 DELIMITER ;
@@ -1424,7 +1424,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserToTaskBlacklist`(IN `userId` INT, IN `taskId` INT)
     MODIFIES SQL DATA
 BEGIN
-	if not exists(SELECT 1
+  if not exists(SELECT 1
                     FROM TaskTranslatorBlacklist
                     WHERE user_id = userId
                     AND task_id = taskId) then
@@ -1517,41 +1517,41 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID`
     MODIFIES SQL DATA
 BEGIN
 
-	if not exists(select 1 from ArchivedTasks where id = tID) then
-		
-		set @`version` = null;
-		set @`filename` = null;
-		set @`contentType` = null;
-		set @`userIdClaimed` = null;
-		set @`preRequisites` = null;
-		set @`userIdTaskCreator` = null;
-		set @`uploadTime` = null;
-	
-		SELECT MAX(tf.version_id) INTO @`version` FROM TaskFileVersions tf WHERE tf.task_id=tID;
-		SELECT `filename` INTO @`filename` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
-		SELECT `content-type` INTO @`contentType` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
-		SELECT `upload-time` INTO @`uploadTime` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
-		SELECT tc.`user_id` INTO @`userIdClaimed` FROM TaskClaims tc WHERE tc.`task_id` = tID LIMIT 1; 
-		SELECT GROUP_CONCAT(p.`task_id-prerequisite`) INTO @`preRequisites` FROM TaskPrerequisites p WHERE p.task_id=tID;
-		SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.version_id=0 LIMIT 1;
-	
-		START TRANSACTION;
-			INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
-			SELECT t.* FROM Tasks t WHERE t.id = tID;
-			
-			INSERT INTO ArchivedTasksMetadata 
-			(`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
-	
-			VALUES
-			(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
+  if not exists(select 1 from ArchivedTasks where id = tID) then
+
+    set @`version` = null;
+    set @`filename` = null;
+    set @`contentType` = null;
+    set @`userIdClaimed` = null;
+    set @`preRequisites` = null;
+    set @`userIdTaskCreator` = null;
+    set @`uploadTime` = null;
+
+    SELECT MAX(tf.version_id) INTO @`version` FROM TaskFileVersions tf WHERE tf.task_id=tID;
+    SELECT `filename` INTO @`filename` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+    SELECT `content-type` INTO @`contentType` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+    SELECT `upload-time` INTO @`uploadTime` FROM TaskFileVersions tf WHERE tf.task_id=tID LIMIT 1;
+    SELECT tc.`user_id` INTO @`userIdClaimed` FROM TaskClaims tc WHERE tc.`task_id` = tID LIMIT 1;
+    SELECT GROUP_CONCAT(p.`task_id-prerequisite`) INTO @`preRequisites` FROM TaskPrerequisites p WHERE p.task_id=tID;
+    SELECT tf.user_id INTO @`userIdTaskCreator` FROM TaskFileVersions tf WHERE tf.task_id=tID AND tf.version_id=0 LIMIT 1;
+
+    START TRANSACTION;
+      INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
+      SELECT t.* FROM Tasks t WHERE t.id = tID;
+
+      INSERT INTO ArchivedTasksMetadata
+      (`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
+
+      VALUES
+      (tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
             IF EXISTS(SELECT 1 FROM TaskUnclaims WHERE task_id = tID) THEN
                 UPDATE TaskUnclaims tuc SET tuc.task_is_archived = 1 WHERE tuc.task_id = tID;
             END IF;
             IF EXISTS(SELECT 1 FROM TaskViews WHERE task_id = tID) THEN
                 UPDATE TaskViews tvs SET tvs.task_is_archived = 1 WHERE tvs.task_id = tID;
             END IF;
-		COMMIT;
-	   select 1 as result;
+    COMMIT;
+     select 1 as result;
    else
       select 0 as result;
    end if;
@@ -1564,10 +1564,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `assignBadge`(IN `uid` INT, IN `bid` INT)
 BEGIN
 if not EXISTS (select 1 from UserBadges where user_id=uid and badge_id=bid) then
-	INSERT INTO UserBadges (user_id, badge_id) VALUES (uid,bid);
-	select 1 as result;
+  INSERT INTO UserBadges (user_id, badge_id) VALUES (uid,bid);
+  select 1 as result;
 else
-	select 0 as result;
+  select 0 as result;
 end if;
 END//
 DELIMITER ;
@@ -1577,19 +1577,19 @@ DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
 BEGIN
-	if badgeID='' then set badgeID=null;end if;
-	if ownerID='' then set ownerID=null;end if;
-	if name='' then set name=null;end if;
-	if disc='' then set disc=null;end if;
-	
-	if not exists (select 1 from Badges b where b.id = badgeID) then
-		insert into Badges (owner_id,title,description) values (ownerID,name,disc);
-		CALL getBadge(LAST_INSERT_ID(), null, null, null);
-	else
-		update Badges bg set bg.title = name, bg.description = disc
-		where bg.id = badgeID;
-		CALL getBadge(BadgeID, null, null, null);
-	end if;
+  if badgeID='' then set badgeID=null;end if;
+  if ownerID='' then set ownerID=null;end if;
+  if name='' then set name=null;end if;
+  if disc='' then set disc=null;end if;
+
+  if not exists (select 1 from Badges b where b.id = badgeID) then
+    insert into Badges (owner_id,title,description) values (ownerID,name,disc);
+    CALL getBadge(LAST_INSERT_ID(), null, null, null);
+  else
+    update Badges bg set bg.title = name, bg.description = disc
+    where bg.id = badgeID;
+    CALL getBadge(BadgeID, null, null, null);
+  end if;
 END//
 DELIMITER ;
 
@@ -1598,37 +1598,37 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedOrgInsert`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
 
-	Declare userId int;
-	DECLARE done INT DEFAULT FALSE;
-	DECLARE cur1 CURSOR FOR SELECT m.user_id FROM OrganisationMembers m WHERE  m.organisation_id=orgId AND m.user_id NOT IN (SELECT s.user_id FROM Admins s WHERE s.organisation_id IS NULL);
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  Declare userId int;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE cur1 CURSOR FOR SELECT m.user_id FROM OrganisationMembers m WHERE  m.organisation_id=orgId AND m.user_id NOT IN (SELECT s.user_id FROM Admins s WHERE s.organisation_id IS NULL);
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-	IF NOT EXISTS(SELECT 1 FROM BannedOrganisations b WHERE b.org_id = orgId) THEN
-		if orgId='' then set orgId=null;end if;
-		if userIdAdmin='' then set userIdAdmin=null;end if;
-		if bannedTypeId='' then set bannedTypeId=null;end if;
-		if adminComment='' then set adminComment=null;end if;
-	
-	 	START TRANSACTION;
-		INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
-		VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
-		
-		set @orgName = null;
-		SELECT o.name INTO @orgName FROM Organisations o WHERE o.id=orgId;
-		
-		OPEN cur1;
-		
-		read_loop: LOOP
-			FETCH cur1 INTO userId;
-			IF done THEN
-			 	LEAVE read_loop;
-			END IF;
-	      call bannedUserInsert(userId, userIdAdmin, bannedTypeId, Concat('You have been banned because the organisation ',@Orgname,' has been banned. ', adminComment));
-		END LOOP;
-		CLOSE cur1;
-		COMMIT;
-		
-	END IF;
+  IF NOT EXISTS(SELECT 1 FROM BannedOrganisations b WHERE b.org_id = orgId) THEN
+    if orgId='' then set orgId=null;end if;
+    if userIdAdmin='' then set userIdAdmin=null;end if;
+    if bannedTypeId='' then set bannedTypeId=null;end if;
+    if adminComment='' then set adminComment=null;end if;
+
+     START TRANSACTION;
+    INSERT INTO BannedOrganisations (org_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+    VALUES (orgId, userIdAdmin, bannedTypeId, adminComment,NOW());
+
+    set @orgName = null;
+    SELECT o.name INTO @orgName FROM Organisations o WHERE o.id=orgId;
+
+    OPEN cur1;
+
+    read_loop: LOOP
+      FETCH cur1 INTO userId;
+      IF done THEN
+         LEAVE read_loop;
+      END IF;
+        call bannedUserInsert(userId, userIdAdmin, bannedTypeId, Concat('You have been banned because the organisation ',@Orgname,' has been banned. ', adminComment));
+    END LOOP;
+    CLOSE cur1;
+    COMMIT;
+
+  END IF;
 
 END//
 DELIMITER ;
@@ -1638,15 +1638,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedUserInsert`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
 BEGIN
 
-	if userId='' then set userId=null;end if;
-	if userIdAdmin='' then set userIdAdmin=null;end if;
-	if bannedTypeId='' then set bannedTypeId=null;end if;
-	if adminComment='' then set adminComment=null;end if;
-	
-	IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
-		INSERT INTO BannedUsers (`user_id`,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
-		VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
-	END IF;
+  if userId='' then set userId=null;end if;
+  if userIdAdmin='' then set userIdAdmin=null;end if;
+  if bannedTypeId='' then set bannedTypeId=null;end if;
+  if adminComment='' then set adminComment=null;end if;
+
+  IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
+    INSERT INTO BannedUsers (`user_id`,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+    VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
+  END IF;
 
 END//
 DELIMITER ;
@@ -1655,15 +1655,15 @@ DROP PROCEDURE IF EXISTS `claimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
 BEGIN
-	if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
-		START TRANSACTION;
-		insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
-		update Tasks set `task-status_id`=3 where id = tID;
-		COMMIT;
-		select 1 as result;
-	else
-	select 0 as result;
-	end if;
+  if not EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+    START TRANSACTION;
+    insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
+    update Tasks set `task-status_id`=3 where id = tID;
+    COMMIT;
+    select 1 as result;
+  else
+  select 0 as result;
+  end if;
 END//
 DELIMITER ;
 
@@ -1697,12 +1697,12 @@ DROP PROCEDURE IF EXISTS `deleteBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
 BEGIN
-	IF EXISTS(SELECT b.id FROM Badges b WHERE b.id = id) THEN
-		DELETE FROM Badges WHERE Badges.id = id;
-		SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+  IF EXISTS(SELECT b.id FROM Badges b WHERE b.id = id) THEN
+    DELETE FROM Badges WHERE Badges.id = id;
+    SELECT 1 AS result;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -1714,9 +1714,9 @@ BEGIN
 if EXISTS (select 1 from Organisations o where o.id=id) then
   DELETE FROM Organisations WHERE Organisations.id=id;
   DELETE FROM OrganisationExtendedProfiles WHERE OrganisationExtendedProfiles.id=id;
-	select 1 as result;
+  select 1 as result;
 else
-	select 0 as result;
+  select 0 as result;
 end if;
 END//
 DELIMITER ;
@@ -1726,12 +1726,12 @@ DROP PROCEDURE IF EXISTS `deleteProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProject`(IN `projectId` INT)
 BEGIN
-	IF EXISTS(SELECT 1 FROM Projects p WHERE p.id = projectId) THEN	
-		DELETE FROM Projects WHERE id = projectId;
-		SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+  IF EXISTS(SELECT 1 FROM Projects p WHERE p.id = projectId) THEN
+    DELETE FROM Projects WHERE id = projectId;
+    SELECT 1 AS result;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -1741,12 +1741,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProjectTags`(IN `projectId` INT)
 BEGIN
 
-	IF EXISTS (SELECT 1 FROM ProjectTags p WHERE p.project_id = projectId) THEN
-		DELETE FROM ProjectTags WHERE project_id = projectId;
-		SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+  IF EXISTS (SELECT 1 FROM ProjectTags p WHERE p.project_id = projectId) THEN
+    DELETE FROM ProjectTags WHERE project_id = projectId;
+    SELECT 1 AS result;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 
 END//
 DELIMITER ;
@@ -1757,10 +1757,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`(IN `tagID` INT)
 BEGIN
     if EXISTS (select 1 from Tags where Tags.id=tagID) then
-	    delete from Tags where Tags.id=tagID;
-    	select 1 as result;
+      delete from Tags where Tags.id=tagID;
+      select 1 as result;
     else
-	    select 0 as result;
+      select 0 as result;
     end if;
 END//
 DELIMITER ;
@@ -1787,13 +1787,13 @@ BEGIN
         ) AS to_be_made_pending
       );
 
-	    delete from Tasks where Tasks.id=id;
+      delete from Tasks where Tasks.id=id;
 
       call update_project_complete_date(id);
 
-    	select 1 as result;
+      select 1 as result;
     else
-	    select 0 as result;
+      select 0 as result;
     end if;
 END//
 DELIMITER ;
@@ -1865,10 +1865,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisation`(IN `id` INT)
     COMMENT 'finds an organisation by the data passed in.'
 BEGIN
-	SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+  SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
         o.`regional-focus` as regionalFocus
-	FROM Organisations o
-	WHERE o.id=id; 
+  FROM Organisations o
+  WHERE o.id=id;
 END//
 DELIMITER ;
 
@@ -1877,21 +1877,21 @@ DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
 BEGIN
-	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
-		call getOrg(null,null,null,null,null,null,null,null,null);
-	ELSE		
-		SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+  IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
+    call getOrg(null,null,null,null,null,null,null,null,null);
+  ELSE
+    SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
         o.`regional-focus` as regionalFocus
-		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
-		WHERE om.user_id = id
-		UNION
-		SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+    FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
+    WHERE om.user_id = id
+    UNION
+    SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
         o.`regional-focus` as regionalFocus
-		FROM Organisations o
-		JOIN Admins a ON
-		a.organisation_id=o.id
-		WHERE a.user_id=id;
-	END IF;
+    FROM Organisations o
+    JOIN Admins a ON
+    a.organisation_id=o.id
+    WHERE a.user_id=id;
+  END IF;
 END//
 DELIMITER ;
 
@@ -1979,17 +1979,17 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN `orgId` INT)
 BEGIN
 
-	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
-	
-	SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
-            (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
-            (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
-            (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
-            (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-            u.nonce,u.`created-time` as created_time 
+  IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;
 
-        FROM Users u JOIN Admins a ON a.user_id = u.id 
-        
+  SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+            (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+            (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+            (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+            (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+            u.nonce,u.`created-time` as created_time
+
+        FROM Users u JOIN Admins a ON a.user_id = u.id
+
         WHERE (a.organisation_id is null or a.organisation_id = orgId);
 END//
 DELIMITER ;
@@ -2014,50 +2014,50 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
 
-	IF userId = null OR userId = '' THEN SET userId = NULL; END IF;
-	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
-	
-	IF userId IS NOT null AND orgId IS NOT null THEN
-		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
-		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
-		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
-		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
-		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` as created_time
+  IF userId = null OR userId = '' THEN SET userId = NULL; END IF;
+  IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;
 
-		FROM Users u JOIN Admins a ON a.user_id = u.id 
-		WHERE a.user_id = userId AND a.organisation_id = orgId;
-	ELSEIF userId IS NOT null AND orgId IS null THEN
-		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
-		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
-		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
-		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
-		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` as created_time
+  IF userId IS NOT null AND orgId IS NOT null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
 
-		FROM Users u JOIN Admins a ON a.user_id = u.id 
-		WHERE a.user_id = userId AND a.organisation_id is null;
-	ELSEIF userId IS null AND orgId IS NOT null THEN
-		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
-		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
-		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
-		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
-		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` as created_time
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.user_id = userId AND a.organisation_id = orgId;
+  ELSEIF userId IS NOT null AND orgId IS null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
 
-		FROM Users u JOIN Admins a ON a.user_id = u.id 
-		WHERE a.organisation_id = orgId;
-	ELSEIF userId IS null AND orgId IS null THEN
-		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
-		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
-		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
-		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
-		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` as created_time
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.user_id = userId AND a.organisation_id is null;
+  ELSEIF userId IS null AND orgId IS NOT null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
 
-		FROM Users u JOIN Admins a ON a.user_id = u.id 
-		WHERE (a.organisation_id is null or a.organisation_id = orgId);
-	END IF;
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.organisation_id = orgId;
+  ELSEIF userId IS null AND orgId IS null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
+
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE (a.organisation_id is null or a.organisation_id = orgId);
+  END IF;
 END//
 DELIMITER ;
 
@@ -2124,20 +2124,20 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTask`(IN `archiveId` BIGINT, IN `projectId` INT, IN `title` VARCHAR(128), IN `comment` VARCHAR(4096), IN `deadline` DATETIME, IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceLanguageId` INT, IN `targetLanguageId` INT, IN `sourceCountryId` INT, IN `targetCountryId` INT, IN `taskTypeId` INT, IN `taskStatusId` INT, IN `published` BIT(1))
 BEGIN
 
-	if archiveId='' then set archiveId=null; end if;
-	if projectId='' then set projectId=null; end if;
-	if title='' then set title=null; end if;
-	if `comment`='' then set `comment`=null; end if;
-	if deadline='' then set deadline=null; end if;
-	if wordCount='' then set wordCount=null; end if;
-	if createdTime='' then set createdTime=null; end if;	
-	if sourceLanguageId='' then set sourceLanguageId=null; end if;
-	if targetLanguageId='' then set targetLanguageId=null; end if;
-	if sourceCountryId='' then set sourceCountryId=null; end if;
-	if targetCountryId='' then set targetCountryId=null; end if;
-	if taskTypeId='' then set taskTypeId=null; end if;
-	if taskStatusId='' then set taskStatusId=null; end if;
-	if published='' then set published=null; end if;
+  if archiveId='' then set archiveId=null; end if;
+  if projectId='' then set projectId=null; end if;
+  if title='' then set title=null; end if;
+  if `comment`='' then set `comment`=null; end if;
+  if deadline='' then set deadline=null; end if;
+  if wordCount='' then set wordCount=null; end if;
+  if createdTime='' then set createdTime=null; end if;
+  if sourceLanguageId='' then set sourceLanguageId=null; end if;
+  if targetLanguageId='' then set targetLanguageId=null; end if;
+  if sourceCountryId='' then set sourceCountryId=null; end if;
+  if targetCountryId='' then set targetCountryId=null; end if;
+  if taskTypeId='' then set taskTypeId=null; end if;
+  if taskStatusId='' then set taskStatusId=null; end if;
+  if published='' then set published=null; end if;
 
     SELECT t.id, t.project_id as projectId, t.title, t.`comment`, t.deadline, t.`word-count` as wordCount, t.`created-time` as createdTime,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
@@ -2177,16 +2177,16 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512), IN `orgID` INT)
     READS SQL DATA
 BEGIN
-	if id='' then set id=null;end if;
-	if des='' then set des=null;end if;
-	if name='' then set name=null;end if;
-	if orgID='' then set orgID=null;end if;
+  if id='' then set id=null;end if;
+  if des='' then set des=null;end if;
+  if name='' then set name=null;end if;
+  if orgID='' then set orgID=null;end if;
 
-	SELECT * 
-        FROM Badges b 
-    	where (b.id=id or id is null) 
-        and (b.owner_id=orgID or orgID is null) 
-        and (b.title=name or name is null) 
+  SELECT *
+        FROM Badges b
+      where (b.id=id or id is null)
+        and (b.owner_id=orgID or orgID is null)
+        and (b.title=name or name is null)
         and (b.description=des or des is null);
 END//
 DELIMITER ;
@@ -2197,21 +2197,21 @@ DROP PROCEDURE IF EXISTS `getBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedOrg`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
 BEGIN
-	if orgId='' then set orgId=null;end if;
-	if userIdAdmin='' then set userIdAdmin=null;end if;
-	if bannedTypeId='' then set bannedTypeId=null;end if;
-	if adminComment='' then set adminComment=null;end if;
-	if bannedDate='' then set bannedDate=null;end if;
+  if orgId='' then set orgId=null;end if;
+  if userIdAdmin='' then set userIdAdmin=null;end if;
+  if bannedTypeId='' then set bannedTypeId=null;end if;
+  if adminComment='' then set adminComment=null;end if;
+  if bannedDate='' then set bannedDate=null;end if;
 
     SELECT b.org_id as orgId, b.`user_id-admin` as userIdAdmin, 
            b.bannedtype_id as banType, b.`comment`,
            b.`banned-date` as bannedDate 
-    	FROM BannedOrganisations b 
-	    WHERE isNullOrEqual(b.org_id,orgId) 
-        and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 
-        and isNullOrEqual(b.bannedtype_id,bannedTypeId) 
-    	and isNullOrEqual(b.`comment`,adminComment) 
-        and isNullOrEqual(b.`banned-date`,bannedDate); 
+      FROM BannedOrganisations b
+      WHERE isNullOrEqual(b.org_id,orgId)
+        and isNullOrEqual(b.`user_id-admin`,userIdAdmin)
+        and isNullOrEqual(b.bannedtype_id,bannedTypeId)
+      and isNullOrEqual(b.`comment`,adminComment)
+        and isNullOrEqual(b.`banned-date`,bannedDate);
 
 END//
 DELIMITER ;
@@ -2221,18 +2221,18 @@ DROP PROCEDURE IF EXISTS `getBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedUser`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
 BEGIN
-	if userId='' then set userId=null;end if;
-	if userIdAdmin='' then set userIdAdmin=null;end if;
-	if bannedTypeId='' then set bannedTypeId=null;end if;
-	if adminComment='' then set adminComment=null;end if;
-	if bannedDate='' then set bannedDate=null;end if;
+  if userId='' then set userId=null;end if;
+  if userIdAdmin='' then set userIdAdmin=null;end if;
+  if bannedTypeId='' then set bannedTypeId=null;end if;
+  if adminComment='' then set adminComment=null;end if;
+  if bannedDate='' then set bannedDate=null;end if;
 
-	SELECT b.user_id as userId, b.`user_id-admin` as userIdAdmin, b.bannedtype_id as banType, b.`comment`, b.`banned-date` as bannedDate 
-	    FROM BannedUsers b 
-    	WHERE isNullOrEqual(b.user_id,userId) 
-        and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 
+  SELECT b.user_id as userId, b.`user_id-admin` as userIdAdmin, b.bannedtype_id as banType, b.`comment`, b.`banned-date` as bannedDate
+      FROM BannedUsers b
+      WHERE isNullOrEqual(b.user_id,userId)
+        and isNullOrEqual(b.`user_id-admin`,userIdAdmin)
         and isNullOrEqual(b.bannedtype_id,bannedTypeId)
-	    and isNullOrEqual(b.`comment`,adminComment) 
+      and isNullOrEqual(b.`comment`,adminComment)
         and isNullOrEqual(b.`banned-date`, bannedDate);
 END//
 DELIMITER ;
@@ -2261,14 +2261,14 @@ DROP PROCEDURE IF EXISTS `getCountry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
 BEGIN
-	if id='' then set id=null;end if;
-	if code='' then set code=null;end if;
-	if name='' then set name=null;end if;
+  if id='' then set id=null;end if;
+  if code='' then set code=null;end if;
+  if name='' then set name=null;end if;
 
-	select `en-name` as name, c.code, c.id 
-	    from Countries c 
-        where isNullOrEqual(c.id,id) 
-        and isNullOrEqual(c.code,code) 
+  select `en-name` as name, c.code, c.id
+      from Countries c
+        where isNullOrEqual(c.id,id)
+        and isNullOrEqual(c.code,code)
         and isNullOrEqual(c.`en-name`, name);
 END//
 DELIMITER ;
@@ -2278,14 +2278,14 @@ DROP PROCEDURE IF EXISTS `getLanguage`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguage`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
 BEGIN
-	if id='' then set id=null;end if;
-	if code='' then set code=null;end if;
-	if name='' then set name=null;end if;
+  if id='' then set id=null;end if;
+  if code='' then set code=null;end if;
+  if name='' then set name=null;end if;
 
-	select `en-name` as name, l.code, l.id 
-	    from Languages l 
-    	where isNullOrEqual(l.id,id) 
-        and isNullOrEqual(l.code,code) 
+  select `en-name` as name, l.code, l.id
+      from Languages l
+      where isNullOrEqual(l.id,id)
+        and isNullOrEqual(l.code,code)
         and isNullOrEqual(l.`en-name`,name);
 END//
 DELIMITER ;
@@ -2309,7 +2309,7 @@ BEGIN
     if offset='' or offset is null then set offset=0; end if;
 
     SELECT t.id, project_id as projectId, t.title, t.`word-count` as wordCount,
-            (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
+            (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`,
             (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
             (SELECT code from Languages where id =t.`language_id-target`) as `targetLanguageCode`, 
@@ -2357,11 +2357,11 @@ DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT, IN `uID` INT)
 BEGIN
-	if uID='' then set uID=null;end if;
+  if uID='' then set uID=null;end if;
 
-	SELECT max(version_id) as latest_version  
-	    FROM TaskFileVersions tfv 
-    	where isNullOrEqual(tfv.task_id,id) 
+  SELECT max(version_id) as latest_version
+      FROM TaskFileVersions tfv
+      where isNullOrEqual(tfv.task_id,id)
         and isNullOrEqual(tfv.user_id,uID);
 END//
 DELIMITER ;
@@ -2385,7 +2385,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMembershipRequests`(IN `orgID` INT)
 BEGIN
     SELECT id, user_id, org_id, `request-datetime` as request_time
-    	FROM OrgRequests
+      FROM OrgRequests
         WHERE org_id = orgID
         ORDER BY `request-datetime` DESC;
 END//
@@ -2396,17 +2396,17 @@ DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(128), IN `url` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
-	if id='' then set id=null;end if;
-	if name='' then set name=null;end if;
-	if url='' then set url=null;end if;
-	if bio='' then set bio=null;end if;
-	if email='' then set email=null;end if;
-	if address='' then set address=null;end if;
-	if city='' then set city=null;end if;
-	if country='' then set country=null;end if;
-	if regionalFocus='' then set regionalFocus=null;end if;
+  if id='' then set id=null;end if;
+  if name='' then set name=null;end if;
+  if url='' then set url=null;end if;
+  if bio='' then set bio=null;end if;
+  if email='' then set email=null;end if;
+  if address='' then set address=null;end if;
+  if city='' then set city=null;end if;
+  if country='' then set country=null;end if;
+  if regionalFocus='' then set regionalFocus=null;end if;
 
-	select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
+  select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
         where (id is null or o.id = id)
         and (name is null or o.name = name)
         and (url is null or o.`home-page` = url)
@@ -2416,7 +2416,7 @@ BEGIN
         and (city is null or o.city = city)
         and (country is null or o.country = country)
         and (regionalFocus is null or o.`regional-focus` = regionalFocus)
-    	GROUP BY o.name;
+      GROUP BY o.name;
 END//
 DELIMITER ;
 
@@ -2734,10 +2734,10 @@ DROP PROCEDURE IF EXISTS `getStatistics`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHAR(128))
 BEGIN
-	IF statName = '' THEN SET statName = NULL; END IF;
-	
-	SELECT * 
-        FROM Statistics st 
+  IF statName = '' THEN SET statName = NULL; END IF;
+
+  SELECT *
+        FROM Statistics st
         where (statName is null or st.name = statName);
 
 END//
@@ -2783,7 +2783,7 @@ BEGIN
      -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0; end if;
     if id='' then set id=null;end if;
-	if name='' then set name=null;end if;
+  if name='' then set name=null;end if;
 
     SELECT t.id , t.label 
         FROM Tags t 
@@ -2804,15 +2804,15 @@ BEGIN
     if lim = '' or lim is null then set lim = ~0; end if;
   
     SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
-            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
-            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time` as createdTime, 
-            t.`comment`,  t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline  
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time` as createdTime,
+            t.`comment`,  t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline
 
         FROM Tasks t join ProjectTags pt on pt.project_id = t.project_id
         WHERE pt.tag_id = `tID`
@@ -2831,34 +2831,34 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
-	if id='' then set id=null;end if;
-	if projectID='' then set projectID=null;end if;
-	if name='' then set name=null;end if;
-	if sCode='' then set sCode=null;end if;
-	if tCode='' then set tCode=null;end if;
-	if wordCount='' then set wordCount=null;end if;
-	if created='' then set created=null;end if;
-	if sCC='' then set sCC=null;end if;
-	if tCC='' then set tCC=null;end if;
-	if taskComment='' then set taskComment=null;end if;
-	if tStatus='' then set tStatus=null;end if;
-	if tType='' then set tType=null;end if;
-	if pub ='' then set pub = null;end if;
-	if dLine='' then set dLine=null;end if;
-	
-	
-	select t.id, t.project_id as projectId, t.title, `word-count` as wordCount, 
-            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
-            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
-            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+  if id='' then set id=null;end if;
+  if projectID='' then set projectID=null;end if;
+  if name='' then set name=null;end if;
+  if sCode='' then set sCode=null;end if;
+  if tCode='' then set tCode=null;end if;
+  if wordCount='' then set wordCount=null;end if;
+  if created='' then set created=null;end if;
+  if sCC='' then set sCC=null;end if;
+  if tCC='' then set tCC=null;end if;
+  if taskComment='' then set taskComment=null;end if;
+  if tStatus='' then set tStatus=null;end if;
+  if tType='' then set tType=null;end if;
+  if pub ='' then set pub = null;end if;
+  if dLine='' then set dLine=null;end if;
 
-        from Tasks t 
+
+  select t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
+
+        from Tasks t
 
         where (id is null or t.id = id)
             and (projectID is null or t.project_id = projectID)
@@ -2919,11 +2919,11 @@ DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskClaimedTime`(IN `taskId` INT)
 BEGIN
-	IF EXISTS ( SELECT 1 FROM TaskClaims WHERE task_id = taskId) THEN
-		SELECT t.`claimed-time` as result FROM TaskClaims t WHERE t.task_id=taskId;
-	ELSE
-		SELECT 0 as result;
-	END IF;
+  IF EXISTS ( SELECT 1 FROM TaskClaims WHERE task_id = taskId) THEN
+    SELECT t.`claimed-time` as result FROM TaskClaims t WHERE t.task_id=taskId;
+  ELSE
+    SELECT 0 as result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -2933,13 +2933,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskFileMetaData`(IN `tID` INT, IN `vID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uID` INT, IN `uTime` DATETIME)
     READS SQL DATA
 BEGIN
-	if tID='' then set tID=null;end if;
-	if vID='' then set vID=null;end if;
-	if name='' then set name=null;end if;
-	if content='' then set content=null;end if;
-	if uID='' then set uID=null;end if;
-	if uTime='' then set uTime=null;end if;
-	
+  if tID='' then set tID=null;end if;
+  if vID='' then set vID=null;end if;
+  if name='' then set name=null;end if;
+  if content='' then set content=null;end if;
+  if uID='' then set uID=null;end if;
+  if uTime='' then set uTime=null;end if;
+
     select task_id as 'id', version_id as version, filename, `content-type` as content_type, user_id, `upload-time` as upload_time 
         from TaskFileVersions t 
         where (tID is null or t.task_id = tID)
@@ -2948,7 +2948,7 @@ BEGIN
         and (content is null or t.`content-type` = content)
         and (uID is null or t.user_id = uID)
         and (uTime is null or uTime = '0000-00-00 00:00:00' or t.`upload-time` = uTime);
-	
+
 END//
 DELIMITER ;
 
@@ -2959,20 +2959,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs`(IN `taskId` INT)
     READS SQL DATA
 BEGIN
 
-	if taskId='' then set taskId=null;end if;
-	
-	SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
-        	(select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
-            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+  if taskId='' then set taskId=null;end if;
+
+  SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
+          (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
-        	t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
-    	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
-	    WHERE (tp.task_id=taskId or tp.task_id is null);	
+          t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
+      FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
+      WHERE (tp.task_id=taskId or tp.task_id is null);
 END//
 DELIMITER ;
 
@@ -2982,12 +2982,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksFromPreReq`(IN `preReqId` I
     READS SQL DATA
 BEGIN
 
-	if preReqId='' then set preReqId=NULL;end if;
-	if projectId='' then set projectId=NULL;end if;
-	if preReqId is not null then set projectId=(select pt.project_id from Tasks pt where pt.id = preReqId);end if;
-	
-	SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
-    		(select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
+  if preReqId='' then set preReqId=NULL;end if;
+  if projectId='' then set projectId=NULL;end if;
+  if preReqId is not null then set projectId=(select pt.project_id from Tasks pt where pt.id = preReqId);end if;
+
+  SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
+        (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
@@ -2995,10 +2995,10 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
-    		t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
-    	FROM Tasks t LEFT JOIN TaskPrerequisites tp ON tp.task_id=t.id
-    	WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null)	
-	    and (t.project_id = projectId or projectId is null);
+        t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
+      FROM Tasks t LEFT JOIN TaskPrerequisites tp ON tp.task_id=t.id
+      WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null)
+      and (t.project_id = projectId or projectId is null);
 END//
 DELIMITER ;
 
@@ -3037,7 +3037,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTagIds`(IN `lim` INT, IN `offs` INT)
 BEGIN
     if lim = '' or lim is null then set lim = ~0; end if; 
-    if offs = '' or offs is null then set offs=0; end if;	
+    if offs = '' or offs is null then set offs=0; end if;
 
     SELECT t.id as task_id , pt.tag_id 
         FROM ProjectTags pt join Tasks t on t.project_id = pt.project_id 
@@ -3053,9 +3053,9 @@ DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `tID` INT)
 BEGIN
-	set @pID = null;
-	select project_id into @pID  from Tasks where id=tID;
-	call getProjectTags(@pID);
+  set @pID = null;
+  select project_id into @pID  from Tasks where id=tID;
+  call getProjectTags(@pID);
 END//
 DELIMITER ;
 
@@ -3063,7 +3063,7 @@ DROP PROCEDURE IF EXISTS `getTaskType`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskType`(IN `tID` INT)
 BEGIN
-	select name from TaskTypes where id=tID;
+  select name from TaskTypes where id=tID;
 END//
 DELIMITER ;
 
@@ -3116,17 +3116,17 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
     READS SQL DATA
 BEGIN
-	if id='' then set id=null;end if;
-	if name='' then set name=null;end if;
-	if mail='' then set mail=null;end if;
-	if pass='' then set pass=null;end if;
-	if bio='' then set bio=null;end if;
-	if nonce='' then set nonce=null;end if;
-	if created='' then set created=null;end if;
-	if lang_id='' then set lang_id=null;end if;
-	if region_id='' then set region_id=null;end if;
-	
-	select u.id,u.`display-name` as display_name, u.email, u.password, u.biography, 
+  if id='' then set id=null;end if;
+  if name='' then set name=null;end if;
+  if mail='' then set mail=null;end if;
+  if pass='' then set pass=null;end if;
+  if bio='' then set bio=null;end if;
+  if nonce='' then set nonce=null;end if;
+  if created='' then set created=null;end if;
+  if lang_id='' then set lang_id=null;end if;
+  if region_id='' then set region_id=null;end if;
+
+  select u.id,u.`display-name` as display_name, u.email, u.password, u.biography,
             (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`, 
             (select code from Languages l where l.id = u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`, 
@@ -3167,10 +3167,10 @@ BEGIN
             `comment`, `taskType_id` as taskType, `taskStatus_id` as taskStatus, published, deadline, `created-time` as createdTime , am.version, 
             am.filename, am.`content-type` as contentType, am.`upload-time` as uploadTime, am.`user_id-claimed` as userIdClaimed,
             am.`user_id-archived` as userIdArchived, am.prerequisites, am.`user_id-taskCreator` as userIdTaskCreator, am.`archived-date` as archivedDate
-    	FROM ArchivedTasks t 
-	    JOIN ArchivedTasksMetadata am
-    	ON t.id=am.archivedTask_id
-    	WHERE am.`user_id-claimed` = uID
+      FROM ArchivedTasks t
+      JOIN ArchivedTasksMetadata am
+      ON t.id=am.archivedTask_id
+      WHERE am.`user_id-claimed` = uID
         LIMIT offset, lim;
 END//
 DELIMITER ;
@@ -3181,10 +3181,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasksCount`(IN `userId` INT)
 BEGIN
     SELECT COUNT(*) as "count"
-	FROM ArchivedTasks t 
+  FROM ArchivedTasks t
     JOIN ArchivedTasksMetadata am
-	ON t.id=am.archivedTask_id
-	WHERE am.`user_id-claimed` = `userId`;
+  ON t.id=am.archivedTask_id
+  WHERE am.`user_id-claimed` = `userId`;
 
 END//
 DELIMITER ;
@@ -3225,11 +3225,11 @@ DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
 BEGIN
-	IF EXISTS( 	SELECT 1	FROM TaskClaims tc WHERE tc.task_id=taskId) THEN
-		SET @userId = false;			
-		SELECT user_id INTO @userId FROM TaskClaims WHERE task_id=taskId;
-		call getUser(@userId,null,null,null,null,null,null,null,null);
-	END IF;
+  IF EXISTS( SELECT 1 FROM TaskClaims tc WHERE tc.task_id=taskId) THEN
+    SET @userId = false;
+    SELECT user_id INTO @userId FROM TaskClaims WHERE task_id=taskId;
+    call getUser(@userId,null,null,null,null,null,null,null,null);
+  END IF;
 END//
 DELIMITER ;
 
@@ -3237,8 +3237,8 @@ DROP PROCEDURE IF EXISTS `getUserIdsPendingTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIdsPendingTaskStreamNotification`()
 BEGIN
-	SELECT u.user_id FROM UserTaskStreamNotifications u
-	WHERE `last-sent` is NULL
+  SELECT u.user_id FROM UserTaskStreamNotifications u
+  WHERE `last-sent` is NULL
     OR (u.interval = 1 
             AND `last-sent` < NOW() - INTERVAL 1 DAY)
     OR (u.interval = 2
@@ -3255,15 +3255,15 @@ BEGIN
 
      -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0; end if;
-	if offs ='' or offs is null then set offs=0;end if;
-	
-	select s.user_id, 
+  if offs ='' or offs is null then set offs=0;end if;
+
+  select s.user_id,
             (select lg.code from Languages lg where lg.id = s.language_id) as languageCode, 
             (select c.code from Countries c where c.id = s.country_id) as countryCode 
         FROM UserSecondaryLanguages s 
         order by s.user_id
-	    LIMIT lim	
-    	OFFSET offs;
+      LIMIT lim
+      OFFSET offs;
 
 END//
 DELIMITER ;
@@ -3272,15 +3272,15 @@ DROP PROCEDURE IF EXISTS `getUserNativeLCCodes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNativeLCCodes`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	-- if limit is null, set to maxBigInt unsigned
+  -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0; end if;
-	if offs = '' or offs is null then set offs=0;end if;
-	
-	SELECT u.id, 
+  if offs = '' or offs is null then set offs=0;end if;
+
+  SELECT u.id,
             (select l.code from Languages l where l.id = u.language_id) as languageCode, 
             (select c.code from Countries c where c.id = u.country_id) as countryCode from Users u
-        LIMIT lim	
-        OFFSET offs;	
+        LIMIT lim
+        OFFSET offs;
 
 END//
 DELIMITER ;
@@ -3290,9 +3290,9 @@ DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNotifications`(IN `id` INT)
 BEGIN
-	SELECT *
-	    FROM UserNotifications
-    	WHERE user_id = id;
+  SELECT *
+      FROM UserNotifications
+      WHERE user_id = id;
 END//
 DELIMITER ;
 
@@ -3301,7 +3301,7 @@ DROP PROCEDURE IF EXISTS `getUserRealName`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRealName`(IN `userId` INT)
 BEGIN
-	IF EXISTS(SELECT 1
+  IF EXISTS(SELECT 1
                 FROM UserPersonalInformation
                 WHERE user_id = userId
                 AND receive_credit = 1) then
@@ -3319,14 +3319,14 @@ DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
 BEGIN
-	SELECT id, `display-name` as display_name, email, password, biography,
+  SELECT id, `display-name` as display_name, email, password, biography,
         (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`,
         (select code from Languages l where l.id = u.`language_id`) as `languageCode`,
         (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`,
         (select code from Countries c where c.id = u.`country_id`) as `countryCode`,
         nonce, `created-time` as created_time
-	    FROM Users u JOIN UserBadges ON u.id = UserBadges.user_id
-    	WHERE badge_id = bID;
+      FROM Users u JOIN UserBadges ON u.id = UserBadges.user_id
+      WHERE badge_id = bID;
 END//
 DELIMITER ;
 
@@ -3335,14 +3335,14 @@ DROP PROCEDURE IF EXISTS `getUserTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTagIds`(IN `lim` INT, IN `offs` INT)
 BEGIN
-	-- if limit is null, set to maxBigInt unsigned
+  -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0;  end if;
-	if offs ='' or offs is null then set offs= 0;   end if;
-	
-	select ut.user_id, ut.tag_id 
+  if offs ='' or offs is null then set offs= 0;   end if;
+
+  select ut.user_id, ut.tag_id
         from UserTags ut 
         order by ut.user_id
-        LIMIT lim	
+        LIMIT lim
         OFFSET offs;
 
 END//
@@ -3353,11 +3353,11 @@ DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` INT)
 BEGIN
-	-- if limit is null, set to maxBigInt unsigned
+  -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0;  end if;
 
     SELECT t.*
-        FROM UserTags JOIN Tags t ON UserTags.tag_id = t.id	
+        FROM UserTags JOIN Tags t ON UserTags.tag_id = t.id
         WHERE user_id = id LIMIT lim;
     
 END//
@@ -3430,10 +3430,10 @@ DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN `tID` INT)
 BEGIN
-	if uID='' then set uID=null;end if;
+  if uID='' then set uID=null;end if;
     if tID='' then set tID=null;end if;
 
-	select * from UserTaskScores 
+  select * from UserTaskScores
         where (uID is null or user_id = uID)
         and (tID is null or task_id = tID);
 
@@ -3647,9 +3647,9 @@ BEGIN
             (SELECT code from Countries c where c.id = recentTasks.`country_id-target`) as `targetCountryCode`,
             `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
         FROM
-		(SELECT tv.`viewed-time`, t.* FROM TaskViews tv
-		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
+    (SELECT tv.`viewed-time`, t.* FROM TaskViews tv
+    JOIN Tasks AS t on tv.task_id = t.id
+    where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
         LIMIT offset, lim);
 END//
 DELIMITER ;
@@ -3663,8 +3663,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasksCount`(IN `userID
 BEGIN
 
    SELECT count(distinct tv.task_id) as result FROM TaskViews tv
-		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2;
+    JOIN Tasks AS t on tv.task_id = t.id
+    where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2;
 END//
 DELIMITER ;
 
@@ -3687,7 +3687,7 @@ BEGIN
 
     SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
     INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
-	
+
     (
     SELECT
         t2.id,
@@ -3746,7 +3746,7 @@ DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
 BEGIN
-	SELECT t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
+  SELECT t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -3756,8 +3756,8 @@ BEGIN
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
             t.`comment`, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
-	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
-	WHERE user_id = id;
+  FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
+  WHERE user_id = id;
 END//
 DELIMITER ;
 
@@ -3766,14 +3766,14 @@ DROP PROCEDURE IF EXISTS `getUserWithBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserWithBadge`(IN `id` INT)
 BEGIN
-	SELECT Users.id,Users.`display-name`,Users.email,Users.password,Users.biography, 
-		    (SELECT `en-name` FROM Languages l WHERE l.id = Users.`language_id`) AS `languageName`, 
-		    (SELECT code FROM Languages l WHERE l.id = Users.`language_id`) AS `languageCode`, 
-		    (SELECT `en-name` FROM Countries c WHERE c.id = Users.`country_id`) AS `countryName`, 
-		    (SELECT code FROM Countries c WHERE c.id = Users.`country_id`) AS `countryCode`, 
-		    Users.nonce,Users.`created-time`
-	    FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
-    	WHERE UserBadges.user_id = uID AND UserBadges.badge_id = bID;
+  SELECT Users.id,Users.`display-name`,Users.email,Users.password,Users.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = Users.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = Users.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = Users.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = Users.`country_id`) AS `countryCode`,
+        Users.nonce,Users.`created-time`
+      FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
+      WHERE UserBadges.user_id = uID AND UserBadges.badge_id = bID;
 END//
 DELIMITER ;
 
@@ -3796,7 +3796,7 @@ DROP PROCEDURE IF EXISTS `hasUserClaimedSegmentationTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedSegmentationTask`(IN `uID` INT, IN `pID` INT)
 BEGIN
-SELECT exists	 (	select 1
+SELECT exists (  select 1
                         FROM TaskClaims tc JOIN Tasks t ON tc.task_id = t.id
                         WHERE `user_id` = uID
                         AND `project_id` = pID
@@ -3892,7 +3892,7 @@ BEGIN
                 SELECT 0 as result;
         end if;
     else
-    	SELECT 0 as result;
+      SELECT 0 as result;
     end if;
 END//
 DELIMITER ;
@@ -3902,11 +3902,11 @@ DROP PROCEDURE IF EXISTS `isUserBlacklistedForTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTask`(IN `userId` INT, IN `taskId` INT)
 BEGIN
-	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId) THEN
-		SELECT 1 as result;
-	ELSE
-		SELECT 0 as result;
-	END IF;
+  IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId) THEN
+    SELECT 1 as result;
+  ELSE
+    SELECT 0 as result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -3914,11 +3914,11 @@ DROP PROCEDURE IF EXISTS `isUserBlacklistedForTaskByAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTaskByAdmin`(IN `userId` INT, IN `taskId` INT)
 BEGIN
-	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId AND t.revoked_by_admin = 1) THEN
-		SELECT 1 as result;
-	ELSE
-		SELECT 0 as result;
-	END IF;
+  IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId AND t.revoked_by_admin = 1) THEN
+    SELECT 1 as result;
+  ELSE
+    SELECT 0 as result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -3927,8 +3927,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
     MODIFIES SQL DATA
 BEGIN
-	insert into task_file_version_download (task_id,version_id,user_id,time_downloaded) 
-	values (tID,uID,vID,Now());
+  insert into task_file_version_download (task_id,version_id,user_id,time_downloaded)
+  values (tID,uID,vID,Now());
 END//
 DELIMITER ;
 
@@ -4175,34 +4175,34 @@ DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
-	if id='' then set id=null;end if;
-	if url='' then set url=null;end if;
-	if companyName='' then set companyName=null;end if;
-	if bio='' then set bio=null;end if;
-	if email='' then set email=null;end if;
-	if address='' then set address=null;end if;
-	if city='' then set city=null;end if;
-	if country='' then set country=null;end if;
-	if regionalFocus='' then set regionalFocus=null;end if;
-	
-	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
-		INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`) 
+  if id='' then set id=null;end if;
+  if url='' then set url=null;end if;
+  if companyName='' then set companyName=null;end if;
+  if bio='' then set bio=null;end if;
+  if email='' then set email=null;end if;
+  if address='' then set address=null;end if;
+  if city='' then set city=null;end if;
+  if country='' then set country=null;end if;
+  if regionalFocus='' then set regionalFocus=null;end if;
+
+  IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
+    INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`)
                 values ( companyName, bio, url, email, address, city, country, regionalFocus);
 
-		CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-	ELSE
-		
+    CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+  ELSE
+
                 if companyName is not null 
                 and companyName != (select o.name from Organisations o  WHERE o.id = id)
                 or (select o.name from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.name = companyName WHERE org.id = id;
-		end if;
+    end if;
 
                 if url is not null 
                 and url != (select o.`home-page` from Organisations o WHERE o.id = id) 
                 or (select o.`home-page` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set  org.`home-page` = url WHERE org.id = id;
-		end if;
+    end if;
 
                 if bio is not null 
                 and bio != (select o.biography from Organisations o WHERE o.id = id) 
@@ -4211,13 +4211,13 @@ BEGIN
                         # set bio = REPLACE(bio, '\\n', '');
                         # set bio = REPLACE(bio, '\\r', '\n');
                         update Organisations org set  org.biography = bio WHERE org.id = id;
-		end if;
+    end if;
 
-		if email is not null 
-                and email != (select o.`e-mail` from Organisations o WHERE o.id = id) 
+    if email is not null
+                and email != (select o.`e-mail` from Organisations o WHERE o.id = id)
                 or (select o.`e-mail` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`e-mail` = email WHERE org.id = id;
-		end if;
+    end if;
 
                 if address is not null 
                 and address != (select o.address from Organisations o WHERE o.id = id) 
@@ -4226,26 +4226,26 @@ BEGIN
                         # set address = REPLACE(address, '\\n', '');
                         # set address = REPLACE(address, '\\r', '\n');
                         update Organisations org set org.address = address WHERE org.id = id;
-		end if;
+    end if;
 
                 if city is not null 
                 and city != (select o.city from Organisations o WHERE o.id = id) 
                 or (select o.city from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.city = city WHERE org.id = id;
-		end if;
+    end if;
 
                 if country is not null 
                 and country != (select o.country from Organisations o  WHERE o.id = id) 
                 or (select o.country from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.country = country WHERE org.id = id;
-		end if;
+    end if;
 
                 if regionalFocus is not null 
                 and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id) 
                 or (select o.`regional-focus` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`regional-focus` = regionalFocus WHERE org.id = id;
-		end if;
-		
+    end if;
+
         CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
   END IF;
@@ -4504,17 +4504,17 @@ BEGIN
                         from TaskFileVersions tfv 
                         where tfv.task_id=tID
                         and version_id = 1+@maxVer) then
-	        INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
-        	VALUES (tID,1+@maxVer,name, content, uID, Now());
+          INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`)
+          VALUES (tID,1+@maxVer,name, content, uID, Now());
         else
-	        select tfv.version_id into @maxVer
-        	    from TaskFileVersions tfv 
-            	where tfv.task_id=tID 
-            	order by tfv.version_id desc
-            	limit 1;
+          select tfv.version_id into @maxVer
+              from TaskFileVersions tfv
+              where tfv.task_id=tID
+              order by tfv.version_id desc
+              limit 1;
 
             INSERT INTO `TaskFileVersions` (`task_id`, `version_id`, `filename`, `content-type`, `user_id`, `upload-time`) 
-            	VALUES (tID,1+@maxVer,name, content, uID, Now());
+              VALUES (tID,1+@maxVer,name, content, uID, Now());
         end if;
         select 1+@maxVer as version;
     else
@@ -4567,13 +4567,13 @@ DROP PROCEDURE IF EXISTS `removeAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeAdmin`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	IF orgId='' THEN SET orgId=NULL; END IF;
-	
-	IF orgId IS NOT NULL THEN	
-		DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id = orgId;
-	ELSE
-		DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id IS NULL;
-	END IF;
+  IF orgId='' THEN SET orgId=NULL; END IF;
+
+  IF orgId IS NOT NULL THEN
+    DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id = orgId;
+  ELSE
+    DELETE a FROM Admins a WHERE a.user_id = userId AND a.organisation_id IS NULL;
+  END IF;
 
 END//
 DELIMITER ;
@@ -4582,7 +4582,7 @@ DROP PROCEDURE IF EXISTS `removeBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedOrg`(IN `orgId` INT)
 BEGIN
-	DELETE FROM BannedOrganisations WHERE org_id=orgId;
+  DELETE FROM BannedOrganisations WHERE org_id=orgId;
 END//
 DELIMITER ;
 
@@ -4590,7 +4590,7 @@ DROP PROCEDURE IF EXISTS `removeBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedUser`(IN `userId` INT)
 BEGIN
-	DELETE FROM BannedUsers WHERE user_id = userId;
+  DELETE FROM BannedUsers WHERE user_id = userId;
 END//
 DELIMITER ;
 
@@ -4599,7 +4599,7 @@ DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	IF EXISTS (SELECT 1
+  IF EXISTS (SELECT 1
                 FROM OrgRequests r
                 WHERE r.user_id = userId
                 AND r.org_id = orgId) THEN
@@ -4607,9 +4607,9 @@ BEGIN
             WHERE user_id = userId
             AND org_id = orgId;
         SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -4618,12 +4618,12 @@ DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
 BEGIN
-	IF EXISTS (SELECT 1 FROM PasswordResetRequests p WHERE p.user_id = userId) THEN
-		DELETE FROM PasswordResetRequests
-    	WHERE user_id = userId;
-    	SELECT 1 AS result;
+  IF EXISTS (SELECT 1 FROM PasswordResetRequests p WHERE p.user_id = userId) THEN
+    DELETE FROM PasswordResetRequests
+      WHERE user_id = userId;
+      SELECT 1 AS result;
    ELSE
-   	SELECT 0 AS result;   
+     SELECT 0 AS result;
    END IF;   
 END//
 DELIMITER ;
@@ -4634,10 +4634,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeProjectTag`(IN `projectID` INT, IN `tagID` INT)
 BEGIN
 if exists (select 1 from ProjectTags where project_id=projectID and tag_id =tagID) then
-	delete from ProjectTags  where project_id=projectID and tag_id =tagID;
-	select 1 as result;
+  delete from ProjectTags  where project_id=projectID and tag_id =tagID;
+  select 1 as result;
 else
-	select 0 as result;
+  select 0 as result;
 end if;
 END//
 DELIMITER ;
@@ -4648,13 +4648,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
     MODIFIES SQL DATA
 BEGIN
-	if exists(select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
+  if exists(select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
       DELETE FROM TaskPrerequisites
         WHERE task_id = taskId
         AND `task_id-prerequisite` = preReqId;
-   	select 1 as "result";
+     select 1 as "result";
    else
-   	select 0 as "result";
+     select 0 as "result";
    end if;
 END//
 DELIMITER ;
@@ -4679,8 +4679,8 @@ DROP PROCEDURE IF EXISTS `removeUserBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `bID` INT)
 BEGIN
-	set @owner = null;
-	select b.owner_id into @owner from Badges b where b.id=bID;
+  set @owner = null;
+  select b.owner_id into @owner from Badges b where b.id=bID;
         if @owner is not null  or bID in(6,7,8,10,11,12,13) then
             DELETE FROM UserBadges
             WHERE user_id=uID
@@ -4698,15 +4698,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserNotification`(IN `userId` INT, IN `taskId` INT)
     COMMENT 'Remove a task from the Users notification list'
 BEGIN
-	if EXISTS(  SELECT *
-	                FROM UserNotifications
-	                WHERE user_id = userId
-	                AND task_id = taskId) then                 
-		DELETE 	FROM UserNotifications	WHERE user_id=userId AND task_id =taskId; 
-		select 1 as 'result';
-	else
-	select 0 as 'result';
-	end if;
+  if EXISTS(  SELECT *
+                  FROM UserNotifications
+                  WHERE user_id = userId
+                  AND task_id = taskId) then
+    DELETE FROM UserNotifications WHERE user_id=userId AND task_id =taskId;
+    select 1 as 'result';
+  else
+  select 0 as 'result';
+  end if;
 END//
 DELIMITER ;
 
@@ -4716,15 +4716,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserTag`(IN `id` INT, IN `tagID` INT)
     COMMENT 'unsubscripse a user for the given tag'
 BEGIN
-	if EXISTS(  SELECT user_id, tag_id
-	                FROM UserTags
-	                WHERE user_id = id
-	                AND tag_id = tagID) then                 
-		DELETE 	FROM UserTags	WHERE user_id=id AND tag_id =tagID; 
-		select 1 as 'result';
-	else
-	select 0 as 'result';
-	end if;
+  if EXISTS(  SELECT user_id, tag_id
+                  FROM UserTags
+                  WHERE user_id = id
+                  AND tag_id = tagID) then
+    DELETE FROM UserTags WHERE user_id=id AND tag_id =tagID;
+    select 1 as 'result';
+  else
+  select 0 as 'result';
+  end if;
 END//
 DELIMITER ;
 
@@ -4744,7 +4744,7 @@ BEGIN
         INSERT INTO OrgRequests (user_id, org_id) VALUES (userId, orgId);
         select 1 as result;
     else
-	    select 0 as result;
+      select 0 as result;
     end if;
 END//
 DELIMITER ;
@@ -4754,17 +4754,17 @@ DROP PROCEDURE IF EXISTS `revokeMembership`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `revokeMembership`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	if exists(select 1
+  if exists(select 1
                 from OrganisationMembers om
                 where om.user_id = userId
                 and om.organisation_id = orgId) then
-		delete from OrganisationMembers
+    delete from OrganisationMembers
             where user_id = userId
             and organisation_id = orgId;
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
+    select 1 as result;
+  else
+    select 0 as result;
+  end if;
 END//
 DELIMITER ;
 
@@ -4807,10 +4807,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForOrg`(IN `org_name` VARCHAR(128))
     COMMENT 'Search for an organisation by name'
 BEGIN
-	SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+  SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
         o.`regional-focus` as regionalFocus
-	    FROM Organisations o
-	    WHERE name LIKE CONCAT('%', org_name, '%');
+      FROM Organisations o
+      WHERE name LIKE CONCAT('%', org_name, '%');
 END//
 DELIMITER ;
 
@@ -4820,9 +4820,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForTag`(IN `tagName` VARCHAR(50))
     COMMENT 'Search for a tag by label'
 BEGIN
-	SELECT *
-	    FROM Tags
-	    WHERE label LIKE CONCAT('%', tagName, '%');
+  SELECT *
+      FROM Tags
+      WHERE label LIKE CONCAT('%', tagName, '%');
 END//
 DELIMITER ;
 
@@ -4831,9 +4831,9 @@ DROP PROCEDURE IF EXISTS `setTaskStatus`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskStatus`(IN `tID` INT, IN `sID` INT)
 BEGIN
-	update Tasks 
-		set Tasks.`task-status_id`=sID
-		where Tasks.id=tID;
+  update Tasks
+    set Tasks.`task-status_id`=sID
+    where Tasks.id=tID;
 
   IF sID=3 THEN
     call reset_project_complete(tID);
@@ -4853,18 +4853,18 @@ DROP PROCEDURE IF EXISTS `statsUpdateAll`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
 BEGIN
-	CALL statsUpdateArchivedProjects;
-	CALL statsUpdateArchivedTasks;
-	CALL statsUpdateBadges;
-	CALL statsUpdateClaimedTasks;
-	CALL statsUpdateOrganisations;
-	CALL statsUpdateOrgMemberRequests;
-	CALL statsUpdateProjects;
-	CALL statsUpdateTags;
-	CALL statsUpdateTasks;
-	CALL statsUpdateTasksWithPreReqs;
-	CALL statsUpdateUnclaimedTasks;
-	CALL statsUpdateUsers;
+  CALL statsUpdateArchivedProjects;
+  CALL statsUpdateArchivedTasks;
+  CALL statsUpdateBadges;
+  CALL statsUpdateClaimedTasks;
+  CALL statsUpdateOrganisations;
+  CALL statsUpdateOrgMemberRequests;
+  CALL statsUpdateProjects;
+  CALL statsUpdateTags;
+  CALL statsUpdateTasks;
+  CALL statsUpdateTasksWithPreReqs;
+  CALL statsUpdateUnclaimedTasks;
+  CALL statsUpdateUsers;
     CALL statsUpdateCompleteTasks;
 END//
 DELIMITER ;
@@ -4874,10 +4874,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateArchivedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedProjects`()
 BEGIN
-	SET @totalArchivedProjects = 0;	
-	SELECT count(1) INTO @totalArchivedProjects FROM ArchivedProjects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ArchivedProjects', @totalArchivedProjects);	
+  SET @totalArchivedProjects = 0;
+  SELECT count(1) INTO @totalArchivedProjects FROM ArchivedProjects;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('ArchivedProjects', @totalArchivedProjects);
 END//
 DELIMITER ;
 
@@ -4886,10 +4886,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedTasks`()
 BEGIN
-	SET @totalArchivedTasks = 0;
-	SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ArchivedTasks', @totalArchivedTasks);
+  SET @totalArchivedTasks = 0;
+  SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('ArchivedTasks', @totalArchivedTasks);
 END//
 DELIMITER ;
 
@@ -4898,13 +4898,13 @@ DROP PROCEDURE IF EXISTS `statsUpdateCompleteTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateCompleteTasks`()
 BEGIN
-	SET @totalCompleteTasks = 0;
-	SELECT count(1)
+  SET @totalCompleteTasks = 0;
+  SELECT count(1)
         INTO @totalCompleteTasks
         FROM Tasks
         WHERE `task-status_id` = 4;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('CompleteTasks', @totalCompleteTasks);
+  REPLACE INTO Statistics (name, value)
+  VALUES ('CompleteTasks', @totalCompleteTasks);
 END//
 DELIMITER ;
 
@@ -4913,10 +4913,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateBadges`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateBadges`()
 BEGIN
-	SET @totalBadges = 0;
-	SELECT count(1) INTO @totalBadges FROM Badges;		
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Badges', @totalBadges);
+  SET @totalBadges = 0;
+  SELECT count(1) INTO @totalBadges FROM Badges;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Badges', @totalBadges);
 END//
 DELIMITER ;
 
@@ -4925,10 +4925,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateClaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
 BEGIN
-	SET @claimedTasks = 0;
-	SELECT count(1) INTO @claimedTasks FROM TaskClaims;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('ClaimedTasks', @claimedTasks);	
+  SET @claimedTasks = 0;
+  SELECT count(1) INTO @claimedTasks FROM TaskClaims;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('ClaimedTasks', @claimedTasks);
 END//
 DELIMITER ;
 
@@ -4937,10 +4937,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateOrganisations`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrganisations`()
 BEGIN
-	SET @totalOrgs = 0;	
-	SELECT count(1) INTO @totalOrgs FROM Organisations;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Organisations', @totalOrgs);
+  SET @totalOrgs = 0;
+  SELECT count(1) INTO @totalOrgs FROM Organisations;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Organisations', @totalOrgs);
 END//
 DELIMITER ;
 
@@ -4949,10 +4949,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateOrgMemberRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrgMemberRequests`()
 BEGIN
-	SET @orgMemberRequests = 0;	
-	SELECT count(1) INTO @orgMemberRequests FROM OrgRequests;	
-	REPLACE INTO Statistics (name, value)
-	VALUES ('OrgMembershipRequests', @orgMemberRequests);
+  SET @orgMemberRequests = 0;
+  SELECT count(1) INTO @orgMemberRequests FROM OrgRequests;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('OrgMembershipRequests', @orgMemberRequests);
 END//
 DELIMITER ;
 
@@ -4961,10 +4961,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
 BEGIN
-	SET @Projects = 0;		
-	SELECT count(1) INTO @Projects FROM Projects;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Projects', @Projects);	
+  SET @Projects = 0;
+  SELECT count(1) INTO @Projects FROM Projects;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Projects', @Projects);
 END//
 DELIMITER ;
 
@@ -4973,10 +4973,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTags`()
 BEGIN
-	SET @totalTags = 0;
-	SELECT count(1) INTO @totalTags FROM Tags;		
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Tags', @totalTags);
+  SET @totalTags = 0;
+  SELECT count(1) INTO @totalTags FROM Tags;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Tags', @totalTags);
 END//
 DELIMITER ;
 
@@ -4985,10 +4985,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
 BEGIN
-	SET @totalTasks = 0;	
-	SELECT count(1) INTO @totalTasks FROM Tasks;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Tasks', @totalTasks);
+  SET @totalTasks = 0;
+  SELECT count(1) INTO @totalTasks FROM Tasks;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Tasks', @totalTasks);
 END//
 DELIMITER ;
 
@@ -4997,10 +4997,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateTasksWithPreReqs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasksWithPreReqs`()
 BEGIN
-	SET @totalTasksWithPreReqs = 0;
-	SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;	
-	REPLACE INTO Statistics (name, value)
-	VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
+  SET @totalTasksWithPreReqs = 0;
+  SELECT count(DISTINCT tp.task_id) INTO @totalTasksWithPreReqs FROM TaskPrerequisites tp;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('TasksWithPreReqs', @totalTasksWithPreReqs);
 END//
 DELIMITER ;
 
@@ -5026,10 +5026,10 @@ DROP PROCEDURE IF EXISTS `statsUpdateUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUsers`()
 BEGIN
-	SET @totalUsers = 0;	
-	SELECT count(1) INTO @totalUsers FROM Users;
-	REPLACE INTO Statistics (name, value)
-	VALUES ('Users', @totalUsers);
+  SET @totalUsers = 0;
+  SELECT count(1) INTO @totalUsers FROM Users;
+  REPLACE INTO Statistics (name, value)
+  VALUES ('Users', @totalUsers);
 END//
 DELIMITER ;
 
@@ -5063,8 +5063,8 @@ DROP PROCEDURE IF EXISTS `tagInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
 BEGIN
-	insert into Tags (label) values (name);
-	select *  from Tags t where t.id = LAST_INSERT_ID();
+  insert into Tags (label) values (name);
+  select *  from Tags t where t.id = LAST_INSERT_ID();
 END//
 DELIMITER ;
 
@@ -5209,7 +5209,7 @@ DROP PROCEDURE IF EXISTS `taskIsClaimed`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
 BEGIN
-Select exists (SELECT 1	FROM TaskClaims WHERE task_id = tID) as result;
+Select exists (SELECT 1 FROM TaskClaims WHERE task_id = tID) as result;
 END//
 DELIMITER ;
 
@@ -5320,7 +5320,7 @@ DROP PROCEDURE IF EXISTS `userHasBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
 BEGIN
-	Select EXISTS( SELECT 1 FROM UserBadges WHERE user_id = userID AND badge_id = badgeID) as result;
+  Select EXISTS( SELECT 1 FROM UserBadges WHERE user_id = userID AND badge_id = badgeID) as result;
 END//
 DELIMITER ;
 
@@ -5405,9 +5405,9 @@ BEGIN
                 WHERE u.id = id;
         end if;
 
-        if email is not null 
-            and email != (SELECT u.email 
-                FROM Users u 
+        if email is not null
+            and email != (SELECT u.email
+                FROM Users u
                 WHERE u.id = id)
         then
             update Users u 
@@ -5435,7 +5435,7 @@ BEGIN
                 WHERE u.id = id;
         end if;
 
-       	call getUser(id,null,null,null,null,null,null,null,null);
+         call getUser(id,null,null,null,null,null,null,null,null);
     end if;
 END//
 DELIMITER ;
@@ -5445,15 +5445,15 @@ DROP PROCEDURE IF EXISTS `userLikeTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikeTag`(IN `id` INT, IN `tagID` INT)
 BEGIN
-	if not EXISTS(  SELECT user_id, tag_id
-	                FROM UserTags
-	                WHERE user_id = id
-	                AND tag_id = tagID) then                 
-		INSERT INTO UserTags (user_id, tag_id)VALUES (id,tagID);
-		select 1 as 'result';
-	else
-	select 0 as 'result';
-	end if;
+  if not EXISTS(  SELECT user_id, tag_id
+                  FROM UserTags
+                  WHERE user_id = id
+                  AND tag_id = tagID) then
+    INSERT INTO UserTags (user_id, tag_id)VALUES (id,tagID);
+    select 1 as 'result';
+  else
+  select 0 as 'result';
+  end if;
 END//
 DELIMITER ;
 
@@ -5462,7 +5462,7 @@ DROP PROCEDURE IF EXISTS `userNotificationsInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userNotificationsInsertAndUpdate`(IN `user_id` INT, IN `task_id` INT)
 BEGIN
-	insert into UserNotifications  (user_id, task_id, `created-time`) values (user_id, task_id, NOW());
+  insert into UserNotifications  (user_id, task_id, `created-time`) values (user_id, task_id, NOW());
     select 1 as "result";
 END//
 DELIMITER ;
@@ -5472,14 +5472,14 @@ DROP PROCEDURE IF EXISTS `userSubscribedToProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
 BEGIN
-	if EXISTS (SELECT project_id 
-                	FROM UserTrackedProjects
-                	WHERE user_id = userId
+  if EXISTS (SELECT project_id
+                  FROM UserTrackedProjects
+                  WHERE user_id = userId
                     AND project_id = projectId) then
-		select 1 as 'result';
-	else
-    	select 0 as 'result';
-	end if;
+    select 1 as 'result';
+  else
+      select 0 as 'result';
+  end if;
 END//
 DELIMITER ;
 
@@ -5488,14 +5488,14 @@ DROP PROCEDURE IF EXISTS `userSubscribedToTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToTask`(IN `userId` INT, IN `taskId` INT)
 BEGIN
-	if EXISTS (SELECT task_id 
-                	FROM UserTrackedTasks
-                	WHERE user_id = userId
+  if EXISTS (SELECT task_id
+                  FROM UserTrackedTasks
+                  WHERE user_id = userId
                     AND task_id = taskId) then
-		select 1 as 'result';
-	else
-    	select 0 as 'result';
-	end if;
+    select 1 as 'result';
+  else
+      select 0 as 'result';
+  end if;
 END//
 DELIMITER ;
 
@@ -5515,35 +5515,35 @@ DROP PROCEDURE IF EXISTS `userTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
 BEGIN
-	
-	DECLARE taskId INT DEFAULT FALSE;
-	DECLARE done INT DEFAULT FALSE;
-	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=pID;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-	
-	
-	if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
-	
-		START TRANSACTION;
-		insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
-		
-		OPEN cur1;
-		
-		read_loop: LOOP
-			FETCH cur1 INTO taskId;
-			IF done THEN
-			 	LEAVE read_loop;
-			END IF;
+
+  DECLARE taskId INT DEFAULT FALSE;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=pID;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+
+  if not exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
+
+    START TRANSACTION;
+    insert into UserTrackedProjects (project_id,user_id) values (pID,uID);
+
+    OPEN cur1;
+
+    read_loop: LOOP
+      FETCH cur1 INTO taskId;
+      IF done THEN
+         LEAVE read_loop;
+      END IF;
          call userTrackTask(uID, taskId);
-		END LOOP;
-		CLOSE cur1;
-		
-		COMMIT;
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
-	
+    END LOOP;
+    CLOSE cur1;
+
+    COMMIT;
+    select 1 as result;
+  else
+    select 0 as result;
+  end if;
+
 END//
 DELIMITER ;
 
@@ -5553,12 +5553,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackTask`(IN `uID` INT, IN `tID` BIGINT)
     MODIFIES SQL DATA
 BEGIN
-	if not exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
-		insert into UserTrackedTasks (user_id,task_id) values (uID,tID);
-		select 1 as `result`;
-	else
-		select 0 as `result`;
-	end if;
+  if not exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
+    insert into UserTrackedTasks (user_id,task_id) values (uID,tID);
+    select 1 as `result`;
+  else
+    select 0 as `result`;
+  end if;
 END//
 DELIMITER ;
 
@@ -5576,12 +5576,12 @@ DROP PROCEDURE IF EXISTS `userUnTrackTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackTask`(IN `uID` INT, IN `tID` BIGINT)
 BEGIN
-	if exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
-		delete from UserTrackedTasks  where user_id=uID and task_id=tID;
-		select 1 as `result`;
-	else
-		select 0 as `result`;
-	end if;
+  if exists(select 1 from UserTrackedTasks utt where utt.user_id=uID and utt.task_id=tID) then
+    delete from UserTrackedTasks  where user_id=uID and task_id=tID;
+    select 1 as `result`;
+  else
+    select 0 as `result`;
+  end if;
 END//
 DELIMITER ;
 
@@ -5590,20 +5590,20 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
 BEGIN
 
-	set @languageId=null;	
-	select l.id into @languageId from Languages l where l.code=languageCode;
-	
-	set @countryId=null;
-	select c.id into @countryId from Countries c where c.code=countryCode;	
-	
-	INSERT INTO UserSecondaryLanguages (user_id, language_id, country_id)
-	VALUES(userId, @languageId, @countryId);
-	
-	SELECT (select `en-name` from Languages where id =@languageId) as `languageName`,
-			 (select code from Languages where id =@languageId) as `languageCode`,
-			 (select `en-name` from Countries where id =@countryId) as `countryName`,
-			 (select code from Countries where id =@countryId) as `countryCode` FROM UserSecondaryLanguages ul
-	WHERE ul.id = LAST_INSERT_ID();
+  set @languageId=null;
+  select l.id into @languageId from Languages l where l.code=languageCode;
+
+  set @countryId=null;
+  select c.id into @countryId from Countries c where c.code=countryCode;
+
+  INSERT INTO UserSecondaryLanguages (user_id, language_id, country_id)
+  VALUES(userId, @languageId, @countryId);
+
+  SELECT (select `en-name` from Languages where id =@languageId) as `languageName`,
+       (select code from Languages where id =@languageId) as `languageCode`,
+       (select `en-name` from Countries where id =@countryId) as `countryName`,
+       (select code from Countries where id =@countryId) as `countryCode` FROM UserSecondaryLanguages ul
+  WHERE ul.id = LAST_INSERT_ID();
 
 END//
 DELIMITER ;
@@ -5612,11 +5612,11 @@ DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)
 BEGIN
-	SELECT (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
-			 (select code from Languages where id =u.`language_id`) as `languageCode`,
-			 (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
-			 (select code from Countries where id =u.`country_id`) as `countryCode`	
-			  FROM UserSecondaryLanguages u WHERE u.user_id = userId;
+  SELECT (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+       (select code from Languages where id =u.`language_id`) as `languageCode`,
+       (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+       (select code from Countries where id =u.`country_id`) as `countryCode`
+        FROM UserSecondaryLanguages u WHERE u.user_id = userId;
 END//
 DELIMITER ;
 
@@ -5624,12 +5624,12 @@ DROP PROCEDURE IF EXISTS `deleteUserSecondaryLanguage`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSecondaryLanguage`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
 BEGIN
-	IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.user_id=userId AND u.language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND u.country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode)) THEN
-		DELETE FROM UserSecondaryLanguages WHERE user_id=userId AND language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode);
-		SELECT 1 AS result;
-	ELSE
-		SELECT 0 AS result;
-	END IF;
+  IF EXISTS (SELECT 1 FROM UserSecondaryLanguages u WHERE u.user_id=userId AND u.language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND u.country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode)) THEN
+    DELETE FROM UserSecondaryLanguages WHERE user_id=userId AND language_id = (SELECT l.id FROM Languages l WHERE l.code=languageCode) AND country_id = (SELECT c.id FROM Countries c WHERE c.code=countryCode);
+    SELECT 1 AS result;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 END//
 DELIMITER ;
 
@@ -5637,53 +5637,53 @@ DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
-	if id='' then set id=null;end if;
-	if userId='' then set userId=null;end if;
-	if firstName='' then set firstName=null;end if;
-	if lastName='' then set lastName=null;end if;
-	if mobileNumber='' then set mobileNumber=null;end if;
-	if businessNumber='' then set businessNumber=null;end if;
+  if id='' then set id=null;end if;
+  if userId='' then set userId=null;end if;
+  if firstName='' then set firstName=null;end if;
+  if lastName='' then set lastName=null;end if;
+  if mobileNumber='' then set mobileNumber=null;end if;
+  if businessNumber='' then set businessNumber=null;end if;
     if languagePreference='' then set languagePreference=null;end if;
-	if jobTitle='' then set jobTitle=null;end if;
-	if address='' then set address=null;end if;
-	if city='' then set city=null;end if;
-	if country='' then set country=null;end if;
+  if jobTitle='' then set jobTitle=null;end if;
+  if address='' then set address=null;end if;
+  if city='' then set city=null;end if;
+  if country='' then set country=null;end if;
     if receiveCredit IS NULL THEN SET receiveCredit = 0; END IF;
-		
-	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
-		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`, `language-preference`, `job-title`,`address`,`city`,`country`, `receive_credit`)
-		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,languagePreference,jobTitle,address,city,country,receiveCredit);
-		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-	ELSE
+
+  IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
+    INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`, `language-preference`, `job-title`,`address`,`city`,`country`, `receive_credit`)
+    VALUES (userId,firstName,lastName,mobileNumber,businessNumber,languagePreference,jobTitle,address,city,country,receiveCredit);
+    CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+  ELSE
         if userId is not null 
                 and userId != (select p.`user_id` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`user_id` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`user_id` = userId WHERE p.id = id;
-		end if;
+    end if;
 
         if firstName is not null 
                 and firstName != (select p.`first-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`first-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`first-name` = firstName WHERE p.id = id;
-		end if;
+    end if;
 
         if lastName is not null 
                 and lastName != (select p.`last-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`last-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`last-name` = lastName WHERE p.id = id;
-		end if;
+    end if;
 
         if mobileNumber is not null 
                 and mobileNumber != (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`mobile-number` = mobileNumber WHERE p.id = id;
-		end if;
+    end if;
 
         if businessNumber is not null 
                 and businessNumber != (select p.`business-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`business-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`business-number` = businessNumber WHERE p.id = id;
-		end if;
+    end if;
         
         IF languagePreference IS NOT NULL
             AND languagePreference != (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`id` = id)
@@ -5695,41 +5695,41 @@ BEGIN
                 and jobTitle != (select p.`job-title` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`job-title` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`job-title` = jobTitle WHERE p.id = id;
-		end if;
+    end if;
                 
         if address is not null 
                 and address != (select p.address from UserPersonalInformation p WHERE p.id = id)
                 or (select p.address from UserPersonalInformation p WHERE p.id = id) is null
                     then 
                             UPDATE UserPersonalInformation p SET p.address = address WHERE p.id = id;
-		end if;
+    end if;
 
         if city is not null 
                 and city != (select p.city from UserPersonalInformation p WHERE p.id = id)
                 or (select p.city from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.city = city WHERE p.id = id;
-		end if;
+    end if;
                 
         if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
-		end if;
+    end if;
 
         if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
-		end if;
+    end if;
 
         if receiveCredit != (select p.receive_credit from UserPersonalInformation p WHERE p.id = id)
                 or (select p.receive_credit FROM UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.receive_credit = receiveCredit WHERE p.id = id;
         end if;
 
-		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+    CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-	end if;
+  end if;
 END//
 DELIMITER ;
 
@@ -5737,20 +5737,20 @@ DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
-	if id='' then set id=null;end if;
-	if userId='' then set userId=null;end if;
-	if firstName='' then set firstName=null;end if;
-	if lastName='' then set lastName=null;end if;
-	if mobileNumber='' then set mobileNumber=null;end if;
-	if businessNumber='' then set businessNumber=null;end if;
+  if id='' then set id=null;end if;
+  if userId='' then set userId=null;end if;
+  if firstName='' then set firstName=null;end if;
+  if lastName='' then set lastName=null;end if;
+  if mobileNumber='' then set mobileNumber=null;end if;
+  if businessNumber='' then set businessNumber=null;end if;
     if languagePreference='' then set languagePreference=null;end if;
-	if jobTitle='' then set jobTitle=null;end if;
-	if address='' then set address=null;end if;
-	if city='' then set city=null;end if;
-	if country='' then set country=null;end if;
+  if jobTitle='' then set jobTitle=null;end if;
+  if address='' then set address=null;end if;
+  if city='' then set city=null;end if;
+  if country='' then set country=null;end if;
     if receiveCredit = '' then set receiveCredit = null; end if;
-	
-	select p.id, p.user_id as userId, p.`first-name` as firstName, p.`last-name` as lastName, p.`mobile-number` as mobileNumber,
+
+  select p.id, p.user_id as userId, p.`first-name` as firstName, p.`last-name` as lastName, p.`mobile-number` as mobileNumber,
     p.`business-number` as businessNumber, p.`job-title` as jobTitle, p.address, p.city, p.country, p.receive_credit, p.`language-preference` as languagePreference 
     from UserPersonalInformation p 
         
@@ -5766,7 +5766,7 @@ BEGIN
             and (city is null or p.city = city) 
             and (country is null or p.country = country)
             and (receiveCredit is null or p.receive_credit = receiveCredit);
-	
+
 END//
 DELIMITER ;
 
@@ -5785,13 +5785,13 @@ SELECT id INTO @englishID FROM Languages WHERE code = "en";
 
 UPDATE UserPersonalInformation SET `language-preference` = @englishID WHERE `language-preference` IS NULL;
 OPEN createDefaultLangPref;
-		read_loop: LOOP
-		FETCH createDefaultLangPref INTO userId;
-		IF done THEN
-	        LEAVE read_loop;
-	    END IF;
-		CALL userPersonalInfoInsertAndUpdate(NULL,userId,NULL,NULL,NULL,NULL,@englishID,NULL,NULL,NULL,NULL,NULL);
-		END LOOP;
+    read_loop: LOOP
+    FETCH createDefaultLangPref INTO userId;
+    IF done THEN
+          LEAVE read_loop;
+      END IF;
+    CALL userPersonalInfoInsertAndUpdate(NULL,userId,NULL,NULL,NULL,NULL,@englishID,NULL,NULL,NULL,NULL,NULL);
+    END LOOP;
 CLOSE createDefaultLangPref;
 END//
 DELIMITER ;
@@ -5801,11 +5801,11 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
 BEGIN
 
-	IF userId = '' THEN SET userId = NULL; END IF;
-	IF eMail = '' THEN SET eMail = NULL;END IF;
-	IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
-	
-	INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
+  IF userId = '' THEN SET userId = NULL; END IF;
+  IF eMail = '' THEN SET eMail = NULL;END IF;
+  IF loginSuccess = '' THEN SET loginSuccess = NULL; END IF;
+
+  INSERT INTO UserLogins VALUES(userId, eMail, loginSuccess, NOW());
 
 END//
 DELIMITER ;
@@ -5872,16 +5872,16 @@ BEGIN
         WHERE user_id=userId
         AND organisation_id=orgId) THEN
 
-	    DELETE FROM UserTrackedOrganisations
+      DELETE FROM UserTrackedOrganisations
             WHERE user_id=userId AND organisation_id=orgId;
 
-	    SELECT 1 AS `result`;
+      SELECT 1 AS `result`;
 
-	ELSE
+  ELSE
 
-	    SELECT 0 AS `result`;
+      SELECT 0 AS `result`;
 
-	END IF;
+  END IF;
 END//
 DELIMITER ;
 
@@ -5898,7 +5898,7 @@ BEGIN
 
     ELSE
 
-    	SELECT 0 AS 'result';
+      SELECT 0 AS 'result';
 
     END IF;
 END//
@@ -5918,18 +5918,18 @@ BEGIN
         select 1 as result;
       else
       select count(*) into @segmentationTaskCount from Tasks where project_id=pID and (`task-type_id`=4 or `task-type_id`=1);
-	if  @segmentationTaskCount  > 0 then
-   	    select 2 as result;
+  if  @segmentationTaskCount  > 0 then
+         select 2 as result;
         else
            select count(distinct `word-count`) into @distinctTaskWordCount from Tasks where project_id=pID;
- 	       if @distinctTaskWordCount = 1 then
+          if @distinctTaskWordCount = 1 then
                    UPDATE Projects SET `word-count` = newWordCount WHERE id=pID;
                    UPDATE Tasks SET `word-count` = newWordCount WHERE project_id=pID;
                    select 1 as result;
                else
                    select 2 as result;
                end if;
-	end if;
+  end if;
       end if;
  else
   select 0 as result;
@@ -5941,18 +5941,18 @@ DROP PROCEDURE IF EXISTS `recordTaskView`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordTaskView`(IN `tID` INT, IN `uID` INT)
 BEGIN
-	IF `tID` = null OR `tID` = '' THEN SET `tID` = NULL; END IF;	
-	IF `uID` = null OR `uID` = '' THEN SET `uID` = NULL; END IF;
-	
-	IF (`uID` IS NOT NULL) AND (`tID` IS NOT NULL) THEN
+  IF `tID` = null OR `tID` = '' THEN SET `tID` = NULL; END IF;
+  IF `uID` = null OR `uID` = '' THEN SET `uID` = NULL; END IF;
 
-		INSERT INTO TaskViews (id, task_id, user_id, `viewed-time`) VALUES (NULL, `tID`, `uID`, NOW());
-		SELECT 1 as result;
+  IF (`uID` IS NOT NULL) AND (`tID` IS NOT NULL) THEN
 
-	ELSE
-		SELECT 0 as result;
-	END IF;
-	
+    INSERT INTO TaskViews (id, task_id, user_id, `viewed-time`) VALUES (NULL, `tID`, `uID`, NOW());
+    SELECT 1 as result;
+
+  ELSE
+    SELECT 0 as result;
+  END IF;
+
 END//
 DELIMITER ;
 
@@ -5960,20 +5960,20 @@ DROP PROCEDURE IF EXISTS `getProofreadTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProofreadTask`(IN `tID` INT)
 BEGIN
-	DECLARE projectId INT DEFAULT 0;
-	DECLARE taskTitle varchar(128);
-	DECLARE langSource INT DEFAULT 0;
-	DECLARE langTarget INT DEFAULT 0;
-	DECLARE countrySource INT DEFAULT 0;
-	DECLARE countryTarget INT DEFAULT 0;
-	DECLARE taskType INT DEFAULT 0;
-	DECLARE taskStatus INT DEFAULT 0;		
-	
-	select project_id, title, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `task-type_id`, `task-status_id` 
+  DECLARE projectId INT DEFAULT 0;
+  DECLARE taskTitle varchar(128);
+  DECLARE langSource INT DEFAULT 0;
+  DECLARE langTarget INT DEFAULT 0;
+  DECLARE countrySource INT DEFAULT 0;
+  DECLARE countryTarget INT DEFAULT 0;
+  DECLARE taskType INT DEFAULT 0;
+  DECLARE taskStatus INT DEFAULT 0;
+
+  select project_id, title, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `task-type_id`, `task-status_id`
             into projectId, taskTitle, langSource,  langTarget,   countrySource,   countryTarget,  taskType, taskStatus from Tasks where id = `tID`;
 
-	if taskType = 2 then
-		
+  if taskType = 2 then
+
             select t.id, t.project_id as projectId, t.title, `word-count` as wordCount, 
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
@@ -5983,19 +5983,19 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
-            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
 
             from Tasks t 
 
             where (t.project_id =  projectId)
- 	        and (t.title =  taskTitle)
+           and (t.title =  taskTitle)
                 and (t.`language_id-source` = langSource)
                 and (t.`language_id-target` = langTarget)
                 and (t.`country_id-source` = countrySource)
                 and (t.`country_id-target` = countryTarget)
                 and (t.`task-status_id` = 4)
                 and (t.`task-type_id` = 3);
-	end if;
+  end if;
 
 END//
 DELIMITER ;
@@ -9642,11 +9642,11 @@ CREATE TRIGGER `beforeUserLoginInsert` BEFORE INSERT ON `UserLogins` FOR EACH RO
 
 set @loginAttempts = null;
  
-	SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
-	
-	IF @loginAttempts = 4 THEN
-		INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
-	END IF;
+  SELECT count(1) INTO @loginAttempts  FROM UserLogins u WHERE u.user_id = NEW.user_id AND u.success = 0 AND u.`login-time` >=  DATE_SUB(NOW(), INTERVAL 1 MINUTE); 
+
+  IF @loginAttempts = 4 THEN
+    INSERT INTO BannedUsers VALUES (NEW.user_id, 0, 5, 'Sorry, this account has been locked for an hour due to excessive login attempts.', NOW());
+  END IF;
 
 END//
 DELIMITER ;
@@ -9677,7 +9677,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `deleteArchiveTaskOnArchiveProjectDeletion` BEFORE DELETE ON `ArchivedProjects` FOR EACH ROW BEGIN
 
-	DELETE FROM ArchivedTasks WHERE project_id=OLD.id;
+  DELETE FROM ArchivedTasks WHERE project_id=OLD.id;
 
 END//
 DELIMITER ;
@@ -9700,7 +9700,7 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
 
     if (new.`task-status_id`=4) then
         set @userID = null;
-		SELECT user_id INTO @userId
+    SELECT user_id INTO @userId
                 FROM TaskClaims
                 WHERE task_id = new.id;
 
@@ -9708,10 +9708,10 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
                             FROM UserBadges
                             WHERE user_id = @userId
                             AND badge_id = 6) then
-        		INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 6);
+            INSERT INTO UserBadges (user_id, badge_id) VALUES (@userId, 6);
         end if;
         if new.`task-type_id` = 3  
-		  and NOT EXISTS (SELECT 1
+      and NOT EXISTS (SELECT 1
                             FROM UserBadges
                             WHERE user_id = @userId
                             AND badge_id = 7)then
@@ -9769,36 +9769,36 @@ and not exists (select 1
                     on tsk.id= pre.`task_id-prerequisite`
                     where pre.task_id=t.id
                     and tsk.`task-status_id`!=4
-						  and tsk.`id`!=new.task_id);
+              and tsk.`id`!=new.task_id);
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
 
 
 
-	if exists (
-		select 1 from TaskFileVersions tf
-		where tf.task_id = new.task_id
-		and new.version_id > 0) then
-		
-		set @preStatus = null;
-		select `task-status_id` into @preStatus from Tasks t where t.id=new.task_id;
-		
-		OPEN cursor1;
-		read_loop: LOOP
-		FETCH cursor1 INTO tID;
-		IF done THEN
-	   LEAVE read_loop;
-	   END IF;
-		call setTaskStatus(tID,2);
-		END LOOP;
-		CLOSE cursor1;
-		
-		
+  if exists (
+    select 1 from TaskFileVersions tf
+    where tf.task_id = new.task_id
+    and new.version_id > 0) then
 
-		UPDATE Tasks t SET t.`task-status_id`=4 WHERE t.id= new.task_id;
-		
-	end if;
-	
+    set @preStatus = null;
+    select `task-status_id` into @preStatus from Tasks t where t.id=new.task_id;
+
+    OPEN cursor1;
+    read_loop: LOOP
+    FETCH cursor1 INTO tID;
+    IF done THEN
+     LEAVE read_loop;
+     END IF;
+    call setTaskStatus(tID,2);
+    END LOOP;
+    CLOSE cursor1;
+
+
+
+    UPDATE Tasks t SET t.`task-status_id`=4 WHERE t.id= new.task_id;
+
+  end if;
+
 
 END//
 DELIMITER ;
@@ -9810,20 +9810,20 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `updateTaskStatusDeletePrereq` AFTER DELETE ON `TaskPrerequisites` FOR EACH ROW BEGIN
 if exists 
-	(select 1 
-	 from Tasks t
-	 where t.id = old.task_id
-	 and t.`task-status_id`=1
-	 and not exists (select 1 
-						  from TaskPrerequisites tp
-						  join Tasks tsk 
+  (select 1
+   from Tasks t
+   where t.id = old.task_id
+   and t.`task-status_id`=1
+   and not exists (select 1
+              from TaskPrerequisites tp
+              join Tasks tsk
                     on tsk.id=tp.`task_id-prerequisite`
-						  where tp.task_id=t.id
-						  and tsk.`task-status_id`!= 4 )
-	 )
-	 then
-		update Tasks set `task-status_id`=2
-			 where id = old.task_id;
+              where tp.task_id=t.id
+              and tsk.`task-status_id`!= 4 )
+   )
+   then
+    update Tasks set `task-status_id`=2
+       where id = old.task_id;
 end if;
 END//
 DELIMITER ;
@@ -9835,20 +9835,20 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `updateTaskStatusOnAddPrereq` AFTER INSERT ON `TaskPrerequisites` FOR EACH ROW BEGIN
 if exists 
-	(select 1 
-	 from Tasks t
-	 where t.id = new.task_id
-	 and t.`task-status_id`=2
-	 and exists (select 1 
-						  from TaskPrerequisites tp
-						  join Tasks tsk 
+  (select 1
+   from Tasks t
+   where t.id = new.task_id
+   and t.`task-status_id`=2
+   and exists (select 1
+              from TaskPrerequisites tp
+              join Tasks tsk
                     on tsk.id=tp.`task_id-prerequisite`
-						  where tp.task_id=t.id
-						  and tsk.`task-status_id`!= 4 )
-	 )
-	 then
-		update Tasks set `task-status_id`=1
-			 where id = new.task_id;
+              where tp.task_id=t.id
+              and tsk.`task-status_id`!= 4 )
+   )
+   then
+    update Tasks set `task-status_id`=1
+       where id = new.task_id;
 end if;
 END//
 DELIMITER ;
@@ -9859,9 +9859,9 @@ DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `validateHomepageInsert` BEFORE INSERT ON `Organisations` FOR EACH ROW BEGIN
-	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
-	set new.`home-page` = concat("http://",new.`home-page`);
-	end if;
+  if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
+  set new.`home-page` = concat("http://",new.`home-page`);
+  end if;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -9871,9 +9871,9 @@ DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `validateHomepageUpdate` BEFORE UPDATE ON `Organisations` FOR EACH ROW BEGIN
-	if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
-	set new.`home-page` = concat("http://",new.`home-page`);
-	end if;
+  if not (new.`home-page` like "http://%" or new.`home-page`  like "https://%") then
+  set new.`home-page` = concat("http://",new.`home-page`);
+  end if;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -9896,14 +9896,14 @@ DROP TRIGGER IF EXISTS `onUserUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `onUserUpdate` BEFORE UPDATE ON `Users` FOR EACH ROW BEGIN
-	IF ((( old.language_id IS not NULL) OR (OLD.language_id != NEW.language_id))
-		AND (( old.country_id IS not NULL) OR (OLD.country_id != NEW.country_id))
-		AND (( old.biography IS not NULL) OR (OLD.biography != NEW.biography))
-		AND NOT EXISTS (SELECT 1 FROM UserBadges b WHERE b.user_id = OLD.id AND b.badge_id=3)) THEN
-		
-		INSERT INTO UserBadges VALUES(OLD.id, 3);
-		
-	END IF;	
+  IF ((( old.language_id IS not NULL) OR (OLD.language_id != NEW.language_id))
+    AND (( old.country_id IS not NULL) OR (OLD.country_id != NEW.country_id))
+    AND (( old.biography IS not NULL) OR (OLD.biography != NEW.biography))
+    AND NOT EXISTS (SELECT 1 FROM UserBadges b WHERE b.user_id = OLD.id AND b.badge_id=3)) THEN
+
+    INSERT INTO UserBadges VALUES(OLD.id, 3);
+
+  END IF;
 END//
 DELIMITER ;
 
@@ -9915,21 +9915,21 @@ DROP TRIGGER IF EXISTS `afterTaskCreate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
-	Declare userId int;
-	DECLARE done INT DEFAULT FALSE;
-	DECLARE cur1 CURSOR FOR SELECT u.user_id FROM UserTrackedProjects u WHERE u.Project_id = NEW.project_id;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  Declare userId int;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE cur1 CURSOR FOR SELECT u.user_id FROM UserTrackedProjects u WHERE u.Project_id = NEW.project_id;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-	OPEN cur1;
-	
-	read_loop: LOOP
-		FETCH cur1 INTO userId;
-		IF done THEN
-		 	LEAVE read_loop;
-		END IF;
+  OPEN cur1;
+
+  read_loop: LOOP
+    FETCH cur1 INTO userId;
+    IF done THEN
+       LEAVE read_loop;
+    END IF;
       INSERT INTO UserTrackedTasks VALUES(userId, NEW.id);
-	END LOOP;
-	CLOSE cur1;
+  END LOOP;
+  CLOSE cur1;
 
 END//
 DELIMITER ;
@@ -9942,9 +9942,9 @@ DROP TRIGGER IF EXISTS `afterDeleteTaskClaim`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
 CREATE TRIGGER `afterDeleteTaskClaim` AFTER DELETE ON `TaskClaims` FOR EACH ROW BEGIN
-	IF EXISTS (SELECT 1 FROM Tasks t WHERE t.id = old.task_id AND t.`task-status_id` = 3) THEN
-		UPDATE Tasks SET `task-status_id` = 2 WHERE id = old.task_id;
-	END IF;
+  IF EXISTS (SELECT 1 FROM Tasks t WHERE t.id = old.task_id AND t.`task-status_id` = 3) THEN
+    UPDATE Tasks SET `task-status_id` = 2 WHERE id = old.task_id;
+  END IF;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
