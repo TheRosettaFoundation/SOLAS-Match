@@ -5237,8 +5237,8 @@ DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `userFeedback` VARCHAR(4096), IN `unclaimByAdmin` BIT(1))
 BEGIN
-	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
-		START TRANSACTION;
+  if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
+    START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
       # insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
@@ -5289,10 +5289,10 @@ BEGIN
 
     call reset_project_complete(tID);
 
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
+    select 1 as result;
+  else
+    select 0 as result;
+  end if;
 END//
 DELIMITER ;
 
