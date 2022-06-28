@@ -4452,7 +4452,7 @@ BEGIN
 
             then update Projects p set p.`language_id` = (select l.id from Languages l where l.code=sourceLanguageCode) WHERE p.id = projectId;
         end if;
-        
+
         if createdTime is not null
         and createdTime != '0000-00-00 00:00:00'
         and createdTime != (select p.created from Projects p WHERE p.id = projectId)
@@ -4460,8 +4460,8 @@ BEGIN
 
             then update Projects p set p.created = createdTime WHERE p.id = projectId;
         end if;
-        
-       
+
+
         IF imageUploaded != (SELECT p.image_uploaded FROM Projects p WHERE p.id = projectId)
             THEN UPDATE Projects p SET p.image_uploaded = imageUploaded WHERE p.id = projectId;
         END IF;
