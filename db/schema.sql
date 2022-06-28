@@ -4367,7 +4367,7 @@ BEGIN
 
     if projectId is null then
 
-        if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' 
+        if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00'
         then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
 
         	set @scID=null;
@@ -4375,7 +4375,7 @@ BEGIN
 			set @sID=null;
 			select l.id into @sID from Languages l where l.code=sourceLanguageCode;
 	
-        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id, image_uploaded, image_approved) 
+        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id, image_uploaded, image_approved)
         VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID,imageUploaded, imageApproved);
 
         call insert_project_complete_date(LAST_INSERT_ID());
@@ -4384,32 +4384,32 @@ BEGIN
 
     elseif EXISTS (select 1 FROM Projects p WHERE p.id = projectId) then
 
-        if titleText is not null 
+        if titleText is not null
         and titleText != (select p.title from Projects p WHERE p.id = projectId)
         or (select p.title from Projects p WHERE p.id = projectId) is null
 
-            then 
+            then
                     update Projects p set p.title = titleText WHERE p.id = projectId;
         end if;
 
-        if descr is not null 
+        if descr is not null
         and descr != (select p.description from Projects p WHERE p.id = projectId)
         or (select p.description from Projects p WHERE p.id = projectId) is null
 
-            then 
+            then
                     update Projects p set p.description = descr WHERE p.id = projectId;
         end if;
 
 
-        if impactText is not null 
+        if impactText is not null
         and impactText != (select p.impact from Projects p WHERE p.id = projectId)
         or (select p.impact from Projects p WHERE p.id = projectId) is null
 
-            then 
+            then
                     update Projects p set p.impact = impactText WHERE p.id = projectId;
         end if;
 
-        if deadlineTime is not null 
+        if deadlineTime is not null
         and deadlineTime != '0000-00-00 00:00:00'
         and deadlineTime != (select p.deadline from Projects p WHERE p.id = projectId)
         or (select p.deadline from Projects p WHERE p.id = projectId) is null
@@ -4417,14 +4417,14 @@ BEGIN
             then update Projects p set p.deadline = deadlineTime WHERE p.id = projectId;
         end if;
 
-        if orgId is not null 
+        if orgId is not null
         and orgId != (select p.organisation_id from Projects p WHERE p.id = projectId)
         or (select p.organisation_id from Projects p WHERE p.id = projectId) is null
 
             then update Projects p set p.organisation_id = orgId WHERE p.id = projectId;
         end if;
 
-        if ref is not null 
+        if ref is not null
         and ref != (select p.reference from Projects p WHERE p.id = projectId)
         or (select p.reference from Projects p WHERE p.id = projectId) is null
             then update Projects p set p.reference = ref WHERE p.id = projectId;
@@ -4432,28 +4432,28 @@ BEGIN
             update Projects p set p.reference = ref WHERE p.id = projectId;
         end if;
 
-        if wordCount is not null 
+        if wordCount is not null
         and wordCount != (select p.`word-count` from Projects p WHERE p.id = projectId)
         or (select p.`word-count` from Projects p WHERE p.id = projectId) is null
 
             then update Projects p set p.`word-count` = wordCount WHERE p.id = projectId;
         end if;
 
-        if sourceCountryCode is not null 
+        if sourceCountryCode is not null
         and ((select c.id from Countries c where c.code = sourceCountryCode) != (select p.`country_id` from Projects p WHERE p.id = projectId))
         or (select p.`country_id` from Projects p WHERE p.id = projectId) is null
 
             then update Projects p set p.`country_id` = (select c.id from Countries c where c.code = sourceCountryCode) WHERE p.id = projectId;
         end if;
 
-        if sourceLanguageCode is not null 
+        if sourceLanguageCode is not null
         and ((select l.id from Languages l where l.code=sourceLanguageCode) != (select p.`language_id` from Projects p WHERE p.id = projectId))
         or (select p.`language_id` from Projects p WHERE p.id = projectId) is null
 
             then update Projects p set p.`language_id` = (select l.id from Languages l where l.code=sourceLanguageCode) WHERE p.id = projectId;
         end if;
         
-        if createdTime is not null 
+        if createdTime is not null
         and createdTime != '0000-00-00 00:00:00'
         and createdTime != (select p.created from Projects p WHERE p.id = projectId)
         or (select p.created from Projects p WHERE p.id = projectId) is null
