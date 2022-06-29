@@ -73,8 +73,6 @@
             <input type="text" name="last_name" id="last_name" placeholder="Last name" required/>
             <label for="email" class="required"><strong>Email</strong></label>
             <input type="text" name="email" id="email" placeholder="Your email"/>
-            <label for="email2" class="required"><strong>Email Confirmation</strong></label>
-            <input type="text" name="email2"  id="email2" placeholder="Please confirm your email address"/>
             <label for="password" class="required"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
             <label for="password" class="required"><strong>Confirm Password</strong></label>
