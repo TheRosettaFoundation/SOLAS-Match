@@ -105,7 +105,7 @@
                               data-client_id="{Settings::get('googlePlus.client_id')}"
                               data-context="signin"
                               data-ux_mode="popup"
-                              data-login_uri="{urlFor name='login'}"
+                              data-login_uri="{Settings::get('site.location')}login/"
                               data-auto_prompt="false">
                           </div>
                           <div class="g_id_signin"
