@@ -99,7 +99,7 @@ class MemsourceTimezone
             'DENMARK' => 'Europe/Copenhagen',
             'IRELAND' => 'Europe/Dublin',
             'FINLAND' => 'Europe/Helsinki',
-            'TURKEY' => 'Europe/Istanbul',
+            'TÜRKIYE' => 'Europe/Istanbul',
             'UKRAINE' => 'Europe/Kiev',
             'PORTUGAL' => 'Europe/Lisbon',
             'SLOVENIA' => 'Europe/Ljubljana',

@@ -457,11 +457,6 @@ class UserRouteHandler
                         required: true,
                         email: true
                     },
-                    email2: {
-                        required: true,
-                        email: true,
-                        equalTo: "#email"
-                    },
                     age_consent: "required",
                     conduct_consent: "required",
                    
@@ -479,10 +474,6 @@ class UserRouteHandler
                         equalTo: "Please enter the same password as above"
                     },
                     email: "Please enter a valid email address",
-                    email2: {
-                        required:"Please enter a valid email address",
-                        equalTo: "Please enter the same email address as above"
-                    },
                     age_consent: "Please ensure you are above 18 years of age",
                     conduct_consent: "You need to agree to this to proceed",
                 }
@@ -1181,8 +1172,8 @@ class UserRouteHandler
                 }
 
                 try {
-                    $i = 0;
-                    while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                    for ($i = 0; $i < 121; $i++) {
+                      if (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                         list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                         list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
                         if (empty($post["qualification_level_$i"])) $post["qualification_level_$i"] = 1;
@@ -1235,13 +1226,13 @@ class UserRouteHandler
                                 $post["qualification_level_$i"]
                             );
                         }
-                        $i++;
+                      }
                     }
 
                     foreach ($userQualifiedPairs as $userQualifiedPair) {
-                        $i = 0;
                         $found = false;
-                        while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                        for ($i = 0; $i < 121; $i++) {
+                          if (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                             list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                             list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
 
@@ -1252,7 +1243,7 @@ class UserRouteHandler
                             ) {
                                 $found = true;
                             }
-                            $i++;
+                          }
                         }
                         if (!$found) {
                             $userDao->removeUserQualifiedPair(
@@ -1377,6 +1368,11 @@ class UserRouteHandler
                     },
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
+                },
+                success: function(label,element) {
+                    label.parent().removeClass("error");
+                    label.remove(); 
+                	
                 },
                 messages: {
                     firstName: "Please enter your First name",
@@ -1765,14 +1761,76 @@ class UserRouteHandler
             }
         });
 
-        $(".expertise").change(function() {
-            if($(this).is(":checked")) {
+        $(".capabilities").on("change", function() {
+            var capabilities_no = $("input.capabilities:checked").length;
+            if(capabilities_no == 0){
+                $("#ch1").show();
+            }else{
+                $("#ch1").hide();
+            }
+            
+        });
+
+       
+        $(".expertise").on("change", function() {
+            var expertise_no = $("input.expertise:checked").length;
+            if(expertise_no == 0){
+                $("#ch").show();
+            }else{
                 $("#ch").hide();
             }
-            else {
-                $("#ch").show(); 
-            }
+            
         });
+
+
+        $("#nativeLanguageSelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#nativeCountrySelect").change(function(){
+            $(this).valid();
+        });
+        $("#language_code_source_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_source_5", function(){
+            $(this).valid();
+        });
+
+        $("#language_code_target_0").change(function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_1", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_2", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_3", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_4", function(){
+            $(this).valid();
+        });
+        $(document).on("change", "#language_code_target_5", function(){
+            $(this).valid();
+        });
+            
+        
     });        
     
         </script>';
