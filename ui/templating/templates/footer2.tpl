@@ -43,7 +43,7 @@
         </div>
          <!-- Container -->
         <div class="row-fluid">
-        <div class="span4" style="text-align: center;margin-left:-890px;">
+        <div class="span4" style="text-align: center;margin-left:-880px;">
          <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
          <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a>
          <a href="https://linkedin.com/company/translators-without-borders" target="_blank" class="fa fa-linkedin"></a>
