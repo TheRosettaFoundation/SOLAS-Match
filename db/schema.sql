@@ -1787,9 +1787,11 @@ BEGIN
         ) AS to_be_made_pending
       );
 
+      SELECT project_id INTO @pID FROM Tasks WHERE Tasks.id=id;
+
       delete from Tasks where Tasks.id=id;
 
-      call update_project_complete_date(id);
+      call update_project_complete_date_project(@pID);
 
       select 1 as result;
     else
@@ -9102,8 +9104,9 @@ DROP PROCEDURE IF EXISTS `delete_task_directly`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_task_directly`(IN taskID BIGINT)
 BEGIN
+    SELECT project_id INTO @pID FROM Tasks WHERE id=taskID;
     DELETE FROM Tasks WHERE id=taskID;
-    call update_project_complete_date(taskID);
+    call update_project_complete_date_project(@pID);
 END//
 DELIMITER ;
 
@@ -9589,8 +9592,8 @@ BEGIN
     SET @project_complete=0;
 
     SELECT
-        MAX(tcd.complete_date),
-        MIN(IF(tcd.task_id IS NULL OR t.`task-status_id`!=4, 0, 1))
+        IFNULL(MAX(tcd.complete_date), '1000-01-01 00:00:00'),
+        MIN(IF(IFNULL(t.`task-status_id`, 0)!=4, 0, 1))
         INTO @project_complete_date, @project_complete
     FROM      Tasks             t
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
@@ -9599,9 +9602,33 @@ BEGIN
     GROUP BY t.project_id;
 
     IF @project_complete THEN
-        UPDATE project_complete_dates SET status=@project_complete, complete_date=@project_complete_date WHERE project_id=@pID;
+        UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=@pID;
     ELSE
-        UPDATE project_complete_dates SET status=@project_complete WHERE project_id=@pID;
+        UPDATE project_complete_dates SET status=0 WHERE project_id=@pID;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_complete_date_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_complete_date_project`(IN pID INT)
+BEGIN
+    SET @project_complete=0;
+
+    SELECT
+        IFNULL(MAX(tcd.complete_date), '1000-01-01 00:00:00'),
+        MIN(IF(IFNULL(t.`task-status_id`, 0)!=4, 0, 1))
+        INTO @project_complete_date, @project_complete
+    FROM      Tasks             t
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    WHERE
+        t.project_id=pID
+    GROUP BY t.project_id;
+
+    IF @project_complete THEN
+        UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=pID;
+    ELSE
+        UPDATE project_complete_dates SET status=0 WHERE project_id=pID;
     END IF;
 END//
 DELIMITER ;
