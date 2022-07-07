@@ -52,9 +52,9 @@
         </div>
         <br/>
                <div class="navbar" style="color:#000000;">
-           <div class="navbar-inner1">
+           <div class="navbar-inner1" style="margin-left: 15px;">
                 <div class="container">
-                        <div class="span4" style="text-align: center">
+                        <div class="span4" style="text-align: center;margin-left:-25px;">
          <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
          <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a>
          <a href="https://linkedin.com/company/translators-without-borders" target="_blank" class="fa fa-linkedin"></a>
@@ -86,7 +86,7 @@
         
     
          <div class="navbar" style="color:#000000;">
-           <div class="navbar-inner1">
+           <div class="navbar-inner1" >
                 <div class="container" style="margin-top:-15px;">
                         <div class="span4" style="text-align: center">
   
