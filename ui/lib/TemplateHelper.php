@@ -5,6 +5,8 @@ namespace SolasMatch\UI\Lib;
 use \SolasMatch\Common as Common;
 use \SolasMatch\UI\DAO as DAO;
 
+require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
+
 class TemplateHelper
 {
     public static function utcStringToTime($sql_string)
@@ -106,56 +108,36 @@ class TemplateHelper
 
     public static function getTaskSourceLanguage($task)
     {
+        global $from_neon_to_trommons_pair;
         $languageCode = $task->getSourceLocale()->getLanguageCode();
         $languageName = $task->getSourceLocale()->getLanguageName();
         $countryCode = $task->getSourceLocale()->getCountryCode();
         $countryName = $task->getSourceLocale()->getCountryName();
-        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
-
-        if ($use_language_codes == 'y') {
-            return "$languageCode - $countryCode";
-        } elseif ($use_language_codes == 'n') {
-            return "$languageName - $countryName";
-        } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ANY') return "$languageName ($languageCode)";
-            return "$languageName - $countryName ($languageCode-$countryCode)";
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            if ($languageCode === $trommons_pair[0] && $countryCode === $trommons_pair[1]) {
+                $languageName = $language;
+                $countryName  = 'ANY';
+            }
         }
+        if ($countryName === 'ANY') return "$languageName ($languageCode)";
+        return "$languageName - $countryName ($languageCode-$countryCode)";
     }
 
     public static function getTaskTargetLanguage($task)
     {
+        global $from_neon_to_trommons_pair;
         $languageCode = $task->getTargetLocale()->getLanguageCode();
         $languageName = $task->getTargetLocale()->getLanguageName();
         $countryCode = $task->getTargetLocale()->getCountryCode();
         $countryName = $task->getTargetLocale()->getCountryName();
-        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
-
-        if ($use_language_codes == 'y') {
-            return "$languageCode-$countryCode";
-        } elseif ($use_language_codes == 'n') {
-            return "$languageName - $countryName";
-        } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ANY') return "$languageName ($languageCode)";
-            return "$languageName - $countryName ($languageCode-$countryCode)";
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            if ($languageCode === $trommons_pair[0] && $countryCode === $trommons_pair[1]) {
+                $languageName = $language;
+                $countryName  = 'ANY';
+            }
         }
-    }
-
-    public static function getProjectSourceLanguage($project)
-    {
-        $languageCode = $project->getSourceLanguageCode();
-        $languageName = TemplateHelper::languageNameFromCode($languageCode);
-        $countryCode = $project->getSourceCountryCode();
-        $countryName = TemplateHelper::countryNameFromCode($countryCode);
-        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
-
-        if ($use_language_codes == 'y') {
-            return "$languageCode-$countryCode";
-        } elseif ($use_language_codes == 'n') {
-            return "$languageName - $countryName";
-        } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ANY') return "$languageName ($languageCode)";
-            return "$languageName - $countryName ($languageCode-$countryCode)";
-        }
+        if ($countryName === 'ANY') return "$languageName ($languageCode)";
+        return "$languageName - $countryName ($languageCode-$countryCode)";
     }
 
     public static function getLanguage($locale)
@@ -192,49 +174,54 @@ class TemplateHelper
 
     public static function getLanguageAndCountry($locale)
     {
+        global $from_neon_to_trommons_pair;
         $languageCode = $locale->getLanguageCode();
         $languageName = $locale->getLanguageName();
         $countryCode = $locale->getCountryCode();
         $countryName = $locale->getCountryName();
-        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
-
-        if ($use_language_codes == 'y') {
-            return "$languageCode - $countryCode";
-        } elseif ($use_language_codes == 'n') {
-            return "$languageName - $countryName";
-        } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ANY') return "$languageName ($languageCode)";
-            return "$languageName - $countryName ($languageCode - $countryCode)";
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            if ($languageCode === $trommons_pair[0] && $countryCode === $trommons_pair[1]) {
+                $languageName = $language;
+                $countryName  = 'ANY';
+            }
         }
-        return "$languageName - $countryName";
+        if ($countryName === 'ANY') return "$languageName ($languageCode)";
+        return "$languageName - $countryName ($languageCode - $countryCode)";
     }
 
     public static function getLanguageAndCountryNoCodes($locale)
     {
+        global $from_neon_to_trommons_pair;
         $languageName = $locale->getLanguageName();
         $countryName = $locale->getCountryName();
+        $languageCode = $locale->getLanguageCode();
+        $countryCode  = $locale->getCountryCode();
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            if ($languageCode === $trommons_pair[0] && $countryCode === $trommons_pair[1]) {
+                $languageName = $language;
+                $countryName  = 'ANY';
+            }
+        }
         if ($countryName === 'ANY') return $languageName;
         return "$languageName - $countryName";
     }
 
     public static function getLanguageAndCountryFromCode($codes)
     {
+        global $from_neon_to_trommons_pair;
         $splitCodes = explode(',', $codes);
         $languageCode = $splitCodes[0];
         $countryCode = $splitCodes[1];
         $languageName = TemplateHelper::languageNameFromCode($languageCode);
         $countryName  = TemplateHelper::countryNameFromCode($countryCode);
-        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
-
-        if ($use_language_codes == 'y') {
-            return "$languageCode - $countryCode";
-        } elseif ($use_language_codes == 'n') {
-            return "$languageName - $countryName";
-        } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ANY') return "$languageName ($languageCode)";
-            return "$languageName - $countryName ($languageCode - $countryCode)";
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            if ($languageCode === $trommons_pair[0] && $countryCode === $trommons_pair[1]) {
+                $languageName = $language;
+                $countryName  = 'ANY';
+            }
         }
-        return "$language - $countryName";
+        if ($countryName === 'ANY') return "$languageName ($languageCode)";
+        return "$languageName - $countryName ($languageCode - $countryCode)";
     }
 
     public static function languageNameFromId($languageID)

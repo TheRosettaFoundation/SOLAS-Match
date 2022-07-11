@@ -13,6 +13,7 @@ require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
+require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
 
 
 class UserDao extends BaseDao
@@ -1202,8 +1203,23 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function getUserQualifiedPairs($user_id)
     {
+        global $from_neon_to_trommons_pair;
+
         $result = LibAPI\PDOWrapper::call('getUserQualifiedPairs', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) $result = array();
+
+        foreach ($result as $i => $r) {
+            foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+                if ($r['language_code_source'] === $trommons_pair[0] && $r['country_code_source'] === $trommons_pair[1]) {
+                    $result[$i]['language_source'] = $language;
+                    $result[$i]['country_source']  = 'ANY';
+                }
+                if ($r['language_code_target'] === $trommons_pair[0] && $r['country_code_target'] === $trommons_pair[1]) {
+                    $result[$i]['language_target'] = $language;
+                    $result[$i]['country_target']  = 'ANY';
+                }
+            }
+        }
         return $result;
     }
 
