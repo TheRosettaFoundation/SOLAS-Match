@@ -8933,7 +8933,7 @@ BEGIN
     JOIN MemsourceTasks mt ON t.id=mt.task_id
     WHERE
         t.project_id=projectID AND
-        mt.task=taskUID AND
+        BINARY mt.task=taskUID AND
         t.`task-type_id`=typeID;
 END//
 DELIMITER ;
