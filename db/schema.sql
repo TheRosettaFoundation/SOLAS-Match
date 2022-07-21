@@ -3674,18 +3674,12 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN userID INT, IN `offset` INT)
-
-    READS SQL DATA
-
 BEGIN
-    -- if limit is null, set to maxBigInt unsigned
     DECLARE current_task_langSource INT DEFAULT 0;
     DECLARE current_task_langTarget INT DEFAULT 0;
     DECLARE current_task_countrySource INT DEFAULT 0;
     DECLARE current_task_countryTarget INT DEFAULT 0;
     if offset='' or offset is null then set offset = 0; end if;
-
-  
 
     SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
     INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
@@ -3729,7 +3723,8 @@ BEGIN
         JOIN      UserQualifiedPairs             uqp ON
             uqp.user_id=userID AND
             t.`language_id-source`=uqp.language_id_source AND
-            t.`language_id-target`=uqp.language_id_target
+            t.`language_id-target`=uqp.language_id_target AND
+            t.`country_id-target`=uqp.country_id_target
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE
             r.restricted_task_id IS NULL AND
