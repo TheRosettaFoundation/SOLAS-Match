@@ -3479,7 +3479,8 @@ BEGIN
     LEFT JOIN UserQualifiedPairs uqp ON
         uqp.user_id=uID AND
         t.`language_id-source`=uqp.language_id_source AND
-        t.`language_id-target`=uqp.language_id_target
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3519,9 +3520,6 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `getUserTopTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasksCount` (IN `uID` INT, IN `strict` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
-
-    READS SQL DATA
-
 BEGIN
     if taskType = ''       then set taskType = null; end if;
     if sourceLanguage = '' then set sourceLanguage = null; end if;
@@ -3542,7 +3540,8 @@ BEGIN
         LEFT JOIN UserQualifiedPairs uqp ON
             uqp.user_id=uID AND
             t.`language_id-source`=uqp.language_id_source AND
-            t.`language_id-target`=uqp.language_id_target
+            t.`language_id-target`=uqp.language_id_target AND
+            t.`country_id-target`=uqp.country_id_target
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
