@@ -133,6 +133,12 @@ class TaskRouteHandler
             ->setName('task-view');
 
         $app->map(['GET', 'POST'],
+            '/task/{task_id}/search_translators_any_country[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_any_country')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('task-search_translators_any_country');
+
+        $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
@@ -2106,7 +2112,12 @@ class TaskRouteHandler
         return UserRouteHandler::render("task/task.view.tpl", $response);
     }
 
-    public function task_search_translators(Request $request, Response $response, $args)
+    public function task_search_translators_any_country(Request $request, Response $response, $args)
+    {
+        $this->task_search_translators($request, $response, $args, true);
+    }
+
+    public function task_search_translators(Request $request, Response $response, $args, $any_country = false)
     {
         global $template_data;
         $task_id = $args['task_id'];
@@ -2126,7 +2137,8 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
+        if ($any_country) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
+        else              $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
         $users_in_invites_not_sent = array();
         foreach ($invites_not_sent as $user) {
             $users_in_invites_not_sent[$user['user_id']] = $user;

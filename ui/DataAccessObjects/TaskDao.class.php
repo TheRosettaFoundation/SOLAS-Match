@@ -1157,6 +1157,13 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result;
     }
 
+    public function list_task_invites_not_sent_strict($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_strict', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+
     public function list_task_invites_not_sent($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent', LibAPI\PDOWrapper::cleanse($task_id));
