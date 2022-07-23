@@ -35,6 +35,11 @@
                         <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                     {/if}
                 </strong>
+                {if $any_country}
+                    — <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">strict</a>
+                {else}
+                    — <a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">loose</a>
+                {/if}
             </small>
         </span>
 

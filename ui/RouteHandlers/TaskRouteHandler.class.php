@@ -2217,6 +2217,7 @@ class TaskRouteHandler
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,
+            'any_country'     => $any_country,
         ));
 
         return UserRouteHandler::render("task/task.search_translators.tpl", $response);
