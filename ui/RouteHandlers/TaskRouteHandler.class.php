@@ -2114,7 +2114,7 @@ class TaskRouteHandler
 
     public function task_search_translators_any_country(Request $request, Response $response, $args)
     {
-        $this->task_search_translators($request, $response, $args, true);
+        return $this->task_search_translators($request, $response, $args, true);
     }
 
     public function task_search_translators(Request $request, Response $response, $args, $any_country = false)
