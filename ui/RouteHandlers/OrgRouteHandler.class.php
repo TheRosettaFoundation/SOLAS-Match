@@ -776,6 +776,7 @@ class OrgRouteHandler
                     $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_overview_not_set');
                 }
                 if (isset($post['homepage'])) {
+error_log("post[homepage]: " . $post['homepage']);
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
                             $org->setHomepage(Lib\Validator::addhttp($post['homepage']));
