@@ -160,7 +160,7 @@ class OrgRouteHandler
             if (isset($post["homepage"])) {
                 if (trim($post["homepage"])!="") {
                     if (Lib\Validator::validateURL($post["homepage"])) {
-                        $org->setHomepage($post["homepage"]);
+                        $org->setHomepage(Lib\Validator::addhttp($post['homepage']));
                     } else {
                         $errorOccured = true;
                         array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
@@ -778,12 +778,12 @@ class OrgRouteHandler
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
-                            $org->setHomepage($post["homepage"]);
+                            $org->setHomepage(Lib\Validator::addhttp($post['homepage']));
                         } else {
                             $errorOccured = true;
                             array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
                         }
-                    }
+                    } else $org->setHomepage('');
                 }
                 if (isset($post['biography'])) {
                     $org->setBiography($post['biography']);
@@ -844,7 +844,7 @@ class OrgRouteHandler
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    }
+                    } else $org2->setFacebook('');
                 }
                 if (isset($post['linkedin'])) {
                     if (trim($post['linkedin']) != '') {
@@ -854,7 +854,7 @@ class OrgRouteHandler
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    }
+                    } else $org2->setLinkedin('');
                 }
                 if (isset($post['twitter'])) {
                     if (trim($post['twitter']) != '') {
@@ -864,7 +864,7 @@ class OrgRouteHandler
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    }
+                    } else $org2->setPrimaryContactEmail('');
                 }
                 if (isset($post['urlvideo1'])) {
                     if (trim($post['urlvideo1']) != '') {

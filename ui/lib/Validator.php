@@ -8,7 +8,7 @@ class Validator
     public static function addhttp($url)
     {
         if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
-            $url = "http://" . $url;
+            $url = "https://" . $url;
         }
         return $url;
     }
