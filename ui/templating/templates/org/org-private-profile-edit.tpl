@@ -45,7 +45,7 @@
 
                     <label for='homepage'><strong>{Localisation::getTranslation('org_private_profile_organisation_website')}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
-                    {if isset($org) && !is_null($org->getHomepage()) && $org->getHomepage() != ''}
+                    {if isset($org) && !is_null($org->getHomepage()) && $org->getHomepage() != '' && $org->getHomepage() != 'https://'}
                         value="{$org->getHomepage()}"
                     {else}
                         placeholder="https://"
