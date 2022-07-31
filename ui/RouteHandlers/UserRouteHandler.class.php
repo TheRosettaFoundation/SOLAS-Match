@@ -615,12 +615,22 @@ class UserRouteHandler
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('email_verification_7'));
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
+
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
                     UserRouteHandler::flash('success', Lib\Localisation::getTranslation('email_verification_8'));
                 } else {
                     UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
                 }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+            }
+        }
+
+        $template_data = array_merge($template_data, array('uuid' => $uuid));
+
+        return UserRouteHandler::render("user/email.verification.tpl", $response);
     }
 
     public function passwordReset(Request $request, Response $response, $args)
