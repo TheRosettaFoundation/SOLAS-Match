@@ -466,7 +466,7 @@ a:hover{
  {else}
         {if isset($user)}
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
-            <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
+            <span style="font-size: 14px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
             </h3>
             <form method="post" action="{urlFor name="home"}">
 	            <table>
