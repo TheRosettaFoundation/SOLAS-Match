@@ -788,6 +788,10 @@ class UserRouteHandler
                         } else {
                             $nativeLocale = $user->getNativeLocale();
                             if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                                if ($message = $userDao->get_post_login_message($user->getId())) {
+                                    UserRouteHandler::flash('error', $message);
+                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                                }
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                             } else {
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
@@ -879,6 +883,10 @@ class UserRouteHandler
                     } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                            if ($message = $userDao->get_post_login_message($user->getId())) {
+                                UserRouteHandler::flash('error', $message);
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                            }
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
                             if ($userDao->terms_accepted($user->getId()) == 1) {
@@ -1302,6 +1310,8 @@ class UserRouteHandler
                     $notify = $userDao->terms_accepted($user_id) < 3;
                     $userDao->update_terms_accepted($user_id, 3);
                     if ($notify) $userDao->NotifyRegistered($user_id);
+
+                    $userDao->update_post_login_message($user_id);
 
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {

@@ -952,6 +952,18 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ",$accepted_level");
     }
 
+    public function get_post_login_message($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_post_login_message', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result) || $result[0]['show'] == 0) return 0;
+        return  $result[0]['message'];
+    }
+
+    public function update_post_login_message($user_id)
+    {
+        LibAPI\PDOWrapper::call('update_post_login_message', LibAPI\PDOWrapper::cleanse($user_id) . ',0');
+    }
+
     public function saveUser($user)
     {
         $userId = $user->getId();

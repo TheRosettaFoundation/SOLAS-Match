@@ -1294,6 +1294,16 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `post_login_messages` (
+  user_id    INT(10) UNSIGNED NOT NULL,
+  show       INT(10) UNSIGNED NOT NULL,
+  date_shown DATETIME NOT NULL,
+  message    TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_post_login_messages_users (user_id),
+  CONSTRAINT  FK_post_login_messages_users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -8098,6 +8108,22 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_terms_accepted`(IN userID INT, IN acceptedLevel INT)
 BEGIN
     REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, acceptedLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_post_login_message`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_post_login_message`(IN userID INT)
+BEGIN
+     SELECT * FROM post_login_messages WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_post_login_message`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_post_login_message`(IN userID INT, IN s INT)
+BEGIN
+    UPDATE post_login_messages SET show=s, date_shown=NOW() WHERE user_id=userID;
 END//
 DELIMITER ;
 
