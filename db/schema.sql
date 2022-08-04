@@ -1296,7 +1296,7 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
 
 CREATE TABLE IF NOT EXISTS `post_login_messages` (
   user_id    INT(10) UNSIGNED NOT NULL,
-  show       INT(10) UNSIGNED NOT NULL,
+  `show`     INT(10) UNSIGNED NOT NULL,
   date_shown DATETIME NOT NULL,
   message    TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY FK_post_login_messages_users (user_id),
