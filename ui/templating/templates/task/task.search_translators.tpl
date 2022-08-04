@@ -35,11 +35,6 @@
                         <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                     {/if}
                 </strong>
-                {if $any_country}
-                    — <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">strict</a>
-                {else}
-                    — <a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">loose</a>
-                {/if}
             </small>
         </span>
 
@@ -49,6 +44,13 @@
             </a>
         </div>
     </h1>
+    {if $any_country}
+        Sourcing is currently loose: Source users matching target language "{$task->getTargetLocale()->getLanguageCode()}" irrespective of country<br />
+        If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click strict</a>
+    {else}
+        Sourcing is currently strict: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
+        If you want to source all users with the target language {$task->getTargetLocale()->getLanguageCode()} irrespective of country <a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click loose</a>
+    {/if}
 
 		{include file="task/task.details.tpl"} 
 
