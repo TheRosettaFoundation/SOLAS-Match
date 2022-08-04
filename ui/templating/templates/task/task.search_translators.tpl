@@ -52,7 +52,7 @@
         Sourcing is currently strict: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
         If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" irrespective of country <a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click loose</a>
     {/if}
-    </strong>
+    </strong><br />
 
 		{include file="task/task.details.tpl"} 
 
