@@ -44,17 +44,17 @@
             </a>
         </div>
     </h1>
-    <strong>
-    {if $any_country}
-        Sourcing is currently loose: Source users matching target language "{$task->getTargetLocale()->getLanguageCode()}" irrespective of country<br />
-        If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click strict</a>
-    {else}
-        Sourcing is currently strict: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
-        If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" irrespective of country <a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click loose</a>
-    {/if}
-    </strong><br /><br />
 
-		{include file="task/task.details.tpl"} 
+		{include file="task/task.details.tpl"}
+
+    <h3>Manual Sourcing</h3>
+    {if $any_country}
+        Sourcing is currently <strong>loose</strong>: Source users matching target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong><br />
+        If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click here</a></strong>
+    {else}
+        Sourcing is currently <strong>strict</strong>: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
+        If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click here</a></strong>
+    {/if}
 
 {if !empty($sent_users)}
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
