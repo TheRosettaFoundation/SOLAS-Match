@@ -8123,7 +8123,7 @@ DROP PROCEDURE IF EXISTS `update_post_login_message`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_post_login_message`(IN userID INT, IN s INT)
 BEGIN
-    UPDATE post_login_messages SET show=s, date_shown=NOW() WHERE user_id=userID;
+    UPDATE post_login_messages SET `show`=s, date_shown=NOW() WHERE user_id=userID;
 END//
 DELIMITER ;
 

@@ -727,15 +727,18 @@ class UserRouteHandler
     public function login(Request $request, Response $response)
     {
         global $app, $template_data;
+error_log("login()");
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
         $error = null;
         if ($request->getMethod() === 'POST') {
+error_log("login() POST");
             $post = $request->getParsedBody();
 
             if (isset($post['login'])) {
+error_log("post['login']");
                 $user = null;
                 try {
                     $user = $userDao->login($post['email'], $post['password']);
@@ -829,9 +832,11 @@ class UserRouteHandler
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         } else {
+error_log("else check for code");
             $parms = $request->getQueryParams();
             $authCode = !empty($parms['code']) ? $parms['code'] : null;
             if (!is_null($authCode)) {
+error_log("code");
                 // Exchange auth code for access token
                 $user = null;
                 try {
@@ -844,6 +849,7 @@ class UserRouteHandler
                         $e->getMessage()
                     );
                     UserRouteHandler::flash('error', $error);
+error_log("redirect login");
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
@@ -882,8 +888,11 @@ class UserRouteHandler
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
+error_log("check language code");
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+error_log("check get_post_login_message");
                             if ($message = $userDao->get_post_login_message($user->getId())) {
+error_log("flash $message");
                                 UserRouteHandler::flash('error', $message);
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                             }
