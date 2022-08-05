@@ -55,6 +55,7 @@
         Sourcing is currently <strong>strict</strong>: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
         If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click here</a></strong>
     {/if}
+    <br /><br />
 
 {if !empty($sent_users)}
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
