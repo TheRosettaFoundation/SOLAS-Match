@@ -727,18 +727,15 @@ class UserRouteHandler
     public function login(Request $request, Response $response)
     {
         global $app, $template_data;
-error_log("login()");
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
         $error = null;
         if ($request->getMethod() === 'POST') {
-error_log("login() POST");
             $post = $request->getParsedBody();
 
             if (isset($post['login'])) {
-error_log("post['login']");
                 $user = null;
                 try {
                     $user = $userDao->login($post['email'], $post['password']);
@@ -832,11 +829,9 @@ error_log("post['login']");
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         } else {
-error_log("else check for code");
             $parms = $request->getQueryParams();
             $authCode = !empty($parms['code']) ? $parms['code'] : null;
             if (!is_null($authCode)) {
-error_log("code");
                 // Exchange auth code for access token
                 $user = null;
                 try {
@@ -849,7 +844,6 @@ error_log("code");
                         $e->getMessage()
                     );
                     UserRouteHandler::flash('error', $error);
-error_log("redirect login");
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
@@ -881,10 +875,12 @@ error_log("redirect login");
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
+error_log("before request_url: $request_url");
                 if ($request_url) {
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     if ($userDao->is_admin_or_org_member($user->getId())) {
+error_log("admin");
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
