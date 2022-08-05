@@ -875,20 +875,15 @@ class UserRouteHandler
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
-error_log("before request_url: $request_url");
                 if ($request_url) {
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     if ($userDao->is_admin_or_org_member($user->getId())) {
-error_log("admin");
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
-error_log("check language code");
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-error_log("check get_post_login_message");
                             if ($message = $userDao->get_post_login_message($user->getId())) {
-error_log("flash $message");
                                 UserRouteHandler::flash('error', $message);
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                             }
