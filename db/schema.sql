@@ -1295,11 +1295,13 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
 
 
 CREATE TABLE IF NOT EXISTS `post_login_messages` (
+  id         INT(11) NOT NULL AUTO_INCREMENT,
   user_id    INT(10) UNSIGNED NOT NULL,
   `show`     INT(10) UNSIGNED NOT NULL,
   date_shown DATETIME NOT NULL,
   message    TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY FK_post_login_messages_users (user_id),
+  PRIMARY KEY (id),
+  KEY         FK_post_login_messages_users (user_id),
   CONSTRAINT  FK_post_login_messages_users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -8115,7 +8117,12 @@ DROP PROCEDURE IF EXISTS `get_post_login_message`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_post_login_message`(IN userID INT)
 BEGIN
-     SELECT * FROM post_login_messages WHERE user_id=userID;
+     SELECT *
+     FROM post_login_messages
+     WHERE
+         user_id=userID AND
+         `show`>0
+     ORDER BY id;
 END//
 DELIMITER ;
 
@@ -8123,7 +8130,16 @@ DROP PROCEDURE IF EXISTS `update_post_login_message`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_post_login_message`(IN userID INT, IN s INT)
 BEGIN
-    UPDATE post_login_messages SET `show`=s, date_shown=NOW() WHERE user_id=userID;
+    SET @target_id = 0;
+    SELECT id INTO @target_id
+    FROM post_login_messages
+    WHERE
+        user_id=userID AND
+        `show`>0
+    ORDER BY id
+    LIMIT 1;
+
+    UPDATE post_login_messages SET `show`=s, date_shown=NOW() WHERE id=@target_id;
 END//
 DELIMITER ;
 
