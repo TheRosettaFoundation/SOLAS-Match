@@ -2837,6 +2837,23 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $result = curl_exec($ch);
                     curl_close($ch);
                     error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+
+                    $asana_task_details = json_decode($result, true);
+                    if (!empty($asana_task_details['errors'][0]['message']) && strpos($asana_task_details['errors'][0]['message'], 'Not a user in Organization') !== false) {
+                        unset($data['data']['assignee']);
+                        $ch = curl_init($url);
+                        $payload = json_encode($data);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                        if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                        else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                        $result = curl_exec($ch);
+                        curl_close($ch);
+                        error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+                    }
+
                     if ($create) {
                         $asana_task_details = json_decode($result, true);
                         if (!empty($asana_task_details['data']['gid'])) {
