@@ -2826,6 +2826,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                             ));
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
+$data['data']['assignee'] = 'translators@translatorswithoutborders.org';//TEST CODE
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
