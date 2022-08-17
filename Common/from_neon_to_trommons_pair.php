@@ -220,8 +220,8 @@ $from_neon_to_trommons_pair = array(
 );
 
 $language_options_changes = [
-  'apc---#' => 'Arabic North Levantine',
-  'bin-NG#' => 'Bini',
-  'run-BI' => 'Rundi',
+  //'apc---#' => 'Arabic North Levantine',
+  //'bin-NG#' => 'Bini',
+  //'run-BI' => 'Rundi',
   //'run-BI#' => 'Kirundi',
 ];
