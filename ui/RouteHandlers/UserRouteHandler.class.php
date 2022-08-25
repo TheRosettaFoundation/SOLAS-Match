@@ -1366,6 +1366,9 @@ class UserRouteHandler
 
             //Admin
             var admin = "'.$isSiteAdmin.'";
+            $.validator.addMethod( "notEqualTo", function( value, element, param ) {
+                return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
+            }, "Please enter a different value, values must not be the same." );
 
             var validator = $("#userprofile").validate({
                 rules: {
@@ -1395,6 +1398,7 @@ class UserRouteHandler
                     },
                 }
             });
+           
 
             $(".nexttab").click(function() {
                 //var selected = $("#tabs").tabs("option", "selected");
@@ -1616,8 +1620,8 @@ class UserRouteHandler
                     $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
-            $("#language_code_source_0").rules("add", { required: true });
-            $("#language_code_target_0").rules("add", { required: true });
+            $("#language_code_source_0").rules("add", { required: true, notEqualTo:"#language_code_target_0"});
+            $("#language_code_target_0").rules("add", { required: true, notEqualTo:"#language_code_source_0" });
         });
 
         $(document).on("click", "#btnTrigger", function(e) {
@@ -1746,8 +1750,9 @@ class UserRouteHandler
                 fieldWrapper.append(fTypee);
             }
             fieldWrapper.append(removeButton);
-            $("#language_code_source_"+ select_count).rules("add", { required: true });
-            $("#language_code_target_"+ select_count).rules("add", { required: true });
+         
+            $("#language_code_source_"+ select_count).rules("add", { required: true, notEqualTo: "#language_code_target_"+ select_count });
+            $("#language_code_target_"+ select_count).rules("add", { required: true, notEqualTo: "#language_code_source_"+ select_count  });
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
@@ -1806,18 +1811,24 @@ class UserRouteHandler
             $(this).valid();
         });
         $(document).on("change", "#language_code_source_1", function(){
+            $("#language_code_source_1").rules("add", { notEqualTo: "#language_code_target_1" });
             $(this).valid();
+            
         });
         $(document).on("change", "#language_code_source_2", function(){
+            $("#language_code_source_2").rules("add", { notEqualTo: "#language_code_target_2" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_source_3", function(){
+            $("#language_code_source_3").rules("add", { notEqualTo: "#language_code_target_3" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_source_4", function(){
+            $("#language_code_source_4").rules("add", { notEqualTo: "#language_code_target_4" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_source_5", function(){
+            $("#language_code_source_5").rules("add", { notEqualTo: "#language_code_target_5" });
             $(this).valid();
         });
 
@@ -1825,18 +1836,24 @@ class UserRouteHandler
             $(this).valid();
         });
         $(document).on("change", "#language_code_target_1", function(){
+            $("#language_code_target_1").rules("add", { notEqualTo: "#language_code_source_1" });
             $(this).valid();
+            
         });
         $(document).on("change", "#language_code_target_2", function(){
+            $("#language_code_target_2").rules("add", { notEqualTo: "#language_code_source_2" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_target_3", function(){
+            $("#language_code_target_3").rules("add", { notEqualTo: "#language_code_source_3" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_target_4", function(){
+            $("#language_code_target_4").rules("add", { notEqualTo: "#language_code_source_4" });
             $(this).valid();
         });
         $(document).on("change", "#language_code_target_5", function(){
+            $("#language_code_target_5").rules("add", { notEqualTo: "#language_code_source_5" });
             $(this).valid();
         });
             
