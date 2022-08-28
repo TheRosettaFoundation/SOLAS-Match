@@ -595,13 +595,13 @@ $memsource_change_country_to_kp = [
         if (!empty($kp_change_language_to_memsource[$kp_language])) $kp_language = $kp_change_language_to_memsource[$kp_language];
         $kp_change_country_to_memsource = [
             '419' => '419',  // Latin America
-            'LATN' => 'latn', // Latin Script
-            'CYRL' => 'cyrl', // Cyrillic Script
-            'HANS' => 'cn',   // Simplified Script
-            'HANT' => 'tw',   // Traditional Script
-            'ARAB' => 'arab_iq', // Bahdini Variant
-            'BENG' => 'beng', // Bangla Script
-            'ROHG' => 'rohg', // Hanifi Script
+            'latn' => 'latn', // Latin Script
+            'cyrl' => 'cyrl', // Cyrillic Script
+            'hans' => 'cn',   // Simplified Script
+            'hant' => 'tw',   // Traditional Script
+            'arab' => 'arab_iq', // Bahdini Variant
+            'beng' => 'beng', // Bangla Script
+            'rohg' => 'rohg', // Hanifi Script
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
