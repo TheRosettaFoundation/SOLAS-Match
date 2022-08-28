@@ -520,42 +520,42 @@ $memsource_change_language_to_kp = [
 $memsource_change_country_to_kp = [
 '001' => '--',
 'mod' => '--',
-'419' => '49',
-'latn' => '90',
-'latn_az' => '90',
-'latn_bg' => '90',
-'latn_ba' => '90',
-'latn_gr' => '90',
-'latn_ir' => '90',
-'latn_am' => '90',
-'latn_in' => '90',
-'latn_ru' => '90',
-'latn_rs' => '90',
-'latn_ua' => '90',
-'latn_uz' => '90',
-'latn_ng' => '90',
+'419' => '419',
+'latn' => 'LATN',
+'latn_az' => 'LATN',
+'latn_bg' => 'LATN',
+'latn_ba' => 'LATN',
+'latn_gr' => 'LATN',
+'latn_ir' => 'LATN',
+'latn_am' => 'LATN',
+'latn_in' => 'LATN',
+'latn_ru' => 'LATN',
+'latn_rs' => 'LATN',
+'latn_ua' => 'LATN',
+'latn_uz' => 'LATN',
+'latn_ng' => 'LATN',
 
-'cyrl_rs' => '91',
-'cyrl' => '91',
-'cyrl_az' => '91',
-'cyrl_ba' => '91',
-'cyrl_tj' => '91',
-'cyrl_uz' => '91',
+'cyrl_rs' => 'CYRL',
+'cyrl' => 'CYRL',
+'cyrl_az' => 'CYRL',
+'cyrl_ba' => 'CYRL',
+'cyrl_tj' => 'CYRL',
+'cyrl_uz' => 'CYRL',
 
 'arab' => 'pk', // Because sd_arab is the only active 'arab'
 
-'cn' => '92',
-'hans' => '92',
-'hans_cn' => '92',
-'tw' => '93',
-'hant' => '93',
-'hant_tw' => '93',
+'cn' => 'HANS',
+'hans' => 'HANS',
+'hans_cn' => 'HANS',
+'tw' => 'HANT',
+'hant' => 'HANT',
+'hant_tw' => 'HANT',
 
-'arab_iq' => '94',
+'arab_iq' => 'ARAB',
 'arab_pk' => 'pk',
 
-'beng' => '95',
-'rohg' => '96',
+'beng' => 'BENG',
+'rohg' => 'ROHG',
 ];
         $trommons_language_code = $memsource;
         $trommons_country_code  = '';
@@ -571,8 +571,8 @@ $memsource_change_country_to_kp = [
         if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
         if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
-        if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';} // These 2 should no longer come from Memsource
-        if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
+        if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = 'LATN';} // These 2 should no longer come from Memsource
+        if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = 'CYRL';}
         if ($trommons_language_code === 'mf0' && $trommons_country_code === '--') { $trommons_language_code = 'mfi'; $trommons_country_code = 'CM';}
         if ($trommons_language_code === 'taq' && $trommons_country_code === '--') { $trommons_language_code = 'dtk';} // Temporary hack because Memsource does not support
         if ($trommons_language_code === 'khq' && $trommons_country_code === 'ML') { $trommons_language_code = 'ses'; $trommons_country_code = '--';} // Temporary hack because Memsource does not support
@@ -594,14 +594,14 @@ $memsource_change_country_to_kp = [
         ];
         if (!empty($kp_change_language_to_memsource[$kp_language])) $kp_language = $kp_change_language_to_memsource[$kp_language];
         $kp_change_country_to_memsource = [
-            '49' => '419',  // Latin America
-            '90' => 'latn', // Latin Script
-            '91' => 'cyrl', // Cyrillic Script
-            '92' => 'cn',   // Simplified Script
-            '93' => 'tw',   // Traditional Script
-            '94' => 'arab_iq', // Bahdini Variant
-            '95' => 'beng', // Bangla Script
-            '96' => 'rohg', // Hanifi Script
+            '419' => '419',  // Latin America
+            'LATN' => 'latn', // Latin Script
+            'CYRL' => 'cyrl', // Cyrillic Script
+            'HANS' => 'cn',   // Simplified Script
+            'HANT' => 'tw',   // Traditional Script
+            'ARAB' => 'arab_iq', // Bahdini Variant
+            'BENG' => 'beng', // Bangla Script
+            'ROHG' => 'rohg', // Hanifi Script
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
