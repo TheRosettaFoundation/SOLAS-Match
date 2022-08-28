@@ -194,7 +194,7 @@ ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"IE", for example',
+  `code` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"IE", for example',
   `en-name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
@@ -833,11 +833,11 @@ CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   language_id_source   INT(10) UNSIGNED NOT NULL,
   language_code_source VARCHAR(3) NOT NULL,
   country_id_source    INT(10) UNSIGNED NOT NULL,
-  country_code_source  VARCHAR(2) NOT NULL,
+  country_code_source  VARCHAR(4) NOT NULL,
   language_id_target   INT(10) UNSIGNED NOT NULL,
   language_code_target VARCHAR(3) NOT NULL,
   country_id_target    INT(10) UNSIGNED NOT NULL,
-  country_code_target  VARCHAR(2) NOT NULL,
+  country_code_target  VARCHAR(4) NOT NULL,
   qualification_level  INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (user_id, language_code_source, country_code_source, language_code_target, country_code_target),
   KEY `FK_user_qualified_pairs_user` (`user_id`),
@@ -2077,7 +2077,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(2), IN imageUploaded BIT(1), IN imageApproved BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(4), IN imageUploaded BIT(1), IN imageApproved BIT(1))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
@@ -7722,7 +7722,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(4), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(4), IN qualificationLevel INT)
 BEGIN
   if NOT EXISTS (
     SELECT 1
@@ -7772,7 +7772,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `updateUserQualifiedPair`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(4), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(4), IN qualificationLevel INT)
 BEGIN
     UPDATE UserQualifiedPairs SET qualification_level=qualificationLevel
     WHERE
@@ -7801,7 +7801,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `removeUserQualifiedPair`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(4), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(4))
 BEGIN
     DELETE FROM UserQualifiedPairs
     WHERE
