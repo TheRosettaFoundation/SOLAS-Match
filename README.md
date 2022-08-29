@@ -36,20 +36,6 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Aaron Mason
 - Alan Barrett
 
-# Technical Requirements
-
-SOLAS Match is written in PHP 5.4+ code and makes use of
-a MySQL 5+ database.
-
-## System Requirements
-
-HTTP server (Apache, for example) with PHP 5.4+ (ideally 5.5+) interpreter MySQL 5+
-database
-
-Several additional libraries also need to be installed alongside
-SOLAS Match.
-See the following installation instructions.
-
 # Release Notes
 
 ## Version 11.0
@@ -135,12 +121,6 @@ See the following installation instructions.
 ## Version 2.0
 
 - Updated JavaScript
-
-# Create an Org Account
-
-Create a user by registering with the app. This can be done by supplying a valid email and a password.
-Once a user has been created you can create an organisation and begin to create projects and tasks.
-For more infomation see the videos tab in the web UI.
 
 # Collaborative source code management
 
