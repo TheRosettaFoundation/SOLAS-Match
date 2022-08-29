@@ -35,6 +35,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Tadhg O’Flaherty
 - Aaron Mason
 - Alan Barrett
+- Ian Magero
 
 # Release Notes
 
