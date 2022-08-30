@@ -10,7 +10,6 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
-require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
 
 
 class ProjectDao extends BaseDao
@@ -479,24 +478,17 @@ $replace = array(
 
     public function generate_language_selection($create_memsource = 0)
     {
-        global $from_neon_to_trommons_pair, $language_options_changes;
-
+        $selections = $this->get_selections();
         $language_options = [];
-        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
-            $language_options[$trommons_pair[0] . '-' . $trommons_pair[1]] = $language;
+        foreach ($selections as $selection) {
+            if ($selection['enabled']) $language_options[$selection['language_code'] . '-' . $selection['country_code']] = $selection['selection'];
         }
-
-        foreach ($language_options_changes as $key => $language) {
-            $language_options[$key] = $language;
-        }
-
         asort($language_options);
         return $language_options;
     }
 
     public function convert_selection_to_language_country($selection)
     {
-        $language_code = str_replace('#', '', $selection); // Alternative language name uses # in code
         $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
         $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
         return [$trommons_language_code, $trommons_country_code];
@@ -504,129 +496,22 @@ $replace = array(
 
     public function convert_memsource_to_language_country($memsource)
     {
-$memsource_change_language_to_kp = [
-'as' => 'asm',
-'ilt' => 'ilo',
-'kz' => 'ky',
-'rn' => 'run',
-'tir' => 'ti',
-'mfi' => 'mf0',
-'nb' => 'no',
-
-'ku' => 'kmr',
-
-'wes' => 'pcm',
-];
-
-$memsource_change_country_to_kp = [
-'001' => '--',
-'mod' => '--',
-'419' => '419',
-'latn' => 'LATN',
-'latn_az' => 'LATN',
-'latn_bg' => 'LATN',
-'latn_ba' => 'LATN',
-'latn_gr' => 'LATN',
-'latn_ir' => 'LATN',
-'latn_am' => 'LATN',
-'latn_in' => 'LATN',
-'latn_ru' => 'LATN',
-'latn_rs' => 'LATN',
-'latn_ua' => 'LATN',
-'latn_uz' => 'LATN',
-'latn_ng' => 'LATN',
-
-'cyrl_rs' => 'CYRL',
-'cyrl' => 'CYRL',
-'cyrl_az' => 'CYRL',
-'cyrl_ba' => 'CYRL',
-'cyrl_tj' => 'CYRL',
-'cyrl_uz' => 'CYRL',
-
-'arab' => 'pk', // Because sd_arab is the only active 'arab'
-
-'cn' => 'HANS',
-'hans' => 'HANS',
-'hans_cn' => 'HANS',
-'tw' => 'HANT',
-'hant' => 'HANT',
-'hant_tw' => 'HANT',
-
-'arab_iq' => 'ARAB',
-'arab_pk' => 'pk',
-
-'beng' => 'BENG',
-'rohg' => 'ROHG',
-];
-        $trommons_language_code = $memsource;
-        $trommons_country_code  = '';
-        $pos = strpos($memsource, '_');
-        if ($pos != false) {
-            $trommons_language_code = substr($memsource, 0, $pos);
-            $trommons_country_code  = substr($memsource, $pos + 1);
-            if (!empty($memsource_change_country_to_kp[$trommons_country_code])) $trommons_country_code = $memsource_change_country_to_kp[$trommons_country_code];
-            $trommons_country_code = strtoupper($trommons_country_code);
-        } else {
-            $trommons_country_code = '--';
+        $selections = $this->get_selections();
+        foreach ($selections as $selection) {
+            if ($selection['memsource'] === $memsource) return [$selection['language_code'], $selection['country_code']];
         }
-        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
-        if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
-        if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = 'LATN';} // These 2 should no longer come from Memsource
-        if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = 'CYRL';}
-        if ($trommons_language_code === 'mf0' && $trommons_country_code === '--') { $trommons_language_code = 'mfi'; $trommons_country_code = 'CM';}
-        if ($trommons_language_code === 'taq' && $trommons_country_code === '--') { $trommons_language_code = 'dtk';} // Temporary hack because Memsource does not support
-        if ($trommons_language_code === 'khq' && $trommons_country_code === 'ML') { $trommons_language_code = 'ses'; $trommons_country_code = '--';} // Temporary hack because Memsource does not support
-
-        return [$trommons_language_code, $trommons_country_code];
+        $pos = strpos($memsource, '_');
+        if ($pos !== false) $memsource = substr($memsource, 0, $pos);
+        return [$memsource, '--'];
     }
 
     public function convert_language_country_to_memsource($kp_language, $kp_country)
     {
-        $kp_country = strtolower($kp_country);
-        $kp_change_language_to_memsource = [
-            'asm' => 'as',
-            'run' => 'rn',
-            'swc' => 'sw',
-            'mf0' => 'mfi',
-            'no' => 'nb',
-
-            'pcm' => 'wes',
-        ];
-        if (!empty($kp_change_language_to_memsource[$kp_language])) $kp_language = $kp_change_language_to_memsource[$kp_language];
-        $kp_change_country_to_memsource = [
-            '419' => '419',  // Latin America
-            'latn' => 'latn', // Latin Script
-            'cyrl' => 'cyrl', // Cyrillic Script
-            'hans' => 'cn',   // Simplified Script
-            'hant' => 'tw',   // Traditional Script
-            'arab' => 'arab_iq', // Bahdini Variant
-            'beng' => 'beng', // Bangla Script
-            'rohg' => 'rohg', // Hanifi Script
-        ];
-        if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
-
-        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','bm','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','ku_arab_iq','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','tw','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','mfi','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ndc','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','pa_arab_pk','qu','rhg_latn','rhg_beng','ro','ru_ru','sm','sg_cf','seh','cnr_cyrl','sr_cyrl_rs','cnr_latn','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','taq_ml','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','dje','zu_za','tig','lu','wes_ng','taq','khq_ml','ses','dtk','rom',];
-
-        if ($kp_country != '--') $memsource_pair = $kp_language . '_' . $kp_country;
-        else                     $memsource_pair = $kp_language;
-
-        if ($memsource_pair === 'sd_pk') $memsource_pair = 'sd_arab';
-        if ($memsource_pair === 'shu_latn') $memsource_pair = 'shu_latn_ng';
-        if ($memsource_pair === 'uz_cyrl') $memsource_pair = 'uz_cyrl_uz';
-        if ($memsource_pair === 'tg_cyrl') $memsource_pair = 'tg_cyrl_tj';
-        if ($memsource_pair === 'sr_latn') $memsource_pair = 'sr_latn_rs';
-        if ($memsource_pair === 'sr_cyrl') $memsource_pair = 'sr_cyrl_rs';
-        //if ($memsource_pair === 'cnr_latn') $memsource_pair = 'sr_latn_me';
-        //if ($memsource_pair === 'cnr_cyrl') $memsource_pair = 'sr_cyrl_me';
-        if ($memsource_pair === 'mfi_cm') $memsource_pair = 'mfi';
-        if ($memsource_pair === 'kmr_arab_iq') $memsource_pair = 'ku_arab_iq';
-        if ($memsource_pair === 'pa_pk') $memsource_pair = 'pa_arab_pk';
-        if ($memsource_pair === 'dtk') $memsource_pair = 'taq'; // Temporary hack because Memsource does not support
-        if ($memsource_pair === 'ses') $memsource_pair = 'khq_ml'; // Temporary hack because Memsource does not support
-
-        if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
-        if (in_array($kp_language,    $memsource_valid)) return $kp_language;
+        $selections = $this->get_selections();
+        foreach ($selections as $selection) {
+            if ($selection['language_code'] === $kp_language AND $selection['country_code'] === $kp_country) return $selection['memsource'];
+        }
 
         error_log("Failed: convert_language_country_to_memsource($kp_language, $kp_country)");
         return 0;
