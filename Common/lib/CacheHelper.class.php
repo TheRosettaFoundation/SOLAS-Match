@@ -11,6 +11,7 @@ class CacheHelper
     const GET_USER              = "GetUser";
     const SITE_LANGUAGE         = "SiteLanguage";
     const LOADED_LANGUAGES      = "LoadedLanguages";
+    const SELECTIONS            = 'Selections';
     
     public static function getCached($key, $ttl, $function, $args = null)
     {

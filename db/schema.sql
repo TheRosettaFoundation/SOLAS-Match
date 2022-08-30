@@ -1306,6 +1306,19 @@ CREATE TABLE IF NOT EXISTS `post_login_messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `selections` (
+  language_code VARCHAR(3) NOT NULL,
+  country_code  VARCHAR(4) NOT NULL,
+  selection     VARCHAR(255) NOT NULL,
+  memsource     VARCHAR(12) NOT NULL,
+  enabled       INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (language_code, country_code),
+  UNIQUE  KEY (selection),
+  UNIQUE  KEY (memsource),
+  KEY enabled
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9726,6 +9739,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_project_complete`(IN tID BIGINT)
 BEGIN
     UPDATE project_complete_dates SET status=0 WHERE project_id=(SELECT project_id FROM Tasks WHERE id=tID LIMIT 1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_selections`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_selections`()
+BEGIN
+    SELECT * FROM selections;
 END//
 DELIMITER ;
 

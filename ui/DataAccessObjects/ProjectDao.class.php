@@ -7,6 +7,7 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\UI\RouteHandlers as Route;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
 require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
@@ -1492,5 +1493,17 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     public function delete_not_accepted_user()
     {
         LibAPI\PDOWrapper::call('delete_not_accepted_user', '');
+    }
+
+    public function get_selections()
+    {
+        $selections = Common\Lib\CacheHelper::getCached(
+            Common\Lib\CacheHelper::SELECTIONS,
+            2592000,
+            function ($args) {
+                return LibAPI\PDOWrapper::call('get_selections', '');
+            }
+        );
+        return $selections;
     }
 }
