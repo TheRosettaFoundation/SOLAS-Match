@@ -489,8 +489,8 @@ $replace = array(
 
     public function convert_selection_to_language_country($selection)
     {
-        $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
-        $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+        $trommons_language_code = substr($selection, 0, strpos($selection, '-'));
+        $trommons_country_code  = substr($selection, strpos($selection, '-') + 1);
         return [$trommons_language_code, $trommons_country_code];
     }
 
