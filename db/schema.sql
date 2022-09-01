@@ -1315,7 +1315,7 @@ CREATE TABLE IF NOT EXISTS `selections` (
   PRIMARY KEY (language_code, country_code),
   UNIQUE  KEY (selection),
   UNIQUE  KEY (memsource),
-  KEY enabled
+  KEY (enabled)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
