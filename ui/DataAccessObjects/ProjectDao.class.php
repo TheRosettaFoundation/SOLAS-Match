@@ -1387,7 +1387,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             2592000,
             function ($args) {
                 return LibAPI\PDOWrapper::call('get_selections', '');
-            }
+            },
+            []
         );
         return $selections;
     }
