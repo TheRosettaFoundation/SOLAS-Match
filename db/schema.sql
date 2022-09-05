@@ -2128,7 +2128,7 @@ BEGIN
         and (titleText is null or p.title=titleText) 
         and (descr is null or p.description= descr) 
         and (imp is null or p.impact=imp)
-        and (deadlineTime is null or p.deadline=deadlineTime or deadlineTime='0000-00-00 00:00:00') 
+        and (deadlineTime is null or p.deadline=deadlineTime)
         and (orgId is null or p.organisation_id=orgId) 
         and (ref is null or p.reference=ref)
         and (wordCount is null or p.`word-count`=wordCount) 
@@ -2137,7 +2137,7 @@ BEGIN
         and (cCode is null or @cID=cCode)
         and (@lID is null or p.language_id=@lID)
         and (@cID is null or p.country_id = @cID)
-        and (archiveDate is null or m.`archived-date`=archiveDate or archiveDate='0000-00-00 00:00:00') 
+        and (archiveDate is null or m.`archived-date`=archiveDate)
         and (archiverId is null or m.`user_id-archived`= archiverId)
         AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
         AND (imageApproved IS NULL OR p.image_approved = imageApproved);
@@ -2617,11 +2617,11 @@ BEGIN
         AND (titleText is null or p.title = titleText)
         AND (descr is null or p.description = descr)
         AND (impactText is null or p.impact = impactText)
-        AND (deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' or p.deadline = deadlineTime)
+        AND (deadlineTime is null or p.deadline = deadlineTime)
         AND (orgId is null or p.organisation_id = orgId)
         AND (ref is null or p.reference = ref)
         AND (wordCount is null or p.`word-count`= wordCount)
-        AND (createdTime is null or createdTime = '0000-00-00 00:00:00' or p.created = createdTime)
+        AND (createdTime is null or p.created = createdTime)
         AND (sourceCountryCode is null or p.country_id = (select c.id from Countries c where c.code = sourceCountryCode))
         AND (sourceLanguageCode is null or p.language_id=(select l.id from Languages l where l.code = sourceLanguageCode))
         AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
@@ -2895,12 +2895,12 @@ BEGIN
             and (sCC is null or t.`country_id-source` = (select c.id from Countries c where c.code = sCC))
             and (tCC is null or t.`country_id-target` = (select c.id from Countries c where c.code = tCC))
             and (wordCount is null or t.`word-count` = wordCount)
-            and (created is null or created = '0000-00-00 00:00:00' or t.`created-time` = created)
+            and (created is null or t.`created-time` = created)
             and (taskComment is null or t.`comment`= taskComment)
             and (tStatus is null or t.`task-status_id` = tStatus)
             and (tType is null or t.`task-type_id` = tType)
             and (pub is null or t.`published` = pub)
-            and (dLine is null or dLine = '0000-00-00 00:00:00' or t.`deadline` = dLine)
+            and (dLine is null or t.`deadline` = dLine)
   ORDER BY targetLanguageName, targetCountryName, t.`task-type_id`, t.id;
 END//
 DELIMITER ;
@@ -4388,7 +4388,7 @@ BEGIN
 
     if projectId is null then
 
-        if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00'
+        if deadlineTime is null
         then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
 
                 set @scID=null;
@@ -4431,7 +4431,6 @@ BEGIN
         end if;
 
         if deadlineTime is not null
-        and deadlineTime != '0000-00-00 00:00:00'
         and deadlineTime != (select p.deadline from Projects p WHERE p.id = projectId)
         or (select p.deadline from Projects p WHERE p.id = projectId) is null
 
@@ -4475,7 +4474,6 @@ BEGIN
         end if;
 
         if createdTime is not null
-        and createdTime != '0000-00-00 00:00:00'
         and createdTime != (select p.created from Projects p WHERE p.id = projectId)
         or (select p.created from Projects p WHERE p.id = projectId) is null
 
@@ -5111,7 +5109,7 @@ BEGIN
 
         if id is null then
                 if taskComment is null then set taskComment="";end if;
-                if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+                if dLine is null then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
 
                 set @scid=null;
                 select c.id into @scid from Countries c where c.code=sCC;
@@ -5189,7 +5187,7 @@ BEGIN
                     then update Tasks t SET t.comment = taskComment WHERE t.id = id;
                 end if;
 
-                if dLine is not null and dLine != '0000-00-00 00:00:00'
+                if dLine is not null
                 and dLine != (SELECT t.`deadline` FROM Tasks t WHERE  t.id = id)
                 or (select t.`deadline` from Tasks t WHERE t.id = id) is null
 
