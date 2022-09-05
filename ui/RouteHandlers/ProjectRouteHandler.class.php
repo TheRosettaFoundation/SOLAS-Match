@@ -2740,10 +2740,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
-                if ($projectId < 28433) { // Before cutover
-                    $projectDao->dequeue_asana_project($projectId);
-                    break;
-                }
+//                if ($projectId < 28433) { // Before cutover
+//                    $projectDao->dequeue_asana_project($projectId);
+//                    break;
+//                }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
@@ -2795,6 +2795,12 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
                     // https://app.asana.com/0/1200067882657242/board
+error_log("input: $pm");
+$TEMP_TWB_to_CLEAR_email = $projectDao->get_TEMP_TWB_to_CLEAR_email();
+foreach ($TEMP_TWB_to_CLEAR_email as $TWB_to_CLEAR_email) {
+    if ($TWB_to_CLEAR_email['TWB_email'] == $pm) $pm = $TWB_to_CLEAR_email['CLEAR_email'];
+}
+error_log("mapped: $pm");
                     if ($create) {
                         $data = array('data' => array(
                             "name" => $project_name,
