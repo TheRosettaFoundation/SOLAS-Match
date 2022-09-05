@@ -2740,10 +2740,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
-//                if ($projectId < 28433) { // Before cutover
-//                    $projectDao->dequeue_asana_project($projectId);
-//                    break;
-//                }
+                if ($projectId < 28433) { // Before cutover
+                    $projectDao->dequeue_asana_project($projectId);
+                    break;
+                }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
