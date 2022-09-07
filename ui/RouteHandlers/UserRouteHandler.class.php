@@ -508,7 +508,7 @@ class UserRouteHandler
             if (!empty($google_response)) {
                 $response_keys = json_decode($google_response, true);
                 if($response_keys['success'] != 1) {
-                    $error = 'Spam Detected!';
+                    $error = 'Oops! something went wrong, please try again.';
                     // Get exact response message why it has been flagged as spam
                     $g_response = $response_keys['error-codes'][0];
                     error_log("$error: $ip Google_response: $g_response");
@@ -550,7 +550,10 @@ class UserRouteHandler
                     );
                 }
             } else {
-                if ($error === 'Spam Detected!') UserRouteHandler::flashNow('error', $error);
+                if ($error === 'Oops! something went wrong, please try again.') {
+                    $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
+                    UserRouteHandler::flashNow('error', $error);
+                }
             }
         }
         if ($error !== null) {

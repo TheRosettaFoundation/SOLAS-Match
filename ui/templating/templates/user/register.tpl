@@ -68,11 +68,11 @@
     <div class="span4">
       <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="first_name" class="required "><strong>First name</strong></label>
-            <input type="text" name="first_name" id="first_name" placeholder="First name" required/>
+            <input type="text" name="first_name" id="first_name" placeholder="First name" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
             <label for="last_name" class="required"><strong>Last name</strong></label>
-            <input type="text" name="last_name" id="last_name" placeholder="Last name" required/>
+            <input type="text" name="last_name" id="last_name" placeholder="Last name" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
             <label for="email" class="required"><strong>Email</strong></label>
-            <input type="text" name="email" id="email" placeholder="Your email"/>
+            <input type="text" name="email" id="email" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
             <label for="password" class="required"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
             <label for="password" class="required"><strong>Confirm Password</strong></label>
