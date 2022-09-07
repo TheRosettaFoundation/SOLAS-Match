@@ -516,7 +516,6 @@ class UserRouteHandler
             } else {
                 error_log("Spam response from Google empty ip: $ip");
             }
-$error = 'Oops! something went wrong, please try again.';
 
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
