@@ -39,6 +39,13 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 11.1
+
+- Change the language mapping from selection lists and from and to Memsource to use a database table for flexibility
+- Added new four letter Country codes: LATN, CYRL, 419, HANS, HANT, ARAB, BENG
+- Changed the registration error message for spam from "Spam Detected!" to "Oops! something went wrong, please try again." and keep the user's names and email to make resubmitting easier.
+It is not clear why a User gets this message (we use Google spam detection), it is intended for Robots.
+
 ## Version 11.0
 
 **New features and improvements**
