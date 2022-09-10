@@ -342,8 +342,13 @@ class ProjectRouteHandler
             } else {
                 $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$part['workflowLevel'] - 1];
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
-                if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-                elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+                $task_type_to_enum = [
+                    'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
+                    'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
+                    'Language Quality Inspection' => Common\Enums\TaskTypeEnum::>>QA,
+                    'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::>>APPROVAL,
+                ];
+                if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                 else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
