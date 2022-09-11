@@ -455,16 +455,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 }
             }
 
-if claimabel test... and make claimabel
-$taskclaims_required_to_make_claimable = $projectDao->get_taskclaims_required_to_make_claimable($memsource_project['project_id']);
-foreach ($taskclaims_required_to_make_claimable as $required) {
-         $required['']
-
-
-
-$taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-================================================================
-
+            if(>>->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (
