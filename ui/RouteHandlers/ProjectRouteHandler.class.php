@@ -325,7 +325,7 @@ class ProjectRouteHandler
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
             $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
             $task->setSourceLocale($taskSourceLocale);
-            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
 
             $taskTargetLocale = new Common\Protobufs\Models\Locale();
             list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
@@ -409,15 +409,6 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
 
             $task->setPublished(1);
 
-            $prerequisite = 0;
-            if (!empty($part['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
-                if ($prerequisite_task) {
-                    $prerequisite = $prerequisite_task['task_id'];
-                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                }
-            }
-
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
                 error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
@@ -430,13 +421,50 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex'],
-                $prerequisite);
+                0);
 error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success");//(**)
             if (!$success) { // May be because of double hook?
                 $projectDao->delete_task_directly($task_id);
                 error_log("delete_task_directly($task_id) because of set_memsource_task fail");
                 continue;
             }
+
+(**)BUT ALLOW FOR SOME MIGHT BE MISSING
+            $forward_order = [
+                Common\Enums\TaskTypeEnum::TRANSLATION  => Common\Enums\TaskTypeEnum::PROOFREADING,
+                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::>>QA,
+                Common\Enums\TaskTypeEnum::>>QA         => Common\Enums\TaskTypeEnum::>>APPROVAL,
+                Common\Enums\TaskTypeEnum::>>APPROVAL   => 0,
+            ];
+            $reverse_order = [
+                Common\Enums\TaskTypeEnum::TRANSLATION  => 0,
+                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::TRANSLATION,
+                Common\Enums\TaskTypeEnum::>>QA         => Common\Enums\TaskTypeEnum::PROOFREADING,
+                Common\Enums\TaskTypeEnum::>>APPROVAL   => Common\Enums\TaskTypeEnum::>>QA,
+            ];
+            $project_tasks =  $projectDao->get_tasks_for_project($memsource_project['project_id']); use $project_id above and here?(**)
+            foreach ($project_tasks as $project_task) {
+                if ($forward_order[$taskType]) {
+(**)MATCH ONLY THIS FILE AND LANGUAGE OTHER FILES ETC LIKE THIS MATCH LANGYUAGE get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
+                     if ($forward_order[$taskType] == $project_task['task-type_id'])
+                         $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $memsource_project['project_id']);
+                }
+                if ($reverse_order[$taskType]) {
+                     if ($reverse_order[$taskType] == $project_task['task-type_id'])
+                         $projectDao->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $memsource_project['project_id']);
+                }
+            }
+
+if claimabel test... and make claimabel
+$taskclaims_required_to_make_claimable = $projectDao->get_taskclaims_required_to_make_claimable($memsource_project['project_id']);
+foreach ($taskclaims_required_to_make_claimable as $required) {
+         $required['']
+
+
+
+$taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+================================================================
+
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (
