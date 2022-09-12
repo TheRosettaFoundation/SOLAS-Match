@@ -558,34 +558,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
-
-                if (strpos($memsource_task['internalId'], '.') === false) { // Not split
-                    if (empty($part['project']['id'])) {
-                        error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
-                        continue;
-                    }
-                    $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
-                    if (empty($memsource_project)) {
-                        error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
-                        continue;
-                    }
-                    $dependent_task = $projectDao->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
-                    if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-                        if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
-                        {
-                            $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-error_log("setTaskStatus({$dependent_task['task_id']}, 2)");
-                        }
-else error_log("task-status_id: {$dependent_task['task-status_id']} != 1");
-                        $user_id = $projectDao->getUserClaimedTask($task_id);
-                        if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
-                    }
-else {
-  if ($dependent_task) error_log("prerequisite: {$dependent_task['prerequisite']} != $task_id");
-  else error_log("get_memsource_tasks_for_project_internal_id_type({$memsource_project['project_id']}, {$memsource_task['internalId']}, 3) == 0");
-}
-                }
-else error_log("strpos({$memsource_task['internalId']}, '.') !== false");
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
               }
             }
