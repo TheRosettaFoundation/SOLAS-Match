@@ -1072,7 +1072,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        //$allow_downloads = array();
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -1094,7 +1093,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $metaData['tracking'] = false;
                     }
                     $taskMetaData[$task_id] = $metaData;
-                    //$allow_downloads[$task_id] = $taskDao->get_allow_download($task);
                 }
             }
 
