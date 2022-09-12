@@ -345,8 +345,8 @@ class ProjectRouteHandler
                 $task_type_to_enum = [
                     'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
                     'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
-                    'Language Quality Inspection' => Common\Enums\TaskTypeEnum::>>QA,
-                    'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::>>APPROVAL,
+                    'Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
+                    'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
                 ];
                 if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
@@ -432,15 +432,15 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 (**)BUT ALLOW FOR SOME MIGHT BE MISSING
             $forward_order = [
                 Common\Enums\TaskTypeEnum::TRANSLATION  => Common\Enums\TaskTypeEnum::PROOFREADING,
-                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::>>QA,
-                Common\Enums\TaskTypeEnum::>>QA         => Common\Enums\TaskTypeEnum::>>APPROVAL,
-                Common\Enums\TaskTypeEnum::>>APPROVAL   => 0,
+                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::QUALITY,
+                Common\Enums\TaskTypeEnum::QUALITY      => Common\Enums\TaskTypeEnum::APPROVAL,
+                Common\Enums\TaskTypeEnum::APPROVAL     => 0,
             ];
             $reverse_order = [
                 Common\Enums\TaskTypeEnum::TRANSLATION  => 0,
                 Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::TRANSLATION,
-                Common\Enums\TaskTypeEnum::>>QA         => Common\Enums\TaskTypeEnum::PROOFREADING,
-                Common\Enums\TaskTypeEnum::>>APPROVAL   => Common\Enums\TaskTypeEnum::>>QA,
+                Common\Enums\TaskTypeEnum::QUALITY      => Common\Enums\TaskTypeEnum::PROOFREADING,
+                Common\Enums\TaskTypeEnum::APPROVAL     => Common\Enums\TaskTypeEnum::QUALITY,
             ];
             $project_tasks =  $projectDao->get_tasks_for_project($memsource_project['project_id']); use $project_id above and here?(**)
             foreach ($project_tasks as $project_task) {
