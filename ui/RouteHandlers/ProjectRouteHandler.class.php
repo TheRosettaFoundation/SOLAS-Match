@@ -340,7 +340,8 @@ class ProjectRouteHandler
                 error_log("Don't support workflowLevel > 12: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             } else {
-                $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$part['workflowLevel'] - 1];
+                $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
+                $taskType = $workflow_levels[$part['workflowLevel'] - 1];
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
                 $task_type_to_enum = [
                     'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
@@ -349,7 +350,10 @@ class ProjectRouteHandler
                     'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
                 ];
                 if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
-                elseif ($taskType == '' && $part['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                elseif ($taskType == '' && $part['workflowLevel'] == 1) {
+                    $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                    $workflow_levels = ['Translation'];
+                }
                 else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
                     continue;
@@ -429,41 +433,14 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 continue;
             }
 
-(**)BUT ALLOW FOR SOME MIGHT BE MISSING
-[[[
-$workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
-                $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$part['workflowLevel'] - 1];
-                error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
-                $task_type_to_enum = [
-                    'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
-                    'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
-                    'Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
-                    'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
-                ];
-
-FORCE TO HAVE TRANSLATION IF EMPTY???
-check name collisions
-$forward_order = [];
-$reverse_order = [];
-foreach ($workflow_levels as $i => $workflow_level) {
-    if (!empty($task_type_to_enum[$workflow_level])) {
-        $forward_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i + 1]];
-        $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
-    }
-}
-]]]
-            $forward_order = [
-                Common\Enums\TaskTypeEnum::TRANSLATION  => Common\Enums\TaskTypeEnum::PROOFREADING,
-                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::QUALITY,
-                Common\Enums\TaskTypeEnum::QUALITY      => Common\Enums\TaskTypeEnum::APPROVAL,
-                Common\Enums\TaskTypeEnum::APPROVAL     => 0,
-            ];
-            $reverse_order = [
-                Common\Enums\TaskTypeEnum::TRANSLATION  => 0,
-                Common\Enums\TaskTypeEnum::PROOFREADING => Common\Enums\TaskTypeEnum::TRANSLATION,
-                Common\Enums\TaskTypeEnum::QUALITY      => Common\Enums\TaskTypeEnum::PROOFREADING,
-                Common\Enums\TaskTypeEnum::APPROVAL     => Common\Enums\TaskTypeEnum::QUALITY,
-            ];
+            $forward_order = [];
+            $reverse_order = [];
+            foreach ($workflow_levels as $i => $workflow_level) {
+                if (!empty($task_type_to_enum[$workflow_level])) {
+                    $forward_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i + 1]];
+                    $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
+                }
+            }
             $project_tasks =  $projectDao->get_tasks_for_project($memsource_project['project_id']); use $project_id above and here?(**)
             foreach ($project_tasks as $project_task) {
                 if ($forward_order[$taskType]) {
