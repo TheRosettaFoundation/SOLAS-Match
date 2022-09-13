@@ -1319,6 +1319,19 @@ CREATE TABLE IF NOT EXISTS `selections` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
+  task_id           BIGINT(20) UNSIGNED NOT NULL,
+  claimable_task_id BIGINT(20) UNSIGNED NOT NULL,
+  project_id        INT(10)    UNSIGNED NOT NULL,
+  PRIMARY KEY FK_claimable_task_id (claimable_task_id),
+          KEY FK_required_task_id  (task_id),
+          KEY FK_required_project_id  (project_id),
+  CONSTRAINT FK_claimable_task_id FOREIGN KEY (claimable_task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_required_task_id  FOREIGN KEY (task_id)           REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_required_project_id FOREIGN KEY (project_id)      REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9745,6 +9758,35 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_selections`()
 BEGIN
     SELECT * FROM selections;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_taskclaims_required_to_make_claimable`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_taskclaims_required_to_make_claimable`(IN tID BIGINT, IN claimable_tID BIGINT, IN pID INT)
+BEGIN
+    INSERT INTO taskclaims_required_to_make_claimable (task_id, claimable_task_id, project_id) VALUES (tID, claimable_tID, pID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_task_claimable`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_claimable`(IN claimable_tID BIGINT)
+BEGIN
+    IF EXISTS (SELECT 1 FROM make_claimable_regardless WHERE claimable_task_id=claimable_tID) THEN
+        SELECT 1 AS result;
+    ELSEIF NOT EXISTS (
+        SELECT
+        FROM taskclaims_required_to_make_claimable tc
+        JOIN Tasks                                  t ON tc.task_id=t.id
+        WHERE
+            claimable_task_id=claimable_tID AND
+            t.`task-status_id`<3
+    ) THEN
+        SELECT 1 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
 END//
 DELIMITER ;
 
