@@ -441,16 +441,19 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                     $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
                 }
             }
-            $project_tasks =  $projectDao->get_tasks_for_project($project_id);
+            $top_level = $projectDao->get_top_level($part['internalId']);
+            $project_tasks = $projectDao->get_tasks_for_project($project_id);
             foreach ($project_tasks as $project_task) {
-                if ($forward_order[$taskType]) {
-(**)MATCH ONLY THIS FILE AND LANGUAGE OTHER FILES ETC LIKE THIS MATCH LANGYUAGE get_memsource_tasks_for_project_language_type($project_id, $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
-                     if ($forward_order[$taskType] == $project_task['task-type_id'])
-                         $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
-                }
-                if ($reverse_order[$taskType]) {
-                     if ($reverse_order[$taskType] == $project_task['task-type_id'])
-                         $projectDao->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
+                if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                    //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
+                    if ($forward_order[$taskType]) {
+                         if ($forward_order[$taskType] == $project_task['task-type_id'])
+                             $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
+                    }
+                    if ($reverse_order[$taskType]) {
+                         if ($reverse_order[$taskType] == $project_task['task-type_id'])
+                             $projectDao->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
+                    }
                 }
             }
 
