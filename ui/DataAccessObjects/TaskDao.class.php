@@ -1072,8 +1072,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                    if (strpos($memsource_task['internalId'], '.') || strpos($project_task['internalId'], '.')) { // Make sure is split
-                        if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                    if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                        if ( $memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                            ($memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+//(**)Need to add additional code to deny if user translated ANY file (not just current)
+//(**)Will there be index on QA/Proofread?
                             if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                 error_log("Adding $user_id to Deny List for {$project_task['id']} {$project_task['internalId']}");
                                 $this->addUserToTaskBlacklist($user_id, $project_task['id']);
