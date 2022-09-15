@@ -1408,4 +1408,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $result = LibAPI\PDOWrapper::call('is_task_claimable', LibAPI\PDOWrapper::cleanse($claimable_task_id));
         $result[0]['result'];
     }
+
+    public function make_tasks_claimable($project_id)
+    {
+        LibAPI\PDOWrapper::call('make_tasks_claimable', LibAPI\PDOWrapper::cleanse($project_id));
+    }
 }

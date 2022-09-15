@@ -1065,7 +1065,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
     {
         $result = LibAPI\PDOWrapper::call('claimTask', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if ($success = $result[0]['result']) {
-            // If either workflow split, add corresponding task(s) to deny list for translator
+            // Add corresponding task(s) to deny list for translator
             $projectDao = new ProjectDao();
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
             $task = $this->getTask($task_id);
@@ -1085,6 +1085,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                     }
                 }
             }
+            $projectDao->make_tasks_claimable($task->getProjectId());
         }
         return $success;
     }
