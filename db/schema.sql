@@ -9797,9 +9797,9 @@ BEGIN
     UPDATE Tasks t0 SET t0.`task-status_id`=2 WHERE t0.id IN (
         SELECT
             t.id
-        FROM Tasks t
-        JOIN taskclaims_required_to_make_claimable tc ON t.id=tc.claimable_task_id
-        JOIN Tasks t1 ON tc.task_id=t1.id
+        FROM      Tasks                                  t
+        LEFT JOIN taskclaims_required_to_make_claimable tc ON t.id=tc.claimable_task_id
+        LEFT JOIN Tasks                                 t1 ON tc.task_id=t1.id
         WHERE
             p.project_id=pID AND
             t.`task-status_id`=1
