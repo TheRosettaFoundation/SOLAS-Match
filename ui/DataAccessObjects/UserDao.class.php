@@ -520,14 +520,17 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) Before Notify");
                 $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
 error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
-                // If this is split, add corresponding task(s) to deny list for translator
+                // Add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
                 $top_level = $projectDao->get_top_level($memsource_task['internalId']);
                 $project_tasks = $projectDao->get_tasks_for_project($project_id);
                 foreach ($project_tasks as $project_task) {
                     if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                        if (strpos($memsource_task['internalId'], '.') || strpos($project_task['internalId'], '.')) { // Make sure is split
-                            if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                        if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                            if ( $memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                                ($memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+//(**)Need to add additional code to deny if user translated ANY file (not just current)
+//(**)Will there be index on QA/Proofread?
                                 if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                     error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
                                     $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
@@ -536,6 +539,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                         }
                     }
                 }
+                $projectDao->make_tasks_claimable($project_id);
             }
         } else {
             $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
