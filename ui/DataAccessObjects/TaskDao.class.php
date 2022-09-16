@@ -1058,6 +1058,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id) . "," . LibAPI\PDOWrapper::cleanse($user_id);
         $result = LibAPI\PDOWrapper::call('claimTask', $args);
+
+        $projectDao = new ProjectDao();
+        $task = $this->getTask($task_id);
+        $projectDao->make_tasks_claimable($task->getProjectId());
+
         return $result[0]['result'];
     }
 
