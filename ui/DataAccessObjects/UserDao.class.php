@@ -433,7 +433,7 @@ class UserDao extends BaseDao
     {
 error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao = new TaskDao();
-        $taskDao->claimTask($taskId, $userId);
+        $taskDao->claimTask($taskId, $userId, false);
 
         if ($memsource_task) {
             $memsource_user_uid = $this->get_memsource_user($userId);
