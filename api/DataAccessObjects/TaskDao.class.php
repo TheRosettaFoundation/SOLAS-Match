@@ -710,7 +710,7 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
             $project_tasks = self::get_tasks_for_project($task->getProjectId());
 
             $top_level = self::get_top_level($memsource_task['internalId']);
-            // Remove any Deny List for this $userId for this top level 'internalId' for other 'workflowLevel' (split or not)
+            // Remove any Deny List for this $userId for this top level 'internalId' for other 'workflowLevel's
             foreach ($project_tasks as $dependent_task) {
                 if ($top_level == self::get_top_level($dependent_task['internalId'])) {
                     if ($memsource_task['workflowLevel'] != $dependent_task['workflowLevel']) {
@@ -720,15 +720,18 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
                 }
             }
 
-            // Reapply Deny List for this $userId claimed tasks for this top level 'internalId' for other 'workflowLevel' (only if split)
+            // Reapply Deny List for this $userId claimed tasks for this top level 'internalId' for other 'workflowLevel's
             foreach ($project_tasks as $claimed_task) { // Potential tasks that might have been claimed by $userId
                 if ($top_level == self::get_top_level($claimed_task['internalId'])) {
                     if ($claimed_task['workflowLevel'] == $memsource_task['workflowLevel']) { // Only add back Deny if claimed 'workflowLevel' is same as unclaimed task
                         if (self::hasUserClaimedTask($userId, $claimed_task['id'])) {
                             foreach ($project_tasks as $dependent_task) {
                                 if ($top_level == self::get_top_level($dependent_task['internalId'])) {
-                                    if (strpos($claimed_task['internalId'], '.') || strpos($dependent_task['internalId'], '.')) { // Make sure is split
-                                        if ($claimed_task['workflowLevel'] != $dependent_task['workflowLevel']) { // Not same workflowLevel
+                                    if ($claimed_task['workflowLevel'] != $dependent_task['workflowLevel']) { // Not same workflowLevel
+                                        if ( $claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                                            ($claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $dependent_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+//(**)Need to add additional code to deny if user translated ANY file (not just current)
+//(**)Will there be index on QA/Proofread?
                                             if (($claimed_task['beginIndex'] <= $dependent_task['endIndex']) && ($dependent_task['beginIndex'] <= $claimed_task['endIndex'])) { // Overlap
                                                 error_log("Reapplying $userId to Deny List for {$dependent_task['id']} {$dependent_task['internalId']}");
                                                 self::addUserToTaskBlacklist($userId, $dependent_task['id']);
