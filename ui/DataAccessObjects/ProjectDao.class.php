@@ -1280,15 +1280,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
                   if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
-
-                    // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
-                    if (strpos($memsource_task['internalId'], '.') === false) { // Not split
-                        $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
-                        if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-                            if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
-                                $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                        }
-                    }
                     error_log("Sync ACCEPTED task_id: $task_id, memsource: {$job['uid']}, reverting from COMPLETED_BY_LINGUIST");
                   }
                 }
@@ -1302,39 +1293,17 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
             $taskDao->sendTaskUploadNotifications($task_id, 1);
             $taskDao->set_task_complete_date($task_id);
-
-            if (strpos($memsource_task['internalId'], '.') === false) { // Not split
-                $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
-                if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-                    if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
-                        $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                    $user_id = $this->getUserClaimedTask($task_id);
-                    if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
-                }
-            }
             error_log("Sync COMPLETED task_id: $task_id, memsource: {$job['uid']}");
           }
         }
         if ($status == 'DECLINED' || $status == 'NEW') { // Unclaimed ('DECLINED_BY_LINGUIST' in Hook)
             if ($taskDao->taskIsClaimed($task_id)) {
-                $old_status = $taskDao->getTaskStatus($task_id);
                 $user_id = $this->getUserClaimedTask($task_id);
                 if ($user_id) {
                     $taskDao->unclaimTask($task_id, $user_id);
                     $taskDao->sendOrgFeedbackDeclined($task_id, $user_id, $memsource_project);
                 }
                 error_log("Sync DECLINED task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}");
-                if ($old_status == Common\Enums\TaskStatusEnum::COMPLETE) {
-                    // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
-                    if (strpos($memsource_task['internalId'], '.') === false) { // Not split
-                        $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
-                        if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-                            if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
-                                $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                        }
-                    }
-                    error_log("Sync DECLINED task_id: $task_id, memsource: {$job['uid']}, reverting from COMPLETED");
-                }
             }
         }
     }
