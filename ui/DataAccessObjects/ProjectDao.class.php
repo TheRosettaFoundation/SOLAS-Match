@@ -1084,7 +1084,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
         $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
         $task->setSourceLocale($taskSourceLocale);
-        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
 
         $taskTargetLocale = new Common\Protobufs\Models\Locale();
         list($target_language, $target_country) = $this->convert_memsource_to_language_country($job['targetLang']);
