@@ -1147,21 +1147,6 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
             $task->setWordCount(1);
         }
 
-        $prerequisite = 0;
-        $innerId       = empty($job['innerId']) ? 0 : $job['innerId'];
-        $workflowLevel = empty($job['workflowLevel']) ? 0 : $job['workflowLevel'];
-        if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING && strpos($innerId, '.') === false) { // Revision & top level
-            $project_tasks = $this->get_tasks_for_project($project_id); // Translation task should already have been created
-            foreach ($project_tasks as $project_task) {
-                if ($innerId == $project_task['internalId']) {
-                    if ($workflowLevel > $project_task['workflowLevel']) { // Dependent on
-                        $prerequisite = $project_task['task_id'];
-                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                    }
-                }
-            }
-        }
-
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
         else                         $task->setDeadline($project->getDeadline());
 
@@ -1179,7 +1164,7 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
             empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
             empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
             empty($job['endIndex'])      ? 0 : $job['endIndex'],
-            $prerequisite);
+            0);
 error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success");//(**)
         if (!$success) { // May be because of button double click
             $this->delete_task_directly($task_id);
@@ -1187,7 +1172,33 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
             return '-';
         }
 
-        $project_id = $project->getId();
+        $forward_order = [];
+        $reverse_order = [];
+        foreach ($workflow_levels as $i => $workflow_level) {
+            if (!empty($task_type_to_enum[$workflow_level])) {
+                $forward_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i + 1]];
+                $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
+            }
+        }
+//(**)Old comment: Translation task should already have been created
+        $innerId = empty($job['innerId']) ? 0 : $job['innerId'];
+        $top_level = $this->get_top_level($innerId);
+        $project_tasks = $this->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $project_task) {
+            if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
+                if ($forward_order[$taskType]) {
+                     if ($forward_order[$taskType] == $project_task['task-type_id'])
+                         $this->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
+                }
+                if ($reverse_order[$taskType]) {
+                     if ($reverse_order[$taskType] == $project_task['task-type_id'])
+                         $this->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
+                }
+            }
+        }
+
+        if($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
         $project_restrictions = $taskDao->get_project_restrictions($project_id);
         if ($project_restrictions && (
