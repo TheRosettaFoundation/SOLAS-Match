@@ -354,8 +354,7 @@ class ProjectRouteHandler
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) {
                     $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                     $workflow_levels = ['Translation'];
-                }
-                else {
+                } else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
                     continue;
                 }

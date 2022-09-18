@@ -1099,12 +1099,20 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             error_log("Sync Don't support workflowLevel > 12: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
             return '-';
         } else {
-            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$job['workflowLevel'] - 1];
+            $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
+            $taskType = $workflow_levels[$job['workflowLevel'] - 1];
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
-            if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-            elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
-            elseif ($taskType == '' && $job['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-            else {
+            $task_type_to_enum = [
+                'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
+                'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
+                (**)Not in Memsource'Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
+                'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
+            ];
+            if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
+            elseif ($taskType == '' && $job['workflowLevel'] == 1) {
+                $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                $workflow_levels = ['Translation'];
+            } else {
                 error_log("Sync Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
                 return '-';
             }
