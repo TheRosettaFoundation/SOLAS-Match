@@ -1065,6 +1065,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
 
     private function create_task($memsource_project, $job, $words_default)
     {
+        global $task_type_to_enum;
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
 
@@ -1102,12 +1103,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
             $taskType = $workflow_levels[$job['workflowLevel'] - 1];
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
-            $task_type_to_enum = [
-                'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
-                'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
-                //(**)LexiQA not in Memsource: Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
-                'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
-            ];
             if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
             elseif ($taskType == '' && $job['workflowLevel'] == 1) {
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
@@ -1129,10 +1124,7 @@ if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wo
             }
             $task->setWordCount($job['wordsCount']);
             $this->queue_asana_project($project_id);
-            if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
-                ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-                 $this->no_translation_workflow($memsource_project))
-               ) {
+            if ($this->first_workflow($taskType, $memsource_project)) {
                 $project_languages = $this->get_memsource_project_languages($project_id);
 error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
                 if (!empty($project_languages['kp_target_language_pairs'])) {
@@ -1230,10 +1222,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         $target_language = $task->getTargetLocale()->getLanguageCode();
         $target_country  = $task->getTargetLocale()->getCountryCode();
         $taskType = $project_task['task-type_id'];
-        if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
-            ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-             $this->no_translation_workflow($memsource_project))
-           ) {
+        if ($this->first_workflow($taskType, $memsource_project)) {
             $project_languages = $this->get_memsource_project_languages($project_id);
 error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} - {$project_task['word-count']}");//(**)
             if (!empty($project_languages['kp_target_language_pairs'])) {
@@ -1246,13 +1235,13 @@ error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(
         }
     }
 
-    public function no_translation_workflow($memsource_project)
+    public function first_workflow($taskType, $memsource_project)
     {
-        $translation = false;
-        for ($workflowLevel = 1; $workflowLevel <= 12; $workflowLevel++) {
-            if ($memsource_project["workflow_level_$workflowLevel"] === 'Translation') $translation = true;
-        }
-        return !$translation;
+        global $task_type_to_enum;
+        if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
+            empty($memsource_project['workflow_level_1']) ||
+            $task_type_to_enum[$memsource_project['workflow_level_1']] == $taskType) return true;
+        return false;
     }
 
     private function update_task_from_job($memsource_project, $job, $memsource_task)

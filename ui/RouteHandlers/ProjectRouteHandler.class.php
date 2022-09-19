@@ -282,6 +282,7 @@ class ProjectRouteHandler
 
     private function create_task($hook)
     {
+        global $task_type_to_enum;
         $hook = $hook['jobParts'];
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
@@ -344,12 +345,6 @@ class ProjectRouteHandler
                 $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
                 $taskType = $workflow_levels[$part['workflowLevel'] - 1];
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
-                $task_type_to_enum = [
-                    'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
-                    'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
-                    //(**)LexiQA not in Memsource: 'Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
-                    'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
-                ];
                 if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) {
                     $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
