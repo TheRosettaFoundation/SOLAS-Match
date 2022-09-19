@@ -1105,7 +1105,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             $task_type_to_enum = [
                 'Translation'                 => Common\Enums\TaskTypeEnum::TRANSLATION,
                 'Revision'                    => Common\Enums\TaskTypeEnum::PROOFREADING,
-                (**)Not in Memsource'Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
+                //(**)LexiQA not in Memsource: Language Quality Inspection' => Common\Enums\TaskTypeEnum::QUALITY,
                 'Proofreading and Approval'   => Common\Enums\TaskTypeEnum::APPROVAL,
             ];
             if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
