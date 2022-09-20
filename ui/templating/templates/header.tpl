@@ -261,7 +261,7 @@
                             {/if}
                         {if isset($site_admin)}
                             <li>
-                                <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
+                                <a href="https://analytics.translatorswb.org" target="_blank">TWB Analytics</a>
                             </li>
                         {/if}
                         {if !isset($site_admin)}
