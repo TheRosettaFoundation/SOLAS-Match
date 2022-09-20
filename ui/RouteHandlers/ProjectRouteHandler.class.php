@@ -2620,6 +2620,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
     public function task_cron_1_minute()
     {
+        global $task_type_to_enum;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $orgDao = new DAO\OrganisationDao();
@@ -2725,11 +2726,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($project_lang_pairs[$targetLanguageCode])) {
-                        $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'tWordCount' => 0, 'rWordCount' => 0, 'pWordCount' => 0];
+                        $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
+                        foreach ($task_type_to_enum as to_enum) $project_lang_pairs[$targetLanguageCode][to_enum] = 0;
                     }
-                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::TRANSLATION)  $project_lang_pairs[$targetLanguageCode]['tWordCount'] += $task['wordCount'];
-                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::PROOFREADING) $project_lang_pairs[$targetLanguageCode]['rWordCount'] += $task['wordCount'];
-                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::APPROVAL)     $project_lang_pairs[$targetLanguageCode]['pWordCount'] += $task['wordCount'];
+                    foreach ($task_type_to_enum as to_enum) if ($task['taskType'] == to_enum) $project_lang_pairs[$targetLanguageCode][to_enum] += $task['wordCount'];
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
@@ -2747,9 +2747,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
                     $ch = curl_init($url);
 
-                    $wordCount = $project_lang_pair['tWordCount'];
-                    if ($wordCount == 0) $wordCount = $project_lang_pair['rWordCount'];
-                    if ($wordCount == 0) $wordCount = $project_lang_pair['pWordCount'];
+                    $wordCount = 0; // Pick the first nonzero...
+                    foreach ($task_type_to_enum as to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[to_enum];
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
