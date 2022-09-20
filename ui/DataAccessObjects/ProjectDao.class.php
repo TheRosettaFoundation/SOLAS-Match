@@ -1022,14 +1022,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
                     $this->adjust_for_deleted_task($memsource_project, $project_task);
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
-                } elseif (($prerequisite = $project_task['prerequisite']) && $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
-                    $prerequisite_uid = 0;
-                    foreach ($project_tasks as $u => $pt) {
-                        if ($pt['id'] == $prerequisite) $prerequisite_uid = $u;
-                    }
-                    if (empty($jobs[$prerequisite_uid])) { // Has been (or will be) deleted
-                        $taskDao->setTaskStatus($project_task['id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                    }
                 }
         }
 
