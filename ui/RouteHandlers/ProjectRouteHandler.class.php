@@ -1062,12 +1062,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -1146,7 +1140,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
-                'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_project'   => $memsource_project,
