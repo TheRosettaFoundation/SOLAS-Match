@@ -200,18 +200,6 @@ class UserRouteHandler
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
-        $taskTypeTexts = array();
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
-
-        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $viewData = array();
         $viewData['current_page'] = 'home';
 
@@ -405,7 +393,6 @@ class UserRouteHandler
             'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
             'topTasks' => $topTasks,
             'taskTypeTexts' => $taskTypeTexts,
-            'taskTypeColours' => $taskTypeColours,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
