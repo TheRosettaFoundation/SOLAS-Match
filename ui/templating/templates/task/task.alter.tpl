@@ -180,15 +180,11 @@
                                 <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                 <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
                                 <td>                                            
-                                    {if $type_id == TaskTypeEnum::SEGMENTATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation')}</span>
-                                    {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation')}</span> 
-                                    {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading')}</span> 
-                                    {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                                        <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation')}</span> 
-                                    {/if}
+                                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                                        {if $type_id == $task_type}
+                                            <span style="color: {$ui['colour']}">{$ui['text']}</span>
+                                        {/if}
+                                    {/foreach}
                                 </td>
                                 <td>                                            
                                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
