@@ -269,18 +269,6 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
-        $taskTypeTexts = array();
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
-
-        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
@@ -457,8 +445,6 @@ class TaskRouteHandler
             'selectedOrdering' => $selectedOrdering,
             'topTasks' => $topTasks,
             'taskStatusTexts' => $taskStatusTexts,
-            'taskTypeTexts' => $taskTypeTexts,
-            'taskTypeColours' => $taskTypeColours,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
@@ -507,18 +493,6 @@ class TaskRouteHandler
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
-
-        $taskTypeTexts = array();
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
-
-        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
@@ -594,8 +568,6 @@ class TaskRouteHandler
             'siteLocation' => $siteLocation,
             'recentTasks' => $recentTasks,
             'taskStatusTexts' => $taskStatusTexts,
-            'taskTypeTexts' => $taskTypeTexts,
-            'taskTypeColours' => $taskTypeColours,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
