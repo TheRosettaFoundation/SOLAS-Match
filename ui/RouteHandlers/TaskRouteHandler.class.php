@@ -219,20 +219,12 @@ class TaskRouteHandler
             $bottom = $archivedTasksCount - 1;
         }
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $template_data = array_merge($template_data, array(
                                     'archivedTasks' => $archivedTasks,
                                     "page_no" => $page_no,
                                     "last" => $totalPages,
                                     "top" => $top,
                                     "bottom" => $bottom,
-                                    "taskTypeColours" => $taskTypeColours,
                                     "archivedTasksCount" => $archivedTasksCount
         ));
         return UserRouteHandler::render("task/archived-tasks.tpl", $response);
@@ -1019,12 +1011,6 @@ class TaskRouteHandler
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
         $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-        
         $taskTypeTexts = array();
         $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
         $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
@@ -1106,7 +1092,6 @@ class TaskRouteHandler
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "extra_scripts" => $extra_scripts,
-            "taskTypeColours" => $taskTypeColours,
             "project" => $project,
             "converter" => $converter,
             "task" => $task,
@@ -1290,13 +1275,6 @@ class TaskRouteHandler
 
         $taskFileInfo = $taskDao->getTaskInfo($taskId, 0);
         $filename = $taskFileInfo->getFilename();
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $matecat_url = '';
@@ -1402,7 +1380,6 @@ class TaskRouteHandler
             "converter"     => $converter,
             "fieldName"     => $fieldName,
             "max_file_size" => Lib\TemplateHelper::maxFileSizeMB(),
-            "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
             'chunks'               => $chunks,
@@ -1452,12 +1429,6 @@ class TaskRouteHandler
                 $taskDao->set_task_complete_date($taskId);
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-review', array('task_id' => $taskId)));
             }
-        }
-
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         $matecat_url = '';
@@ -1531,7 +1502,6 @@ class TaskRouteHandler
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
             'project'         => $project,
-            'taskTypeColours' => $taskTypeColours,
             'matecat_url'     => $matecat_url,
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
         ));
@@ -1833,13 +1803,6 @@ class TaskRouteHandler
         }
         }
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         if (!$memsource_task) {
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
@@ -1878,7 +1841,6 @@ class TaskRouteHandler
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'allow_downloads'     => $allow_downloads,
-            "taskTypeColours"     => $taskTypeColours
         ));
 
         return UserRouteHandler::render("task/task.alter.tpl", $response);
@@ -2045,13 +2007,6 @@ class TaskRouteHandler
         ));
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if ($isOrgMember || $isSiteAdmin) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
@@ -2067,7 +2022,6 @@ class TaskRouteHandler
                 "org" => $org,
                 "project" => $project,
                 "registered" => $registered,
-                "taskTypeColours" => $taskTypeColours,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
@@ -2102,12 +2056,6 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
-
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
 
         if ($any_country) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
         else              $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
@@ -2180,7 +2128,6 @@ class TaskRouteHandler
             'task'            => $task,
             'other_task_ids'  => $taskDao->getOtherPendingChunks($task_id),
             'project'         => $project,
-            'taskTypeColours' => $taskTypeColours,
             'isSiteAdmin'     => 1,
             'isMember'        => 1,
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
@@ -2357,19 +2304,6 @@ class TaskRouteHandler
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
 
-        $taskTypes = array();
-        $taskTypes[Common\Enums\TaskTypeEnum::SEGMENTATION] = "Segmentation";
-        $taskTypes[Common\Enums\TaskTypeEnum::TRANSLATION] = "Translation";
-        $taskTypes[Common\Enums\TaskTypeEnum::PROOFREADING] = "Proofreading";
-        $taskTypes[Common\Enums\TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
-
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $extra_scripts = "
 <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
 <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
@@ -2386,13 +2320,11 @@ class TaskRouteHandler
             "taskPreReqs"   => $taskPreReqs,
             "languages"     => $languages,
             "countries"     => $countries,
-            "taskTypes"     => $taskTypes,
             "extra_scripts" => $extra_scripts,
             "titleError"    => $titleError,
             "wordCountError"=> $wordCountError,
             "deadlineError" => $deadlineError,
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
-            "taskTypeColours" => $taskTypeColours
         ));
 
         return UserRouteHandler::render("task/task.create.tpl", $response);
@@ -2432,12 +2364,6 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
-
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -2516,7 +2442,6 @@ class TaskRouteHandler
             "taskClaimedDate" => $taskClaimedDate,
             "claimant" => $claimant,
             'isSiteAdmin' => $isSiteAdmin,
-            "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
         ));
 
@@ -2598,12 +2523,6 @@ class TaskRouteHandler
             }
         }
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "org" => $organisation,
@@ -2611,7 +2530,6 @@ class TaskRouteHandler
             "task" => $task,
             "taskClaimedDate" =>$taskClaimedDate,
             "claimant" => $claimant,
-            "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
         ));
 
