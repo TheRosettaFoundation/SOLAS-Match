@@ -9,7 +9,7 @@
         {TemplateHelper::uiCleanseHTML($task->getTitle())}
         <small>
             <strong>
-                - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}
+                - <span style="color: {TaskTypeEnum::$enum_to_UI[TaskTypeEnum::DESEGMENTATION]['colour']}">{TaskTypeEnum::$enum_to_UI[TaskTypeEnum::DESEGMENTATION]['text']} Task
             </strong>
         </small>   
         {assign var="task_id" value=$task->getId()}
