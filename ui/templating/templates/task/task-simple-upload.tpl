@@ -15,11 +15,11 @@
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
-                {if $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation_task')}
-                {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading_task')}
-                {/if}
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    {if $type_id == $task_type}
+                        <span style="color: {$ui['colour']}">{$ui['text']} Task</span>
+                    {/if}
+                {/foreach}
             </strong>
         </small>   
         {assign var="task_id" value=$task->getId()}
