@@ -123,15 +123,20 @@
                             {/if}
 
                             <p>
-                               {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
+                               {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != ''}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
                                             </a>
-                                        {else}
+                                        {elseif $type_id == 3}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
+                                            </a>
+                                        {/if}
+                                        {elseif $type_id == 6}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                Approve using Memsource
                                             </a>
                                         {/if}
                                     {/if}
@@ -182,6 +187,11 @@
                                 {if $show_memsource_revision[$task_id]}
                                     <a href="{$siteLocation}task/{$show_memsource_revision[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
                                         Download Complete Revised Version
+                                    </a>
+                                {/if}
+                                {if $show_memsource_approval[$task_id]}
+                                    <a href="{$siteLocation}task/{$show_memsource_approval[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Approved Version
                                     </a>
                                 {/if}
                                 {if ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2 || $type_id == 6)}

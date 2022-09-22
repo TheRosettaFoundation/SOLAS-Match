@@ -301,6 +301,7 @@ class TaskRouteHandler
         $proofreadTaskIds = array();
         $parentTaskIds = [];
         $show_memsource_revision = [];
+        $show_memsource_approval = [];
         $matecat_urls = array();
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
@@ -375,6 +376,7 @@ class TaskRouteHandler
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 $show_memsource_revision[$taskId] = null;
+                $show_memsource_approval[$taskId] = null;
                 if ($memsource_task) {
                     $project_tasks = $projectDao->get_tasks_for_project($topTask->getProjectId());
                     foreach ($project_tasks as $project_task) {
@@ -382,15 +384,22 @@ class TaskRouteHandler
                     }
                     $revision_task = 0;
                     $revision_complete = 1;
+                    $approval_task = 0;
+                    $approval_complete = 1;
                     foreach ($project_tasks as $project_task) {
                         if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
                             if ($project_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING) { // Revision
                                 if (!$revision_task) $revision_task = $project_task['id'];
                                 if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $revision_complete = 0;
                             }
+                            if ($project_task['task-type_id'] == Common\Enums\TaskTypeEnum::APPROVAL) { // Approval
+                                if (!$approval_task) $approval_task = $project_task['id'];
+                                if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $approval_complete = 0;
+                            }
                         }
                     }
                     if ($revision_task && $revision_complete) $show_memsource_revision[$taskId] = $revision_task;
+                    if ($approval_task && $approval_complete) $show_memsource_approval[$taskId] = $approval_task;
                     $proofreadTaskIds[$taskId] = null;
                     $parentTaskIds[$taskId] = null;
                 } else {
@@ -449,6 +458,7 @@ class TaskRouteHandler
             'proofreadTaskIds' => $proofreadTaskIds,
             'parentTaskIds'    => $parentTaskIds,
             'show_memsource_revision' => $show_memsource_revision,
+            'show_memsource_approval' => $show_memsource_approval,
             'memsource_tasks' => $memsource_tasks,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
