@@ -88,8 +88,8 @@
                             <h2>{Localisation::getTranslation('common_task_type')} <span style="color: red">*</span></h2>
                             <p class="desc">{Localisation::getTranslation('task_create_2')}</p>
                             <select name="taskType" style="width: 400px">
-                                <option value="2">{$taskTypes[2]}</option>
-                                <option value="3">{$taskTypes[3]}</option>
+                                <option value="2">Translation</option>
+                                <option value="3">Proofreading</option>
                             </select>
                             <p style="margin-bottom:40px;"/>
                             <p>
@@ -174,15 +174,11 @@
                                             <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                             <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
                                             <td>                                            
-                                                {if $type_id == TaskTypeEnum::SEGMENTATION}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation')}</span>
-                                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation')}</span>
-                                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading')}</span>
-                                                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation')}</span>
-                                                {/if}
+                                                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                                                    {if $type_id == $task_type}
+                                                        <span style="color: {$ui['colour']}">{$ui['text']}</span>
+                                                    {/if}
+                                                {/foreach}
                                             </td>
                                             <td>                                            
                                                 {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
