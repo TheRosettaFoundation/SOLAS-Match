@@ -6,19 +6,12 @@
         <h2>
             <a href="{urlFor name="task-view" options="task_id.$task_id"}">{TemplateHelper::uiCleanseHTML($task->getTitle())}</a>
         </h2>
-        {if $type_id == TaskTypeEnum::SEGMENTATION}
-            <p>{Localisation::getTranslation('common_type')} 
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation')}</span> 
-        {elseif $type_id == TaskTypeEnum::TRANSLATION}
-            <p>{Localisation::getTranslation('common_type')}
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation')}</span>
-        {elseif $type_id == TaskTypeEnum::PROOFREADING}
-            <p>{Localisation::getTranslation('common_type')}
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading')}</span>
-        {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-            <p>{Localisation::getTranslation('common_type')}
-            <span class="label label-info" style="background-color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation')}</span>
-        {/if}                
+    <p>{Localisation::getTranslation('common_type')}
+        {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+            {if $type_id == $task_type}
+                <span class="label label-info" style="background-color: {$ui['colour']}">{$ui['text']}</span>
+            {/if}
+        {/foreach}
     </p>
 
     <p>
