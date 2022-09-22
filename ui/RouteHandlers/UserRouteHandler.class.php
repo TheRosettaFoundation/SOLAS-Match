@@ -392,7 +392,6 @@ class UserRouteHandler
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
             'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
             'topTasks' => $topTasks,
-            'taskTypeTexts' => $taskTypeTexts,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,

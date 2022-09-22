@@ -1011,12 +1011,6 @@ class TaskRouteHandler
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
         $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
 
-        $taskTypeTexts = array();
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
-        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
-        
         $taskStatusTexts = array();
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
@@ -1105,7 +1099,6 @@ class TaskRouteHandler
             'alsoViewedTasks' => $alsoViewedTasks,
             'alsoViewedTasksCount' => $alsoViewedTasksCount,
             'siteLocation' => $siteLocation,
-            'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $projectDao->discourse_parameterize($project),
             'memsource_task' => $memsource_task,
