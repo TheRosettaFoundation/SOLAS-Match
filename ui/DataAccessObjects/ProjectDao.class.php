@@ -600,19 +600,6 @@ $replace = array(
         }
     }
 
-    public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target)
-    {
-        LibAPI\PDOWrapper::call('insert_testing_center_project',
-            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($translation_task_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($proofreading_task_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($project_to_copy_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target)
-        );
-    }
-
     public function get_testing_center_projects($user_id, &$testing_center_projects_by_code)
     {
         $results = LibAPI\PDOWrapper::call('get_testing_center_projects', LibAPI\PDOWrapper::cleanse($user_id));
