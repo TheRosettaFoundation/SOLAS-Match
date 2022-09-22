@@ -180,20 +180,12 @@ class TagRouteHandler
             }
         }
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-        
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         $top_tags= $tagDao->getTopTags(30);
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "tag" => $tag,
             "top_tags" => $top_tags,
-            "taskTypeColours" => $taskTypeColours
         ));
         return UserRouteHandler::render("tag/tag.tpl", $response);
     }
