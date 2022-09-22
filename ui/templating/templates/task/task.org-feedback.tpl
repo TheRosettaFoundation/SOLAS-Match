@@ -14,15 +14,11 @@
             <strong>
                 -
                 {assign var="type_id" value=$task->getTaskType()}
-                {if $type_id == TaskTypeEnum::SEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation_task')}</span>
-                {elseif $type_id == TaskTypeEnum::TRANSLATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">{Localisation::getTranslation('common_translation_task')}</span>
-                {elseif $type_id == TaskTypeEnum::PROOFREADING}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">{Localisation::getTranslation('common_proofreading_task')}</span>
-                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
-                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
-                {/if}
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    {if $type_id == $task_type}
+                        <span style="color: {$ui['colour']}">{$ui['text']} Task</span>
+                    {/if}
+                {/foreach}
             </strong>
             {if $isSiteAdmin}
             — <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
