@@ -2519,13 +2519,6 @@ error_log("result: $result");//(**)
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
 
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $taskTypeColours = array();
-
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
         if (isset($userPersonalInfo)) {
             $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
             $langPrefName = $langPref->getName();
@@ -2546,7 +2539,6 @@ error_log("result: $result");//(**)
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
-            "taskTypeColours" => $taskTypeColours
         ));
 
         if ($private_access || $isSiteAdmin) {
