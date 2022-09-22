@@ -1311,7 +1311,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     {
 
         $translations_not_all_complete = 0;
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task) {
+        if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION && $memsource_task) {
             $top_level = $this->get_top_level($memsource_task['internalId']);
             $project_tasks = $this->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
