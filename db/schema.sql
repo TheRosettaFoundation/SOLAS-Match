@@ -9778,7 +9778,7 @@ BEGIN
     IF EXISTS (SELECT 1 FROM make_claimable_regardless WHERE claimable_task_id=claimable_tID) THEN
         SELECT 1 AS result;
     ELSEIF NOT EXISTS (
-        SELECT
+        SELECT 1
         FROM taskclaims_required_to_make_claimable tc
         JOIN Tasks                                  t ON tc.task_id=t.id
         WHERE
