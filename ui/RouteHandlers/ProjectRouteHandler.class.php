@@ -11,7 +11,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
-require_once __DIR__.'/../../Common/matecat_acceptable_languages.php';
 
 class ProjectRouteHandler
 {
@@ -628,8 +627,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     {
         global $app, $template_data;
         $project_id = $args['project_id'];
-
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
@@ -819,222 +816,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if (!empty($post['copyChunks']) && empty($memsource_project)) {
-                $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
-                $matecat_language_pairs_populated = false;
-                if (!empty($matecat_language_pairs)) {
-                    $matecat_language_pairs_populated = true;
-                    foreach ($matecat_language_pairs as $matecat_language_pair) {
-                        if (empty($matecat_language_pair['matecat_id_job'])) $matecat_language_pairs_populated = false;
-                    }
-                }
-                if ($matecat_language_pairs_populated) {
-                    $project_chunks = $taskDao->getTaskChunks($project_id);
-                    if (empty($project_chunks)) $project_chunks = array();
-
-                    $task_chunks = array();
-                    foreach ($project_chunks as $task_chunk) {
-                        $task_chunks[$task_chunk['matecat_id_job']][$task_chunk['chunk_number']][$task_chunk['type_id']] = $task_chunk;
-                    }
-
-                    $parent_task_by_matecat_id_job_and_type = array();
-                    $job_was_chunked = array();
-                    foreach ($matecat_language_pairs as $matecat_language_pair) {
-                        $parent_task_by_matecat_id_job_and_type[$matecat_language_pair['matecat_id_job']][$matecat_language_pair['type_id']] = $matecat_language_pair['task_id'];
-
-                        $job_was_chunked[$matecat_language_pair['matecat_id_job']] = true;
-                    }
-
-                    foreach ($matecat_language_pairs as $matecat_language_pair) {
-                        if (empty($task_chunks[$matecat_language_pair['matecat_id_job']])) {
-                            $job_was_chunked[$matecat_language_pair['matecat_id_job']] = false;
-
-                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::TRANSLATION ] = array(
-                                'task_id' => 0,
-                                'project_id' => $project_id,
-                                'type_id' => Common\Enums\TaskTypeEnum::TRANSLATION,
-                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
-                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
-                                'chunk_number' => 0,
-                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
-                                'job_first_segment' => '',
-                            );
-                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::PROOFREADING] = array(
-                                'task_id' => 0,
-                                'project_id' => $project_id,
-                                'type_id' => Common\Enums\TaskTypeEnum::PROOFREADING,
-                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
-                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
-                                'chunk_number' => 0,
-                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
-                                'job_first_segment' => '',
-                            );
-                        }
-                    }
-
-                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
-                    if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
-                        $re = curl_init("{$matecat_api}api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
-
-                        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                        curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                        curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                        curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                        $httpHeaders = array(
-                            'Expect:'
-                        );
-                        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                        curl_setopt($re, CURLOPT_HEADER, true);
-                        curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                        curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                        $res = curl_exec($re);
-
-                        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                        $header = substr($res, 0, $header_size);
-                        $res = substr($res, $header_size);
-                        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                        curl_close($re);
-
-                        if ($responseCode == 200) {
-                            $response_data = json_decode($res, true);
-                            if (!empty($response_data['urls']['jobs'])) {
-                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
-                                $segment_by_job_and_password = [];
-                                foreach ($chunks as $chunk) {
-                                    $segment_by_job_and_password[$chunk['matecat_id_job'] . '|' . $chunk['matecat_id_chunk_password']] = $chunk['job_first_segment'];
-                                }
-
-                                $jobs = $response_data['urls']['jobs'];
-                                foreach ($jobs as $job) {
-                                    if (!empty($job['chunks']) && !empty($job['id'])) {
-                                        $matecat_id_job = $job['id'];
-
-                                        $chunks = $job['chunks'];
-                                        $number_of_chunks = count($chunks);
-
-                                        foreach ($chunks as $chunk_number => $chunk) {
-                                            if (empty($chunks[$chunk_number]['password']) && !empty($chunks[$chunk_number]['translate_url'])) {
-                                                // 20191102 MateCat 2.9.2e no longer has "password" key here, need to extract it from "translate_url"
-                                                $chunks[$chunk_number]['password'] = substr($chunks[$chunk_number]['translate_url'], strrpos($chunks[$chunk_number]['translate_url'], '-') + 1);
-                                            }
-                                        }
-
-                                        $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
-                                        $chunked_now = $number_of_chunks > 1;
-                                        if     (!$was_chunked && !$chunked_now) $matched = true;
-                                        elseif (!$was_chunked &&  $chunked_now) $matched = false;
-                                        elseif ( $was_chunked && !$chunked_now) $matched = false;
-                                        else { //$was_chunked &&  $chunked_now
-                                            $matched = true;
-                                            foreach ($chunks as $chunk_number => $chunk) {
-                                                if (empty($task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password']) ||
-                                                    $task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password'] != $chunk['password']) {
-
-                                                    $matched = false;
-                                                }
-                                            }
-                                        }
-
-                                        if (!$matched) {
-                                            $parent_task_id_translation  = 0;
-                                            $parent_task_id_proofreading = 0;
-                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION])) {
-                                                $parent_task_id_translation  = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION];
-                                            }
-                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING])) {
-                                                $parent_task_id_proofreading = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING];
-                                            }
-                                            if (!empty($parent_task_id_translation ) || !empty($parent_task_id_proofreading)) {
-                                                if (empty($parent_task_id_translation )) $parent_task_id_translation  = $parent_task_id_proofreading;
-                                                if (empty($parent_task_id_proofreading)) $parent_task_id_proofreading = $parent_task_id_translation;
-
-                                                $parent_translation_task  = $taskDao->getTask($parent_task_id_translation);
-                                                $parent_proofreading_task = $taskDao->getTask($parent_task_id_proofreading);
-
-                                                if ($parent_task_id_translation === $parent_task_id_proofreading) {
-                                                    // Need to calculate Translation Deadline, 3 days earlier if it will fit
-                                                    $deadline = strtotime($parent_proofreading_task->getDeadline());
-                                                    $deadline_less_3_days = $deadline - 3*24*60*60;
-                                                    if ($deadline_less_3_days < time())    $deadline_less_3_days = time() + 2*24*60*60;
-                                                    if ($deadline_less_3_days > $deadline) $deadline_less_3_days = $deadline;
-                                                    error_log("Parent task_id: $parent_task_id_translation, deadline will be inherited: " . date("Y-m-d H:i:s", $deadline_less_3_days));
-                                                    $parent_translation_task->setDeadline(date("Y-m-d H:i:s", $deadline_less_3_days));
-                                                }
-
-                                                if ($was_chunked) {
-                                                    foreach ($task_chunks[$matecat_id_job] as $chunk_item) {
-                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::TRANSLATION ]['task_id']);
-                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::PROOFREADING]['task_id']);
-                                                    }
-                                                    // $taskDao->removeTaskChunks($matecat_id_job); WILL BE DONE BY DELETE CASCADE
-                                                }
-
-                                                if ($chunked_now) {
-                                                    foreach ($chunks as $chunk_number => $chunk) {
-                                                        $job_first_segment = '';
-                                                        if (!empty($segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']])) $job_first_segment = $segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']];
-
-                                                        // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
-                                                        // However we are not doing that here
-                                                        $task_id = $this->addChunkTask(
-                                                            $taskDao,
-                                                            $project_id,
-                                                            $parent_translation_task,
-                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
-                                                            $chunk_number,
-                                                            $number_of_chunks);
-                                                        $taskDao->insertTaskChunks(
-                                                            $task_id,
-                                                            $project_id,
-                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
-                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::TRANSLATION ]['matecat_langpair'],
-                                                            $matecat_id_job,
-                                                            $chunk_number,
-                                                            $chunk['password'],
-                                                            $job_first_segment);
-                                                        $task_id = $this->addChunkTask(
-                                                            $taskDao,
-                                                            $project_id,
-                                                            $parent_proofreading_task,
-                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                            $chunk_number,
-                                                            $number_of_chunks);
-                                                        $taskDao->insertTaskChunks(
-                                                            $task_id,
-                                                            $project_id,
-                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::PROOFREADING]['matecat_langpair'],
-                                                            $matecat_id_job,
-                                                            $chunk_number,
-                                                            $chunk['password'],
-                                                            $job_first_segment);
-                                                    }
-                                                }
-                                            } else {
-                                                UserRouteHandler::flashNow('error', "Could not find parent translation or revising task for chunks (Job id: $matecat_id_job)");
-                                            }
-                                        }
-                                    } else {
-                                        UserRouteHandler::flashNow('error', 'No chunks or id found for job');
-                                    }
-                                }
-                            } else {
-                                UserRouteHandler::flashNow('error', 'No jobs found');
-                            }
-                        } else {
-                            UserRouteHandler::flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
-                        }
-                    } else {
-                        UserRouteHandler::flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
-                    }
-                } else {
-                    UserRouteHandler::flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
-                }
-            }
             if (!empty($post['copyChunks']) && !empty($memsource_project)) {
                 $error = $projectDao->sync_split_jobs($memsource_project);
                 if ($error) UserRouteHandler::flashNow('error', $error);
@@ -1153,55 +934,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
-    private function addChunkTask(
-        $taskDao,
-        $project_id,
-        $parent_task,
-        $type_id,
-        $chunk_number,
-        $number_of_chunks)
-    {
-        $task = new Common\Protobufs\Models\Task();
-        $task->setProjectId($project_id);
-        $task->setTitle("Chunk $chunk_number of " . $parent_task->getTitle());
-        $task->setTaskType($type_id);
-        $task->setSourceLocale($parent_task->getSourceLocale());
-        $task->setTargetLocale($parent_task->getTargetLocale());
-        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-        $word_count = $parent_task->getWordCount() / $number_of_chunks;
-        if ($word_count < 1) $word_count = 1;
-        $task->setWordCount($word_count);
-
-        $task->setDeadline($parent_task->getDeadline());
-        //$task->setPublished($parent_task->getPublished());
-        $task->setPublished(true);
-
-        $newTask = $taskDao->createTask($task);
-        $task_id = $newTask->getId();
-        error_log("addChunkTask $chunk_number: $task_id, deadline: " . $task->getDeadline());
-
-        $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
-
-        $project_restrictions = $taskDao->get_project_restrictions($project_id);
-        if ($project_restrictions && (
-                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
-                    ||
-                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
-            $taskDao->setRestrictedTask($task_id);
-        }
-
-        // Trigger afterTaskCreate should update UserTrackedTasks based on UserTrackedProjects
-
-        return $task_id;
-    }
-
     public function projectAlter(Request $request, Response $response, $args)
     {
         global $app, $template_data;
         $project_id = $args['project_id'];
-
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
@@ -1344,21 +1080,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
-
-                                if (!empty($post['analyse_url'])) {
-                                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
-                                    if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
-                                        $found = preg_match('|^http[s]?' . substr($matecat_api, strpos($matecat_api, ':')) . 'analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
-                                        if ($found && $matches[1] == $project_id) {
-                                            $matecat_id_project = $matches[2];
-                                            $matecat_id_project_pass = $matches[3];
-                                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
-                                            UserRouteHandler::flash('success', 'Matecat Project ID/Password updated!');
-                                        } else {
-                                            UserRouteHandler::flash('error', 'URL did not match project and expected pattern!');
-                                        }
-                                    }
-                                }
                                 try {
                                      return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -1435,14 +1156,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userIsAdmin = $adminDao->isSiteAdmin($user_id);
         // For some reason the existing Dart code excludes this case...
         //$userIsAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $userIsAdmin;
-        $enter_analyse_url = 0;
         if ($userIsAdmin) {
             $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
-
-            $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
-            if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
-                $enter_analyse_url = 1;
-            }
         } else {
             $userIsAdmin = 0;
         }
@@ -1477,7 +1192,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
             'userIsAdmin'    => $userIsAdmin,
-            'enter_analyse_url' => $enter_analyse_url,
+            'enter_analyse_url' => 0,
             'memsource_project' => $memsource_project,
             'sesskey'        => $sesskey,
         ));
@@ -1693,113 +1408,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 }
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
-
-                                // Add Tasks for the new Project
-                                $targetCount = 0;
-                                $creatingTasksSuccess = true;
-                                $createdTasks = array();
-                                $matecat_translation_task_ids         = array();
-                                $matecat_translation_target_languages = array();
-                                $matecat_translation_target_countrys  = array();
-                                $matecat_proofreading_task_ids        = array();
-                                $matecat_proofreading_target_languages= array();
-                                $matecat_proofreading_target_countrys = array();
-                                while (!$create_memsource && !empty($post["target_language_$targetCount"])) {
-                                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
-                                        if ($create_memsource || !empty($post["translation_$targetCount"])) {
-                                            $translation_Task_Id = $this->addProjectTask(
-                                                $project,
-                                                $memsource_project,
-                                                $trommons_language_code,
-                                                $trommons_country_code,
-                                                Common\Enums\TaskTypeEnum::TRANSLATION,
-                                                0,
-                                                $createdTasks,
-                                                $user_id,
-                                                $projectDao,
-                                                $taskDao,
-                                                $userDao,
-                                                $app,
-                                                $post);
-                                            if (!$translation_Task_Id) {
-                                                $creatingTasksSuccess = false;
-                                                break;
-                                            }
-                                            $matecat_translation_task_ids[]         = $translation_Task_Id;
-                                            $matecat_translation_target_languages[] = $trommons_language_code;
-                                            $matecat_translation_target_countrys[]  = $trommons_country_code;
-
-                                            if ($create_memsource || !empty($post["proofreading_$targetCount"])) {
-                                                $id = $this->addProjectTask(
-                                                    $project,
-                                                    $memsource_project,
-                                                    $trommons_language_code,
-                                                    $trommons_country_code,
-                                                    Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                    $translation_Task_Id,
-                                                    $createdTasks,
-                                                    $user_id,
-                                                    $projectDao,
-                                                    $taskDao,
-                                                    $userDao,
-                                                    $app,
-                                                    $post);
-                                                if (!$id) {
-                                                    $creatingTasksSuccess = false;
-                                                    break;
-                                                }
-                                                $matecat_proofreading_task_ids[]         = $id;
-                                                $matecat_proofreading_target_languages[] = $trommons_language_code;
-                                                $matecat_proofreading_target_countrys[]  = $trommons_country_code;
-                                            }
-                                        } elseif (!$create_memsource && empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
-                                            // Only a proofreading task to be created
-                                            $id = $this->addProjectTask(
-                                                $project,
-                                                $memsource_project,
-                                                $trommons_language_code,
-                                                $trommons_country_code,
-                                                Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                0,
-                                                $createdTasks,
-                                                $user_id,
-                                                $projectDao,
-                                                $taskDao,
-                                                $userDao,
-                                                $app,
-                                                $post);
-                                            if (!$id) {
-                                                $creatingTasksSuccess = false;
-                                                break;
-                                            }
-                                            $matecat_proofreading_task_ids[]         = $id;
-                                            $matecat_proofreading_target_languages[] = $trommons_language_code;
-                                            $matecat_proofreading_target_countrys[]  = $trommons_country_code;
-                                        }
-                                    $targetCount++;
-                                }
-
-                                if (!$creatingTasksSuccess) {
-                                    foreach ($createdTasks as $taskIdToDelete) {
-                                        if ($taskIdToDelete) {
-                                            try {
-                                                $taskDao->deleteTask($taskIdToDelete);
-                                            } catch (\Exception $e) {
-                                            }
-                                        }
-                                    }
-                                    UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                     try {
-                                        $projectDao->deleteProject($project->getId());
-                                    } catch (\Exception $e) {
-                                    }
-                                } else {
-                                    try {
-                                      if (!$memsource_project) {
-                                        error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
-                                        $projectDao->calculateProjectDeadlines($project->getId());
-                                        $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
-                                      }
                                         $target_languages = '';
                                         $targetCount = 0;
                                         if (!empty($post["target_language_$targetCount"])) {
@@ -1812,52 +1421,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
-
-                                      if (!$memsource_project) {
-                                        // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
-                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
-
-                                        $source_language = $this->valid_language_for_matecat($source_language);
-                                        if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
-                                            $target_list = array();
-                                            foreach ($matecat_translation_task_ids as $i => $matecat_translation_task_id) {
-                                                $target_language = $this->valid_language_for_matecat($matecat_translation_target_languages[$i] . '-' . $matecat_translation_target_countrys[$i]);
-                                                if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
-                                                    $target_list[] = $target_language;
-                                                    $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
-                                                }
-                                            }
-                                        }
-                                        if (!empty($source_language) && !empty($matecat_proofreading_task_ids)) {
-                                            $target_list = array();
-                                            foreach ($matecat_proofreading_task_ids as $i => $matecat_proofreading_task_id) {
-                                                $target_language = $this->valid_language_for_matecat($matecat_proofreading_target_languages[$i] . '-' . $matecat_proofreading_target_countrys[$i]);
-                                                if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
-                                                    $target_list[] = $target_language;
-                                                    $taskDao->insertMatecatLanguagePairs($matecat_proofreading_task_id, $project->getId(), Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
-                                                }
-                                            }
-                                        }
-
-                                        if ($adminDao->isSiteAdmin($user_id)) {
-                                            $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
-                                            $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
-                                            $lexiqa           = '1';
-                                            if (!empty($post['private_tm_key'])) $post['private_tm_key'] = str_replace(' ', '', $post['private_tm_key']);
-                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522';
-
-                                            if (!empty($post['testing_center'])) {
-                                                $mt_engine        = '0';
-                                                $pretranslate_100 = '0';
-                                                $lexiqa           = '0';
-                                                $private_tm_key   = 'new';
-                                            }
-
-                                            if (!empty($post['testing_center']) || !empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
-                                                $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
-                                            }
-                                        }
-                                      }
 
                                         $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
                                         $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
@@ -1883,7 +1446,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         } catch (\Exception $e) {
                                         }
                                     }
-                                }
                             }
                         }
                     }
@@ -1952,138 +1514,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
         ));
         return UserRouteHandler::render("project/project.create.tpl", $response);
-    }
-
-    private function addProjectTask(
-        $project,
-        $memsource_project,
-        $target_language,
-        $target_country,
-        $taskType,
-        $preReqTaskId,
-        &$createdTasks,
-        $user_id,
-        $projectDao,
-        $taskDao,
-        $userDao,
-        $app,
-        $post)
-    {
-        $taskPreReqs = array();
-        $task = new Common\Protobufs\Models\Task();
-        $task->setProjectId($project->getId());
-
-        $task->setTitle($project->getTitle());
-
-        $projectSourceLocale = $project->getSourceLocale();
-        $taskSourceLocale = new Common\Protobufs\Models\Locale();
-        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-        $task->setSourceLocale($taskSourceLocale);
-        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-        $taskTargetLocale = new Common\Protobufs\Models\Locale();
-        $taskTargetLocale->setLanguageCode($target_language);
-        $taskTargetLocale->setCountryCode($target_country);
-        $task->setTargetLocale($taskTargetLocale);
-
-        $task->setTaskType($taskType);
-        $task->setWordCount($project->getWordCount());
-        if ($memsource_project) {
-            $deadline = strtotime($project->getDeadline());
-            $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
-            $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
-            $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
-            $now = time();
-            if ($deadline_less_7_days < $now) { // We are squashed for time
-                $total = $deadline - $now;
-                if ($total < 0) $total = 0;
-                $deadline_less_4_days = $deadline - $total*4/7;
-                $deadline_less_1_days = $deadline - $total*1/7;
-            }
-            if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
-            else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
-        } else                                                       $task->setDeadline($project->getDeadline());
-
-        if (!empty($post['publish'])) {
-            $task->setPublished(1);
-        } else {
-            $task->setPublished(0);
-        }
-
-        if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
-            $task->setPublished(0);
-        }
-
-        try {
-            if ($memsource_project) {
-                if ($preReqTaskId) {
-                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                }
-            }
-            error_log("addProjectTask");
-            $newTask = $taskDao->createTask($task);
-            $newTaskId = $newTask->getId();
-
-            if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
-            }
-
-            $createdTasks[] = $newTaskId;
-
-            $upload_error = $taskDao->saveTaskFileFromProject(
-                $newTaskId,
-                $user_id,
-                $projectDao->getProjectFile($project->getId())
-            );
-
-            if ($memsource_project) {
-                $memsource_target = $projectDao->convert_language_country_to_memsource($target_language, $target_country);
-                if (!$memsource_target) return 0;
-
-                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                    $type_text = 'Translation';
-                    $default_workflow = 1;
-                } else {
-                    $type_text = 'Revision';
-                    $default_workflow = 2;
-                }
-                $levels = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3];
-                if (!empty($levels[$type_text])) $workflow = $levels[$type_text];
-                else                             $workflow = $default_workflow;
-
-                if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
-                $job = $memsource_project['jobs']["$memsource_target-$workflow"];
-                // Missing items should be updated by memsource hook...
-                $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
-                    0,
-                    empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
-                    0,
-                    0,
-                    $preReqTaskId);
-                error_log("set_memsource_task($newTaskId, 0, {$job['uid']}...)");
-            } else {
-                if ($newTaskId && $preReqTaskId) {
-                    $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
-                }
-            }
-
-            if (!empty($post['trackProject'])) {
-                $userDao->trackTask($user_id, $newTaskId);
-            }
-
-            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                $taskDao->setRestrictedTask($newTaskId);
-            }
-            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $taskDao->setRestrictedTask($newTaskId);
-            }
-        } catch (\Exception $e) {
-            return 0;
-        }
-
-        error_log("Added Task: $newTaskId");
-        return $newTaskId;
     }
 
     /**
@@ -2306,303 +1736,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
     public function project_cron_1_minute(Request $request)
     {
-      $matecat_api = Common\Lib\Settings::get('matecat.url');
-
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
-
-        $taskDao = new DAO\TaskDao();
-
-        // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
-        $projects = $taskDao->getWordCountRequestForProjects(1);
-        if (!empty($projects)) {
-            foreach ($projects as $project) {
-                $project_id = $project['project_id'];
-                $matecat_id_project = $project['matecat_id_project'];
-                $matecat_id_project_pass = $project['matecat_id_project_pass'];
-
-                // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
-                // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
-                $re = curl_init("{$matecat_api}api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
-
-                // http://php.net/manual/en/function.curl-setopt.php
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                $httpHeaders = array(
-                    'Expect:'
-                );
-                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-
-                $res = curl_exec($re);
-                if ($error_number = curl_errno($re)) {
-                    error_log("project_cron /status ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
-                }
-
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
-                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                curl_close($re);
-
-                $word_count = 0;
-                if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
-
-                    if ($response_data['status'] === 'DONE') {
-                        if (empty($response_data['errors'])) {
-                            if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
-                                $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
-
-                                if (!empty($response_data['jobs']['langpairs'])) {
-                                    $langpairs = count(array_unique($response_data['jobs']['langpairs']));
-
-                                    foreach ($response_data['jobs']['langpairs'] as $job_password => $langpair) {
-                                        $matecat_id_job          = substr($job_password, 0, strpos($job_password, '-'));
-                                        $matecat_id_job_password = substr($job_password, strpos($job_password, '-') + 1);
-                                        $matecat_id_file         = 0;
-                                        if (!empty($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password])) {
-                                            foreach ($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] as $i => $filename_array) {
-                                                $matecat_id_file = $i;
-                                                break; // Should only be one... actually now not used and could be more than one for ZIP file
-                                            }
-                                        } else {
-                                            error_log("project_cron /status ($project_id) ['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] empty!");
-                                        }
-
-                                        if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                                            // Set matecat_id_job, matecat_id_job_password, matecat_id_file
-                                            // Note: SQL will not update if we were forced to use fake language pairs for word count purposes as they will not match
-                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::TRANSLATION, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
-                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::PROOFREADING, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
-                                        } else {
-                                            error_log("project_cron /status ($project_id) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!");
-                                        }
-                                    }
-
-                                    $word_count = $word_count / $langpairs;
-
-                                    if (!empty($word_count)) {
-                                        // Set word count for the Project and its Tasks
-                                        $taskDao->updateWordCountForProject($project_id, $word_count);
-
-                                        // Change status to Complete (2)
-                                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
-                                    } else {
-                                        error_log("project_cron /status ($project_id) calculated wordcount empty!");
-                                    }
-                                } else {
-                                    error_log("project_cron /status ($project_id) langpairs empty!");
-                                }
-                            } else {
-                                error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
-                            }
-                        } else {
-                            foreach ($response_data['errors'] as $error) {
-                                error_log("project_cron /status ($project_id) error: " . $error);
-                            }
-                        }
-                    } else {
-                        error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
-                        if ($response_data['status'] === 'NO_SEGMENTS_FOUND') {
-                            // Change status to Complete (3), Give up!
-                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 3);
-                            $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], empty($response_data['message']) ? '' : $response_data['message']);
-                        }
-                    }
-                } else {
-                    error_log("project_cron /status ($project_id) responseCode: $responseCode");
-                }
-                // Note, we will retry if there was an error and hope it is temporary and/or the analysis is not complete yet
-            }
-        }
-
-        // status 0 => Waiting for Upload to MateCat
-        $projects = $taskDao->getWordCountRequestForProjects(0);
-        if (!empty($projects)) {
-            $count = 0;
-            foreach ($projects as $project) {
-                if (++$count > 1) break; // Limit number done at one time, just in case
-
-                $project_id = $project['project_id'];
-
-                $project_file = $taskDao->getProjectFileLocation($project_id);
-                if (!empty($project_file)) {
-                    $filename = $project_file['filename'];
-                    //$file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
-                    $file = $taskDao->getPhysicalProjectFilePath($project_id, $filename);
-                    if (!$file) {
-                        error_log("project_cron ($project_id) getPhysicalProjectFilePath FAILED");
-                        continue;
-                    }
-                } else {
-                    error_log("project_cron ($project_id) getProjectFileLocation FAILED");
-                    continue;
-                }
-
-                $creator = $taskDao->get_creator($project_id);
-
-                $source_language = $project['source_language'];
-                $source_language = $this->valid_language_for_matecat($source_language);
-                if (empty($source_language)) $source_language = 'en-US';
-
-                // https://www.matecat.com/api/docs#!/Project/post_new
-                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
-                $re = curl_init("{$matecat_api}api/v1/new");
-
-                // http://php.net/manual/en/function.curl-setopt.php
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                $httpHeaders = array(
-                    'Expect:'
-                );
-                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                // http://php.net/manual/en/class.curlfile.php
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mime = finfo_file($finfo, $file);
-                finfo_close($finfo);
-                $cfile = new \CURLFile($file, $mime, $filename);
-
-                $target_languages = explode(',', $project['target_languages']);
-                $filtered_target_languages = array();
-                foreach ($target_languages as $target_language) {
-                    $target_language = $this->valid_language_for_matecat($target_language);
-                    if (!empty($target_language) && ($target_language != $source_language)) {
-                        $filtered_target_languages[$target_language] = $target_language;
-                    }
-                }
-                if (!empty($filtered_target_languages)) {
-                    $filtered_target_languages = implode(',', $filtered_target_languages);
-                } else {
-                    if ($source_language != 'es-ES') {
-                        $filtered_target_languages = 'es-ES';
-                    } else {
-                        $filtered_target_languages = 'en-US';
-                    }
-                }
-
-                $private_tm_key = $taskDao->get_project_tm_key($project_id);
-                if (empty($private_tm_key)) {
-                    $mt_engine        = '1';
-                    $pretranslate_100 = '1';
-                    $lexiqa           = '1';
-                    $private_tm_key   = '58f97b6f65fb5c8c8522';
-                } else {
-                    $mt_engine        = $private_tm_key[0]['mt_engine'];
-                    $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
-                    $lexiqa           = $private_tm_key[0]['lexiqa'];
-                    $private_tm_key   = $private_tm_key[0]['private_tm_key'];
-                }
-                $fields = array(
-                  'file'         => $cfile,
-                  'project_name' => "proj-$project_id",
-                  'source_lang'  => $source_language,
-                  'target_lang'  => $filtered_target_languages,
-                  'tms_engine'   => '1',
-                  'mt_engine'        => $mt_engine,
-                  'private_tm_key'   => $private_tm_key,
-                  'pretranslate_100' => $pretranslate_100,
-                  'lexiqa'           => $lexiqa,
-                  'subject'      => 'general',
-                  'owner_email'  => $creator['email']
-                );
-                if ($private_tm_key === 'new') { // Testing Center Project
-                    $fields['tms_engine']         = '0';
-                    $fields['get_public_matches'] = '0';
-                }
-                error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
-                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
-
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-
-                $res = curl_exec($re);
-                if ($error_number = curl_errno($re)) {
-                    error_log("project_cron /new ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
-                }
-
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
-                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                curl_close($re);
-
-                if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
-
-                    if ($response_data['status'] !== 'OK') {
-                        error_log("project_cron /new ($project_id) status NOT OK: " . $response_data['status']);
-                        error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
-                        // Change status to Complete (3), if there was an error!
-                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
-                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
-                    }
-                    elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
-                        error_log("project_cron /new ($project_id) id_project or project_pass empty!");
-                        // Change status to Complete (3), if there was an error!
-                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
-                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], 'id_project or project_pass empty');
-                    } else {
-                        $matecat_id_project      = $response_data['id_project'];
-                        $matecat_id_project_pass = $response_data['project_pass'];
-
-                        // Change status to Uploaded (1), 0 is still placeholder for new word count
-                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
-                    }
-                } else {
-                    // If this was a comms error, we will retry (as status is still 0)
-                    error_log("project_cron /new ($project_id) responseCode: $responseCode");
-                }
-            }
-        }
-
-        // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
-        // $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
-        $active_tasks_for_chunks = array(); // It is now desired to have tranlators manually mark as COMPLETE
-        if (!empty($active_tasks_for_chunks)) {
-            $projects = array();
-            foreach ($active_tasks_for_chunks as $active_task) {
-                $projects[$active_task['project_id']] = $active_task['project_id'];
-            }
-
-          if (count($projects) > 10) $projects = array_rand($projects, 10); // Pick random Projects, we don't want to do too many at once.
-          foreach ($projects as $project_id) {
-            $chunks = $taskDao->getStatusOfSubChunks($project_id);
-
-            foreach ($active_tasks_for_chunks as $active_task) {
-                foreach ($chunks as $chunk) {
-                    if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
-                        if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
-                            ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
-
-                            error_log('Setting Task COMPLETE for: ' . $active_task['task_id']);
-                            $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
-                            $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
-                            // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
-                        }
-                    }
-                }
-            }
-          }
-        }
-
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
       fclose($fp_for_lock);
@@ -2831,24 +1966,6 @@ error_log("mapped: $pm");
         fclose($fp_for_lock);
 
         die;
-    }
-
-    public function valid_language_for_matecat($language_code)
-    {
-        global $matecat_acceptable_languages;
-        if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
-        // Special case...
-        if ($language_code === 'tn-BW') return 'tsn-BW';
-        if ($language_code === 'es-49') return 'es-MX';
-        if ($language_code === 'sr-90') return 'sr-ME';
-        if ($language_code === 'shu-90') return 'shu-NG';
-        if ($language_code === 'rhg-90') return 'rhl-MM';
-        if ($language_code === 'sr-90') return 'sr-Latn-RS';
-        if ($language_code === 'sr-91') return 'sr-Cyrl-RS';
-        if ($language_code === 'zh-93') return 'zh-TW';
-
-        if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
-        return '';
     }
 
     public function project_get_wordcount(Request $request, Response $response, $args)

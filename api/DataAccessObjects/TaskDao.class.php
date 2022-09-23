@@ -1213,20 +1213,4 @@ error_log("call recordFileUpload($args)");
     {
         Lib\PDOWrapper::call('dequeue_claim_task', Lib\PDOWrapper::cleanse($task_id));
     }
-
-    public static function getMatecatLanguagePairs($task_id)
-    {
-        $result = Lib\PDOWrapper::call('getMatecatLanguagePairs', Lib\PDOWrapper::cleanse($task_id));
-        return $result;
-    }
-
-    public static function getWordCountRequestForProject($project_id)
-    {
-        $result = Lib\PDOWrapper::call('getWordCountRequestForProject', Lib\PDOWrapper::cleanse($project_id));
-        if ($result) {
-            return $result[0];
-        } else {
-            return false;
-        }
-    }
 }

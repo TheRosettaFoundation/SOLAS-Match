@@ -51,51 +51,9 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
-    public function active_now_matecat()
-    {
-        $result = LibAPI\PDOWrapper::call('active_now_matecat', '');
-
-        foreach ($result as $index => $user_row) {
-           $stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
-
-           $result[$index]['DOWNLOAD_STATUS'] = '';
-           $result[$index]['TRANSLATED_PERC_FORMATTED'] = '';
-           $result[$index]['APPROVED_PERC_FORMATTED'] = '';
-           $result[$index]['matecat_url'] = '';
-
-            if (!empty($stats['DOWNLOAD_STATUS']))           $result[$index]['DOWNLOAD_STATUS']           = $stats['DOWNLOAD_STATUS'];
-            if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
-            if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
-            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
-            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
-        }
-        return $result;
-    }
-
     public function testing_center()
     {
         $result = LibAPI\PDOWrapper::call('testing_center', '');
-        return $result;
-    }
-
-    public function late_matecat()
-    {
-        $result = LibAPI\PDOWrapper::call('late_matecat', '');
-
-        foreach ($result as $index => $user_row) {
-           $stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
-
-           $result[$index]['DOWNLOAD_STATUS'] = '';
-           $result[$index]['TRANSLATED_PERC_FORMATTED'] = '';
-           $result[$index]['APPROVED_PERC_FORMATTED'] = '';
-           $result[$index]['matecat_url'] = '';
-
-            if (!empty($stats['DOWNLOAD_STATUS']))           $result[$index]['DOWNLOAD_STATUS']           = $stats['DOWNLOAD_STATUS'];
-            if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
-            if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
-            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
-            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
-        }
         return $result;
     }
 
@@ -120,100 +78,6 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
-    }
-
-    public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
-    {
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $taskDao = new TaskDao();
-        $stats = array();
-        $we_are_a_subchunk = false;
-        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            $job_first_segment = '';
-            $translate = 'translate';
-            if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-
-            if (empty($matecat_id_job)) {
-                // Might be a chunk...
-                $matecat_tasks = $taskDao->getTaskChunk($task_id);
-                if (!empty($matecat_tasks)) {
-                    $we_are_a_subchunk = true;
-                    $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
-                    $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
-                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-                    $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
-                }
-            }
-
-            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                  if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
-                      // This has been chunked, so need to accumulate status of all chunks
-                      $chunks = $taskDao->getStatusOfSubChunks($project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password);
-                      $translated_status = true;
-                      $approved_status   = true;
-                      foreach ($chunks as $index => $chunk) {
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
-                      }
-                      if     ($approved_status)   $stats['DOWNLOAD_STATUS'] = 'approved (Split Job)';
-                      elseif ($translated_status) $stats['DOWNLOAD_STATUS'] = 'translated (Split Job)';
-                      else                        $stats['DOWNLOAD_STATUS'] = 'draft (Split Job)';
-                  } else {
-                $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
-                if ($recorded_status === 'approved') { // We do not need to query MateCat...
-                    $stats = array();
-                    $stats['DOWNLOAD_STATUS']           = 'approved';
-                    $stats['TRANSLATED_PERC_FORMATTED'] = '100';
-                    $stats['APPROVED_PERC_FORMATTED']   = '100';
-                    $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
-                    $stats['matecat_langpair_or_blank'] = $matecat_langpair;
-                    return $stats;
-                }
-                // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
-
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                $httpHeaders = array(
-                    'Expect:'
-                );
-                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                $res = curl_exec($re);
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
-                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                curl_close($re);
-
-                if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
-
-                    if (!empty($response_data['stats'])) {
-                        $stats = $response_data['stats'];
-                        $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
-                        $stats['matecat_langpair_or_blank'] = $matecat_langpair;
-                        if ($stats['DOWNLOAD_STATUS'] === 'draft') {
-                            $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
-                        }
-                    } else {
-                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
-                    }
-                } else {
-                    error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
-                }
-                  }
-            }
-        }
-        return $stats;
     }
 
     public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)

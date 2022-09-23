@@ -94,31 +94,11 @@ class TaskRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('task');
 
-        $app->map(['GET', 'POST'],
-            '/task/{task_id}/simple-upload[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskSimpleUpload')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
-            ->setName('task-simple-upload');
-
-        $app->map(['GET', 'POST'],
-            '/task/{task_id}/chunk-complete[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskChunkComplete')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
-            ->setName('task-chunk-complete');
-
         $app->get(
             '/task/{task_id}/uploaded[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskUploaded')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-uploaded');
-
-        $app->get(
-            '/task/{task_id}/chunk-completed[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskChunkCompleted')
-            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
-            ->setName('task-chunk-completed');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/alter[/]',
@@ -149,18 +129,6 @@ class TaskRouteHandler
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_invites_sent')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('task-invites_sent');
-
-        $app->map(['GET', 'POST'],
-            '/project/{project_id}/create-task[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskCreate')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
-            ->setName('task-create');
-
-        $app->get(
-            '/task/{task_id}/created[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskCreated')
-            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
-            ->setName('task-created');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/org-feedback[/]',
@@ -362,16 +330,6 @@ class TaskRouteHandler
                 else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
-                if (!$allow_downloads[$taskId] && $matecat_urls[$taskId] && !$memsource_task) { // it's a chunk && a bit of optimisation
-                    $matecat_tasks = $taskDao->getTaskChunk($taskId);
-                    $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-
-                    $download_status = $taskDao->getMatecatTaskStatus($taskId, $matecat_id_job, $matecat_id_job_password);
-                    if ($download_status === 'approved' || ($topTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION && $download_status === 'translated')) {
-                        $show_mark_chunk_complete[$taskId] = 1;
-                    }
-                }
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
@@ -417,14 +375,6 @@ class TaskRouteHandler
                 }
 
                 $parentTaskIds[$taskId] = null;
-                if (!$allow_downloads[$taskId]) { // Chunked
-                    if ($parent_translation_id = $taskDao->get_parent_transation_task($topTask)) {
-                        $parent_translation_task = $taskDao->getTask($parent_translation_id);
-                        if ($parent_translation_task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
-                            $parentTaskIds[$taskId] = $parent_translation_id;
-                        }
-                    }
-                }
                 }
             }
         }
@@ -778,7 +728,6 @@ class TaskRouteHandler
 
             $user_id = Common\Lib\UserSession::getCurrentUserID();
 
-            $taskDao->record_task_if_translated_in_matecat($task);
             $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId(), $task);
             if ($success == 1) {
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-claimed', array('task_id' => $taskId)));
@@ -936,25 +885,6 @@ class TaskRouteHandler
             UserRouteHandler::flashKeep();
 
            if ($memsource_task) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
-
-            switch ($task->getTaskType()) {
-                case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                    // return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-desegmentation", array("task_id" => $taskId)));
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-                    break;
-                case Common\Enums\TaskTypeEnum::TRANSLATION:
-                case Common\Enums\TaskTypeEnum::PROOFREADING:
-                  if ($taskDao->get_allow_download($task, $memsource_task)) {
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-simple-upload", array("task_id" => $taskId)));
-                  } else {
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-complete', array('task_id' => $taskId)));
-                  }
-                    break;
-                case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                    // return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-segmentation", array("task_id" => $taskId)));
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-                    break;
-            }
         } else {
             if ($isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != "") || !empty($post['assignUserSelect']))) {
                 $emailOrUserId = trim($post['userIdOrEmail']);
@@ -987,7 +917,6 @@ class TaskRouteHandler
                     {
                         UserRouteHandler::flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
-                        $taskDao->record_task_if_translated_in_matecat($task);
                         $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId(), $task);
                         if ($success == 1) {
                             UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
@@ -1031,15 +960,8 @@ class TaskRouteHandler
 
         $siteLocation = Common\Lib\Settings::get("site.location");
 
-        if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
-            $task_file_info = $taskDao->getTaskInfo($parent_translation_id);
-            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
-            $chunked_message = '(each translator will work on a specific chunk)';
-        } else {
             $task_file_info = $taskDao->getTaskInfo($taskId);
             $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($taskId) . '/download-task-external/';
-            $chunked_message = '';
-        }
 
         $alsoViewedTasksCount = 0;
         
@@ -1100,7 +1022,7 @@ class TaskRouteHandler
             "converter" => $converter,
             "task" => $task,
             "file_preview_path" => $file_path,
-            'chunked_message' => $chunked_message,
+            'chunked_message' => '',
             "filename" => $task_file_info->getFilename(),
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
@@ -1121,395 +1043,6 @@ class TaskRouteHandler
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
         }
-    }
-
-    public function taskSimpleUpload(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $taskId = $args['task_id'];
-
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $taskClaimed = $taskDao->isTaskClaimed($taskId);
-        if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
-        }
-
-        $fieldName = "fileUpload";
-        $errorMessage = null;
-        $userId = Common\Lib\UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject($task->getProjectId());
-
-        $memsource_task = $projectDao->get_memsource_task($taskId); // $memsource_task should never be set, protect against this
-        if ($memsource_task || !$taskDao->get_allow_download($task, $memsource_task)) {
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $taskId)));
-        }
-
-        if ($request->getMethod() === 'POST') {
-          $post = $request->getParsedBody();
-          if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-
-          if (!empty($post['copy_from_matecat'])) {
-            $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
-            if (!empty($matecat_tasks)) {
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
-                if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                    $matecat_id_file = ''; // Need all files in job to be downloaded
-                    $re = curl_init("{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all");
-
-                    curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                    curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                    curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                    $httpHeaders = array(
-                        'Expect:'
-                    );
-                    curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                    curl_setopt($re, CURLOPT_HEADER, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                    $res = curl_exec($re);
-                    if( $res !== false) {
-                        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                        curl_close($re);
-
-                        if ($responseCode == 200) {
-                            try {
-                                error_log("taskSimpleUpload copy_from_matecat ($taskId)");
-                                $taskDao->uploadOutputFile($taskId, $userId, $res);
-                            } catch (\Exception  $e) {
-                                $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                                error_log($errorMessage);
-                            }
-                        } else {
-                            $errorMessage = "Curl error ($taskId) responseCode: $responseCode";
-                            error_log($errorMessage);
-                        }
-                    } else {
-                        $errorMessage = "Curl error ($taskId): " . curl_error($re);
-                        error_log($errorMessage);
-                        curl_close($re);
-                    }
-                } else {
-                    $errorMessage = "Curl error ($taskId) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!";
-                    error_log($errorMessage);
-                }
-            } else {
-                $errorMessage = "Curl error ($taskId) MateCat data not found!";
-                error_log($errorMessage);
-            }
-          } else {
-            try {
-                Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-                $projectFile = $projectDao->getProjectFileInfo($project->getId());
-                $projectFileMimeType = $projectFile->getMime();
-                $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
-
-                $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-
-                //Call API to determine MIME type of file contents
-                $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
-                $siteApi = Common\Lib\Settings::get("site.api");
-                $filename = urlencode($_FILES[$fieldName]["name"]);
-                $request_url = $siteApi . "v0/io/contentMime/$filename";
-                $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                $fileUploadMime = $helper->call(null, $request_url, Common\Enums\HttpMethodEnum::POST, null, null, $data);
-                if (strcasecmp($fileUploadType, $projectFileType) != 0) {
-                    throw new \Exception(sprintf(
-                        Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
-                        $projectFileType
-                    ));
-                } elseif ($fileUploadMime != $projectFileMimeType) {
-                    throw new \Exception(
-                        sprintf(
-                            Lib\Localisation::getTranslation('task_simple_upload_6'),
-                            $projectFileType,
-                            $projectFileType
-                        )
-                    );
-                }
-            } catch (\Exception $e) {
-                $errorMessage = $e->getMessage();
-            }
-
-            if (is_null($errorMessage)) {
-                try {
-                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-
-                    error_log("taskSimpleUpload _FILES ($taskId)");
-                    if ($post['submit'] == 'XLIFF') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
-                    } elseif ($post['submit'] == 'submit') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata);
-                    }
-
-                } catch (\Exception  $e) {
-                    $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                }
-            }
-          }
-
-          if (is_null($errorMessage)) {
-              return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-review", array("task_id" => $taskId)));
-          } else {
-              UserRouteHandler::flashNow("error", $errorMessage);
-          }
-        }
-
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
-        $taskVersion = $taskDao->getTaskVersion($task->getId());
-
-        $file_previously_uploaded = false;
-        if ($taskVersion > 0) {
-            $file_previously_uploaded = true;
-        }
-
-        $taskFileInfo = $taskDao->getTaskInfo($taskId, 0);
-        $filename = $taskFileInfo->getFilename();
-        $converter = Common\Lib\Settings::get("converter.converter_enabled");
-
-        $matecat_url = '';
-        $matecat_download_url = '';
-        $chunks = array();
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
-            if (!empty($matecat_tasks)) {
-                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
-                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                  if ($taskDao->getTaskSubChunks($matecat_id_job)) {
-                      // This has been chunked, so need to accumulate status of all chunks
-                      $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
-                      $translated_status = true;
-                      $approved_status   = true;
-                      foreach ($chunks as $index => $chunk) {
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
-
-                          $matecat_url = $chunk['translate_url']; // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic.
-                          $matecat_download_url = $chunk['matecat_download_url'];
-                      }
-
-                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
-                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !$approved_status  ) $matecat_url = '';
-                  } else {
-                   $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
-                   if ($recorded_status === 'approved') { // We do not need to query MateCat...
-                       $translate = 'translate';
-                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                       $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                       $matecat_id_file = ''; // Need all files in job to be downloaded
-                       $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
-                   } else {
-                    // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                    $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
-
-                    curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                    curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                    curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                    $httpHeaders = array(
-                        'Expect:'
-                    );
-                    curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                    curl_setopt($re, CURLOPT_HEADER, true);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                    $res = curl_exec($re);
-
-                    $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                    $header = substr($res, 0, $header_size);
-                    $res = substr($res, $header_size);
-                    $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                    curl_close($re);
-
-                    if ($responseCode == 200) {
-                        $response_data = json_decode($res, true);
-
-                        if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
-                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
-                                $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
-                            }
-                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                                $translate = 'translate';
-                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                                $matecat_id_file = ''; // Need all files in job to be downloaded
-                                $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
-
-                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
-                                    $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
-                                }
-                            }
-                        } else {
-                            error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
-                        }
-                    } else {
-                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
-                    }
-                   }
-                  }
-                }
-            }
-        }
-
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
-
-        $template_data = array_merge($template_data, array(
-            'sesskey'       => $sesskey,
-            "extra_scripts" => $extra_scripts,
-            "task"          => $task,
-            "project"       => $project,
-            "org"           => $org,
-            "filename"      => $filename,
-            "converter"     => $converter,
-            "fieldName"     => $fieldName,
-            "max_file_size" => Lib\TemplateHelper::maxFileSizeMB(),
-            'matecat_url' => $matecat_url,
-            'matecat_download_url' => $matecat_download_url,
-            'chunks'               => $chunks,
-            'discourse_slug' => $projectDao->discourse_parameterize($project),
-            "file_previously_uploaded" => $file_previously_uploaded
-        ));
-
-        return UserRouteHandler::render("task/task-simple-upload.tpl", $response);
-    }
-
-    public function taskChunkComplete(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $taskId = $args['task_id'];
-
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $taskClaimed = $taskDao->isTaskClaimed($taskId);
-        if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
-        }
-
-        $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject($task->getProjectId());
-
-        $matecat_tasks = $taskDao->getTaskChunk($taskId);
-        if (empty($matecat_tasks)) {
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
-        }
-
-        if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::IN_PROGRESS) {
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
-        }
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-
-            if (!empty($post['copy_from_matecat'])) {
-                error_log("Setting Task COMPLETE for: $taskId");
-                $taskDao->setTaskStatus($taskId, Common\Enums\TaskStatusEnum::COMPLETE);
-                $taskDao->sendTaskUploadNotifications($taskId, 1);
-                $taskDao->set_task_complete_date($taskId);
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-review', array('task_id' => $taskId)));
-            }
-        }
-
-        $matecat_url = '';
-        $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
-        $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
-        $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-        $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
-        if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-            $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
-            if ($recorded_status === 'approved') { // We do not need to query MateCat...
-                $translate = 'translate';
-                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
-            } else {
-                // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
-
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                $httpHeaders = array(
-                    'Expect:'
-                );
-                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                $res = curl_exec($re);
-
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
-                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                curl_close($re);
-
-                if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
-
-                    if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
-                        if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
-                            $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
-                        }
-                        if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                            $translate = 'translate';
-                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                            $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
-
-                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
-                                $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
-                            }
-                        }
-                    } else {
-                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
-                    }
-                } else {
-                    error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
-                }
-            }
-        }
-        if (empty($matecat_url)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
-
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
-
-        $template_data = array_merge($template_data, array(
-            'sesskey'         => $sesskey,
-            'extra_scripts'   => $extra_scripts,
-            'task'            => $task,
-            'project'         => $project,
-            'matecat_url'     => $matecat_url,
-            'discourse_slug'  => $projectDao->discourse_parameterize($project),
-        ));
-
-        return UserRouteHandler::render('task/task-chunk-complete.tpl', $response);
     }
 
     public function taskUploaded(Request $request, Response $response, $args)
@@ -1533,29 +1066,6 @@ class TaskRouteHandler
         ));
 
         return UserRouteHandler::render("task/task.uploaded.tpl", $response);
-    }
-
-    public function taskChunkCompleted(Request $request, Response $response, $args)
-    {
-        global $template_data;
-        $task_id = $args['task_id'];
-
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
-        $tipDao = new DAO\TipDao();
-
-        $task = $taskDao->getTask($task_id);
-        $project = $projectDao->getProject($task->getProjectId());
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
-        $tip = $tipDao->getTip();
-
-        $template_data = array_merge($template_data, array(
-            'org_name' => $org->getName(),
-            'tip'      => $tip
-        ));
-
-        return UserRouteHandler::render('task/task-chunk-completed.tpl', $response);
     }
 
     public function taskAlter(Request $request, Response $response, $args)
@@ -1875,26 +1385,17 @@ class TaskRouteHandler
         $user = $userDao->getUser($user_id);
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
-        if ($memsource_task) list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = [0, '', ''];
-        else                 list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
 
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
 
         $siteLocation = Common\Lib\Settings::get("site.location");
 
-        if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
-            $task_file_info = $taskDao->getTaskInfo($parent_translation_id, 0);
-            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
-            $chunked_message = '(each translator will work on a specific chunk)';
-        } else {
             $task_file_info = $taskDao->getTaskInfo($task_id, 0);
             $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
-            $chunked_message = '';
-        }
 
         $template_data = array_merge($template_data, array(
             "file_preview_path" => $file_path,
-            'chunked_message' => $chunked_message,
+            'chunked_message' => '',
             "filename" => $task_file_info->getFilename()
         ));
 
@@ -1983,15 +1484,6 @@ class TaskRouteHandler
                     }
                 }
             }
-            if (isset($post['treat_as_translated']) && $isSiteAdmin && !empty($matecat_id_job)) {
-                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                    $recorded_status = 'translated';
-                } else {
-                    $recorded_status = 'approved';
-                }
-                $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $recorded_status);
-                UserRouteHandler::flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
-            }
         }
 
         $taskMetaData = array();
@@ -2032,7 +1524,7 @@ class TaskRouteHandler
                 'memsource_task' => $memsource_task,
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'recorded_status' => $recorded_status,
-                'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
+                'display_treat_as_translated' => 0,
                 'this_is_id' => 0,
                 'paid_status' => $taskDao->get_paid_status($task_id),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
@@ -2184,168 +1676,6 @@ class TaskRouteHandler
             }
         }
         return $response->withStatus(200);
-    }
-
-    public function taskCreate(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $project_id = $args['project_id'];
-
-        $projectDao = new DAO\ProjectDao();
-        $taskDao = new DAO\TaskDao();
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        if ($projectDao->get_memsource_project($project_id)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', ['project_id' => $project_id]));
-
-        $titleError = null;
-        $wordCountError = null;
-        $deadlineError = null;
-        $taskPreReqs = array();
-        $task = new Common\Protobufs\Models\Task();
-        $project = $projectDao->getProject($project_id);
-        $projectTasks = $projectDao->getProjectTasks($project_id);
-        $task->setProjectId($project_id);
-
-        if ($post = $request->getParsedBody()) {
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-
-            if (isset($post['title'])) {
-                $task->setTitle(mb_substr($post['title'], 0, 128));
-            } else {
-                $titleError = Lib\Localisation::getTranslation('task_create_5');
-            }
-
-            if (isset($post['comment'])) {
-                $task->setComment($post['comment']);
-            }
-
-            $projectSourceLocale = $project->getSourceLocale();
-            $taskSourceLocale = new Common\Protobufs\Models\Locale();
-            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-            $task->setSourceLocale($taskSourceLocale);
-            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-            $taskTargetLocale = new Common\Protobufs\Models\Locale();
-            if (isset($post['targetLanguage'])) {
-                $taskTargetLocale->setLanguageCode($post['targetLanguage']);
-            }
-            if (isset($post['targetCountry'])) {
-                $taskTargetLocale->setCountryCode($post['targetCountry']);
-            }
-            $task->setTargetLocale($taskTargetLocale);
-
-            if (isset($post['taskType'])) {
-                $task->setTaskType($post['taskType']);
-            }
-
-            if (ctype_digit($post['word_count'])) {
-                $task->setWordCount($post['word_count']);
-            } elseif ($post['word_count'] != "") {
-                $wordCountError = Lib\Localisation::getTranslation('task_alter_6');
-            } else {
-                $wordCountError = Lib\Localisation::getTranslation('task_alter_7');
-            }
-
-            if (isset($post['deadline'])) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s", $validTime);
-                    $task->setDeadline($date);
-                } else {
-                    $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
-                }
-            }
-
-            if (isset($post['published'])) {
-                $task->setPublished(1);
-            } else {
-                $task->setPublished(0);
-            }
-
-            if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
-                error_log("taskCreate");
-                $newTask = $taskDao->createTask($task);
-                $newTaskId = $newTask->getId();
-
-                if (!empty($post['restrictTask'])) {
-                    $taskDao->setRestrictedTask($newTaskId);
-                } else {
-                    $taskDao->removeRestrictedTask($newTaskId);
-                }
-
-                $upload_error = null;
-                try {
-                    $upload_error = $taskDao->saveTaskFileFromProject(
-                        $newTaskId,
-                        $user_id,
-                        $projectDao->getProjectFile($project_id)
-                    );
-                } catch (\Exception  $e) {
-                    $upload_error = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                }
-
-                if (isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
-                    for ($i = 0; $i < $post['totalTaskPreReqs']; $i++) {
-                        if (isset($post["preReq_$i"])) {
-                            $taskDao->addTaskPreReq($newTaskId, $post["preReq_$i"]);
-                        }
-                    }
-                }
-
-                if (is_null($upload_error)) {
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-created", array("task_id" => $newTaskId)));
-                } else {
-                    $taskDao->deleteTask($newTaskId);
-                    $template_data = array_merge($template_data, array("upload_error" => $upload_error));
-                }
-            }
-        }
-
-
-        $languages = Lib\TemplateHelper::getLanguageList();
-        $countries = Lib\TemplateHelper::getCountryList();
-
-        $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
-";
-
-        $task_word_count = $task->getWordCount();
-        if (empty($task_word_count) && $project->getWordCount() > 1) $task->setWordCount($project->getWordCount());
-
-        $template_data = array_merge($template_data, array(
-            'sesskey'       => $sesskey,
-            "project"       => $project,
-            "task"          => $task,
-            "projectTasks"  => $projectTasks,
-            "taskPreReqs"   => $taskPreReqs,
-            "languages"     => $languages,
-            "countries"     => $countries,
-            "extra_scripts" => $extra_scripts,
-            "titleError"    => $titleError,
-            "wordCountError"=> $wordCountError,
-            "deadlineError" => $deadlineError,
-            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
-        ));
-
-        return UserRouteHandler::render("task/task.create.tpl", $response);
-    }
-
-    public function taskCreated(Request $request, Response $response, $args)
-    {
-        global $template_data;
-        $taskId = $args['task_id'];
-
-        $taskDao = new DAO\TaskDao();
-        $task = $taskDao->getTask($taskId);
-        $template_data = array_merge($template_data, array(
-                "project_id" => $task->getProjectId(),
-                "task_id"    => $task->getId()
-        ));
-
-        return UserRouteHandler::render("task/task.created.tpl", $response);
     }
 
     public function taskOrgFeedback(Request $request, Response $response, $args)
@@ -2569,21 +1899,6 @@ class TaskRouteHandler
 
         $reviews = array();
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
-        if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !empty($matecat_tasks = $taskDao->getTaskChunk($taskId))) {
-            // We are a chunk, so need to manually find the matching translation task
-            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
-            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, Common\Enums\TaskTypeEnum::TRANSLATION);
-            if (!empty($matching_tasks)) {
-                $dummyTask = new Common\Protobufs\Models\Task();
-                $dummyTask->setId($matching_tasks[0]['id']);
-                $dummyTask->setProjectId($matching_tasks[0]['projectId']);
-                $dummyTask->setTitle($matching_tasks[0]['title']);
-                $preReqTasks = array();
-                $preReqTasks[] = $dummyTask;
-                error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
-            }
-        }
         $projectDao = new DAO\ProjectDao();
         if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqTasks = [];
@@ -2716,22 +2031,14 @@ class TaskRouteHandler
                         "success",
                         sprintf(Lib\Localisation::getTranslation('task_review_10'), $tasks_titles)
                     );
-                    if ($taskDao->getTaskChunk($taskId)) {
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
-                    } else {
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-uploaded', array("task_id" => $taskId)));
-                    }
                 } else {
                     UserRouteHandler::flashNow("error", $error);
                 }
             }
 
             if (isset($post['skip'])) {
-                if ($taskDao->getTaskChunk($taskId)) {
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-chunk-completed', array('task_id' => $taskId)));
-                } else {
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-uploaded', array("task_id" => $taskId)));
-                }
             }
         }
 
@@ -2764,7 +2071,7 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,
             'tasks'         => $preReqTasks,
-            'is_chunked'    => !empty($matecat_tasks),
+            'is_chunked'    => 0,
             'reviews'       => $reviews,
             'formAction'    => $formAction,
             'action'        => $action

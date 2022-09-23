@@ -11,8 +11,6 @@
 
 <div class="well">
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>
-    <p><a href="{urlFor name="active_now_matecat"}" target="_blank">List all tasks currently in progress showing their MateCat Status.</a></p>
-    <p><a href="{urlFor name="late_matecat"}" target="_blank">List all tasks within one week of being overdue showing their MateCat Status.</a></p>
     <p><a href="{urlFor name="complete_matecat"}" target="_blank">List all complete tasks showing their MateCat Status.</a></p>
     <p><a href="{urlFor name="unclaimed_tasks"}" target="_blank">List all tasks still unclaimed and the email address of their creators.</a></p>
     <p><a href="{urlFor name="testing_center"}" target="_blank">List all verification system tasks.</a> <a href="{urlFor name="download_testing_center"}">[Download]</a></p>

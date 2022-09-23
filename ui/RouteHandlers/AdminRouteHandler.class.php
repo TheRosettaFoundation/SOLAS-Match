@@ -39,12 +39,6 @@ class AdminRouteHandler
             ->setName('active_now');
 
         $app->map(['GET', 'POST'],
-            '/active_now_matecat[/]',
-            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_now_matecat')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
-            ->setName('active_now_matecat');
-
-        $app->map(['GET', 'POST'],
             '/testing_center[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:testing_center')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
@@ -85,12 +79,6 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_haiti_2021_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_haiti_2021_projects');
-
-        $app->map(['GET', 'POST'],
-            '/late_matecat[/]',
-            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:late_matecat')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
-            ->setName('late_matecat');
 
         $app->map(['GET', 'POST'],
             '/complete_matecat[/]',
@@ -487,17 +475,6 @@ class AdminRouteHandler
         return UserRouteHandler::render('admin/active_now.tpl', $response);
     }
 
-    public function active_now_matecat(Request $request, Response $response)
-    {
-        global $template_data;
-        $statsDao = new DAO\StatisticsDao();
-
-        $all_users = $statsDao->active_now_matecat();
-
-        $template_data = array_merge($template_data, array('all_users' => $all_users));
-        return UserRouteHandler::render('admin/active_now_matecat.tpl', $response);
-    }
-
     public function testing_center(Request $request, Response $response)
     {
         global $template_data;
@@ -543,17 +520,6 @@ class AdminRouteHandler
         header('Cache-control: no-cache, must-revalidate, no-transform');
         echo $data;
         die;
-    }
-
-    public function late_matecat(Request $request, Response $response)
-    {
-        global $template_data;
-        $statsDao = new DAO\StatisticsDao();
-
-        $all_users = $statsDao->late_matecat();
-
-        $template_data = array_merge($template_data, array('all_users' => $all_users));
-        return UserRouteHandler::render('admin/late_matecat.tpl', $response);
     }
 
     public function complete_matecat(Request $request, Response $response)
