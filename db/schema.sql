@@ -1311,6 +1311,7 @@ CREATE TABLE IF NOT EXISTS `selections` (
   country_code  VARCHAR(4) NOT NULL,
   selection     VARCHAR(255) NOT NULL,
   memsource     VARCHAR(12) NOT NULL,
+  memsource_name VARCHAR(255) NOT NULL DEFAULT '',
   enabled       INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (language_code, country_code),
   UNIQUE  KEY (selection),
