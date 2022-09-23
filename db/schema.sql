@@ -1334,6 +1334,13 @@ CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `make_claimable_regardless` (
+  claimable_task_id BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_claimable_task_id_r (claimable_task_id),
+  CONSTRAINT FK_claimable_task_id_r FOREIGN KEY (claimable_task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
