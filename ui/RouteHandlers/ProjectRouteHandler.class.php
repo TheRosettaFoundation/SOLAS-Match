@@ -1855,9 +1855,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($project_lang_pairs[$targetLanguageCode])) {
                         $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
-                        foreach ($task_type_to_enum as to_enum) $project_lang_pairs[$targetLanguageCode][to_enum] = 0;
+                        foreach ($task_type_to_enum as to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
                     }
-                    foreach ($task_type_to_enum as to_enum) if ($task['taskType'] == to_enum) $project_lang_pairs[$targetLanguageCode][to_enum] += $task['wordCount'];
+                    foreach ($task_type_to_enum as to_enum) if ($task['taskType'] == $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] += $task['wordCount'];
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
@@ -1876,7 +1876,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $ch = curl_init($url);
 
                     $wordCount = 0; // Pick the first nonzero...
-                    foreach ($task_type_to_enum as to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[to_enum];
+                    foreach ($task_type_to_enum as to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[$to_enum];
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
