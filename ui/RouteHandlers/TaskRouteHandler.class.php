@@ -1882,20 +1882,7 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($taskId);
         $action = "";
-        switch ($task->getTaskType()) {
-            case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                $action = Lib\Localisation::getTranslation('task_review_segmented');
-                break;
-            case Common\Enums\TaskTypeEnum::TRANSLATION:
-                $action = Lib\Localisation::getTranslation('task_review_translated');
-                break;
-            case Common\Enums\TaskTypeEnum::PROOFREADING:
-                $action = Lib\Localisation::getTranslation('task_review_proofread');
-                break;
-            case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                $action = Lib\Localisation::getTranslation('task_review_merged');
-                break;
-        }
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) $action = Lib\Localisation::getTranslation('task_review_translated');
 
         $reviews = array();
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
