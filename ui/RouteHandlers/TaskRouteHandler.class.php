@@ -1887,13 +1887,13 @@ class TaskRouteHandler
         $reviews = array();
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
         $projectDao = new DAO\ProjectDao();
-        if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
+        if (empty($preReqTasks) && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqTasks = [];
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
             $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                    if ($memsource_task['workflowLevel'] == $project_task['workflowLevel'] + 1) { // Dependent on
                         if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                             $dummyTask = new Common\Protobufs\Models\Task();
                             $dummyTask->setId($project_task['id']);
