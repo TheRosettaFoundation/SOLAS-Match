@@ -5,7 +5,8 @@
     <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
-<h2 class="page-header">{if $task->getTaskType() == TaskTypeEnum::TRANSLATION}Review this translation task{else}Review this revising task{/if} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
+{assign var="type_id" value=$task->getTaskType()}
+<h2 class="page-header">{foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}{if $type_id == $task_type}Review this {$ui['text']} task{/if}{/foreach} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
 {include file="handle-flash-messages.tpl"}
 
 <p>
