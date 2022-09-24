@@ -1334,13 +1334,6 @@ CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE IF NOT EXISTS `make_claimable_regardless` (
-  claimable_task_id BIGINT(20) UNSIGNED NOT NULL,
-  PRIMARY KEY FK_claimable_task_id_r (claimable_task_id),
-  CONSTRAINT FK_claimable_task_id_r FOREIGN KEY (claimable_task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9782,9 +9775,7 @@ DROP PROCEDURE IF EXISTS `is_task_claimable`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_claimable`(IN claimable_tID BIGINT)
 BEGIN
-    IF EXISTS (SELECT 1 FROM make_claimable_regardless WHERE claimable_task_id=claimable_tID) THEN
-        SELECT 1 AS result;
-    ELSEIF NOT EXISTS (
+    IF NOT EXISTS (
         SELECT 1
         FROM taskclaims_required_to_make_claimable tc
         JOIN Tasks                                  t ON tc.task_id=t.id
