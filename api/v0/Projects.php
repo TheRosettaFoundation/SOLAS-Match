@@ -32,11 +32,6 @@ class Projects
             '\SolasMatch\API\V0\Projects:setImageApprovalStatus')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-        $app->post(
-            '/api/v0/projects/{projectId}/calculateDeadlines/',
-            '\SolasMatch\API\V0\Projects:calculateProjectDeadlines')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->get(
             '/api/v0/projects/{projectId}/reviews/',
             '\SolasMatch\API\V0\Projects:getProjectTaskReviews')
@@ -141,14 +136,6 @@ class Projects
         return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function calculateProjectDeadlines(Request $request, Response $response, $args)
-    {
-        $projectId = $args['projectId'];
-        $ret = null;
-        $ret = DAO\ProjectDao::calculateProjectDeadlines($projectId);
-        return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
     public static function getProjectTaskReviews(Request $request, Response $response, $args)
     {
         $projectId = $args['projectId'];
@@ -238,7 +225,6 @@ class Projects
         $data = (string)$request->getBody();
         $client = new Common\Lib\APIHelper('.json');
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
-        if (!DAO\ProjectDao::get_memsource_project($data->getId())) DAO\ProjectDao::calculateProjectDeadlines($data->getId());
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::save($data), null);
     }
 

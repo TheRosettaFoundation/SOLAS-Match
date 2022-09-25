@@ -194,14 +194,6 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $response;
     }
 
-    public function calculateProjectDeadlines($projectId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/projects/$projectId/calculateDeadlines";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        return $ret;
-    }
-
     public function archiveProject($projectId, $userId)
     {
         $memsource_project = $this->get_memsource_project($projectId);

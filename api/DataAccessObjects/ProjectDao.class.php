@@ -12,7 +12,6 @@ require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Project.php";
 require_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
 require_once __DIR__."/../lib/MessagingClient.class.php";
-require_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 //! Project Data Access Object for setting getting data about Projects in the API
@@ -75,31 +74,6 @@ class ProjectDao
         if (empty($result)) return 0;
 
         return $result[0];
-    }
-
-    //! Used to automatically calculate the Deadlines for Project Tasks
-    /*!
-      When this function is called it generates a CalculateProjectDeadlineRequest object and pushes it to RabbitMQ.
-      This gets picked up by the backend which then alters the deadlines of Tasks in the Project to give each volunteer
-      enough time to complete their task. This is called when a Project is created or when a Project's deadline is
-      updated.
-      @param int $projectId is the id of a Project
-      @return No return
-    */
-    public static function calculateProjectDeadlines($projectId)
-    {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $proto = new Common\Protobufs\Requests\CalculateProjectDeadlinesRequest();
-            $proto->setProjectId($projectId);
-            $message = $messagingClient->createMessageFromProto($proto);
-            error_log('sendTopicMessage CalculateProjectDeadlinesTopic: ' . $projectId);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->CalculateProjectDeadlinesTopic
-            );
-        }
     }
 
     //! Retrieve a single Project from the database
