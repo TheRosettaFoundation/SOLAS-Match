@@ -91,6 +91,8 @@ require_once 'ui/DataAccessObjects/SubscriptionDao.class.php';
 require_once 'ui/DataAccessObjects/ProjectDao.class.php';
 require_once 'ui/DataAccessObjects/TipDao.class.php';
 
+\SolasMatch\Common\Enums\TaskTypeEnum::init();
+
 $template_data = [];
 $flash_messages = [];
 

@@ -24,5 +24,3 @@ class TaskTypeEnum
         }
     }
 }
-
-TaskTypeEnum::init();
