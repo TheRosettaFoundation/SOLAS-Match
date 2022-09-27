@@ -1320,6 +1320,17 @@ CREATE TABLE IF NOT EXISTS `selections` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `task_type_details` (
+  type_enum         INT(10) UNSIGNED NOT NULL,
+  enabled           INT(10) UNSIGNED NOT NULL,
+  type_text         VARCHAR(50) NOT NULL,
+  colour            VARCHAR(50) NOT NULL,
+  claimed_template  VARCHAR(50) NOT NULL,
+  show_section      VARCHAR(50) NOT NULL,
+  PRIMARY KEY (type_enum)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
   task_id           BIGINT(20) UNSIGNED NOT NULL,
   claimable_task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -9760,6 +9771,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_selections`()
 BEGIN
     SELECT * FROM selections;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_task_type_details`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_type_details`()
+BEGIN
+    SELECT * FROM task_type_details;
 END//
 DELIMITER ;
 
