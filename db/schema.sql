@@ -1327,6 +1327,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   colour            VARCHAR(50) NOT NULL,
   claimed_template  VARCHAR(50) NOT NULL,
   show_section      VARCHAR(50) NOT NULL,
+  memsource_name    VARCHAR(50) NOT NULL,
   PRIMARY KEY (type_enum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -9778,7 +9779,7 @@ DROP PROCEDURE IF EXISTS `get_task_type_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_type_details`()
 BEGIN
-    SELECT * FROM task_type_details;
+    SELECT * FROM task_type_details ORDER BY type_enum;
 END//
 DELIMITER ;
 

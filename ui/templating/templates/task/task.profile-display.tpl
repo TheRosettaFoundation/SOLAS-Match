@@ -9,7 +9,7 @@
     <p>{Localisation::getTranslation('common_type')}
         {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
             {if $type_id == $task_type}
-                <span class="label label-info" style="background-color: {$ui['colour']}">{$ui['text']}</span>
+                <span class="label label-info" style="background-color: {$ui['colour']}">{$ui['type_text']}</span>
             {/if}
         {/foreach}
     </p>

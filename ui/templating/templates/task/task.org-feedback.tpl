@@ -16,7 +16,7 @@
                 {assign var="type_id" value=$task->getTaskType()}
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {if $type_id == $task_type}
-                        <span style="color: {$ui['colour']}">{$ui['text']} Task</span>
+                        <span style="color: {$ui['colour']}">{$ui['type_text']} Task</span>
                     {/if}
                 {/foreach}
             </strong>

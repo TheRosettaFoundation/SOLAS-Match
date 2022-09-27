@@ -1250,6 +1250,19 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $selections;
     }
 
+    public static function get_task_type_details()
+    {
+        $get_task_type_details = Common\Lib\CacheHelper::getCached(
+            Common\Lib\CacheHelper::TASK_TYPE_DETAILS,
+            2592000,
+            function ($args) {
+                return LibAPI\PDOWrapper::call('get_task_type_details', '');
+            },
+            []
+        );
+        return $get_task_type_details;
+    }
+
     public function get_TEMP_TWB_to_CLEAR_email()
     {
         return LibAPI\PDOWrapper::call('get_TEMP_TWB_to_CLEAR_email', '');

@@ -16,7 +16,7 @@
                     {assign var="type_id" value=$task->getTaskType()}
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $type_id == $task_type}
-                            <span style="color: {$ui['colour']}">{$ui['text']} Task</span>
+                            <span style="color: {$ui['colour']}">{$ui['type_text']} Task</span>
                         {/if}
                     {/foreach}
                 </strong>
@@ -116,7 +116,7 @@
 		                            	<p>
 			                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
 			                            	&nbsp;|&nbsp;
-                                    <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['text']}</span>
+                                    <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text']}</span>
 											&nbsp;|&nbsp;
 											{if $alsoViewedTask->getWordCount()}
 			                                    <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>
