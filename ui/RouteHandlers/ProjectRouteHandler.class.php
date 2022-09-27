@@ -281,7 +281,6 @@ class ProjectRouteHandler
 
     private function create_task($hook)
     {
-        global $task_type_to_enum;
         $hook = $hook['jobParts'];
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
@@ -344,7 +343,7 @@ class ProjectRouteHandler
                 $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
                 $taskType = $workflow_levels[$part['workflowLevel'] - 1];
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
-                if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
+                if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType])) $taskType = Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType];
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) {
                     $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                     $workflow_levels = ['Translation'];
@@ -429,9 +428,9 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             $forward_order = [];
             $reverse_order = [];
             foreach ($workflow_levels as $i => $workflow_level) {
-                if (!empty($task_type_to_enum[$workflow_level])) {
-                    $forward_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i + 1]];
-                    $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
+                if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level])) {
+                    $forward_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]];
+                    $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
                 }
             }
             $top_level = $projectDao->get_top_level($part['internalId']);
@@ -1748,7 +1747,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
     public function task_cron_1_minute()
     {
-        global $task_type_to_enum;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1855,9 +1853,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($project_lang_pairs[$targetLanguageCode])) {
                         $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
-                        foreach ($task_type_to_enum as $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
+                        foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
                     }
-                    foreach ($task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] += $task['wordCount'];
+                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] += $task['wordCount'];
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
@@ -1876,7 +1874,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $ch = curl_init($url);
 
                     $wordCount = 0; // Pick the first nonzero...
-                    foreach ($task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[$to_enum];
+                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[$to_enum];
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task

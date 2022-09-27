@@ -941,7 +941,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
 
     private function create_task($memsource_project, $job, $words_default)
     {
-        global $task_type_to_enum;
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
 
@@ -979,7 +978,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
             $taskType = $workflow_levels[$job['workflowLevel'] - 1];
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
-            if (!empty($task_type_to_enum[$taskType])) $taskType = $task_type_to_enum[$taskType];
+            if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType])) $taskType = Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType];
             elseif ($taskType == '' && $job['workflowLevel'] == 1) {
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                 $workflow_levels = ['Translation'];
@@ -1043,9 +1042,9 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         $forward_order = [];
         $reverse_order = [];
         foreach ($workflow_levels as $i => $workflow_level) {
-            if (!empty($task_type_to_enum[$workflow_level])) {
-                $forward_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i + 1]];
-                $reverse_order[$task_type_to_enum[$workflow_level]] = empty($task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : $task_type_to_enum[$workflow_levels[$i - 1]];
+            if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level])) {
+                $forward_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]];
+                $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
             }
         }
 //(**)Old comment: Translation task should already have been created
@@ -1113,10 +1112,9 @@ error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(
 
     public function first_workflow($taskType, $memsource_project)
     {
-        global $task_type_to_enum;
         if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
             empty($memsource_project['workflow_level_1']) ||
-            $task_type_to_enum[$memsource_project['workflow_level_1']] == $taskType) return true;
+            Common\Enums\TaskTypeEnum::$task_type_to_enum[$memsource_project['workflow_level_1']] == $taskType) return true;
         return false;
     }
 
