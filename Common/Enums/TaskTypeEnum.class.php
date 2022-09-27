@@ -22,7 +22,5 @@ class TaskTypeEnum
             TaskTypeEnum::$enum_to_UI[$task_type_detail['type_enum']] = $task_type_detail;
             if ($task_type_detail['enabled']) TaskTypeEnum::$task_type_to_enum[$task_type_detail['memsource_name']] = $task_type_detail['type_enum'];
         }
-error_log(print_r(TaskTypeEnum::$enum_to_UI, true));
-error_log(print_r(TaskTypeEnum::$task_type_to_enum, true));
     }
 }
