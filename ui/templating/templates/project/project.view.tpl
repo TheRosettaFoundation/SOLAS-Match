@@ -363,6 +363,10 @@ Tweet</a>
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a>
+                                        {elseif $status_id == TaskStatusEnum::CLAIMED}
+                                            <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
+                                                Claimed
+                                            </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
                                             <a href="{urlFor name="org-task-complete" options="task_id.$task_id|org_id.$org_id"}">
@@ -435,7 +439,7 @@ Tweet</a>
                                                         $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_delete')}
                                                 </a> 
-                                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                            {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
                                                 <button class="btn btn-small btn-inverse" disabled>
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('project_view_2')}
                                                 </button>  
@@ -519,6 +523,8 @@ Tweet</a>
                                             {Localisation::getTranslation('common_unclaimed')}
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                             {Localisation::getTranslation('common_in_progress')}
+                                        {elseif $status_id == TaskStatusEnum::CLAIMED}
+                                            Claimed
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {Localisation::getTranslation('common_complete')}
                                         {/if}

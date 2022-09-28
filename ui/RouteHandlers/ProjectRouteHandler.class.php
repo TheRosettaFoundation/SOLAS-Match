@@ -846,14 +846,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
+            $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
             $taskLanguageMap = array();
             if ($project_tasks) {
                 foreach ($project_tasks as $task) {
+                    $task_id = $task->getId();
+                    if (!empty($translations_not_all_complete[$task_id])) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
                     $targetLocale = $task->getTargetLocale();
                     $taskTargetLanguage = $targetLocale->getLanguageCode();
                     $taskTargetCountry = $targetLocale->getCountryCode();
                     $taskLanguageMap["$taskTargetLanguage,$taskTargetCountry"][] = $task;
-                    $task_id = $task->getId();
                     $metaData = array();
                     $response_dao = $userDao->isSubscribedToTask($user_id, $task_id);
                     if ($response_dao == 1) {
@@ -890,8 +892,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             ));
         } else {
             $project_tasks = $taskDao->getVolunteerProjectTasks($project_id, $user_id);
+            $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
             $volunteerTaskLanguageMap = array();
             foreach ($project_tasks as $task) {
+                $task_id = $task->getId();
+                if (!empty($translations_not_all_complete[$task_id])) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
                 $volunteerTaskLanguageMap[$task['target_language_code'] . ',' . $task['target_country_code']][] = $task;
             }
 

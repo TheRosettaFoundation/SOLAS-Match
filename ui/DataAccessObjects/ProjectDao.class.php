@@ -1211,6 +1211,34 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $translations_not_all_complete;
     }
 
+    public function identify_claimed_but_not_yet_in_progress($project_id)
+    {
+        $memsource_tasks = $this->get_tasks_for_project($project_id);
+        $project_tasks = $memsource_tasks;
+        $translations_not_all_complete = [];
+        foreach ($memsource_tasks as $memsource_task) {
+            if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // This status can sometimes display as CLAIMED if not all translations are complete
+                $translations_not_all_complete[$memsource_task['id']] = 0;
+                if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    $top_level = $this->get_top_level($memsource_task['internalId']);
+                    foreach ($project_tasks as $project_task) {
+                        if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                            if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                                if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                    if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                                        $translations_not_all_complete[$memsource_task['id']] = 1;
+                                        error_log("identify_claimed_but_not_yet_in_progress($project_id), translations_not_all_complete {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $translations_not_all_complete;
+    }
+
     public function delete_task_directly($task_id)
     {
         LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));
