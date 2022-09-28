@@ -398,12 +398,14 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
                 else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
                 $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
+
+                $task->setPublished(1);
             } else {
                 if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
                 else                          $task->setDeadline($project->getDeadline());
-            }
 
-            $task->setPublished(0);
+                $task->setPublished(0);
+            }
 
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
