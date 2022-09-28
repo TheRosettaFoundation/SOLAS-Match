@@ -1191,7 +1191,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function are_translations_not_all_complete($task, $memsource_task)
     {
-
         $translations_not_all_complete = 0;
         if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION && $memsource_task) {
             $top_level = $this->get_top_level($memsource_task['internalId']);
