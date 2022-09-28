@@ -1219,7 +1219,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         foreach ($memsource_tasks as $memsource_task) {
             if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // This status can sometimes display as CLAIMED if not all translations are complete
                 $translations_not_all_complete[$memsource_task['id']] = 0;
-                if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION) {
+                if ($memsource_task['task-type_id'] != Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $top_level = $this->get_top_level($memsource_task['internalId']);
                     foreach ($project_tasks as $project_task) {
                         if ($top_level == $this->get_top_level($project_task['internalId'])) {
