@@ -403,7 +403,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 else                          $task->setDeadline($project->getDeadline());
             }
 
-            $task->setPublished(1);
+            $task->setPublished(0);
 
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
