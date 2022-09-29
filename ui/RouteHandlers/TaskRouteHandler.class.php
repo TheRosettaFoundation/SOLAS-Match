@@ -226,6 +226,7 @@ class TaskRouteHandler
         $taskStatusTexts = array();
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[10] = 'Claimed';
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
@@ -443,6 +444,7 @@ class TaskRouteHandler
         $taskStatusTexts = array();
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[10] = 'Claimed';
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
@@ -953,6 +955,7 @@ class TaskRouteHandler
         $taskStatusTexts = array();
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[10] = 'Claimed';
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
