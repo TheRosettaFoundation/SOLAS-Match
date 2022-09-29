@@ -1501,6 +1501,8 @@ class TaskRouteHandler
         }
         $taskMetaData[$task_id] = $metaData;
 
+        if ($projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+
         $template_data = array_merge($template_data, array(
                      "task" => $task,
                      "taskMetaData" => $taskMetaData
