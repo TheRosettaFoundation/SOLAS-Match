@@ -46,6 +46,8 @@
                         {Localisation::getTranslation('common_waiting')}
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                         {Localisation::getTranslation('common_unclaimed')}
+                    {elseif $status_id == TaskStatusEnum::CLAIMED}
+                        Claimed
                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                         {Localisation::getTranslation('common_in_progress')}
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
