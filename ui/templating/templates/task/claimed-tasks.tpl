@@ -97,7 +97,7 @@
                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
                             <p>
-                                {Localisation::getTranslation('common_status')}: <strong>{$taskStatusTexts[$status_id]}</strong>
+                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}</strong>
                             </p>
                             <p>
                                 {if !empty($taskTags) && !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
@@ -165,7 +165,7 @@
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>
-                                {if $status_id == 3 || $status_id == 10}
+                                {if $status_id == 3}
                                     <a href="{$siteLocation}task/{$task_id}/user-feedback" class="btn btn-small btn-danger">
                                         {Localisation::getTranslation('claimed_tasks_unclaim_task')}
                                     </a>
@@ -194,7 +194,7 @@
                                         Download Complete Approved Version
                                     </a>
                                 {/if}
-                                {if ($status_id == 3 || $status_id == 10 || $status_id == 4) && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
+                                {if ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary" target="_blank">
                                         TWB Pre-Delivery Checklist
                                     </a>
