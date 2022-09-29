@@ -185,6 +185,8 @@
                                                     {Localisation::getTranslation('common_waiting')}
                                                 {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                                     {Localisation::getTranslation('common_unclaimed')}
+                                                {elseif $status_id == TaskStatusEnum::CLAIMED}
+                                                    Claimed
                                                 {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                                     <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">{Localisation::getTranslation('common_in_progress')}</a>
                                                 {elseif $status_id == TaskStatusEnum::COMPLETE}
