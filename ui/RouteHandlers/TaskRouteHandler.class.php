@@ -1627,6 +1627,8 @@ class TaskRouteHandler
       });
     </script>";
 
+        if ($projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+
         $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
