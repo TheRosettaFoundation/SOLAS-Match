@@ -9,6 +9,8 @@
         {include file="task/task.claim-proofreading.tpl"}
     {elseif $taskType == TaskTypeEnum::DESEGMENTATION}
         {include file="task/task.claim-desegmentation.tpl"}
+    {elseif $taskType == TaskTypeEnum::APPROVAL}
+        {include file="task/task.claim-approval.tpl"}
     {/if}
 
 {include file="footer.tpl"}
