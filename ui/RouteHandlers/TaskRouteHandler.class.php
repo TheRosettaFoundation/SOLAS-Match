@@ -1140,7 +1140,7 @@ class TaskRouteHandler
         $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
         $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
-        $template_data = array_merge($template_data, ['task' => $task]);
+        $copy_task = unserialize(serialize($task));
 
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
@@ -1340,7 +1340,10 @@ class TaskRouteHandler
             $restrictTaskStatus = 'checked';
         }
 
+        if ($projectDao->are_translations_not_all_complete($copy_task, $memsource_task)) $copy_task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+
         $template_data = array_merge($template_data, array(
+            'task'                => $copy_task,
             'sesskey'             => $sesskey,
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
