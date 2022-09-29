@@ -865,6 +865,18 @@ $replace = array(
         return $result[0]['id'];
     }
 
+    public function get_users_who_claimed($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_users_who_claimed', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+
+        $users = [];
+        foreach ($result as $row) {
+            $users[$row['task_id']] = $row;
+        }
+        return $users;
+    }
+
     public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false, $words_default = 0)
     {
 error_log('split_uids_filter:' . print_r($split_uids_filter, true));//(**)

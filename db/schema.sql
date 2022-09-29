@@ -9829,6 +9829,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_users_who_claimed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_users_who_claimed`(IN pID INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        t.id AS task_id
+    FROM Projects    p
+    JOIN Tasks       t ON p.id=t.project_id
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    WHERE
+        t.`task-status_id`>=3 AND
+        p.id=pID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
