@@ -515,6 +515,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                     return 0;
                 }
 
+                LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
+
                 // This now only does the notifications
 error_log("claimTask($userId, $taskId, ..., $project_id, ...) Before Notify");
                 $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
