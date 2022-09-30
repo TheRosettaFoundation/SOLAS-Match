@@ -1323,7 +1323,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
         if (empty($result)) return;
         foreach ($result as $row) {
-            LibAPI\PDOWrapper::call('insert_tasks_status_audit_trail', LibAPI\PDOWrapper::cleanse($row['id']) . ',2,NULL,NULL');
+            LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($row['id']) . ',2,NULL,NULL');
         }
     }
 }
