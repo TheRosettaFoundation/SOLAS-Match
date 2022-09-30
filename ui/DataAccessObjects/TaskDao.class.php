@@ -181,6 +181,8 @@ error_log("createTaskDirectly: $args");
         if (empty($result[0]['id'])) return 0;
         $task_id = $result[0]['id'];
         $this->inheritRequiredTaskQualificationLevel($task_id);
+
+        $this->insert_tasks_status($task_id, $task->getTaskStatus());
         return $task_id;
     }
 
