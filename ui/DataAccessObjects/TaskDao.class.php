@@ -524,6 +524,8 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('setTaskStatus',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($status));
+
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL,NULL');
     }
 
     public function getTaskStatus($task_id)
