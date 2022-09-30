@@ -668,6 +668,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
+
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($taskId) . ',2,NULL,NULL');
         return $ret;
     }
 

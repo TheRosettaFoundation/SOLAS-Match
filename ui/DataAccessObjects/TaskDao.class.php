@@ -549,6 +549,8 @@ error_log("createTaskDirectly: $args");
             $projectDao = new ProjectDao();
             $task = $this->getTask($task_id);
             $projectDao->make_tasks_claimable($task->getProjectId());
+
+            LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
 
         return $result[0]['result'];
@@ -579,6 +581,8 @@ error_log("createTaskDirectly: $args");
                 }
             }
             $projectDao->make_tasks_claimable($task->getProjectId());
+
+            LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
         return $success;
     }
@@ -587,6 +591,8 @@ error_log("createTaskDirectly: $args");
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($userFeedback) . ',0';
         $result = LibAPI\PDOWrapper::call('unClaimTaskMemsource', $args);
+
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',2,NULL,NULL');
         return $result[0]['result'];
     }
 
