@@ -1318,6 +1318,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function make_tasks_claimable($project_id)
     {
+        $result = LibAPI\PDOWrapper::call('get_tasks_to_be_made_claimable', LibAPI\PDOWrapper::cleanse($project_id));
         LibAPI\PDOWrapper::call('make_tasks_claimable', LibAPI\PDOWrapper::cleanse($project_id));
+
+        if (empty($result)) return;
+        foreach ($result as $row) {
+            LibAPI\PDOWrapper::call('insert_tasks_status_audit_trail', LibAPI\PDOWrapper::cleanse($row['id']) . ',2,NULL,NULL');
+        }
     }
 }
