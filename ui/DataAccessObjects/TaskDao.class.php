@@ -182,7 +182,7 @@ error_log("createTaskDirectly: $args");
         $task_id = $result[0]['id'];
         $this->inheritRequiredTaskQualificationLevel($task_id);
 
-        $this->insert_tasks_status($task_id, $task->getTaskStatus());
+        LibAPI\PDOWrapper::call('insert_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($task->getTaskStatus()));
         return $task_id;
     }
 
@@ -525,7 +525,7 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($status));
 
-        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL,NULL');
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL');
     }
 
     public function getTaskStatus($task_id)
@@ -552,7 +552,7 @@ error_log("createTaskDirectly: $args");
             $task = $this->getTask($task_id);
             $projectDao->make_tasks_claimable($task->getProjectId());
 
-            LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
+            LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
 
         return $result[0]['result'];
@@ -584,7 +584,7 @@ error_log("createTaskDirectly: $args");
             }
             $projectDao->make_tasks_claimable($task->getProjectId());
 
-            LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
+            LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
         return $success;
     }
@@ -594,7 +594,7 @@ error_log("createTaskDirectly: $args");
         $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($userFeedback) . ',0';
         $result = LibAPI\PDOWrapper::call('unClaimTaskMemsource', $args);
 
-        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',2,NULL,NULL');
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',2,NULL');
         return $result[0]['result'];
     }
 
