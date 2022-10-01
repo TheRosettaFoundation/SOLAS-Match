@@ -1326,4 +1326,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($row['id']) . ',2,NULL');
         }
     }
+
+    public function get_possible_completes()
+    {
+        $result = LibAPI\PDOWrapper::call('get_possible_completes', '');
+        if (empty($result)) return [];
+        return $result;
+    }
 }
