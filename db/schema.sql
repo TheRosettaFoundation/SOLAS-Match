@@ -9896,6 +9896,79 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_tasks_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tasks_status`(IN tID BIGINT, IN sID INT)
+BEGIN
+    INSERT INTO tasks_status             (task_id, status_id)
+    VALUES                               (    tID,       sID);
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time)
+    VALUES                               (    tID,       sID,        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_tasks_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status`(IN tID BIGINT, IN sID INT, IN c TEXT)
+BEGIN
+    UPDATE tasks_status
+    SET status_id=sID
+    WHERE task_id=tID;
+
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time, comment)
+    VALUES                               (    tID,       sID,        NOW(),       c);
+
+    INSERT INTO possible_completes (project_id)
+    VALUES                         (SELECT project_id FROM Tasks WHERE id=tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_tasks_status_plain`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status_plain`(IN tID BIGINT, IN sID INT)
+BEGIN
+    UPDATE tasks_status
+    SET status_id=sID
+    WHERE task_id=tID;
+
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time)
+    VALUES                               (    tID,       sID,        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_tasks_status_claimant`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status_claimant`(IN tID BIGINT, IN sID INT, IN cID INT, IN c TEXT)
+BEGIN
+    UPDATE tasks_status
+    SET status_id=sID, claimant_id=cID
+    WHERE task_id=tID;
+
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, claimant_id, changed_time, comment)
+    VALUES                               (    tID,       sID,         cID,        NOW(),       c);
+
+    INSERT INTO possible_completes (project_id)
+    VALUES                         (SELECT project_id FROM Tasks WHERE id=tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tasks_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_status`(IN tID BIGINT)
+BEGIN
+    SELECT * FROM tasks_status WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_possible_completes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_possible_completes`()
+BEGIN
+    SELECT * FROM possible_completes;
+    DELETE FROM possible_completes;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
