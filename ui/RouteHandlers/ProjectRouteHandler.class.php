@@ -1744,6 +1744,14 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
     {
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+        $projectDao = new DAO\ProjectDao();
+        $possible_completes = $projectDao->get_possible_completes();
+        foreach ($possible_completes as $possible_complete) {
+            $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($possible_complete['project_id']);
+            foreach ($translations_not_all_complete as $task_id => $task_item) {
+                $projectDao->update_tasks_status_conditionally($task_id, $task_item ? Common\Enums\TaskStatusEnum::CLAIMED : Common\Enums\TaskStatusEnum::IN_PROGRESS);
+            }
+        }
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
       fclose($fp_for_lock);

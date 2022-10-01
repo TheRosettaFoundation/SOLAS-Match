@@ -1333,4 +1333,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         if (empty($result)) return [];
         return $result;
     }
+
+    public function update_tasks_status_conditionally($task_id, $status_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tasks_status', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return;
+
+        if (result[0]['status_id'] != $status_id) LibAPI\PDOWrapper::call('update_tasks_status_plain', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status_id));
+    }
 }
