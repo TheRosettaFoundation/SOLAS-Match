@@ -1346,6 +1346,37 @@ CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `tasks_status` (
+  task_id      BIGINT(20) UNSIGNED NOT NULL,
+  status_id    INT(10)    UNSIGNED NOT NULL,
+  claimant_id  INT(10)    UNSIGNED,
+  PRIMARY KEY (task_id),
+          KEY (claimant_id),
+          KEY (status_id),
+  CONSTRAINT FK_tasks_status_Tasks FOREIGN KEY (task_id) REFERENCES Tasks (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `tasks_status_audit_trail` (
+  id           BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  task_id      BIGINT(20) UNSIGNED NOT NULL,
+  status_id    INT(10)    UNSIGNED NOT NULL,
+  claimant_id  INT(10)    UNSIGNED,
+  changed_time DATETIME            NOT NULL,
+  comment      TEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (id),
+          KEY (task_id),
+          KEY (claimant_id),
+          KEY (status_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `possible_completes` (
+  project_id INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (project_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9826,6 +9857,23 @@ BEGIN
         GROUP BY t.id
         HAVING SUM(IF(t1.`task-status_id`<3, 1, 0))=0
     );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tasks_to_be_made_claimable`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_to_be_made_claimable`(IN pID INT)
+BEGIN
+    SELECT
+        t.id
+    FROM      Tasks                                  t
+    LEFT JOIN taskclaims_required_to_make_claimable tc ON t.id=tc.claimable_task_id
+    LEFT JOIN Tasks                                 t1 ON tc.task_id=t1.id
+    WHERE
+        t.project_id=pID AND
+        t.`task-status_id`=1
+    GROUP BY t.id
+    HAVING SUM(IF(t1.`task-status_id`<3, 1, 0))=0;
 END//
 DELIMITER ;
 
