@@ -1328,6 +1328,10 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   claimed_template  VARCHAR(50) NOT NULL,
   show_section      VARCHAR(50) NOT NULL,
   memsource_name    VARCHAR(50) NOT NULL,
+  for_self_managed  INT(10) UNSIGNED NOT NULL,
+  visible_community INT(10) UNSIGNED NOT NULL,
+  unit_measurement  VARCHAR(50) NOT NULL,
+  unit_rate         FLOAT NOT NULL,
   PRIMARY KEY (type_enum)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
