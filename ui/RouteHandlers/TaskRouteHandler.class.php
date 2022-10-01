@@ -1735,6 +1735,7 @@ class TaskRouteHandler
                             $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
                         } else {
                             $taskRevoke = true;
+                            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM); // updateTask() has already set this, but need setTaskStatus() for tasks_status table
                         }
                         if ($taskRevoke) {
                             if ($claimant != null) {
@@ -1829,6 +1830,7 @@ class TaskRouteHandler
                             $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                             $taskDao->updateTask($task);
                             $taskRevoke = true;
+                            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM); // updateTask() has already set this, but need setTaskStatus() for tasks_status table
                         }
                         if ($taskRevoke) {
                             UserRouteHandler::flash(
