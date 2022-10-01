@@ -9919,7 +9919,7 @@ BEGIN
     VALUES                               (    tID,       sID,        NOW(),       c);
 
     INSERT INTO possible_completes (project_id)
-    VALUES                         (SELECT project_id FROM Tasks WHERE id=tID);
+    VALUES                         ((SELECT project_id FROM Tasks WHERE id=tID));
 END//
 DELIMITER ;
 
