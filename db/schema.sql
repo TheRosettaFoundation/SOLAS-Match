@@ -9835,7 +9835,7 @@ BEGIN
         FROM taskclaims_required_to_make_claimable tc
         JOIN Tasks                                  t ON tc.task_id=t.id
         WHERE
-            claimable_task_id=claimable_tID AND
+            tc.claimable_task_id=claimable_tID AND
             t.`task-status_id`<3
     ) THEN
         SELECT 1 AS result;
@@ -9856,7 +9856,7 @@ BEGIN
         LEFT JOIN taskclaims_required_to_make_claimable tc ON t.id=tc.claimable_task_id
         LEFT JOIN Tasks                                 t1 ON tc.task_id=t1.id
         WHERE
-            p.project_id=pID AND
+            t.project_id=pID AND
             t.`task-status_id`=1
         GROUP BY t.id
         HAVING SUM(IF(t1.`task-status_id`<3, 1, 0))=0
