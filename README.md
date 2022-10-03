@@ -39,6 +39,17 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 12.0
+
+- Added support for Approval Memsource Workflow and generalised adding new workflows.
+- Moved to system of allowing all tasks to be claimed when previous level in workflow is all claimed.
+- Added new task status of CLAIMED, but not yet IN_PROGRESS, because prerequisite tasks are not complete
+- Removed support for Matecat (old projects remain in system).
+- Removed code supporting pre-Matecat file based download and uploads.
+- Removed User verification system (where a user could create a project as a test to be verified).
+- Added new wording for registration related emails.
+- Security fix (low priority): Bump smarty/smarty from 4.1.1 to 4.2.1 in /ui (PR #1288)
+
 ## Version 11.1
 
 - Change the language mapping from selection lists and from and to Memsource to use a database table for flexibility
