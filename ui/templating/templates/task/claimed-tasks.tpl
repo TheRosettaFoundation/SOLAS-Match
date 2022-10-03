@@ -133,7 +133,6 @@
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
-                                        {/if}
                                         {elseif $type_id == 6}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 Approve using Memsource
