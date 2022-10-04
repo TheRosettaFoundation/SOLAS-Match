@@ -718,4 +718,15 @@ error_log("createTaskDirectly: $args");
     {
         LibAPI\PDOWrapper::call('clear_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
     }
+
+    public function get_paid_for_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_paid_for_project', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $paids = [];
+        foreach ($result as $row) {
+            $paids[$row['id']] = $row['level'];
+        }
+        return $paids;
+    }
 }

@@ -9542,6 +9542,20 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_paid_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_status`(IN pID INT)
+BEGIN
+    SELECT
+        t.id,
+        IF(tp.level IS NOT NULL, tp.level, 0) AS level
+    FROM      Tasks      t
+    LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    WHERE t.project_id=pID;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `get_points_for_badges_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges_details`(IN uID INT)
