@@ -124,7 +124,7 @@
 
                             <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
-                                    {if $matecat_urls[$task_id] != ''}
+                                    {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
