@@ -870,13 +870,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            $graph = $projectDao->getProjectGraph($project_id);
-            $viewer = new Lib\GraphViewer($graph);
-            $graphView = $viewer->constructView();
-
             $extra_scripts = "";
-            $extra_scripts .= $viewer->generateDataScript();
-            $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView2.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
@@ -884,7 +878,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             $template_data = array_merge($template_data, array(
                     "org" => $org,
-                    "graph" => $graphView,
                     "extra_scripts" => $extra_scripts,
                     "projectTasks" => $project_tasks,
                     "taskMetaData" => $taskMetaData,

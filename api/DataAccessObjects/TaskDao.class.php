@@ -17,7 +17,6 @@ require_once __DIR__."/../../Common/protobufs/models/Task.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__."/../lib/PDOWrapper.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
-require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 
 class TaskDao
@@ -378,40 +377,6 @@ error_log("call taskInsertAndUpdate($args)");
         return $ret;
     }
 
-    //! Add a prerequisite to a Task
-    /*!
-      Adds a prerequisite to a Task. A prerequisite is a Task that must be completed before any Tasks dependant on it
-      can be claimed. This function will make the Task with id $taskId dependant on the Task with id $preReqId.
-      @param int $taskId is the id of a Task
-      @param int $preReqId is the id of a Task
-      @return Returns 1 if the prereq was added successfully, 0 otherwise
-    */
-    public static function addTaskPreReq($taskId, $preReqId)
-    {
-        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
-            Lib\PDOWrapper::cleanseNull($preReqId);
-        $result = Lib\PDOWrapper::call("addTaskPreReq", $args);
-error_log("addTaskPreReq($taskId, $preReqId)");
-        return $result[0]["result"];
-    }
-
-    //! Remove a prerequisite from a Task
-    /*!
-      Remove a prerequisite from a Task. This function will remove the dependency the Task with id $taskId has on the
-      Task with id $preReqId
-      @param int $taskId is the id of a Task
-      @param int $preReqId is the id of a Task
-      @return Returns 1 if the prereq was removed successfully, 0 otherwise
-    */
-    public static function removeTaskPreReq($taskId, $preReqId)
-    {
-        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
-            Lib\PDOWrapper::cleanseNull($preReqId);
-        $result = Lib\PDOWrapper::call("removeTaskPreReq", $args);
-error_log("removeTaskPreReq($taskId, $preReqId)");
-        return $result[0]["result"];
-    }
-
     //! Get a list of the most recently created Tasks
     /*!
       Get a list of the most recently created Task objects. This will only return Task objects that are in the
@@ -576,71 +541,17 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
     */
     public static function moveToArchiveByID($taskId, $userId)
     {
-        $ret = false;
         $task = self::getTasks($taskId);
         $task = $task[0];
-        
-        if (is_null($task)) {
-            return 0 ;
-        }
+        if (is_null($task)) return 0;
 
-        $graphBuilder = new Lib\APIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
+        $subscribedUsers = self::getSubscribedUsers($taskId);
 
-        if ($graph) {
-            $index = $graphBuilder->find($taskId, $graph);
-            $node = $graph->getAllNodes($index);
-            $ret = self::archiveTaskNode($node, $graph, $userId);
-        }
+        $result = Lib\PDOWrapper::call('archiveTask', Lib\PDOWrapper::cleanseNull($taskId) . ',' . Lib\PDOWrapper::cleanseNull($userId));
+        if ($result[0]['result']) self::delete($taskId);
 
-        // UI is expecting output to be 0 or 1
-        if ($ret) {
-            $ret = 1;
-        } else {
-            $ret = 0;
-        }
+        Lib\Notify::sendTaskArchivedNotifications($taskId, $subscribedUsers);
 
-        return $ret;
-    }
-
-
-    private static function archiveTaskNode($node, $graph, $userId)
-    {
-        $ret = true;
-        $task = self::getTasks($node->getTaskId());
-        $dependantNodes = $node->getNext();
-        if (!empty($dependantNodes) && count($dependantNodes) > 0) {
-            $builder = new Lib\APIWorkflowBuilder();
-            foreach ($dependantNodes as $dependantId) {
-                $dTask = self::getTasks($dependantId);
-                $index = $builder->find($dependantId, $graph);
-                $dependant = $graph->getAllNodes($index);
-                $preReqs = $dependant->getPrevious();
-                if (!empty($preReqs) && ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
-                        count($preReqs) == 1)) {
-                    $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
-                }
-            }
-        }
-
-        if ($ret) {
-            $subscribedUsers = self::getSubscribedUsers($node->getTaskId());
-            $ret = self::archiveTask($node->getTaskId(), $userId);
-            Lib\Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
-        }
-
-        return $ret;
-    }
-
-    private static function archiveTask($taskId, $userId)
-    {
-        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
-            Lib\PDOWrapper::cleanseNull($userId);
-        
-        $result = Lib\PDOWrapper::call("archiveTask", $args);
-        if ($result[0]['result']) {
-            self::delete($taskId);
-        }
         return $result[0]['result'];
     }
 

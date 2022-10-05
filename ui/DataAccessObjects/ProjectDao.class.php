@@ -59,14 +59,6 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
-    public function getProjectGraph($projectId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/projects/buildGraph/$projectId";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\WorkflowGraph", $request);
-        return $ret;
-    }
-
     public function getProjectTags($projectId)
     {
         $ret = null;

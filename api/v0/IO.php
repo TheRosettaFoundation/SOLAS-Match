@@ -65,11 +65,6 @@ class IO
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
 
         $app->put(
-            '/api/v0/io/upload/taskOutput/{taskId}/{userId}/',
-            '\SolasMatch\API\V0\IO:saveOutputFile')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserForClaimedTask');
-
-        $app->put(
             '/api/v0/io/upload/sendTaskUploadNotifications/{taskId}/{type}/',
             '\SolasMatch\API\V0\IO:sendTaskUploadNotifications');
     }
@@ -208,30 +203,6 @@ class IO
         return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
-    public static function saveOutputFile(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $userId = $args['userId'];
-        $task = DAO\TaskDao::getTask($taskId);
-        $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
-        $filename = $projectFile->getFilename();
-        $data = (string)$request->getBody();
-        try {
-            error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
-        self::uploadOutputFile($task, $data, $userId, $filename);
-            error_log("After uploadOutputFile($taskId..., $userId, $filename)");
-$task = DAO\TaskDao::getTask($taskId + 1);
-if (!empty($task) && $task->getTaskType() == 3) {
-    $ts = $task->getTaskStatus();
-    error_log("After uploadOutputFile($taskId + 1 getTaskStatus(): $ts");
-}
-        } catch (Common\Exceptions\SolasMatchException $e) {
-            error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
-            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
-        }
-        return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CREATED);
-    }
-
     public static function saveProjectFile(Request $request, Response $response, $args)
     {
         $projectId = $args['projectId'];
@@ -286,36 +257,6 @@ if (!empty($task) && $task->getTaskType() == 3) {
             );
         }
         return $success;
-    }
-
-    //! Upload a new version of a Task file
-    /*!
-     This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
-    dependant on this Task.
-    @param Task $task is a Task object
-    @param String $file is the contents of the uploaded file (passed as reference)
-    @param int $userId is the id of the User uploading the file
-    @param String filename is the name of the file
-    @return No Return
-    */
-    private static function uploadOutputFile($task, &$file, $userId, $filename)
-    {
-        $physical_pointer = self::uploadFile($task, $file, null, $userId, $filename);
-        $graphBuilder = new Lib\APIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-        if ($graph) {
-            $index = $graphBuilder->find($task->getId(), $graph);
-            $taskNode = $graph->getAllNodes($index);
-            foreach ($taskNode->getNext() as $nextTaskId) {
-                $result = DAO\TaskDao::getTasks($nextTaskId);
-                $nextTask = $result[0];
-                if ($physical_pointer) {
-                    self::uploadFile($nextTask, $physical_pointer, 0, $userId, $filename, true);
-                } else {
-                    self::uploadFile($nextTask, $file, 0, $userId, $filename);
-                }
-            }
-        }
     }
 
     //! Records a ProjectFile upload

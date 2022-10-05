@@ -1234,51 +1234,6 @@ class TaskRouteHandler
                 else {
                     $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
                 }
-
-                $graphBuilder = new Lib\UIWorkflowBuilder();
-                $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
-
-                if ($graph) {
-
-                    $index = $graphBuilder->find($task->getId(), $graph);
-                    $node = $graph->getAllNodes($index);
-                    $selectedList = array();
-                    foreach ($node->getPrevious() as $prevId) {
-                        $selectedList[] = $prevId;
-                    }
-
-                    error_log("taskAlter (graphBuilder)");
-                    $taskDao->updateTask($task);
-                    if ($preReqTasks) {
-                        foreach ($preReqTasks as $preReqTask) {
-                            if (!in_array($preReqTask->getId(), $selectedList)) {
-                                $taskDao->removeTaskPreReq($task->getId(), $preReqTask->getId());
-                                $task = $taskDao->getTask($task->getId()); // Trigger will probably have changed status
-                            }
-                        }
-                    }
-
-                    foreach ($selectedList as $taskId) {
-                        if (is_numeric($taskId)) {
-                            $taskDao->addTaskPreReq($task->getId(), $taskId);
-                            $task = $taskDao->getTask($task->getId()); // Trigger will probably have changed status
-                        }
-                    }
-
-                    error_log("taskAlter (addTaskPreReq)");
-                    $taskDao->updateTask($task);
-
-                    if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
-                        $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
-                    }
-
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
-                } else {
-                    //A deadlock occured
-                    $deadlockError = Lib\Localisation::getTranslation('task_alter_9');
-                    //Reset prereqs so as not to crash second run of the graph builder
-                    $taskPreReqIds[$task->getId()] = $oldPreReqs;
-                }
             }
           } else {
                 $taskDao->updateTask($task);
@@ -1288,37 +1243,6 @@ class TaskRouteHandler
                 }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
           }
-        }
-
-        if (!$memsource_task) {
-        $graphBuilder = new Lib\UIWorkflowBuilder();
-        //Maybe replace with an API call
-        $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
-
-        if ($graph) {
-
-            $index = $graphBuilder->find($task_id, $graph);
-            $node = $graph->getAllNodes($index);
-
-            $currentRow = $node->getPrevious();
-            $previousRow = array();
-
-            while (!empty($currentRow) && count($currentRow) > 0) {
-                foreach ($currentRow as $nodeId) {
-                    $index = $graphBuilder->find($nodeId, $graph);
-                    $node = $graph->getAllNodes($index);
-                    $tasksEnabled[$node->getTaskId()] = false;
-
-                    foreach ($node->getPrevious() as $prevIndex) {
-                        if (!in_array($prevIndex, $previousRow)) {
-                            $previousRow[] = $prevIndex;
-                        }
-                    }
-                }
-                $currentRow = $previousRow;
-                $previousRow = array();
-            }
-        }
         }
 
         if (!$memsource_task) {

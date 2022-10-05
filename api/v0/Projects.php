@@ -13,7 +13,6 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Project.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
-require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 
 
 class Projects
@@ -69,11 +68,6 @@ class Projects
             '/api/v0/projects/archiveProject/{projectId}/user/{userId}/',
             '\SolasMatch\API\V0\Projects:archiveProject')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
-
-        $app->get(
-            '/api/v0/projects/buildGraph/{projectId}/',
-            '\SolasMatch\API\V0\Projects:getProjectGraph')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->post(
                 '/api/v0/projects/getProjectByName/',
@@ -188,14 +182,6 @@ class Projects
         $projectId = $args['projectId'];
         $userId = $args['userId'];
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::archiveProject($projectId, $userId), null);
-    }
-
-    public static function getProjectGraph(Request $request, Response $response, $args)
-    {
-        $projectId = $args['projectId'];
-        $builder = new Lib\APIWorkflowBuilder();
-        $graph = $builder->buildProjectGraph($projectId);
-        return API\Dispatcher::sendResponse($response, $graph, null);
     }
 
     public static function getProject(Request $request, Response $response, $args)

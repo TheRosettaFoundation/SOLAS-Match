@@ -123,9 +123,6 @@ class ModelFactory
             case "OAuthResponse":
                 $ret = self::generateOAuthResponse($modelData);
                 break;
-            case "WorkflowGraph" :
-                $ret = self::generateWorkflowGraph($modelData);
-                break;
             case "UserFeedback" :
                 $ret = self::generateUserFeedback($modelData);
                 break;
@@ -1054,59 +1051,6 @@ class ModelFactory
         
         if (isset($modelData['expires_in'])) {
             $ret->setExpiresIn($modelData['expires_in']);
-        }
-        
-        return $ret;
-    }
-    
-    private static function generateWorkflowGraph($modelData)
-    {
-        
-        $ret = new Models\WorkflowGraph();
-        
-        if (isset($modelData['projectId'])) {
-            $ret->setProjectId($modelData['projectId']);
-        }
-        
-        if (isset($modelData['allNodes'])) {
-            
-            foreach ($modelData['allNodes'] as $aNode) {
-                $ret->appendAllNodes(self::generateWorkflowNode($aNode));
-            }
-        }
-        
-        if (isset($modelData['rootNode'])) {
-            
-            foreach ($modelData['rootNode'] as $rootNodePart) {
-                $ret->appendRootNode($rootNodePart);
-            }
-        }
-        
-        return $ret;
-    }
-    
-    private static function generateWorkflowNode($modelData)
-    {
-        $ret = new Models\WorkflowNode();
-        
-        if (isset($modelData['taskId'])) {
-            $ret->setTaskId($modelData['taskId']);
-        }
-        
-        if (isset($modelData['task'])) {
-            $ret->setTask(self::generateTask($modelData['task']));
-        }
-        
-        if (isset($modelData['previous'])) {
-            foreach ($modelData['previous'] as $prev) {
-                $ret->appendPrevious($prev);
-            }
-        }
-        
-        if (isset($modelData['next'])) {
-            foreach ($modelData['next'] as $next) {
-                $ret->appendNext($next);
-            }
         }
         
         return $ret;

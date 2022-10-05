@@ -31,10 +31,6 @@ class StaticAPI
             '\SolasMatch\API\V0\StaticAPI:getStatisticByName');
 
         $app->get(
-            '/api/v0/static/dart/conf/',
-            '\SolasMatch\API\V0\StaticAPI:getDartConf');
-
-        $app->get(
             '/api/v0/localisation/siteLanguages/',
             '\SolasMatch\API\V0\StaticAPI:getSiteLanguagesDart')
             ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
@@ -61,41 +57,6 @@ class StaticAPI
     {
         $name = $args['name'];
         $data = DAO\StatDao::getStatistics($name);
-        return Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function getDartConf(Request $request, Response $response)
-    {
-        $siteLocation = Common\Lib\Settings::get('site.location');
-        $siteAPI = Common\Lib\Settings::get('site.api');
-        $task_1_colour = Common\Lib\Settings::get('ui.task_1_colour');
-        $task_2_colour = Common\Lib\Settings::get('ui.task_2_colour');
-        $task_3_colour = Common\Lib\Settings::get('ui.task_3_colour');
-        $task_4_colour = Common\Lib\Settings::get('ui.task_4_colour');
-        $projImageSize = Common\Lib\Settings::get('projectImages.max_image_size');
-        $projImageWidth = Common\Lib\Settings::get('projectImages.max_width');
-        $projImageHeight = Common\Lib\Settings::get('projectImages.max_height');
-        $projImageFormats = Common\Lib\Settings::get('projectImages.supported_formats');
-        
-        $arr = array(
-            'urls' => array(
-                'SOLASMatch' => $siteAPI,
-                'SiteLocation' => $siteLocation
-            ),
-            'task_colours' => array(
-                'colour_1' => $task_1_colour,
-                'colour_2' => $task_2_colour,
-                'colour_3' => $task_3_colour,
-                'colour_4' => $task_4_colour
-            ),
-            'project_images' => array (
-            	'max_size' => $projImageSize,
-                'max_width' => $projImageWidth,
-                'max_height' => $projImageHeight,
-                'supported_formats' => $projImageFormats
-            )
-        );
-        $data = json_encode($arr, JSON_UNESCAPED_SLASHES);
         return Dispatcher::sendResponse($response, $data, null);
     }
 

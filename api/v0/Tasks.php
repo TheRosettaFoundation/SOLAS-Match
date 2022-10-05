@@ -24,16 +24,6 @@ class Tasks
         global $app;
 
         $app->put(
-            '/api/v0/tasks/{taskId}/prerequisites/{preReqId}/',
-            '\SolasMatch\API\V0\Tasks:addTaskPreReq')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreationPassingTaskId');
-
-        $app->delete(
-            '/api/v0/tasks/{taskId}/prerequisites/{preReqId}/',
-            '\SolasMatch\API\V0\Tasks:removeTaskPreReq')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
-
-        $app->put(
             '/api/v0/tasks/{taskId}/orgFeedback/',
             '\SolasMatch\API\V0\Tasks:sendOrgFeedback')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
@@ -144,20 +134,6 @@ class Tasks
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreation');
     }
 
-    public static function addTaskPreReq(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $preReqId = $args['preReqId'];
-        return API\Dispatcher::sendResponse($response, Lib\Upload::addTaskPreReq($taskId, $preReqId), null);
-    }
-
-    public static function removeTaskPreReq(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $preReqId = $args['preReqId'];
-        return API\Dispatcher::sendResponse($response, Lib\Upload::removeTaskPreReq($taskId, $preReqId), null);
-    }
-
     // Org Feedback, feedback sent from the organisation to the user who claimed the task
     public static function sendOrgFeedback(Request $request, Response $response, $args)
     {
@@ -218,7 +194,7 @@ class Tasks
             null
         );
     }
-    
+
     public static function getTaskPreReqs(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];

@@ -214,20 +214,6 @@ error_log("createTaskDirectly: $args");
         $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
 
-    public function addTaskPreReq($taskId, $preReqId)
-    {
-        $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        return $response;
-    }
-
-    public function removeTaskPreReq($taskId, $preReqId)
-    {
-        $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $response;
-    }
-
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
