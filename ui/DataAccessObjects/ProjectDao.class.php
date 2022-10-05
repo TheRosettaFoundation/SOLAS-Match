@@ -1055,8 +1055,8 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         $reverse_order = [];
         foreach ($workflow_levels as $i => $workflow_level) {
             if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level])) {
-                $forward_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]];
-                $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]]) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
+                $forward_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i == 11 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]];
+                $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i ==  0 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
             }
         }
 //(**)Old comment: Translation task should already have been created
