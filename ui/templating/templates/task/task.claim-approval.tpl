@@ -2,7 +2,7 @@
 
     <section>
         <div class="page-header">
-            <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>Approval Task</small></h1>
+            <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>Proofreading and Approval Task</small></h1>
         </div>
     </section>
 
@@ -13,10 +13,10 @@
     {/if}
 
     <section>
-        <h2>Do you want to approve this file?</h2>
+        <h2>Do you want to proofread and approve this file?</h2>
         <p style="margin-bottom:20px;"></p>
         <ol>
-            <li>Will you have enough time to approve this file? Check how long the file is.</li>
+            <li>Will you have enough time to proofread and approve this file? Check how long the file is.</li>
             <li>
                 {sprintf('Do you think you are capable of revising a file in <strong>%s?</strong>', {TemplateHelper::getLanguage($task->getTargetLocale())})}
             </li>
@@ -27,12 +27,12 @@
             {/if}
             {if !empty($matecat_url)}
             <li>
-                {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, 'Yes, I promise I will approve this file')}
+                {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, 'Yes, I promise I will proofread and approve this file')}
             </li>
             {/if}
             {if !empty($memsource_task) || empty($allow_download)}
             <li>
-                Also please note that you must wait for translation/revision to be complete (100% translated/revised) before starting approval.
+                Also please note that you must wait for translation/revision to be complete (100% translated/revised) before starting proofreading and approval.
             </li>
             {/if}
         </ol>
@@ -57,7 +57,7 @@
         <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
         <p> 
                 <button type="submit" class="btn btn-primary">
-                    <i class="icon-ok-circle icon-white"></i> Yes, I promise I will approve this file
+                    <i class="icon-ok-circle icon-white"></i> Yes, I promise I will proofread and approve this file
                 </button>
                 <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
                     <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}

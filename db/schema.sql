@@ -546,7 +546,7 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (2, "Translation"),
   (3, "Proofreading"),
   (4, "Desegmentation"),
-  (6, "Approval");
+  (6, "Proofreading and Approval");
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (

@@ -41,12 +41,13 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 ## Version 12.0
 
-- Added support for Approval Memsource Workflow and generalised adding new workflows.
+- Added support for the Proofreading and Approval Phrase TMS Workflow and generalised adding new workflows.
 - Moved to system of allowing all tasks to be claimed when previous level in workflow is all claimed.
 - Added new task status of CLAIMED (but not yet IN_PROGRESS, because prerequisite tasks are not complete).
 - This expanded status is stored in a new table (tasks_status).
 - Added an audit trail of task status changes (tasks_status_audit_trail which also includes, where appropriate, the linguist, changed time and a comment).
-- Removed support for Matecat (old projects remain in system)..
+- Changed UI references from "Memsource" to "Phrase TMS".
+- Removed support for Matecat (old projects remain in system).
 - Removed code supporting pre-Matecat file based download and uploads.
 - Removed User verification system (where a user could create a project as a test to be verified).
 - Added new wording for registration related emails.
