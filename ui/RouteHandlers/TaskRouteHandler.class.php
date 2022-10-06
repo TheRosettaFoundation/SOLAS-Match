@@ -1018,7 +1018,7 @@ class TaskRouteHandler
         });
         </script>";
 
-        if ($projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+        if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
@@ -1428,7 +1428,7 @@ class TaskRouteHandler
         }
         $taskMetaData[$task_id] = $metaData;
 
-        if ($projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+        if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
                      "task" => $task,
@@ -1551,7 +1551,7 @@ class TaskRouteHandler
       });
     </script>";
 
-        if ($projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+        if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
