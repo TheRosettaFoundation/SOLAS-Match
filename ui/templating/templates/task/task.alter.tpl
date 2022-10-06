@@ -117,15 +117,6 @@
                     <hr/>
                 </td> 
             </tr>
-            {if $deadlockError != ''}
-            <tr>
-                <td colspan="2">
-                    <div class="alert alert-error">
-                        {$deadlockError}
-                    </div>
-                </td>
-            </tr>
-            {/if}
             {if !empty($projectTasks)}
             <tr>
                 <td colspan="2">

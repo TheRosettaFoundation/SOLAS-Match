@@ -1086,7 +1086,6 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $word_count_err = null;
-        $deadlockError = null;
         $deadlineError = "";
 
         $extra_scripts = "
@@ -1277,7 +1276,6 @@ class TaskRouteHandler
             "thisTaskPreReqIds"   => $thisTaskPreReqIds,
             "tasksEnabled"        => $tasksEnabled,
             "word_count_err"      => $word_count_err,
-            "deadlockError"       => $deadlockError,
             "deadline_error"      => $deadlineError,
             "publishStatus"      => $publishStatus,
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
@@ -1457,7 +1455,7 @@ class TaskRouteHandler
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
-                'recorded_status' => $recorded_status,
+                'recorded_status' => '',
                 'display_treat_as_translated' => 0,
                 'this_is_id' => 0,
                 'paid_status' => $taskDao->get_paid_status($task_id),
