@@ -734,9 +734,9 @@ class TaskRouteHandler
             if ($success == 1) {
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-claimed', array('task_id' => $taskId)));
             } elseif ($success == -1) {
-                UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
+                UserRouteHandler::flashNow('error', 'Unable to create user in Phrase TMS.');
             } else {
-                UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Phrase TMS and will soon be removed from here.');
             }
         }
 
@@ -924,7 +924,7 @@ class TaskRouteHandler
                             UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $task->getProjectId())));
                         } elseif ($success == -1) {
-                            UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
+                            UserRouteHandler::flashNow('error', 'Unable to create user in Phrase TMS.');
                         } else {
                             UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                         }
