@@ -127,15 +127,15 @@
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                {if $memsource_tasks[$task_id]}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
+                                                {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
                                             </a>
                                         {elseif $type_id == 3}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                {if $memsource_tasks[$task_id]}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
+                                                {if $memsource_tasks[$task_id]}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
                                         {elseif $type_id == 6}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                Approve using Memsource
+                                                Proofread and approve using Phrase TMS
                                             </a>
                                         {/if}
                                     {/if}

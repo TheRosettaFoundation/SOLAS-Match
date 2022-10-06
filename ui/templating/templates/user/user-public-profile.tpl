@@ -42,7 +42,7 @@
                         {/if}
                         {if $show_create_memsource_user}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-primary" name="mark_create_memsource_user" value="Create Matching Memsource User" />
+                                <input type="submit" class="btn btn-primary" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}

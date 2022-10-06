@@ -16,7 +16,7 @@
         <ol>
             <li>Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.</li>
             <li>You will be notified by email when the translations that this task depends on are complete.</li>
-            <li>The email will contain a link to Memsource, our translation tool, where you can revise the task. You can also find the link in your Claimed Tasks page.</li>
+            <li>The email will contain a link to Phrase TMS, our translation tool, where you can revise the task. You can also find the link in your Claimed Tasks page.</li>
             <li>Click on the link to start revising.</li>
         </ol>
        {else}
@@ -29,7 +29,7 @@
                 {/if}
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                    <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}</a></li>
+                    <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('task_claimed_proofreading_1')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>

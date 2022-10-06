@@ -303,7 +303,7 @@ a:hover{
 </div>
 <div class="span3">
   <span>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
-   Get free access to Memsource, our translation tool and hone your translation skills through practice.<br/>
+   Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
    Receive feedback on your translations from more senior linguists and grow in the process.
     </span>
 </div>
@@ -334,7 +334,7 @@ a:hover{
    <h2  class="clearheader" style="text-align: center">Learn</h2>
    <br/>
    <span>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion<br/>
-   Get free access to Memsource, our translation tool and hone your translation skills through practice.<br/>
+   Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
    Receive feedback on your translations from more senior linguists and grow in the process
     </span>
          </div>
