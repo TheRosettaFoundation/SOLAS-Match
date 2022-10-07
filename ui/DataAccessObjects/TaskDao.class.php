@@ -556,8 +556,8 @@ error_log("createTaskDirectly: $args");
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
                     if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
-                        if ( $memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
-                            ($memsource_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+                        if ( $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                            ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
 //(**)Need to add additional code to deny if user translated ANY file (not just current)
 //(**)Will there be index on QA/Proofread?
                             if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
