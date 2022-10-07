@@ -9543,9 +9543,9 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_paid_status`;
+DROP PROCEDURE IF EXISTS `get_paid_for_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_status`(IN pID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_for_project`(IN pID INT)
 BEGIN
     SELECT
         t.id,
@@ -9555,7 +9555,6 @@ BEGIN
     WHERE t.project_id=pID;
 END//
 DELIMITER ;
-
 
 DROP PROCEDURE IF EXISTS `get_points_for_badges_details`;
 DELIMITER //
