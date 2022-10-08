@@ -18,7 +18,7 @@
         <ol>
             <li>Will you have enough time to proofread and approve this file? Check how long the file is.</li>
             <li>
-                {sprintf('Do you think you are capable of revising a file in <strong>%s?</strong>', {TemplateHelper::getLanguage($task->getTargetLocale())})}
+                {sprintf('Do you think you are capable of proofreading and approving a file in <strong>%s?</strong>', {TemplateHelper::getLanguage($task->getTargetLocale())})}
             </li>
             {if empty($memsource_task)}
             <li>
