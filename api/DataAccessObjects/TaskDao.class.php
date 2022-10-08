@@ -637,7 +637,7 @@ error_log("call taskInsertAndUpdate($args)");
 error_log($claimed_task['workflowLevel'] . '==' . $memsource_task['workflowLevel']);
                     if ($claimed_task['workflowLevel'] == $memsource_task['workflowLevel']) { // Only add back Deny if claimed 'workflowLevel' is same as unclaimed task
                         if (self::hasUserClaimedTask($userId, $claimed_task['id'])) {
-error_log($claimed_task['$claimed_task[id]: ' . $claimed_task['id']);
+error_log('$claimed_task[id]: ' . $claimed_task['id']);
                             foreach ($project_tasks as $dependent_task) {
                                 if ($top_level == self::get_top_level($dependent_task['internalId'])) {
 error_log($claimed_task['workflowLevel'] . '!=' . $dependent_task['workflowLevel']);
