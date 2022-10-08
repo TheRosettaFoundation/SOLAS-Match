@@ -634,11 +634,15 @@ error_log("call taskInsertAndUpdate($args)");
             // Reapply Deny List for this $userId claimed tasks for this top level 'internalId' for other 'workflowLevel's
             foreach ($project_tasks as $claimed_task) { // Potential tasks that might have been claimed by $userId
                 if ($top_level == self::get_top_level($claimed_task['internalId'])) {
+error_log($claimed_task['workflowLevel'] . '==' . $memsource_task['workflowLevel']);
                     if ($claimed_task['workflowLevel'] == $memsource_task['workflowLevel']) { // Only add back Deny if claimed 'workflowLevel' is same as unclaimed task
                         if (self::hasUserClaimedTask($userId, $claimed_task['id'])) {
+error_log($claimed_task['$claimed_task[id]: ' . $claimed_task['id']);
                             foreach ($project_tasks as $dependent_task) {
                                 if ($top_level == self::get_top_level($dependent_task['internalId'])) {
+error_log($claimed_task['workflowLevel'] . '!=' . $dependent_task['workflowLevel']);
                                     if ($claimed_task['workflowLevel'] != $dependent_task['workflowLevel']) { // Not same workflowLevel
+error_log($claimed_task['task-type_id'] . '...' . $dependent_task['task-type_id']);
                                         if ( $claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
                                             ($claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $dependent_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
 //(**)Need to add additional code to deny if user translated ANY file (not just current)
