@@ -9859,25 +9859,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `make_tasks_claimable`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `make_tasks_claimable`(IN pID INT)
-BEGIN
-    UPDATE Tasks t0 SET t0.`task-status_id`=2 WHERE t0.id IN (
-        SELECT
-            t.id
-        FROM      Tasks                                  t
-        LEFT JOIN taskclaims_required_to_make_claimable tc ON t.id=tc.claimable_task_id
-        LEFT JOIN Tasks                                 t1 ON tc.task_id=t1.id
-        WHERE
-            t.project_id=pID AND
-            t.`task-status_id`=1
-        GROUP BY t.id
-        HAVING SUM(IF(t1.`task-status_id`<3, 1, 0))=0
-    );
-END//
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS `get_tasks_to_be_made_claimable`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_to_be_made_claimable`(IN pID INT)
