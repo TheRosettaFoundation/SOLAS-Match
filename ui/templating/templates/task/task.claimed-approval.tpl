@@ -17,7 +17,7 @@
             <li>Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.</li>
             <li>You will be notified by email when the translations and revisions that this task depends on are complete.</li>
             <li>The email will contain a link to Phrase TMS, our translation tool, where you can proofread and approve the task. You can also find the link in your Claimed Tasks page.</li>
-            <li>Click on the link to start revising.</li>
+            <li>Click on the link to start proofreading and approving.</li>
         </ol>
        {else}
         <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
