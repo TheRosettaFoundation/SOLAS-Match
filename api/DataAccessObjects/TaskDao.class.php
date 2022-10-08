@@ -615,8 +615,6 @@ error_log("call taskInsertAndUpdate($args)");
 
         $memsource_task = self::get_memsource_task($taskId);
         if ($memsource_task) {
-            $ret = Lib\PDOWrapper::call('unClaimTaskMemsource', $args);
-
             $task = self::getTask($taskId);
             $project_tasks = self::get_tasks_for_project($task->getProjectId());
 
@@ -636,6 +634,7 @@ error_log("call taskInsertAndUpdate($args)");
                 if ($top_level == self::get_top_level($claimed_task['internalId'])) {
 error_log($claimed_task['workflowLevel'] . '==' . $memsource_task['workflowLevel']);
                     if ($claimed_task['workflowLevel'] == $memsource_task['workflowLevel']) { // Only add back Deny if claimed 'workflowLevel' is same as unclaimed task
+error_log('$claimed_task[id]: ' . $claimed_task['id'] . " userId: $userId");
                         if (self::hasUserClaimedTask($userId, $claimed_task['id'])) {
 error_log('$claimed_task[id]: ' . $claimed_task['id']);
                             foreach ($project_tasks as $dependent_task) {
@@ -659,6 +658,7 @@ error_log($claimed_task['task-type_id'] . '...' . $dependent_task['task-type_id'
                     }
                 }
             }
+            $ret = Lib\PDOWrapper::call('unClaimTaskMemsource', $args);
 
             $memsource_project = self::get_memsource_project($task->getProjectId());
             $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
