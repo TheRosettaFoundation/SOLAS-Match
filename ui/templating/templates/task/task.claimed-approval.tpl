@@ -34,7 +34,7 @@
     </section>
 
     <section>
-        <h3>When you have finished approving:</h3>
+        <h3>When you have finished proofreading and approving:</h3>
         <p>
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
