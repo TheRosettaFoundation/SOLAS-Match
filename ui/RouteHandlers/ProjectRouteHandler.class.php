@@ -1960,7 +1960,7 @@ error_log("mapped: $pm");
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
                         }
                     }
-*/ (**)
+(**) */
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
