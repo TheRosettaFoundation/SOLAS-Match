@@ -1832,8 +1832,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
                 if ($projectId < 28433) { // Before cutover
-//(**)                    $projectDao->dequeue_asana_project($projectId);
-//(**)                    break;
+                    $projectDao->dequeue_asana_project($projectId);
+                    break;
                 }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
@@ -1878,11 +1878,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $targetLocale = $project_lang_pair['targetLanguageName'];
                     $targetLocale_code = $project_lang_pair['targetLanguageCode'];
 
-//(**)                    $ch = curl_init($url);
+                    $ch = curl_init($url);
 
                     $wordCount = 0; // Pick the first nonzero...
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[$to_enum];
-error_log("Asana wordCount: $wordCount");
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
@@ -1925,7 +1924,6 @@ error_log("mapped: $pm");
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
-/* (**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                     else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -1960,7 +1958,6 @@ error_log("mapped: $pm");
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
                         }
                     }
-(**) */
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
