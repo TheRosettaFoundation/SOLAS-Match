@@ -1021,7 +1021,7 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
         else                         $task->setDeadline($project->getDeadline());
 
-        $task->setPublished(1);
+        $task->setPublished(0);
 
         $task_id = $taskDao->createTaskDirectly($task);
         if (!$task_id) {
