@@ -1,6 +1,6 @@
 <h2>{TemplateHelper::uiCleanseHTML($reviewedTask->getTitle())}</h2>
 
-{if $reviewedTask->getTaskType() != null && $reviewedTask->getTaskStatus() != null && ($reviewedTask->getTaskType() < 1 || $reviewedTask->getTaskType() > 4 || $reviewedTask->getTaskStatus() < 1 || $reviewedTask->getTaskStatus() > 4)}
+{if $reviewedTask->getTaskType() != null && $reviewedTask->getTaskStatus() != null && ($reviewedTask->getTaskType() < 1 || $reviewedTask->getTaskType() > 6 || $reviewedTask->getTaskStatus() < 1 || $reviewedTask->getTaskStatus() > 4)}
     <!-- These contain $project_task['beginIndex'] and $project_task['endIndex'] -->
     <h3>Starting segment: {$reviewedTask->getTaskType()}, ending segment: {$reviewedTask->getTaskStatus()}</h3>
 {/if}
