@@ -684,27 +684,6 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('clear_paid_status', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
-    public function get_all_as_paid($project_id)
-    {
-        $result = LibAPI\PDOWrapper::call('get_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
-        return $result[0]['result'];
-    }
-
-    public function set_all_as_paid($project_id)
-    {
-        LibAPI\PDOWrapper::call('set_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
-    }
-
-    public function set_revision_as_paid($project_id)
-    {
-        LibAPI\PDOWrapper::call('set_revision_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
-    }
-
-    public function clear_all_as_paid($project_id)
-    {
-        LibAPI\PDOWrapper::call('clear_all_as_paid', LibAPI\PDOWrapper::cleanse($project_id));
-    }
-
     public function get_paid_for_project($project_id)
     {
         $result = LibAPI\PDOWrapper::call('get_paid_for_project', LibAPI\PDOWrapper::cleanse($project_id));
