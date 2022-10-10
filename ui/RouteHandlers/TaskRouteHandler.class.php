@@ -1311,6 +1311,11 @@ class TaskRouteHandler
         }
 
         $task = $taskDao->getTask($task_id);
+        if (is_null($task)) {
+            UserRouteHandler::flash('error', sprintf(Lib\Localisation::getTranslation('task_view_5'), $task_id));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
+
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
 
