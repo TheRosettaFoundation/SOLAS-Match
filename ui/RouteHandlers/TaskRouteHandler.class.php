@@ -886,7 +886,7 @@ class TaskRouteHandler
         if ($taskClaimed) {
             UserRouteHandler::flashKeep();
 
-           if ($memsource_task) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
+           return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
         } else {
             if ($isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != "") || !empty($post['assignUserSelect']))) {
                 $emailOrUserId = trim($post['userIdOrEmail']);
