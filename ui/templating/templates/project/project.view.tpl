@@ -328,7 +328,6 @@ Tweet</a>
         </div>
         {/if}
     </h1> 
-{/if}
             
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success">
