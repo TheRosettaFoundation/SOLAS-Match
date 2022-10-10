@@ -61,6 +61,7 @@
 	<string name="common_organisation">Organizzazione</string>
 	<string name="common_organisations">Organizzazioni</string>
 	<string name="common_type">Tipo di attività</string>
+	<string name="common_mode">Mode</string>
 	<string name="common_waiting">In attesa</string>
 	<string name="common_unclaimed">Non assegnata</string>
 	<string name="common_in_progress">In corso</string>

@@ -60,6 +60,7 @@
 	<string name="common_edit_project">Modificar proyecto</string>
 	<string name="common_organisation">Organización</string>
 	<string name="common_organisations">Organizaciones</string>
+	<string name="common_mode">Modo</string>
 	<string name="common_type">Tipo de tarea</string>
 	<string name="common_waiting">En cola</string>
 	<string name="common_unclaimed">Sin asignar</string>

@@ -59,6 +59,7 @@
 	<string name="common_organisation">Organisation</string>
 	<string name="common_organisations">Organisationen</string>
 	<string name="common_type">Aufgabentyp</string>
+	<string name="common_mode">Mode</string>
 	<string name="common_waiting">Warten</string>
 	<string name="common_unclaimed">Nicht vergeben</string>
 	<string name="common_in_progress">In Arbeit</string>

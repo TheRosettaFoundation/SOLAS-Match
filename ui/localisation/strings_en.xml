@@ -61,6 +61,7 @@
 	<string name="common_organisation">Organization</string>
 	<string name="common_organisations">Organizations</string>
 	<string name="common_type">Task Type</string>
+	<string name="common_mode">Mode</string>
 	<string name="common_waiting">Waiting</string>
 	<string name="common_unclaimed">Unclaimed</string>
 	<string name="common_in_progress">In Progress</string>

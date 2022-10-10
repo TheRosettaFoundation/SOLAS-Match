@@ -822,8 +822,174 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
+            if(!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks']) ){
+
+                $tasks = [];
+                
+                if(!empty($post['unpublish_selected_tasks'])) {
+                    $task_ids = preg_split ("/\,/", $post['unpublish_selected_tasks']); 
+                    //$tasks['published'] = false;
+                    $published = false;
+                }
+
+                if(!empty($post['publish_selected_tasks'])) {
+                    $task_ids = preg_split ("/\,/", $post['publish_selected_tasks']); 
+                    //$tasks['published'] = true;
+                    $published = true;
+                }  
+                
+                foreach($task_ids as $id){
+                    $tasks[] = $taskDao->getTask($id);
+
+                }
+
+                //Unpublish selected tasks
+                if (!empty($tasks)) {
+                    foreach ($tasks as $project_task) {
+                       
+                     $project_task->setPublished($published);
+                     $taskDao->updateTask($project_task);
+                        
+                    }
+                 UserRouteHandler::flashNow('success', count($tasks). ' tasks now marked as published/unpublished.');
+                }
+
+
+            }
+
+            if(!empty($post['tasks_as_paid'])) {
+                
+                  $tasks = [];
+
+                if(!empty($post['tasks_as_paid'])){
+                    $task_ids = preg_split ("/\,/", $post['tasks_as_paid']); 
+                    $task_paid = true;
+                }
+
+                foreach($task_ids as $id){
+
+                    if($task_paid == true){
+                        $tasks[] = $taskDao->getTask($id);
+                        $taskDao->set_paid_status($id);
+
+                    }
+
+
+                }
+
+                //Update tasks 
+                if (!empty($tasks)) {
+                    foreach ($tasks as $project_task) {
+
+                     $taskDao->updateTask($project_task);
+                        
+                    }
+                }
+                UserRouteHandler::flashNow('success', count($tasks). ' tasks now marked as paid.');
+
+            }
+
+            if(!empty($post['tasks_as_unpaid'])) {
+                
+                $tasks = [];
+
+              if(!empty($post['tasks_as_unpaid'])){
+                  $task_ids = preg_split ("/\,/", $post['tasks_as_unpaid']); 
+                  $task_paid = true;
+              }
+
+              foreach($task_ids as $id){
+                  if($task_paid == true){
+                      $tasks[] = $taskDao->getTask($id);
+                      $taskDao->clear_paid_status($id);
+                  }
+
+              }
+
+              //Update tasks
+              
+              if (!empty($tasks)) {
+                  foreach ($tasks as $project_task) {                   
+                   $taskDao->updateTask($project_task);   
+                  }
+              }
+              UserRouteHandler::flashNow('success', count($tasks). ' tasks now marked as unpaid.');
+
+          }
+
+            if(!empty($post['status_as_unclaimed'])){
+
+                $tasks = [];
+
+                if(!empty($post['status_as_unclaimed'])){
+                    $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']); 
+                    $status_as_unclaimed = true;
+                }
+
+                foreach($task_ids as $id){
+
+                    if($status_as_unclaimed){
+                        $tasks[] = $taskDao->getTask($id);
+
+                    }
+
+
+                }
+                //echo '<pre>',print_r($tasks,1),'</pre>';die();
+
+                if (!empty($tasks)) {
+                    foreach ($tasks as $project_task) {
+
+                        if($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
+                            $project_task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                            $taskDao->updateTask($project_task);  
+                       }
+                        
+                    }
+                    
+                }
+                
+
+            }
+
+            if(!empty($post['status_as_waiting'])){
+
+                $tasks = [];
+
+                if(!empty($post['status_as_waiting'])){
+                    $task_ids = preg_split ("/\,/", $post['status_as_waiting']); 
+                    $status_as_waiting = true;
+                }
+
+                foreach($task_ids as $id){
+
+                    if($status_as_waiting){
+                        $tasks[] = $taskDao->getTask($id);
+
+                    }
+
+
+                }
+                //echo '<pre>',print_r($tasks,1),'</pre>';die();
+
+                if (!empty($tasks)) {
+                    foreach ($tasks as $project_task) {
+
+                        if($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
+                            $project_task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            $taskDao->updateTask($project_task);  
+                       }
+                        
+                    }
+                    
+                }
+                
+
+            }
+            /*
             if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
-                $project_tasks = $projectDao->getProjectTasks($project_id);
+                //$project_tasks = $projectDao->getProjectTasks($project_id);
+
                 if (!empty($project_tasks)) {
                     foreach ($project_tasks as $project_task) {
                         if ((!empty($post['unpublish_all_translated']) && ($project_task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION)) ||
@@ -833,7 +999,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
                 }
-            }
+            }*/
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -934,7 +1100,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'pm' => $pm,
                 'project' => $project,
                 'all_as_paid' => $taskDao->get_all_as_paid($project_id),
-                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
+                'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
+               'get_paid_for_project' => $taskDao->get_paid_for_project($project_id),               
+                'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
