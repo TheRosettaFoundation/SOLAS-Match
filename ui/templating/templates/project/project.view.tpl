@@ -590,4 +590,9 @@ Tweet</a>
                 {/foreach}
 {/if}
 
-{include file="footer.tpl"}
+{include file="footer_no_end.tpl"}
+        <script>
+            $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
+        </script>
+    </body>
+</html>
