@@ -840,7 +840,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 foreach ($task_ids as $id) {
                     $taskDao->set_paid_status($id);
                 }
-                UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as paid.');
+                UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
             }
 
             if (!empty($post['tasks_as_unpaid'])) {
@@ -848,7 +848,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 foreach ($task_ids as $id) {
                     $taskDao->clear_paid_status($id);
                 }
-                UserRouteHandler::flashNow('success', count($tasks). ' tasks now marked as unpaid.');
+                UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
             }
 
             if (!empty($post['status_as_unclaimed'])) {
