@@ -22,7 +22,7 @@
     <th width="25%">Title</th>
     <th width="24%">Creator</th>
     <th width="25%">Partner</th>
-    <th width="11%">Phrase TMS URL</th>
+    <th width="11%">Phrase URL</th>
     <th width="8%">Word Count</th>
   </thead>
 
