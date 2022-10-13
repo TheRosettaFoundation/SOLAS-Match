@@ -22,7 +22,7 @@
     <th width="25%">Title</th>
     <th width="24%">Creator</th>
     <th width="25%">Partner</th>
-    <th width="11%">Phrase URL</th>
+    <th width="11%">Phrase TMS URL</th>
     <th width="8%">Word Count</th>
   </thead>
 
@@ -38,7 +38,7 @@
       <td></td>
       {/if}
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['organisation_id']}"}" target="_blank">{$user_row['name']|escape:'html':'UTF-8'}</a></td>
-      <td><a href="https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Phrase TMS Project</a></td>
+      <td><a href="https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Phrase Project</a></td>
       <td>{if $user_row['word-count'] != 1}{$user_row['word-count']}{else}None{/if}</td>
     </tr>
 
