@@ -1519,6 +1519,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         for ($i = 0; $i < 60; $i++) {
             $minute_list[$i] = $i;
         }
+        $week = strtotime('+1 week');
+        $selected_year   = (int)date('Y', $week);
+        $selected_month  = (int)date('n', $week);
+        $selected_day    = (int)date('j', $week);
+        $selected_hour   = (int)date('G', $week); // These are UTC, they will be recalculated to local time by JavaScript (we do not know what the local time zone is)
+        $selected_minute = 0;
+        $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate10.js\"></script>";
@@ -1533,14 +1540,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             "user_id"        => $user_id,
             'subscription_text' => null,
             "extra_scripts"  => $extraScripts,
+            'deadline_timestamp' => $deadline_timestamp,
+            'selected_day'   => $selected_day,
             'month_list'     => $month_list,
-            'selected_month' => (int)date('n'),
+            'selected_month' => $selected_month,
             'year_list'      => $year_list,
-            'selected_year'  => (int)date('Y'),
+            'selected_year'  => $selected_year,
             'hour_list'      => $hour_list,
-            'selected_hour'  => 0,
+            'selected_hour'  => $selected_hour,
             'minute_list'    => $minute_list,
-            'selected_minute'=> 0,
+            'selected_minute'=> $selected_minute,
             'create_memsource'=> $create_memsource,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
