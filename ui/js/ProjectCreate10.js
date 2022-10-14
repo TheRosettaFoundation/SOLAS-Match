@@ -10,6 +10,9 @@ var imageMaxFileSize;
 var supportedImageFormats;
 var org_id;
 var user_id;
+var deadline_timestamp;
+var initial_selected_day;
+var userIsAdmin;
 var create_memsource;
 
 // Errors
@@ -167,10 +170,26 @@ function documentReady()
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
   create_memsource = document.getElementById("create_memsource").innerHTML;
+  userIsAdmin      = document.getElementById("userIsAdmin").innerHTML;
+  if (userIsAdmin == 1) {
+    userIsAdmin = true;
+  } else {
+    userIsAdmin = false; // A "0" will not be false!
+  }
+
   supportedImageFormats = getSetting("supportedImageFormats").toString().split(","); // Image format string is comma separated, split it into a list
 
+  deadline_timestamp = new Date(document.getElementById("deadline_timestamp").innerHTML * 1000);
+  document.getElementById("selectedYear").value   = deadline_timestamp.getFullYear();
+  document.getElementById("selectedMonth").value  = deadline_timestamp.getMonth() + 1;
+  document.getElementById("selectedDay").value    = deadline_timestamp.getDate();
+  document.getElementById("selectedHour").value   = deadline_timestamp.getHours();
+  document.getElementById("selectedMinute").value = deadline_timestamp.getMinutes();
+
   // Set the options for the day in month select field based on month/year
+  initial_selected_day = deadline_timestamp.getDate();
   selectedMonthChanged();
+  initial_selected_day = null; // If user changes date after this, do not use the initial value
 
   parameters = new Parameters(loadingComplete);
 }
@@ -520,7 +539,7 @@ function validateLocalValues()
   // Parse project deadline info
   var projectDeadline = new Date(selectedYear, selectedMonth - 1, selectedDay, selectedHour, selectedMinute);
   if (projectDeadline != null) {
-    if (projectDeadline > (new Date())) {
+    if (projectDeadline > (new Date()) && (userIsAdmin || projectDeadline >= deadline_timestamp)) {
       var m = projectDeadline.getUTCMonth() + 1;
       if (m < 10) {
         m = "0" + m;
@@ -542,6 +561,7 @@ function validateLocalValues()
     } else {
       // Deadline is not a date in the future, set error message
       deadlineError = parameters.getTranslation("project_create_25");
+      if (!userIsAdmin) deadlineError = 'One week is the minimum deadline.';
       success = false;
     }
   } else {
@@ -778,7 +798,9 @@ function set_options_for_days_in_month(month, year)
 
   var options_list = '';
   for (var i = 1; i <= monthLengths[month]; i++) {
-    options_list += '<option value="' + i.toString() + '">' + i.toString() + '</option>';
+    selectedString = "";
+    if (initial_selected_day != null && i == initial_selected_day) selectedString = ' selected="selected"'
+    options_list += '<option value="' + i.toString() + '"' + selectedString + '>' + i.toString() + '</option>';
   }
 
   document.getElementById("selectedDay").innerHTML = options_list;
