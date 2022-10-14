@@ -1189,11 +1189,15 @@ class TaskRouteHandler
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
+                   if ($site_admin || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                         $userDao = new DAO\UserDao();
                         $userDao->set_dateDue_in_memsource($task, $memsource_task, $date);
                     }
+                   } else {
+                    $deadlineError = 'You may not tighten the deadline.';
+                   }
                 } else {
                     $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
                 }

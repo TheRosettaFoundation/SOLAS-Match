@@ -291,7 +291,7 @@ function validateLocalValues()
   // Parse project deadline info
   var projectDeadline = new Date(selectedYear, selectedMonth - 1, selectedDay, selectedHour, selectedMinute);
   if (projectDeadline != null) {
-    if (projectDeadline > (new Date()) && (userIsAdmin || projectDeadline > deadline_timestamp)) {
+    if (projectDeadline > (new Date()) && (userIsAdmin || projectDeadline >= deadline_timestamp)) {
       var m = projectDeadline.getUTCMonth() + 1;
       if (m < 10) {
         m = "0" + m;
@@ -312,6 +312,7 @@ function validateLocalValues()
     } else {
       // Deadline is not a date in the future, set error message
       deadlineError = parameters.getTranslation("project_create_25");
+      if (!userIsAdmin) deadlineError = 'You may not tighten the deadline.';
       success = false;
     }
   } else {
