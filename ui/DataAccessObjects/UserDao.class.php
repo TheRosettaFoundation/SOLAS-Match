@@ -1510,6 +1510,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
         $urls = $this->getUserURLs($user_id);
         foreach ($urls as $url) {
+            if (empty($url['url'])) continue;
             if (strpos($url['url'], 'https://') === false) $url['url'] = 'https://' . $url['url'];
             $url_list[$url['url_key']]['state'] = $url['url'];
         }
