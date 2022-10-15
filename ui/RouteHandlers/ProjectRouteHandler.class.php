@@ -478,7 +478,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 
             if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
 
-            if ($self_service_project && $self_service_project['split'] && $task->getWordCount() > 900 && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            if ($self_service_project && $self_service_project['split'] && $task->getWordCount() > 2000 && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
                 error_log("Splitting project_id: $project_id, task_id: $task_id");
                 $uid = $part['uid'];
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];

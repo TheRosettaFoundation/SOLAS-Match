@@ -1970,6 +1970,7 @@ error_log(print_r($project_result, true));//(**)
             $workflowLevels);
 
         $split = in_array($project->getOrganisationId(), [860, $this->usernamePrefix === 'DEV_' ? 547 : 0]) ? 1 : 0;
+        $split = 1;
         $projectDao->set_memsource_self_service_project($project_result['id'], $split);
 
         if ($client) {
