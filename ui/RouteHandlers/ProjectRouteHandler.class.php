@@ -1722,16 +1722,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $org = $orgDao->getOrganisation($org_id);
         $org_name = $org->getName();
 
-        $langDao = new DAO\LanguageDao();
+        $selections = $projectDao->generate_language_selection();
         $langcodearray = explode(',', $targetlanguages);
-        $i = 0;
         $languages = array();
         foreach($langcodearray as $langcode){
-          if (!empty($langcode)) {
-            $langcode = substr($langcode,0,strpos($langcode."-","-"));
-            $language = $langDao->getLanguageByCode($langcode);
-            $languages[$i++] = $language->getName();
-          }
+            if (!empty($langcode) && !empty($selections[$langcode])) {
+                $languages[] = $selections[$langcode];
+            }
         }
 
         $creator = $taskDao->get_creator($projectId, $memsource_project);
@@ -1892,6 +1889,11 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $objDateTime = new \DateTime($project->getDeadline());
                 $sourceLocale_code = $project->getSourceLocale()->getLanguageCode() .  '-'  . $project->getSourceLocale()->getCountryCode();
                 $sourceLocale      = $project->getSourceLocale()->getLanguageName() . ' - ' . $project->getSourceLocale()->getCountryName();
+                $selections = $projectDao->generate_language_selection();
+                $source_name_asana = $sourceLocale;
+                if (!empty($selections[$sourceLocale_code])) $source_name_asana = $selections[$sourceLocale_code];
+                $source_code_asana = str_replace('---', '', $sourceLocale_code);
+
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
@@ -1940,6 +1942,9 @@ foreach ($TEMP_TWB_to_CLEAR_email as $TWB_to_CLEAR_email) {
 }
 error_log("mapped: $pm");
                     if ($create) {
+                        $target_name_asana = $targetLocale;
+                        if (!empty($selections[$targetLocale_code])) $target_name_asana = $selections[$targetLocale_code];
+                        $target_code_asana = str_replace('---', '', $targetLocale_code);
                         $data = array('data' => array(
                             "name" => $project_name,
                             "projects" => array(
@@ -1948,10 +1953,10 @@ error_log("mapped: $pm");
                             "custom_fields" => array(
                                 "1200067882657247" => $wordCount,
                                 "1200067882657245" => $org_name,
-                                "1200068101079960" => $sourceLocale,
-                                "1200269602122253" => $sourceLocale_code,
-                                "1200067882657251" => $targetLocale,
-                                "1200269602122255" => $targetLocale_code,
+                                "1200068101079960" => $source_name_asana,
+                                "1200269602122253" => $source_code_asana,
+                                "1200067882657251" => $target_name_asana,
+                                "1200269602122255" => $target_code_asana,
                                 "1200226775862070" => $project_url,
                                 '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
                                 "1200269602122257" => "$projectId"
