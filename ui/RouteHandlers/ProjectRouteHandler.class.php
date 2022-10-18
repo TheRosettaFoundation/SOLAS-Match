@@ -878,7 +878,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
-        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
+        $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
+        $isAdmin = $isOrgAdmin || $isSiteAdmin;
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -954,6 +955,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $template_data = array_merge($template_data, array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
+                'isOrgAdmin'    => $isOrgAdmin,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
                 "imgCacheToken" => $preventImageCacheToken,
