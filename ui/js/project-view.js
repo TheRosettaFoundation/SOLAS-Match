@@ -15,7 +15,9 @@ function select() {
         if (valueSelected == "all_translation_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
             $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
                 arr.push($(this).val());
+                }
             });
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
@@ -27,7 +29,9 @@ function select() {
         } else if (valueSelected == "all_revision_tasks") {
             $(":checkbox[data-task-type='3']").prop("checked", true);
             $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
                 arr.push($(this).val());
+                }
             });
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
@@ -38,7 +42,9 @@ function select() {
         } else if (valueSelected == "all_tasks") {
             $('[name=select_task]').prop("checked", true);
             $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
                 arr.push($(this).val());
+                }
             });
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
@@ -46,7 +52,21 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else {
+        } else if (valueSelected == "all_approval_tasks") {
+            $(":checkbox[data-task-type='6']").prop("checked", true);
+            $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
+                arr.push($(this).val());
+                }
+            });
+            $("[name=unpublish_selected_tasks]").val(arr);
+            $("[name=publish_selected_tasks]").val(arr);
+            $("[name=tasks_as_paid]").val(arr);
+            $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=status_as_unclaimed]").val(arr);
+            $("[name=status_as_waiting]").val(arr);
+        } 
+        else {
             $(":checkbox").prop("checked", false);
             arr = [];
             $("[name=unpublish_selected_tasks]").val(arr);
@@ -56,39 +76,46 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
         }
-        // console.log(valueSelected);
+    
     });
 
-    $('[name=select_all_tasks]').on('change', function (e) {
-        var arr = [];
-        if ($(this).prop('checked') == true) {
-            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", true);
+    var select_all_tasks = [];
+    var select_all_tasks_removed = [];
+    var unchecked_items = [];
+    $('[name=select_all_tasks]').on('change', function (e) { 
+        if ($(this).prop('checked') == true) { 
+            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", true); 
             $(':checkbox:checked').each(function () {
-                if ($(this).val() != "on") {
-                    arr.push($(this).val());
+                if ($(this).val() != "on" && !(jQuery.inArray($(this).val(), select_all_tasks) !== -1)) {
+                    select_all_tasks.push($(this).val());
                 }
             });
-            $("[name=unpublish_selected_tasks]").val(arr);
-            $("[name=publish_selected_tasks]").val(arr);
-            $("[name=tasks_as_paid]").val(arr);
-            $("[name=tasks_as_unpaid]").val(arr);
-            $("[name=status_as_unclaimed]").val(arr);
-            $("[name=status_as_waiting]").val(arr);
+
         } else {
-            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", false);
-            $("[name=unpublish_selected_tasks]").val(arr);
-            $("[name=publish_selected_tasks]").val(arr);
-            $("[name=tasks_as_paid]").val(arr);
-            $("[name=tasks_as_unpaid]").val(arr);
-            $("[name=status_as_unclaimed]").val(arr);
-            $("[name=status_as_waiting]").val(arr);
+            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", false); 
+            $($(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]')).each( function () {
+              if($(this).val() != "on") {
+                    select_all_tasks.splice( $.inArray($(this).val(), select_all_tasks), 1 ); 
+                }
+            });            
+
         }
+        $("[name=unpublish_selected_tasks]").val(select_all_tasks);
+        $("[name=publish_selected_tasks]").val(select_all_tasks);
+        $("[name=tasks_as_paid]").val(select_all_tasks);
+        $("[name=tasks_as_unpaid]").val(select_all_tasks);
+        $("[name=status_as_unclaimed]").val(select_all_tasks);
+        $("[name=status_as_waiting]").val(select_all_tasks);
+        
+
     });
 
     $('[name=select_task]').on('change', function (e) {
         var arr_select_task = [];
         $(':checkbox:checked').each(function () {
+            if ($(this).val() != "on") {
             arr_select_task.push($(this).val());
+            }
         });
         $("[name=unpublish_selected_tasks]").val(arr_select_task);
         $("[name=publish_selected_tasks]").val(arr_select_task);
@@ -141,17 +168,15 @@ function select() {
     }
 
     // Language pair dropdown
-    $('#language_options').on('change', function (e) {
+    $(document).on('change', 'select[name="language_options[]"]', function(){
+       
         var arr = [];
         var optionSelected = $("option:selected", this);
         var valueSelected = this.value;
-        $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"]').prop("checked", false);
-        // console.log($.trim($('.language_name').html()).split(" ")[0]);
-        // console.log(valueSelected);
-
-        if (valueSelected == "all_tasks_"+$.trim($('.language_name').html()).split(" ")[0]) {
-            $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"]').prop("checked", true);
-            arr = [];
+        $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", false);
+        if (valueSelected == "all_tasks_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", true);
+           // arr = [];
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on") {
                     arr.push($(this).val());
@@ -163,9 +188,9 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else if (valueSelected == "all_translation_tasks_"+$.trim($('.language_name').html()).split(" ")[0]) {
-            $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"][data-task-type="2"]').prop("checked", true);
-            arr = [];
+        } else if (valueSelected == "all_translation_tasks_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
+           // arr = [];
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on") {
                     arr.push($(this).val());
@@ -177,9 +202,9 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else if (valueSelected == "all_revision_tasks_"+$.trim($('.language_name').html()).split(" ")[0]) {
-            $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"][data-task-type="3"]').prop("checked", true);
-            arr = [];
+        } else if (valueSelected == "all_revision_tasks_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
+           // arr = [];
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on") {
                     arr.push($(this).val());
@@ -191,9 +216,9 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else if (valueSelected == "all_approval_tasks_"+$.trim($('.language_name').html()).split(" ")[0]) {
-            $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"][data-task-type="6"]').prop("checked", true);
-            arr = [];
+        } else if (valueSelected == "all_approval_tasks_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="6"]').prop("checked", true);
+           // arr = [];
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on") {
                     arr.push($(this).val());
@@ -205,9 +230,13 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else if (valueSelected == "delesect_all_"+$.trim($('.language_name').html()).split(" ")[0]) {
-            arr = [];
-            $(':checkbox[data-lang="'+$.trim($('.language_name').html()).split(" ")[0]+'"]').prop("checked", false);
+        } else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", false);
+            $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on" && !(jQuery.inArray($(this).val(), arr) !== -1)) {
+                    arr.push($(this).val());
+                }
+            });
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
@@ -223,5 +252,11 @@ function select() {
             $("[name=status_as_waiting]").val(arr);
         }
     });
+
+
+
+
+    
+  
 }
 </script>
