@@ -124,6 +124,7 @@
 
                             <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
+task_id: {$task_id}, status_id: {$status_id}, type_id: {$type_id} , url: {$matecat_urls[$task_id]}, {if $memsource_tasks[$task_id]}MEM{/if}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
