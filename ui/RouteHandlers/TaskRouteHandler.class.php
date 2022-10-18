@@ -327,8 +327,14 @@ class TaskRouteHandler
 
                 $memsource_task = $projectDao->get_memsource_task($taskId);
                 $memsource_tasks[$taskId] = $memsource_task;
-                if ($projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
-                else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
+                if ($projectDao->are_translations_not_all_complete($topTask, $memsource_task)) {
+error_log("Not complete so not claimable taskId: $taskId");
+                  $matecat_urls[$taskId] = '';
+                }
+                else {
+                  $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
+error_log("Complete so claimable taskId: $taskId, " . $matecat_urls[$taskId]);
+                }
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
 
