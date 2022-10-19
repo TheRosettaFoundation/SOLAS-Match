@@ -135,7 +135,7 @@
                                             </a>
                                         {elseif $type_id == 6}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                Proofread and approve using Phrase TMS
+                                                Proofread using Phrase TMS
                                             </a>
                                         {/if}
                                     {/if}
@@ -190,7 +190,7 @@
                                 {/if}
                                 {if $show_memsource_approval[$task_id]}
                                     <a href="{$siteLocation}task/{$show_memsource_approval[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
-                                        Download Complete Proofread and Approved Version
+                                        Download Complete Proofread Version
                                     </a>
                                 {/if}
                                 {if ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
