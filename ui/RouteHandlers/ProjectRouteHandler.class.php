@@ -819,7 +819,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
-            if ($isAdmin) {
+            if ($isAdmin || $isOrgMember) {
                 if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
                     $tasks = [];
                     if (!empty($post['unpublish_selected_tasks'])) {
@@ -958,7 +958,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $template_data = array_merge($template_data, array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
-                'isOrgAdmin'    => $isOrgAdmin,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
                 "imgCacheToken" => $preventImageCacheToken,
