@@ -638,6 +638,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
+        $org = $orgDao->getOrganisation($project->getOrganisationId());
+        $project_tags = $projectDao->getProjectTags($project_id);
+        $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
+
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
+        $isAdmin = $isOrgAdmin || $isSiteAdmin;
+
+        
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -809,77 +819,70 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
-
-            if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
-                $tasks = [];
-                if (!empty($post['unpublish_selected_tasks'])) {
-                    $task_ids = preg_split ("/\,/", $post['unpublish_selected_tasks']);
-                    $published = false;
-                }
-                if(!empty($post['publish_selected_tasks'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_selected_tasks']);
-                    $published = true;
-                }
-                
-                foreach ($task_ids as $id) {
-                    $tasks[] = $taskDao->getTask($id);
-                }
-
-                // Unpublish selected tasks
-                if (!empty($tasks)) {
-                    foreach ($tasks as $project_task) {
-                        $project_task->setPublished($published);
-                        $taskDao->updateTask($project_task);
+            if ($isAdmin) {
+                if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
+                    $tasks = [];
+                    if (!empty($post['unpublish_selected_tasks'])) {
+                        $task_ids = preg_split ("/\,/", $post['unpublish_selected_tasks']);
+                        $published = false;
                     }
-                    UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
-                }
-            }
+                    if(!empty($post['publish_selected_tasks'])) {
+                        $task_ids = preg_split ("/\,/", $post['publish_selected_tasks']);
+                        $published = true;
+                    }
+                    
+                    foreach ($task_ids as $id) {
+                        $tasks[] = $taskDao->getTask($id);
+                    }
 
-            if (!empty($post['tasks_as_paid'])) {
-                $task_ids = preg_split ("/\,/", $post['tasks_as_paid']);
-                foreach ($task_ids as $id) {
-                    $taskDao->set_paid_status($id);
-                }
-                UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
-            }
-
-            if (!empty($post['tasks_as_unpaid'])) {
-                $task_ids = preg_split ("/\,/", $post['tasks_as_unpaid']);
-                foreach ($task_ids as $id) {
-                    $taskDao->clear_paid_status($id);
-                }
-                UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
-            }
-
-            if (!empty($post['status_as_unclaimed'])) {
-                $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
-                foreach ($task_ids as $id) {
-                    $project_task = $taskDao->getTask($id);
-                    if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
-                        $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    // Unpublish selected tasks
+                    if (!empty($tasks)) {
+                        foreach ($tasks as $project_task) {
+                            $project_task->setPublished($published);
+                            $taskDao->updateTask($project_task);
+                        }
+                        UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
                     }
                 }
             }
+            if($isSiteAdmin) {
+                if (!empty($post['tasks_as_paid'])) {
+                    $task_ids = preg_split ("/\,/", $post['tasks_as_paid']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->set_paid_status($id);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
+                }
 
-            if (!empty($post['status_as_waiting'])) {
-                $task_ids = preg_split ("/\,/", $post['status_as_waiting']);
-                foreach ($task_ids as $id) {
-                    $project_task = $taskDao->getTask($id);
-                    if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
-                        $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                if (!empty($post['tasks_as_unpaid'])) {
+                    $task_ids = preg_split ("/\,/", $post['tasks_as_unpaid']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->clear_paid_status($id);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
+                }
+
+                if (!empty($post['status_as_unclaimed'])) {
+                    $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
+                    foreach ($task_ids as $id) {
+                        $project_task = $taskDao->getTask($id);
+                        if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
+                            $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                        }
+                    }
+                }
+
+                if (!empty($post['status_as_waiting'])) {
+                    $task_ids = preg_split ("/\,/", $post['status_as_waiting']);
+                    foreach ($task_ids as $id) {
+                        $project_task = $taskDao->getTask($id);
+                        if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
+                            $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                        }
                     }
                 }
             }
         }
-
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
-        $project_tags = $projectDao->getProjectTags($project_id);
-        $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
-
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
-        $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
-        $isAdmin = $isOrgAdmin || $isSiteAdmin;
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);

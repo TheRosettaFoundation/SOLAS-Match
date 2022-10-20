@@ -272,7 +272,7 @@ Tweet</a>
             </a>
             <ul id="menu3" class="dropdown-menu" role="menu" aria-labelledby="drop5">
 
-        {if $isOrgAdmin}
+        {if $isAdmin || $isOrgMember}
             <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#publish_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
                     <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
@@ -291,20 +291,20 @@ Tweet</a>
         {/if}
 
         {if isset($isSiteAdmin)}
+            <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
+                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as paid
+                </a>
+                <input type="hidden" name="tasks_as_paid" value="" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+
             <form id="tasks_as_unpaid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_unpaid').submit();" style="color:#000000;margin-right:22px;">
                     <i class="fa fa-strikethrough" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Mark Selected Tasks as Unpaid
                 </a>
                 <input type="hidden" name="all_as_paid1" value="1" />
                 <input type="hidden" name="tasks_as_unpaid" value="" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-            <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
-                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as paid
-                </a>
-                <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         {/if}
@@ -345,13 +345,14 @@ Tweet</a>
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
+                <br/><br/>
                 <div style="background-color:#fef9f2;padding:3px;">
                     <div>
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
-                        <select name="language_options" id="language_options">
+                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">
                             <option value="">-- Choose --</option>
                             <option value="all_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Tasks</option>
                             <option value="all_translation_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Translation Tasks</option>
@@ -370,7 +371,7 @@ Tweet</a>
                                 <th>{Localisation::getTranslation('common_title')}</th>
                                 <th>{Localisation::getTranslation('common_status')}</th>       
                                 <th>{Localisation::getTranslation('common_type')}</th> 
-                                <th>Mode</th>
+                                <th>Model</th>
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
                                 <th>{Localisation::getTranslation('common_publish')}</th>
                                 <th>{Localisation::getTranslation('common_tracking')}</th>
