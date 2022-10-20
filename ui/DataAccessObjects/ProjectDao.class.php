@@ -1243,6 +1243,30 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $translations_not_all_complete;
     }
 
+    public function tasks_with_incomplete_prerequisites($project_id)
+    {
+        $memsource_tasks = $this->get_tasks_for_project($project_id);
+        $project_tasks = $memsource_tasks;
+        $has_incomplete_prerequisites = [];
+        foreach ($memsource_tasks as $memsource_task) {
+            $has_incomplete_prerequisites[$memsource_task['id']] = 0;
+            $top_level = $this->get_top_level($memsource_task['internalId']);
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                                $has_incomplete_prerequisites[$memsource_task['id']] = 1;
+                                error_log("tasks_with_incomplete_prerequisites($project_id), has_incomplete_prerequisites {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $has_incomplete_prerequisites;
+    }
+
     public function delete_task_directly($task_id)
     {
         LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));

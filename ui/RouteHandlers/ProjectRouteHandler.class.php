@@ -873,11 +873,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!empty($post['status_as_waiting'])) {
+                    $has_incomplete_prerequisites = $projectDao->tasks_with_incomplete_prerequisites($project_id);
                     $task_ids = preg_split ("/\,/", $post['status_as_waiting']);
                     foreach ($task_ids as $id) {
-                        $project_task = $taskDao->getTask($id);
-                        if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
-                            $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                        if (!empty($has_incomplete_prerequisites[$id])) {
+                            $project_task = $taskDao->getTask($id);
+                            if ($project_task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
+                                $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            }
                         }
                     }
                 }
