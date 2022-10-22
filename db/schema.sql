@@ -1325,6 +1325,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   type_enum         INT(10) UNSIGNED NOT NULL,
   enabled           INT(10) UNSIGNED NOT NULL,
   type_text         VARCHAR(50) NOT NULL,
+  type_text_short   VARCHAR(50) NOT NULL,
   colour            VARCHAR(50) NOT NULL,
   claimed_template  VARCHAR(50) NOT NULL,
   show_section      VARCHAR(50) NOT NULL,
