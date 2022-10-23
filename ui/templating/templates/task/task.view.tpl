@@ -36,11 +36,7 @@
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
             {else}
-                {if isset($registered)}
                     <form id="trackedOrganisationForm" class="fixMargin" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                {else}
-                    <form id="trackedOrganisationForm" class="fixMargin" method="post" action="{urlFor name="task" options="task_id.$task_id"}">
-                {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             {/if}
