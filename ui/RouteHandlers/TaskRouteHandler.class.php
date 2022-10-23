@@ -1453,7 +1453,6 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if ($isOrgMember || $isSiteAdmin) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
@@ -1505,7 +1504,6 @@ class TaskRouteHandler
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
                 "extra_scripts" => $extra_scripts,
-                "org" => $org,
                 "project" => $project,
 'task' => $task,
 'taskMetaData' => $taskMetaData,
