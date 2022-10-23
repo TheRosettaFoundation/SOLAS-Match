@@ -1467,41 +1467,33 @@ class TaskRouteHandler
         $projectAndOrgs = [];
         $list_qualified_translators = [];
 
-[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
         if (!$taskClaimed) {
-        $org_id = $project->getOrganisationId();
-        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
-        if (!empty($alsoViewedTasks)) {
-            $alsoViewedTasksCount = count($alsoViewedTasks);
-        }
-        if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {
+            $org_id = $project->getOrganisationId();
+            $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
+            if (!empty($alsoViewedTasks)) $alsoViewedTasksCount = count($alsoViewedTasks);
+            if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {
                 foreach ($alsoViewedTasks as $alsoViewedTask) {
-                $viewedTaskId = $alsoViewedTask->getId();
-                $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
-                $viewedOrgId = $viewedProject->getOrganisationId();
-                $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
-
-                $deadline = $alsoViewedTask->getDeadline();
-                $deadline_timestamps[$viewedTaskId] = $deadline;
-
-                $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
-                $viewedProjectName = $viewedProject->getTitle();
-                $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
-                $viewedOrgName = $viewedOrg->getName();
-                $projectAndOrgs[$viewedTaskId]=sprintf(
-                    Lib\Localisation::getTranslation('common_part_of_for'),
-                    $viewedProjectUri,
-                    htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
-                    $viewedOrgUri,
-                    htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
-                );
+                    $viewedTaskId = $alsoViewedTask->getId();
+                    $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+                    $viewedOrgId = $viewedProject->getOrganisationId();
+                    $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+                    $deadline = $alsoViewedTask->getDeadline();
+                    $deadline_timestamps[$viewedTaskId] = $deadline;
+                    $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+                    $viewedProjectName = $viewedProject->getTitle();
+                    $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+                    $viewedOrgName = $viewedOrg->getName();
+                    $projectAndOrgs[$viewedTaskId]=sprintf(
+                        Lib\Localisation::getTranslation('common_part_of_for'),
+                        $viewedProjectUri,
+                        htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                        $viewedOrgUri,
+                        htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+                    );
+                }
             }
+            if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
-
-        if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
-        }
-]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
         $taskStatusTexts = [];
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
