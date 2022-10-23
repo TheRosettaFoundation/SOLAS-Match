@@ -1453,11 +1453,6 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        $template_data = array_merge($template_data, array(
-                     "task" => $task,
-                     "taskMetaData" => $taskMetaData
-        ));
-
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         if ($isOrgMember || $isSiteAdmin) {
@@ -1467,19 +1462,81 @@ class TaskRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $alsoViewedTasksCount = 0; 
 
+        $deadline_timestamps = [];
+        $projectAndOrgs = [];
+
+[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
+        if (!$taskClaimed) {
+        $org_id = $project->getOrganisationId();
+        $alsoViewedTasksCount = 0;
+        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
+        if (!empty($alsoViewedTasks)) {
+            $alsoViewedTasksCount = count($alsoViewedTasks);
+        }
+        if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {
+                foreach ($alsoViewedTasks as $alsoViewedTask) {
+                $viewedTaskId = $alsoViewedTask->getId();
+                $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+                $viewedOrgId = $viewedProject->getOrganisationId();
+                $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+
+                $deadline = $alsoViewedTask->getDeadline();
+                $deadline_timestamps[$viewedTaskId] = $deadline;
+
+                $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $viewedProjectName = $viewedProject->getTitle();
+                $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+                $viewedOrgName = $viewedOrg->getName();
+                $projectAndOrgs[$viewedTaskId]=sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $viewedProjectUri,
+                    htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                    $viewedOrgUri,
+                    htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+                );
+            }
+        }
+        $list_qualified_translators = array();
+        if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
+
+        $template_data = array_merge($template_data, array(
+            "extra_scripts" => $extra_scripts,
+            'alsoViewedTasks' => $alsoViewedTasks,
+            'alsoViewedTasksCount' => $alsoViewedTasksCount,
+            'list_qualified_translators' => $list_qualified_translators,
+        ));
+        }
+]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+        $taskStatusTexts = [];
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[10] = 'Claimed';
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
+
+if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
+                'siteLocation' => $siteLocation,
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 "project" => $project,
+'task' => $task,
+'taskMetaData' => $taskMetaData,
                 "registered" => $registered,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
+'deadline_timestamps' => $deadline_timestamps,
+'projectAndOrgs' => $projectAndOrgs,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'paid_status' => $taskDao->get_paid_status($task_id),
+                'taskStatusTexts' => $taskStatusTexts,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
