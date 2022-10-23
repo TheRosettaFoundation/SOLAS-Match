@@ -1391,37 +1391,6 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'The task is now marked as unpaid.');
                 }
             }
-
-            if (isset($post['trackOrganisation'])) {
-                $org_id = $project->getOrganisationId();
-                if ($post['trackOrganisation']) {
-                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
-                    if ($userTrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_track_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            Lib\Localisation::getTranslation('org_public_profile_org_track_error')
-                        );
-                    }
-                } else {
-                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
-                    if ($userUntrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
-                        );
-                    }
-                }
-            }
         }
 
         $taskMetaData = array();

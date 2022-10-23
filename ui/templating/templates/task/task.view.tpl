@@ -48,19 +48,6 @@
                 {else}
                     <form id="trackedOrganisationForm" class="fixMargin" method="post" action="{urlFor name="task" options="task_id.$task_id"}">
                 {/if}
-                {if false}
-                {if $userSubscribedToOrganisation}
-                    <input type="hidden" name="trackOrganisation" value="0" />
-                    <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
-                        <i class="icon-remove-circle icon-white"></i>{Localisation::getTranslation('org_public_profile_untrack_organisation')}
-                    </a>
-                {else}
-                    <input type="hidden" name="trackOrganisation" value="1" />
-                    <a class="btn btn-small" onclick="$('#trackedOrganisationForm').submit();" >
-                        <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
-                    </a>
-                {/if}
-                {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             {/if}
