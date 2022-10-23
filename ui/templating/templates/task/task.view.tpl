@@ -122,7 +122,7 @@
         {if $isSiteAdmin}
             <div class="well">
         {/if}
-		    {if $isSiteAdmin and !isset($registered)}
+		    {if $isSiteAdmin}
             <table><tr>
               <td>
 		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
