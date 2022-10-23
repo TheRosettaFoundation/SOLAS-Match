@@ -21,13 +21,6 @@
                     {/foreach}
                 </strong>
                 {if $isSiteAdmin}
-                {if $this_is_id}
-                    — <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
-                {else}
-                    {if $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-                        — <a href="{urlFor name="task" options="task_id.$task_id"}">id</a>
-                    {/if}
-                {/if}
                 — <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
                 {/if}
             </small>  
@@ -171,19 +164,6 @@
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
                 {/if}
-                {if $display_treat_as_translated}
-                    {if $recorded_status == 'draft' || ($recorded_status == 'translated' && $type_id == TaskTypeEnum::PROOFREADING)}
-                        <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                            <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
-                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                                <i class="icon-check icon-black"></i> Treat as if fully {if $type_id == TaskTypeEnum::TRANSLATION}translated{else}approved{/if} in Kató TM
-                            </a>
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                    {else}
-                        Note: This task is being treated as if fully {$recorded_status} in Kató TM.
-                    {/if}
-                {/if}
             </div>
         {/if}
 
@@ -191,7 +171,7 @@
         {if !empty($file_preview_path)}
 		    <table width="100%">
 		        <thead>
-                <th>{Localisation::getTranslation('task_view_source_document_preview')} {$chunked_message} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
+                <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>

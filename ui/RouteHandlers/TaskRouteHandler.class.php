@@ -1322,14 +1322,12 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $memsource_task = $projectDao->get_memsource_task($task_id);
         $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
+
         $siteLocation = Common\Lib\Settings::get('site.location');
-
-            $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
-
+        $task_file_info = $taskDao->getTaskInfo($task_id);
+        $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
         $template_data = array_merge($template_data, array(
             "file_preview_path" => $file_path,
-            'chunked_message' => '',
             "filename" => $task_file_info->getFilename()
         ));
 
@@ -1411,7 +1409,6 @@ class TaskRouteHandler
         if ($isOrgMember || $isSiteAdmin) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
         $alsoViewedTasksCount = 0; 
@@ -1428,11 +1425,7 @@ class TaskRouteHandler
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
-                'recorded_status' => '',
-                'display_treat_as_translated' => 0,
-                'this_is_id' => 0,
                 'paid_status' => $taskDao->get_paid_status($task_id),
-                "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
