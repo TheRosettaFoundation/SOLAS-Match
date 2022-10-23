@@ -1511,7 +1511,6 @@ if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $proje
                 "project" => $project,
 'task' => $task,
 'taskMetaData' => $taskMetaData,
-                "registered" => $registered,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasks' => $alsoViewedTasks,
