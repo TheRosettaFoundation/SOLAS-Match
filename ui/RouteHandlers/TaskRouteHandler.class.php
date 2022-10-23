@@ -1501,8 +1501,6 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
-if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
-
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
