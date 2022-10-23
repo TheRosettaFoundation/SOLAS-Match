@@ -1331,6 +1331,7 @@ class TaskRouteHandler
             "filename" => $task_file_info->getFilename()
         ));
 
+        $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -1342,7 +1343,6 @@ class TaskRouteHandler
                 } else {
                     $task->setPublished(0);
                 }
-                error_log("taskView");
                 if ($taskDao->updateTask($task)) {
                     if ($post['published']) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
@@ -1383,6 +1383,60 @@ class TaskRouteHandler
                 } else {
                     $taskDao->clear_paid_status($task_id);
                     UserRouteHandler::flashNow('success', 'The task is now marked as unpaid.');
+                }
+            }
+
+            if (!$taskClaimed && $isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
+                $emailOrUserId = trim($post['userIdOrEmail']);
+                if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
+                $userToBeAssigned = null;
+                $errorOccured = False;
+                if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
+                    $userToBeAssigned = $userDao->getUser($emailOrUserId);
+                    if (is_null($userToBeAssigned)) {
+                        UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_view_assign_id_error'));
+                        $errorOccured = True;
+                    }
+                } else if (Lib\Validator::validateEmail($emailOrUserId)) {
+                    $userToBeAssigned = $userDao->getUserByEmail($emailOrUserId);
+                    if (is_null($userToBeAssigned)) {
+                        $errorOccured = True;
+                        UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_view_assign_email_error'));
+                    }
+                } else {
+                    $errorOccured = True;
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
+                }
+
+                if (!$errorOccured && !is_null($userToBeAssigned)) {
+                    $userDisplayName = $userToBeAssigned->getDisplayName();
+                    $assgneeId = $userToBeAssigned->getId();
+                    $isUserBlackListedForTask = $userDao->isBlacklistedForTask($assgneeId, $task_id);
+                    if ($isUserBlackListedForTask) {
+                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
+                    } else {
+                        $success = $userDao->claimTask($assgneeId, $task_id, $memsource_task, $task->getProjectId(), $task);
+                        if ($success == 1) {
+                            UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $task->getProjectId())));
+                        } elseif ($success == -1) {
+                            UserRouteHandler::flashNow('error', 'Unable to create user in Phrase TMS.');
+                        } else {
+                            UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                        }
+                    }
+                }
+                $post['userIdOrEmail'] = '';
+            }
+            if (!$taskClaimed && $isSiteAdmin && !empty($post['userIdOrEmailDenyList'])) {
+                $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
+                if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
+                else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
+                if (empty($remove_deny_user)) {
+                    UserRouteHandler::flashNow('error', 'User does not exist.');
+                } else {
+                    $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $task_id);
+                    UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
         }
