@@ -1309,14 +1309,13 @@ class TaskRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
-        if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
-            UserRouteHandler::flash('error', "You are not authorized to view this page");
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-        }
-
         $task = $taskDao->getTask($task_id);
         if (is_null($task)) {
             UserRouteHandler::flash('error', sprintf(Lib\Localisation::getTranslation('task_view_5'), $task_id));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
+        if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
