@@ -1320,13 +1320,9 @@ class TaskRouteHandler
         }
 
         $project = $projectDao->getProject($task->getProjectId());
-        $user = $userDao->getUser($user_id);
-
         $memsource_task = $projectDao->get_memsource_task($task_id);
-
-        $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
-
-        $siteLocation = Common\Lib\Settings::get("site.location");
+        $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
+        $siteLocation = Common\Lib\Settings::get('site.location');
 
             $task_file_info = $taskDao->getTaskInfo($task_id, 0);
             $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
