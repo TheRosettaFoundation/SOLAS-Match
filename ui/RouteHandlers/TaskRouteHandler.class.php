@@ -1460,15 +1460,16 @@ class TaskRouteHandler
         }
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
-        $alsoViewedTasksCount = 0; 
 
+        $alsoViewedTasks = [];
+        $alsoViewedTasksCount = 0;
         $deadline_timestamps = [];
         $projectAndOrgs = [];
+        $list_qualified_translators = [];
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
         if (!$taskClaimed) {
         $org_id = $project->getOrganisationId();
-        $alsoViewedTasksCount = 0;
         $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
         if (!empty($alsoViewedTasks)) {
             $alsoViewedTasksCount = count($alsoViewedTasks);
@@ -1496,16 +1497,8 @@ class TaskRouteHandler
                 );
             }
         }
-        $list_qualified_translators = array();
-        if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
 
-        $template_data = array_merge($template_data, array(
-            "extra_scripts" => $extra_scripts,
-            'alsoViewedTasks' => $alsoViewedTasks,
-            'alsoViewedTasksCount' => $alsoViewedTasksCount,
-            'list_qualified_translators' => $list_qualified_translators,
-        ));
+        if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
 ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -1529,6 +1522,7 @@ if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $proje
                 "registered" => $registered,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
+                'alsoViewedTasks' => $alsoViewedTasks,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
 'deadline_timestamps' => $deadline_timestamps,
 'projectAndOrgs' => $projectAndOrgs,
@@ -1537,6 +1531,7 @@ if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $proje
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'paid_status' => $taskDao->get_paid_status($task_id),
                 'taskStatusTexts' => $taskStatusTexts,
+'list_qualified_translators' => $list_qualified_translators,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
