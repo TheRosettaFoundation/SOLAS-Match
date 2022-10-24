@@ -3919,6 +3919,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `is_admin_or_member_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_admin_or_member_for_org`(IN uID INT, IN orgId INT)
+BEGIN
+    SELECT EXISTS (
+        SELECT user_id
+        FROM Admins
+        WHERE user_id=uID AND
+        organisation_id=orgId
+        UNION
+        SELECT user_id
+        FROM OrganisationMembers
+        WHERE user_id=uID AND
+        organisation_id=orgId
+    ) AS result;
+END//
+DELIMITER ;
+
 -- Dumping structure for function Solas-Match-Dev.isNullOrEqual
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
 DELIMITER //

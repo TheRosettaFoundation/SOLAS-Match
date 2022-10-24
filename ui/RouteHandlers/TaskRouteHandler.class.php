@@ -1453,7 +1453,8 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+        $org_id = $project->getOrganisationId();
+        $isOrgMember = $userDao->is_admin_or_member_for_org($user_id, $org_id);
         if ($isOrgMember || $isSiteAdmin) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
@@ -1467,7 +1468,6 @@ class TaskRouteHandler
         $list_qualified_translators = [];
 
         if (!$taskClaimed) {
-            $org_id = $project->getOrganisationId();
             $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
             if (!empty($alsoViewedTasks)) $alsoViewedTasksCount = count($alsoViewedTasks);
             if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {

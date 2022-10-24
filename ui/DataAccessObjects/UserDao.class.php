@@ -1018,6 +1018,12 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $result[0]['result'];
     }
 
+    public function is_admin_or_member_for_org($user_id, $org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_admin_or_member_for_org', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+        return $result[0]['result'];
+    }
+
     public function getOrgIDUsingName($org_name)
     {
         $org_id = 0;
