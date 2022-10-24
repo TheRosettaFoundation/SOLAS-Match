@@ -533,7 +533,7 @@ a:hover{
                         <div style="background-color:#eee;padding:10px;margin:5px;width:100%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
                         {/if}
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h2>
                             <p>
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>

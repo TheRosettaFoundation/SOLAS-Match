@@ -45,7 +45,7 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('task_claim_translation_5')}
                 </button>
-                <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn">
+                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn">
                     <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                 </a>
             </p>

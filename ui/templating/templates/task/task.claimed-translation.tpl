@@ -34,7 +34,7 @@
         <h3>When you have finished translating:</h3>
         <p>
             {if empty($memsource_task)}
-            <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
+            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
             </a>
             {/if}

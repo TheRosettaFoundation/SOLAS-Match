@@ -48,7 +48,7 @@
                         {assign var="task_title" value=$task->getTitle()}
                         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                 <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                 {if $task->getWordCount()}
                                     <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$task->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>

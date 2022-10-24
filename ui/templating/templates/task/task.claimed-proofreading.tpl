@@ -46,7 +46,7 @@
         <h3>When you have finished revising:</h3>
         <p>
             {if empty($memsource_task)}
-            <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
+            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_proofreading_upload_proofread_task')}
             </a>
             {/if}
