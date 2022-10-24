@@ -35,12 +35,7 @@
                 <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary' style="margin-top: -12.5%;margin-right: 45%;">
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
-            {else}
-                    <form id="trackedOrganisationForm" class="fixMargin" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
             {/if}
-            
         </div>
     </h1>
 
