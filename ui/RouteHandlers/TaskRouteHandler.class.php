@@ -1505,8 +1505,8 @@ class TaskRouteHandler
                 'siteLocation' => $siteLocation,
                 "extra_scripts" => $extra_scripts,
                 "project" => $project,
-'task' => $task,
-'taskMetaData' => $taskMetaData,
+                'task' => $task,
+                'taskMetaData' => $taskMetaData,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasks' => $alsoViewedTasks,
@@ -1518,7 +1518,7 @@ class TaskRouteHandler
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'paid_status' => $taskDao->get_paid_status($task_id),
                 'taskStatusTexts' => $taskStatusTexts,
-'list_qualified_translators' => $list_qualified_translators,
+                'list_qualified_translators' => $list_qualified_translators,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
