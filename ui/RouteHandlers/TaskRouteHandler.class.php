@@ -707,7 +707,7 @@ class TaskRouteHandler
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if ($taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $taskId)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
         }
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -1613,7 +1613,7 @@ class TaskRouteHandler
                                 $organisation->getName()
                             )
                         );
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task", array("task_id" => $task_id)));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $task_id)));
                     }
                 } else {
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_user_feedback_5'));
