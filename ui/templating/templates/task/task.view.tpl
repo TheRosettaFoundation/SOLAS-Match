@@ -120,7 +120,7 @@
 		    {if $isSiteAdmin}
             <table><tr>
               <td>
-		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     {Localisation::getTranslation('task_view_assign_label')}<br />
                     <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                     {if !empty($list_qualified_translators)}
@@ -138,7 +138,7 @@
 		            </form> 
               </td>
               <td>
-                <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     Remove a user from deny list for this task:<br />
                     <input type="text" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                     <a class="btn btn-primary" onclick="$('#removeUserFromDenyListForm').submit();">
