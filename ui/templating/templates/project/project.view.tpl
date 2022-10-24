@@ -286,7 +286,7 @@
         {if isset($isSiteAdmin)}
             <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
-                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as paid
+                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -364,7 +364,7 @@
                                 <th>{Localisation::getTranslation('common_title')}</th>
                                 <th>{Localisation::getTranslation('common_status')}</th>       
                                 <th>{Localisation::getTranslation('common_type')}</th> 
-                                <th>Model</th>
+                                <th>Paid?</th>
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
                                 <th>{Localisation::getTranslation('common_publish')}</th>
                                 <th>{Localisation::getTranslation('common_tracking')}</th>
@@ -395,14 +395,14 @@
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                             <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                             {/if}
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
@@ -415,7 +415,7 @@
                                             </a>
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -492,9 +492,10 @@
                                                     <i class="icon-trash icon-white"></i>
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <button  style="pointer-events: auto !important;"  class="btn btn-small btn-inverse" disabled data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">
+                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn btn-small btn-inverse" disabled >
                                                     <i class="icon-trash icon-white"></i>
-                                                </button>  
+                                                 </button> 
+                                                </div>
                                             {else}
                                                 {if $isSiteAdmin}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
