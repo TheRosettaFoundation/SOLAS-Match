@@ -7,7 +7,7 @@
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    {Localisation::getTranslation('task_review_1')} {Localisation::getTranslation('task_twitter_0')}
+    {Localisation::getTranslation('task_review_1')}
 </p>
 
 {if $action === Localisation::getTranslation('task_review_translated')}
