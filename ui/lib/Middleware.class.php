@@ -488,7 +488,8 @@ class Middleware
                         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
                             $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
                         } else {
-                            $message = Localisation::getTranslation('common_error_cannot_reclaim');
+                            if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION) $message = 'You cannot claim the task <a href="%s">%s</a>, because you have previously claimed the matching translation task.';
+                            else                                                                $message = 'You cannot claim the task <a href="%s">%s</a>, because you have previously claimed the matching revision or proofreading task.';
                         }
                     } else {
                         //An admin has previously revoked this task from the user.
