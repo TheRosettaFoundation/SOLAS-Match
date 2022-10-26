@@ -283,7 +283,7 @@
             </form>
         {/if}
 
-        {if isset($isSiteAdmin)}
+        {if $isSiteAdmin}
             <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
                     <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
@@ -360,16 +360,19 @@
                     <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" name="select_all_tasks" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /></th>
-                                <th>{Localisation::getTranslation('common_title')}</th>
-                                <th>{Localisation::getTranslation('common_status')}</th>       
-                                <th>{Localisation::getTranslation('common_type')}</th> 
-                                <th>Paid?</th>
-                                <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
-                                <th>{Localisation::getTranslation('common_publish')}</th>
-                                <th>{Localisation::getTranslation('common_tracking')}</th>
-                                <th>{Localisation::getTranslation('common_edit')}</th>
-                                <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
+                                
+                                 <th><input type="checkbox" name="select_all_tasks" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /></th>
+                                 <th>{Localisation::getTranslation('common_title')}</th>
+                                 <th>{Localisation::getTranslation('common_status')}</th>       
+                                 <th>{Localisation::getTranslation('common_type')}</th> 
+                                {if $isSiteAdmin}
+                                 <th>Paid?</th>
+                                {/if}
+                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
+                                 <th>{Localisation::getTranslation('common_publish')}</th>
+                                 <th>{Localisation::getTranslation('common_tracking')}</th>
+                                 <th>{Localisation::getTranslation('common_edit')}</th>
+                                 <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -430,15 +433,15 @@
                                             </small>
                                         </strong>
                                     </td>
-                                    <td>
-
-                                    {if $get_paid_for_project[$task_id] == 1}
-                                        <span>Paid</span>
-                                    {else}
-                                        <span>-</span>
-                                    {/if}
-
+                                    {if $isSiteAdmin}
+                                    <td>                                    
+                                     {if $get_paid_for_project[$task_id] == 1}
+                                         <span>Paid</span>
+                                     {else}
+                                         <span>-</span>
+                                     {/if}
                                     </td>
+                                    {/if}
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
