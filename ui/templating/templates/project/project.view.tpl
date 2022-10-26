@@ -317,12 +317,12 @@
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-
+        {/if}
             </ul>
          </div>
          </div>
         {/if}
-{/if}
+
     </h1> 
             
     {if isset($flash['taskSuccess'])}
