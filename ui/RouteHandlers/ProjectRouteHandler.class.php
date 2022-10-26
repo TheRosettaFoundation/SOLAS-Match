@@ -626,6 +626,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function projectView(Request $request, Response $response, $args)
     {
+$t0 = microtime(true);
         global $app, $template_data;
         $project_id = $args['project_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -886,6 +887,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
         }
+error_log('After POST: ' . microtime(true) - $t0);
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -974,6 +976,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
         ));
 
+error_log('Before Render: ' . microtime(true) - $t0);
         return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
