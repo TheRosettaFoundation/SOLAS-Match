@@ -300,7 +300,7 @@
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        {/if}
+        
 
             <form id="status_as_unclaimed" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_unclaimed').submit();" >
@@ -319,9 +319,10 @@
             </form>
 
             </ul>
-        </div>
-        </div>
+         </div>
+         </div>
         {/if}
+{/if}
     </h1> 
             
     {if isset($flash['taskSuccess'])}
