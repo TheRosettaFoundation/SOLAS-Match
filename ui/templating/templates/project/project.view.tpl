@@ -440,16 +440,15 @@ Tweet</a>
                                             </small>
                                         </strong>
                                     </td>
-                                    <td>
                                     {if $isSiteAdmin}
+                                    <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          <span>Paid</span>
                                      {else}
                                          <span>-</span>
                                      {/if}
-                                    {/if}
-
                                     </td>
+                                    {/if}
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
