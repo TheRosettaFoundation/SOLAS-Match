@@ -977,7 +977,10 @@ error_log('After POST: ' . (microtime(true) - $t0));
         ));
 
 error_log('Before Render: ' . (microtime(true) - $t0));
-        return UserRouteHandler::render("project/project.view.tpl", $response);
+$r = UserRouteHandler::render("project/project.view.tpl", $response);
+error_log('After Render: ' . (microtime(true) - $t0));
+return $r;
+//        return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
     public function projectAlter(Request $request, Response $response, $args)
