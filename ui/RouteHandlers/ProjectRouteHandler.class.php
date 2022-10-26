@@ -887,7 +887,7 @@ $t0 = microtime(true);
                 }
             }
         }
-error_log('After POST: ' . microtime(true) - $t0);
+error_log('After POST: ' . (microtime(true) - $t0));
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -976,7 +976,7 @@ error_log('After POST: ' . microtime(true) - $t0);
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
         ));
 
-error_log('Before Render: ' . microtime(true) - $t0);
+error_log('Before Render: ' . (microtime(true) - $t0));
         return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
