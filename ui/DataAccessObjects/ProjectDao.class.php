@@ -1305,7 +1305,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function get_language_from_code_directly($code)
     {
-        return LibAPI\PDOWrapper::call('getLanguage', 'NULL,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($code) . ',NULL');
+        $result = LibAPI\PDOWrapper::call('getLanguage', 'NULL,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($code) . ',NULL');
+        return $result[0]['name'];
     }
 
     public static function get_task_type_details()
