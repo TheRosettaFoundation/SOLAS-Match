@@ -161,10 +161,10 @@ function select() {
     // Show/hide approval selection
     if (jQuery.inArray("6", data ) == -1) {
         $("#all_approval_tasks").hide();
-        $("#all_approval_tasks_lang").hide();
+        $(".all_approval_tasks_lang").hide();
     } else {
         $("#all_approval_tasks").show();
-        $("#all_approval_tasks_lang").show();
+        $(".all_approval_tasks_lang").show();
     }
 
     // Language pair dropdown
