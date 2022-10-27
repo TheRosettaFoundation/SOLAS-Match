@@ -339,11 +339,11 @@
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
-                <br/><br/>
+                <br/><br/>{microtime()}
                 <div style="background-color:#fef9f2;padding:3px;">
                     <div>
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
-                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}{microtime()}
                     </span>
                     <span>
                         <select name="language_options[]" id="language_options" id="language_options" data-select-name="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">
@@ -357,6 +357,7 @@
                     </span>
                     </div>                
                     <hr />  
+ {microtime()}
  
                     <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
@@ -373,7 +374,7 @@
                                  <th>{Localisation::getTranslation('common_publish')}</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
                                  <th>{Localisation::getTranslation('common_edit')}</th>
-                                 <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
+                                 <th>{Localisation::getTranslation('project_view_archive_delete')}{microtime()}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -381,8 +382,9 @@
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /> </td>
+                                <td>{microtime()} <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /> </td>
                                     <td width="24%">
+{microtime()}
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
@@ -421,6 +423,7 @@
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
+{microtime()}
                                     </td>
                                     <td>
                                         <strong>
@@ -433,6 +436,7 @@
                                                 {/foreach}
                                             </small>
                                         </strong>
+{microtime()}
                                     </td>
                                     {if $isSiteAdmin}
                                     <td>                                    
@@ -447,6 +451,7 @@
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
                                     <td>
+{microtime()}
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
@@ -464,6 +469,7 @@
                                         </form>
                                     </td>
                                     <td>
+{microtime()}
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
@@ -512,6 +518,7 @@
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
+{microtime()}
                                     </td>
                                 </tr>                        
                             {/foreach}
