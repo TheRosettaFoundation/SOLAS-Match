@@ -230,6 +230,8 @@ class TemplateHelper
 
         $languageName = $projectDao->get_language_from_code_directly($languageCode);
         $countryName  = TemplateHelper::countryNameFromCode($countryCode);
+        if ($countryName === 'ANY') return "$languageName ($languageCode)";
+
         return "$languageName - $countryName ($languageCode - $countryCode)";
     }
 
