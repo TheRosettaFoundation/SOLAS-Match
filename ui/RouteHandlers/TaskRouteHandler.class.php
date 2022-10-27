@@ -1102,6 +1102,8 @@ class TaskRouteHandler
         ));
 
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
+        if ($taskClaimed) $claimant = $taskDao->getUserClaimedTask($task_id);
+        else              $claimant = null;
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -1209,6 +1211,34 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
+            if ($claimant && !empty($post['feedback'])) {
+                $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
+                UserRouteHandler::flashNow(
+                    'success',
+                    sprintf(
+                        Lib\Localisation::getTranslation('task_org_feedback_6'),
+                        $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $claimant->getId()]),
+                        $claimant->getDisplayName()
+                    )
+                );
+                if (!empty($post['revokeTask'])) {
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    error_log('taskOrgFeedback');
+                    $taskDao->updateTask($task);
+                    $userDao->unclaimTask($claimant->getId(), $task_id, null);
+                    UserRouteHandler::flash(
+                        'taskSuccess',
+                        sprintf(
+                            Lib\Localisation::getTranslation('task_org_feedback_3'),
+                            $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $task_id]),
+                            $task->getTitle(),
+                            $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $claimant->getId()]),
+                            $claimant->getDisplayName()
+                        )
+                    );
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', ['project_id' => $task->getProjectId()]));
+                }
+            }
         }
 
         $taskMetaData = array();
@@ -1263,6 +1293,10 @@ class TaskRouteHandler
             }
             if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
+
+        $taskClaimedDate = $taskDao->getClaimedDate($task_id);
+        $task_tags = $taskDao->getTaskTags($task_id);
+
         $taskStatusTexts = [];
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
@@ -1289,6 +1323,9 @@ class TaskRouteHandler
                 'paid_status' => $taskDao->get_paid_status($task_id),
                 'taskStatusTexts' => $taskStatusTexts,
                 'list_qualified_translators' => $list_qualified_translators,
+                'taskClaimedDate' => $taskClaimedDate,
+                'claimant' => $claimant,
+                'task_tags' => $task_tags,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
