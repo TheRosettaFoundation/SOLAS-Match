@@ -55,13 +55,6 @@
     </p>
 {/if}
 
-<p>
-{Localisation::getTranslation('task_twitter_0_project_view')} <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_3')}&url=https%3A%2F%2Fkato.translatorswb.org"
-  data-size="large" data-counturl="https://kato.translatorswb.org">
-Tweet</a>
-</p>
-
     <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
@@ -290,10 +283,10 @@ Tweet</a>
             </form>
         {/if}
 
-        {if isset($isSiteAdmin)}
+        {if $isSiteAdmin}
             <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
-                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as paid
+                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -307,7 +300,7 @@ Tweet</a>
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        {/if}
+        
 
             <form id="status_as_unclaimed" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_unclaimed').submit();" >
@@ -324,11 +317,12 @@ Tweet</a>
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-
-            </ul>
-        </div>
-        </div>
         {/if}
+            </ul>
+         </div>
+         </div>
+        {/if}
+
     </h1> 
             
     {if isset($flash['taskSuccess'])}
@@ -348,17 +342,18 @@ Tweet</a>
                 <br/><br/>
                 <div style="background-color:#fef9f2;padding:3px;">
                     <div>
+                    
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
-                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">
+                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
                             <option value="">-- Choose --</option>
-                            <option value="all_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Tasks</option>
-                            <option value="all_translation_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Translation Tasks</option>
-                            <option value="all_revision_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Revision Tasks</option>
-                            <option value="all_approval_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" id="all_approval_tasks_lang">Select all Approval Tasks</option>
-                            <option value="delesect_all_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Deselect all</option>
+                            <option value="all_tasks_{$languageCountry|replace:',':'_'}">Select all Tasks</option>
+                            <option value="all_translation_tasks_{$languageCountry|replace:',':'_'}">Select all Translation Tasks</option>
+                            <option value="all_revision_tasks_{$languageCountry|replace:',':'_'}">Select all Revision Tasks</option>
+                            <option value="all_approval_tasks_{$languageCountry|replace:',':'_'}" class="all_approval_tasks_lang">Select all Approval Tasks</option>
+                            <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
                     </span>
                     </div>                
@@ -367,16 +362,19 @@ Tweet</a>
                     <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" name="select_all_tasks" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /></th>
-                                <th>{Localisation::getTranslation('common_title')}</th>
-                                <th>{Localisation::getTranslation('common_status')}</th>       
-                                <th>{Localisation::getTranslation('common_type')}</th> 
-                                <th>Model</th>
-                                <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
-                                <th>{Localisation::getTranslation('common_publish')}</th>
-                                <th>{Localisation::getTranslation('common_tracking')}</th>
-                                <th>{Localisation::getTranslation('common_edit')}</th>
-                                <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
+                                
+                                 <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
+                                 <th>{Localisation::getTranslation('common_title')}</th>
+                                 <th>{Localisation::getTranslation('common_status')}</th>       
+                                 <th>{Localisation::getTranslation('common_type')}</th> 
+                                {if $isSiteAdmin}
+                                 <th>Paid?</th>
+                                {/if}
+                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
+                                 <th>{Localisation::getTranslation('common_publish')}</th>
+                                 <th>{Localisation::getTranslation('common_tracking')}</th>
+                                 <th>{Localisation::getTranslation('common_edit')}</th>
+                                 <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -384,7 +382,7 @@ Tweet</a>
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /> </td>
+                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" /> </td>
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -402,14 +400,14 @@ Tweet</a>
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                             <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                             {/if}
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
@@ -422,7 +420,7 @@ Tweet</a>
                                             </a>
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -437,15 +435,15 @@ Tweet</a>
                                             </small>
                                         </strong>
                                     </td>
-                                    <td>
-
-                                    {if $get_paid_for_project[$task_id] == 1}
-                                        <span>Paid</span>
-                                    {else}
-                                        <span>-</span>
-                                    {/if}
-
+                                    {if $isSiteAdmin}
+                                    <td>                                    
+                                     {if $get_paid_for_project[$task_id] == 1}
+                                         <span>Paid</span>
+                                     {else}
+                                         <span>-</span>
+                                     {/if}
                                     </td>
+                                    {/if}
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
@@ -499,9 +497,10 @@ Tweet</a>
                                                     <i class="icon-trash icon-white"></i>
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <button  style="pointer-events: auto !important;"  class="btn btn-small btn-inverse" disabled data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">
+                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn btn-small btn-inverse" disabled >
                                                     <i class="icon-trash icon-white"></i>
-                                                </button>  
+                                                 </button> 
+                                                </div>
                                             {else}
                                                 {if $isSiteAdmin}
                                                 <input type="hidden" name="archiveTask" value="Delete" />

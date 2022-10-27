@@ -51,6 +51,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Removed code supporting pre-Matecat file based download and uploads.
 - Removed User verification system (where a user could create a project as a test to be verified).
 - Added new wording for registration related emails.
+- Removed Tweeting from TWB Platform.
 - Security fix (low priority): Bump smarty/smarty from 4.1.1 to 4.2.1 in /ui (PR #1288)
 - Security fix (low priority): Bump twig/twig from 3.3.8 to 3.4.3 in /ui
 

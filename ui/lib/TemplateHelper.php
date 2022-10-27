@@ -214,21 +214,24 @@ class TemplateHelper
 
     public static function getLanguageAndCountryFromCode($codes)
     {
+        $projectDao = new DAO\ProjectDao();
+
         $splitCodes = explode(',', $codes);
         $languageCode = $splitCodes[0];
         $countryCode = $splitCodes[1];
-        $languageName = TemplateHelper::languageNameFromCode($languageCode);
-        $countryName  = TemplateHelper::countryNameFromCode($countryCode);
 
-        $projectDao = new DAO\ProjectDao();
         $selections = $projectDao->get_selections();
         foreach ($selections as $selection) {
             if ($languageCode === $selection['language_code'] && $countryCode === $selection['country_code']) {
                 $languageName = $selection['selection'];
-                $countryName  = 'ANY';
+                return "$languageName ($languageCode)";
             }
         }
+
+        $languageName = $projectDao->get_language_from_code_directly($languageCode);
+        $countryName  = TemplateHelper::countryNameFromCode($countryCode);
         if ($countryName === 'ANY') return "$languageName ($languageCode)";
+
         return "$languageName - $countryName ($languageCode - $countryCode)";
     }
 

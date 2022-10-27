@@ -7,13 +7,8 @@
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    {Localisation::getTranslation('task_review_1')} {Localisation::getTranslation('task_twitter_0')}
+    {Localisation::getTranslation('task_review_1')}
 </p>
-
-<a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_1')}&url=https%3A%2F%2Fkato.translatorswb.org"
-  data-size="large" data-counturl="https://kato.translatorswb.org">
-Tweet</a>
 
 {if $action === Localisation::getTranslation('task_review_translated')}
 <p>

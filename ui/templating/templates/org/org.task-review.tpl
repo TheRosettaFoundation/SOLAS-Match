@@ -13,13 +13,6 @@
     {sprintf(Localisation::getTranslation('org_task_review_the_volunteer'), {urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}, TemplateHelper::uiCleanseHTML($translator->getDisplayName()))}
 </p>
 
-<p>
-{Localisation::getTranslation('task_twitter_0_org_task_review')} <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=https%3A%2F%2Fkato.translatorswb.org"
-  data-size="large" data-counturl="https://kato.translatorswb.org">
-Tweet</a>
-</p>
-
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
         <div id="placeholder_for_errors_1"></div>
