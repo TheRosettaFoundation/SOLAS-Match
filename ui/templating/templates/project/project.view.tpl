@@ -349,17 +349,18 @@ Tweet</a>
                 <br/><br/>
                 <div style="background-color:#fef9f2;padding:3px;">
                     <div>
+                    
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
-                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">
+                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|strstr:',':true}">
                             <option value="">-- Choose --</option>
-                            <option value="all_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Tasks</option>
-                            <option value="all_translation_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Translation Tasks</option>
-                            <option value="all_revision_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Select all Revision Tasks</option>
-                            <option value="all_approval_tasks_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" id="all_approval_tasks_lang">Select all Approval Tasks</option>
-                            <option value="delesect_all_{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}">Deselect all</option>
+                            <option value="all_tasks_{$languageCountry|strstr:',':true}">Select all Tasks</option>
+                            <option value="all_translation_tasks_{$languageCountry|strstr:',':true}">Select all Translation Tasks</option>
+                            <option value="all_revision_tasks_{$languageCountry|strstr:',':true}">Select all Revision Tasks</option>
+                            <option value="all_approval_tasks_{$languageCountry|strstr:',':true}" class="all_approval_tasks_lang">Select all Approval Tasks</option>
+                            <option value="delesect_all_{$languageCountry|strstr:',':true}">Deselect all</option>
                         </select>
                     </span>
                     </div>                
@@ -369,7 +370,7 @@ Tweet</a>
                         <thead>
                             <tr>
                                 
-                                 <th><input type="checkbox" name="select_all_tasks" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /></th>
+                                 <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|strstr:',':true}" /></th>
                                  <th>{Localisation::getTranslation('common_title')}</th>
                                  <th>{Localisation::getTranslation('common_status')}</th>       
                                  <th>{Localisation::getTranslation('common_type')}</th> 
@@ -388,7 +389,7 @@ Tweet</a>
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{TemplateHelper::getLanguageAndCountryFromCode($languageCountry)|strstr:' ':true}" /> </td>
+                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|strstr:',':true}" /> </td>
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
