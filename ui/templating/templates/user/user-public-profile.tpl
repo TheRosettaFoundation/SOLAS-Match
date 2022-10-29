@@ -416,7 +416,10 @@ The points are cumulative and never reset to zero, so you keep accruing points e
 <p>Please remember that the quality of the work we submit is of utmost importance,
 as it can influence the lives of people affected by humanitarian crises.
 Only work that meets our minimum quality standards (as described in <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB’s Code of Conduct</a>)
-will qualify towards our Community Recognition Program.</p>
+will qualify towards our Community Recognition Program.
+If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
+<a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
+</p>
 <p style="margin-bottom:50px;" />
 
 <table border="0">
@@ -448,6 +451,7 @@ will qualify towards our Community Recognition Program.</p>
                         <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Type of task</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Unit</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points accrued per unit</strong></td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                                   <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Proofreading/Approval</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.25</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                                 <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Voice recording</td>                               <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Translation of subtitles</td>                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
