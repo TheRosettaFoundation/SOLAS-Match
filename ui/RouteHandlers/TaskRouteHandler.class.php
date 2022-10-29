@@ -1212,7 +1212,7 @@ class TaskRouteHandler
                 }
             }
             if ($details_claimant && isset($post['feedback'])) {
-               if (!empty($post['feedback']) {
+               if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
                        'success',
