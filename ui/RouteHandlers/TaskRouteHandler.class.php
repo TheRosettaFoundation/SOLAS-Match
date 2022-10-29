@@ -1299,7 +1299,6 @@ class TaskRouteHandler
         }
 
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
-        $task_tags = $taskDao->getTaskTags($task_id);
 
         $taskStatusTexts = [];
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
@@ -1329,7 +1328,6 @@ class TaskRouteHandler
                 'list_qualified_translators' => $list_qualified_translators,
                 'taskClaimedDate' => $taskClaimedDate,
                 'claimant' => $claimant,
-                'task_tags' => $task_tags,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
