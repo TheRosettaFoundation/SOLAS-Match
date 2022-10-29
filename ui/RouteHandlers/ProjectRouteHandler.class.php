@@ -915,7 +915,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
-            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView2.js");
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
@@ -938,7 +938,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
-            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView2.js");
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
@@ -1206,7 +1206,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter2.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter3.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1535,7 +1535,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate10.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate11.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
