@@ -20,9 +20,6 @@
                         {/if}
                     {/foreach}
                 </strong>
-                {if $isSiteAdmin}
-                — <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
-                {/if}
             </small>  
         </span>
 
@@ -157,6 +154,31 @@
                 {/if}
             </div>
         {/if}
+
+        <p style="margin-bottom: 40px" />
+
+        <div class="well">
+            <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
+            <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
+                <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
+                <p style="margin-bottom:30px;" />
+
+                <span style="float: left; position: relative;">
+                    <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
+                        <i class="icon-remove icon-white"></i> {Localisation::getTranslation('task_org_feedback_2')}
+                    </button>
+                </span>
+                <span style="float: right; position: relative;">
+                    <button type="submit" value="Submit" name="submit" class="btn btn-success">
+                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_submit_feedback')}
+                    </button>
+                    <button type="reset" value="Reset" name="reset" class="btn btn-primary">
+                        <i class="icon-repeat icon-white"></i> {Localisation::getTranslation('common_reset')}
+                    </button>
+                </span>
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </div>
 
 		    <p style="margin-bottom: 40px"/>        
         {if !empty($file_preview_path)}

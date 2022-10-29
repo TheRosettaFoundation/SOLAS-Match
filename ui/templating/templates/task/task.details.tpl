@@ -171,6 +171,10 @@
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
             {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
+            {if !empty($details_claimant))}
+            <th>{Localisation::getTranslation('common_claimed_date')}</th>
+            <th>{Localisation::getTranslation('common_claimed_by')}</th>
+            {/if}
         </thead>
         <tr align="center">
             <td>
@@ -225,6 +229,17 @@
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
+            </td>
+            {/if}
+            {if !empty($details_claimant))}
+            <td>
+                <span class="process_deadline_utc">
+                {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get('ui.date_format'), strtotime($details_claimed_date))})}
+                </span>
+            </td>
+            <td>
+                {assign var="user_id" value=$details_claimant->getId()}
+                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
             </td>
             {/if}
         </tr>

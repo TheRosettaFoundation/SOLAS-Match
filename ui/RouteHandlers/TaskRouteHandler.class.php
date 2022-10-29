@@ -1102,8 +1102,8 @@ class TaskRouteHandler
         ));
 
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
-        if ($taskClaimed) $claimant = $taskDao->getUserClaimedTask($task_id);
-        else              $claimant = null;
+        if ($taskClaimed) $details_claimant = $taskDao->getUserClaimedTask($task_id);
+        else              $details_claimant = 0;
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -1211,30 +1211,30 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($claimant && isset($post['feedback'])) {
+            if ($details_claimant && isset($post['feedback'])) {
                if (!empty($post['feedback']) {
-                   $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
+                   $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
                        'success',
                        sprintf(
                            Lib\Localisation::getTranslation('task_org_feedback_6'),
-                           $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $claimant->getId()]),
-                           $claimant->getDisplayName()
+                           $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $details_claimant->getId()]),
+                           $details_claimant->getDisplayName()
                        )
                    );
                    if (!empty($post['revokeTask'])) {
                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                        error_log('taskOrgFeedback');
                        $taskDao->updateTask($task);
-                       $userDao->unclaimTask($claimant->getId(), $task_id, null);
+                       $userDao->unclaimTask($details_claimant->getId(), $task_id, null);
                        UserRouteHandler::flash(
                            'taskSuccess',
                            sprintf(
                                Lib\Localisation::getTranslation('task_org_feedback_3'),
                                $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $task_id]),
                                $task->getTitle(),
-                               $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $claimant->getId()]),
-                               $claimant->getDisplayName()
+                               $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $details_claimant->getId()]),
+                               $details_claimant->getDisplayName()
                            )
                        );
                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', ['project_id' => $task->getProjectId()]));
@@ -1298,7 +1298,8 @@ class TaskRouteHandler
             if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
 
-        $taskClaimedDate = $taskDao->getClaimedDate($task_id);
+        if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);
+        else              $details_claimed_date = 0;
 
         $taskStatusTexts = [];
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
@@ -1326,8 +1327,8 @@ class TaskRouteHandler
                 'paid_status' => $taskDao->get_paid_status($task_id),
                 'taskStatusTexts' => $taskStatusTexts,
                 'list_qualified_translators' => $list_qualified_translators,
-                'taskClaimedDate' => $taskClaimedDate,
-                'claimant' => $claimant,
+                'details_claimed_date' => $details_claimed_date,
+                'details_claimant' => $details_claimant,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
