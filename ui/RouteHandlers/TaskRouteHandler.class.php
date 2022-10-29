@@ -1329,6 +1329,8 @@ class TaskRouteHandler
                 'list_qualified_translators' => $list_qualified_translators,
                 'details_claimed_date' => $details_claimed_date,
                 'details_claimant' => $details_claimant,
+                'org_id' => $org_id,
+                'memsource_task' => $memsource_task,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);

@@ -180,6 +180,32 @@
             </form>
         </div>
 
+        {if $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
+            {if !empty($memsource_task)}
+                <p>{Localisation::getTranslation('org_task_review_0')}</p>
+                <p>
+                <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
+                    <i class="icon-download icon-white"></i> {Localisation::getTranslation('org_task_review_download_output_file')}
+                </a>
+                </p>
+            {/if}
+
+            <h2 class="page-header">
+                {Localisation::getTranslation('org_task_review_review_this_file')}
+                <small>{Localisation::getTranslation('org_task_review_1')}</small>
+            </h2>
+
+            <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
+            <p>
+                <a class="btn btn-primary" href="{urlFor name="org-task-review" options="org_id.$org_id|task_id.$task_id"}">
+                    <i class="icon-list-alt icon-white"></i>{Localisation::getTranslation('org_task_complete_provide_a_review')}
+                </a>
+                <a class="btn btn-primary" href="{urlFor name="org-task-reviews" options="org_id.$org_id|task_id.$task_id"}">
+                    <i class="icon-list icon-white"></i>{Localisation::getTranslation('org_task_complete_view_reviews')}
+                </a>
+            </p>
+        {/if}
+
 		    <p style="margin-bottom: 40px"/>        
         {if !empty($file_preview_path)}
 		    <table width="100%">
