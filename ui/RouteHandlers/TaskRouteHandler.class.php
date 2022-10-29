@@ -1224,7 +1224,7 @@ class TaskRouteHandler
                    );
                    if (!empty($post['revokeTask'])) {
                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                       error_log('taskOrgFeedback');
+                       error_log("taskView revokeTask: $task_id");
                        $taskDao->updateTask($task);
                        $userDao->unclaimTask($details_claimant->getId(), $task_id, null);
                        UserRouteHandler::flash(
