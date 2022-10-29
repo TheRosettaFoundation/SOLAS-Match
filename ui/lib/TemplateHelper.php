@@ -229,7 +229,7 @@ class TemplateHelper
         }
 
         $languageName = $projectDao->get_language_from_code_directly($languageCode);
-        $countryName  = TemplateHelper::countryNameFromCode($countryCode);
+        $countryName  = $projectDao->get_country_from_code_directly($countryCode);
         if ($countryName === 'ANY') return "$languageName ($languageCode)";
 
         return "$languageName - $countryName ($languageCode - $countryCode)";
@@ -244,13 +244,8 @@ class TemplateHelper
 
     public static function languageNameFromCode($languageCode)
     {
-        $ret = "";
-        $langDao = new DAO\LanguageDao();
-        $lang = $langDao->getLanguageByCode($languageCode);
-        if ($lang) {
-            $ret = self::cleanse($lang->getName());
-        }
-        return $ret;
+        $projectDao = new DAO\ProjectDao();
+        return $projectDao->get_language_from_code_directly($languageCode);
     }
 
     public static function orgNameFromId($orgID)
@@ -264,13 +259,6 @@ class TemplateHelper
     {
         $countryDao = new DAO\CountryDao();
         $result = $countryDao->getCountry($cID);
-        return self::cleanse($result->getName());
-    }
-
-    public static function countryNameFromCode($cc)
-    {
-        $countryDao = new DAO\CountryDao();
-        $result = $countryDao->getCountryByCode($cc);
         return self::cleanse($result->getName());
     }
 

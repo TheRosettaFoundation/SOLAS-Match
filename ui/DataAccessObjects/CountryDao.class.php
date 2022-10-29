@@ -23,13 +23,6 @@ class CountryDao extends BaseDao
         return $response;
     }
 
-    public function getCountryByCode($code)
-    {
-        $request = "{$this->siteApi}v0/countries/getByCode/$code";
-        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
-        return $response;
-    }
-
     public function getCountries()
     {
         $countries = Common\Lib\CacheHelper::getCached(

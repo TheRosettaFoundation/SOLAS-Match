@@ -18,11 +18,6 @@ class Countries
         global $app;
 
         $app->get(
-            '/api/v0/countries/getByCode/{code}/',
-            '\SolasMatch\API\V0\Countries:getCountryByCode')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/countries/getByPattern/{pattern}/',
             '\SolasMatch\API\V0\Countries:getCountriesByPattern');
 
@@ -35,16 +30,6 @@ class Countries
             '/api/v0/countries/',
             '\SolasMatch\API\V0\Countries:getCountries')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-    }
-
-    public static function getCountryByCode(Request $request, Response $response, $args)
-    {
-        $code = $args['code'];
-        $data = DAO\CountryDao::getCountry(null, $code);
-        if (is_array($data) && is_array($data[0])) {
-            $data = $data[0];
-        }
-        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getCountry(Request $request, Response $response, $args)

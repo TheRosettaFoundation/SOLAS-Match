@@ -64,7 +64,7 @@ class LanguageDao extends BaseDao
     
     public function getLanguageByCode($code)
     {
-        $request = "{$this->siteApi}v0/languages/getByCode/$code";
-        return $this->client->call("\SolasMatch\Common\Protobufs\Models\Language", $request);
+        $projectDao = new ProjectDao();
+        return $projectDao->get_language_from_code_directly($code);
     }
 }

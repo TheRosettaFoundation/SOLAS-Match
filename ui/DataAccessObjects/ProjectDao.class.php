@@ -1309,6 +1309,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $result[0]['name'];
     }
 
+    public function get_country_from_code_directly($code)
+    {
+        $result = LibAPI\PDOWrapper::call('getCountry', 'NULL,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($code) . ',NULL');
+        return $result[0]['name'];
+    }
+
     public static function get_task_type_details()
     {
         $get_task_type_details = Common\Lib\CacheHelper::getCached(
