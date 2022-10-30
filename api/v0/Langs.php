@@ -30,6 +30,10 @@ class Langs
             '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
 
         $app->get(
+            '/api/v0/languages/getByCode/{code}/',
+            '\SolasMatch\API\V0\Langs:getLanguageByCode');
+
+        $app->get(
             '/api/v0/languages/{languageId}/',
             '\SolasMatch\API\V0\Langs:getLanguage');
 
@@ -51,6 +55,16 @@ class Langs
     public static function getActiveTargetLanguages(Request $request, Response $response)
     {
         return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveTargetLanguages(), null);
+    }
+
+    public static function getLanguageByCode(Request $request, Response $response, $args)
+    {
+        $code = $args['code'];
+        $data = DAO\LanguageDao::getLanguage(null, $code);
+        if (is_array($data) && is_array($data[0])) {
+            $data = $data[0];
+        }
+        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getLanguage(Request $request, Response $response, $args)
