@@ -742,8 +742,6 @@ class TaskRouteHandler
 
         $sourcelocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
-        $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
-        $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
 
         // Used in proofreading page, link to original project file
@@ -754,8 +752,6 @@ class TaskRouteHandler
                     'sesskey' => $sesskey,
                     "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
-                    "sourceLanguage"=> $sourceLanguage,
-                    "targetLanguage"=> $targetLanguage,
                     'matecat_url'   => '',
                     'allow_download'=> $taskDao->get_allow_download($task, $memsource_task),
                     'memsource_task'=> $memsource_task,

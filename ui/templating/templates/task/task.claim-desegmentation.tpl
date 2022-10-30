@@ -16,7 +16,7 @@
                 <li>{sprintf(Localisation::getTranslation('task_claim_desegmentation_3'), {$taskMetadata->getContentType()})}</li>
             {/if}
             <li>{Localisation::getTranslation('task_claim_desegmentation_4')}</li>
-            <li>{sprintf(Localisation::getTranslation('task_claim_desegmentation_6'), {$targetLanguage->getName()})}</li>
+            <li>{sprintf(Localisation::getTranslation('task_claim_desegmentation_6'), '---')}</li>
         </ol>
     </section>
 
