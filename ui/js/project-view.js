@@ -65,7 +65,21 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } 
+        } else if (valueSelected == "all_revtrans_tasks") {
+            $(":checkbox[data-task-type='2']").prop("checked", true);
+            $(":checkbox[data-task-type='3']").prop("checked", true);
+            $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
+                arr.push($(this).val());
+                }
+            });
+            $("[name=unpublish_selected_tasks]").val(arr);
+            $("[name=publish_selected_tasks]").val(arr);
+            $("[name=tasks_as_paid]").val(arr);
+            $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=status_as_unclaimed]").val(arr);
+            $("[name=status_as_waiting]").val(arr);
+        }  
         else {
             $(":checkbox").prop("checked", false);
             arr = [];
@@ -230,7 +244,23 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
-        } else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
+        } else if (valueSelected == "all_revtrans_tasks_"+$(this).attr("data-select-name")) {
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
+            $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
+           // arr = [];
+            $(':checkbox:checked').each(function () {
+                if ($(this).val() != "on") {
+                    arr.push($(this).val());
+                }
+            });
+            $("[name=unpublish_selected_tasks]").val(arr);
+            $("[name=publish_selected_tasks]").val(arr);
+            $("[name=tasks_as_paid]").val(arr);
+            $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=status_as_unclaimed]").val(arr);
+            $("[name=status_as_waiting]").val(arr);
+        }
+         else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", false);
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on" && !(jQuery.inArray($(this).val(), arr) !== -1)) {

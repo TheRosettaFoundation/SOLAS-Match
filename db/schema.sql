@@ -9436,6 +9436,7 @@ BEGIN
         ROUND(
             IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0) +
             IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0)*0.5 +
+            IFNULL(SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0)*0.25 +
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
@@ -9458,6 +9459,15 @@ BEGIN
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
             ), 0)*0.5 +
+            IFNULL(SUM(
+                IF(
+                    t.`task-type_id`=6 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
+                    t.`word-count`, 0)
+            ), 0)*0.25 +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
         ) AS strategic_points,
         0 AS taskscompleted
@@ -9610,7 +9620,8 @@ FROM
         SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
         ROUND(
             SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5 +
+            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.25
         ) AS points_recognition_unadjusted,
         ROUND(
             SUM(
@@ -9630,7 +9641,16 @@ FROM
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
-            )*0.5
+            )*0.5 +
+            SUM(
+                IF(
+                    t.`task-type_id`=6 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
+                    t.`word-count`, 0)
+            )*0.25
         ) AS points_strategic_unadjusted
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id
@@ -10326,7 +10346,7 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 /*---------------------------------------end of triggers-------------------------------------------*/
 
 
-/* Recognition SQL for Metabase Report, given to Manuel
+/* Recognition SQL for Metabase Report, given to Manuel (but now updated for Proofreading/Aproval)
 SELECT
     main.user_id,
     main.email,
@@ -10358,7 +10378,8 @@ FROM
         SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
         ROUND(
             SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5 +
+            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.25
         ) AS points_recognition_unadjusted,
         ROUND(
             SUM(
@@ -10378,7 +10399,16 @@ FROM
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
-            )*0.5
+            )*0.5 +
+            SUM(
+                IF(
+                    t.`task-type_id`=6 AND
+                    tp.task_id IS NULL AND
+                    t.`task-status_id`=4 AND
+                    sco.start IS NOT NULL AND
+                    t.`created-time`>=sco.start,
+                    t.`word-count`, 0)
+            )*0.25
         ) AS points_strategic_unadjusted
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id

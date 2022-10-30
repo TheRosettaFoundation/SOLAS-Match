@@ -253,6 +253,7 @@
                 <option value="all_tasks">Select all Tasks</option>
                 <option value="all_translation_tasks">Select all Translation Tasks</option>
                 <option value="all_revision_tasks">Select all Revision Tasks</option>
+                <option value="all_revtrans_tasks">Select all Translation and Revision</option>
                 <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
                 <option value="delesect_all">Deselect all</option>
             </select>
@@ -352,6 +353,7 @@
                             <option value="all_tasks_{$languageCountry|replace:',':'_'}">Select all Tasks</option>
                             <option value="all_translation_tasks_{$languageCountry|replace:',':'_'}">Select all Translation Tasks</option>
                             <option value="all_revision_tasks_{$languageCountry|replace:',':'_'}">Select all Revision Tasks</option>
+                            <option value="all_revtrans_tasks_{$languageCountry|replace:',':'_'}">Select all Translation and Revision</option>
                             <option value="all_approval_tasks_{$languageCountry|replace:',':'_'}" class="all_approval_tasks_lang">Select all Approval Tasks</option>
                             <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
