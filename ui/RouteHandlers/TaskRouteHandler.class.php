@@ -1259,7 +1259,7 @@ class TaskRouteHandler
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView2.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView3.js");
 
         $alsoViewedTasks = [];
         $alsoViewedTasksCount = 0;
@@ -1402,7 +1402,7 @@ class TaskRouteHandler
             }
         }
 
-        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView2.js");
+        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView3.js");
         $extra_scripts .= "
     <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
     <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
