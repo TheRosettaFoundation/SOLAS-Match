@@ -39,6 +39,14 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 12.1
+
+- Self service projects are automatically split if they have more than 2000 words (translation only is split).
+- Added a minimum week deadline for self service projects (including limits on changes).
+- The four Task view, Task id, Org feedback and Task complete pages have been merged into one.
+- The language names used when creating Asana and TWB Community entries for projects (language pairs) are aligned with the names in selection lists.
+- Fixed a bug that would not allow a user to remove a URL from their profile.
+
 ## Version 12.0
 
 - Added support for the Proofreading and Approval Phrase TMS Workflow and generalised adding new workflows.
