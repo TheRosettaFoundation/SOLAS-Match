@@ -9432,6 +9432,7 @@ BEGIN
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
         IFNULL(SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_translated,
         IFNULL(SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_proofread,
+        IFNULL(SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_approved,
         IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         ROUND(
             IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0) +
@@ -9491,6 +9492,7 @@ UNION
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
         0 AS words_translated,
         0 AS words_proofread,
+        0 AS words_approved,
         (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         ROUND(
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
@@ -9597,6 +9599,7 @@ SELECT
     main.name,
     main.words_translated,
     main.words_proofread,
+    main.words_approved,
     IFNULL(proz.words_proz, 0) AS words_proz,
     IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
     IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
@@ -9615,6 +9618,7 @@ FROM
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
         SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
         SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_approved,
         SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
         SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
         SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
@@ -9702,6 +9706,7 @@ SELECT
     proz.name,
     0 AS words_translated,
     0 AS words_proofread,
+    0 AS words_approved,
     IFNULL(proz.words_proz, 0) AS words_proz,
     IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
     IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
@@ -10355,6 +10360,7 @@ SELECT
     main.name,
     main.words_translated,
     main.words_proofread,
+    main.words_approved,
     IFNULL(proz.words_proz, 0) AS words_proz,
     IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
     IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
@@ -10373,6 +10379,7 @@ FROM
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
         SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
         SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_approved,
         SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
         SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
         SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
@@ -10456,6 +10463,7 @@ SELECT
     proz.name,
     0 AS words_translated,
     0 AS words_proofread,
+    0 AS words_approved,
     IFNULL(proz.words_proz, 0) AS words_proz,
     IFNULL(adjust.points_adjustment, 0) AS points_adjustment,
     IFNULL(adjust_strategic.points_adjustment_strategic, 0) AS points_adjustment_strategic,
