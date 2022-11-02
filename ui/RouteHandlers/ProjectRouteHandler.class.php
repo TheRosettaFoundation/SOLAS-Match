@@ -638,6 +638,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
+        if (empty($project)) {
+            UserRouteHandler::flash('error', 'That project does not exist!');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
+
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
@@ -646,12 +651,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
         $isAdmin = $isOrgAdmin || $isSiteAdmin;
-
-        
-        if (empty($project)) {
-            UserRouteHandler::flash('error', 'That project does not exist!');
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-        }
 
         if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
             UserRouteHandler::flash('error', 'You cannot access this project!');
