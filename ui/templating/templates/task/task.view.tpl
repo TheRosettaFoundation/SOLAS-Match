@@ -111,10 +111,8 @@
 		
 		    {include file="task/task.details.tpl"} 
 		
-        {if $isSiteAdmin}
+        {if $isSiteAdmin && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
             <div class="well">
-        {/if}
-		    {if $isSiteAdmin}
             <table><tr>
               <td>
                 <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
@@ -145,13 +143,10 @@
                 </form>
               </td>
             </tr></table>
-		    {/if}
-        {if $isSiteAdmin}
-                {if $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
-                {/if}
             </div>
         {/if}
 
