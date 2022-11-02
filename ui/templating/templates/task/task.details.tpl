@@ -233,9 +233,7 @@
             {/if}
             {if !empty($details_claimant)}
             <td>
-                <span class="process_deadline_utc">
-                {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get('ui.date_format'), strtotime($details_claimed_date))})}
-                </span>
+                <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$details_claimed_date}</div>
             </td>
             <td>
                 {assign var="user_id" value=$details_claimant->getId()}
