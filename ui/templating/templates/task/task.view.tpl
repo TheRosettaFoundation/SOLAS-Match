@@ -110,7 +110,7 @@
 		
 		
 		    {include file="task/task.details.tpl"} 
-    TEST CODE isSiteAdmin{$isSiteAdmin}  isMember{$isMember}
+
         {if $isSiteAdmin && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
             <div class="well">
             <table><tr>
