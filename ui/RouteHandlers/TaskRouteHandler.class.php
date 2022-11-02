@@ -1269,7 +1269,6 @@ class TaskRouteHandler
 
         if (!$taskClaimed) {
             $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
-$alsoViewedTasks = $taskDao->getTopTasks(10, 0);
             if (!empty($alsoViewedTasks)) $alsoViewedTasksCount = count($alsoViewedTasks);
             if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {
                 foreach ($alsoViewedTasks as $alsoViewedTask) {
