@@ -92,9 +92,7 @@
 		                                </p>
 		                            </div>
 		                            <p>
-		                            	<span class="process_deadline_utc" style="display: inline-block">
-		                            		{sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($deadline_timestamps[$also_viewed_task_id]))})}
-		                            	</span>
+                                    {Localisation::getTranslation('common_due_by')} <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</div>
 		                            </p>
                                 <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
 		                        </div>
