@@ -150,6 +150,7 @@
 
         <p style="margin-bottom: 40px" />
 
+        {if $isSiteAdmin || $isMember}
         <div class="well">
             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
@@ -172,6 +173,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         </div>
+        {/if}
 
         {if ($isSiteAdmin || $isMember) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
             {if !empty($memsource_task)}
