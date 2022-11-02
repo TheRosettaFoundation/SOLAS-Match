@@ -150,7 +150,7 @@
 
         <p style="margin-bottom: 40px" />
 
-        {if $isSiteAdmin || $isMember}
+        {if ($isSiteAdmin || $isMember) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
         <div class="well">
             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
