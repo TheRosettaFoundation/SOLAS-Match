@@ -92,7 +92,7 @@
 		                                </p>
 		                            </div>
 		                            <p>
-                                    {Localisation::getTranslation('common_due_by')} <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</div>
+                                    Due by <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</div>
 		                            </p>
                                 <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
 		                        </div>
