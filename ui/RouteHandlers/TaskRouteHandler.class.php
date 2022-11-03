@@ -1263,7 +1263,7 @@ class TaskRouteHandler
             $restrictTaskStatus = 'checked';
         }
 
-        if ($projectDao->are_translations_not_all_complete($copy_task, $memsource_task)) $copy_task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
+        if ($copy_task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($copy_task, $memsource_task)) $copy_task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
             'task'                => $copy_task,
