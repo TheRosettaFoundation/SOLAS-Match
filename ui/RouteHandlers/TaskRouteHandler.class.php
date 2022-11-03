@@ -107,7 +107,7 @@ class TaskRouteHandler
             ->setName('task-alter');
 
         $app->map(['GET', 'POST'],
-            '/task/{task_id}/view[/]',
+            '/task/{task_id}/view[/{params:.*}]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskView')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('task-view');
@@ -313,7 +313,7 @@ class TaskRouteHandler
                     $completed_timestamps[$taskId] = 0;
                 }
 
-                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view/?99";
                 $projectName = $project->getTitle();
                 $orgUri = "{$siteLocation}org/{$org_id}/profile";
                 $orgName = $org->getName();
@@ -1063,7 +1063,7 @@ class TaskRouteHandler
     {
         global $app, $template_data;
         $task_id = $args['task_id'];
-
+    
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();

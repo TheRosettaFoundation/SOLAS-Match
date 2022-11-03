@@ -359,8 +359,10 @@
                         </select>
                     </span>
                     </div>                
-                    <hr />  
- 
+                    <hr /> 
+                    {if !$isAdmin}
+                     {assign var="tracker_url" value="?utm_source=twb&utm_medium=projectpage&utm_campaign=tasks"}
+                    {/if} 
                     <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
                             <tr>
@@ -386,7 +388,7 @@
                                 <tr style="overflow-wrap: break-word;">
                                 <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" /> </td>
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}/{$tracker_url}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
                                         <br/>
