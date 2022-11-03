@@ -1272,7 +1272,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $ret = $this->client->call(null, $request);
         return $ret;
     }
-    
+
+    public function is_denied_for_task($user_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('isUserBlacklistedForTask', LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($task_id));
+        return $result[0]['result'];
+    }
+
     public function isBlacklistedForTaskByAdmin($userId, $taskId)
     {
         $ret = null;

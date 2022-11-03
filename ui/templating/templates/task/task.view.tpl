@@ -24,7 +24,7 @@
         </span>
 
         <div class="pull-right">
-            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
+            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task}
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary claim_btn">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>&nbsp;&nbsp;
             {/if}
@@ -39,6 +39,14 @@
     {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
         <p class="alert alert-info">
             {Localisation::getTranslation('task_view_0')}
+        </p>
+    {elseif $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
+        <p class="alert alert-info">
+            Note: You cannot claim this task, because you have previously claimed the matching translation task.
+        </p>
+    {elseif $is_denied_for_task}
+        <p class="alert alert-info">
+            Note: You cannot claim this task, because you have previously claimed the matching revision or proofreading task.
         </p>
     {/if}
     
