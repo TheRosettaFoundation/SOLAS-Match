@@ -1005,12 +1005,14 @@ class TaskRouteHandler
                 }
             }
           } else {
+              if (empty($word_count_err) && empty($deadlineError)) {
                 $taskDao->updateTask($task);
 
                 if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
+              }
           }
         }
 
