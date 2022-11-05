@@ -568,7 +568,7 @@
                                 {assign var="task_id" value=$task['task_id']}
                                 <tr style="overflow-wrap: break-word;">
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?utm_source=twb&utm_medium=projectpage&utm_campaign=tasks">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
                                         <br/>
