@@ -2161,7 +2161,7 @@ class UserRouteHandler
         }
         $referers = $userDao->get_referers();
         foreach ($referers as $i => $referer) {
-            $referers[$i] = ['referer' => $referer, 'url' => $userDao->get_referer_link($referer);
+            $referers[$i] = ['referer' => $referer, 'url' => $userDao->get_referer_link($referer)];
         }
         $template_data = array_merge($template_data, array(
             'sesskey'  => $sesskey,
