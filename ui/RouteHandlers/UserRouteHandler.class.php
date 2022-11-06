@@ -2159,9 +2159,13 @@ class UserRouteHandler
                 UserRouteHandler::flashNow('success', "Added Tracking Code (if not already present), URL: $url");
             }
         }
+        $referers = $userDao->get_referers();
+        foreach ($referers as $i => $referer) {
+            $referers[$i] = ['referer' => $referer, 'url' => $userDao->get_referer_link($referer);
+        }
         $template_data = array_merge($template_data, array(
             'sesskey'  => $sesskey,
-            'referers' => $userDao->get_referers(),
+            'referers' => $referers,
         ));
         return UserRouteHandler::render('user/add_tracking_code.tpl', $response);
     }

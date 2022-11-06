@@ -9308,6 +9308,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_referer_link`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_referer_link`(IN ref VARCHAR(30))
+BEGIN
+    SELECT CONCAT('https://kato.translatorswb.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `set_google_user_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_google_user_details`(IN mail VARCHAR(128), IN firstName VARCHAR(128), IN lastName VARCHAR(128))

@@ -2193,6 +2193,12 @@ error_log(print_r($result, true));//(**)
         return $referers;
     }
 
+    public function get_referer_link($referer)
+    {
+        $results = LibAPI\PDOWrapper::call('get_referer_link', LibAPI\PDOWrapper::cleanseWrapStr($referer));
+        return $results[0]['url'];
+    }
+
     public function set_google_user_details($email, $first_name, $last_name)
     {
         LibAPI\PDOWrapper::call('set_google_user_details', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name));

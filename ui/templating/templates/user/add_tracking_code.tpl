@@ -11,10 +11,12 @@
 {/if}
 
 <p>
-    Existing codes...<br />
+    Existing codes...
+    <table>
     {foreach $referers as $referer}
-        {$referer}<br />
+        <tr><td>{$referer['referer']}</td><td>{$referer['url']}</td></tr>
     {/foreach}
+    </table>
 </p>
 
 <form method="post" action="{urlFor name="add_tracking_code"}">
