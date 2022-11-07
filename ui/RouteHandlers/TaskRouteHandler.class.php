@@ -313,7 +313,7 @@ class TaskRouteHandler
                     $completed_timestamps[$taskId] = 0;
                 }
 
-                $projectUri = "{$siteLocation}project/{$project->getId()}/view/?99";
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view/";
                 $projectName = $project->getTitle();
                 $orgUri = "{$siteLocation}org/{$org_id}/profile";
                 $orgName = $org->getName();
