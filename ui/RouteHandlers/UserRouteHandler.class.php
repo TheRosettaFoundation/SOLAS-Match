@@ -72,11 +72,6 @@ class UserRouteHandler
             ->setName('login');
 
         $app->map(['GET', 'POST'],
-            '/loggedin',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login_proz')
-            ->setName('loggedin');
-
-        $app->map(['GET', 'POST'],
             '/{user_id}/profile[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPublicProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
@@ -902,98 +897,9 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array(
             'extra_scripts' => self::createGooglePlusJavaScript(),
-            'client_id'    => Common\Lib\Settings::get('proz.client_id'),
-            'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
 
         return UserRouteHandler::render("user/login.tpl", $response);
-    }
-
-    public function login_proz(Request $request, Response $response)
-    {
-        global $app;
-        $userDao = new DAO\UserDao();
-
-        error_log("login_proz() Redirect from ProZ");
-
-        $bad_message = '';
-
-        $parms = $request->getQueryParams();
-        $code = !empty($parms['code']) ? $parms['code'] : null;
-        if (!empty($code)) {
-            // Exchange the authorization code for an access token
-            $client_id = Common\Lib\Settings::get('proz.client_id');
-            $client_secret = Common\Lib\Settings::get('proz.client_secret');
-            $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'));
-
-            $curl = curl_init('https://www.proz.com/oauth/token');
-            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt($curl, CURLOPT_USERPWD, "$client_id:$client_secret");
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($curl, CURLOPT_AUTOREFERER, true);
-
-            $curl_response = curl_exec($curl);
-
-            $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-            curl_close($curl);
-
-            if ($responseCode == 200) {
-                $response_data = json_decode($curl_response);
-
-                $access_token = $response_data->access_token;
-
-                $curl = curl_init('https://api.proz.com/v2/user');
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $access_token"));
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($curl, CURLOPT_AUTOREFERER, true);
-
-                $curl_response = curl_exec($curl);
-
-                $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-                curl_close($curl);
-
-                if ($responseCode == 200) {
-
-                    $response_data = json_decode($curl_response);
-
-                    if (!empty($response_data->email)) {
-                        error_log("ProZ SSO, Login: {$response_data->email}");
-                        return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($response_data->email));
-                        // Redirects to API v0/users/$email/auth/code/
-                        // which starts "normal" Trommons authorization process
-                        // (and may register a user if the email is new),
-                        // which then redirects to /login URL with a different Trommons 'code',
-                        // which completes login and
-                        // redirects to UserSession::getReferer() or home.
-                    } else {
-                        $bad_message = 'email not set /user';
-                    }
-                } else {
-                    $bad_message = "BAD responseCode /user: $responseCode";
-                }
-            } else {
-                $bad_message = "BAD responseCode /oauth/token: $responseCode";
-            }
-        } else {
-            $bad_message = 'An empty access token received.';
-        }
-
-        $error = sprintf(
-            Lib\Localisation::getTranslation('proz_error'),
-            $app->getRouteCollector()->getRouteParser()->urlFor('login'),
-            $app->getRouteCollector()->getRouteParser()->urlFor('register'),
-            "[$bad_message]"
-        );
-        error_log($bad_message);
-
-        UserRouteHandler::flash('error', $error);
-        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
     private static function createGooglePlusJavaScript()
