@@ -449,10 +449,14 @@ function set_options_for_days_in_month(month, year)
     monthLengths[2] = 29;
   }
 
+  var current_selected_day = document.getElementById("selectedDay").value;
+  if (current_selected_day > monthLengths[month]) current_selected_day = monthLengths[month];
+
   var options_list = '';
   for (var i = 1; i <= monthLengths[month]; i++) {
     selectedString = "";
     if (initial_selected_day != null && i == initial_selected_day) selectedString = ' selected="selected"'
+    if (initial_selected_day == null && i == current_selected_day) selectedString = ' selected="selected"'
     options_list += '<option value="' + i.toString() + '"' + selectedString + '>' + i.toString() + '</option>';
   }
 
