@@ -485,7 +485,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$uid/split");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $data = [
-                    'partCount' => ceil($task->getWordCount()/900.),
+                    'partCount' => ceil($task->getWordCount()/2000.),
                 ];
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -508,7 +508,7 @@ error_log(print_r($result, true));//(**)
                 }
             }
         }
-        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter, $words_default);
+        if ($memsource_project_sync) $projectDao->sync_split_jobs($memsource_project_sync, $split_uids_filter, $parent_tasks_filter, $words_default, 1);
     }
 
     private function update_task_status($hook)
