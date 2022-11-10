@@ -869,7 +869,7 @@ $replace = array(
         return $users;
     }
 
-    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false, $words_default = 0)
+    public function sync_split_jobs($memsource_project, $split_uids_filter = false, $parent_tasks_filter = false, $words_default = 0, $publish = 0)
     {
 error_log('split_uids_filter:' . print_r($split_uids_filter, true));//(**)
 error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
@@ -890,7 +890,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
             if ($full_job) {
                 if (empty($memsource_task)) {
-                    if (!$error = $this->create_task($memsource_project, $full_job, $words_default)) {
+                    if (!$error = $this->create_task($memsource_project, $full_job, $words_default, $publish)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                         $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
                         $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
@@ -943,7 +943,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         return 0;
     }
 
-    private function create_task($memsource_project, $job, $words_default)
+    private function create_task($memsource_project, $job, $words_default, $publish)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
@@ -1021,7 +1021,7 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
         else                         $task->setDeadline($project->getDeadline());
 
-        $task->setPublished(0);
+        $task->setPublished($publish);
 
         $task_id = $taskDao->createTaskDirectly($task);
         if (!$task_id) {
