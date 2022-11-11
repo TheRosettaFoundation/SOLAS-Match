@@ -1079,6 +1079,12 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
             $taskDao->setRestrictedTask($task_id);
         }
 
+        if ($this->get_memsource_self_service_project($memsource_project['memsource_project_id'])) {
+            $creator = $taskDao->get_self_creator_from_project_file($project_id);
+            error_log("Sync Tracking for Self Service Creator: {$creator['id']}");
+            $taskDao->trackTaskDirectly($creator['id'], $task_id);
+        }
+
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
         mkdir($uploadFolder, 0755, true);
         $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
