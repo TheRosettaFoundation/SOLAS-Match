@@ -398,15 +398,23 @@
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             {Localisation::getTranslation('common_unclaimed')}
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                          {if $isSiteAdmin}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
+                                          {else}
+                                                {Localisation::getTranslation('common_in_progress')}<br />
+                                          {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
+                                          {if $isSiteAdmin}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
+                                          {else}
+                                                Claimed<br />
+                                          {/if}
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
                                              <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
