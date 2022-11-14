@@ -1291,6 +1291,20 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         error_log("set_dateDue_in_memsource_when_new($memsource_project_uid, $memsource_task_uid, $deadline)");
     }
 
+    public function set_dateDue_in_memsource_for_project($memsource_project, $deadline)
+    {
+        $memsource_project_uid = $memsource_project['memsource_project_uid'];
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z']));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        error_log("set_dateDue_in_memsource_for_project $memsource_project_uid, $deadline");
+    }
+
     public function delete_not_accepted_user()
     {
         LibAPI\PDOWrapper::call('delete_not_accepted_user', '');

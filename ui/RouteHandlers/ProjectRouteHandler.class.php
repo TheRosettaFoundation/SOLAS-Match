@@ -1010,6 +1010,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 $project->setTitle(mb_substr($post['project_title'], 0, 128));
                 $project->setDescription($post['project_description']);
+                $set_dateDue_in_memsource = $project->getDeadline() != $post['project_deadline'];
                 $project->setDeadline($post['project_deadline']);
                 $projectDao->queue_asana_project($project_id);
                 $project->setImpact($post['project_impact']);
@@ -1123,6 +1124,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
                                 try {
+                                     if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
                                      return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                 }
