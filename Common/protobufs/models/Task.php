@@ -9,12 +9,14 @@ class Task
   public $comment;
   public $deadline;
   public $wordCount;
+  public $word_count_original;
   public $createdTime;
   public $sourceLocale;
   public $targetLocale;
   public $taskType;
   public $taskStatus;
   public $published;
+  public $cancelled;
 
   public function __construct() {
     $this->id = null;
@@ -23,12 +25,14 @@ class Task
     $this->comment = '';
     $this->deadline = '';
     $this->wordCount = null;
+    $this->word_count_original = 0;
     $this->createdTime = '';
     $this->sourceLocale = null;
     $this->targetLocale = null;
     $this->taskType = null;
     $this->taskStatus = null;
     $this->published = false;
+    $this->cancelled = 0;
   }
 
   public function getId() {
@@ -89,6 +93,14 @@ class Task
 
   public function setWordCount($wordCount) {
     $this->wordCount = $wordCount;
+  }
+
+  public function get_word_count_original() {
+    return $this->word_count_original;
+  }
+
+  public function set_word_count_original($word_count_original) {
+    $this->word_count_original = $word_count_original;
   }
 
   public function getCreatedTime() {
@@ -155,4 +167,11 @@ class Task
     $this->published = (boolean)$published;
   }
 
+  public function get_cancelled() {
+    return $this->cancelled;
+  }
+
+  public function set_cancelled($cancelled) {
+    $this->cancelled = $cancelled;
+  }
 }
