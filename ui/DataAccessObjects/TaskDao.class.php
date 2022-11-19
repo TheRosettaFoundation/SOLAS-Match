@@ -192,15 +192,26 @@ error_log("createTaskDirectly: $args");
         $id = $task->getId();
         $title = $task->getTitle();
         error_log("updateTask($u) $id: $title");
-
-        $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
-        $response = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Task",
-            $request,
-            Common\Enums\HttpMethodEnum::PUT,
-            $task
-        );
-        return $response;
+        $sourceLocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();
+        $args =
+            LibAPI\PDOWrapper::cleanseNull($task->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getComment()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskType()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
+            LibAPI\PDOWrapper::cleanse($task->getPublished()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_cancelled());
+        error_log("call taskInsertAndUpdate($args)");
+        return LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
     }
 
     public function deleteTask($taskId)

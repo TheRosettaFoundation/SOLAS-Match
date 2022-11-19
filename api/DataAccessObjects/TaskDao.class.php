@@ -109,12 +109,6 @@ class TaskDao
         return $tasks;
     }
     
-    public static function save($task)
-    {
-            self::update($task);
-        return $task;
-    }
-
     //! Submit a Review of a Task
     /*!
       Provide a Review for a Task. Reviews can be used to help understand the quality of a volunteers work as well as
@@ -188,34 +182,6 @@ class TaskDao
         return $reviews;
     }
 
-    private static function update($task)
-    {
-        $sourceLocale = $task->getSourceLocale();
-        $targetLocale = $task->getTargetLocale();
-        $args = Lib\PDOWrapper::cleanseNull($task->getId()).",".
-            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
-            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
-            Lib\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
-            Lib\PDOWrapper::cleanse($task->getPublished()) . ',' .
-            Lib\PDOWrapper::cleanseNull($task->get_cancelled());
-        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
-error_log("call taskInsertAndUpdate($args)");
-        if ($result) {
-            $task = Common\Lib\ModelFactory::buildModel('Task', $result);
-        } else {
-            return null;
-        }
-    }
-    
     //! Delete a Task from the database
     /*!
       Permanently delete a Task from the database.
