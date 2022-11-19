@@ -2941,6 +2941,7 @@ BEGIN
 
 
   select t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
+            word_count_original,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -2949,8 +2950,8 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
-            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
-
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime,
+            cancelled
         from Tasks t
 
         where (id is null or t.id = id)
