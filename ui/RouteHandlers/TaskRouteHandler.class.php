@@ -1088,6 +1088,8 @@ class TaskRouteHandler
         }
 
         $project = $projectDao->getProject($task->getProjectId());
+        $org_id = $project->getOrganisationId();
+        $isOrgMember = $userDao->is_admin_or_member_for_org($user_id, $org_id);
         $memsource_task = $projectDao->get_memsource_task($task_id);
         $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
 
@@ -1107,7 +1109,7 @@ class TaskRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if (isset($post['published'])) {
+            if (($isOrgMember || $isSiteAdmin) && isset($post['published'])) {
                 if ($post['published']) {
                     $task->setPublished(1);
                 } else {
@@ -1209,7 +1211,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($details_claimant && isset($post['feedback'])) {
+            if ($details_claimant && $isSiteAdmin && isset($post['feedback'])) {
                if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
@@ -1255,8 +1257,6 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        $org_id = $project->getOrganisationId();
-        $isOrgMember = $userDao->is_admin_or_member_for_org($user_id, $org_id);
         if ($isOrgMember || $isSiteAdmin) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }

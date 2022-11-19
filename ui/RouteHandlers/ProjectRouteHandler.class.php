@@ -672,7 +672,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['revokeTaskId']);
             }
 
-            if (isset($post['publishedTask']) && isset($post['task_id'])) {
+            if (($isAdmin || $isOrgMember) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
                 } else {
