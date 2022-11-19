@@ -196,6 +196,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
             Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
+            Lib\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
@@ -204,7 +205,8 @@ class TaskDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
             Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
-            Lib\PDOWrapper::cleanse($task->getPublished());
+            Lib\PDOWrapper::cleanse($task->getPublished()) . ',' .
+            Lib\PDOWrapper::cleanseNull($task->get_cancelled());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
 error_log("call taskInsertAndUpdate($args)");
         if ($result) {
@@ -265,43 +267,6 @@ error_log("call taskInsertAndUpdate($args)");
         return $ret;
     }
 
-    // Insert a Task into the database (pass by reference so no return)
-    private static function insert(&$task)
-    {
-      $number = '';
-      for ($i = 0; $i < 10; $i++) {
-        $sourceLocale = $task->getSourceLocale();
-        $targetLocale = $task->getTargetLocale();
-        $args = "null ,".
-            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle() . $number) . ",".
-            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
-            Lib\PDOWrapper::cleanseNull($task->getPublished());
-        error_log("TaskDAO::insert args: " . $args);
-        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
-        if ($result) {
-            $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
-            if (!empty($task)) {
-                error_log("TaskDAO::insert id: " . $task->getId());
-            }
-            return;
-        } else {
-            error_log("TaskDAO::insert Failed");
-        }
-        // Make sure UNIQUE KEY is unique
-        $number = $number . substr('0123456789', mt_rand() % 10, 1);
-      }
-      $task = null;
-    }
-    
     public static function getAlsoViewedTasks(
             $taskId,
             $limit = null,
