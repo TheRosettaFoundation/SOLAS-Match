@@ -124,10 +124,6 @@ class Tasks
             '\SolasMatch\API\V0\Tasks:deleteTask')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreationPassingTaskId');
 
-        $app->get(
-            '/api/v0/tasks/',
-            '\SolasMatch\API\V0\Tasks:getTasks');
-
         $app->post(
             '/api/v0/tasks/',
             '\SolasMatch\API\V0\Tasks:createTask')
@@ -318,11 +314,6 @@ class Tasks
     {
         $taskId = $args['taskId'];
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::delete($taskId), null);
-    }
-
-    public static function getTasks(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTasks(), null);
     }
 
     public static function createTask(Request $request, Response $response)

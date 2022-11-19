@@ -25,13 +25,6 @@ class TaskDao extends BaseDao
         return $response;
     }
     
-    public function getTasks()
-    {
-        $request = "{$this->siteApi}v0/tasks";
-        $response =$this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
-        return $response;
-    }
-    
     public function getAlsoViewedTasks($taskId,$limit, $offset)
     {
         $ret = null;
