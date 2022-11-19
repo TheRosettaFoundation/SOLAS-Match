@@ -160,6 +160,7 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getComment()) . ',' .

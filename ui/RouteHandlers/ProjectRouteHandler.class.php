@@ -356,6 +356,7 @@ class ProjectRouteHandler
 
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
+                $task->set_word_count_original($part['wordsCount']);
                 $projectDao->queue_asana_project($project_id);
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION || $part['workflowLevel'] == 1) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
