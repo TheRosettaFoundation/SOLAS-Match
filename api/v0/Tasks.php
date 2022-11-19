@@ -123,11 +123,6 @@ class Tasks
             '/api/v0/tasks/{taskId}/',
             '\SolasMatch\API\V0\Tasks:deleteTask')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreationPassingTaskId');
-
-        $app->post(
-            '/api/v0/tasks/',
-            '\SolasMatch\API\V0\Tasks:createTask')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreation');
     }
 
     // Org Feedback, feedback sent from the organisation to the user who claimed the task
@@ -314,14 +309,6 @@ class Tasks
     {
         $taskId = $args['taskId'];
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::delete($taskId), null);
-    }
-
-    public static function createTask(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
     }
 }
 Tasks::init();

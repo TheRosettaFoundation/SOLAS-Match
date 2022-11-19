@@ -109,26 +109,9 @@ class TaskDao
         return $tasks;
     }
     
-    //! Save a Task to the database
-    /*!
-     Save a Task to the database. If the input Task does not have an id then a new Task will be created. If the input
-     Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
-     score request for this Task.
-     @param Task $task is the Task being saved to the database.
-     @return Returns the updated/created Task object
-    */
     public static function save($task)
     {
-        if (is_null($task->getId())) {
-            self::insert($task);
-            // self::calculateTaskScore($task->getId()); // Not required see https://github.com/TheRosettaFoundation/SOLAS-Match/commit/ce6724ca50cd68eb1898156fd942237bdb5dddcf and https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/commit/0130685a93246d8f6f82ac44041cd039c1879cd0
-        } else {
             self::update($task);
-            //commented out the following line which triggers task-score-calculation & email per every task update 
-            //operation. This is to reduce the Disk Read/Write usage of the server by the PluginHandler. 
-            
-            //self::calculateTaskScore($task->getId());
-        }
         return $task;
     }
 
