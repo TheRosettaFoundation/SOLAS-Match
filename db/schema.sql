@@ -5175,7 +5175,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN wordCount_original INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` bit(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN wordCount_original INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN pub bit(1), IN can INT)
 BEGIN
 
         if id='' then set id=null;end if;
@@ -5208,8 +5208,8 @@ BEGIN
                 set @tID=null;
                 select l.id into @tID from Languages l where l.code=tCode;
 
-                INSERT INTO Tasks (project_id, title, `word-count`, word_count_original, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, `published`)
-                VALUES            ( projectID,  name,    wordCount,  wordCount_original,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      dLine,       taskType,          tStatus,         pub);
+                INSERT INTO Tasks (project_id, title, `word-count`, word_count_original, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, published)
+                VALUES            ( projectID,  name,    wordCount,  wordCount_original,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      dLine,       taskType,          tStatus,       pub);
                  call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
                 call reset_project_complete(LAST_INSERT_ID());
@@ -5265,6 +5265,10 @@ BEGIN
                     then update Tasks t SET t.`word-count` = wordCount WHERE t.id = id;
                 end if;
 
+                IF wordCount_original!=(SELECT t.word_count_original FROM Tasks t WHERE t.id=id)
+                    THEN UPDATE Tasks t SET t.word_count_original=wordCount_original WHERE t.id=id;
+                END IF;
+
                 if taskComment is not null
                 and taskComment != (SELECT t.comment FROM Tasks t WHERE  t.id = id)
                 or (select t.comment from Tasks t WHERE t.id = id) is null
@@ -5300,6 +5304,10 @@ BEGIN
                         update Tasks t SET t.`published` = 0 WHERE t.id = id;
                     end if;
                 end if;
+
+                IF can!=(SELECT t.cancelled FROM Tasks t WHERE t.id=id)
+                    THEN UPDATE Tasks t SET t.cancelled=can WHERE t.id=id;
+                END IF;
 
                 call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
 

@@ -169,7 +169,8 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getTaskType()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
-            LibAPI\PDOWrapper::cleanseNull($task->getPublished());
+            LibAPI\PDOWrapper::cleanseNull($task->getPublished()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_cancelled());
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
 error_log("createTaskDirectly: $args");
         if (empty($result[0]['id'])) return 0;
