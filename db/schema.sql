@@ -10015,6 +10015,15 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_tasks_status_cancelled`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status_cancelled`(IN tID BIGINT, IN sID INT, IN cID INT, IN c TEXT)
+BEGIN
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, cancelled, changed_time, comment)
+    VALUES                               (    tID,       sID,       cID,        NOW(),       c);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_tasks_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_status`(IN tID BIGINT)
