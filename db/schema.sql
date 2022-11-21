@@ -1369,6 +1369,7 @@ CREATE TABLE IF NOT EXISTS `tasks_status_audit_trail` (
   id           BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   task_id      BIGINT(20) UNSIGNED NOT NULL,
   status_id    INT(10)    UNSIGNED NOT NULL,
+  cancelled    INT(10)    UNSIGNED NOT NULL DEFAULT 0,
   claimant_id  INT(10)    UNSIGNED,
   changed_time DATETIME            NOT NULL,
   comment      TEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
