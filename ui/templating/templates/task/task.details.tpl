@@ -37,7 +37,7 @@
                     <div id="siteLocationURL">{Settings::get("site.location")}</div>
                     <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
                 </span>
-                <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
+                <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
             </td>
             {if isset($isMember)}
                 <td>
