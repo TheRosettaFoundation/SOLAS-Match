@@ -9837,7 +9837,8 @@ BEGIN
     FROM      Tasks             t
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
-        t.project_id=@pID
+        t.project_id=@pID AND
+        t.cancelled=0
     GROUP BY t.project_id;
 
     IF @project_complete THEN
@@ -9861,7 +9862,8 @@ BEGIN
     FROM      Tasks             t
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
-        t.project_id=pID
+        t.project_id=pID AND
+        t.cancelled=0
     GROUP BY t.project_id;
 
     IF @project_complete THEN
@@ -9876,7 +9878,9 @@ DROP PROCEDURE IF EXISTS `reset_project_complete`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_project_complete`(IN tID BIGINT)
 BEGIN
+  IF 0=(SELECT cancelled FROM Tasks WHERE id=tID) THEN
     UPDATE project_complete_dates SET status=0 WHERE project_id=(SELECT project_id FROM Tasks WHERE id=tID LIMIT 1);
+  END IF;
 END//
 DELIMITER ;
 
