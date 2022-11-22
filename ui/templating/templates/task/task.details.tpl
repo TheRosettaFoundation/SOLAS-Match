@@ -196,6 +196,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
+            <td>
                 {if $task->get_cancelled()}
                     <a href="#" class="btn btn-small" disabled>
                         <i class="icon-check icon-black"></i> Yes
@@ -205,6 +206,7 @@
                         <i class="icon-remove-circle icon-white"></i> No
                     </a>
                 {/if}
+            </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
