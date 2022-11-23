@@ -455,14 +455,22 @@ class TaskDao
     */
     public static function moveToArchiveByID($taskId, $userId)
     {
+error_log("moveToArchiveByID($taskId, $userId)");
         $task = self::getTasks($taskId);
         $task = $task[0];
-        if (is_null($task)) return 0;
+        if (is_null($task)) {
+error_log("moveToArchiveByID($taskId, $userId) return 0");
+          return 0;
+        }
 
         $subscribedUsers = self::getSubscribedUsers($taskId);
 
         $result = Lib\PDOWrapper::call('archiveTask', Lib\PDOWrapper::cleanseNull($taskId) . ',' . Lib\PDOWrapper::cleanseNull($userId));
-        if ($result[0]['result']) self::delete($taskId);
+error_log('archiveTask: ' . Lib\PDOWrapper::cleanseNull($taskId) . ',' . Lib\PDOWrapper::cleanseNull($userId));
+        if ($result[0]['result']) {
+          error_log('archiveTask: ' . Lib\PDOWrapper::cleanseNull($taskId) . ',' . Lib\PDOWrapper::cleanseNull($userId) . 'go and delete');
+          self::delete($taskId);
+        }
 
         Lib\Notify::sendTaskArchivedNotifications($taskId, $subscribedUsers);
 
