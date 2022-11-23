@@ -44,7 +44,7 @@
         <form action="{urlFor name='login'}" method="post">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
-                <legend><strong>{Localisation::getTranslation('common_signin_or_create_new_account')}</strong></legend>
+                <legend><strong>or sign-in via Google</strong></legend>
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
@@ -63,12 +63,6 @@
                               data-logo_alignment="left">
                           </div>
                         </div>
-                    <div id="pSignInWrapper">
-                        <div id="customProZBtn" class="customProZSignIn">
-                            <span id="customProZBtnIcon"></span>
-                            <a id="customProZBtnText" href="https://twb.translationcenter.org/oauth/authorize?client_id={$client_id}&redirect_uri={$redirect_uri}&response_type=code&scope=public+user.email">{Localisation::getTranslation('log_in_with_proz')}</a>
-                        </div>
-                    </div>
             </fieldset>
         </form>
         </div>
