@@ -885,8 +885,30 @@ $userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $id, 'COMM
                         }
                     }
                 }
+
+                if (isset($post['cancelled'])) {
+                    $comment = ($post['cancel_task'] == 'other') ? $post['reason'] : $post['cancel_task'];
+                    $task_ids = preg_split ("/\,/", $post['cancel']);
+                    $cancelled = $post['cancelled'];
+                    if($cancelled) {
+                        foreach ($task_ids as $task_id) {
+                            $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment);
+                        }
+                        UserRouteHandler::flashNow('success', count($task_ids) . ' tasks cancelled.');
+                    }else {
+                        foreach ($task_ids as $task_id) {
+                            $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment);
+                        }
+                        UserRouteHandler::flashNow('success', count($task_ids) . ' tasks uncancelled.');
+                            
+                        }
+
+                    }  
+
+                }
             }
-        }
+        
+        
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -915,6 +937,7 @@ $userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $id, 'COMM
             }
 
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
