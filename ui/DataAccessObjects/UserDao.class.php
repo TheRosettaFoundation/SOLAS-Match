@@ -567,6 +567,10 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
       foreach ($task_ids as $task_id) {
         error_log("function propagate_cancelled(... $task_id)");
         $task = $taskDao->getTask($task_id);
+        if ($cancelled && $task->get_cancelled() || !$cancelled && !$task->get_cancelled()) {
+            error_log('Task already in correct cancelled state');
+            continue;
+        }
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $user_id = 0;
