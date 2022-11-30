@@ -603,12 +603,18 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 curl_close($ch);
                 $result = json_decode($result, true);
                 error_log(print_r($result, true));
-                if (isset($result['segmentsCountsResults']['counts']['confirmedWordsCount'])) {
-                    $word_count = $result['segmentsCountsResults']['counts']['confirmedWordsCount'];
-                    if ($word_count < 1) $word_count = 1;
-                    $task->setWordCount($word_count);
-                    $task->set_cancelled(2);
-                    $taskDao->updateTask($task);
+                if (!empty($result['segmentsCountsResults'])) {
+                    foreach ($result['segmentsCountsResults'] as $job_counts) {
+                        if (!empty($job_counts['jobPartUid']) && $job_counts['jobPartUid'] == $memsource_task['memsource_task_uid']) {
+                            if (isset($job_counts['counts']['confirmedWordsCount'])) {
+                                $word_count = $job_counts['counts']['confirmedWordsCount'];
+                                if ($word_count < 1) $word_count = 1;
+                                $task->setWordCount($word_count);
+                                $task->set_cancelled(2);
+                                $taskDao->updateTask($task);
+                            }
+                        }
+                    }
                 }
             }
         }
