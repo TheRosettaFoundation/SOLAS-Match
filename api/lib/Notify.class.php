@@ -13,6 +13,7 @@ require_once __DIR__."/../vendor/autoload.php";
 //\DrSlump\Protobuf::autoload();
 
 require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserTaskCancelled.php";
 require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
