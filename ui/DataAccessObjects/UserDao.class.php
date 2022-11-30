@@ -598,7 +598,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']], 'getParts' => (object)[]]));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']]], 'getParts' => (object)[]]));
                 $result = curl_exec($ch);
                 curl_close($ch);
                 $result = json_decode($result, true);
