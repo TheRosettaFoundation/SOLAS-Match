@@ -549,11 +549,24 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
-    public function propagate_cancelled($cancelled, $memsource_project, $task, $task_id)
+    public function propagate_cancelled($cancelled, $memsource_project, $task_id)
     {
-        error_log("function propagate_cancelled($cancelled... $task_id)");
-        $projectDao = new ProjectDao();
-        $taskDao = new TaskDao();
+      error_log("function propagate_cancelled($cancelled... $task_id)");
+      $projectDao = new ProjectDao();
+      $taskDao = new TaskDao();
+      $memsource_task = $projectDao->get_memsource_task($task_id);
+      $task_ids = [$task_id];
+      if ($cancelled && $memsource_project && $memsource_task) {
+          $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+          $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
+          $task_ids = [];
+          foreach ($project_tasks as $project_task) {
+              if ($top_level == $projectDao->get_top_level($project_task['internalId'])) $task_ids[] = $project_task['id'];
+          }
+      }
+      foreach ($task_ids as $task_id) {
+        error_log("function propagate_cancelled(... $task_id)");
+        $task = $taskDao->getTask($task_id);
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $user_id = 0;
@@ -621,6 +634,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
             $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
         }
+      }
     }
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)

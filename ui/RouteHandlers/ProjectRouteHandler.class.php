@@ -840,7 +840,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         foreach ($tasks as $project_task) {
                             $project_task->setPublished($published);
                             $taskDao->updateTask($project_task);
-$userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $project_task, $id);//(**)Test code to be removed
+$userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $id);//(**)Test code to be removed
                         }
                         UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
                     }
