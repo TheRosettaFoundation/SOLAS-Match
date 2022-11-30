@@ -549,6 +549,74 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
+    public function propagate_cancelled($cancelled, $memsource_project, $task, $task_id)
+    {
+        error_log("function propagate_cancelled($cancelled... $task_id)");
+        $projectDao = new ProjectDao();
+        $taskDao = new TaskDao();
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
+        $user_id = 0;
+        $details_claimant = $taskDao->getUserClaimedTask($task_id);
+        if ($details_claimant) $user_id = $details_claimant->getId();
+
+        if ($memsource_project && $memsource_task) {
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $memsource_task_uid = $memsource_task['memsource_task_uid'];
+            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+
+            if ($cancelled && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && !$projectDao->are_translations_not_all_complete($task, $memsource_task)) $cancelled = 2;
+
+            $memsource_user_uid = 0;
+            if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
+
+            $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
+            $deadline = $task->getDeadline();
+            $status = 'CANCELLED';
+            if (!$cancelled) {
+                $status = [1 => 'NEW', 2 => 'NEW', 3 => 'ACCEPTED', 4 => 'COMPLETED', 10 => 'ACCEPTED'][$task->getTaskStatus()];
+                $word_count = $task->get_word_count_original();
+                if ($word_count < 1) $word_count = 1;
+                $task->setWordCount($word_count);
+                $taskDao->updateTask($task);
+            }
+            $data = [
+                'status' => $status,
+                'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'
+            ];
+            if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
+            error_log(print_r($data, true));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            if ($cancelled == 2) {
+                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']], 'getParts' => (object)[]]));
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $result = json_decode($result, true);
+                error_log(print_r($result, true));
+                if (isset($result['segmentsCountsResults']['counts']['confirmedWordsCount'])) {
+                    $word_count = $result['segmentsCountsResults']['counts']['confirmedWordsCount'];
+                    if ($word_count < 1) $word_count = 1;
+                    $task->setWordCount($word_count);
+                    $task->set_cancelled(2);
+                    $taskDao->updateTask($task);
+                }
+            }
+        }
+        if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
+            $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
+        }
+    }
+
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
         if ($memsource_task) {
