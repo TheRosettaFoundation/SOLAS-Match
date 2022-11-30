@@ -628,7 +628,14 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                             }
                         }
                     }
+                } else {
+                    $task->set_cancelled(1);
+                    $taskDao->updateTask($task);
                 }
+            }
+            if ($cancelled == 1) {
+                $task->set_cancelled(1);
+                $taskDao->updateTask($task);
             }
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
