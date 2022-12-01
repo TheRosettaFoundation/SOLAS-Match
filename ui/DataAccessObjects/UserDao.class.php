@@ -592,6 +592,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $deadline = $task->getDeadline();
             $status = 'CANCELLED';
             if (!$cancelled) {
+                $task->set_cancelled(0);
                 $status = [1 => 'NEW', 2 => 'NEW', 3 => 'ACCEPTED', 4 => 'COMPLETED', 10 => 'ACCEPTED'][$task->getTaskStatus()];
                 $word_count = $task->get_word_count_original();
                 if ($word_count < 1) $word_count = 1;
