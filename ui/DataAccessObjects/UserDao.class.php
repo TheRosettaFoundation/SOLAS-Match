@@ -549,7 +549,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
-    public function propagate_cancelled($cancelled, $memsource_project, $task_id)
+    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment)
     {
       error_log("function propagate_cancelled($cancelled... $task_id)");
       $projectDao = new ProjectDao();
@@ -582,7 +582,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $memsource_task_uid = $memsource_task['memsource_task_uid'];
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
 
-            if ($cancelled && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && !$projectDao->are_translations_not_all_complete($task, $memsource_task)) $cancelled = 2;
+            $status_id = $task->getTaskStatus();
+            if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $status_id = Common\Enums\TaskStatusEnum::CLAIMED;
 
             $memsource_user_uid = 0;
             if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
@@ -596,6 +597,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 if ($word_count < 1) $word_count = 1;
                 $task->setWordCount($word_count);
                 $taskDao->updateTask($task);
+                $projectDao->update_tasks_status_cancelled($task_id, $status_id, 0, $comment);
             }
             $data = [
                 'status' => $status,
@@ -610,36 +612,33 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $result = curl_exec($ch);
             curl_close($ch);
 
-            if ($cancelled == 2) {
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']]], 'getParts' => (object)[]]));
-                $result = curl_exec($ch);
-                curl_close($ch);
-                $result = json_decode($result, true);
-                error_log(print_r($result, true));
-                if (!empty($result['segmentsCountsResults'])) {
-                    foreach ($result['segmentsCountsResults'] as $job_counts) {
-                        if (!empty($job_counts['jobPartUid']) && $job_counts['jobPartUid'] == $memsource_task['memsource_task_uid']) {
-                            if (isset($job_counts['counts']['confirmedWordsCount'])) {
-                                $word_count = $job_counts['counts']['confirmedWordsCount'];
-                                if ($word_count < 1) $word_count = 1;
-                                $task->setWordCount($word_count);
-                                $task->set_cancelled(2);
-                                $taskDao->updateTask($task);
+            if ($cancelled) {
+                $task->set_cancelled(1);
+                if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+                    $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']]], 'getParts' => (object)[]]));
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    $result = json_decode($result, true);
+                    error_log(print_r($result, true));
+                    if (!empty($result['segmentsCountsResults'])) {
+                        foreach ($result['segmentsCountsResults'] as $job_counts) {
+                            if (!empty($job_counts['jobPartUid']) && $job_counts['jobPartUid'] == $memsource_task['memsource_task_uid']) {
+                                if (isset($job_counts['counts']['confirmedWordsCount'])) {
+                                    $word_count = $job_counts['counts']['confirmedWordsCount'];
+                                    if ($word_count < 1) $word_count = 1;
+                                    $task->setWordCount($word_count);
+                                    $task->set_cancelled(2);
+                                }
                             }
                         }
                     }
-                } else {
-                    $task->set_cancelled(1);
-                    $taskDao->updateTask($task);
                 }
-            }
-            if ($cancelled == 1) {
-                $task->set_cancelled(1);
                 $taskDao->updateTask($task);
+                $projectDao->update_tasks_status_cancelled($task_id, $status_id, 1, $comment);
             }
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
