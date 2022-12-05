@@ -324,7 +324,6 @@
              <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="0" href="#cancelmodal" role="button">
                 <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
-
         {/if}
             </ul>
          </div>
@@ -379,9 +378,7 @@
                                 {if $isSiteAdmin}
                                  <th>Paid?</th>
                                 {/if}
-                                {if $isSiteAdmin}
                                  <th>Cancelled?</th>
-                                {/if}
                                  <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
                                  <th>{Localisation::getTranslation('common_publish')}</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
@@ -465,7 +462,6 @@
                                     </td>
                                     {/if}
                                     <td>
-                                    
                                     {if $task->get_cancelled()}
                                         <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                             <a class="btn btn-small cancel" data-toggle="modal" href="#cancelmodal" role="button" id="uncancel" data-task-id="{$task->getId()}" data-cancelled="0">
@@ -669,13 +665,11 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-  
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Cancel</button>
   </div>
   </form>
 </div>
-
 
 {include file="footer_no_end.tpl"}
         <script>

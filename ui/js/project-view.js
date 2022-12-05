@@ -84,7 +84,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
-        }  
+        }
         else {
             $(":checkbox").prop("checked", false);
             arr = [];
@@ -96,15 +96,14 @@ function select() {
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
         }
-    
     });
 
     var select_all_tasks = [];
     var select_all_tasks_removed = [];
     var unchecked_items = [];
-    $('[name=select_all_tasks]').on('change', function (e) { 
-        if ($(this).prop('checked') == true) { 
-            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", true); 
+    $('[name=select_all_tasks]').on('change', function (e) {
+        if ($(this).prop('checked') == true) {
+            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", true);
             $(':checkbox:checked').each(function () {
                 if ($(this).val() != "on" && !(jQuery.inArray($(this).val(), select_all_tasks) !== -1)) {
                     select_all_tasks.push($(this).val());
@@ -112,13 +111,12 @@ function select() {
             });
 
         } else {
-            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", false); 
+            $(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]').prop("checked", false);
             $($(':checkbox[data-lang="'+$(this).attr("data-lang")+'"]')).each( function () {
               if($(this).val() != "on") {
-                    select_all_tasks.splice( $.inArray($(this).val(), select_all_tasks), 1 ); 
+                    select_all_tasks.splice( $.inArray($(this).val(), select_all_tasks), 1 );
                 }
-            });            
-
+            });
         }
         $("[name=unpublish_selected_tasks]").val(select_all_tasks);
         $("[name=publish_selected_tasks]").val(select_all_tasks);
@@ -127,8 +125,6 @@ function select() {
         $("[name=status_as_unclaimed]").val(select_all_tasks);
         $("[name=status_as_waiting]").val(select_all_tasks);
         $("[name=cancel]").val(select_all_tasks);
-        
-
     });
 
     $('[name=select_task]').on('change', function (e) {
@@ -191,7 +187,6 @@ function select() {
 
     // Language pair dropdown
     $(document).on('change', 'select[name="language_options[]"]', function(){
-       
         var arr = [];
         var optionSelected = $("option:selected", this);
         var valueSelected = this.value;
@@ -310,30 +305,22 @@ function select() {
             $("[name=reason]").bind("change paste keyup", function() {
                 if($(this).val() == ""){
                     $("#cancelbtn").prop('disabled', true);
-
                 }else {
                     $("#cancelbtn").prop('disabled', false);
-                } 
+                }
              });
-
-         
-           
-
-            
         }else if (valueSelected == "") {
             $("#cancelbtn").prop('disabled', true);
             $("[name=reason_text]").hide();
             $("[name=reason]").hide();
-
         }
          else {
             $("[name=reason]").hide();
             $("[name=reason_text]").hide();
             $("#cancelbtn").prop('disabled', false);
         }
-    
     });
-    
+
     $('#cancelmodal').on('hidden.bs.modal', function () {
         $(this).find('form').trigger('reset');
         $("[name=reason]").hide();
@@ -343,19 +330,15 @@ function select() {
 
     //Validation - Hide btn if task is not selected
     $('#cancelmodal').on('shown', function () {
-        $("#taskmsg").hide();    
+        $("#taskmsg").hide();
         if($("[name=cancel]").val().length == 0) {
             $("#cancelbtn").prop('disabled', true);
             $("#taskmsg").show();
       }
-      
+
       if($("[name=cancel_task]").val() == "") {
         $("#cancelbtn").prop('disabled', true);
-
       }
-     
-      
-     
       });
 
     $('.cancel').on('click', function (e) {
@@ -368,27 +351,7 @@ function select() {
         e.preventDefault();
        // $("[name=cancelled]").val($(this).attr("data-id"));
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
-        console.log($("[name=cancelled]").val());
-        
-        
+        // console.log($("[name=cancelled]").val());
     });
-
-    //Validation
-   /*
-    $("#cancel").validate({
-        rules: {
-            cancel_task: 'required',
-        },
-        messages: {
-            cancel_task: 'This field is required',
-         
-        },
-        submitHandler: function() {
-			alert("submitted!");
-		}
-      });
-      */
-
-  
 }
 </script>

@@ -840,10 +840,20 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         foreach ($tasks as $project_task) {
                             $project_task->setPublished($published);
                             $taskDao->updateTask($project_task);
-$userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $id, 'COMMENT');//(**)Test code to be removed
                         }
                         UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
                     }
+                }
+
+                if (isset($post['cancelled'])) {
+                    $comment = ($post['cancel_task'] == 'other') ? $post['reason'] : $post['cancel_task'];
+                    $task_ids = preg_split ("/\,/", $post['cancel']);
+                    $cancelled = $post['cancelled'];
+                    $number = 0;
+                    foreach ($task_ids as $id) {
+                        $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment);
+                    }
+                    UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
             if($isSiteAdmin) {
@@ -885,30 +895,8 @@ $userDao->propagate_cancelled($published ? 1 : 0, $memsource_project, $id, 'COMM
                         }
                     }
                 }
-
-                if (isset($post['cancelled'])) {
-                    $comment = ($post['cancel_task'] == 'other') ? $post['reason'] : $post['cancel_task'];
-                    $task_ids = preg_split ("/\,/", $post['cancel']);
-                    $cancelled = $post['cancelled'];
-                    if($cancelled) {
-                        foreach ($task_ids as $task_id) {
-                            $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment);
-                        }
-                        UserRouteHandler::flashNow('success', count($task_ids) . ' tasks cancelled.');
-                    }else {
-                        foreach ($task_ids as $task_id) {
-                            $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment);
-                        }
-                        UserRouteHandler::flashNow('success', count($task_ids) . ' tasks uncancelled.');
-                            
-                        }
-
-                    }  
-
-                }
             }
-        
-        
+        }
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);

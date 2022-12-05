@@ -638,6 +638,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                         }
                     }
                 }
+                $task->setPublished(0);
                 $taskDao->updateTask($task);
                 $projectDao->update_tasks_status_cancelled($task_id, $status_id, 1, $comment);
             }
@@ -646,6 +647,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
         }
       }
+      return count($task_ids);
     }
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
