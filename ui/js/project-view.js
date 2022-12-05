@@ -25,6 +25,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
             $("[name=unpublish_selected__translation_tasks]").val(arr);
         } else if (valueSelected == "all_revision_tasks") {
             $(":checkbox[data-task-type='3']").prop("checked", true);
@@ -39,6 +40,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_tasks") {
             $('[name=select_task]').prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -52,6 +54,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_approval_tasks") {
             $(":checkbox[data-task-type='6']").prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -65,6 +68,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
             $(":checkbox[data-task-type='3']").prop("checked", true);
@@ -79,6 +83,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         }  
         else {
             $(":checkbox").prop("checked", false);
@@ -89,6 +94,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         }
     
     });
@@ -120,6 +126,7 @@ function select() {
         $("[name=tasks_as_unpaid]").val(select_all_tasks);
         $("[name=status_as_unclaimed]").val(select_all_tasks);
         $("[name=status_as_waiting]").val(select_all_tasks);
+        $("[name=cancel]").val(select_all_tasks);
         
 
     });
@@ -137,6 +144,7 @@ function select() {
         $("[name=tasks_as_unpaid]").val(arr_select_task);
         $("[name=status_as_unclaimed]").val(arr_select_task);
         $("[name=status_as_waiting]").val(arr_select_task);
+        $("[name=cancel]").val(arr_select_task);
     });
 
     var forms = [
@@ -202,6 +210,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_translation_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
            // arr = [];
@@ -216,6 +225,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_revision_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
            // arr = [];
@@ -230,6 +240,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_approval_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="6"]').prop("checked", true);
            // arr = [];
@@ -244,6 +255,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
@@ -259,6 +271,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         }
          else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", false);
@@ -273,6 +286,7 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         } else {
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
@@ -280,13 +294,101 @@ function select() {
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
+            $("[name=cancel]").val(arr);
         }
     });
 
+    //Cancel Task
+    $("[name=reason]").hide();
+    $("[name=reason_text]").hide();
 
+    $(document).on('change', 'select[name="cancel_task"]', function() {
+        var valueSelected = this.value;
+        if(valueSelected == "other") {
+            $("[name=reason]").show();
+            $("[name=reason_text]").show();
+            $("[name=reason]").bind("change paste keyup", function() {
+                if($(this).val() == ""){
+                    $("#cancelbtn").prop('disabled', true);
 
+                }else {
+                    $("#cancelbtn").prop('disabled', false);
+                } 
+             });
 
+         
+           
+
+            
+        }else if (valueSelected == "") {
+            $("#cancelbtn").prop('disabled', true);
+            $("[name=reason_text]").hide();
+            $("[name=reason]").hide();
+
+        }
+         else {
+            $("[name=reason]").hide();
+            $("[name=reason_text]").hide();
+            $("#cancelbtn").prop('disabled', false);
+        }
     
+    });
+    
+    $('#cancelmodal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+        $("[name=reason]").hide();
+        $("[name=reason_text]").hide();
+        $("#cancelbtn").prop('disabled', false);
+    });
+
+    //Validation - Hide btn if task is not selected
+    $('#cancelmodal').on('shown', function () {
+        $("#taskmsg").hide();    
+        if($("[name=cancel]").val().length == 0) {
+            $("#cancelbtn").prop('disabled', true);
+            $("#taskmsg").show();
+      }
+      
+      if($("[name=cancel_task]").val() == "") {
+        $("#cancelbtn").prop('disabled', true);
+
+      }
+     
+      
+     
+      });
+
+    $('.cancel').on('click', function (e) {
+        e.preventDefault();
+        $("[name=cancel]").val($(this).attr("data-task-id"));
+        $("[name=cancelled]").val($(this).attr("data-cancelled"));
+    });
+
+    $('.open-cancel-modal').on('click', function (e) {
+        e.preventDefault();
+       // $("[name=cancelled]").val($(this).attr("data-id"));
+        $("[name=cancelled]").val($(this).attr("data-cancelled"));
+        console.log($("[name=cancelled]").val());
+        
+        
+    });
+
+    //Validation
+   /*
+    $("#cancel").validate({
+        rules: {
+            cancel_task: 'required',
+        },
+        messages: {
+            cancel_task: 'This field is required',
+         
+        },
+        submitHandler: function() {
+			alert("submitted!");
+		}
+      });
+      */
+
   
 }
 </script>
