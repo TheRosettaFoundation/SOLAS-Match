@@ -564,11 +564,12 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
               if ($top_level == $projectDao->get_top_level($project_task['internalId'])) $task_ids[] = $project_task['id'];
           }
       }
-      foreach ($task_ids as $task_id) {
+      foreach ($task_ids as $index => $task_id) {
         error_log("function propagate_cancelled(... $task_id)");
         $task = $taskDao->getTask($task_id);
         if ($cancelled && $task->get_cancelled() || !$cancelled && !$task->get_cancelled()) {
             error_log('Task already in correct cancelled state');
+            unset($task_ids[$index]);
             continue;
         }
         $memsource_task = $projectDao->get_memsource_task($task_id);
