@@ -17,24 +17,24 @@ class CacheHelper
     public static function getCached($key, $ttl, $function, $args = null)
     {
         $ret= null;
-        if (!apc_exists($key)) {
+        if (!apcu_exists($key)) {
             try {
                 $ret = is_null($args) ? call_user_func($function) : call_user_func($function, $args);
-                apc_add($key, $ret, $ttl);
+                apcu_add($key, $ret, $ttl);
             } catch (Exception $e) {
                 error_log("Failed to add to cache ".$e->getMessage());
                 $ret = null;
             }
         } else {
-            $ret= apc_fetch($key);
+            $ret= apcu_fetch($key);
         }
         return $ret;
     }
     
     public static function unCache($key)
     {
-        if (apc_exists($key)) {
-            apc_delete($key);
+        if (apcu_exists($key)) {
+            apcu_delete($key);
         }
     }
 }
