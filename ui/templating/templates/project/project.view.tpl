@@ -318,12 +318,17 @@
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button">
+            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
-             <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="0" href="#cancelmodal" role="button">
+            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class=" btn btn-small" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
+                <input type="hidden" name="cancel" value="" />
+                <input type="hidden" name="cancelled" value="0" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+             </form>
         {/if}
             </ul>
          </div>
@@ -464,9 +469,14 @@
                                     <td>
                                     {if $task->get_cancelled()}
                                         <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
-                                            <a class="btn btn-small cancel" data-toggle="modal" href="#cancelmodal" role="button" id="uncancel" data-task-id="{$task->getId()}" data-cancelled="0">
+                                         <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                                            <a class=" btn btn-small cancel"  style="color:#000000;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                                 <i class="icon-check icon-black"></i> Yes
                                             </a>
+                                            <input type="hidden" name="cancel" value="" />
+                                            <input type="hidden" name="cancelled" value="0" />
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                          </form>
                                         </span>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
@@ -648,7 +658,7 @@
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
   <p>Reason to cancel selected task(s):</p>
-  <select name="cancel_task" id="cancel_task" required>
+  <select name="cancel_task" id="cancel_task" style="width:450px;">
     <option value="">--Select--</option>
     <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
     <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
@@ -666,7 +676,7 @@
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Cancel</button>
+    <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
   </form>
 </div>

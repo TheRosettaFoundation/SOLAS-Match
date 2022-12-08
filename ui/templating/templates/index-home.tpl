@@ -121,6 +121,34 @@ a:hover{
             </a>
             <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p> -->
+        
+{if isset($flash['error'])}
+    <br>
+    <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+    </div>
+{/if}
+
+{if isset($flash['info'])}
+    <div class="alert alert-info">
+        <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+    </div>
+{/if}
+
+{if isset($flash['success'])}
+    <div class="alert alert-success">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
+    </div>
+{/if}
+
+{if isset($flash['warning'])}
+    <div class="alert alert-warning">
+        <p style="font-size:15px;"><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+    </div>
+{/if}
+
       
         <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner">
@@ -375,33 +403,6 @@ a:hover{
 	    </a>
 	    </div>
 	{/if}    
-{/if}
-
-{if isset($flash['error'])}
-    <br>
-    <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
-    </div>
-{/if}
-
-{if isset($flash['info'])}
-    <div class="alert alert-info">
-        <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
-    </div>
-{/if}
-
-{if isset($flash['success'])}
-    <div class="alert alert-success">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
-    </div>
-{/if}
-
-{if isset($flash['warning'])}
-    <div class="alert alert-warning">
-        <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
-    </div>
 {/if}
 
 {if isset($user)}

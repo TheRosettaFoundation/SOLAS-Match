@@ -294,8 +294,8 @@ function select() {
     });
 
     //Cancel Task
-    $("[name=reason]").hide();
-    $("[name=reason_text]").hide();
+   // $("[name=reason]").hide();
+    //$("[name=reason_text]").hide();
 
     $(document).on('change', 'select[name="cancel_task"]', function() {
         var valueSelected = this.value;
@@ -311,12 +311,12 @@ function select() {
              });
         }else if (valueSelected == "") {
             $("#cancelbtn").prop('disabled', true);
-            $("[name=reason_text]").hide();
-            $("[name=reason]").hide();
+           // $("[name=reason_text]").hide();
+            //$("[name=reason]").hide();
         }
          else {
-            $("[name=reason]").hide();
-            $("[name=reason_text]").hide();
+          //  $("[name=reason]").hide();
+           // $("[name=reason_text]").hide();
             $("#cancelbtn").prop('disabled', false);
         }
     });
@@ -339,19 +339,20 @@ function select() {
       if($("[name=cancel_task]").val() == "") {
         $("#cancelbtn").prop('disabled', true);
       }
+     
       });
 
-    $('.cancel').on('click', function (e) {
+    
+      $('.cancel').on('click', function (e) {
         e.preventDefault();
         $("[name=cancel]").val($(this).attr("data-task-id"));
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
     });
+    
 
     $('.open-cancel-modal').on('click', function (e) {
         e.preventDefault();
-       // $("[name=cancelled]").val($(this).attr("data-id"));
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
-        // console.log($("[name=cancelled]").val());
     });
 }
 </script>
