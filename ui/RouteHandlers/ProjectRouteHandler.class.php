@@ -846,13 +846,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (isset($post['cancelled'])) {
-                    $comment = ($post['cancel_task'] == 'other') ? $post['reason'] : $post['cancel_task'];
+                    $comment = ($post['cancelled'] == 1) ? $post['cancel_task']." - ". $post['reason'] : "Uncancelled";
                     $task_ids = preg_split ("/\,/", $post['cancel']);
-                    $cancelled = $post['cancelled'] ? 1 : 0;
+                    $cancelled = $post['cancelled'] ? 1 : 0;                   
                     $number = 0;
                     foreach ($task_ids as $id) {
                         $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment);
-                    }
+                    } 
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
