@@ -334,7 +334,7 @@ function select() {
       }
       });
 
-      $('.cancel').on('click', function (e) {
+    $('.cancel').on('click', function (e) {
         e.preventDefault();
         $("[name=cancel]").val($(this).attr("data-task-id"));
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
