@@ -58,6 +58,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - Set back the status in Phrase to whatever it was before (based on TWB status).
   - Set the TWB wordcount to whatever it was before (word_count_original).
   - Set the audit trail to show un-cancelled.
+- https://kato.translatorswb.org/org/dashboard/ has a new % complete calculation based on words completed.
 - When a user's email is changed on TWB Platform, the next time the user logs into TWB Community, their email will be updated there.
 
 ## Version 12.1
