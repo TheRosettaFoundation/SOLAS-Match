@@ -3956,6 +3956,8 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` teXT) RETURNS int(11)
+DETERMINISTIC
+CONTAINS SQL
 BEGIN
     return (x=y or x is null or y is null or '0000-00-00 00:00:00' = x or '0000-00-00 00:00:00'=y);
 END//
