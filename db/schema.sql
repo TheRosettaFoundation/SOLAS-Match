@@ -2702,22 +2702,33 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgProjects`(IN `orgId` INT, IN `months` INT)
 BEGIN
     SELECT
-        id,
-        title,
-        description,
-        impact,
-        deadline,
-        organisation_id AS organisationId,
-        reference,
-        `word-count` AS wordCount,
-        created AS createdTime,
-        (SELECT SUM(tsk.`task-status_id`)/(COUNT(tsk.`task-status_id`)*4) FROM Tasks tsk WHERE tsk.project_id=p.id) AS status,
-        image_uploaded AS imageUploaded,
-        image_approved AS imageApproved
-    FROM Projects p
+        p.id,
+        p.title,
+        p.description,
+        p.impact,
+        p.deadline,
+        p.organisation_id AS organisationId,
+        p.reference,
+        IF(p.`word-count`>1, p.`word-count`, '') AS wordCount,
+        p.created AS createdTime,
+        IFNULL(SUM(IF(t.`task-status_id`=4 AND NOT t.cancelled, t.`word-count`, 0)), 0) AS total_complete_wordcount_not_cancelled,
+        IFNULL(SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)), 0) AS total_complete_wordcount_cancelled,
+        IFNULL(SUM(IF(                         NOT t.cancelled, t.`word-count`, 0)), 0) AS total_wordcount_not_cancelled,
+        IFNULL(
+            (SUM(IF(t.`task-status_id`=4 AND NOT t.cancelled, t.`word-count`, 0)) +
+             SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)))
+            /
+            (SUM(IF(                         NOT t.cancelled, t.`word-count`, 0)) +
+             SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)))
+        , '') AS status,
+        p.image_uploaded AS imageUploaded,
+        p.image_approved AS imageApproved
+    FROM      Projects p
+    LEFT JOIN Tasks    t ON p.id=t.project_id
     WHERE
         p.organisation_id=orgId AND
         p.deadline > DATE_SUB(NOW(), INTERVAL months MONTH)
+    GROUP BY p.id
     ORDER BY p.created DESC;
 END//
 DELIMITER ;
