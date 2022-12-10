@@ -79,13 +79,13 @@
                         {/if}
 
                         {if $projectStatus == 100}
-                            <strong style="color: #2F8518">{$projectStatus}% {$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']}</strong>
+                            <strong style="color: #2F8518">{$projectStatus}% ({$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']})</strong>
                         {else if $projectStatus > 66}
-                            <strong style="color: #598518">{$projectStatus}% {$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']}</strong>
+                            <strong style="color: #598518">{$projectStatus}% ({$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']})</strong>
                         {else if $projectStatus > 33}
-                            <strong style="color: #857818">{$projectStatus}% {$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']}</strong>
+                            <strong style="color: #857818">{$projectStatus}% ({$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']})</strong>
                         {else}
-                            <strong style="color: #851818">{$projectStatus}% {$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']}</strong>
+                            <strong style="color: #851818">{$projectStatus}% ({$data['project']['total_complete_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']} of {$data['project']['total_wordcount_not_cancelled'] + $data['project']['total_complete_wordcount_cancelled']})</strong>
                         {/if}
                     </td>
                     <td>                      
