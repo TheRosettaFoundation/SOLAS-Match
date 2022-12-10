@@ -206,9 +206,6 @@ class PDOWrapper
      */
     public static function cleanse($str)
     {
-        if (get_magic_quotes_gpc()) {
-            $str = stripslashes($str);
-        }
         $special = array(
             "\x00" => '\x00',
             "\n" => '\n',

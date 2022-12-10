@@ -23,27 +23,11 @@ class IO
         return isset($_POST[$post_var_name]) ? $this->cleanseInput($_POST[$post_var_name]) : false;
     }
 
-    // Cleanse input, but keep HTML tags.
-    public function postHTML($post_var_name)
-    {
-        return isset($_POST[$post_var_name]) ? $this->cleanseInputKeepHTML($_POST[$post_var_name]) : false;
-    }
-
     // Cleanse input: make safe from SQL injection.
     public function cleanseInput($str)
     {
-        $str = $this->cleanseInputKeepHTML($str);
         //mysql_real_escape_string
         return strip_tags(trim($str));
-    }
-
-    // Allow to keep HTML tags.
-    public function cleanseInputKeepHTML($str)
-    {
-        if (get_magic_quotes_gpc()) {
-            $str = stripslashes($str);
-        }
-        return $str;
     }
 
     public static function formatForUrl($text)
