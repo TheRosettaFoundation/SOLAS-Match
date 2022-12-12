@@ -21,7 +21,7 @@ class UserDao extends BaseDao
     {
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
-        $this->usernamePrefix = strpos($this->siteApi, 'kato') ? 'TWB_' : 'DEV_';
+        $this->usernamePrefix = strpos($this->siteApi, 'twbplatform') ? 'TWB_' : 'DEV_';
         $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
