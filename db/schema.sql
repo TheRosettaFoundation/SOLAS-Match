@@ -10024,6 +10024,14 @@ DELIMITER ;
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
+--
+-- Final view structure for view `Total_Projects_2020`
+--
+
+DROP VIEW IF EXISTS `Total_Projects_2020`;
+CREATE DEFINER=`root`@`localhost` VIEW `Total_Projects_2020` AS select `o`.`name` AS `Partner`,count(`p`.`id`) AS `total_projects`,(count(`p`.`id`) / (6 + (9 / 31))) AS `avg_projects`,monthname(`p`.`created`) AS `Month` from (`Projects` `p` join `Organisations` `o` on((`p`.`organisation_id` = `o`.`id`))) where (year(`p`.`created`) = 2020) group by `o`.`name`,monthname(`p`.`created`) order by `o`.`name`;
+
+
 /*---------------------------------------start of triggers-----------------------------------------*/
 
 
