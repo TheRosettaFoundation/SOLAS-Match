@@ -2211,7 +2211,7 @@ class UserRouteHandler
                     'notes' =>
                         'PM: ' . $pm_info->getFirstName() . ' ' . $pm_info->getLastName() . ' - ' . $pm->getEmail() . "\n" .
                         "Paid work: $paid_work" .
-                        "Linguist: $full_name - " . $user->getEmail() . " - https://kato.translatorswb.org/$user_id/profile/"
+                        "Linguist: $full_name - " . $user->getEmail() . " - https://twbplatform.org/$user_id/profile/"
                 ]];
                 $payload = json_encode($data);
 error_log("payload: $payload");//(**)

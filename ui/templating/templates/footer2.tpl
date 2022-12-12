@@ -28,7 +28,7 @@
                         <a href="{urlFor name='terms'}">
                             {Localisation::getTranslation('footer_terms_and_conditons')}
                         </a> |
-                        <a href="https://kato.translatorswb.org/static/privacy/">
+                        <a href="https://twbplatform.org/static/privacy/">
                             {Localisation::getTranslation('footer_privacy_policy')}
                         </a>
                         {if Settings::get('site.forum_enabled') == 'y'}
@@ -74,7 +74,7 @@
                         <a href="{urlFor name='terms'}">
                             {Localisation::getTranslation('footer_terms_and_conditons')}
                         </a> |
-                        <a href="https://kato.translatorswb.org/static/privacy/">
+                        <a href="https://twbplatform.org/static/privacy/">
                             {Localisation::getTranslation('footer_privacy_policy')}
                         </a>
                         {if Settings::get('site.forum_enabled') == 'y'}

@@ -9296,7 +9296,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `record_referer`(IN ref VARCHAR(30))
 BEGIN
     REPLACE INTO Referers (referer) VALUES (ref);
-    SELECT CONCAT('https://kato.translatorswb.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
+    SELECT CONCAT('https://twbplatform.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
 END//
 DELIMITER ;
 
@@ -9312,7 +9312,7 @@ DROP PROCEDURE IF EXISTS `get_referer_link`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_referer_link`(IN ref VARCHAR(30))
 BEGIN
-    SELECT CONCAT('https://kato.translatorswb.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
+    SELECT CONCAT('https://twbplatform.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
 END//
 DELIMITER ;
 

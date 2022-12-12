@@ -1950,7 +1950,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             'useDefaultProjectSettings' => true,
             'workflowSteps' => $workflowSteps,
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
-            'purchaseOrder' => 'https://kato.translatorswb.org/project/' . $project->getId() . '/view',
+            'purchaseOrder' => 'https://twbplatform.org/project/' . $project->getId() . '/view',
         ];
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
 

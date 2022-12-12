@@ -1864,7 +1864,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 // Patch the KP Project URL into Memsource Project PO (this will happen many times)
                 $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
                 $data = [
-                    'purchaseOrder' => "https://kato.translatorswb.org/project/$project_id/view",
+                    'purchaseOrder' => "https://twbplatform.org/project/$project_id/view",
                 ];
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

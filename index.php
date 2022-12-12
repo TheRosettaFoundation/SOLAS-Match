@@ -120,7 +120,7 @@ $customErrorHandler = function (
 <table width="100%">
 <tr><td style="padding-bottom: 90px" /></tr>
 <tr><td align="center" style="padding-bottom: 40px"><h4>Not found: ' . $request->getUri() . '<br /><a href="https://' . $_SERVER['SERVER_NAME'] . '">Click here to go to home page</a></h4></td></tr>
-<tr><td align="center"><img height="60px" src="https://kato.translatorswb.org/ui/img/TWB_logo1.PNG"></td></tr>
+<tr><td align="center"><img height="60px" src="https://twbplatform.org/ui/img/TWB_logo1.PNG"></td></tr>
 </table>
 </body>
 </html>');
