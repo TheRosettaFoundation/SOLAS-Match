@@ -2979,13 +2979,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskFileMetaData`(IN `tID` INT, IN `vID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uID` INT, IN `uTime` DATETIME)
     READS SQL DATA
 BEGIN
-  if tID='' then set tID=null;end if;
-  if vID='' then set vID=null;end if;
-  if name='' then set name=null;end if;
-  if content='' then set content=null;end if;
-  if uID='' then set uID=null;end if;
-  if uTime='' then set uTime=null;end if;
-
     select task_id as 'id', version_id as version, filename, `content-type` as content_type, user_id, `upload-time` as upload_time 
         from TaskFileVersions t 
         where (tID is null or t.task_id = tID)
