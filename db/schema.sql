@@ -4393,10 +4393,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
 BEGIN
     if projectId="" then set projectId=null; end if;
-    if deadlineTime="" then set deadlineTime=null; end if;
     if orgId="" then set orgId=null; end if;
     if wordCount="" then set wordCount=null; end if;
-    if createdTime="" then set createdTime=null; end if;
     if sourceCountryCode="" then set sourceCountryCode=null; end if;
     if sourceLanguageCode="" then set sourceLanguageCode=null; end if;
     if titleText="" then set titleText=null; end if;
