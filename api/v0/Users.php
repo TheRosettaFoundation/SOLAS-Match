@@ -921,6 +921,7 @@ error_log(print_r($params, true));
 error_log("After authCode =");
         } catch (\Exception $e) {
 error_log("In exception");
+die();
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
             error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
