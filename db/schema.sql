@@ -2257,12 +2257,6 @@ DROP PROCEDURE IF EXISTS `getBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedOrg`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
 BEGIN
-  if orgId='' then set orgId=null;end if;
-  if userIdAdmin='' then set userIdAdmin=null;end if;
-  if bannedTypeId='' then set bannedTypeId=null;end if;
-  if adminComment='' then set adminComment=null;end if;
-  if bannedDate='' then set bannedDate=null;end if;
-
     SELECT b.org_id as orgId, b.`user_id-admin` as userIdAdmin, 
            b.bannedtype_id as banType, b.`comment`,
            b.`banned-date` as bannedDate 
