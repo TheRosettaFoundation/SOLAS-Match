@@ -3157,16 +3157,14 @@ BEGIN
             (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`, 
             (select code from Countries c where c.id = u.`country_id`) as `countryCode`, 
             u.nonce, u.`created-time` as created_time
-        
         from Users u  
-
         where   (id is null or u.id = id)
             and (name is null or u.`display-name` = name)
             and (mail is null or (LOWER(u.email) = LOWER(mail)))
             and (pass is null or u.password = pass)
             and (bio is null or u.biography = bio)
             and (nonce is null or u.nonce = nonce)
-            and (created is null or created = '0000-00-00 00:00:00' or u.`created-time` = created)
+            and (created IS NULL OR u.`created-time`=created)
             and (lang_id is null or u.language_id = lang_id)
             and (region_id is null or u.country_id = region_id);
 
