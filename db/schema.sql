@@ -2157,21 +2157,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(4), IN imageUploaded BIT(1), IN imageApproved BIT(1))
     READS SQL DATA
 BEGIN
-    if projectId='' then set projectId=null;end if;
-    if titleText='' then set titleText=null;end if;
-    if descr='' then set descr=null;end if;
-    if imp='' then set imp=null;end if;
-    if deadlineTime='' then set deadlineTime=null;end if;
-    if orgId='' then set orgId=null;end if;
-    if ref='' then set ref=null;end if;
-    if wordCount='' then set wordCount=null;end if;
-    if createdTime='' then set createdTime=null;end if;
-    if archiveDate='' then set archiveDate=null;end if;
-    if archiverId='' then set archiverId=null;end if;
-    if lCode='' then set lCode=null;end if;
-    if cCode='' then set cCode=null;end if;
-    if imageUploaded='' then set imageUploaded=null;end if;
-    if imageApproved='' then set imageApproved=null;end if;
     set @lID=null;
     set @cID=null;
 
