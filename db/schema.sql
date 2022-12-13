@@ -2616,11 +2616,9 @@ BEGIN
     if titleText='' then set titleText=null;end if;
     if descr='' then set descr=null;end if;
     if impactText='' then set impactText=null;end if;
-    if deadlineTime='' then set deadlineTime=null;end if;
     if orgId='' then set orgId=null;end if;
     if ref='' then set ref=null;end if;
     if wordCount='' then set wordCount=null;end if;
-    if createdTime='' then set createdTime=null;end if;
     if sourceCountryCode="" then set sourceCountryCode=null; end if;
     if sourceLanguageCode="" then set sourceLanguageCode=null; end if;
     if imageUploaded="" then set imageUploaded=null; end if;
