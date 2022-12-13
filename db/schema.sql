@@ -2983,8 +2983,7 @@ BEGIN
         and (name is null or t.filename = name)
         and (content is null or t.`content-type` = content)
         and (uID is null or t.user_id = uID)
-        and (uTime is null or uTime = '0000-00-00 00:00:00' or t.`upload-time` = uTime);
-
+        and (uTime IS NULL OR t.`upload-time`=uTime);
 END//
 DELIMITER ;
 
