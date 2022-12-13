@@ -23,7 +23,7 @@ class Session implements SessionInterface
 
     public function deleteSession($clientId, $ownerType, $ownerId)
     {
-        $args = PDOWrapper::cleanseNull($clientId).",".
+        $args = PDOWrapper::cleanseNullOrWrapStr($clientId) . ',' .
             PDOWrapper::cleanseNullOrWrapStr($ownerType).",".
             PDOWrapper::cleanseNull($ownerId);
         PDOWrapper::call("oauthDeleteSession", $args);

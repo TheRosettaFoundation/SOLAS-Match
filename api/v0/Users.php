@@ -904,25 +904,14 @@ error_log("userClaimTask($userId, $taskId)");
         }
         $params = array();
         try {
-error_log("DAO\AdminDao::isUserBanned");
             if (DAO\AdminDao::isUserBanned($user->getId())) {
-error_log("Banned");
                 throw new \Exception("User is banned");
             }
-error_log("Before");
             $server = API\Dispatcher::getOauthServer();
-error_log("Before getGrantType");
             $authCodeGrant = $server->getGrantType('authorization_code');
-error_log("After getGrantType");
             $params = $authCodeGrant->checkAuthoriseParams();
-error_log("After params =");
-error_log(print_r($params, true));
-error_log("user_id: " . $user->getId());
             $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
-error_log("After authCode =");
         } catch (\Exception $e) {
-error_log("In exception");
-die();
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
             error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
