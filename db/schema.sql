@@ -3155,16 +3155,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
     READS SQL DATA
 BEGIN
-  if id='' then set id=null;end if;
-  if name='' then set name=null;end if;
-  if mail='' then set mail=null;end if;
-  if pass='' then set pass=null;end if;
-  if bio='' then set bio=null;end if;
-  if nonce='' then set nonce=null;end if;
-  if created='' then set created=null;end if;
-  if lang_id='' then set lang_id=null;end if;
-  if region_id='' then set region_id=null;end if;
-
   select u.id,u.`display-name` as display_name, u.email, u.password, u.biography,
             (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`, 
             (select code from Languages l where l.id = u.`language_id`) as `languageCode`, 
