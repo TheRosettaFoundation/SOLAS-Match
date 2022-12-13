@@ -2275,12 +2275,6 @@ DROP PROCEDURE IF EXISTS `getBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedUser`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
 BEGIN
-  if userId='' then set userId=null;end if;
-  if userIdAdmin='' then set userIdAdmin=null;end if;
-  if bannedTypeId='' then set bannedTypeId=null;end if;
-  if adminComment='' then set adminComment=null;end if;
-  if bannedDate='' then set bannedDate=null;end if;
-
   SELECT b.user_id as userId, b.`user_id-admin` as userIdAdmin, b.bannedtype_id as banType, b.`comment`, b.`banned-date` as bannedDate
       FROM BannedUsers b
       WHERE isNullOrEqual(b.user_id,userId)
