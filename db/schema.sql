@@ -3956,7 +3956,7 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` teXT) R
 DETERMINISTIC
 CONTAINS SQL
 BEGIN
-    return (x=y or x is null or y is null or '0000-00-00 00:00:00' = x or '0000-00-00 00:00:00'=y);
+    return (x=y or x is null or y is null);
 END//
 DELIMITER ;
 
