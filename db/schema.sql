@@ -3167,7 +3167,6 @@ BEGIN
             and (created IS NULL OR u.`created-time`=created)
             and (lang_id is null or u.language_id = lang_id)
             and (region_id is null or u.country_id = region_id);
-
 END//
 DELIMITER ;
 
