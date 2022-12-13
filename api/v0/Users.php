@@ -917,6 +917,7 @@ error_log("After getGrantType");
             $params = $authCodeGrant->checkAuthoriseParams();
 error_log("After params =");
 error_log(print_r($params, true));
+error_log("user_id: " . $user->getId());
             $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
 error_log("After authCode =");
         } catch (\Exception $e) {
