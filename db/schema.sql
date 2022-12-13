@@ -5198,7 +5198,6 @@ BEGIN
         if taskComment is null then set taskComment=""; end if;
         if sCode='' then set sCode=null;end if;
         if tCode='' then set tCode=null;end if;
-        if dLine='' then set dLine=null;end if;
         if taskType='' then set taskType=null;end if;
         if tStatus='' then set tStatus=null;end if;
         if pub is null then set pub=1;end if;
