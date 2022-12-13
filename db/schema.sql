@@ -3952,11 +3952,11 @@ DELIMITER ;
 -- Dumping structure for function Solas-Match-Dev.isNullOrEqual
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` teXT) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` TEXT) RETURNS INT
 DETERMINISTIC
 CONTAINS SQL
 BEGIN
-    return (x=y or x is null or y is null);
+    RETURN (x=y OR x IS NULL OR y IS NULL);
 END//
 DELIMITER ;
 
