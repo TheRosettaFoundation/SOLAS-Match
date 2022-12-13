@@ -2942,15 +2942,12 @@ BEGIN
   if sCode='' then set sCode=null;end if;
   if tCode='' then set tCode=null;end if;
   if wordCount='' then set wordCount=null;end if;
-  if created='' then set created=null;end if;
   if sCC='' then set sCC=null;end if;
   if tCC='' then set tCC=null;end if;
   if taskComment='' then set taskComment=null;end if;
   if tStatus='' then set tStatus=null;end if;
   if tType='' then set tType=null;end if;
   if pub ='' then set pub = null;end if;
-  if dLine='' then set dLine=null;end if;
-
 
   select t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
             word_count_original,
