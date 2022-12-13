@@ -2199,22 +2199,6 @@ DROP PROCEDURE IF EXISTS `getArchivedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTask`(IN `archiveId` BIGINT, IN `projectId` INT, IN `title` VARCHAR(128), IN `comment` VARCHAR(4096), IN `deadline` DATETIME, IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceLanguageId` INT, IN `targetLanguageId` INT, IN `sourceCountryId` INT, IN `targetCountryId` INT, IN `taskTypeId` INT, IN `taskStatusId` INT, IN `published` BIT(1))
 BEGIN
-
-  if archiveId='' then set archiveId=null; end if;
-  if projectId='' then set projectId=null; end if;
-  if title='' then set title=null; end if;
-  if `comment`='' then set `comment`=null; end if;
-  if deadline='' then set deadline=null; end if;
-  if wordCount='' then set wordCount=null; end if;
-  if createdTime='' then set createdTime=null; end if;
-  if sourceLanguageId='' then set sourceLanguageId=null; end if;
-  if targetLanguageId='' then set targetLanguageId=null; end if;
-  if sourceCountryId='' then set sourceCountryId=null; end if;
-  if targetCountryId='' then set targetCountryId=null; end if;
-  if taskTypeId='' then set taskTypeId=null; end if;
-  if taskStatusId='' then set taskStatusId=null; end if;
-  if published='' then set published=null; end if;
-
     SELECT t.id, t.project_id as projectId, t.title, t.`comment`, t.deadline, t.`word-count` as wordCount, t.`created-time` as createdTime,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
