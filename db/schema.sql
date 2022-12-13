@@ -2210,16 +2210,14 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
         t.`taskType_id` as taskType, t.`taskStatus_id` as taskStatus, t.published, tm.version, tm.filename, tm.`content-type` as contentType, tm.`upload-time` as uploadTime,
         tm.`user_id-claimed` as useridClaimed, tm.`user_id-archived` as userIdArchived, tm.prerequisites, tm.`user_id-taskCreator` as userIdTaskCreator, tm.`archived-date` as archivedDate
-
         FROM ArchivedTasks t JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id 
-
         WHERE (archiveId is null or t.id = archiveId)
             and (projectId is null or t.project_id = projectId)
             and (title is null or t.title = title)
             and (`comment` is null or t.`comment` = `comment`)
-            and (deadline is null or deadline = '0000-00-00 00:00:00' or t.deadline = deadline)
+            and (deadline IS NULL OR t.deadline=deadline)
             and (wordCount is null or t.`word-count` = wordCount)
-            and (createdTime is null or createdTime = '0000-00-00 00:00:00' or t.`created-time` = createdTime)
+            and (createdTime IS NULL OR t.`created-time`=createdTime)
             and (sourceLanguageId is null or t.`language_id-source` = sourceLanguageId) 
             and (targetLanguageId is null or t.`language_id-target` = targetLanguageId)
             and (sourceCountryId is null or t.`country_id-source` = sourceCountryId)
@@ -2227,7 +2225,6 @@ BEGIN
             and (taskTypeId is null or t.`taskType_id` = taskTypeId)
             and (taskStatusId is null or t.`taskStatus_id` = taskStatusId)
             and (published is null or t.`published` = published);
-
 END//
 DELIMITER ;
 
