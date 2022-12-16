@@ -37,7 +37,7 @@
                     <div id="siteLocationURL">{Settings::get("site.location")}</div>
                     <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
                 </span>
-                <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}</div>
+                <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
             </td>
             {if isset($isMember)}
                 <td>
@@ -169,6 +169,7 @@
     <table width="100%" class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
+            <th>Cancelled?</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
             {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
             {if !empty($details_claimant)}
@@ -194,6 +195,17 @@
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
+            </td>
+            <td>
+                {if $task->get_cancelled()}
+                    <a href="#" class="btn btn-small" disabled>
+                        <i class="icon-check icon-black"></i> Yes
+                    </a>
+                {else}
+                    <a href="#" class="btn btn-small btn-inverse" disabled>
+                        <i class="icon-remove-circle icon-white"></i> No
+                    </a>
+                {/if}
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">

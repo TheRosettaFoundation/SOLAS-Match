@@ -114,24 +114,10 @@ class Tasks
             '/api/v0/tasks/{taskId}/',
             '\SolasMatch\API\V0\Tasks:getTask');
 
-        $app->put(
-            '/api/v0/tasks/{taskId}/',
-            '\SolasMatch\API\V0\Tasks:updateTask')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreationPassingTaskId');
-
         $app->delete(
             '/api/v0/tasks/{taskId}/',
             '\SolasMatch\API\V0\Tasks:deleteTask')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreationPassingTaskId');
-
-        $app->get(
-            '/api/v0/tasks/',
-            '\SolasMatch\API\V0\Tasks:getTasks');
-
-        $app->post(
-            '/api/v0/tasks/',
-            '\SolasMatch\API\V0\Tasks:createTask')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTaskCreation');
     }
 
     // Org Feedback, feedback sent from the organisation to the user who claimed the task
@@ -305,32 +291,10 @@ class Tasks
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTask($taskId), null);
     }
 
-    public static function updateTask(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
-    }
-
     public static function deleteTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::delete($taskId), null);
-    }
-
-    public static function getTasks(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTasks(), null);
-    }
-
-    public static function createTask(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::save($data), null);
     }
 }
 Tasks::init();

@@ -318,6 +318,17 @@
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+                <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
+            </a>
+            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class=" btn btn-small" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
+                <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
+            </a>
+                <input type="hidden" name="cancel" value="" />
+                <input type="hidden" name="cancelled" value="0" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+             </form>
         {/if}
             </ul>
          </div>
@@ -372,6 +383,7 @@
                                 {if $isSiteAdmin}
                                  <th>Paid?</th>
                                 {/if}
+                                 <th>Cancelled?</th>
                                  <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
                                  <th>{Localisation::getTranslation('common_publish')}</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
@@ -454,6 +466,26 @@
                                      {/if}
                                     </td>
                                     {/if}
+                                    <td>
+                                    {if $task->get_cancelled()}
+                                        <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                         <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                                            <a class=" btn btn-small cancel"  style="color:#000000;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                                <i class="icon-check icon-black"></i> Yes
+                                            </a>
+                                            <input type="hidden" name="cancel" value="" />
+                                            <input type="hidden" name="cancelled" value="0" />
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                          </form>
+                                        </span>
+                                    {else}
+                                        <span data-toggle="tooltip" data-placement="right" title="Cancel" >
+                                            <a class="btn btn-small btn-inverse cancel" data-toggle="modal" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                                <i class="icon-remove-circle icon-white"></i> No
+                                            </a>
+                                        </span>
+                                    {/if}
+                                    </td>
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
@@ -616,6 +648,38 @@
                     </table>
                 {/foreach}
 {/if}
+<!-- Cancel Modal -->
+<div id="cancelmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Cancel Task</h3>
+    <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
+  </div>
+  <div class="modal-body">
+  <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
+  <p>Reason to cancel selected task(s):</p>
+  <select name="cancel_task" id="cancel_task" style="width:450px;">
+    <option value="">--Select--</option>
+    <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
+    <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
+    <option value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
+    <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
+    <option value="other">Other</option>    
+  </select>
+  <br/>
+  <p name="reason_text">Kindly provide the reason below:</p>
+  <br/>
+  <textarea rows="4" cols="50" name="reason" id="reason" style="width:auto;"></textarea>
+  <input type="hidden" name="cancel" value="" />
+  <input type="hidden" name="cancelled" value="" />
+   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
+  </div>
+  </form>
+</div>
 
 {include file="footer_no_end.tpl"}
         <script>

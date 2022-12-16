@@ -17,6 +17,7 @@ class MessagingClient
     public $TaskUploadNotificationTopic     = "tasks";
     public $CalculateProjectDeadlinesTopic  = "projects";
     public $UserTaskClaimTopic              = "email";
+    public $UserTaskCancelledTopic          = 'email';
     public $PasswordResetTopic              = "email";
     public $OrgMembershipAcceptedTopic      = "email";
     public $OrgMembershipRefusedTopic       = "email";

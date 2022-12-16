@@ -473,6 +473,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `project_id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `word-count` int(11) DEFAULT NULL,
+   word_count_original INT(10) UNSIGNED NOT NULL DEFAULT 0,
   `language_id-source` int(10) unsigned NOT NULL,
   `language_id-target` int(10) unsigned NOT NULL,
   `country_id-source` int(10) unsigned NOT NULL,
@@ -483,6 +484,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `task-type_id` int(11) unsigned NOT NULL,
   `task-status_id` int(11) unsigned NOT NULL,
   `published` BIT(1) DEFAULT 0 NOT NULL,
+   cancelled  INT(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK_Tasks_Languages` (`language_id-source`),
   KEY `FK_Tasks_Languages_2` (`language_id-target`),
@@ -1367,6 +1369,7 @@ CREATE TABLE IF NOT EXISTS `tasks_status_audit_trail` (
   id           BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   task_id      BIGINT(20) UNSIGNED NOT NULL,
   status_id    INT(10)    UNSIGNED NOT NULL,
+  cancelled    INT(10)    UNSIGNED NOT NULL DEFAULT 0,
   claimant_id  INT(10)    UNSIGNED,
   changed_time DATETIME            NOT NULL,
   comment      TEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1626,7 +1629,7 @@ BEGIN
 
     START TRANSACTION;
       INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
-      SELECT t.* FROM Tasks t WHERE t.id = tID;
+      SELECT                       `id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `task-type_id`,`task-status_id`,`published` FROM Tasks t WHERE t.id = tID;
 
       INSERT INTO ArchivedTasksMetadata
       (`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 
@@ -2651,22 +2654,33 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgProjects`(IN `orgId` INT, IN `months` INT)
 BEGIN
     SELECT
-        id,
-        title,
-        description,
-        impact,
-        deadline,
-        organisation_id AS organisationId,
-        reference,
-        `word-count` AS wordCount,
-        created AS createdTime,
-        (SELECT SUM(tsk.`task-status_id`)/(COUNT(tsk.`task-status_id`)*4) FROM Tasks tsk WHERE tsk.project_id=p.id) AS status,
-        image_uploaded AS imageUploaded,
-        image_approved AS imageApproved
-    FROM Projects p
+        p.id,
+        p.title,
+        p.description,
+        p.impact,
+        p.deadline,
+        p.organisation_id AS organisationId,
+        p.reference,
+        IF(p.`word-count`>1, p.`word-count`, '') AS wordCount,
+        p.created AS createdTime,
+        IFNULL(SUM(IF(t.`task-status_id`=4 AND NOT t.cancelled, t.`word-count`, 0)), 0) AS total_complete_wordcount_not_cancelled,
+        IFNULL(SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)), 0) AS total_complete_wordcount_cancelled,
+        IFNULL(SUM(IF(                         NOT t.cancelled, t.`word-count`, 0)), 0) AS total_wordcount_not_cancelled,
+        IFNULL(
+            (SUM(IF(t.`task-status_id`=4 AND NOT t.cancelled, t.`word-count`, 0)) +
+             SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)))
+            /
+            (SUM(IF(                         NOT t.cancelled, t.`word-count`, 0)) +
+             SUM(IF(t.`task-status_id`=4 AND     t.cancelled, t.`word-count`, 0)))
+        , '') AS status,
+        p.image_uploaded AS imageUploaded,
+        p.image_approved AS imageApproved
+    FROM      Projects p
+    LEFT JOIN Tasks    t ON p.id=t.project_id
     WHERE
         p.organisation_id=orgId AND
         p.deadline > DATE_SUB(NOW(), INTERVAL months MONTH)
+    GROUP BY p.id
     ORDER BY p.created DESC;
 END//
 DELIMITER ;
@@ -2880,17 +2894,15 @@ BEGIN
   if sCode='' then set sCode=null;end if;
   if tCode='' then set tCode=null;end if;
   if wordCount='' then set wordCount=null;end if;
-  if created='' then set created=null;end if;
   if sCC='' then set sCC=null;end if;
   if tCC='' then set tCC=null;end if;
   if taskComment='' then set taskComment=null;end if;
   if tStatus='' then set tStatus=null;end if;
   if tType='' then set tType=null;end if;
   if pub ='' then set pub = null;end if;
-  if dLine='' then set dLine=null;end if;
-
 
   select t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
+            word_count_original,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -2899,8 +2911,8 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
-            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
-
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime,
+            cancelled
         from Tasks t
 
         where (id is null or t.id = id)
@@ -3871,8 +3883,10 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` FUNCTION `isNullOrEqual`(`x` TEXT, `y` teXT) RETURNS int(11)
+DETERMINISTIC
+CONTAINS SQL
 BEGIN
-    return (x=y or x is null or y is null or '0000-00-00 00:00:00' = x or '0000-00-00 00:00:00'=y);
+    return (x=y or x is null or y is null);
 END//
 DELIMITER ;
 
@@ -5100,7 +5114,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` bit(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN wordCount_original INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN pub bit(1), IN can INT)
 BEGIN
 
         if id='' then set id=null;end if;
@@ -5112,7 +5126,6 @@ BEGIN
         if taskComment is null then set taskComment=""; end if;
         if sCode='' then set sCode=null;end if;
         if tCode='' then set tCode=null;end if;
-        if dLine='' then set dLine=null;end if;
         if taskType='' then set taskType=null;end if;
         if tStatus='' then set tStatus=null;end if;
         if pub is null then set pub=1;end if;
@@ -5133,8 +5146,8 @@ BEGIN
                 set @tID=null;
                 select l.id into @tID from Languages l where l.code=tCode;
 
-                insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
-                 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
+                INSERT INTO Tasks (project_id, title, `word-count`, word_count_original, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, published)
+                VALUES            ( projectID,  name,    wordCount,  wordCount_original,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      dLine,       taskType,          tStatus,       pub);
                  call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
                 call reset_project_complete(LAST_INSERT_ID());
@@ -5190,6 +5203,10 @@ BEGIN
                     then update Tasks t SET t.`word-count` = wordCount WHERE t.id = id;
                 end if;
 
+                IF wordCount_original!=(SELECT t.word_count_original FROM Tasks t WHERE t.id=id)
+                    THEN UPDATE Tasks t SET t.word_count_original=wordCount_original WHERE t.id=id;
+                END IF;
+
                 if taskComment is not null
                 and taskComment != (SELECT t.comment FROM Tasks t WHERE  t.id = id)
                 or (select t.comment from Tasks t WHERE t.id = id) is null
@@ -5225,6 +5242,10 @@ BEGIN
                         update Tasks t SET t.`published` = 0 WHERE t.id = id;
                     end if;
                 end if;
+
+                IF can!=(SELECT t.cancelled FROM Tasks t WHERE t.id=id)
+                    THEN UPDATE Tasks t SET t.cancelled=can WHERE t.id=id;
+                END IF;
 
                 call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);
 
@@ -8438,7 +8459,10 @@ BEGIN
     JOIN Organisations o ON p.organisation_id=o.id
     WHERE
         tc.user_id=uID AND
-        t.`task-status_id`=4
+        (
+            t.`task-status_id`=4 OR
+            (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)
+        )
     ORDER BY o.name;
 END//
 DELIMITER ;
@@ -9366,14 +9390,14 @@ BEGIN
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`,  '') AS last_name,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-        IFNULL(SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_translated,
-        IFNULL(SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_proofread,
-        IFNULL(SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)), 0) AS words_approved,
-        IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+        IFNULL(SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_translated,
+        IFNULL(SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_proofread,
+        IFNULL(SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_approved,
+        IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`=2 OR t.`task-type_id`=3 OR t.`task-type_id`=6) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         ROUND(
-            IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0) +
-            IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0)*0.5 +
-            IFNULL(SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)), 0)*0.25 +
+            IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) +
+            IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.5 +
+            IFNULL(SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.25 +
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
@@ -9382,7 +9406,7 @@ BEGIN
                 IF(
                     t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9391,7 +9415,7 @@ BEGIN
                 IF(
                     t.`task-type_id`=3 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9400,7 +9424,7 @@ BEGIN
                 IF(
                     t.`task-type_id`=6 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9552,23 +9576,23 @@ FROM
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`,  '') AS last_name,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
-        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
-        SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_approved,
-        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
-        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
-        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
+        SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_approved,
+        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id` =2 OR  t.`task-type_id` =3 OR  t.`task-type_id` =6) AND     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_donated_unadjusted,
+        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id` =2 OR  t.`task-type_id` =3 OR  t.`task-type_id` =6) AND     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_paid_uncounted,
+        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3 AND t.`task-type_id`!=6) OR  NOT (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_not_complete_uncounted,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5 +
-            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.25
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0))*0.5 +
+            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0))*0.25
         ) AS points_recognition_unadjusted,
         ROUND(
             SUM(
                 IF(
                     t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9577,7 +9601,7 @@ FROM
                 IF(
                     t.`task-type_id`=3 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9586,7 +9610,7 @@ FROM
                 IF(
                     t.`task-type_id`=6 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -9753,7 +9777,8 @@ BEGIN
     FROM      Tasks             t
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
-        t.project_id=@pID
+        t.project_id=@pID AND
+        t.cancelled=0
     GROUP BY t.project_id;
 
     IF @project_complete THEN
@@ -9777,7 +9802,8 @@ BEGIN
     FROM      Tasks             t
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
-        t.project_id=pID
+        t.project_id=pID AND
+        t.cancelled=0
     GROUP BY t.project_id;
 
     IF @project_complete THEN
@@ -9792,7 +9818,9 @@ DROP PROCEDURE IF EXISTS `reset_project_complete`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `reset_project_complete`(IN tID BIGINT)
 BEGIN
+  IF 0=(SELECT cancelled FROM Tasks WHERE id=tID) THEN
     UPDATE project_complete_dates SET status=0 WHERE project_id=(SELECT project_id FROM Tasks WHERE id=tID LIMIT 1);
+  END IF;
 END//
 DELIMITER ;
 
@@ -9928,6 +9956,15 @@ BEGIN
 
     INSERT INTO possible_completes (project_id)
     VALUES                         ((SELECT project_id FROM Tasks WHERE id=tID));
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_tasks_status_cancelled`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status_cancelled`(IN tID BIGINT, IN sID INT, IN cID INT, IN c TEXT)
+BEGIN
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, cancelled, changed_time, comment)
+    VALUES                               (    tID,       sID,       cID,        NOW(),       c);
 END//
 DELIMITER ;
 
@@ -10321,23 +10358,23 @@ FROM
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`,  '') AS last_name,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`,  '')) AS name,
-        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
-        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
-        SUM(IF(t.`task-type_id`=6 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_approved,
-        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_donated_unadjusted,
-        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id`= 2 OR  t.`task-type_id`= 3) AND t.`task-status_id`= 4, t.`word-count`, 0)) AS words_paid_uncounted,
-        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3) OR  t.`task-status_id`!=4, t.`word-count`, 0)) AS words_not_complete_uncounted,
+        SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_proofread,
+        SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_approved,
+        SUM(IF(tp.task_id IS NULL     AND (t.`task-type_id` =2 OR  t.`task-type_id`= 3 OR  t.`task-type_id` =6) AND     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_donated_unadjusted,
+        SUM(IF(tp.task_id IS NOT NULL AND (t.`task-type_id` =2 OR  t.`task-type_id`= 3 OR  t.`task-type_id` =6) AND     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_paid_uncounted,
+        SUM(IF(                           (t.`task-type_id`!=2 AND t.`task-type_id`!=3 AND t.`task-type_id`!=6) OR  NOT (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) AS words_not_complete_uncounted,
         ROUND(
-            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0)) +
-            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.5 +
-            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND t.`task-status_id`=4, t.`word-count`, 0))*0.25
+            SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)) +
+            SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0))*0.5 +
+            SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0))*0.25
         ) AS points_recognition_unadjusted,
         ROUND(
             SUM(
                 IF(
                     t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -10346,7 +10383,7 @@ FROM
                 IF(
                     t.`task-type_id`=3 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)
@@ -10355,7 +10392,7 @@ FROM
                 IF(
                     t.`task-type_id`=6 AND
                     tp.task_id IS NULL AND
-                    t.`task-status_id`=4 AND
+                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
                     t.`word-count`, 0)

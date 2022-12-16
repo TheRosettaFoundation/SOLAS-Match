@@ -109,29 +109,6 @@ class TaskDao
         return $tasks;
     }
     
-    //! Save a Task to the database
-    /*!
-     Save a Task to the database. If the input Task does not have an id then a new Task will be created. If the input
-     Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
-     score request for this Task.
-     @param Task $task is the Task being saved to the database.
-     @return Returns the updated/created Task object
-    */
-    public static function save($task)
-    {
-        if (is_null($task->getId())) {
-            self::insert($task);
-            // self::calculateTaskScore($task->getId()); // Not required see https://github.com/TheRosettaFoundation/SOLAS-Match/commit/ce6724ca50cd68eb1898156fd942237bdb5dddcf and https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/commit/0130685a93246d8f6f82ac44041cd039c1879cd0
-        } else {
-            self::update($task);
-            //commented out the following line which triggers task-score-calculation & email per every task update 
-            //operation. This is to reduce the Disk Read/Write usage of the server by the PluginHandler. 
-            
-            //self::calculateTaskScore($task->getId());
-        }
-        return $task;
-    }
-
     //! Submit a Review of a Task
     /*!
       Provide a Review for a Task. Reviews can be used to help understand the quality of a volunteers work as well as
@@ -205,32 +182,6 @@ class TaskDao
         return $reviews;
     }
 
-    private static function update($task)
-    {
-        $sourceLocale = $task->getSourceLocale();
-        $targetLocale = $task->getTargetLocale();
-        $args = Lib\PDOWrapper::cleanseNull($task->getId()).",".
-            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
-            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
-            Lib\PDOWrapper::cleanse($task->getPublished());
-        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
-error_log("call taskInsertAndUpdate($args)");
-        if ($result) {
-            $task = Common\Lib\ModelFactory::buildModel('Task', $result);
-        } else {
-            return null;
-        }
-    }
-    
     //! Delete a Task from the database
     /*!
       Permanently delete a Task from the database.
@@ -282,43 +233,6 @@ error_log("call taskInsertAndUpdate($args)");
         return $ret;
     }
 
-    // Insert a Task into the database (pass by reference so no return)
-    private static function insert(&$task)
-    {
-      $number = '';
-      for ($i = 0; $i < 10; $i++) {
-        $sourceLocale = $task->getSourceLocale();
-        $targetLocale = $task->getTargetLocale();
-        $args = "null ,".
-            Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle() . $number) . ",".
-            Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getComment()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
-            Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
-            Lib\PDOWrapper::cleanseNull($task->getPublished());
-        error_log("TaskDAO::insert args: " . $args);
-        $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
-        if ($result) {
-            $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
-            if (!empty($task)) {
-                error_log("TaskDAO::insert id: " . $task->getId());
-            }
-            return;
-        } else {
-            error_log("TaskDAO::insert Failed");
-        }
-        // Make sure UNIQUE KEY is unique
-        $number = $number . substr('0123456789', mt_rand() % 10, 1);
-      }
-      $task = null;
-    }
-    
     public static function getAlsoViewedTasks(
             $taskId,
             $limit = null,

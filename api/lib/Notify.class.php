@@ -13,6 +13,7 @@ require_once __DIR__."/../vendor/autoload.php";
 //\DrSlump\Protobuf::autoload();
 
 require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
+require_once __DIR__."/../../Common/protobufs/emails/UserTaskCancelled.php";
 require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
@@ -136,6 +137,24 @@ error_log("notifyUserClaimedTask($userId, $taskId)");
                 $messagingClient->UserTaskClaimTopic
             );
 error_log("notifyUserClaimedTask($userId, $taskId) After Send");
+        }
+    }
+
+    public static function notifyUserTaskCancelled($userId, $taskId)
+    {
+error_log("notifyUserTaskCancelled($userId, $taskId)");
+        $messagingClient = new Lib\MessagingClient();
+        if ($messagingClient->init()) {
+            $message_type = new Common\Protobufs\Emails\UserTaskCancelled();
+            $message_type->setUserId($userId);
+            $message_type->setTaskId($taskId);
+            $message = $messagingClient->createMessageFromProto($message_type);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->UserTaskCancelledTopic
+            );
+error_log("notifyUserTaskCancelled($userId, $taskId) After Send");
         }
     }
 

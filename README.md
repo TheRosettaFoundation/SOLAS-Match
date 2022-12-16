@@ -39,6 +39,28 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 12.2
+
+- Edited project deadlines are now sent to Phrase.
+- Upgraded Task table for cancelled and word_count_original fields.
+- Upgraded tasks_status_audit_trail for cancelled field.
+- There is UI to set Cancelled in Project View (and also to display it in Task View):
+  - When cancelled, propagate to all tasks for same file.
+  - Don't cancel something that is already cancelled.
+  - Set cancelled for all the tasks in TWB Platform.
+  - Set the CANCELLED status in Phrase for all the jobs.
+  - For CLAIMED and IN_PROGRESS tasks get the confirmed wordcount from Phrase and store in wordcount for the task (for recognition).
+  - Send email to linguist for all tasks.
+  - Set the audit trail to show cancelled for all tasks.
+- If un-cancelled (via the Project View UI):
+  - Don't un-cancel something that is already un-cancelled.
+  - Set un-cancelled for the task in TWB Platform.
+  - Set back the status in Phrase to whatever it was before (based on TWB status).
+  - Set the TWB wordcount to whatever it was before (word_count_original).
+  - Set the audit trail to show un-cancelled.
+- https://kato.translatorswb.org/org/dashboard/ has a new % complete calculation based on words completed.
+- When a user's email is changed on TWB Platform, the next time the user logs into TWB Community, their email will be updated there.
+
 ## Version 12.1
 
 - Self service projects are automatically split if they have more than 2000 words (translation only is split).

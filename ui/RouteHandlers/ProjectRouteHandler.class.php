@@ -356,6 +356,7 @@ class ProjectRouteHandler
 
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
+                $task->set_word_count_original($part['wordsCount']);
                 $projectDao->queue_asana_project($project_id);
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION || $part['workflowLevel'] == 1) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
@@ -671,7 +672,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['revokeTaskId']);
             }
 
-            if (isset($post['publishedTask']) && isset($post['task_id'])) {
+            if (($isAdmin || $isOrgMember) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
                 } else {
@@ -843,6 +844,17 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
                     }
                 }
+
+                if (isset($post['cancelled'])) {
+                    $comment = ($post['cancelled'] == 1) ? $post['cancel_task'] . ' - ' . $post['reason'] : 'Uncancelled';
+                    $task_ids = preg_split ("/\,/", $post['cancel']);
+                    $cancelled = $post['cancelled'] ? 1 : 0;
+                    $number = 0;
+                    foreach ($task_ids as $id) {
+                        $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment);
+                    }
+                    UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
+                }
             }
             if($isSiteAdmin) {
                 if (!empty($post['tasks_as_paid'])) {
@@ -913,6 +925,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
@@ -1010,6 +1023,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 $project->setTitle(mb_substr($post['project_title'], 0, 128));
                 $project->setDescription($post['project_description']);
+                $set_dateDue_in_memsource = $project->getDeadline() != $post['project_deadline'];
                 $project->setDeadline($post['project_deadline']);
                 $projectDao->queue_asana_project($project_id);
                 $project->setImpact($post['project_impact']);
@@ -1123,6 +1137,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
                                 try {
+                                     if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
                                      return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                 }

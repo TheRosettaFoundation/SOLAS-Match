@@ -549,6 +549,108 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
+    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment)
+    {
+      error_log("function propagate_cancelled($cancelled... $task_id)");
+      $projectDao = new ProjectDao();
+      $taskDao = new TaskDao();
+      $memsource_task = $projectDao->get_memsource_task($task_id);
+      $task_ids = [$task_id];
+      if ($cancelled && $memsource_project && $memsource_task) {
+          $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+          $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
+          $task_ids = [];
+          foreach ($project_tasks as $project_task) {
+              if ($top_level == $projectDao->get_top_level($project_task['internalId'])) $task_ids[] = $project_task['id'];
+          }
+      }
+      foreach ($task_ids as $index => $task_id) {
+        error_log("function propagate_cancelled(... $task_id)");
+        $task = $taskDao->getTask($task_id);
+        if ($cancelled && $task->get_cancelled() || !$cancelled && !$task->get_cancelled()) {
+            error_log('Task already in correct cancelled state');
+            unset($task_ids[$index]);
+            continue;
+        }
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
+        $user_id = 0;
+        $details_claimant = $taskDao->getUserClaimedTask($task_id);
+        if ($details_claimant) $user_id = $details_claimant->getId();
+
+        if ($memsource_project && $memsource_task) {
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $memsource_task_uid = $memsource_task['memsource_task_uid'];
+            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+
+            $status_id = $task->getTaskStatus();
+            if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $status_id = Common\Enums\TaskStatusEnum::CLAIMED;
+
+            $memsource_user_uid = 0;
+            if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
+
+            $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
+            $deadline = $task->getDeadline();
+            $status = 'CANCELLED';
+            if (!$cancelled) {
+                $task->set_cancelled(0);
+                $status = [1 => 'NEW', 2 => 'NEW', 3 => 'ACCEPTED', 4 => 'COMPLETED', 10 => 'ACCEPTED'][$task->getTaskStatus()];
+                $word_count = $task->get_word_count_original();
+                if ($word_count < 1) $word_count = 1;
+                $task->setWordCount($word_count);
+                $taskDao->updateTask($task);
+                $projectDao->update_tasks_status_cancelled($task_id, $status_id, 0, $comment);
+            }
+            $data = [
+                'status' => $status,
+                'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'
+            ];
+            if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
+            error_log(print_r($data, true));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            if ($cancelled) {
+                $task->set_cancelled(1);
+                if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+                    $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [(object)['uid' => $memsource_task['memsource_task_uid']]], 'getParts' => (object)[]]));
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    $result = json_decode($result, true);
+                    error_log(print_r($result, true));
+                    if (!empty($result['segmentsCountsResults'])) {
+                        foreach ($result['segmentsCountsResults'] as $job_counts) {
+                            if (!empty($job_counts['jobPartUid']) && $job_counts['jobPartUid'] == $memsource_task['memsource_task_uid']) {
+                                if (isset($job_counts['counts']['confirmedWordsCount'])) {
+                                    $word_count = $job_counts['counts']['confirmedWordsCount'];
+                                    if ($word_count < 1) $word_count = 1;
+                                    $task->setWordCount($word_count);
+                                    $task->set_cancelled(2);
+                                }
+                            }
+                        }
+                    }
+                }
+                $task->setPublished(0);
+                $taskDao->updateTask($task);
+                $projectDao->update_tasks_status_cancelled($task_id, $status_id, 1, $comment);
+            }
+        }
+        if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
+            $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
+        }
+      }
+      return count($task_ids);
+    }
+
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
         if ($memsource_task) {
