@@ -3462,7 +3462,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
@@ -3520,11 +3519,11 @@ BEGIN
         )
     GROUP BY t.id
     ORDER BY
-        IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
-        IF(t.`language_id-source`=u.language_id, 250 + IF(u.country_id=t.`country_id-source`, 25, 0), 0) +
+        IF(t.`language_id-target`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-target`, 50, 0), 0) +
+        IF(t.`language_id-source`=MAX(u.language_id), 250 + IF(MAX(u.country_id)=t.`country_id-source`, 25, 0), 0) +
         IF(COUNT(uqp.user_id), 1000,
-            IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
-            IF(t.`language_id-source`=u.language_id, 500 + IF(u.country_id=t.`country_id-source`, 50, 0), 0)
+            IF(t.`language_id-target`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-target`, 50, 0), 0) +
+            IF(t.`language_id-source`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-source`, 50, 0), 0)
         ) +
         IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
         IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
