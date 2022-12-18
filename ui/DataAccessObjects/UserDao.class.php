@@ -22,6 +22,7 @@ class UserDao extends BaseDao
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
         $this->usernamePrefix = strpos($this->siteApi, 'twbplatform') ? 'TWB_' : 'DEV_';
+$this->usernamePrefix = 'DEV_';//(**)DELETE
         $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
@@ -2018,31 +2019,31 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
             ];
-            if ($this->usernamePrefix === 'DEV_') {
+//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                 ];
-            }
+//(**)DELETE            }
         } elseif (empty($post['translation_0']) && !empty($post['proofreading_0'])) {
             $workflowSteps = [
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-            if ($this->usernamePrefix === 'DEV_') {
+//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-            }
+//(**)DELETE            }
         } else {
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-            if ($this->usernamePrefix === 'DEV_') {
+//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-            }
+//(**)DELETE            }
         }
         $data = [
             'name' => $post['project_title'],
@@ -2084,7 +2085,6 @@ error_log(print_r($project_result, true));//(**)
             empty($project_result['owner']['uid']) ? '' : $project_result['owner']['uid'],
             $workflowLevels);
 
-        $split = in_array($project->getOrganisationId(), [860, $this->usernamePrefix === 'DEV_' ? 547 : 0]) ? 1 : 0;
         $split = 1;
         $projectDao->set_memsource_self_service_project($project_result['id'], $split);
 
