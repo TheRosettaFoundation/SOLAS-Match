@@ -16,16 +16,13 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="13%">Partner</th>
-    <th width="10%">Claimed</th>
-    <th width="10%">Email</th>
-    <th width="11%">Task Title</th>
+    <th width="20%">Partner</th>
+    <th width="20%">Claimed</th>
+    <th width="15%">Email</th>
+    <th width="20%">Task Title</th>
     <th width="7%">Words</th>
     <th width="10%">Task Type</th>
-    <th width="12%">Kató TM Status</th>
-    <th width="10%">Translated</th>
-    <th width="9%">Approved</th>
-    <th width="8%">URL</th>
+    <th width="8%">Language Pair</th>
   </thead>
 
   <tbody>
@@ -38,9 +35,6 @@
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
-      <td></td>
-      <td></td>
-      <td></td>
       <td>{$user_row['language_pair']}</td>
     </tr>
 
