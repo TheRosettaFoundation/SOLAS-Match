@@ -526,10 +526,10 @@ If a language is to be removed from this list, the community will be informed be
                     </a>
                     -->
                 </h2>
-                {if $user_has_strategic_languages[0]['nigeria'] == 1}<div style="overflow: auto; max-height: 300px;">{/if}
+                {if !empty($user_has_strategic_languages) && $user_has_strategic_languages[0]['nigeria'] == 1}<div style="overflow: auto; max-height: 300px;">{/if}
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
-{if $user_has_strategic_languages[0]['nigeria'] == 0}
+{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
                         <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Points in strategic<br />languages</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Status</strong></td> <td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Recognition reward</strong></td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                         <td align="center" style="border:2px solid #e8991c">TWB New Community<br />Member</td><td align="center" style="border:2px solid #e8991c">10 USD phone top-up or online voucher,<br />where applicable</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">25,000</td>                                        <td align="center" style="border:2px solid #e8991c">TWB Traveler</td>            <td align="center" style="border:2px solid #e8991c">100 USD bank transfer</td></tr>
@@ -585,7 +585,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
                     </tbody>
                 </table>
-                {if $user_has_strategic_languages[0]['nigeria'] == 1}</div>{/if}
+                {if !empty($user_has_strategic_languages) && $user_has_strategic_languages[0]['nigeria'] == 1}</div>{/if}
             </div>
         </td>
 
