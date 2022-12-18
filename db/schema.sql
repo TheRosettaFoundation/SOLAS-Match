@@ -8481,7 +8481,10 @@ BEGIN
     JOIN Organisations o ON p.organisation_id=o.id
     WHERE
         tc.user_id=uID AND
-        t.`task-status_id`=4
+        (
+            t.`task-status_id`=4 OR
+            (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)
+        )
     ORDER BY o.name;
 END//
 DELIMITER ;
