@@ -38,10 +38,10 @@
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
-      <td>{$user_row['DOWNLOAD_STATUS']}</td>
-      <td>{$user_row['TRANSLATED_PERC_FORMATTED']}</td>
-      <td>{$user_row['APPROVED_PERC_FORMATTED']}</td>
-      <td>{if !empty($user_row['matecat_url'])}<a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a>{else}{$user_row['language_pair']}{/if}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{$user_row['language_pair']}</td>
     </tr>
 
   {/foreach}
