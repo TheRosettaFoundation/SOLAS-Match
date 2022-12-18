@@ -827,7 +827,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function finishRegistrationManually(Request $request, Response $response, $args)
     {
-        $email = $args['email'];
+        $email = $args['uuid'];
         error_log("finishRegistrationManually($email)");
         $ret = DAO\UserDao::finishRegistrationManually($email);
         return API\Dispatcher::sendResponse($response, $ret, null);
