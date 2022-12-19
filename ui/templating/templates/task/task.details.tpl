@@ -198,12 +198,12 @@
             </td>
             <td>
                 {if $task->get_cancelled()}
-                    <a href="#" class="btn btn-small" disabled>
-                        <i class="icon-check icon-black"></i> Yes
+                    <a href="#" class="btn btn-small btn-inverse" disabled>
+                        <i class="icon-check icon-white"></i> Yes
                     </a>
                 {else}
-                    <a href="#" class="btn btn-small btn-inverse" disabled>
-                        <i class="icon-remove-circle icon-white"></i> No
+                    <a href="#" class="btn btn-small" disabled>
+                        <i class="icon-remove-circle icon-black"></i> No
                     </a>
                 {/if}
             </td>
