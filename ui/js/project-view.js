@@ -314,12 +314,14 @@ function select() {
         }
     });
 
+    
     $('#cancelmodal').on('hidden.bs.modal', function () {
         $(this).find('form').trigger('reset');
-        $("[name=reason]").hide();
-        $("[name=reason_text]").hide();
-        $("#cancelbtn").prop('disabled', false);
+        //$("[name=reason]").hide();
+       // $("[name=reason_text]").show();
+        //$("#cancelbtn").prop('disabled', false);
     });
+    
 
     //Validation - Hide btn if task is not selected
     $('#cancelmodal').on('shown', function () {

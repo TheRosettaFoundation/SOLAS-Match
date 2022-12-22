@@ -470,8 +470,8 @@
                                     {if $task->get_cancelled()}
                                         <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                                            <a class=" btn btn-small cancel"  style="color:#000000;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
-                                                <i class="icon-check icon-black"></i> Yes
+                                            <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                                <i class="icon-check icon-white"></i> Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
                                             <input type="hidden" name="cancelled" value="0" />
@@ -480,8 +480,8 @@
                                         </span>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
-                                            <a class="btn btn-small btn-inverse cancel" data-toggle="modal" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
-                                                <i class="icon-remove-circle icon-white"></i> No
+                                            <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                                <i class="icon-remove-circle icon-black"></i> No
                                             </a>
                                         </span>
                                     {/if}
@@ -608,7 +608,7 @@
                                 {assign var="task_id" value=$task['task_id']}
                                 <tr style="overflow-wrap: break-word;">
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?utm_source=twb&utm_medium=projectpage&utm_campaign=tasks">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
                                         <br/>
@@ -667,7 +667,7 @@
     <option value="other">Other</option>    
   </select>
   <br/>
-  <p name="reason_text">Kindly provide the reason below:</p>
+  <p name="reason_text">Further details:</p>
   <br/>
   <textarea rows="4" cols="50" name="reason" id="reason" style="width:auto;"></textarea>
   <input type="hidden" name="cancel" value="" />
