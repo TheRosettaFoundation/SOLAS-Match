@@ -60,6 +60,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - Set the audit trail to show un-cancelled.
 - https://kato.translatorswb.org/org/dashboard/ has a new % complete calculation based on words completed.
 - When a user's email is changed on TWB Platform, the next time the user logs into TWB Community, their email will be updated there.
+- Fixed a bug: "Email Verification" was not working since March 2022
 
 ## Version 12.1
 
