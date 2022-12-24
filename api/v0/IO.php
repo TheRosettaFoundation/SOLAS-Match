@@ -82,26 +82,15 @@ class IO
     {
         $projectId = $args['projectId'];
 
-$fff0 = glob(Common\Lib\Settings::get("files.upload_path") . "*");
-error_log(print_r($fff0, true) );
-$fff1 = glob("*");
-error_log(print_r($fff1, true) );
-
-error_log(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (isset($imageFileList[0]))
         {
             $imageFilePath=$imageFileList[0];
-error_log($imageFilePath);
             $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
-error_log("Here");
             $mime = finfo_file($finfo, $imageFilePath);
-error_log($mime);
             finfo_close($finfo);
-error_log("Here2");
             return API\Dispatcher::sendResponse($response, self::setDownloadHeaders($imageFilePath, $mime), null);
         } else {
-error_log("NOT FOUND");
             return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
     }
