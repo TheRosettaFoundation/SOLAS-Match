@@ -82,6 +82,11 @@ class IO
     {
         $projectId = $args['projectId'];
 
+$fff0 = glob(Common\Lib\Settings::get("files.upload_path") . "*");
+error_log(print_r($fff0, true) );
+$fff1 = glob("*");
+error_log(print_r($fff1, true) );
+
 error_log(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
         if (isset($imageFileList[0]))
