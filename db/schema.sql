@@ -741,8 +741,8 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   `viewed-time` DATETIME NOT NULL,
   `task_is_archived` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   KEY `FK_task_viewed_user` (`user_id`),
+  KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
