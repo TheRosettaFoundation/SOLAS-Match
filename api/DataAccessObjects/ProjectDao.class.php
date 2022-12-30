@@ -609,8 +609,6 @@ class ProjectDao
     }
 
     public static function getPhysicalTaskFilePath($project_id, $task_id, $version, $filename) {
-error_log(Common\Lib\Settings::get('files.upload_path'));//(**)
-error_log("proj-$project_id/task-$task_id/v-$version/$filename");//(**)
         $path = file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version/$filename");
         if ($path === false) $path = 'BADPATH';
         return Common\Lib\Settings::get('files.upload_path') . $path;
