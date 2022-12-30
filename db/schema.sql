@@ -9928,7 +9928,7 @@ BEGIN
     INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time, comment)
     VALUES                               (    tID,       sID,        NOW(),       c);
 
-    INSERT INTO possible_completes (project_id)
+    REPLACE INTO possible_completes (project_id)
     VALUES                         ((SELECT project_id FROM Tasks WHERE id=tID));
 END//
 DELIMITER ;
@@ -9957,7 +9957,7 @@ BEGIN
     INSERT INTO tasks_status_audit_trail (task_id, status_id, claimant_id, changed_time, comment)
     VALUES                               (    tID,       sID,         cID,        NOW(),       c);
 
-    INSERT INTO possible_completes (project_id)
+    REPLACE INTO possible_completes (project_id)
     VALUES                         ((SELECT project_id FROM Tasks WHERE id=tID));
 END//
 DELIMITER ;
