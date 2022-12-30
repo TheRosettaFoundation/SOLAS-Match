@@ -405,9 +405,9 @@ CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
 
 
 CREATE TABLE IF NOT EXISTS `AsanaProjects` (
-  project_id INT(10) UNSIGNED NOT NULL,
+  project_id INT UNSIGNED NOT NULL,
   run_time   DATETIME NOT NULL,
-  PRIMARY KEY (run_time),
+  KEY (run_time),
   KEY FK_AsanaProjects_project_id (project_id),
   CONSTRAINT FK_AsanaProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
