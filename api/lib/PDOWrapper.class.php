@@ -193,10 +193,14 @@ class PDOWrapper
         $conn = $db->connection;
         $data = array();
 
-        if ($result = $conn->query($sql)) {
-            foreach ($result as $row) {
-                $data[] = $row;
+        try {
+            if ($result = $conn->query($sql)) {
+                foreach ($result as $row) {
+                    $data[] = $row;
+                }
             }
+        } catch (\PDOExcepton $e) {
+            error_log('PDOExcepton ' . $e->getMessage() . ' ' .  print_r($e->errorInfo, true));
         }
         return empty($data) ? false : $data;
     }
