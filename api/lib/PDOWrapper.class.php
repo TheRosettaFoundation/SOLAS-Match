@@ -194,13 +194,18 @@ class PDOWrapper
         $data = array();
 
         try {
-            if ($result = $conn->query($sql)) {
-                foreach ($result as $row) {
-                    $data[] = $row;
+            try {
+                if ($result = $conn->query($sql)) {
+                    foreach ($result as $row) {
+                        $data[] = $row;
+                    }
                 }
+            } catch (\PDOExcepton $e) {
+                error_log('PDOExcepton ' . $e->getMessage() . ' ' .  print_r($e->errorInfo, true));
             }
-        } catch (\PDOExcepton $e) {
-            error_log('PDOExcepton ' . $e->getMessage() . ' ' .  print_r($e->errorInfo, true));
+        } catch (\Throwable $e) {
+            error_log('PDO Throwable ' . $e->getMessage());
+            error_log($e->getTraceAsString());
         }
         return empty($data) ? false : $data;
     }
