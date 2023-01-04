@@ -202,6 +202,7 @@ class TaskRouteHandler
     {
         global $app, $template_data;
         $user_id = $args['user_id'];
+error_log(print_r($args, true));
         $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedTaskStatus = !empty($args['ts'])      ? $args['ts'] : 3;
@@ -237,6 +238,7 @@ class TaskRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
+error_log('POST' . print_r($post, true));
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
