@@ -203,10 +203,10 @@ class TaskRouteHandler
         global $app, $template_data;
         $user_id = $args['user_id'];
 error_log(print_r($args, true));
-        $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
-        $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
-        $selectedTaskStatus = !empty($args['ts'])      ? $args['ts'] : 3;
-        $selectedOrdering   = !empty($args['o'])       ? $args['o'] : 0;
+        $currentScrollPage  = isset($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType   = isset($args['tt'])      ? $args['tt'] : 0;
+        $selectedTaskStatus = isset($args['ts'])      ? $args['ts'] : 3;
+        $selectedOrdering   = isset($args['o'])       ? $args['o'] : 0;
 
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -255,6 +255,7 @@ error_log('POST' . print_r($post, true));
         $selectedTaskStatus = (int)$selectedTaskStatus;
         $selectedOrdering   = (int)$selectedOrdering;
 
+        error_log("currentScrollPage: $currentScrollPage, selectedTaskType: $selectedTaskType, selectedTaskStatus!!: $selectedTaskStatus, selectedOrdering: $selectedOrdering");
         try {
             $topTasks      = $userDao->getFilteredUserClaimedTasks($user_id, $selectedOrdering, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedTaskStatus);
             $topTasksCount = $userDao->getFilteredUserClaimedTasksCount($user_id, $selectedTaskType, $selectedTaskStatus);
