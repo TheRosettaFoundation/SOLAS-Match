@@ -202,7 +202,6 @@ class TaskRouteHandler
     {
         global $app, $template_data;
         $user_id = $args['user_id'];
-error_log(print_r($args, true));
         $currentScrollPage  = isset($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType   = isset($args['tt'])      ? $args['tt'] : 0;
         $selectedTaskStatus = isset($args['ts'])      ? $args['ts'] : 3;
@@ -238,7 +237,6 @@ error_log(print_r($args, true));
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-error_log('POST' . print_r($post, true));
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
@@ -255,7 +253,6 @@ error_log('POST' . print_r($post, true));
         $selectedTaskStatus = (int)$selectedTaskStatus;
         $selectedOrdering   = (int)$selectedOrdering;
 
-        error_log("currentScrollPage: $currentScrollPage, selectedTaskType: $selectedTaskType, selectedTaskStatus!!: $selectedTaskStatus, selectedOrdering: $selectedOrdering");
         try {
             $topTasks      = $userDao->getFilteredUserClaimedTasks($user_id, $selectedOrdering, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedTaskStatus);
             $topTasksCount = $userDao->getFilteredUserClaimedTasksCount($user_id, $selectedTaskType, $selectedTaskStatus);
