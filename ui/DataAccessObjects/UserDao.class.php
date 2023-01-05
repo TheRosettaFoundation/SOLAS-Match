@@ -344,14 +344,6 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function hasUserRequestedPasswordReset($email)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function getPasswordResetRequestTime($email)
     {
         $ret = null;
@@ -835,10 +827,37 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $ret;
     }
 
-    public function requestPasswordReset($email)
+    public function request_password_reset($email)
+    {
+[[[also del elsewheer
+    public static function createPasswordReset($user)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest";
+        if (!self::hasRequestedPasswordReset($user->getEmail())) {
+            $uid = md5(uniqid(rand()));
+            $ret = self::addPasswordResetRequest($uid, $user->getId());
+        }
+        return $ret;
+    }
+HAVE TO MAKE SURE USER EXISTS
+OTHER PASSWORD DELETE??
+[[[[
+    public static function addPasswordResetRequest($unique_id, $user_id)
+    {
+        $args = Lib\PDOWrapper::cleanseWrapStr($unique_id).",".
+            Lib\PDOWrapper::cleanse($user_id);
+        $result = Lib\PDOWrapper::call("addPasswordResetRequest", $args);
+
+        if ($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+]]]]
+]]]
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/email/$email/send_password_reset_verification";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $ret;
     }

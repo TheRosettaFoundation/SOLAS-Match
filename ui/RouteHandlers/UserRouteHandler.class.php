@@ -58,7 +58,7 @@ class UserRouteHandler
 
         $app->map(['GET', 'POST'],
             '/password/reset[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passResetRequest')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:request_password_reset')
             ->setName('password-reset-request');
 
         $app->get(
@@ -657,7 +657,7 @@ class UserRouteHandler
         return UserRouteHandler::render("user/password-reset.tpl", $response);
     }
 
-    public function passResetRequest(Request $request, Response $response)
+    public function request_password_reset(Request $request, Response $response)
     {
         global $app, $template_data;
         $userDao = new DAO\UserDao();
@@ -666,12 +666,7 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
-                    $email = $post['email_address'];
-                    $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($email);
-                    $message = "";
-                    if (!$hasUserRequestedPwReset) {
-                        //send request
-                        if ($userDao->requestPasswordReset($email)) {
+                        if ($userDao->request_password_reset($post['email_address'])) {
                             UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
@@ -681,17 +676,6 @@ class UserRouteHandler
                                     "address correctly?"
                             );
                         }
-                    } else {
-                        $response_dao = $userDao->getPasswordResetRequestTime($email);
-                        if ($response_dao != null) {
-                            UserRouteHandler::flashNow(
-                                "info",
-                                Lib\Localisation::getTranslation('user_reset_password_3'),
-                                $response_dao
-                            );
-                            $userDao->requestPasswordReset($email);
-                        }
-                    }
                 } else {
                     UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }

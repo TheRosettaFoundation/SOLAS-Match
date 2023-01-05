@@ -248,17 +248,13 @@ class Users
             '\SolasMatch\API\V0\Users:getPasswordResetRequestTime');
 
         $app->get(
-            '/api/v0/users/email/{email}/passwordResetRequest/',
-            '\SolasMatch\API\V0\Users:hasUserRequestedPasswordReset');
-
-        $app->get(
             '/api/v0/users/email/{email}/getBannedComment/',
             '\SolasMatch\API\V0\Users:getBannedComment')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateIsUserBanned');
 
         $app->post(
-            '/api/v0/users/email/{email}/passwordResetRequest/',
-            '\SolasMatch\API\V0\Users:createPasswordResetRequest');
+            '/api/v0/users/email/{email}/send_password_reset_verification/',
+            '\SolasMatch\API\V0\Users:send_password_reset_verification');
 
         $app->delete(
             '/api/v0/users/removeSecondaryLanguage/{userId}/{languageCode}/{countryCode}/',
@@ -840,23 +836,14 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, $resetRequest->getRequestTime(), null);
     }
 
-    public static function hasUserRequestedPasswordReset(Request $request, Response $response, $args)
-    {
-        $email = $args['email'];
-        $data = DAO\UserDao::hasRequestedPasswordReset($email) ? 1 : 0;
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function createPasswordResetRequest(Request $request, Response $response, $args)
+    public static function send_password_reset_verification(Request $request, Response $response, $args)
     {
         $email = $args['email'];
         $user = DAO\UserDao::getUser(null, $email);
         if ($user) {
             Lib\Notify::sendPasswordResetEmail($user->getId());
-            return API\Dispatcher::sendResponse($response, DAO\UserDao::createPasswordReset($user), null);
-        } else {
-            return API\Dispatcher::sendResponse($response, null, null);
         }
+        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function deleteSecondaryLanguage(Request $request, Response $response, $args)

@@ -607,32 +607,6 @@ class UserDao
         return $ret;
     }
 
-    public static function createPasswordReset($user)
-    {
-        $ret = null;
-        if (!self::hasRequestedPasswordReset($user->getEmail())) {
-            $uid = md5(uniqid(rand()));
-            $ret = self::addPasswordResetRequest($uid, $user->getId());
-        }
-        return $ret;
-    }
-    
-    /*
-        Add password reset request to DB for this user
-    */
-    public static function addPasswordResetRequest($unique_id, $user_id)
-    {
-        $args = Lib\PDOWrapper::cleanseWrapStr($unique_id).",".
-            Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("addPasswordResetRequest", $args);
-        
-        if ($result) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
-    }
-
     public static function removePasswordResetRequest($user_id)
     {
         $args = Lib\PDOWrapper::cleanse($user_id);
