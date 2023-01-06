@@ -7,8 +7,6 @@ use \SolasMatch\Common\Protobufs\Emails as Emails;
 
 require_once __DIR__."/../protobufs/models/MembershipRequest.php";
 require_once __DIR__."/../protobufs/models/ArchivedTask.php";
-require_once __DIR__."/../protobufs/models/PasswordResetRequest.php";
-require_once __DIR__."/../protobufs/models/PasswordReset.php";
 require_once __DIR__."/../protobufs/models/Register.php";
 require_once __DIR__."/../protobufs/models/Country.php";
 require_once __DIR__."/../protobufs/models/Language.php";
@@ -50,12 +48,6 @@ class ModelFactory
                 break;
             case "ArchivedTask":
                 $ret = self::generateArchivedTask($modelData);
-                break;
-            case "PasswordReset":
-                $ret = self::generatePasswordReset($modelData);
-                break;
-            case "PasswordResetRequest":
-                $ret = self::generatePasswordResetRequest($modelData);
                 break;
             case "Register":
                 $ret = self::generateRegister($modelData);
@@ -259,37 +251,6 @@ class ModelFactory
             $ret->setArchivedDate($modelData['archivedDate']);
         }
         
-        return $ret;
-    }
-
-    private static function generatePasswordReset($modelData)
-    {
-        $ret = new Models\PasswordReset();
-        
-        if (isset($modelData['password'])) {
-            $ret->setPassword($modelData['password']);
-        }
-        if (isset($modelData['key'])) {
-            $ret->setKey($modelData['key']);
-        }
-
-        return $ret;
-    }
-
-    private static function generatePasswordResetRequest($modelData)
-    {
-        $ret = new Models\PasswordResetRequest();
-
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
-        }
-        if (isset($modelData['key'])) {
-            $ret->setKey($modelData['key']);
-        }
-        if (isset($modelData['requestTime'])) {
-            $ret->setRequestTime($modelData['requestTime']);
-        }
-
         return $ret;
     }
 

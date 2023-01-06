@@ -11,8 +11,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Login.php";
-require_once __DIR__ . "/../../Common/protobufs/models/PasswordResetRequest.php";
-require_once __DIR__ . "/../../Common/protobufs/models/PasswordReset.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Locale.php";
 
 class UserRouteHandler
@@ -624,13 +622,11 @@ class UserRouteHandler
 
         $userDao = new DAO\UserDao();
 
-        $reset_request = $userDao->getPasswordResetRequest($uid);
-        if (!is_object($reset_request)) {
+        if (!$userDao->get_password_reset_request_by_uid($uid)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
-        $user_id = $reset_request->getUserId();
         $template_data = array_merge($template_data, ['uid' => $uid]);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();

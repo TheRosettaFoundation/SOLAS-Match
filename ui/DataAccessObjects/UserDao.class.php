@@ -344,14 +344,6 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getPasswordResetRequestTime($email)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest/time";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function leaveOrganisation($userId, $orgId)
     {
         $ret = null;
@@ -827,50 +819,6 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $ret;
     }
 
-    public function request_password_reset($email)
-    {
-        $results = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
-        if (empty($results)) return 0;
-        $user_id = $results[0]['id'];
-[[
-[[[
-OTHER PASSWORD DELETE??
-COUNT????????????????????????????????????????????????????
-PROVIDE ADMIN ACCESS TO LINK!
-]]]
-DROP PROCEDURE IF EXISTS `get_password_reset_request`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
-BEGIN
-    SELECT *
-    FROM PasswordResetRequests
-    WHERE user_id=uID;
-END//
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uid`(IN UID CHAR(40))
-BEGIN
-    SELECT *
-    FROM PasswordResetRequests
-    WHERE BINARY uid=UID;
-END//
-DELIMITER ;
-
-  `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `request-time` datetime DEFAULT NULL,
-]]
-        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($results)) {
-            LibAPI\PDOWrapper::call('addPasswordResetRequest', LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
-        }
-        $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        return 1;
-    }
-
     public function trackProject($userId, $projectId)
     {
         $ret = null;
@@ -1004,12 +952,24 @@ DELIMITER ;
         return $user;
     }
 
-    public function getPasswordResetRequest($key)
+    public function get_password_reset_request_by_uid($uid)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/passwordReset/$key";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\PasswordResetRequest", $request);
-        return $ret;
+        return LibAPI\PDOWrapper::call('get_password_reset_request_by_uid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uid));
+    }
+
+    public function request_password_reset($email)
+    {
+        $results = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+        if (empty($results)) return 0;
+        $user_id = $results[0]['id'];
+
+        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($results)) {
+            LibAPI\PDOWrapper::call('addPasswordResetRequest', LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+        }
+        $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        return 1;
     }
 
     public function resetPassword($password, $uid)

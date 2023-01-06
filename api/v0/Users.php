@@ -12,8 +12,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
-require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
-require_once __DIR__."/../../Common/protobufs/models/PasswordReset.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
@@ -244,10 +242,6 @@ class Users
             '\SolasMatch\API\V0\Users:finishRegistrationManually');
 
         $app->get(
-            '/api/v0/users/email/{email}/passwordResetRequest/time/',
-            '\SolasMatch\API\V0\Users:getPasswordResetRequestTime');
-
-        $app->get(
             '/api/v0/users/email/{email}/getBannedComment/',
             '\SolasMatch\API\V0\Users:getBannedComment')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateIsUserBanned');
@@ -320,10 +314,6 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:registerValidation');
 
         $app->get(
-            '/api/v0/users/passwordReset/{key}/',
-            '\SolasMatch\API\V0\Users:getResetRequest');
-
-        $app->get(
             '/api/v0/users/getCurrentUser/',
             '\SolasMatch\API\V0\Users:getCurrentUser');
 
@@ -334,15 +324,6 @@ class Users
         $app->post(
             '/api/v0/users/login/',
             '\SolasMatch\API\V0\Users:login');
-
-        $app->get(
-            '/api/v0/users/passwordReset/',
-            '\SolasMatch\API\V0\Users:getResetTemplate')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->post(
-            '/api/v0/users/passwordReset/',
-            '\SolasMatch\API\V0\Users:resetPassword');
 
         $app->get(
             '/api/v0/users/register/',
@@ -829,13 +810,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
-    public static function getPasswordResetRequestTime(Request $request, Response $response, $args)
-    {
-        $email = $args['email'];
-        $resetRequest = DAO\UserDao::getPasswordResetRequests($email);
-        return API\Dispatcher::sendResponse($response, $resetRequest->getRequestTime(), null);
-    }
-
     public static function send_password_reset_verification(Request $request, Response $response, $args)
     {
         Lib\Notify::sendPasswordResetEmail($args['user_id']);
@@ -995,13 +969,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getResetRequest(Request $request, Response $response, $args)
-    {
-        $key = $args['key'];
-        $data = DAO\UserDao::getPasswordResetRequests(null, $key);
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
     public static function getCurrentUser(Request $request, Response $response)
     {
         $user = DAO\UserDao::getLoggedInUser();
@@ -1044,21 +1011,6 @@ error_log("userClaimTask($userId, $taskId)");
         } catch (\Exception $e) {
             return API\Dispatcher::sendResponse($response, $e->getMessage(), Common\Enums\HttpStatusEnum::UNAUTHORIZED);
         }
-    }
-
-    public static function getResetTemplate(Request $request, Response $response)
-    {
-        $data = Common\Lib\ModelFactory::buildModel("PasswordReset", array());
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function resetPassword(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\PasswordReset');
-        $result = DAO\UserDao::passwordReset($data->getPassword(), $data->getKey());
-        return API\Dispatcher::sendResponse($response, $result, null);
     }
 
     public static function getRegisterTemplate(Request $request, Response $response)

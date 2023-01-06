@@ -2653,6 +2653,28 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `get_password_reset_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT *
+    FROM PasswordResetRequests
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uid`(IN UID CHAR(40))
+BEGIN
+    SELECT *
+    FROM PasswordResetRequests
+    WHERE BINARY uid=UID;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))

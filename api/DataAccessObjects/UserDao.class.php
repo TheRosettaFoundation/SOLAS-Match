@@ -41,19 +41,6 @@ class UserDao
         return self::save($user);
     }
 
-    public static function changePassword($user_id, $password)
-    {
-        $user = self::getUsers($user_id);
-
-        $nonce = Common\Lib\Authentication::generateNonce();
-        $pass = Common\Lib\Authentication::hashPassword($password, $nonce);
-
-        $user[0]->setNonce($nonce);
-        $user[0]->setPassword($pass);
-
-        return self::save($user[0]);
-    }
-
     public static function save($user)
     {
         $userId = $user->getId();
@@ -607,58 +594,6 @@ class UserDao
         return $ret;
     }
 
-    public static function removePasswordResetRequest($user_id)
-    {
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("removePasswordResetRequest", $args);
-        
-        if ($result) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
-    }
-
-    /*
-        Check if a user has requested a password reset
-    */
-    public static function hasRequestedPasswordReset($email)
-    {
-        if (self::getPasswordResetRequests($email)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /*
-        Get Password Reset Requests
-    */
-    public static function getPasswordResetRequests($email, $uniqueId = null)
-    {
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($uniqueId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($email);
-        $result = Lib\PDOWrapper::call("getPasswordResetRequests", $args);
-        if ($result) {
-            return Common\Lib\ModelFactory::buildModel("PasswordResetRequest", $result[0]);
-        } else {
-            return null;
-        }
-    }
-
-    public static function passwordReset($password, $key)
-    {
-        $reset_request = self::getPasswordResetRequests(null, $key);
-        if (is_null($reset_request->getUserId())) {
-            return 0;
-        } elseif (self::changePassword($reset_request->getUserId(), $password)) {
-            self::removePasswordResetRequest($reset_request->getUserId());
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    
     public static function getTrackedProjects($user_id)
     {
         $args = Lib\PDOWrapper::cleanse($user_id);
