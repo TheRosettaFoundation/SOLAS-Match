@@ -253,7 +253,7 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authenticateIsUserBanned');
 
         $app->post(
-            '/api/v0/users/email/{email}/send_password_reset_verification/',
+            '/api/v0/users/email/{user_id}/send_password_reset_verification/',
             '\SolasMatch\API\V0\Users:send_password_reset_verification');
 
         $app->delete(
@@ -838,11 +838,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function send_password_reset_verification(Request $request, Response $response, $args)
     {
-        $email = $args['email'];
-        $user = DAO\UserDao::getUser(null, $email);
-        if ($user) {
-            Lib\Notify::sendPasswordResetEmail($user->getId());
-        }
+        Lib\Notify::sendPasswordResetEmail($args['user_id']);
         return API\Dispatcher::sendResponse($response, null, null);
     }
 

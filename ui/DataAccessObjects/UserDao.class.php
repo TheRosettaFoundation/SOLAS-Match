@@ -829,37 +829,46 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function request_password_reset($email)
     {
-[[[also del elsewheer
-    public static function createPasswordReset($user)
-    {
-        $ret = null;
-        if (!self::hasRequestedPasswordReset($user->getEmail())) {
-            $uid = md5(uniqid(rand()));
-            $ret = self::addPasswordResetRequest($uid, $user->getId());
-        }
-        return $ret;
-    }
-HAVE TO MAKE SURE USER EXISTS
+        $results = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+        if (empty($results)) return 0;
+        $user_id = $results[0]['id'];
+[[
+[[[
 OTHER PASSWORD DELETE??
-[[[[
-    public static function addPasswordResetRequest($unique_id, $user_id)
-    {
-        $args = Lib\PDOWrapper::cleanseWrapStr($unique_id).",".
-            Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("addPasswordResetRequest", $args);
-
-        if ($result) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
-    }
-]]]]
+COUNT????????????????????????????????????????????????????
+PROVIDE ADMIN ACCESS TO LINK!
 ]]]
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/email/$email/send_password_reset_verification";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        return $ret;
+DROP PROCEDURE IF EXISTS `get_password_reset_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT *
+    FROM PasswordResetRequests
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uid`(IN UID CHAR(40))
+BEGIN
+    SELECT *
+    FROM PasswordResetRequests
+    WHERE BINARY uid=UID;
+END//
+DELIMITER ;
+
+  `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `request-time` datetime DEFAULT NULL,
+]]
+        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($results)) {
+            LibAPI\PDOWrapper::call('addPasswordResetRequest', LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+        }
+        $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        return 1;
     }
 
     public function trackProject($userId, $projectId)
@@ -1003,15 +1012,18 @@ OTHER PASSWORD DELETE??
         return $ret;
     }
 
-    public function resetPassword($password, $key)
+    public function resetPassword($password, $uid)
     {
-        $ret = null;
-        $passwordReset = new Common\Protobufs\Models\PasswordReset();
-        $passwordReset->setPassword($password);
-        $passwordReset->setKey($key);
-        $request = "{$this->siteApi}v0/users/passwordReset";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $passwordReset);
-        return $ret;
+        $results = LibAPI\PDOWrapper::call('get_password_reset_request_by_uid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uid));
+        if (empty($results)) return 0;
+        $results = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanse($results[0]['user_id']) . ',null,null,null,null,null,null,null,null');
+        if (empty($results)) return 0;
+
+        $user = Common\Lib\ModelFactory::buildModel('User', $results[0]);
+        $user->setNonce(Common\Lib\Authentication::generateNonce());
+        $user->setPassword(Common\Lib\Authentication::hashPassword($password, $nonce));
+        $this->saveUser($user)
+        return 1;
     }
 
     public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
