@@ -2353,6 +2353,9 @@ error_log("result: $result");//(**)
             $howheard = $howheard[0];
         }
 
+        $uid = 0;
+        if ($isSiteAdmin) $uid = $userDao->get_password_reset_request_uid($user_id);
+
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'user_badges'            => $userDao->get_points_for_badges($user_id),
@@ -2377,6 +2380,7 @@ error_log("result: $result");//(**)
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
             'show_create_memsource_user'      => $show_create_memsource_user,
+            'uid' => $uid,
         ));
 
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);

@@ -986,6 +986,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
+    public function get_password_reset_request_uid($user_id)
+    {
+        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($results)) return 0;
+        return $results[0]['uid'];
+    }
+
     public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
     {
         $ret = null;
