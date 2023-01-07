@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
+DELDEL(**)CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `request-time` datetime DEFAULT NULL,
@@ -1443,7 +1443,7 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
+(**)DELDROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
 BEGIN
@@ -2636,7 +2636,7 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
+(**)DELDROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
 BEGIN
@@ -2653,7 +2653,7 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `get_password_reset_request`;
+(**)DELDROP PROCEDURE IF EXISTS `get_password_reset_request`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
 BEGIN
@@ -2664,7 +2664,7 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
+(**)DELDROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uid`(IN UID CHAR(40))
 BEGIN
@@ -4751,7 +4751,7 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
+(**)DEL DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
 BEGIN

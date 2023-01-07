@@ -50,7 +50,7 @@ class UserRouteHandler
             ->setName('email-verification');
 
         $app->map(['GET', 'POST'],
-            '/{uid}/password/reset[/]',
+            '/{uuid}/password/reset[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
             ->setName('password-reset');
 
@@ -618,16 +618,16 @@ class UserRouteHandler
     public function passwordReset(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $uid = $args['uid'];
+        $uuid = $args['uuid'];
 
         $userDao = new DAO\UserDao();
 
-        if (!$userDao->get_password_reset_request_by_uid($uid)) {
+        if (!$userDao->get_password_reset_request_by_uuid($uuid)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
-        $template_data = array_merge($template_data, ['uid' => $uid]);
+        $template_data = array_merge($template_data, ['uuid' => $uuid]);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -636,7 +636,7 @@ class UserRouteHandler
                     isset($post['confirmation_password']) &&
                     $post['confirmation_password'] == $post['new_password']
                 ) {
-                    $response_dao = $userDao->resetPassword($post['new_password'], $uid);
+                    $response_dao = $userDao->resetPassword($post['new_password'], $uuid);
                     if ($response_dao) {
                         UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
@@ -2356,8 +2356,8 @@ error_log("result: $result");//(**)
             $howheard = $howheard[0];
         }
 
-        $uid = 0;
-        if ($isSiteAdmin) $uid = $userDao->get_password_reset_request_uid($user_id);
+        $uuid = 0;
+        if ($isSiteAdmin) $uuid = $userDao->get_password_reset_request_uuid($user_id);
 
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
@@ -2383,7 +2383,7 @@ error_log("result: $result");//(**)
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
             'show_create_memsource_user'      => $show_create_memsource_user,
-            'uid' => $uid,
+            'uuid' => $uuid,
         ));
 
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);

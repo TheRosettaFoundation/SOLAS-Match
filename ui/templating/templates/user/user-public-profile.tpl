@@ -107,10 +107,10 @@
                             </tr>
                         {/if}
                         {if $isSiteAdmin}
-                            {if !empty($uid)}
+                            {if !empty($uuid)}
                             <tr>
                                 <td>
-                                    <a href='{urlFor name="password-reset" options="uid.$uid"}' class='pull-right btn btn-primary'>
+                                    <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class='pull-right btn btn-primary'>
                                         <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
                                     </a>
                                 </td>

@@ -952,9 +952,9 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $user;
     }
 
-    public function get_password_reset_request_by_uid($uid)
+    public function get_password_reset_request_by_uuid($uuid)
     {
-        return LibAPI\PDOWrapper::call('get_password_reset_request_by_uid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uid));
+        return LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));
     }
 
     public function request_password_reset($email)
@@ -967,14 +967,17 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         if (empty($results)) {
             LibAPI\PDOWrapper::call('addPasswordResetRequest', LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         }
+[[
+                        } elseif ($success == -1) TOO MANY
+]]
         $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return 1;
     }
 
-    public function resetPassword($password, $uid)
+    public function resetPassword($password, $uuid)
     {
-        $results = LibAPI\PDOWrapper::call('get_password_reset_request_by_uid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uid));
+        $results = LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));
         if (empty($results)) return 0;
         $results = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanse($results[0]['user_id']) . ',null,null,null,null,null,null,null,null');
         if (empty($results)) return 0;
@@ -986,11 +989,11 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return 1;
     }
 
-    public function get_password_reset_request_uid($user_id)
+    public function get_password_reset_request_uuid($user_id)
     {
         $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($results)) return 0;
-        return $results[0]['uid'];
+        return $results[0]['uuid'];
     }
 
     public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
