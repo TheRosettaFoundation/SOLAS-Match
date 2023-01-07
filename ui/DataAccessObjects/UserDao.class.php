@@ -965,11 +965,12 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
         $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($results)) {
-            LibAPI\PDOWrapper::call('addPasswordResetRequest', LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+            LibAPI\PDOWrapper::call('add_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
         }
-[[
-                        } elseif ($success == -1) TOO MANY
-]]
+
+        $results = LibAPI\PDOWrapper::call('update_password_reset_request_count', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!$results[0]['result']) return -1; // Too many requests, DOS?
+
         $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return 1;
