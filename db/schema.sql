@@ -302,12 +302,14 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-DELDEL(**)CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
-  `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `request-time` datetime DEFAULT NULL,
-  UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE IF NOT EXISTS `password_reset_requests` (
+  user_id    INT UNSIGNED NOT NULL,
+  uuid       BINARY(40) NOT NULL,
+  sent_time  DATETIME NOT NULL,
+  sent_count INT UNSIGNED NOT NULL DEFAULT 0,
+  UNIQUE KEY user_id (user_id),
+  UNIQUE KEY uuid (uuid),
+  CONSTRAINT `FK_password_reset_requests_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -1439,16 +1441,6 @@ else
   select 0 as result;
 end if;
 
-END//
-DELIMITER ;
-
-
-(**)DELDROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
-BEGIN
-    INSERT INTO PasswordResetRequests (uid, user_id, `request-time`) VALUES (uniqueId,userId,NOW());
-    SELECT 1 AS result;
 END//
 DELIMITER ;
 
@@ -2636,41 +2628,58 @@ END//
 DELIMITER ;
 
 
-(**)DELDROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
+DROP PROCEDURE IF EXISTS `add_password_reset_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_password_reset_request`(IN uID INT UNSIGNED, IN UUID BINARY(40))
 BEGIN
-    if unique_id='' then set unique_id=null;end if;
-    if email='' then set email=null;end if;
-    
-    SELECT p.user_id, p.uid as 'key', p.`request-time` as requestTime 
-        FROM PasswordResetRequests p 
-        WHERE (unique_id is null or p.uid = unique_id)
-        and (email is null or p.user_id IN
-                (SELECT id FROM Users u WHERE email = u.email));
-
+    INSERT INTO password_reset_requests (user_id, uuid, sent_time) VALUES (uID, UUID, NOW());
 END//
 DELIMITER ;
 
 
-(**)DELDROP PROCEDURE IF EXISTS `get_password_reset_request`;
+DROP PROCEDURE IF EXISTS `update_password_reset_request_count`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_password_reset_request_count`(IN uID INT UNSIGNED)
+BEGIN
+    UPDATE password_reset_requests SET sent_count=sent_count + 1 WHERE user_id=uID;
+
+    SELECT
+        DATE_ADD(sent_time, INTERVAL 1 DAY) < NOW(),
+        sent_count
+        INTO @day_old, @count
+    FROM password_reset_requests
+    WHERE user_id=uID;
+
+    IF @day_old THEN
+        UPDATE password_reset_requests SET sent_time=NOW(), sent_count=0 WHERE user_id=uID;
+        SELECT 1 AS result;
+    ELSEIF @count<=4 THEN
+        SELECT 1 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `get_password_reset_request`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
 BEGIN
     SELECT *
-    FROM PasswordResetRequests
+    FROM password_reset_requests
     WHERE user_id=uID;
 END//
 DELIMITER ;
 
 
-(**)DELDROP PROCEDURE IF EXISTS `get_password_reset_request_by_uid`;
+DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uuid`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uid`(IN UID CHAR(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uuid`(IN UUID BINARY(40))
 BEGIN
     SELECT *
-    FROM PasswordResetRequests
-    WHERE BINARY uid=UID;
+    FROM password_reset_requests
+    WHERE uuid=UUID;
 END//
 DELIMITER ;
 
@@ -4747,21 +4756,6 @@ BEGIN
   ELSE
     SELECT 0 AS result;
   END IF;
-END//
-DELIMITER ;
-
-
-(**)DEL DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
-BEGIN
-  IF EXISTS (SELECT 1 FROM PasswordResetRequests p WHERE p.user_id = userId) THEN
-    DELETE FROM PasswordResetRequests
-      WHERE user_id = userId;
-      SELECT 1 AS result;
-   ELSE
-     SELECT 0 AS result;
-   END IF;   
 END//
 DELIMITER ;
 
