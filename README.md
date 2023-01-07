@@ -39,6 +39,15 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 12.3
+
+- The password reset mechanism has been simplified.
+  - Multiple password reset emails will now be sent when requested (not just one).
+  - These will all be identical, so any of the identical links can be used (this is to avoid user confusion). THE C++ code has been updated to allow identical emails to go out in this case.
+  - However there will be a limit of 4 emails a day to avoid possible spamming.
+  - If a user requests a password reset before they have acted on the verification email from registration (and users seem to do this), completing password reset will act as a substitute (verifying the user's email).
+  - There is a button in user's profile (visible only to admins and only if the user has requested a reset) which says "Link emailed to User for Password Reset". Clicking on this will bring up the link which can be sent to a user having trouble. Or could be used to reset a password on a user's behalf.
+
 ## Version 12.2
 
 - Edited project deadlines are now sent to Phrase.

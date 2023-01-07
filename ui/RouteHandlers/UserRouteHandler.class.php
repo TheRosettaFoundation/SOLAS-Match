@@ -11,8 +11,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Login.php";
-require_once __DIR__ . "/../../Common/protobufs/models/PasswordResetRequest.php";
-require_once __DIR__ . "/../../Common/protobufs/models/PasswordReset.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Locale.php";
 
 class UserRouteHandler
@@ -52,13 +50,13 @@ class UserRouteHandler
             ->setName('email-verification');
 
         $app->map(['GET', 'POST'],
-            '/{uid}/password/reset[/]',
+            '/{uuid}/password/reset[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
             ->setName('password-reset');
 
         $app->map(['GET', 'POST'],
             '/password/reset[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passResetRequest')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:request_password_reset')
             ->setName('password-reset-request');
 
         $app->get(
@@ -620,18 +618,16 @@ class UserRouteHandler
     public function passwordReset(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $uid = $args['uid'];
+        $uuid = $args['uuid'];
 
         $userDao = new DAO\UserDao();
 
-        $reset_request = $userDao->getPasswordResetRequest($uid);
-        if (!is_object($reset_request)) {
+        if (!$userDao->get_password_reset_request_by_uuid($uuid)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
-        $user_id = $reset_request->getUserId();
-        $template_data = array_merge($template_data, ['uid' => $uid]);
+        $template_data = array_merge($template_data, ['uuid' => $uuid]);
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -640,7 +636,7 @@ class UserRouteHandler
                     isset($post['confirmation_password']) &&
                     $post['confirmation_password'] == $post['new_password']
                 ) {
-                    $response_dao = $userDao->resetPassword($post['new_password'], $uid);
+                    $response_dao = $userDao->resetPassword($post['new_password'], $uuid);
                     if ($response_dao) {
                         UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
@@ -657,7 +653,7 @@ class UserRouteHandler
         return UserRouteHandler::render("user/password-reset.tpl", $response);
     }
 
-    public function passResetRequest(Request $request, Response $response)
+    public function request_password_reset(Request $request, Response $response)
     {
         global $app, $template_data;
         $userDao = new DAO\UserDao();
@@ -666,14 +662,12 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
-                    $email = $post['email_address'];
-                    $hasUserRequestedPwReset = $userDao->hasUserRequestedPasswordReset($email);
-                    $message = "";
-                    if (!$hasUserRequestedPwReset) {
-                        //send request
-                        if ($userDao->requestPasswordReset($email)) {
+                        $success = $userDao->request_password_reset($post['email_address']);
+                        if ($success == 1) {
                             UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
+                        } elseif ($success == -1) {
+                            UserRouteHandler::flashNow('error', 'This email has requested too many password resets in 24 hours, please check the emails that were previously sent to you.');
                         } else {
                             UserRouteHandler::flashNow(
                                 "error",
@@ -681,17 +675,6 @@ class UserRouteHandler
                                     "address correctly?"
                             );
                         }
-                    } else {
-                        $response_dao = $userDao->getPasswordResetRequestTime($email);
-                        if ($response_dao != null) {
-                            UserRouteHandler::flashNow(
-                                "info",
-                                Lib\Localisation::getTranslation('user_reset_password_3'),
-                                $response_dao
-                            );
-                            $userDao->requestPasswordReset($email);
-                        }
-                    }
                 } else {
                     UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }
@@ -2373,6 +2356,9 @@ error_log("result: $result");//(**)
             $howheard = $howheard[0];
         }
 
+        $uuid = 0;
+        if ($isSiteAdmin) $uuid = $userDao->get_password_reset_request_uuid($user_id);
+
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'user_badges'            => $userDao->get_points_for_badges($user_id),
@@ -2397,6 +2383,7 @@ error_log("result: $result");//(**)
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
             'show_create_memsource_user'      => $show_create_memsource_user,
+            'uuid' => $uuid,
         ));
 
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
