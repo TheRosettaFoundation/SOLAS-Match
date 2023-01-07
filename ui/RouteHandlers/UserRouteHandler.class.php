@@ -662,9 +662,12 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             if (isset($post['password_reset'])) {
                 if (isset($post['email_address']) && $post['email_address'] != '') {
-                        if ($userDao->request_password_reset($post['email_address'])) {
+                        $success = $userDao->request_password_reset($post['email_address']);
+                        if ($success == 1) {
                             UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
+                        } elseif ($success == -1) {
+                            UserRouteHandler::flashNow('error', 'This email has requested too many password resets in 24 hours, please check the emails that were previously sent to you.');
                         } else {
                             UserRouteHandler::flashNow(
                                 "error",
