@@ -111,7 +111,7 @@
                             <tr>
                                 <td>
                                     <a href='{urlFor name="password-reset" options="uid.$uid"}' class='pull-right btn btn-primary'>
-                                        <i class="icon-list icon-white"></i> Reset Password for User
+                                        <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
                                     </a>
                                 </td>
                             </tr>
