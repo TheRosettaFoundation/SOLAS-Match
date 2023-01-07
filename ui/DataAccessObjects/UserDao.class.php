@@ -980,13 +980,16 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     {
         $results = LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));
         if (empty($results)) return 0;
-        $results = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanse($results[0]['user_id']) . ',null,null,null,null,null,null,null,null');
+        $user_id = $results[0]['user_id'];
+        $results = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null');
         if (empty($results)) return 0;
 
         $user = Common\Lib\ModelFactory::buildModel('User', $results[0]);
         $user->setNonce(Common\Lib\Authentication::generateNonce());
         $user->setPassword(Common\Lib\Authentication::hashPassword($password, $nonce));
         $this->saveUser($user)
+
+        LibAPI\PDOWrapper::call('finishRegistration', LibAPI\PDOWrapper::cleanse($user_id)); // Just in case user is tring to do registration and also password reset... they have proved ownership of email
         return 1;
     }
 
