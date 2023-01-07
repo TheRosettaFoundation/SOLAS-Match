@@ -987,7 +987,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $user = Common\Lib\ModelFactory::buildModel('User', $results[0]);
         $user->setNonce(Common\Lib\Authentication::generateNonce());
         $user->setPassword(Common\Lib\Authentication::hashPassword($password, $nonce));
-        $this->saveUser($user)
+        $this->saveUser($user);
 
         LibAPI\PDOWrapper::call('finishRegistration', LibAPI\PDOWrapper::cleanse($user_id)); // Just in case user is tring to do registration and also password reset... they have proved ownership of email
         return 1;
