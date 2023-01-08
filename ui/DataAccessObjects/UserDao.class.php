@@ -13,6 +13,7 @@ require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
+require_once __DIR__ . '/../../Common/lib/Authentication.class.php';
 
 
 class UserDao extends BaseDao
