@@ -10409,6 +10409,16 @@ DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 
+DROP TRIGGER IF EXISTS `onDeleteFromRegisteredUsers`;
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
+DELIMITER //
+CREATE TRIGGER `onDeleteFromRegisteredUsers` AFTER DELETE ON `RegisteredUsers` FOR EACH ROW BEGIN
+  INSERT INTO oauth_clients (id, secret, name) SELECT id, `password`, `display-name` FROM Users WHERE id = old.user_id;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+
 /*---------------------------------------end of triggers-------------------------------------------*/
 
 
