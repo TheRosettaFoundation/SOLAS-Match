@@ -2651,7 +2651,7 @@ BEGIN
     WHERE user_id=uID;
 
     IF @day_old THEN
-        UPDATE password_reset_requests SET sent_time=NOW(), sent_count=0 WHERE user_id=uID;
+        UPDATE password_reset_requests SET sent_time=NOW(), sent_count=1 WHERE user_id=uID;
         SELECT 1 AS result;
     ELSEIF @count<=4 THEN
         SELECT 1 AS result;
