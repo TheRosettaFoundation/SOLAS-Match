@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
 
 CREATE TABLE IF NOT EXISTS `password_reset_requests` (
   user_id    INT UNSIGNED NOT NULL,
-  uuid       BINARY(40) NOT NULL,
+  uuid       BINARY(32) NOT NULL,
   sent_time  DATETIME NOT NULL,
   sent_count INT UNSIGNED NOT NULL DEFAULT 0,
   UNIQUE KEY user_id (user_id),
@@ -2630,7 +2630,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `add_password_reset_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_password_reset_request`(IN uID INT UNSIGNED, IN ID BINARY(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_password_reset_request`(IN uID INT UNSIGNED, IN ID BINARY(32))
 BEGIN
     INSERT INTO password_reset_requests (user_id, uuid, sent_time) VALUES (uID, ID, NOW());
 END//
@@ -2675,7 +2675,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uuid`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uuid`(IN ID BINARY(40))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uuid`(IN ID BINARY(32))
 BEGIN
     SELECT *
     FROM password_reset_requests
