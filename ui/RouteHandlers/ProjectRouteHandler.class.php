@@ -1955,12 +1955,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
                     // https://app.asana.com/0/1200067882657242/board
-error_log("input: $pm");
-$TEMP_TWB_to_CLEAR_email = $projectDao->get_TEMP_TWB_to_CLEAR_email();
-foreach ($TEMP_TWB_to_CLEAR_email as $TWB_to_CLEAR_email) {
-    if ($TWB_to_CLEAR_email['TWB_email'] == $pm) $pm = $TWB_to_CLEAR_email['CLEAR_email'];
-}
-error_log("mapped: $pm");
                     if ($create) {
                         $target_name_asana = $targetLocale;
                         if (!empty($selections[$targetLocale_code])) $target_name_asana = $selections[$targetLocale_code];

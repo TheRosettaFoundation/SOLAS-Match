@@ -1349,11 +1349,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $get_task_type_details;
     }
 
-    public function get_TEMP_TWB_to_CLEAR_email()
-    {
-        return LibAPI\PDOWrapper::call('get_TEMP_TWB_to_CLEAR_email', '');
-    }
-
     public function set_taskclaims_required_to_make_claimable($task_id, $claimable_task_id, $project_id)
     {
         LibAPI\PDOWrapper::call('set_taskclaims_required_to_make_claimable', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($claimable_task_id) . ',' . LibAPI\PDOWrapper::cleanse($project_id));
