@@ -1305,6 +1305,8 @@ CREATE TABLE IF NOT EXISTS `post_login_messages` (
   `show`     INT(10) UNSIGNED NOT NULL,
   date_shown DATETIME NOT NULL,
   message    TEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  message_id INT NOT NULL DEFAULT 1,
+  message_date DATETIME NOT NULL DEFAULT '2022-08-04 23:59:59',
   PRIMARY KEY (id),
   KEY         FK_post_login_messages_users (user_id),
   CONSTRAINT  FK_post_login_messages_users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
