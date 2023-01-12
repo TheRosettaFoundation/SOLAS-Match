@@ -10,6 +10,7 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
 require_once __DIR__."/../lib/MessagingClient.class.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
+require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 class UserDao
 {
@@ -732,8 +733,24 @@ class UserDao
     
     public static function deleteUser($userId)
     {
+        $user = self::getUser($userId);
+
         $args = Lib\PDOWrapper::cleanseNull($userId);
         Lib\PDOWrapper::call("deleteUser", $args);
+
+        $ip = Common\Lib\Settings::get('moodle.ip');
+        $token = Common\Lib\Settings::get('moodle.token');
+        $MoodleRest = new Common\Lib\MoodleRest();
+        $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
+        $MoodleRest->setToken($token);
+        $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
+        $MoodleRest->setDebug();//(**)DELETE
+        $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$user->getEmail()]]);
+        error_log("deleteUser($userId) core_user_get_users_by_field: " . print_r($results, 1));
+        if (!empty($results) && empty($results['warnings']) && count($results) == 1) {
+            $results = $MoodleRest->request('core_user_delete_users', ['userids' => [$results[0]['id']]]);
+            error_log('core_user_delete_users: ' . print_r($results, 1));
+        }
     }
     
     public static function logLoginAttempt($userId, $email, $loginSuccess)

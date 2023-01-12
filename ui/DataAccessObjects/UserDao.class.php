@@ -14,6 +14,7 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
 require_once __DIR__ . '/../../Common/lib/Authentication.class.php';
+require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 
 class UserDao extends BaseDao
@@ -1178,20 +1179,42 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function changeEmail($user_id, $email, $old_email)
     {
-        $ret = null;
+        error_log("changeEmail($user_id, $email, $old_email)");
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
         $registerData->setPassword("$user_id"); // Repurpose field to hold User for which email is to be changed
         $request = "{$this->siteApi}v0/users/changeEmail";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
-        if ($registered) {
-            $record = $this->get_memsource_user_record($old_email);
-            if ($record) $this->change_memsource_user_email($user_id, $record, $email);
-            else error_log("changeEmail($user_id, $email, $old_email), can't find email in Memsource");
-            return true;
-        } else {
-            return false;
+        if (!$registered) return 'Did not change email in TWB Platform.';
+
+        $error = '';
+        $record = $this->get_memsource_user_record($old_email);
+        if ($record) $this->change_memsource_user_email($user_id, $record, $email);
+        else {
+            error_log("changeEmail($user_id, $email, $old_email), can't find email in Phrase");
+            $error =  "Can't find $old_email in Phrase ";
         }
+
+        $ip = Common\Lib\Settings::get('moodle.ip');
+        $token = Common\Lib\Settings::get('moodle.token');
+        $MoodleRest = new Common\Lib\MoodleRest();
+        $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
+        $MoodleRest->setToken($token);
+        $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
+        $MoodleRest->setDebug();//(**)DELETE
+        $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
+        error_log('core_user_get_users_by_field: ' . print_r($results, 1));
+        if (empty($results) || !empty($results['warnings'])) $error .= "Can't find $old_email in Moodle";
+        else {
+            if (count($results) > 1) $error .= "Duplicate $old_email in Moodle";
+            else {
+                $results = $MoodleRest->request('core_user_update_users', ['users' => [['id' => $results[0]['id'], 'email' => $email]]]);
+                error_log('core_user_update_users: ' . print_r($results, 1));
+                if (empty($results) || !empty($results['warnings'])) $error .= "Did not change email in Moodle";
+            }
+        }
+        if ($error) return "Changed email in TWB Platform But $error.";
+        return '';
     }
 
     public function get_memsource_user_record($old_email)
