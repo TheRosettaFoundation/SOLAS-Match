@@ -744,7 +744,7 @@ class UserDao
         $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
         $MoodleRest->setToken($token);
         $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
-        $MoodleRest->setDebug();//(**)DELETE
+        //$MoodleRest->setDebug();
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$user->getEmail()]]);
         error_log("deleteUser($userId) core_user_get_users_by_field: " . print_r($results, 1));
         if (!empty($results) && empty($results['warnings']) && count($results) == 1) {

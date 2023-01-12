@@ -1201,7 +1201,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
         $MoodleRest->setToken($token);
         $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
-        $MoodleRest->setDebug();//(**)DELETE
+        //$MoodleRest->setDebug();
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
         error_log('core_user_get_users_by_field: ' . print_r($results, 1));
         if (empty($results) || !empty($results['warnings'])) $error .= "Can't find $old_email in Moodle";
