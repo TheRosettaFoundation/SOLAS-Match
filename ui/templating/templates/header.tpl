@@ -266,6 +266,9 @@
                         {/if}
                         {if !isset($site_admin)}
                             <li>
+                                <a href="https://elearn.translatorswb.org/" target="_blank">TWB Learning Center</a>
+                            </li>
+                            <li>
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
                             </li>
                         {/if}
