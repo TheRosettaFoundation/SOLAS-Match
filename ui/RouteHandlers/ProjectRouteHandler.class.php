@@ -361,7 +361,7 @@ class ProjectRouteHandler
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION || $part['workflowLevel'] == 1) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
                         $project_languages = $projectDao->get_memsource_project_languages($project_id);
-error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$part['wordsCount']}");//(**)
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages['kp_target_language_pairs']} + {$part['wordsCount']}");//(**)
                         if (!empty($project_languages['kp_target_language_pairs'])) {
                             $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                             if ("{$target_language}-{$target_country}" === $project_languages[0]) {

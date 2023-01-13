@@ -1006,7 +1006,7 @@ if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wo
             $this->queue_asana_project($project_id);
             if ($this->first_workflow($taskType, $memsource_project)) {
                 $project_languages = $this->get_memsource_project_languages($project_id);
-error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
+error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages['kp_target_language_pairs']} + {$job['wordsCount']}");//(**)
                 if (!empty($project_languages['kp_target_language_pairs'])) {
                     $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                     if ("{$target_language}-{$target_country}" === $project_languages[0]) {
@@ -1110,7 +1110,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         $taskType = $project_task['task-type_id'];
         if ($this->first_workflow($taskType, $memsource_project)) {
             $project_languages = $this->get_memsource_project_languages($project_id);
-error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} - {$project_task['word-count']}");//(**)
+error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages['kp_target_language_pairs']} - {$project_task['word-count']}");//(**)
             if (!empty($project_languages['kp_target_language_pairs'])) {
                 $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                 if ("{$target_language}-{$target_country}" === $project_languages[0]) {
