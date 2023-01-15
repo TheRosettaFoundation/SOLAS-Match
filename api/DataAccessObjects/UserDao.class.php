@@ -731,12 +731,62 @@ class UserDao
         return $ret;
     }
     
-    public static function deleteUser($userId)
+    public static function deleteUser($user_id)
     {
-        $user = self::getUser($userId);
+        $user = self::getUser($user_id);
+        $old_email = $user->getEmail();
 
-        $args = Lib\PDOWrapper::cleanseNull($userId);
-        Lib\PDOWrapper::call("deleteUser", $args);
+        Lib\PDOWrapper::call('deleteUser', Lib\PDOWrapper::cleanseNull($user_id));
+        $deleted_user = self::getUser($user_id);
+        $deleted_email = $deleted_user->getEmail();
+
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if (empty($result)) {
+            error_log("No data returned from Phrase for $old_email in deleteUser($user_id)");
+        } else {
+            $response_data = json_decode($result, true);
+            if (empty($response_data['content'])) {
+                error_log("No ['content'] returned from Phrase for $old_email in deleteUser($user_id)");
+                error_log(print_r($response_data, 1));
+            } else {
+                $uid = 0;
+                foreach ($response_data['content'] as $phrase_user) {
+                    if ($phrase_user['email'] === $old_email) {
+                        $uid = $phrase_user['uid'];
+                        break;
+                    }
+                }
+                if (!$uid) {
+                    error_log("No matching email returned from Phrase for $old_email in deleteUser($user_id)");
+                    error_log(print_r($response_data, 1));
+                } else {
+                    $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/$uid");
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $data = [
+                        'email' => $deleted_email,
+                        'firstName' => 'xxx',
+                        'lastName'  => 'xxx',
+                        'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                        'timezone' => 'Europe/Rome',
+                        'userName' => 'TWB_' . substr($deleted_email, 0, strpos($deleted_email, '@')) . "_$user_id",
+                        'receiveNewsletter' => false,
+                        'active' => false,
+                        'note' => 'xxx',
+                    ];
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    error_log($result);
+                }
+            }
+        }
 
         $ip = Common\Lib\Settings::get('moodle.ip');
         $token = Common\Lib\Settings::get('moodle.token');
@@ -745,12 +795,30 @@ class UserDao
         $MoodleRest->setToken($token);
         $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
         //$MoodleRest->setDebug();
-        $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$user->getEmail()]]);
-        error_log("deleteUser($userId) core_user_get_users_by_field: " . print_r($results, 1));
+        $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
+        error_log("deleteUser($user_id) core_user_get_users_by_field: " . print_r($results, 1));
         if (!empty($results) && empty($results['warnings']) && count($results) == 1) {
             $results = $MoodleRest->request('core_user_delete_users', ['userids' => [$results[0]['id']]]);
             error_log('core_user_delete_users: ' . print_r($results, 1));
         }
+
+        $ch = curl_init(Common\Lib\Settings::get('discourse.url') . "/admin/users/list/all.json?email=$old_email");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $response_data = json_decode($result, true);
+        if (!empty($response_data) && !empty($response_data[0]['id']) && count($response_data) == 1) {
+            $id = $response_data[0]['id'];
+            $ch = curl_init(Common\Lib\Settings::get('discourse.url') . "/admin/users/$id.json");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['delete_posts' => false, 'block_email' => false, 'block_urls' => false, 'block_ip' => false]));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log("deleteUser($user_id) /admin/users/$id.json: $result");
+        } else error_log("deleteUser($user_id) /admin/users/list/all.json?email=$old_email: $result");
     }
     
     public static function logLoginAttempt($userId, $email, $loginSuccess)
