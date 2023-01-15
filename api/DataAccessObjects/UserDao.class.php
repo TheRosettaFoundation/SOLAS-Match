@@ -771,7 +771,7 @@ class UserDao
                         'email' => $deleted_email,
                         'firstName' => 'xxx',
                         'lastName'  => 'xxx',
-                        'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                        'role' => 'LINGUIST',
                         'timezone' => 'Europe/Rome',
                         'userName' => 'TWB_' . substr($deleted_email, 0, strpos($deleted_email, '@')) . "_$user_id",
                         'receiveNewsletter' => false,
