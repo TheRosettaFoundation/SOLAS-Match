@@ -1390,6 +1390,23 @@ CREATE TABLE IF NOT EXISTS `possible_completes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `email_sents` (
+  recipient_id  INT UNSIGNED NOT NULL,
+  task_id       BIGINT UNSIGNED NOT NULL,
+  project_id    INT UNSIGNED NOT NULL,
+  org_id        INT UNSIGNED NOT NULL,
+  translator_id INT UNSIGNED NOT NULL,
+  admin_id      INT UNSIGNED NOT NULL,
+  badge_id      INT UNSIGNED NOT NULL,
+  topic         VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  logged_time   DATETIME NOT NULL,
+  KEY (recipient_id),
+  KEY (task_id),
+  KEY (project_id),
+  KEY (logged_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -10003,6 +10020,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_possible_completes`()
 BEGIN
     SELECT * FROM possible_completes;
     DELETE FROM possible_completes;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `log_email_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `log_email_sent`(IN rID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN pID INT UNSIGNED, IN oID INT UNSIGNED, IN transID INT UNSIGNED, IN aID INT UNSIGNED, IN bID INT UNSIGNED, IN top VARCHAR(128))
+BEGIN
+    INSERT INTO email_sents
+               (recipient_id, task_id, project_id, org_id, translator_id, admin_id, badge_id, topic, logged_time)
+        VALUES (         rID,     tID,        pID,    oID,       transID,      aID,      bID,   top,       NOW());
 END//
 DELIMITER ;
 
