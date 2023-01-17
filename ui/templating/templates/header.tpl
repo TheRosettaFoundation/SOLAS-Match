@@ -266,7 +266,7 @@
                         {/if}
                         {if !isset($site_admin)}
                             <li>
-                                <a href="https://elearn.translatorswb.org/" target="_blank">TWB Learning Center</a>
+                                <a href="https://develearn.westeurope.cloudapp.azure.com/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">TWB Learning Center</a>
                             </li>
                             <li>
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
