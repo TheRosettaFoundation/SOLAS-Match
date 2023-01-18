@@ -275,6 +275,8 @@
                             <li>
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
                             </li>
+                        {else}
+                                <a href="https://develearn.westeurope.cloudapp.azure.com/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">Moodle</a>
                         {/if}
                     </ul>
                     <ul class="nav pull-right main_nav_right" style="max-height: 38px">
