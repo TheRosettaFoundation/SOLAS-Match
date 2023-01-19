@@ -261,7 +261,7 @@
                             {/if}
                         {if isset($site_admin)}
                             <li>
-                                <a href="https://analytics.translatorswb.org" target="_blank">TWB Analytics</a>
+                                <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
                             </li>
                         {/if}
                         {if !isset($site_admin)}
@@ -277,7 +277,7 @@
                             </li>
                         {else}
                             <li>
-                                <a href="https://develearn.westeurope.cloudapp.azure.com/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">Moodle</a>
+                                <a href="https://develearn.westeurope.cloudapp.azure.com/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">Learn. Center</a>
                             </li>
                         {/if}
                     </ul>
