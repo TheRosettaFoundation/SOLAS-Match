@@ -102,6 +102,7 @@ class Middleware
         if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
             $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
             if (!is_null($current_user)) {
+              try {
                 $template_data = array_merge($template_data, ['user' => $current_user]);
                 $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
                 if ($org_array && count($org_array) > 0) {
@@ -117,6 +118,13 @@ class Middleware
                 if ($isAdmin) {
                     $template_data = array_merge($template_data, ['site_admin' => true]);
                 }
+              } catch (Common\Exceptions\SolasMatchException $e) {
+                Common\Lib\UserSession::clearCurrentUserID();
+                Common\Lib\UserSession::clearAccessToken();
+                unset($template_data['user']);
+                error_log('beforeDispatch ERROR on: ' . $request->getUri() . ', ' . $e->getMessage());
+                error_log($e->getTraceAsString());
+              }
             } else {
                 Common\Lib\UserSession::clearCurrentUserID();
                 Common\Lib\UserSession::clearAccessToken();

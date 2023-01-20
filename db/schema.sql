@@ -1390,6 +1390,23 @@ CREATE TABLE IF NOT EXISTS `possible_completes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `email_sents` (
+  recipient_id  INT UNSIGNED NOT NULL,
+  task_id       BIGINT UNSIGNED NOT NULL,
+  project_id    INT UNSIGNED NOT NULL,
+  org_id        INT UNSIGNED NOT NULL,
+  translator_id INT UNSIGNED NOT NULL,
+  admin_id      INT UNSIGNED NOT NULL,
+  badge_id      INT UNSIGNED NOT NULL,
+  topic         VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  logged_time   DATETIME NOT NULL,
+  KEY (recipient_id),
+  KEY (task_id),
+  KEY (project_id),
+  KEY (logged_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2517,7 +2534,7 @@ BEGIN
         where deadline < NOW()
         AND   deadline > DATE_SUB(DATE_SUB(NOW(), INTERVAL 1 DAY), INTERVAL 30 MINUTE)
         AND `task-status_id` != 4
-        AND published = 1;
+        AND cancelled=0;
 END//
 DELIMITER ;
 
@@ -2543,7 +2560,7 @@ BEGIN
         t.deadline < DATE_ADD(NOW(), INTERVAL 1 WEEK) AND
         t.deadline > DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 WEEK), INTERVAL 30 HOUR) AND
         t.`task-status_id`!=4 AND
-        t.published=1 AND
+        t.cancelled=0 AND
         n.notification IS NULL;
 END//
 DELIMITER ;
@@ -2569,6 +2586,7 @@ BEGIN
     WHERE
         t.deadline < DATE_SUB(NOW(), INTERVAL 1 WEEK) AND
         t.`task-status_id`!=4 AND
+        t.cancelled=0 AND
         (n.notification IS NULL OR n.notification<2);
 END//
 DELIMITER ;
@@ -10003,6 +10021,75 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_possible_completes`()
 BEGIN
     SELECT * FROM possible_completes;
     DELETE FROM possible_completes;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `log_email_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `log_email_sent`(IN rID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN pID INT UNSIGNED, IN oID INT UNSIGNED, IN transID INT UNSIGNED, IN aID INT UNSIGNED, IN bID INT UNSIGNED, IN top VARCHAR(128))
+BEGIN
+    INSERT INTO email_sents
+               (recipient_id, task_id, project_id, org_id, translator_id, admin_id, badge_id, topic, logged_time)
+        VALUES (         rID,     tID,        pID,    oID,       transID,      aID,      bID,   top,       NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_evenness_of_task_stream`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_evenness_of_task_stream`()
+BEGIN
+    SELECT
+        COUNT(*),
+        HOUR(`last-sent`)
+    FROM UserTaskStreamNotifications
+    GROUP BY HOUR(`last-sent`)
+    ORDER BY HOUR(`last-sent`);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `even_out_task_stream`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `even_out_task_stream`()
+BEGIN
+    DECLARE limit_per_hour     INT DEFAULT 0;
+    DECLARE number_this_hour   INT DEFAULT 0;
+    DECLARE overflow_this_hour INT DEFAULT 0;
+    DECLARE counter_48         INT DEFAULT 0;
+    DECLARE loop_user_id       INT DEFAULT 0;
+    DECLARE done               INT DEFAULT 0;
+    # DECLARE result             VARCHAR(10000) DEFAULT '';
+
+    DECLARE move_cursor CURSOR FOR SELECT user_id FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL AND HOUR(`last-sent`)=(counter_48%24) ORDER BY user_id%number_this_hour LIMIT overflow_this_hour;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=1;
+
+    SELECT COUNT(*)/24 + 50 INTO limit_per_hour FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL;
+
+    WHILE counter_48<48 DO
+        SELECT COUNT(*) INTO number_this_hour FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL AND HOUR(`last-sent`)=(counter_48%24);
+
+        IF (number_this_hour>limit_per_hour) THEN
+            # SET result=CONCAT(result, number_this_hour, '(number for)');
+            # SET result=CONCAT(result, ' ', counter_48, ': ');
+
+            SET done=0;
+            SET overflow_this_hour=number_this_hour - limit_per_hour;
+            OPEN move_cursor;
+            read_loop: LOOP
+                FETCH move_cursor INTO loop_user_id;
+                IF done THEN
+                    LEAVE read_loop;
+                END IF;
+                # SET result=CONCAT(result, loop_user_id, ',');
+
+                UPDATE UserTaskStreamNotifications SET `last-sent`=(`last-sent` + INTERVAL 1 HOUR) WHERE user_id=loop_user_id;
+            END LOOP;
+            CLOSE move_cursor;
+        END IF;
+
+        SET counter_48=counter_48 + 1;
+    END WHILE;
+
+    # SELECT result;
 END//
 DELIMITER ;
 

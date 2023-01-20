@@ -14,6 +14,7 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
 require_once __DIR__ . '/../../Common/lib/Authentication.class.php';
+require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 
 class UserDao extends BaseDao
@@ -23,7 +24,7 @@ class UserDao extends BaseDao
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
         $this->usernamePrefix = strpos($this->siteApi, 'twbplatform') ? 'TWB_' : 'DEV_';
-$this->usernamePrefix = 'DEV_';//(**)DELETE
+        $this->usernamePrefix = strpos($this->siteApi, 'kato') ? 'TWB_' : 'DEV_';
         $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
@@ -1178,20 +1179,42 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function changeEmail($user_id, $email, $old_email)
     {
-        $ret = null;
+        error_log("changeEmail($user_id, $email, $old_email)");
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
         $registerData->setPassword("$user_id"); // Repurpose field to hold User for which email is to be changed
         $request = "{$this->siteApi}v0/users/changeEmail";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
-        if ($registered) {
-            $record = $this->get_memsource_user_record($old_email);
-            if ($record) $this->change_memsource_user_email($user_id, $record, $email);
-            else error_log("changeEmail($user_id, $email, $old_email), can't find email in Memsource");
-            return true;
-        } else {
-            return false;
+        if (!$registered) return 'Did not change email in TWB Platform.';
+
+        $error = '';
+        $record = $this->get_memsource_user_record($old_email);
+        if ($record) $this->change_memsource_user_email($user_id, $record, $email);
+        else {
+            error_log("changeEmail($user_id, $email, $old_email), can't find email in Phrase");
+            $error =  "<br />Can't find $old_email in Phrase.";
         }
+
+        $ip = Common\Lib\Settings::get('moodle.ip');
+        $token = Common\Lib\Settings::get('moodle.token');
+        $MoodleRest = new Common\Lib\MoodleRest();
+        $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
+        $MoodleRest->setToken($token);
+        $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
+        //$MoodleRest->setDebug();
+        $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
+        error_log('core_user_get_users_by_field: ' . print_r($results, 1));
+        if (empty($results) || !empty($results['warnings'])) $error .= "<br />Can't find $old_email in Moodle.";
+        else {
+            if (count($results) > 1) $error .= "<br />Duplicate $old_email in Moodle.";
+            else {
+                $results = $MoodleRest->request('core_user_update_users', ['users' => [['id' => $results[0]['id'], 'email' => $email]]]);
+                error_log('core_user_update_users: ' . print_r($results, 1));
+                if (empty($results) || !empty($results['warnings'])) $error .= "<br />Did not change email in Moodle.";
+            }
+        }
+        if ($error) return "Changed email in TWB Platform but...$error";
+        return '';
     }
 
     public function get_memsource_user_record($old_email)
@@ -2026,31 +2049,31 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                 ];
-//(**)DELETE            }
+            }
         } elseif (empty($post['translation_0']) && !empty($post['proofreading_0'])) {
             $workflowSteps = [
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-//(**)DELETE            }
+            }
         } else {
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-//(**)DELETE            }
+            }
         }
         $data = [
             'name' => $post['project_title'],

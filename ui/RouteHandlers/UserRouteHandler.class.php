@@ -552,8 +552,7 @@ class UserRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        $error = null;
-        $warning = null;
+        $error = '';
         if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
@@ -564,24 +563,18 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('common_new_email_already_used');
             }
 
-            if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
+            if (!$error && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
                 $user = $userDao->getUser($user_id);
-                if ($userDao->changeEmail($user_id, $post['email'], $user->getEmail())) {
+                if (!($error = $userDao->changeEmail($user_id, $post['email'], $user->getEmail()))) {
                     UserRouteHandler::flashNow('success', '');
                 } else {
-                    UserRouteHandler::flashNow('error', '');
+                    UserRouteHandler::flashNow('error', $error);
                 }
             }
         }
-        if ($error !== null) {
-            $template_data = array_merge($template_data, array("error" => $error));
-        }
-        if ($warning !== null) {
-            $template_data = array_merge($template_data, array("warning" => $warning));
-        }
-
-        $template_data = array_merge($template_data, array('user_id' => $user_id, 'sesskey' => $sesskey));
-        return UserRouteHandler::render("user/change-email.tpl", $response);
+        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
+        $template_data = array_merge($template_data, ['user_id' => $user_id, 'sesskey' => $sesskey]);
+        return UserRouteHandler::render('user/change-email.tpl', $response);
     }
 
     public function emailVerification(Request $request, Response $response, $args)
