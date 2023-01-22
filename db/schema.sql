@@ -10033,6 +10033,65 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_evenness_of_task_stream`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_evenness_of_task_stream`()
+BEGIN
+    SELECT
+        COUNT(*),
+        HOUR(`last-sent`)
+    FROM UserTaskStreamNotifications
+    GROUP BY HOUR(`last-sent`)
+    ORDER BY HOUR(`last-sent`);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `even_out_task_stream`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `even_out_task_stream`()
+BEGIN
+    DECLARE limit_per_hour     INT DEFAULT 0;
+    DECLARE number_this_hour   INT DEFAULT 0;
+    DECLARE overflow_this_hour INT DEFAULT 0;
+    DECLARE counter_48         INT DEFAULT 0;
+    DECLARE loop_user_id       INT DEFAULT 0;
+    DECLARE done               INT DEFAULT 0;
+    # DECLARE result             VARCHAR(10000) DEFAULT '';
+
+    DECLARE move_cursor CURSOR FOR SELECT user_id FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL AND HOUR(`last-sent`)=(counter_48%24) ORDER BY user_id%number_this_hour LIMIT overflow_this_hour;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=1;
+
+    SELECT COUNT(*)/24 + 50 INTO limit_per_hour FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL;
+
+    WHILE counter_48<48 DO
+        SELECT COUNT(*) INTO number_this_hour FROM UserTaskStreamNotifications WHERE `last-sent` is NOT NULL AND HOUR(`last-sent`)=(counter_48%24);
+
+        IF (number_this_hour>limit_per_hour) THEN
+            # SET result=CONCAT(result, number_this_hour, '(number for)');
+            # SET result=CONCAT(result, ' ', counter_48, ': ');
+
+            SET done=0;
+            SET overflow_this_hour=number_this_hour - limit_per_hour;
+            OPEN move_cursor;
+            read_loop: LOOP
+                FETCH move_cursor INTO loop_user_id;
+                IF done THEN
+                    LEAVE read_loop;
+                END IF;
+                # SET result=CONCAT(result, loop_user_id, ',');
+
+                UPDATE UserTaskStreamNotifications SET `last-sent`=(`last-sent` + INTERVAL 1 HOUR) WHERE user_id=loop_user_id;
+            END LOOP;
+            CLOSE move_cursor;
+        END IF;
+
+        SET counter_48=counter_48 + 1;
+    END WHILE;
+
+    # SELECT result;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
