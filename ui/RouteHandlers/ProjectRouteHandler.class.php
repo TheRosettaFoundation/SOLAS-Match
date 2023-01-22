@@ -473,7 +473,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
             mkdir($filesFolder, 0755, true);
 
-            $filename = $part['fileName'];
+            $filename = str_replace('/', '_', $part['fileName']);
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
