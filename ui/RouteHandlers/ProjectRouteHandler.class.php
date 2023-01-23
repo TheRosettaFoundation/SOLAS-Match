@@ -1935,6 +1935,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
+                $dequeue = true;
                 foreach ($project_lang_pairs as $key => $project_lang_pair) {
                     if (empty($asana_tasks[$key])) {
                         $create = true;
@@ -2002,7 +2003,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
 
                     $asana_task_details = json_decode($result, true);
-                    if (!empty($asana_task_details['errors'][0]['message']) && strpos($asana_task_details['errors'][0]['message'], 'Not a user in Organization') !== false) {
+                    if (!empty($asana_task_details['errors'][0]['message'])) {
+                      if (strpos($asana_task_details['errors'][0]['message'], 'Not a user in Organization') !== false) {
                         unset($data['data']['assignee']);
                         $ch = curl_init($url);
                         $payload = json_encode($data);
@@ -2015,6 +2017,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         $result = curl_exec($ch);
                         curl_close($ch);
                         error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+                      } elseif (strpos($asana_task_details['errors'][0]['message'], 'Usually waiting and then retrying') !== false) {
+                        $dequeue = false;
+                      }
                     }
 
                     if ($create) {
@@ -2026,8 +2031,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     }
                 }
 
+                if ($dequeue) {
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
                 $projectDao->dequeue_asana_project($projectId);
+                }
             }
 
             $projectDao->delete_not_accepted_user();
