@@ -55,12 +55,12 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-149484461-6"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
-  gtag('config', 'UA-149484461-6');
+  gtag('config', 'G-3Z3VNH71D6');
 </script>
 
         <!-- extra Scripts -->
