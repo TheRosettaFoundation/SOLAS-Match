@@ -2534,7 +2534,7 @@ BEGIN
         where deadline < NOW()
         AND   deadline > DATE_SUB(DATE_SUB(NOW(), INTERVAL 1 DAY), INTERVAL 30 MINUTE)
         AND `task-status_id` != 4
-        AND published = 1;
+        ;
 END//
 DELIMITER ;
 
@@ -2560,7 +2560,6 @@ BEGIN
         t.deadline < DATE_ADD(NOW(), INTERVAL 1 WEEK) AND
         t.deadline > DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 WEEK), INTERVAL 30 HOUR) AND
         t.`task-status_id`!=4 AND
-        t.published=1 AND
         n.notification IS NULL;
 END//
 DELIMITER ;
