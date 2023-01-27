@@ -2557,11 +2557,8 @@ error_log("result: $result");//(**)
                 $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
             } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
                 $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            } else {
-                $translation_hrs = $proofread_hrs = $transproofread_hrs = 0 ;
-            }
+            } 
         }
-
         $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
         $displayname = $user->getDisplayName();
         $createdtime = $user->getCreatedTime();
@@ -2649,8 +2646,8 @@ $html = <<<EOF
         <div class="test">
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase"> $name </span>
-        <br /><br />Is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since and contributed a 
-        <br />total of $word_count words (an equivalent to $hours hours) upon providing language services in the language combination(s):
+        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since and contributed a 
+        <br />total of $word_count words (equivalent to $hours hours) upon providing language services in the language combination(s):
         <br /> $language_combinations. 
         <br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
         <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
@@ -2753,11 +2750,7 @@ public static function downloadletter(Request $request, Response $response, $arg
                 $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
             } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
                 $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            } else {
-                $translation_hrs = 0;
-                $proofread_hrs = 0;
-                $transproofread_hrs = 0;
-            }
+            } 
         }
 
         $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
@@ -2841,10 +2834,24 @@ Thereby, $firstName has provided linguistic support to the following nonprofit p
 <ul>
 $partners1
 </ul>
-<img class="footer" width="220" src="/ui/img/aimee_sign.png" />
-<hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;text-align:right;width:40%;" />
-<span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
+        
+
 </div>
+
+<table width="100%" cellspacing="0" cellpadding="55%">
+          <tr valign="bottom">
+                <td class="header1" rowspan="2" align="left" valign="middle"
+                      width="34%"></td>
+                <td width="30%"></td>
+                  
+                <td class="header1" rowspan="2" align="right" valign="middle"
+                      width="40%"><img style="border-bottom: 225px solid red;" class="" width="220" src="/ui/img/aimee_sign.png" />
+                      <hr/>
+                      <span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
+                      </td>
+          </tr></table>
+
+
 <div class="footer-clear">
 <span>
 <span>Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be heard, whatever language they speak. We do this through language support, training, data, and technology.</span>
