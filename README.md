@@ -54,6 +54,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - The dev TWB Platform now connected to dev Community
 - A situation could occur that the API layer was logged out, but not the front end TWB Platform layer. If this happens the front end layer is logged out.
 - Deadline reminders are sent even for unpublished tasks.
+- Claimed tasks "any task status" filter now working
 
 ## Version 12.3
 
