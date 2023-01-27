@@ -24,7 +24,7 @@ class UserDao extends BaseDao
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
         $this->usernamePrefix = strpos($this->siteApi, 'twbplatform') ? 'TWB_' : 'DEV_';
-$this->usernamePrefix = 'DEV_';//(**)DELETE
+        $this->usernamePrefix = strpos($this->siteApi, 'kato') ? 'TWB_' : 'DEV_';
         $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
@@ -2049,31 +2049,31 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                 ];
-//(**)DELETE            }
+            }
         } elseif (empty($post['translation_0']) && !empty($post['proofreading_0'])) {
             $workflowSteps = [
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-//(**)DELETE            }
+            }
         } else {
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ];
-//(**)DELETE            if ($this->usernamePrefix === 'DEV_') {
+            if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
                 ];
-//(**)DELETE            }
+            }
         }
         $data = [
             'name' => $post['project_title'],
