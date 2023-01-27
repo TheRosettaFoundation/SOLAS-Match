@@ -39,6 +39,22 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 12.4
+
+- When an email is changed in TWB Platform...
+  - In Phrase, the email is changed.
+  - In Moodle, the email is changed.
+  - If any of the emails was not successfully changed, it will be reported back to the user.
+- When a user is deleted in TWB Platform...
+  - In Phrase, the email will be set to the same randomised email as the one in TWB Platform. Other names will also be overwritten/randomised.
+  - The TWB Community account will be deleted.
+  - The Moodle user will be deleted.
+- A link to "TWB Learning Center" has been added to TWB Platform pages
+- When a "temporary" error occurs when a post is made to Asana for project tasks, a retry occurs a minute later.
+- The dev TWB Platform now connected to dev Community
+- A situation could occur that the API layer was logged out, but not the front end TWB Platform layer. If this happens the front end layer is logged out.
+- Deadline reminders are sent even for unpublished tasks.
+
 ## Version 12.3
 
 - The password reset mechanism has been simplified.
@@ -47,8 +63,8 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - However there will be a limit of 4 emails a day to avoid possible spamming.
   - If a user requests a password reset before they have acted on the verification email from registration (and users seem to do this), completing password reset will act as a substitute (verifying the user's email).
   - There is a button in user's profile (visible only to admins and only if the user has requested a reset) which says "Link emailed to User for Password Reset". Clicking on this will bring up the link which can be sent to a user having trouble. Or could be used to reset a password on a user's behalf.
-  - Task Stream emails were being processed in a way that caused queues to overflow. Now the decision to send or not is made earlier so there is no risk of overflow.
-  - Links to the dev instance of Phrase from dev.translatorswb.org will now work (project and task pages).
+- Task Stream emails were being processed in a way that caused queues to overflow. Now the decision to send or not is made earlier so there is no risk of overflow.
+- Links to the dev instance of Phrase from dev.translatorswb.org will now work (project and task pages).
 
 ## Version 12.2
 
