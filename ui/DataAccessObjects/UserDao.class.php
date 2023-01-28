@@ -1213,7 +1213,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 if (empty($results) || !empty($results['warnings'])) $error .= "<br />Did not change email in Moodle.";
             }
         }
-        if ($error) return "Changed email in TWB Platform But...$error";
+        if ($error) return "Changed email in TWB Platform but...$error";
         return '';
     }
 
