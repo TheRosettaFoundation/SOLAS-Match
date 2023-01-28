@@ -4,10 +4,15 @@
     <h1>{Localisation::getTranslation('common_change_email')}</h1>
 </div>
 
-{include file="handle-flash-messages.tpl"}
+{if isset($flash['success'])}
+    <div class="alert alert-success">
+        <p><strong>{Localisation::getTranslation('common_success')}!</strong> {$flash['success']}</p>
+    </div>
+{/if}
+
 {if isset($error)}
     <div class="alert alert-error">
-        <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
+        <strong>{Localisation::getTranslation('common_error')}!:</strong> {$error}
     </div>
 {/if}
 
