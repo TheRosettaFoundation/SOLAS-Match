@@ -1192,7 +1192,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         if ($record) $this->change_memsource_user_email($user_id, $record, $email);
         else {
             error_log("changeEmail($user_id, $email, $old_email), can't find email in Phrase");
-            $error =  "Can't find $old_email in Phrase ";
+            $error =  "<br />Can't find $old_email in Phrase.";
         }
 
         $ip = Common\Lib\Settings::get('moodle.ip');
@@ -1204,16 +1204,16 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         //$MoodleRest->setDebug();
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
         error_log('core_user_get_users_by_field: ' . print_r($results, 1));
-        if (empty($results) || !empty($results['warnings'])) $error .= "Can't find $old_email in Moodle";
+        if (empty($results) || !empty($results['warnings'])) $error .= "<br />Can't find $old_email in Moodle.";
         else {
-            if (count($results) > 1) $error .= "Duplicate $old_email in Moodle";
+            if (count($results) > 1) $error .= "<br />Duplicate $old_email in Moodle.";
             else {
                 $results = $MoodleRest->request('core_user_update_users', ['users' => [['id' => $results[0]['id'], 'email' => $email]]]);
                 error_log('core_user_update_users: ' . print_r($results, 1));
-                if (empty($results) || !empty($results['warnings'])) $error .= "Did not change email in Moodle";
+                if (empty($results) || !empty($results['warnings'])) $error .= "<br />Did not change email in Moodle.";
             }
         }
-        if ($error) return "Changed email in TWB Platform But $error.";
+        if ($error) return "Changed email in TWB Platform But...$error";
         return '';
     }
 
