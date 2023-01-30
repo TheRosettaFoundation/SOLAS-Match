@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__ . "/../DataAccessObjects/ProjectDao.class.php";
+require_once __DIR__ . "/../DataAccessObjects/OrganisationDao.class.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Login.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Locale.php";
@@ -173,6 +175,28 @@ class UserRouteHandler
             '/native_languages/{term}/search[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
             ->setName('native_languages');
+
+        $app->map(['GET', 'POST'],
+            '/{user_id}/{request_type}/printrequest[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrintRequest')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('user-print-request');
+
+        $app->map(['GET', 'POST'],
+            '/{valid_key}/generatevolunteercertificate[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:generatevolunteercertificate')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('user-print-certificate');
+            $app->map(['GET', 'POST'],
+            '/{valid_key}/downloadletter[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadletter')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('downloadletter');
+            $app->map(['GET', 'POST'],
+            '/{filename}/download[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('download');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -2208,6 +2232,18 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
+            if(isset($post['PrintRequest'])) {
+               $print_request = $userDao->insert_print_request($post['user_id'],$post['user_word_count'],Common\Enums\PrintRequestTypesEnum::CERTIFICATE,$loggedInUserId,uniqid());
+                UserRouteHandler::flashNow('success', "Print request made for user");               
+
+            }
+            if(isset($post['PrintRequestLetter'])) {
+                $print_request = $userDao->insert_print_request($post['user_id'],$post['user_word_count'],Common\Enums\PrintRequestTypesEnum::REFERENCE_LETTER,$loggedInUserId,uniqid());
+                 UserRouteHandler::flashNow('success', "Print request made for user");               
+ 
+             }
+
+
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
                     UserRouteHandler::flashNow('error', 'You must enter a comment and a score between 1 and 5');
@@ -2282,9 +2318,87 @@ error_log("result: $result");//(**)
             }
         }
 
+       
+        
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"/resources/datatables/js/jquery.dataTables.min.js\"></script>";
+        $extra_scripts .= '<script type="text/javascript">
+        $(document).ready(function() { 
+            
+            $("#printrequest").DataTable({
+                "ajax": {
+                    "url": "/'.$user_id.'/0/printrequest",
+                    "dataSrc": "",
+                    "type": "GET",
+                    "datatype": "json"
+                 },
+                columns: [
+                    { data: "date_of_request" },
+                    { data: "request_by" },
+                    { data: "word_count" },
+                    { data: "valid_key",
+                        "render": function ( data, type, row, meta ) {
+                            return data;
+                          }
+                        },                    
+                ], 
+                order: [[0, "desc"]],           
+      
+        
+    });
+
+    $("#printrequestletter").DataTable({
+        "ajax": {
+            "url": "/'.$user_id.'/1/printrequest",
+            "dataSrc": "",
+            "type": "GET",
+            "datatype": "json"
+         },
+        columns: [
+            { data: "date_of_request" },
+            { data: "request_by" },
+            { data: "word_count" },
+            { data: "valid_key",
+                "render": function ( data, type, row, meta ) {
+                    return data;
+                  }
+                },                    
+        ],
+        order: [[0, "desc"]],          
+
+
+});
+
+    
+		$("body").on("click", ".download-cert", function(e) {
+            e.preventDefault();
+            var valid_key = $(this).data("id");            
+            $.ajax({
+				type: "POST",
+				url: "/"+valid_key+"/generatevolunteercertificate",
+				data: {
+					valid_key: valid_key
+				},
+				dataType: "json"
+			}).done(function(response) {
+                console.log(response);
+                setTimeout(function() {
+					window.open("/"+response.file_name+"/generatevolunteercertificate", "_blank");
+				}, 2000);
+
+            });
+            
+		});
+                  
+
+               
+        });        
+    
+        </script>';
+
+        $extra_styles .= "<link rel=\"stylesheet\" href=\"/resources/datatables/css/jquery.dataTables.min.css\">";
 
         if (isset($userPersonalInfo)) {
             $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
@@ -2303,6 +2417,7 @@ error_log("result: $result");//(**)
             "user_tags" => $user_tags,
             "this_user" => $user,
             "extra_scripts" => $extra_scripts,
+            "extra_styles" => $extra_styles,
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
@@ -2359,6 +2474,11 @@ error_log("result: $result");//(**)
         $uuid = 0;
         if ($isSiteAdmin) $uuid = $userDao->get_password_reset_request_uuid($user_id);
 
+        $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id,$request_type=0);
+        $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id,$request_type=1);
+        
+        
+
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'user_badges'            => $userDao->get_points_for_badges($user_id),
@@ -2384,11 +2504,389 @@ error_log("result: $result");//(**)
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
             'show_create_memsource_user'      => $show_create_memsource_user,
             'uuid' => $uuid,
+            'valid_key_certificate' => $valid_key_certificate,
+            'valid_key_reference_letter' => $valid_key_reference_letter,
         ));
+
 
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
+    public static function userPrintRequest(Request $request, Response $response, $args)
+    {
+        
+        $user_id = $args['user_id'];
+        $request_type = $args['request_type'];
+        $userDao = new DAO\UserDao();
+        $print_data = $userDao->get_print_request_by_user($user_id,$request_type);
+    
+        $print_data_val = [];
+        foreach($print_data as $key => $value) {
+        $user_personal_info = $userDao->getUserPersonalInformation($print_data[$key]['request_by']);
+        $firstName = $user_personal_info->firstName;
+            array_push($print_data_val,[
+                'date_of_request' => $print_data[$key]['date_of_request'],
+                'request_by' => '<a href="/'.$print_data[$key]['request_by'].'/profile" target="_blank">'.$firstName .'</a>',
+                'word_count' => $print_data[$key]['word_count'],
+                'valid_key' =>  $print_data[$key]['valid_key']
+            ]);
+        }
+        echo json_encode($print_data_val);
+        die();
+    }
 
+
+    public static function generatevolunteercertificate(Request $request, Response $response, $args)
+    {
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';        
+        $valid_key = $args['valid_key'];
+        $userDao = new DAO\UserDao();
+        $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
+        $user = $userDao->getUser($print_data_by_key[0]['user_id']);
+        $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
+        $name = $userinfo->firstName .' ' .$userinfo->lastName;
+        $word_count = $print_data_by_key[0]['word_count'];
+        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'],$limit = 1000000,$offset = 0);        
+        $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
+        $languages = [];
+        foreach($user_tasks as $key => $value) {
+            array_push($languages,[
+                'sourceLanguageName' => $value['sourceLanguageName'],
+                'targetLanguageName' => $value['targetLanguageName']
+            ]);
+        }
+        $prepend = '';
+        $language_combinations = '';
+
+        foreach(array_unique($languages, SORT_REGULAR) as $item) {
+            $language_combinations .= $prepend.$item['sourceLanguageName'].' and '.$item['targetLanguageName'];
+            $prepend = ', ';
+                }
+    
+        $grouped_tasks_word_count = [];
+        foreach ($grouped_tasks as $key =>$value) {  
+            foreach ($grouped_tasks[$key] as $kk => $vv) {
+                array_push($grouped_tasks_word_count,[
+                    'wordcount' => $vv['wordCount'],
+                    'key' => $key ]);
+            }
+        }
+
+        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) { 
+        if(!isset($carry[$item['key']])) { 
+            $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']]; 
+        } else { 
+            $carry[$item['key']]['wordcount'] += $item['wordcount']; 
+            } 
+        return $carry; 
+        });
+
+        foreach($total_wordcount_by_tasktype as $key => $value) {
+            if($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $translation_hrs =  (int)$value['wordcount'] / Common\Enums\TaskTypeHourEnum::TRANSLATION;
+            }else if($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
+            }else if($key == Common\Enums\TaskTypeEnum::APPROVAL) {
+                $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
+            }else {
+                $translation_hrs = $proofread_hrs = $transproofread_hrs = 0 ;
+                
+                }
+
+        }
+
+        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);        
+        $displayname = $user->getDisplayName();
+        $createdtime = $user->getCreatedTime();
+        $datetime = new \DateTime($createdtime);
+        $since = $datetime->format('F').', '.$datetime->format('Y');
+        $locales = $user->getSecondaryLocales();
+
+                // create new PDF document
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('TWB Platform');
+        $pdf->SetTitle('Volunteer Certificate - '.$name);
+        $pdf->SetSubject('Generate Certificate');
+        $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
+
+        // set default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+        $pdf->setFooterData(array(0,64,0), array(0,64,128));
+
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('times', '', 14, '', false);
+        $pdf->AddPage('L');
+        $pdf->SetLineStyle( array( 'width' => 5, 'color' => array(232, 153, 28)));
+        $pdf->Line(0,0,$pdf->getPageWidth(),0); 
+        $pdf->Line($pdf->getPageWidth(),0,$pdf->getPageWidth(),$pdf->getPageHeight());
+        $pdf->Line(0,$pdf->getPageHeight(),$pdf->getPageWidth(),$pdf->getPageHeight());
+        $pdf->Line(0,0,0,$pdf->getPageHeight());
+
+        // Set some content to print
+$html = <<<EOF
+        <style>
+        div.test {
+            color: #000000;    
+            font-size: 14pt;
+            border-style: solid solid solid solid;
+            border-width: 8px 8px 8px 8px;
+            border-color: #FFFFFF;
+            text-align: center;
+            margin: 50px auto;
+        }
+        .uppercase {
+            text-transform: uppercase;
+            font-weight:bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10pt;
+        }
+        .footer-main {
+            text-align:center;
+        }
+        </style>
+        <div class="test">
+        &nbsp;
+        <img width="250" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+        <br /><br />This is to certify that
+        <br /><br /><br /><span class="uppercase"> $name </span>
+        <br /><br />Is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since and contributed a 
+        <br />total of $word_count words (an equivalent to $hours hours) upon providing language services in the language combination(s):
+        <br /> $language_combinations. 
+        <br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
+        <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
+        </div>
+        <div class="footer-main">
+        <img  src="/ui/img/aimee_sign.png" />
+        </div>
+        <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
+        <div class="footer-main">
+        <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
+        </div>
+EOF;
+    // output the HTML content
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Cell(20, 10, "Issued on ".date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');   
+    $pdf->Cell(0, 9, "Ref: ". $valid_key, 0, false, 'R', 0, '', 0, false, 'T', 'M' );
+    $pdf->lastPage();
+
+    $file_name = 'certificate_' . $userinfo->firstName . '_' . date('Y-m-d') . '.pdf';
+    $pdf->Output($file_name, 'I');
+    exit;	      
+
+    }
+
+public static function downloadletter(Request $request, Response $response, $args)
+{
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
+        
+        $valid_key = $args['valid_key'];
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $organisationDao = new DAO\OrganisationDao();
+        $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
+        $user = $userDao->getUser($print_data_by_key[0]['user_id']);
+        $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
+        $name = $userinfo->firstName .' ' .$userinfo->lastName;
+        $firstName = $userinfo->firstName;
+        $word_count = $print_data_by_key[0]['word_count'];
+
+        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'],$limit = 1000000,$offset = 0);        
+        $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
+
+        $languages = [];
+        foreach($user_tasks as $key => $value) {
+            array_push($languages,[
+                'sourceLanguageName' => $value['sourceLanguageName'],
+                'targetLanguageName' => $value['targetLanguageName']
+            ]);
+        }
+
+        $projectIds = [];
+        foreach($user_tasks as $key => $value) {
+            array_push($projectIds,[
+                'projectId' => $value['projectId']
+            ]);
+
+        }
+        $projects = array_unique($projectIds, SORT_REGULAR);
+        
+        $org_details = [];        
+        foreach($projects as $key => $value) {
+            $org_id = $projectDao->get_project_org_id($value['projectId']);
+            $org_name = $organisationDao->get_org_name($org_id[0][0]);
+            array_push($org_details,$org_name[0][0]); 
+        }
+        $unique_orgs = array_unique($org_details, SORT_REGULAR);
+           
+        $prepend = '';
+        $partners1 = '';       
+        $partners = implode(', ', $unique_orgs);
+        foreach(array_unique($languages, SORT_REGULAR) as $item) {
+            $language_combinations .= $prepend.$item['sourceLanguageName'].' to '.$item['targetLanguageName'];
+            $prepend = ', ';
+        }
+ 
+        $grouped_tasks_word_count = [];
+        foreach ($grouped_tasks as $key =>$value) {  
+            foreach ($grouped_tasks[$key] as $kk => $vv) {
+                array_push($grouped_tasks_word_count,[
+                    'wordcount' => $vv['wordCount'],
+                    'key' => $key ]);
+            }
+        }
+        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item){ 
+            if(!isset($carry[$item['key']])){ 
+                $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']]; 
+            } else { 
+                $carry[$item['key']]['wordcount'] += $item['wordcount']; 
+            } 
+            return $carry; 
+        });
+   
+        foreach($total_wordcount_by_tasktype as $key => $value) {
+            if($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $translation_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::TRANSLATION;
+            }else if($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
+            }else if($key == Common\Enums\TaskTypeEnum::APPROVAL) {
+                $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
+            }else{
+                $translation_hrs = 0;
+                $proofread_hrs = 0;
+                $transproofread_hrs = 0;
+            }
+
+        }
+
+        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
+        $displayname = $user->getDisplayName();
+        $createdtime = $user->getCreatedTime();
+        $datetime = new \DateTime($createdtime);
+        $since = $datetime->format('F').', '.$datetime->format('Y');
+        $locales = $user->getSecondaryLocales();
+        $today = date("d F Y");
+
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('TWB Platform');
+        $pdf->SetTitle('Volunteer Letter - '.$name);
+        $pdf->SetSubject('Generate Certificate');
+        $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+        $pdf->setFooterData(array(0,64,0), array(0,64,128));
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('times', '', 14, '', false);
+        $pdf->AddPage();
+// Set some content to print
+$html = <<<EOF
+<style>
+div.test {
+    color: #000000;
+    
+    font-size: 14pt;
+    border-style: solid solid solid solid;
+    border-width: 8px 8px 8px 8px;
+    border-color: #FFFFFF;
+    text-align: center;
+    margin: 50px auto;
+}
+.uppercase {
+    text-transform: uppercase;
+    font-weight:bold;
+}
+.footer {
+    text-align: right;
+    font-size: 10pt;
+}
+.footer-clear{
+    border: 0px solid #f89406;
+    font-size:10pt; 
+}
+.footer-address{
+    font-size:10pt; 
+}
+
+</style>
+<div class="test">
+&nbsp;
+<img width="250" height="62" style="text-align:left;" alt="CLEAR Global logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img//CG_Logo_horizontal_primary_RGB.svg">
+<br/><br/><span style="text-align:left">$today</span>
+<br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
+<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing language-related tasks in the following language combination[s]:
+<br/><br/> $language_combinations
+<br/><br/>Thereby, $firstName has provided linguistic support to the following nonprofit partners:
+<br/><br/>
+$partners
+<br/>
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<img class="footer" width="220" src="/ui/img/aimee_sign.png" />
+<hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;text-align:right;" />
+<span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
+</div>
+<div class="footer-clear">
+<span>
+<span>Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be heard, whatever language they speak. We do this through language support, training, data, and technology.</span>
+</span>
+</div>
+<div class="footer-address">
+<br/><span style="text-align:left;">CLEAR Global/Translators without Borders</span>
+<br/><span style="text-align:left;">9169 W State St #3055</span>
+<br/><span style="text-align:left;">Garden City, ID 83714, USA</span>
+<br/><span style="text-align:left;">Ref: $valid_key</span>
+</div>
+EOF;
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->lastPage();
+        $file_name = 'certificate_' . $userinfo->firstName. '_' . date('Y-m-d') . '.pdf';
+        $pdf->Output($file_name, 'I');
+        exit;	
+    }
     public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -2613,6 +3111,8 @@ error_log("result: $result");//(**)
         $smarty->registerClass('TaskStatusEnum',           '\SolasMatch\Common\Enums\TaskStatusEnum');
         $smarty->registerClass('NotificationIntervalEnum', '\SolasMatch\Common\Enums\NotificationIntervalEnum');
         $smarty->registerClass('BanTypeEnum',              '\SolasMatch\Common\Enums\BanTypeEnum');
+        $smarty->registerClass('PrintRequestTypesEnum',    '\SolasMatch\Common\Enums\PrintRequestTypesEnum');
+        $smarty->registerClass('TaskTypeHourEnum',        '\SolasMatch\Common\Enums\TaskTypeHourEnum');
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);

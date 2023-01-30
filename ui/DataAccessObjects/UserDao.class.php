@@ -1796,6 +1796,45 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
 
+    public function insert_print_request($user_id,$user_word_count,$cert_type,$loggedInUserId,$valid_key)
+    {
+        LibAPI\PDOWrapper::call('insert_print_request',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_word_count) . ',' .
+            LibAPI\PDOWrapper::cleanse($cert_type) . ',' .
+            LibAPI\PDOWrapper::cleanse($loggedInUserId) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($valid_key));
+
+    }
+
+    public function get_print_request_by_user($user_id,$request_type)
+    {
+        $result = LibAPI\PDOWrapper::call('get_print_request_by_user',
+         LibAPI\PDOWrapper::cleanse($user_id). ',' .
+         LibAPI\PDOWrapper::cleanse($request_type)
+        );
+        if (empty($result)) $result = [];
+        return $result;
+
+    }
+
+    public function get_print_request_by_valid_key($valid_key)
+    {
+        $result = LibAPI\PDOWrapper::call('get_print_request_by_valid_key', LibAPI\PDOWrapper::cleanseWrapStr($valid_key));
+        if (empty($result)) $result = [];
+        return $result;
+
+    }
+
+    public function get_print_request_valid_key_for_user($user_id,$request_type)
+    {
+        $result = LibAPI\PDOWrapper::call('get_print_request_valid_key_for_user', LibAPI\PDOWrapper::cleanse($user_id). ',' .
+        LibAPI\PDOWrapper::cleanse($request_type));
+        if (empty($result)) $result = [];
+        return $result[0];
+    }
+
+
     public function delete_admin_comment($id)
     {
         LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
@@ -2330,5 +2369,21 @@ error_log(print_r($result, true));//(**)
         $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0];
         return $result[0];
+    }
+
+    public function get_user_tasks($user_id,$limit,$offset) 
+    {
+        $result = LibAPI\PDOWrapper::call('getUserTasks', LibAPI\PDOWrapper::cleanse($user_id). ',' . LibAPI\PDOWrapper::cleanse($limit). ',' . LibAPI\PDOWrapper::cleanse($offset));
+        if (empty($result)) return [];
+        return $result;
+
+    }
+    public function group_user_tasks_by($array, $key)
+    {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return;
     }
 }

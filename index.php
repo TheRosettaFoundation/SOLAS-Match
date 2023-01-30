@@ -56,6 +56,8 @@ require_once 'Common/Enums/HttpMethodEnum.class.php';
 require_once 'Common/Enums/NotificationIntervalEnum.class.php';
 require_once 'Common/Enums/TaskStatusEnum.class.php';
 require_once 'Common/Enums/TaskTypeEnum.class.php';
+require_once 'Common/Enums/PrintRequestTypesEnum.class.php';
+require_once 'Common/Enums/TaskTypeHourEnum.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
@@ -88,6 +90,10 @@ require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
 require_once 'ui/DataAccessObjects/SubscriptionDao.class.php';
 require_once 'ui/DataAccessObjects/ProjectDao.class.php';
 require_once 'ui/DataAccessObjects/TipDao.class.php';
+
+
+
+
 
 \SolasMatch\Common\Enums\TaskTypeEnum::init();
 
