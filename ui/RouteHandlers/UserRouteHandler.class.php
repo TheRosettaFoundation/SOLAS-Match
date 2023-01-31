@@ -3111,8 +3111,6 @@ EOF;
         $smarty->registerClass('TaskStatusEnum',           '\SolasMatch\Common\Enums\TaskStatusEnum');
         $smarty->registerClass('NotificationIntervalEnum', '\SolasMatch\Common\Enums\NotificationIntervalEnum');
         $smarty->registerClass('BanTypeEnum',              '\SolasMatch\Common\Enums\BanTypeEnum');
-        $smarty->registerClass('PrintRequestTypesEnum',    '\SolasMatch\Common\Enums\PrintRequestTypesEnum');
-        $smarty->registerClass('TaskTypeHourEnum',        '\SolasMatch\Common\Enums\TaskTypeHourEnum');
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
