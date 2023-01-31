@@ -177,25 +177,25 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             '/{user_id}/{request_type}/printrequest[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrintRequest')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user-print-request');
 
         $app->map(['GET', 'POST'],
             '/{valid_key}/generatevolunteercertificate[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:generatevolunteercertificate')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user-print-certificate');
 
             $app->map(['GET', 'POST'],
             '/{valid_key}/downloadletter[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadletter')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('downloadletter');
 
             $app->map(['GET', 'POST'],
             '/{filename}/download[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download');
     }
 
