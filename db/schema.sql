@@ -1399,6 +1399,8 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
   request_by      INT(10) NOT NULL,
   valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (id)
+          KEY (user_id),
+  UNIQUE  KEY (valid_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
