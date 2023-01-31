@@ -1819,15 +1819,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     public function get_print_request_by_valid_key($valid_key)
     {
         $result = LibAPI\PDOWrapper::call('get_print_request_by_valid_key', LibAPI\PDOWrapper::cleanseWrapStr($valid_key));
-        if (empty($result)) $result = [];
         return $result;
     }
 
     public function get_print_request_valid_key_for_user($user_id, $request_type)
     {
-        $result = LibAPI\PDOWrapper::call('get_print_request_valid_key_for_user', LibAPI\PDOWrapper::cleanse($user_id). ',' .
-        LibAPI\PDOWrapper::cleanse($request_type));
-        if (empty($result)) $result = [];
+        $result = LibAPI\PDOWrapper::call('get_print_request_valid_key_for_user', LibAPI\PDOWrapper::cleanse($user_id). ',' . LibAPI\PDOWrapper::cleanse($request_type));
+        if (empty($result)) return '';
         return $result[0];
     }
 
@@ -2372,8 +2370,8 @@ error_log(print_r($result, true));//(**)
         $result = LibAPI\PDOWrapper::call('getUserTasks', LibAPI\PDOWrapper::cleanse($user_id). ',' . LibAPI\PDOWrapper::cleanse($limit). ',' . LibAPI\PDOWrapper::cleanse($offset));
         if (empty($result)) return [];
         return $result;
-
     }
+
     public function group_user_tasks_by($array, $key)
     {
         $return = [];
