@@ -2456,10 +2456,8 @@ error_log("result: $result");//(**)
         $uuid = 0;
         if ($isSiteAdmin) $uuid = $userDao->get_password_reset_request_uuid($user_id);
 
-        $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id,$request_type=0);
-        $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id,$request_type=1);
-        
-        
+        $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id, 0);
+        $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id, 1);
 
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
@@ -2489,25 +2487,22 @@ error_log("result: $result");//(**)
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
         ));
-
-
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
+
     public static function userPrintRequest(Request $request, Response $response, $args)
     {
-        
         $user_id = $args['user_id'];
         $request_type = $args['request_type'];
         $userDao = new DAO\UserDao();
-        $print_data = $userDao->get_print_request_by_user($user_id,$request_type);
-    
+        $print_data = $userDao->get_print_request_by_user($user_id, $request_type);
         $print_data_val = [];
-        foreach($print_data as $key => $value) {
-        $user_personal_info = $userDao->getUserPersonalInformation($print_data[$key]['request_by']);
-        $firstName = $user_personal_info->firstName;
-            array_push($print_data_val,[
+        foreach ($print_data as $key => $value) {
+            $user_personal_info = $userDao->getUserPersonalInformation($print_data[$key]['request_by']);
+            $firstName = $user_personal_info->firstName;
+            array_push($print_data_val, [
                 'date_of_request' => $print_data[$key]['date_of_request'],
-                'request_by' => '<a href="/'.$print_data[$key]['request_by'].'/profile" target="_blank">'.$firstName .'</a>',
+                'request_by' => '<a href="/' . $print_data[$key]['request_by'] . '/profile" target="_blank">' . $firstName . '</a>',
                 'word_count' => $print_data[$key]['word_count'],
                 'valid_key' =>  $print_data[$key]['valid_key']
             ]);
@@ -2515,7 +2510,6 @@ error_log("result: $result");//(**)
         echo json_encode($print_data_val);
         die();
     }
-
 
     public static function generatevolunteercertificate(Request $request, Response $response, $args)
     {
@@ -2681,8 +2675,7 @@ EOF;
 
     $file_name = 'certificate_' . $userinfo->firstName . '_' . date('Y-m-d') . '.pdf';
     $pdf->Output($file_name, 'I');
-    exit;	      
-
+    exit;
     }
 
 public static function downloadletter(Request $request, Response $response, $args)
