@@ -2703,73 +2703,71 @@ public static function downloadletter(Request $request, Response $response, $arg
 
         $projectIds = [];
         foreach($user_tasks as $key => $value) {
-            array_push($projectIds,[
+            array_push($projectIds, [
                 'projectId' => $value['projectId']
             ]);
-
         }
         $projects = array_unique($projectIds, SORT_REGULAR);
         
-        $org_details = [];        
+        $org_details = [];
         foreach($projects as $key => $value) {
             $org_id = $projectDao->get_project_org_id($value['projectId']);
             $org_name = $organisationDao->get_org_name($org_id[0][0]);
-            array_push($org_details,$org_name[0][0]); 
+            array_push($org_details,$org_name[0][0]);
         }
         $unique_orgs = array_unique($org_details, SORT_REGULAR);
-           
+
         $prepend = '';
         $partners1 = '';       
         $partners = implode(', ', $unique_orgs);
         foreach(array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend.$item['sourceLanguageName'].' to '.$item['targetLanguageName'];
+            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
             $prepend = ', ';
         }
  
         $grouped_tasks_word_count = [];
         foreach ($grouped_tasks as $key =>$value) {  
             foreach ($grouped_tasks[$key] as $kk => $vv) {
-                array_push($grouped_tasks_word_count,[
+                array_push($grouped_tasks_word_count, [
                     'wordcount' => $vv['wordCount'],
-                    'key' => $key ]);
+                    'key' => $key]);
             }
         }
-        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item){ 
-            if(!isset($carry[$item['key']])){ 
-                $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']]; 
-            } else { 
-                $carry[$item['key']]['wordcount'] += $item['wordcount']; 
-            } 
-            return $carry; 
+        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) {
+            if (!isset($carry[$item['key']])) {
+                $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']];
+            } else {
+                $carry[$item['key']]['wordcount'] += $item['wordcount'];
+            }
+            return $carry;
         });
-   
-        foreach($total_wordcount_by_tasktype as $key => $value) {
-            if($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
+
+        foreach ($total_wordcount_by_tasktype as $key => $value) {
+            if ($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
                 $translation_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::TRANSLATION;
-            }else if($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            } else if ($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
-            }else if($key == Common\Enums\TaskTypeEnum::APPROVAL) {
+            } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
                 $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            }else{
+            } else {
                 $translation_hrs = 0;
                 $proofread_hrs = 0;
                 $transproofread_hrs = 0;
             }
-
         }
 
         $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
         $displayname = $user->getDisplayName();
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F').', '.$datetime->format('Y');
+        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
         $locales = $user->getSecondaryLocales();
-        $today = date("d F Y");
+        $today = date('d F Y');
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
-        $pdf->SetTitle('Volunteer Letter - '.$name);
+        $pdf->SetTitle('Volunteer Letter - ' . $name);
         $pdf->SetSubject('Generate Certificate');
         $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
@@ -2819,7 +2817,6 @@ div.test {
 .footer-address{
     font-size:10pt; 
 }
-
 </style>
 <div class="test">
 &nbsp;
@@ -2859,6 +2856,7 @@ EOF;
         $pdf->Output($file_name, 'I');
         exit;	
     }
+
     public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
         global $app, $template_data;
