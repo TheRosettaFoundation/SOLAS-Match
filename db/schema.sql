@@ -10031,22 +10031,22 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_print_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID BIGINT,IN wc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30) )
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
 BEGIN
     INSERT INTO UserRequest
                (user_id, date_of_request, word_count, type_of_request, request_by, valid_key)
-        VALUES (    uID, NOW(),  wc,  tor,   rb,  vk);
+        VALUES (    uID,           NOW(),         wc,             tor,         rb,        vk);
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_print_request_by_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_by_user`(IN userID INT,IN request_type INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_by_user`(IN userID INT, IN request_type INT)
 BEGIN
-    SELECT date_of_request,request_by,word_count,valid_key 
-		FROM UserRequest 
-		WHERE user_id=userID AND type_of_request=request_type 
-		ORDER BY date_of_request DESC;
+    SELECT *
+    FROM UserRequest
+    WHERE user_id=userID AND type_of_request=request_type
+    ORDER BY date_of_request DESC;
 END//
 DELIMITER ;
 
@@ -10054,7 +10054,7 @@ DROP PROCEDURE IF EXISTS `get_print_request_by_valid_key`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_by_valid_key`(IN validKey VARCHAR(30))
 BEGIN
-    SELECT user_id,date_of_request,request_by,word_count,valid_key,type_of_request FROM UserRequest WHERE valid_key=validKey;
+    SELECT * FROM UserRequest WHERE valid_key=validKey;
 END//
 DELIMITER ;
 
