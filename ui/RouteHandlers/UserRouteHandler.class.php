@@ -2412,7 +2412,7 @@ error_log("result: $result");//(**)
             "user_tags" => $user_tags,
             "this_user" => $user,
             "extra_scripts" => $extra_scripts,
-            "extra_styles" => $extra_styles,
+            'extra_styles' => $extra_styles,
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
