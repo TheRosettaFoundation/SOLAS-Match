@@ -2513,19 +2513,19 @@ error_log("result: $result");//(**)
 
     public static function generatevolunteercertificate(Request $request, Response $response, $args)
     {
-        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';        
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
         $valid_key = $args['valid_key'];
         $userDao = new DAO\UserDao();
         $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
         $user = $userDao->getUser($print_data_by_key[0]['user_id']);
         $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
-        $name = $userinfo->firstName .' ' .$userinfo->lastName;
+        $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $word_count = $print_data_by_key[0]['word_count'];
-        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'],$limit = 1000000,$offset = 0);        
+        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
         $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
         $languages = [];
         foreach($user_tasks as $key => $value) {
-            array_push($languages,[
+            array_push($languages, [
                 'sourceLanguageName' => $value['sourceLanguageName'],
                 'targetLanguageName' => $value['targetLanguageName']
             ]);
@@ -2533,62 +2533,59 @@ error_log("result: $result");//(**)
         $prepend = '';
         $language_combinations = '';
 
-        foreach(array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend.$item['sourceLanguageName'].' and '.$item['targetLanguageName'];
+        foreach (array_unique($languages, SORT_REGULAR) as $item) {
+            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' and ' . $item['targetLanguageName'];
             $prepend = ', ';
-                }
-    
+        }
         $grouped_tasks_word_count = [];
-        foreach ($grouped_tasks as $key =>$value) {  
+        foreach ($grouped_tasks as $key =>$value) {
             foreach ($grouped_tasks[$key] as $kk => $vv) {
-                array_push($grouped_tasks_word_count,[
+                array_push($grouped_tasks_word_count, [
                     'wordcount' => $vv['wordCount'],
                     'key' => $key ]);
             }
         }
 
-        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) { 
-        if(!isset($carry[$item['key']])) { 
-            $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']]; 
-        } else { 
-            $carry[$item['key']]['wordcount'] += $item['wordcount']; 
+        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) {
+            if (!isset($carry[$item['key']])) {
+                $carry[$item['key']] = ['key' => $item['key'], 'wordcount' => $item['wordcount']];
+            } else {
+                $carry[$item['key']]['wordcount'] += $item['wordcount'];
             } 
-        return $carry; 
+            return $carry;
         });
 
-        foreach($total_wordcount_by_tasktype as $key => $value) {
-            if($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
+        foreach ($total_wordcount_by_tasktype as $key => $value) {
+            if ($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
                 $translation_hrs =  (int)$value['wordcount'] / Common\Enums\TaskTypeHourEnum::TRANSLATION;
-            }else if($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            } else if ($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
-            }else if($key == Common\Enums\TaskTypeEnum::APPROVAL) {
+            } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
                 $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            }else {
+            } else {
                 $translation_hrs = $proofread_hrs = $transproofread_hrs = 0 ;
-                
-                }
-
+            }
         }
 
-        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);        
+        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
         $displayname = $user->getDisplayName();
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F').', '.$datetime->format('Y');
+        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
         $locales = $user->getSecondaryLocales();
 
-                // create new PDF document
+        // Create new PDF document
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
-        $pdf->SetTitle('Volunteer Certificate - '.$name);
+        $pdf->SetTitle('Volunteer Certificate - ' . $name);
         $pdf->SetSubject('Generate Certificate');
         $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
 
         // set default header data
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
         $pdf->setFooterData(array(0,64,0), array(0,64,128));
 
         // remove default header/footer
@@ -2626,7 +2623,7 @@ error_log("result: $result");//(**)
 $html = <<<EOF
         <style>
         div.test {
-            color: #000000;    
+            color: #000000;
             font-size: 14pt;
             border-style: solid solid solid solid;
             border-width: 8px 8px 8px 8px;
@@ -2693,7 +2690,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $firstName = $userinfo->firstName;
         $word_count = $print_data_by_key[0]['word_count'];
 
-        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'],$limit = 1000000,$offset = 0);        
+        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
         $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
 
         $languages = [];
