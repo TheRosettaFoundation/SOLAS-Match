@@ -2686,7 +2686,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
         $user = $userDao->getUser($print_data_by_key[0]['user_id']);
         $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
-        $name = $userinfo->firstName .' ' .$userinfo->lastName;
+        $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $firstName = $userinfo->firstName;
         $word_count = $print_data_by_key[0]['word_count'];
 
@@ -2694,7 +2694,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
 
         $languages = [];
-        foreach($user_tasks as $key => $value) {
+        foreach ($user_tasks as $key => $value) {
             array_push($languages,[
                 'sourceLanguageName' => $value['sourceLanguageName'],
                 'targetLanguageName' => $value['targetLanguageName']
@@ -2702,7 +2702,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         }
 
         $projectIds = [];
-        foreach($user_tasks as $key => $value) {
+        foreach ($user_tasks as $key => $value) {
             array_push($projectIds, [
                 'projectId' => $value['projectId']
             ]);
@@ -2710,10 +2710,10 @@ public static function downloadletter(Request $request, Response $response, $arg
         $projects = array_unique($projectIds, SORT_REGULAR);
         
         $org_details = [];
-        foreach($projects as $key => $value) {
+        foreach ($projects as $key => $value) {
             $org_id = $projectDao->get_project_org_id($value['projectId']);
             $org_name = $organisationDao->get_org_name($org_id[0][0]);
-            array_push($org_details,$org_name[0][0]);
+            array_push($org_details, $org_name[0][0]);
         }
         $unique_orgs = array_unique($org_details, SORT_REGULAR);
 
