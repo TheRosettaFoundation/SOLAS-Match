@@ -2682,7 +2682,6 @@ public static function downloadletter(Request $request, Response $response, $arg
         $valid_key = $args['valid_key'];
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
-        $organisationDao = new DAO\OrganisationDao();
         $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
         $user = $userDao->getUser($print_data_by_key[0]['user_id']);
         $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
@@ -2711,9 +2710,8 @@ public static function downloadletter(Request $request, Response $response, $arg
         
         $org_details = [];
         foreach ($projects as $key => $value) {
-            $org_id = $projectDao->get_project_org_id($value['projectId']);
-            $org_name = $organisationDao->get_org_name($org_id[0][0]);
-            array_push($org_details, $org_name[0][0]);
+            $org_name = $projectDao->get_project_org_name($value['projectId']);
+            array_push($org_details, $org_name);
         }
         $unique_orgs = array_unique($org_details, SORT_REGULAR);
 

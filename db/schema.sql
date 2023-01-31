@@ -10018,23 +10018,14 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_project_org_id`;
+DROP PROCEDURE IF EXISTS `get_project_org_name`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_org_id`(IN projectID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_org_name`(IN projectID INT)
 BEGIN
-    SELECT organisation_id 
-		FROM Projects
-		WHERE id=projectID;
-END//
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `get_org_name`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_name`(IN orgID INT)
-BEGIN
-    SELECT name
-		FROM Organisations
-		WHERE id=orgID;
+    SELECT o.name
+    FROM Projects      p
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE p.id=projectID;
 END//
 DELIMITER ;
 

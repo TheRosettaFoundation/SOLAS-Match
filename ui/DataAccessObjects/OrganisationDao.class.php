@@ -3,11 +3,9 @@
 namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\Common as Common;
-use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
-require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
 
 class OrganisationDao extends BaseDao
 {
@@ -222,13 +220,5 @@ class OrganisationDao extends BaseDao
         $request = "{$this->siteApi}v0/orgs/$orgisationId/trackingUsers";
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $ret;
-    }
-
-    public function get_org_name($org_id)
-    {
-        $result = LibAPI\PDOWrapper::call('get_org_name', LibAPI\PDOWrapper::cleanse($org_id));
-        if (empty($result)) return [];
-        return $result;
-
     }
 }
