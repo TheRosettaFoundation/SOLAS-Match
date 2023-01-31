@@ -2320,15 +2320,14 @@ error_log("result: $result");//(**)
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
-        $(document).ready(function() { 
-            
+        $(document).ready(function() {
             $("#printrequest").DataTable({
                 "ajax": {
                     "url": "/'.$user_id.'/0/printrequest",
                     "dataSrc": "",
                     "type": "GET",
                     "datatype": "json"
-                 },
+                },
                 columns: [
                     { data: "date_of_request" },
                     { data: "request_by" },
@@ -2336,61 +2335,50 @@ error_log("result: $result");//(**)
                     { data: "valid_key",
                         "render": function ( data, type, row, meta ) {
                             return data;
-                          }
-                        },                    
-                ], 
-                order: [[0, "desc"]],           
-      
-        
-    });
-
-    $("#printrequestletter").DataTable({
-        "ajax": {
-            "url": "/'.$user_id.'/1/printrequest",
-            "dataSrc": "",
-            "type": "GET",
-            "datatype": "json"
-         },
-        columns: [
-            { data: "date_of_request" },
-            { data: "request_by" },
-            { data: "word_count" },
-            { data: "valid_key",
-                "render": function ( data, type, row, meta ) {
-                    return data;
-                  }
-                },                    
-        ],
-        order: [[0, "desc"]],          
-
-
-});
-
-    
-		$("body").on("click", ".download-cert", function(e) {
-            e.preventDefault();
-            var valid_key = $(this).data("id");            
-            $.ajax({
-				type: "POST",
-				url: "/"+valid_key+"/generatevolunteercertificate",
-				data: {
-					valid_key: valid_key
-				},
-				dataType: "json"
-			}).done(function(response) {
-                console.log(response);
-                setTimeout(function() {
-					window.open("/"+response.file_name+"/generatevolunteercertificate", "_blank");
-				}, 2000);
-
+                        }
+                    },
+                ],
+                order: [[0, "desc"]],
             });
-            
-		});
-                  
 
-               
-        });        
-    
+            $("#printrequestletter").DataTable({
+                "ajax": {
+                    "url": "/'.$user_id.'/1/printrequest",
+                    "dataSrc": "",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                columns: [
+                    { data: "date_of_request" },
+                    { data: "request_by" },
+                    { data: "word_count" },
+                    { data: "valid_key",
+                        "render": function ( data, type, row, meta ) {
+                            return data;
+                        }
+                    },
+                ],
+                order: [[0, "desc"]],
+            });
+
+            $("body").on("click", ".download-cert", function(e) {
+                e.preventDefault();
+                var valid_key = $(this).data("id");
+                $.ajax({
+                    type: "POST",
+                    url: "/"+valid_key+"/generatevolunteercertificate",
+                    data: {
+                        valid_key: valid_key
+                    },
+                    dataType: "json"
+                }).done(function(response) {
+                    // console.log(response);
+                    setTimeout(function() {
+                        window.open("/"+response.file_name+"/generatevolunteercertificate", "_blank");
+                    }, 2000);
+                });
+            });
+        });
         </script>';
         $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css\"/>";
 
