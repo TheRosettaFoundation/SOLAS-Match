@@ -1389,16 +1389,17 @@ CREATE TABLE IF NOT EXISTS `possible_completes` (
   PRIMARY KEY (project_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `UserRequest`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL,
-  `date_of_request` datetime(0) NOT NULL,
-  `word_count` int(11) NOT NULL,
-  `type_of_request` int(11) NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
-  `request_by` int(10) NOT NULL,
-  `valid_key` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARSET=utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserRequest` (
+  id              INT(11) NOT NULL AUTO_INCREMENT,
+  user_id         INT(10) NOT NULL,
+  date_of_request DATETIME NOT NULL,
+  word_count      INT(11) NOT NULL,
+  type_of_request INT(11) NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
+  request_by      INT(10) NOT NULL,
+  valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 /*---------------------------------------end of tables---------------------------------------------*/
