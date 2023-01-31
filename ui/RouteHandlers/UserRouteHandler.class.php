@@ -2232,17 +2232,14 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
-            if(isset($post['PrintRequest'])) {
-               $print_request = $userDao->insert_print_request($post['user_id'],$post['user_word_count'],Common\Enums\PrintRequestTypesEnum::CERTIFICATE,$loggedInUserId,uniqid());
-                UserRouteHandler::flashNow('success', "Print request made for user");               
-
+            if (isset($post['PrintRequest'])) {
+                $userDao->insert_print_request($post['user_id'], $post['user_word_count'], 0, $loggedInUserId, uniqid());
+                UserRouteHandler::flashNow('success', 'Print request made for user');
             }
-            if(isset($post['PrintRequestLetter'])) {
-                $print_request = $userDao->insert_print_request($post['user_id'],$post['user_word_count'],Common\Enums\PrintRequestTypesEnum::REFERENCE_LETTER,$loggedInUserId,uniqid());
-                 UserRouteHandler::flashNow('success', "Print request made for user");               
- 
-             }
-
+            if (isset($post['PrintRequestLetter'])) {
+                 $userDao->insert_print_request($post['user_id'], $post['user_word_count'], 1, $loggedInUserId, uniqid());
+                 UserRouteHandler::flashNow('success', 'Print request made for user');
+            }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
@@ -2318,8 +2315,6 @@ error_log("result: $result");//(**)
             }
         }
 
-       
-        
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
