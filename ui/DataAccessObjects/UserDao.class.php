@@ -1825,7 +1825,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     public function get_print_request_valid_key_for_user($user_id, $request_type)
     {
         $result = LibAPI\PDOWrapper::call('get_print_request_valid_key_for_user', LibAPI\PDOWrapper::cleanse($user_id). ',' . LibAPI\PDOWrapper::cleanse($request_type));
-        if (empty($result)) return '';
+        if (empty($result)) return [];
         return $result[0];
     }
 
