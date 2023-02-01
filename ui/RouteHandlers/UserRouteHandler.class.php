@@ -2718,6 +2718,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $prepend = '';
         $partners1 = '';       
         $partners = implode(', ', $unique_orgs);
+        $language_combinations = '';
         foreach(array_unique($languages, SORT_REGULAR) as $item) {
             $language_combinations .= $prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
             $prepend = ', ';
