@@ -1391,12 +1391,12 @@ CREATE TABLE IF NOT EXISTS `possible_completes` (
 
 
 CREATE TABLE IF NOT EXISTS `UserRequest` (
-  id              INT(11) NOT NULL AUTO_INCREMENT,
-  user_id         INT(10) NOT NULL,
+  id              INT NOT NULL AUTO_INCREMENT,
+  user_id         INT NOT NULL,
   date_of_request DATETIME NOT NULL,
-  word_count      INT(11) NOT NULL,
-  type_of_request INT(11) NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
-  request_by      INT(10) NOT NULL,
+  word_count      INT NOT NULL,
+  type_of_request INT NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
+  request_by      INT NOT NULL,
   valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (id),
           KEY (user_id),
