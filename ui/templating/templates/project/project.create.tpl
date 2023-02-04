@@ -54,7 +54,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
 
             <div id ="projFormTop" class="pull-left">
             <div class="projFormTopBlock">
@@ -275,7 +275,7 @@
                 </div>
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
-                    <button type="submit" onclick="return validateForm();" class="btn btn-success" id="create_project_button">
+                    <button type="submit" onclick="return validateForm();" class="btn btn-success" name="create_project_button" id="create_project_button">
                         <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
                     </button>
                     <p style="margin-bottom:20px;"></p>
