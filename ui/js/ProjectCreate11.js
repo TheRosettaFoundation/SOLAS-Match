@@ -439,6 +439,8 @@ function validateForm()
     return false;
   }
 
+  var create_project_button = document.getElementById("create_project_button");
+  create_project_button.disabled = true;
   return true;
 }
 
