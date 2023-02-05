@@ -39,6 +39,16 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 13.0
+- Move to twbplatform.org server.
+- Upgrade code and database tables to work with PHP8, MySQL 8 and QT6 (C++).
+- Had to handle errors and do retrys for SMTP because of remote SMTP server (kato.translatorswb.org).
+- Updated Google tracking codes for twbplatform.org.
+- There is now logging in place for all emails sent in "email_sents" table: recipient_id, task_id, project_id, org_id, translator_id, admin_id, badge_id, topic, logged_time as appropriate.
+- Added cleaner "start" and "stop" commands for backend C++.
+- Phrase sometimes passes '/' in a filename, this is changed to '_'.
+- "message_id", "message_date" added to "post_login_messages" table.
+
 ## Version 12.4
 
 - When an email is changed in TWB Platform...
