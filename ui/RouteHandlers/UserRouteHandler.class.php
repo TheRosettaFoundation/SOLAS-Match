@@ -2724,11 +2724,15 @@ public static function downloadletter(Request $request, Response $response, $arg
 
         $prepend = '';
         $partners1 = '';       
-        $partners = implode(', ', $unique_orgs);
+        //$partners = implode(', ', $unique_orgs);
+        foreach($unique_orgs as $key => $value) {
+            $partners1 .= '<li>'.$value.'</li>';
+
+        }
         $language_combinations = '';
         foreach(array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
-            $prepend = ', ';
+            $language_combinations .= '<li>'.$prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'].'</li>';
+            $prepend = '';
         }
  
         $grouped_tasks_word_count = [];
@@ -2806,7 +2810,7 @@ div.test {
     border-width: 8px 8px 8px 8px;
     border-color: #FFFFFF;
     text-align: center;
-    margin: 50px auto;
+    
 }
 .uppercase {
     text-transform: uppercase;
@@ -2832,13 +2836,11 @@ div.test {
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
 <br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing language-related tasks in the following language combination[s]:
-<br/><br/> $language_combinations
-<br/><br/>Thereby, $firstName has provided linguistic support to the following nonprofit partners:
-<br/><br/>
-$partners
-<br/>
-
-<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<ul>$language_combinations</ul>
+Thereby, $firstName has provided linguistic support to the following nonprofit partners:
+<ul>
+$partners1
+</ul>
 <img class="footer" width="220" src="/ui/img/aimee_sign.png" />
 <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;text-align:right;width:40%;" />
 <span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
