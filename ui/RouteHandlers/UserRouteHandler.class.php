@@ -2520,6 +2520,8 @@ error_log("result: $result");//(**)
         $user = $userDao->getUser($print_data_by_key[0]['user_id']);
         $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
         $name = $userinfo->firstName . ' ' . $userinfo->lastName;
+        $firstName = $userinfo->firstName;
+        $lastName = $userinfo->lastName;
         $word_count = $print_data_by_key[0]['word_count'];
         $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
         $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
@@ -2611,7 +2613,7 @@ error_log("result: $result");//(**)
         }
 
         $pdf->setFontSubsetting(true);
-        $pdf->SetFont('times', '', 14, '', false);
+        $pdf->SetFont('dejavusans', '', 9, '', false);
         $pdf->AddPage('L');
         $pdf->SetLineStyle( array( 'width' => 5, 'color' => array(232, 153, 28)));
         $pdf->Line(0,0,$pdf->getPageWidth(),0); 
@@ -2624,7 +2626,7 @@ $html = <<<EOF
         <style>
         div.test {
             color: #000000;
-            font-size: 14pt;
+            font-size: 13pt;
             border-style: solid solid solid solid;
             border-width: 8px 8px 8px 8px;
             border-color: #FFFFFF;
@@ -2637,17 +2639,20 @@ $html = <<<EOF
         }
         .footer {
             text-align: center;
-            font-size: 10pt;
+            font-size: 11pt;
         }
         .footer-main {
             text-align:center;
         }
         </style>
-        <div class="test">
-        &nbsp;
-        <img width="250" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img width="270" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+        <div class="test">
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase"> $name </span>
         <br /><br />Is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since and contributed a 
@@ -2670,7 +2675,7 @@ EOF;
     $pdf->Cell(0, 9, "Ref: ". $valid_key, 0, false, 'R', 0, '', 0, false, 'T', 'M' );
     $pdf->lastPage();
 
-    $file_name = 'certificate_' . $userinfo->firstName . '_' . date('Y-m-d') . '.pdf';
+    $file_name = 'Certificate_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
     $pdf->Output($file_name, 'I');
     exit;
     }
@@ -2687,6 +2692,8 @@ public static function downloadletter(Request $request, Response $response, $arg
         $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
         $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $firstName = $userinfo->firstName;
+        $firstName = $userinfo->firstName;
+        $lastName = $userinfo->lastName;
         $word_count = $print_data_by_key[0]['word_count'];
 
         $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
@@ -2786,7 +2793,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         }
 
         $pdf->setFontSubsetting(true);
-        $pdf->SetFont('times', '', 14, '', false);
+        $pdf->SetFont('dejavusans', '', 8, '', false);
         $pdf->AddPage();
 // Set some content to print
 $html = <<<EOF
@@ -2794,7 +2801,7 @@ $html = <<<EOF
 div.test {
     color: #000000;
     
-    font-size: 14pt;
+    font-size: 12pt;
     border-style: solid solid solid solid;
     border-width: 8px 8px 8px 8px;
     border-color: #FFFFFF;
@@ -2817,11 +2824,11 @@ div.test {
     font-size:10pt; 
 }
 </style>
+<img width="270" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
 <div class="test">
-&nbsp;
-<img width="250" height="62" style="text-align:left;" alt="CLEAR Global logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img//CG_Logo_horizontal_primary_RGB.svg">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
 <br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing language-related tasks in the following language combination[s]:
@@ -2833,7 +2840,7 @@ $partners
 
 <br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <img class="footer" width="220" src="/ui/img/aimee_sign.png" />
-<hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;text-align:right;" />
+<hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;text-align:right;width:40%;" />
 <span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
 </div>
 <div class="footer-clear">
@@ -2842,16 +2849,18 @@ $partners
 </span>
 </div>
 <div class="footer-address">
-<br/><span style="text-align:left;">CLEAR Global/Translators without Borders</span>
-<br/><span style="text-align:left;">9169 W State St #3055</span>
+<br/><span style="text-align:left;">CLEAR Global/Translators without Borders&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email: info@translatorswithoutborders.org</span>
+<br/><span style="text-align:left;">9169 W State St #3055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp; Website: http://translatorswithoutborders.org</span>
 <br/><span style="text-align:left;">Garden City, ID 83714, USA</span>
 <br/><span style="text-align:left;">Ref: $valid_key</span>
 </div>
+
 EOF;
 
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->lastPage();
-        $file_name = 'certificate_' . $userinfo->firstName. '_' . date('Y-m-d') . '.pdf';
+        $file_name = 'Reference_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
         $pdf->Output($file_name, 'I');
         exit;	
     }
