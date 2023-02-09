@@ -2536,7 +2536,7 @@ error_log("result: $result");//(**)
         $language_combinations = '';
 
         foreach (array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' and ' . $item['targetLanguageName'];
+            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
             $prepend = ', ';
         }
         $grouped_tasks_word_count = [];
@@ -2645,13 +2645,14 @@ $html = <<<EOF
             text-align:center;
         }
         </style>
-        <img width="270" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+        <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="right" valign="middle"
+                    width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
+        </tr></table>
         <div class="test">
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase"> $name </span>
@@ -2773,8 +2774,9 @@ public static function downloadletter(Request $request, Response $response, $arg
         $since = $datetime->format('F') . ', ' . $datetime->format('Y');
         $locales = $user->getSecondaryLocales();
         $today = date('d F Y');
+        $pageDimension = array('500,300');
 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, $pageDimension, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
         $pdf->SetTitle('Volunteer Letter - ' . $name);
@@ -2828,10 +2830,15 @@ div.test {
     font-size:10pt; 
 }
 </style>
-<img width="270" height="62" style="text-align:left;" alt="TWB logo" data-src="/ui/img/TWB_logo1.PNG" class="clearlogo" src="/ui/img/TWB_logo1.PNG">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img width="180" height="68" style="text-align:right" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+<table width="100%" cellspacing="0" cellpadding="55%">
+          <tr valign="bottom">
+                <td class="header1" rowspan="2" align="left" valign="middle"
+                      width="34%"><img width="245"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
+                <td width="35%"></td>
+                  
+                <td class="header1" rowspan="2" align="right" valign="middle"
+                      width="19%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
+          </tr></table>
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
