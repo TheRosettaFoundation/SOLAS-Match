@@ -1319,7 +1319,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
                 if (!empty($post['earthquake'])) {
                     $tag = new Common\Protobufs\Models\Tag();
-                    $tag->setLabel('2023-TurkeySyria');
+                    $tag->setLabel('2023-turkeysyria');
                     $project->addTag($tag);
                 }
 
