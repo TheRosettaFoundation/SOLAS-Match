@@ -1407,6 +1407,20 @@ CREATE TABLE IF NOT EXISTS `email_sents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `UserRequest` (
+  id              INT NOT NULL AUTO_INCREMENT,
+  user_id         INT NOT NULL,
+  date_of_request DATETIME NOT NULL,
+  word_count      INT NOT NULL,
+  type_of_request INT NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
+  request_by      INT NOT NULL,
+  valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (id),
+          KEY (user_id),
+  UNIQUE  KEY (valid_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -10090,6 +10104,54 @@ BEGIN
     END WHILE;
 
     # SELECT result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_org_name`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_org_name`(IN projectID INT)
+BEGIN
+    SELECT o.name
+    FROM Projects      p
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE p.id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_print_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
+BEGIN
+    INSERT INTO UserRequest
+               (user_id, date_of_request, word_count, type_of_request, request_by, valid_key)
+        VALUES (    uID,           NOW(),         wc,             tor,         rb,        vk);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_print_request_by_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_by_user`(IN userID INT, IN request_type INT)
+BEGIN
+    SELECT *
+    FROM UserRequest
+    WHERE user_id=userID AND type_of_request=request_type
+    ORDER BY date_of_request DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_print_request_by_valid_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_by_valid_key`(IN validKey VARCHAR(30))
+BEGIN
+    SELECT * FROM UserRequest WHERE valid_key=validKey;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_print_request_valid_key_for_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_print_request_valid_key_for_user`(IN userID INT,IN request_type INT)
+BEGIN
+    SELECT valid_key FROM UserRequest WHERE user_id=userID AND type_of_request=request_type ORDER BY id DESC;
 END//
 DELIMITER ;
 

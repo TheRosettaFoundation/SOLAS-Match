@@ -1317,6 +1317,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
                 }
+                if (!empty($post['earthquake'])) {
+                    $tag = new Common\Protobufs\Models\Tag();
+                    $tag->setLabel('2023-turkeysyria');
+                    $project->addTag($tag);
+                }
 
                 try {
                     $project = $projectDao->createProject($project);
@@ -1486,7 +1491,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
-                                           $this->create_discourse_topic($project->getId(), $target_languages);
+                                           $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
                                         } catch (\Exception $e) {
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
@@ -1731,7 +1736,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0)
+    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
     {
         global $app;
         $projectDao = new DAO\ProjectDao();

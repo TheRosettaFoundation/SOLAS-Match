@@ -1390,4 +1390,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     {
         LibAPI\PDOWrapper::call('update_tasks_status_cancelled', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status_id) . ',' . LibAPI\PDOWrapper::cleanse($cancelled) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
+
+    public function get_project_org_name($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_project_org_name', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return '';
+        return $result[0]['name'];
+    }
 }

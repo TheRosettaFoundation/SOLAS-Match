@@ -54,7 +54,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
 
             <div id ="projFormTop" class="pull-left">
             <div class="projFormTopBlock">
@@ -107,6 +107,15 @@
                         <p class="desc">{Localisation::getTranslation('project_create_word_count')}</p>
                     </div>
                 </div>
+<span class="hidden">
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>This project is part of the emergency response to the Türkiye/Syria earthquake:</h2>
+                        <p class="desc">Check if that is the case.</p>
+                        <input type="checkbox" name="earthquake" id="earthquake" value="1" />
+                    </div>
+                </div>
+</span>
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('common_deadline')}: <span style="color: red">*</span></h2>
@@ -275,7 +284,7 @@
                 </div>
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
-                    <button type="submit" onclick="return validateForm();" class="btn btn-success">
+                    <button type="submit" onclick="return validateForm();" class="btn btn-success" name="create_project_button" id="create_project_button">
                         <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
                     </button>
                     <p style="margin-bottom:20px;"></p>

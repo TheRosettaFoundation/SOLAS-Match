@@ -1407,8 +1407,8 @@ class TaskRouteHandler
 
         $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView3.js");
         $extra_scripts .= "
-    <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
-    <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
+    <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css\"/>
+    <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js\"></script>
     <script type=\"text/javascript\">
       $(document).ready(function(){
         $('#myTable').DataTable(
