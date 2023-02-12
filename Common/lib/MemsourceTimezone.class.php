@@ -4,7 +4,7 @@ namespace SolasMatch\Common\Lib;
 
 class MemsourceTimezone
 {
-    public function timezones()
+    public static function timezones()
     {
         $timezones = [
             'GHANA' => 'Africa/Accra',
