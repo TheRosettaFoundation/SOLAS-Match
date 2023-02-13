@@ -10155,6 +10155,81 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_user_earthquake_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_earthquake_tasks`(IN uID INT)
+BEGIN
+    SELECT
+        t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.`comment`, t.`task-type_id` AS taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline, t.`created-time` AS createdTime
+    FROM ProjectTags                     pt
+    JOIN Projects                         p ON pt.project_id=p.id
+    JOIN Tasks                            t ON p.id=t.project_id
+    JOIN tasks_status_audit_trail       sat ON t.id=sat.task_id AND sat.status_id=2
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target
+         JOIN UserTags                   ut ON ut.user_id=uID AND ut.tag_id=4868
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
+    LEFT JOIN TaskTranslatorBlacklist    bl ON t.id=bl.task_id AND bl.user_id=uID
+    WHERE
+        pt.tag_id=4868 AND
+        t.`task-status_id`=2 AND
+        t.published=1 AND
+        bl.task_id IS NULL AND
+        tq.required_qualification_level<=uqp.qualification_level AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    GROUP BY t.id
+    HAVING
+        MAX(sat.changed_time)>=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 HOUR), "%Y-%m-%d %H:10:00") AND
+        MAX(sat.changed_time)< DATE_FORMAT(NOW(), "%Y-%m-%d %H:10:00")
+    ORDER BY t.deadline DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_users_list_for_earthquake`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_users_list_for_earthquake`()
+BEGIN
+    SELECT uqp.user_id
+    FROM ProjectTags                     pt
+    JOIN Projects                         p ON pt.project_id=p.id
+    JOIN Tasks                            t ON p.id=t.project_id
+    JOIN tasks_status_audit_trail       sat ON t.id=sat.task_id AND sat.status_id=2
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target
+         JOIN UserTags                   ut ON uqp.user_id=ut.user_id AND ut.tag_id=4868
+    LEFT JOIN TaskTranslatorBlacklist    bl ON t.id=bl.task_id AND uqp.user_id=bl.user_id
+    WHERE
+        pt.tag_id=4868 AND
+        t.`task-status_id`=2 AND
+        t.published=1 AND
+        bl.task_id IS NULL AND
+        sat.changed_time>=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 HOUR), "%Y-%m-%d %H:10:00") AND
+        sat.changed_time< DATE_FORMAT(NOW(), "%Y-%m-%d %H:10:00")
+    GROUP BY uqp.user_id
+    ORDER BY MAX(t.deadline) DESC;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

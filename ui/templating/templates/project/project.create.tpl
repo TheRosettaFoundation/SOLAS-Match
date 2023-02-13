@@ -107,7 +107,6 @@
                         <p class="desc">{Localisation::getTranslation('project_create_word_count')}</p>
                     </div>
                 </div>
-<span class="hidden">
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>This project is part of the emergency response to the Türkiye/Syria earthquake:</h2>
@@ -115,7 +114,6 @@
                         <input type="checkbox" name="earthquake" id="earthquake" value="1" />
                     </div>
                 </div>
-</span>
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('common_deadline')}: <span style="color: red">*</span></h2>
