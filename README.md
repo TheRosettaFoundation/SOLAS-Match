@@ -51,6 +51,10 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Phrase sometimes passes '/' in a filename, this is changed to '_'.
 - Fixed a bug causing the Task Type in Task Stream emails to be often incorrect.
 - "message_id", "message_date" added to "post_login_messages" table.
+- Added checkbox for emergency response to project create page
+  - This allows partners to set a shorter (if clicked)
+  - Those projects automatically get a tag "2023-turkeysyria"
+- If linguists subscribe to the above tag they will get emailed within an hour if new tasks from a project with that tag become claimable, are published and match their language pairs. There is a new template for this.
 
 ## Version 12.4
 
