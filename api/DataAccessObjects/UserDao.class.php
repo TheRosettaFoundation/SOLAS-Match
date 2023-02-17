@@ -543,8 +543,10 @@ class UserDao
             Lib\PDOWrapper::cleanse($project_id);
         $result = Lib\PDOWrapper::call('userSubscribedToProject', $args);
         if ($result) {
+error_log("result[0]['result']: " . $result[0]['result']);
             return $result[0]['result'];
         } else {
+error_log("result[0]['result']: EMPTY");
             return null;
         }
     }
