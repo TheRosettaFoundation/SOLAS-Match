@@ -99,7 +99,7 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/subscribedToProject/$userId/$projectId";
         $ret = $this->client->call(null, $request);
-error_log("ret: " . $ret]);
+error_log("ret: " . $ret);
         return $ret;
     }
 
