@@ -96,10 +96,10 @@ class UserDao extends BaseDao
 
     public function isSubscribedToProject($userId, $projectId)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/users/subscribedToProject/$userId/$projectId";
         $ret = $this->client->call(null, $request);
 error_log("ret: " . $ret);
+        if (empty($ret)) return 0;
         return $ret;
     }
 
