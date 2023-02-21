@@ -2673,7 +2673,7 @@ EOF;
 
 public static function downloadletter(Request $request, Response $response, $args)
 {
-        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
+        require_once 'resources/TCPDF-main/examples/tcpdf_custom.php';
         
         $valid_key = $args['valid_key'];
         $userDao = new DAO\UserDao();
@@ -2762,7 +2762,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $today = date('d F Y');
         $pageDimension = array('500,300');
 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, $pageDimension, true, 'UTF-8', false);
+        $pdf = new \MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
         $pdf->SetTitle('Volunteer Letter - ' . $name);
@@ -2770,13 +2770,15 @@ public static function downloadletter(Request $request, Response $response, $arg
         $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
         $pdf->setFooterData(array(0,64,0), array(0,64,128));
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+        $pdf->setPrintHeader(true);
+        $pdf->setPrintFooter(true);
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+      // $pdf->SetMargins(20, 10, 10);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->SetFooterMargin(60);
+        $pdf->CustomKey = $valid_key;
+        $pdf->SetAutoPageBreak(TRUE, 50);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
@@ -2816,15 +2818,7 @@ div.test {
     font-size:10pt; 
 }
 </style>
-<table width="100%" cellspacing="0" cellpadding="55%">
-          <tr valign="bottom">
-                <td class="header1" rowspan="2" align="left" valign="middle"
-                      width="34%"><img width="245"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
-                <td width="35%"></td>
-                  
-                <td class="header1" rowspan="2" align="right" valign="middle"
-                      width="19%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
-          </tr></table>
+
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
@@ -2834,38 +2828,7 @@ Thereby, $firstName has provided linguistic support to the following nonprofit p
 <ul>
 $partners1
 </ul>
-        
-
 </div>
-
-<table width="100%" cellspacing="0" cellpadding="55%">
-          <tr valign="bottom">
-                <td class="header1" rowspan="2" align="left" valign="middle"
-                      width="34%"></td>
-                <td width="30%"></td>
-                  
-                <td class="header1" rowspan="2" align="right" valign="middle"
-                      width="40%"><img style="border-bottom: 225px solid red;" class="" width="220" src="/ui/img/aimee_sign.png" />
-                      <hr/>
-                      <span style="text-align:right;font-size: 10pt;">Aimee Ansari, CEO, CLEAR Global / TWB</span>
-                      </td>
-          </tr></table>
-
-
-<div class="footer-clear">
-<span>
-<span>Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be heard, whatever language they speak. We do this through language support, training, data, and technology.</span>
-</span>
-</div>
-<div class="footer-address">
-<br/><span style="text-align:left;">CLEAR Global/Translators without Borders&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email: info@translatorswithoutborders.org</span>
-<br/><span style="text-align:left;">9169 W State St #3055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp; Website: http://translatorswithoutborders.org</span>
-<br/><span style="text-align:left;">Garden City, ID 83714, USA</span>
-<br/>
-<br/><span style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ref: $valid_key</span>
-</div>
-
 EOF;
 
         $pdf->writeHTML($html, true, false, true, false, '');
