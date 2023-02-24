@@ -679,7 +679,7 @@ error_log("createTaskDirectly: $args");
     {
         $result = LibAPI\PDOWrapper::call('get_paid_status', LibAPI\PDOWrapper::cleanse($task_id));
         if (empty($result)) return 0;
-        return 1;
+        return $result[0];
     }
 
     public function set_paid_status($task_id)

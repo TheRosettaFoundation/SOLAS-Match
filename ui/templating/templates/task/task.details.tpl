@@ -228,7 +228,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
-                    {if $paid_status == 0}
+                    {if empty($paid_status)}
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
                             <i class="icon-check icon-black"></i> Make Paid
@@ -256,7 +256,7 @@
     </table>
 {/if}
 
-{if !empty($isSiteAdmin) && isset($paid_status)}
+{if !empty($isSiteAdmin) && !empty($paid_status)}
     <table width="100%" class="table table-striped">
         <thead>
             <th>Purchase Order</th>
@@ -268,19 +268,31 @@
         <tr align="center">
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input type='text' value="{$purchase_order}" name="purchase_order" id="purchase_order" />
+                    <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
                     <input type="submit" class="btn btn-primary" name="purchase_order_submit" value="Submit" />
                     <input type="hidden" name="mark_purchase_order" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
             <td>
-                {$payment_status}
-                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to ???" />
-                    <input type="hidden" name="mark_payment_status" value="1" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
+                {$paid_status['payment_status']}
+                {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        {if $paid_status['payment_status'] == 'Pending documentation'}
+                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Ready for payment" />
+                            <input type="hidden" name="mark_payment_status" value="1" />
+                        {/if}
+                        {if $paid_status['payment_status'] == 'Ready for payment'}
+                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Pending documentation" />
+                            <input type="hidden" name="mark_payment_status" value="2" />
+                        {/if}
+                        {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
+                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Settled???" />
+                            <input type="hidden" name="mark_payment_status" value="3" />
+                        {/if}
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
