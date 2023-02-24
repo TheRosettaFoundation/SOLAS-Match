@@ -165,6 +165,7 @@
     </table>
 </div>
 
+{assign var="task_id" value=$task->getId()}
 {if isset($isOrgMember)}
     <table width="100%" class="table table-striped">
         <thead>
@@ -179,7 +180,6 @@
         </thead>
         <tr align="center">
             <td>
-                {assign var="task_id" value=$task->getId()}
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
@@ -252,6 +252,50 @@
                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
             </td>
             {/if}
+        </tr>
+    </table>
+{/if}
+
+{if !empty($isSiteAdmin) && isset($paid_status)}
+    <table width="100%" class="table table-striped">
+        <thead>
+            <th>Purchase Order</th>
+            <th>Payment Status</th>
+            <th>Unit Rate</th>
+            <th>Default Unit Rate</th>
+            <th>Total Expected Cost</th>
+        </thead>
+        <tr align="center">
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type='text' value="{$purchase_order}" name="purchase_order" id="purchase_order" />
+                    <input type="submit" class="btn btn-primary" name="purchase_order_submit" value="Submit" />
+                    <input type="hidden" name="mark_purchase_order" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            <td>
+                {$payment_status}
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to ???" />
+                    <input type="hidden" name="mark_payment_status" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type='text' value="{$unit_rate}" name="unit_rate" id="unit_rate" />
+                    <input type="submit" class="btn btn-primary" name="unit_rate_submit" value="Submit" />
+                    <input type="hidden" name="mark_unit_rate" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            <td>
+                {$default_unit_rate}
+            </td>
+            <td>
+                {$total_expected_cost}
+            </td>
         </tr>
     </table>
 {/if}
