@@ -1105,6 +1105,8 @@ class TaskRouteHandler
         if ($taskClaimed) $details_claimant = $taskDao->getUserClaimedTask($task_id);
         else              $details_claimant = 0;
 
+        $paid_status = $taskDao->get_paid_status($task_id);
+
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
@@ -1243,6 +1245,21 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
+            if ($isSiteAdmin && isset($post['mark_purchase_order'])) {
+                $paid_status['purchase_order'] = $post['purchase_order'];
+                $taskDao->update_paid_status($paid_status);
+                UserRouteHandler::flashNow('success', 'Purchase Order updated.');
+            }
+            if ($isSiteAdmin && isset($post['mark_payment_status'])) {
+                $paid_status['payment_status'] = $post['mark_payment_status'];
+                $taskDao->update_paid_status($paid_status);
+                UserRouteHandler::flashNow('success', 'Payment Status updated.');
+            }
+            if ($isSiteAdmin && isset($post['mark_unit_rate'])) {
+                $paid_status['unit_rate'] = $post['unit_rate'];
+                $taskDao->update_paid_status($paid_status);
+                UserRouteHandler::flashNow('success', 'Unit Rate updated.');
+            }
         }
 
         $taskMetaData = array();
@@ -1306,7 +1323,6 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
-        $paid_status = $taskDao->get_paid_status($task_id);
         $total_expected_cost = '-';
         if ($task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
 

@@ -280,15 +280,15 @@
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                         {if $paid_status['payment_status'] == 'Pending documentation'}
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Ready for payment" />
-                            <input type="hidden" name="mark_payment_status" value="1" />
+                            <input type="hidden" name="mark_payment_status" value="Ready for payment" />
                         {/if}
                         {if $paid_status['payment_status'] == 'Ready for payment'}
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Pending documentation" />
-                            <input type="hidden" name="mark_payment_status" value="2" />
+                            <input type="hidden" name="mark_payment_status" value="Pending documentation" />
                         {/if}
                         {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Settled???" />
-                            <input type="hidden" name="mark_payment_status" value="3" />
+                            <input type="hidden" name="mark_payment_status" value="Settled" />
                         {/if}
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
@@ -296,7 +296,7 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input type='text' value="{$unit_rate}" name="unit_rate" id="unit_rate" />
+                    <input type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
                     <input type="submit" class="btn btn-primary" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
