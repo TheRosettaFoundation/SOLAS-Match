@@ -1306,6 +1306,10 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
+        $paid_status = $taskDao->get_paid_status($task_id);
+        $total_expected_cost = '-';
+        if ($task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
+
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
@@ -1322,7 +1326,8 @@ class TaskRouteHandler
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
-                'paid_status' => $taskDao->get_paid_status($task_id),
+                'paid_status' => $paid_status,
+                'total_expected_cost' => $total_expected_cost,
                 'taskStatusTexts' => $taskStatusTexts,
                 'list_qualified_translators' => $list_qualified_translators,
                 'details_claimed_date' => $details_claimed_date,

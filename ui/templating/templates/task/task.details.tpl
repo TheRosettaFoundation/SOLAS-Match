@@ -310,7 +310,7 @@
                 {/foreach}
             </td>
             <td>
-                {$total_expected_cost}
+                ${$total_expected_cost}
             </td>
         </tr>
     </table>
