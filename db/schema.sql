@@ -1236,11 +1236,11 @@ CREATE TABLE IF NOT EXISTS `prozdata` (
 
 
 CREATE TABLE IF NOT EXISTS `TaskPaids` (
-  task_id BIGINT(20) UNSIGNED NOT NULL,
-  level      INT(10) UNSIGNED NOT NULL,
-  purchase_order INT UNSIGNED NOT NULL DEFAULT 0,
-  payment_status INT UNSIGNED NOT NULL DEFAULT 0,
-  unit_rate FLOAT NOT NULL DEFAULT 0.0,
+  task_id           BIGINT UNSIGNED NOT NULL,
+  level             INT UNSIGNED NOT NULL,
+  purchase_order    INT UNSIGNED NOT NULL DEFAULT 0,
+  payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unpaid',
+  unit_rate         FLOAT NOT NULL DEFAULT 0.0,
   UNIQUE KEY FK_TaskPaid (task_id),
   CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -9540,7 +9540,8 @@ DROP PROCEDURE IF EXISTS `set_paid_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_paid_status`(IN tID BIGINT)
 BEGIN
-    INSERT INTO TaskPaids VALUES (tID, 1);
+    INSERT INTO TaskPaids (task_id, level, unit_rate)
+                   VALUES (tID,         1, (SELECT ttd.unit_rate FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID));
 END//
 DELIMITER ;
 
