@@ -286,10 +286,12 @@
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Pending documentation" />
                             <input type="hidden" name="mark_payment_status" value="Pending documentation" />
                         {/if}
+<!-- (**)
                         {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Settled???" />
                             <input type="hidden" name="mark_payment_status" value="Settled" />
                         {/if}
+(**) -->
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}

@@ -1246,20 +1246,31 @@ class TaskRouteHandler
                 }
             }
             if ($isSiteAdmin && isset($post['mark_purchase_order'])) {
-                if ($paid_status['purchase_order'] != $post['purchase_order']) $paid_status['payment_status'] = 'Unpaid';
-                $paid_status['purchase_order'] = $post['purchase_order'];
-                $taskDao->update_paid_status($paid_status);
-                UserRouteHandler::flashNow('success', 'Purchase Order updated.');
+                if (is_int($post['purchase_order'])) {
+                    if ($paid_status['purchase_order'] != $post['purchase_order']) $paid_status['payment_status'] = 'Unpaid';
+                    $paid_status['purchase_order'] = $post['purchase_order'];
+                    $taskDao->update_paid_status($paid_status);
+                    UserRouteHandler::flashNow('success', 'Purchase Order updated.');
+                } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
             }
             if ($isSiteAdmin && isset($post['mark_payment_status'])) {
-                $paid_status['payment_status'] = $post['mark_payment_status'];
-                $taskDao->update_paid_status($paid_status);
-                UserRouteHandler::flashNow('success', 'Payment Status updated.');
+//(**)set to Unpaid OK by PO?? not here
+//(**)Settled transitions ask Mariam about others
+                if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
+                        ||
+                    $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment')
+                {
+                    $paid_status['payment_status'] = $post['mark_payment_status'];
+                    $taskDao->update_paid_status($paid_status);
+                    UserRouteHandler::flashNow('success', 'Payment Status updated.');
+                } else UserRouteHandler::flashNow('error', 'Payment Status Invalid.');
             }
             if ($isSiteAdmin && isset($post['mark_unit_rate'])) {
-                $paid_status['unit_rate'] = $post['unit_rate'];
-                $taskDao->update_paid_status($paid_status);
-                UserRouteHandler::flashNow('success', 'Unit Rate updated.');
+                if (is_numeric($post['unit_rate']))
+                    $paid_status['unit_rate'] = $post['unit_rate'];
+                    $taskDao->update_paid_status($paid_status);
+                    UserRouteHandler::flashNow('success', 'Unit Rate updated.');
+                } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
         }
 
