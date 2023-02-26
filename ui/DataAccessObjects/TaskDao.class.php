@@ -689,7 +689,7 @@ error_log("createTaskDirectly: $args");
 
     public function update_paid_status($paid_status)
     {
-        LibAPI\PDOWrapper::call('update_paid_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($paid_status['purchase_order']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($paid_status['payment_status']) . ',' . LibAPI\PDOWrapper::cleanse($paid_status['unit_rate']));
+        LibAPI\PDOWrapper::call('update_paid_status', LibAPI\PDOWrapper::cleanse($paid_status['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($paid_status['purchase_order']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($paid_status['payment_status']) . ',' . LibAPI\PDOWrapper::cleanse($paid_status['unit_rate']));
     }
 
     public function clear_paid_status($task_id)
