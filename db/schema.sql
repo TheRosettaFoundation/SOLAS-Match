@@ -9552,6 +9552,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_all_as_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_as_paid`(IN pID INT)
@@ -9566,6 +9567,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `set_all_as_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_all_as_paid`(IN pID INT)
@@ -9574,6 +9576,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `set_revision_as_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_revision_as_paid`(IN pID INT)
@@ -9582,6 +9585,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `clear_all_as_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_all_as_paid`(IN pID INT)
