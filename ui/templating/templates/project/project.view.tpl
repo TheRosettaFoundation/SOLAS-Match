@@ -255,6 +255,8 @@
                 <option value="all_revision_tasks">Select all Revision Tasks</option>
                 <option value="all_revtrans_tasks">Select all Translation and Revision</option>
                 <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
+                <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
+                <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
                 <option value="delesect_all">Deselect all</option>
             </select>
         </span>
@@ -321,7 +323,7 @@
             <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
-            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btn btn-small" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
@@ -329,6 +331,33 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
+            <a class=" btn btn-small open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
+                <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-65px;" aria-hidden="true"></i>  Set Purchase Order #
+            </a>
+            <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class=" btn btn-small" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
+                <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set tasks to Ready for Payment
+            </a>
+                <input type="hidden" name="ready_payment" value="" />
+                <input type="hidden" name="ready_payment_status" value="Ready for payment" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+            <form id="pending_documentation" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class=" btn btn-small" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
+                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
+            </a>
+                <input type="hidden" name="pending_documentation" value="" />
+                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+            <form id="tasks_settled" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class=" btn btn-small" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
+                <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-70px;" aria-hidden="true"></i> Set tasks to Settled
+            </a>
+                <input type="hidden" name="tasks_settled" value="" />
+                <input type="hidden" name="ready_payment_status" value="Settled" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
         {/if}
             </ul>
          </div>
@@ -396,7 +425,7 @@
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" /> </td>
+                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]}" /> </td>
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -460,7 +489,20 @@
                                     {if $isSiteAdmin}
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
-                                         <span>Paid</span>
+                                         <span>Paid&nbsp;
+                                         {if $get_payment_status_for_project[$task_id] == 'Unsettled'}
+                                          <span data-toggle="tooltip" data-placement="bottom" title="Unsettled"><i class="icon-remove" ></i> </span>
+                                         {elseif $get_payment_status_for_project[$task_id] == 'Ready for payment'}
+                                          <span data-toggle="tooltip" data-placement="bottom" title="Ready for payment"><i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
+                                         {elseif $get_payment_status_for_project[$task_id] == 'Pending documentation'}
+                                          <span data-toggle="tooltip" data-placement="bottom" title="Pending documentation"><i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
+                                         {elseif $get_payment_status_for_project[$task_id] == 'Settled'}
+                                          <span data-toggle="tooltip" data-placement="bottom" title="Settled"><i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
+                                          {else}
+                                           <span></span>
+                                          {/if}
+                                         
+                                          </span>
                                      {else}
                                          <span>-</span>
                                      {/if}
@@ -677,6 +719,25 @@
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
+  </div>
+  </form>
+</div>
+<!-- PO# Modal -->
+<div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Set Purchase Order #</h3>
+  </div>
+  <div class="modal-body">
+  <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+  PO #: <input type="text" name="po" value="" />
+  <input type="hidden" name="ponum" value="" />
+  <input type="hidden" name="ready_payment_status" value="Unsettled" />
+   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
   </div>
   </form>
 </div>

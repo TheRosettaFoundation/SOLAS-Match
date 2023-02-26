@@ -712,6 +712,16 @@ error_log("createTaskDirectly: $args");
         }
         return $paids;
     }
+    public function get_payment_status_for_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_payment_status_for_project', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $paids = [];
+        foreach ($result as $row) {
+            $paids[$row['id']] = $row['payment_status'];
+        }
+        return $paids;
+    }
 
     public function sync_po()
     {
@@ -808,5 +818,12 @@ error_log("createTaskDirectly: $args");
         }
         LibAPI\PDOWrapper::call('insert_sync_po_event', LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()) . ',' . LibAPI\PDOWrapper::cleanse(count($ids)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(implode(',', $ids)));
         return count($ids) + 1;
+    }
+
+    public function get_tasks_type_details_by_task_type($task_type_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tasks_type_details_by_task_type', LibAPI\PDOWrapper::cleanse($task_type_id));
+        if (empty($result)) $result = array();
+        return $result[0];
     }
 }

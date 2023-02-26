@@ -895,6 +895,70 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
                 }
+                $updated = [];
+                if (!empty($post['ready_payment'])) {
+                    $task_ids = preg_split ("/\,/", $post['ready_payment']);
+                    foreach ($task_ids as $id) {                      
+                        if($taskDao->get_paid_status($id)['payment_status'] == 'Pending documentation') {
+                            $updated[] = $id;                           
+                            $paid_status['task_id'] = $id;
+                            $paid_status_task = $taskDao->get_paid_status($id);
+                            $paid_status['payment_status'] = $post['ready_payment_status'];
+                            $paid_status['purchase_order'] = $paid_status_task['purchase_order'];
+                            $paid_status['unit_rate'] = $paid_status_task['unit_rate'];
+                            $paid_status['status_changed'] = date('Y-m-d H:i:s');                            
+                            $taskDao->update_paid_status($paid_status);
+                        }
+                    }
+                    UserRouteHandler::flashNow('success', count($updated) . ' tasks now marked as ready for payment.');
+                }
+
+                if (!empty($post['pending_documentation'])) {
+                    $task_ids = preg_split ("/\,/", $post['pending_documentation']);
+                    foreach ($task_ids as $id) {                      
+                        if($taskDao->get_paid_status($id)['payment_status'] == 'Ready for payment') {
+                            $updated[] = $id;                           
+                            $paid_status['task_id'] = $id;
+                            $paid_status['payment_status'] = $post['ready_payment_status'];
+                            $paid_status['purchase_order'] = $taskDao->get_paid_status($id)['purchase_order'];
+                            $paid_status['unit_rate'] = $taskDao->get_paid_status($id)['unit_rate'];
+                            $paid_status['status_changed'] = date('Y-m-d H:i:s');                            
+                            $taskDao->update_paid_status($paid_status);
+                        }
+                    }
+                    UserRouteHandler::flashNow('success', count($updated) . ' tasks now marked as pending documentation.');
+                }
+
+                if (!empty($post['tasks_settled'])) {
+                    $task_ids = preg_split ("/\,/", $post['tasks_settled']);
+                    foreach ($task_ids as $id) {                      
+                        if($taskDao->get_paid_status($id)['payment_status'] == 'Ready for payment') {
+                            $updated[] = $id;                           
+                            $paid_status['task_id'] = $id;
+                            $paid_status['payment_status'] = $post['ready_payment_status'];
+                            $paid_status['purchase_order'] = $taskDao->get_paid_status($id)['purchase_order'];
+                            $paid_status['unit_rate'] = $taskDao->get_paid_status($id)['unit_rate'];
+                            $paid_status['status_changed'] = date('Y-m-d H:i:s');                            
+                            $taskDao->update_paid_status($paid_status);
+                        }
+                    }
+                    UserRouteHandler::flashNow('success', count($updated) . ' tasks now marked as settled.');
+                }
+
+                if (!empty($post['ponum']) && !empty($post['po'])) {
+                    $task_ids = preg_split ("/\,/", $post['ponum']);                    
+                    foreach ($task_ids as $id) { 
+                        $task = $taskDao->getTask($id);              
+                        $updated[] = $id;                           
+                        $paid_status['task_id'] = $id;
+                        $paid_status['payment_status'] = $post['ready_payment_status'];
+                        $paid_status['purchase_order'] = $post['po'];
+                        $paid_status['unit_rate'] = $taskDao->get_tasks_type_details_by_task_type($task->getTaskType())['unit_rate'];
+                        $paid_status['status_changed'] = date('Y-m-d H:i:s');                            
+                        $taskDao->update_paid_status($paid_status);
+                    }
+                    UserRouteHandler::flashNow('success', count($updated) . ' tasks purchase order number set.');
+                }
             }
         }
 
@@ -983,6 +1047,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'project' => $project,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
                 'get_paid_for_project' => $taskDao->get_paid_for_project($project_id),
+                'get_payment_status_for_project' => $taskDao->get_payment_status_for_project($project_id),
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
         ));
 
