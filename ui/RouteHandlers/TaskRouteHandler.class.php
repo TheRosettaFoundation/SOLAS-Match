@@ -1266,7 +1266,7 @@ class TaskRouteHandler
                 } else UserRouteHandler::flashNow('error', 'Payment Status Invalid.');
             }
             if ($isSiteAdmin && isset($post['mark_unit_rate'])) {
-                if (is_numeric($post['unit_rate']))
+                if (is_numeric($post['unit_rate'])) {
                     $paid_status['unit_rate'] = $post['unit_rate'];
                     $taskDao->update_paid_status($paid_status);
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
