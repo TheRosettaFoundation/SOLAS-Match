@@ -1158,6 +1158,7 @@ class TaskRouteHandler
                     $taskDao->clear_paid_status($task_id);
                     UserRouteHandler::flashNow('success', 'The task is now marked as unpaid.');
                 }
+                $paid_status = $taskDao->get_paid_status($task_id);
             }
 
             if (!$taskClaimed && $isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
