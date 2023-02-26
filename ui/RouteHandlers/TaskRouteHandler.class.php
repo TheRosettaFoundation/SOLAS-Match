@@ -1246,6 +1246,7 @@ class TaskRouteHandler
                 }
             }
             if ($isSiteAdmin && isset($post['mark_purchase_order'])) {
+                if ($paid_status['purchase_order'] != $post['purchase_order']) $paid_status['payment_status'] = 'Unpaid';
                 $paid_status['purchase_order'] = $post['purchase_order'];
                 $taskDao->update_paid_status($paid_status);
                 UserRouteHandler::flashNow('success', 'Purchase Order updated.');
