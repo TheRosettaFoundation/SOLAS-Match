@@ -207,6 +207,42 @@
     </form>
     <hr />
 
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <label for="sync_po"><h2>Sync Purchase Order Status with Paid Tasks</h2></label>
+                </td>
+            </tr>
+            {if isset($flash['sync_po_error'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['sync_po_error'])}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['sync_po_success'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['sync_po_success'])}</p>
+                    </td>
+                </tr>
+            {/if}
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="sync_po" value="1">
+                        <i class="icon-star icon-white"></i>
+                        Sync
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
