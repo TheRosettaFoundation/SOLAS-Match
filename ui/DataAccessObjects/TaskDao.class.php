@@ -707,4 +707,9 @@ error_log("createTaskDirectly: $args");
         }
         return $paids;
     }
+
+    public function sync_po()
+    {
+        return 1;
+    }
 }

@@ -305,6 +305,14 @@ class AdminRouteHandler
                 }
             }
 
+            if (isset($post['sync_po'])) {
+                if ($taskDao->sync_po()) {
+                    UserRouteHandler::flashNow('sync_po_success', 'Purchase Orders Synchronized');
+                } else {
+                    UserRouteHandler::flashNow('sync_po_error', 'Purchase Orders NOT Synchronized');
+                }
+            }
+
             if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
