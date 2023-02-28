@@ -9548,9 +9548,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_paid_status`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po INT, IN status VARCHAR(30), IN rate FLOAT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po INT, IN status VARCHAR(30), IN rate FLOAT, IN changed DATETIME)
 BEGIN
-    UPDATE TaskPaids SET purchase_order=po, payment_status=status, unit_rate=rate
+    UPDATE TaskPaids SET purchase_order=po, payment_status=status, unit_rate=rate, status_changed=changed
     WHERE task_id=tID;
 END//
 DELIMITER ;
