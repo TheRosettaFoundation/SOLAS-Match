@@ -1255,10 +1255,11 @@ class TaskRouteHandler
                 } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
             }
             if ($isSiteAdmin && isset($post['mark_payment_status'])) {
-//(**)Settled transitions ask Mariam about others
                 if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
                         ||
-                    $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment')
+                    $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment'
+                        ||
+                    $paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Settled')
                 {
                     $paid_status['payment_status'] = $post['mark_payment_status'];
                     $taskDao->update_paid_status($paid_status);
