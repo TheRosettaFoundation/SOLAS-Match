@@ -1336,7 +1336,7 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
-        $total_expected_cost = '-';
+        $total_expected_cost = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
 
         $template_data = array_merge($template_data, array(

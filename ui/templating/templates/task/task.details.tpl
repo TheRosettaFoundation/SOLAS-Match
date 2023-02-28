@@ -312,7 +312,7 @@
                 {/foreach}
             </td>
             <td>
-                ${$total_expected_cost}
+                ${round($total_expected_cost, 2)}
             </td>
         </tr>
     </table>
