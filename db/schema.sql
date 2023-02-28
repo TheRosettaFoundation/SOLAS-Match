@@ -1241,6 +1241,7 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
   purchase_order    INT UNSIGNED NOT NULL DEFAULT 0,
   payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unsettled',
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
+  status_changed    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
   UNIQUE KEY FK_TaskPaid (task_id),
   CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -9540,8 +9541,8 @@ DROP PROCEDURE IF EXISTS `set_paid_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_paid_status`(IN tID BIGINT)
 BEGIN
-    INSERT INTO TaskPaids (task_id, level, unit_rate)
-                   VALUES (tID,         1, (SELECT ttd.unit_rate FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID));
+    INSERT INTO TaskPaids (task_id, level, unit_rate,                                                                                              status_changed)
+                   VALUES (tID,         1, (SELECT ttd.unit_rate FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID), NOW());
 END//
 DELIMITER ;
 
