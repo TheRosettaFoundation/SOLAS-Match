@@ -236,7 +236,7 @@
                     {else}
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
-                            <i class="icon-remove-circle icon-white"></i> Make Unpaid
+                            <i class="icon-remove-circle icon-white"></i> Make Unsettled
                         </a>
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}

@@ -1239,7 +1239,7 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
   task_id           BIGINT UNSIGNED NOT NULL,
   level             INT UNSIGNED NOT NULL,
   purchase_order    INT UNSIGNED NOT NULL DEFAULT 0,
-  payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unpaid',
+  payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unsettled',
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
   UNIQUE KEY FK_TaskPaid (task_id),
   CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE

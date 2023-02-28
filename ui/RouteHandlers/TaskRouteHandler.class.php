@@ -1156,7 +1156,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'The task is now marked as paid.');
                 } else {
                     $taskDao->clear_paid_status($task_id);
-                    UserRouteHandler::flashNow('success', 'The task is now marked as unpaid.');
+                    UserRouteHandler::flashNow('success', 'The task is now marked as unsettled.');
                 }
                 $paid_status = $taskDao->get_paid_status($task_id);
             }
@@ -1248,14 +1248,14 @@ class TaskRouteHandler
             }
             if ($isSiteAdmin && isset($post['mark_purchase_order'])) {
                 if (is_numeric($post['purchase_order'])) {
-                    if ($paid_status['purchase_order'] != (int)$post['purchase_order']) $paid_status['payment_status'] = 'Unpaid';
+                    if ($paid_status['purchase_order'] != (int)$post['purchase_order']) $paid_status['payment_status'] = 'Unsettled';
                     $paid_status['purchase_order'] = (int)$post['purchase_order'];
                     $taskDao->update_paid_status($paid_status);
                     UserRouteHandler::flashNow('success', 'Purchase Order updated.');
                 } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
             }
             if ($isSiteAdmin && isset($post['mark_payment_status'])) {
-//(**)set to Unpaid OK by PO?? not here
+//(**)set to Unsettled OK by PO?? not here
 //(**)Settled transitions ask Mariam about others
                 if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
                         ||
