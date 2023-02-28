@@ -211,7 +211,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <label for="sync_po"><h2>Sync Purchase Order Status with Paid Tasks</h2></label>
+                    <label for="sync_po"><h2>Sync PO Status with Paid Tasks</h2></label>
                 </td>
             </tr>
             {if isset($flash['sync_po_error'])}
