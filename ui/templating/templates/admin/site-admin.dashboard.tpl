@@ -207,7 +207,7 @@
     </form>
     <hr />
 
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8" onsubmit="sync_po.disabled = true;">
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
@@ -232,7 +232,7 @@
                 <td>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-success" type="submit" name="sync_po" value="1">
+                    <button class="btn btn-success" type="submit" name="sync_po" value="1" id="sync_po">
                         <i class="icon-star icon-white"></i>
                         Sync
                     </button>
