@@ -10345,6 +10345,35 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_sync_po_event`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_sync_po_event`(IN UID INT UNSIGNED, IN number INT UNSIGNED, IN ID_s TEXT)
+BEGIN
+    INSERT INTO sync_po_events VALUES (UID, number, ID_s, NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_completed_paid_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_completed_paid_tasks`()
+BEGIN
+    SELECT t.id, t.`word-count`, t.project_id, tp.purchase_order, tp.payment_status, tp.unit_rate, tc.user_id
+    FROM Tasks t
+    JOIN TaskPaids  tp ON t.id=tp.task_id
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE t.`task-status_id`=4;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_paid_status_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status_status`(IN tID BIGINT, IN status VARCHAR(30))
+BEGIN
+    UPDATE TaskPaids SET payment_status=status, status_changed=NOW()
+    WHERE task_id=tID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
