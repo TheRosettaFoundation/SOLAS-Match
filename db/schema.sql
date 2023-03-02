@@ -1442,6 +1442,16 @@ CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `sync_po_events` (
+  admin_id       INT UNSIGNED NOT NULL,
+  number_changed INT UNSIGNED NOT NULL,
+  ids            TEXT,
+  date_synced    DATETIME NOT NULL,
+  KEY (date_synced),
+  CONSTRAINT FK_sync_po_events_admin_id FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
