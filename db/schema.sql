@@ -10265,6 +10265,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_zahara_purchase_orders`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_zahara_purchase_orders`()
+BEGIN
+    SELECT * FROM zahara_purchase_orders ORDER BY purchase_order;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
