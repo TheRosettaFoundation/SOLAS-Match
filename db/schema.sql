@@ -10273,6 +10273,68 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_update_zahara_purchase_orders`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_zahara_purchase_orders`(
+    IN do_insert            INT UNSIGNED,
+    IN p_purchase_order     INT UNSIGNED,
+    IN p_creation_date      DATETIME,
+    IN p_supplier           VARCHAR(255),
+    IN p_supplier_reference VARCHAR(50),
+    IN p_total              FLOAT,
+    IN p_currency           VARCHAR(10),
+    IN p_description        VARCHAR(1000),
+    IN p_division_name      VARCHAR(255),
+    IN p_status             VARCHAR(30),
+    IN p_approver_mail      VARCHAR(255),
+    IN p_approval_date      DATETIME,
+    IN p_md5_hash           BINARY(32))
+BEGIN
+    IF do_insert=1 THEN
+        INSERT INTO zahara_purchase_orders (
+            purchase_order,
+            creation_date,
+            supplier,
+            supplier_reference,
+            total,
+            currency,
+            description,
+            division_name,
+            status,
+            approver_mail,
+            approval_date,
+            md5_hash)
+        VALUES (
+            p_purchase_order,
+            p_creation_date,
+            p_supplier,
+            p_supplier_reference,
+            p_total,
+            p_currency,
+            p_description,
+            p_division_name,
+            p_status,
+            p_approver_mail,
+            p_approval_date,
+            p_md5_hash);
+    ELSE
+        UPDATE zahara_purchase_orders SET
+            creation_date=p_creation_date,
+            supplier=p_supplier,
+            supplier_reference=p_supplier_reference,
+            total=p_total,
+            currency=p_currency,
+            description=p_description,
+            division_name=p_division_name,
+            status=p_status,
+            approver_mail=p_approver_mail,
+            approval_date=p_approval_date,
+            md5_hash=p_md5_hash
+        WHERE purchase_order=p_purchase_order;
+    END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
