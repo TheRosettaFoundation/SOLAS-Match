@@ -1425,6 +1425,23 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
+  purchase_order     INT UNSIGNED NOT NULL DEFAULT 0,
+  creation_date      DATETIME,
+  supplier           VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  supplier_reference VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  total              FLOAT NOT NULL DEFAULT 0.0,
+  currency           VARCHAR(10) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  description        VARCHAR(1000) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  division_name      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  status             VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Created',
+  approver_mail      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  approval_date      DATETIME,
+  md5_hash           BINARY(32) DEFAULT '00000000000000000000000000000000',
+  KEY (purchase_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
