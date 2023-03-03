@@ -799,7 +799,7 @@ error_log("createTaskDirectly: $args");
                 $ids[] = $task['id'];
             }
         }
-        LibAPI\PDOWrapper::call('insert_sync_po_event', LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()) . ',' . LibAPI\PDOWrapper::cleanse(count($ids)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(implode(',' $ids)));
+        LibAPI\PDOWrapper::call('insert_sync_po_event', LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()) . ',' . LibAPI\PDOWrapper::cleanse(count($ids)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(implode(',', $ids)));
         return count($ids) + 1;
     }
 }
