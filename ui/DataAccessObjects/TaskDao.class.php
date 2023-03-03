@@ -757,8 +757,12 @@ error_log(print_r($row, 1));
             if (!is_numeric($row[0])) continue;
             if ($row[10] == 'Completed') $po_ss_completed[$row[0]] = 1;
 
+            if (empty($row[11])) $row[11] = '';
+            if (empty($row[13])) $row[13] = '';
+            if (empty($row[14])) $row[14] = '';
+
             $hash = '';
-            foreach ($row as $i) $hash .= $i;
+            foreach ($row as $v) $hash .= $v;
 
             $insert = -1;
             if (empty($purchase_order_hashs[$row[0]])) {
@@ -774,6 +778,22 @@ error_log(print_r($row, 1));
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[4]) . ',';
                 if (!is_numeric($row[7])) $row[7] = 0;
 /*[[[
+ Array\n(\n    
+ [0] => 4900\n    
+ [1] => lst@translatorswithoutborders.org\n    
+ [2] => 2023-03-03 12:15:31\n    
+ [3] => Yelyzaveta Bolotova\n    
+ [4] => 3714-184794147\n    
+ [5] => \n    
+ [6] => \n    
+ [7] => 90\n    
+ [8] => USD\n    
+ [9] => 2.9.2 EN-UK revision of Welcome Back Check-In Guidance, Mar 5 - Mar 8 2023, The MHPSS Collaborative hosted by Save the Children\n    
+ [10] => Created\n    
+ [11] => \n    
+ [12] => 2023-03-03 12:16:28\n    
+ [13] => 1.2.6 PUkr\n)
+
  G1,
 0G 4900,
 2G '2023-03-03 12:15:31',
@@ -809,7 +829,7 @@ error_log(print_r($row, 1));
     IN p_md5_hash           BINARY(32))
 ]]]
 */
-                $args .= LibAPI\PDOWrapper::cleanse($row[7]) . ',' .
+                $args .= LibAPI\PDOWrapper::cleanse($row[7]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[8]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[9]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[13]) . ',';
