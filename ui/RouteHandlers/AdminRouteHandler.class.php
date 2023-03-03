@@ -306,6 +306,7 @@ class AdminRouteHandler
             }
 
             if (isset($post['sync_po'])) {
+error_log('sync_po');
                 if ($number = $taskDao->sync_po()) {
                     $number--;
                     UserRouteHandler::flashNow('sync_po_success', "Purchase Orders Synchronized (Payment Status for $number Tasks Changed)");
