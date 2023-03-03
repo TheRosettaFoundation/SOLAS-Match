@@ -749,7 +749,7 @@ error_log("createTaskDirectly: $args");
         $zahara_purchase_orders = LibAPI\PDOWrapper::call('get_zahara_purchase_orders', '');
         if (empty($zahara_purchase_orders)) $zahara_purchase_orders = [];
         $purchase_order_hashs = [];
-        foreach ($zahara_purchase_orders as $po) $purchase_orders_hashs[$po['purchase_order']] = $po['md5_hash'];
+        foreach ($zahara_purchase_orders as $po) $purchase_order_hashs[$po['purchase_order']] = $po['md5_hash'];
 
         $po_ss_completed = [];
         foreach ($res['values'] as $row) {
@@ -792,7 +792,6 @@ else error_log("IGNORING PO: ".$row[0]);
             }
         }
 
-error_log(print_r($po_ss_completed, 1));
         $ids = [];
         foreach ($completed_paid_tasks as $task) {
             if ($task['payment_status'] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
