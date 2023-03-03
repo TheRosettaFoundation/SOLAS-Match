@@ -766,7 +766,7 @@ error_log("createTaskDirectly: $args");
                 $insert = 0;
             }
             if ($insert != -1) {
-                $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',' .
+                $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',';
                 if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
                 else $args .= 'NULL,'
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[3]) . ',';
