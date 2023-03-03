@@ -753,6 +753,7 @@ error_log("createTaskDirectly: $args");
 
         $po_ss_completed = [];
         foreach ($res['values'] as $row) {
+error_log(print_r($row, 1));
             if (!is_numeric($row[0])) continue;
             if ($row[10] == 'Completed') $po_ss_completed[$row[0]] = 1;
 
@@ -772,6 +773,42 @@ error_log("createTaskDirectly: $args");
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[3]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[4]) . ',';
                 if (!is_numeric($row[7])) $row[7] = 0;
+/*[[[
+ G1,
+0G 4900,
+2G '2023-03-03 12:15:31',
+3G 'Yelyzaveta Bolotova',
+4G '3714-184794147',
+7?????? TOTAL
+8G 'USD',
+9?? 90,
+13?? 4900,
+ '2023-03-03 12:15:31',
+ 'Yelyzaveta Bolotova',
+ '3714-184794147',
+ 'USD',
+ '2.9.2 EN-UK revision of Welcome Back Check-In Guidance, Mar 5 - Mar 8 2023, The MHPSS Collaborative hosted by Save the Children',
+ '1.2.6 PUkr',
+ 'Created',
+ '',
+ NULL,
+ 'cac30045ef598fbce2b47cbf6950f86c'
+
+    IN do_insert            INT UNSIGNED,
+    IN p_purchase_order     INT UNSIGNED,
+    IN p_creation_date      DATETIME,
+    IN p_supplier           VARCHAR(255),
+    IN p_supplier_reference VARCHAR(50),
+    IN p_total              FLOAT,
+    IN p_currency           VARCHAR(10),
+    IN p_description        VARCHAR(1000),
+    IN p_division_name      VARCHAR(255),
+    IN p_status             VARCHAR(30),
+    IN p_approver_mail      VARCHAR(255),
+    IN p_approval_date      DATETIME,
+    IN p_md5_hash           BINARY(32))
+]]]
+*/
                 $args .= LibAPI\PDOWrapper::cleanse($row[7]) . ',' .
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[8]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[9]) . ',';
