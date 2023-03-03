@@ -766,12 +766,11 @@ error_log("createTaskDirectly: $args");
             $insert = -1;
             if (empty($purchase_order_hashs[$row[0]])) {
                 $insert = 1;
-error_log("Inserting PO: ".$row[0]);
+                error_log('Inserting PO: ' . $row[0]);
             } elseif ($purchase_order_hashs[$row[0]] != md5($hash)) {
                 $insert = 0;
-error_log("UPDATING PO: ".$row[0]);
+                error_log('Updating PO: ' . $row[0]);
             }
-else error_log("IGNORING PO: ".$row[0]);
             if ($insert != -1) {
                 $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',';
                 if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
@@ -799,9 +798,11 @@ else error_log("IGNORING PO: ".$row[0]);
                 foreach ($completed_paid_tasks as $t) {
                     if ($task['project_id'] == $t['project_id'] && $task['user_id'] == $t['user_id'])
                         $linguist_total_for_project += $t['word-count']*$t['unit_rate'];
+error_log("linguist_total_for_project: $linguist_total_for_project, claimer: ". $task['user_id']);
                 }
                 if ($linguist_total_for_project < 600) $status = 'Ready for payment';
                 else                                   $status = 'Pending documentation';
+                error_log('Task: ' . $task['id'] . ', PO: ' . $task['purchase_order'] . " Changed to $status ($linguist_total_for_project)");
                 LibAPI\PDOWrapper::call('update_paid_status_status', LibAPI\PDOWrapper::cleanse($task['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($status));
                 $ids[] = $task['id'];
             }
