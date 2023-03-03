@@ -781,6 +781,7 @@ error_log("createTaskDirectly: $args");
                 if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[11])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
                 else $args .= 'NULL,';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
+error_log("$insert,$args");
                 LibAPI\PDOWrapper::call('insert_update_zahara_purchase_orders', "$insert,$args");
             }
         }
