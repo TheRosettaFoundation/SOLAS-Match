@@ -715,6 +715,91 @@ error_log("createTaskDirectly: $args");
 
     public function sync_po()
     {
-        return 1;
+        $ch = curl_init('https://www.googleapis.com/oauth2/v4/token');
+        $data = [
+            'client_id' => Common\Lib\Settings::get('google_ss.client_id'),
+            'client_secret' => Common\Lib\Settings::get('google_ss.client_secret'),
+            'refresh_token' => Common\Lib\Settings::get('google_ss.refresh_token'),
+            'grant_type' => 'refresh_token',
+        ];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['access_token'])) {
+            error_log("Failed to get Google access_token: $result");
+            return 0;
+        }
+        $access_token = $res['access_token'];
+        $ch = curl_init('https://sheets.googleapis.com/v4/spreadsheets/1Q2jqB3bol0_n-Gs75mBS0ik8S7-12GC2qtvddKdio5s/values/Zahara');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['values'])) {
+            error_log("Failed to read data from Google: $result");
+            return 0;
+        }
+
+        $completed_paid_tasks = LibAPI\PDOWrapper::call('get_completed_paid_tasks', '');
+
+        $zahara_purchase_orders = LibAPI\PDOWrapper::call('get_zahara_purchase_orders', '');
+        if (empty($zahara_purchase_orders)) $zahara_purchase_orders = [];
+        $purchase_order_hashs = [];
+        foreach ($zahara_purchase_orders as $po) $purchase_orders_hashs[$po['purchase_order']] = $po['md5_hash'];
+
+        $po_ss_completed = [];
+        foreach ($res['values'] as $row) {
+            if (!is_numeric($row[0])) continue;
+            if ($row[10] == 'Completed') $po_ss_completed[$row[0]] = 1;
+
+            $hash = '';
+            foreach ($row as $i) $hash .= $i;
+
+            $insert = -1;
+            if (empty($purchase_order_hashs[$row[0]])) {
+                $insert = 1;
+            } elseif ($purchase_order_hashs[$row[0]] != md5($hash)) {
+                $insert = 0;
+            }
+            if ($insert != -1) {
+                $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',' .
+                if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
+                else $args .= 'NULL,'
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[3]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[4]) . ',';
+                if (!is_numeric($row[7])) $row[7] = 0;
+                $args .= LibAPI\PDOWrapper::cleanse($row[7]) . ',' .
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[8]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[9]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[13]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[10]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[14]) . ',';
+                if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[11])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
+                else $args .= 'NULL,'
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
+                LibAPI\PDOWrapper::call('insert_update_zahara_purchase_orders', "$insert,$args");
+            }
+        }
+
+        $ids = [];
+        foreach ($completed_paid_tasks as $task) {
+            if ($task['payment_status']] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
+                $linguist_total_for_project = 0;
+                foreach ($completed_paid_tasks as $t) {
+                    if ($task['project_id'] == $t['project_id'] && $task['user_id'] == $t['user_id'])
+                        $linguist_total_for_project += $t['word-count']*$t['unit_rate'];
+                }
+                if ($linguist_total_for_project < 600) $status = 'Ready for payment';
+                else                                   $status = 'Pending documentation';
+                LibAPI\PDOWrapper::call('update_paid_status_status', LibAPI\PDOWrapper::cleanse($task['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($status));
+                $ids[] = $task['id'];
+            }
+        }
+        LibAPI\PDOWrapper::call('insert_sync_po_event', LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()) . ',' . LibAPI\PDOWrapper::cleanse(count($ids)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(implode(',' $ids)));
+        return count($ids) + 1;
     }
 }
