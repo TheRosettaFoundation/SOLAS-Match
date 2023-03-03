@@ -787,7 +787,7 @@ error_log("createTaskDirectly: $args");
 
         $ids = [];
         foreach ($completed_paid_tasks as $task) {
-            if ($task['payment_status']] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
+            if ($task['payment_status'] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
                 $linguist_total_for_project = 0;
                 foreach ($completed_paid_tasks as $t) {
                     if ($task['project_id'] == $t['project_id'] && $task['user_id'] == $t['user_id'])
