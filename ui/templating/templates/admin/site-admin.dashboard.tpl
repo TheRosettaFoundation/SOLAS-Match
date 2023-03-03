@@ -206,8 +206,8 @@
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
-
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8" onsubmit="sync_po.disabled = true;">
+onsubmit="sync_po.disabled = true;"
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8" >
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
