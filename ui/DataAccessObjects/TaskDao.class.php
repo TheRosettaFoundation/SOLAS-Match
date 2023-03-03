@@ -798,7 +798,6 @@ error_log("createTaskDirectly: $args");
                 foreach ($completed_paid_tasks as $t) {
                     if ($task['project_id'] == $t['project_id'] && $task['user_id'] == $t['user_id'])
                         $linguist_total_for_project += $t['word-count']*$t['unit_rate'];
-error_log("linguist_total_for_project: $linguist_total_for_project, claimer: ". $task['user_id']);
                 }
                 if ($linguist_total_for_project < 600) $status = 'Ready for payment';
                 else                                   $status = 'Pending documentation';
