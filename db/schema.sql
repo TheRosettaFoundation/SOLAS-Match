@@ -10246,7 +10246,14 @@ BEGIN
     GROUP BY uqp.user_id
     ORDER BY MAX(t.deadline) DESC;
 END//
-DELIMITER ;
+DELIMITER;
+DROP PROCEDURE IF EXISTS `get_tasks_type_details_by_task_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_type_details_by_task_type`(IN tID BIGINT)
+BEGIN
+    SELECT * FROM task_type_details WHERE type_enum=tID;
+END//
+DELIMITER;
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
