@@ -299,9 +299,9 @@ class AdminRouteHandler
 
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
-                    UserRouteHandler::flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
+                    UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                 } else {
-                    UserRouteHandler::flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
+                    UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
                 }
             }
 
