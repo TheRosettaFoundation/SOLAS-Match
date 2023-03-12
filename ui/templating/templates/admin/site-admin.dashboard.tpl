@@ -174,7 +174,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation('email_verification_email_verification'), $siteName)}</p>
+                    <p>Verify an email for a user who registered with email and password (but did not act on the verification email) so they can now login.</p>
                 </td>
             </tr>
             {if isset($flash['verifyError'])}
