@@ -728,7 +728,7 @@ error_log("createTaskDirectly: $args");
         return 1;
     }
 
-    public function get_task_type_details($task_type_id)
+    public function get_tasks_type_details_by_task_type($task_type_id)
     {
         $result = LibAPI\PDOWrapper::call('get_tasks_type_details_by_task_type', LibAPI\PDOWrapper::cleanse($task_type_id));
         if (empty($result)) $result = array();
