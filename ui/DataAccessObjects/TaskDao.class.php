@@ -823,7 +823,7 @@ error_log("createTaskDirectly: $args");
     public function get_tasks_type_details_by_task_type($task_type_id)
     {
         $result = LibAPI\PDOWrapper::call('get_tasks_type_details_by_task_type', LibAPI\PDOWrapper::cleanse($task_type_id));
-        if (empty($result)) $result = array();
+        if (empty($result)) return ['unit_rate' => 0];
         return $result[0];
     }
 }
