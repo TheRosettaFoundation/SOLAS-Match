@@ -10254,6 +10254,21 @@ BEGIN
     SELECT * FROM task_type_details WHERE type_enum=tID;
 END//
 DELIMITER;
+DROP PROCEDURE IF EXISTS `get_payment_status_for_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_payment_status_for_project`(IN pID INT)
+BEGIN
+    SELECT
+        t.id,
+        IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status
+    FROM      Tasks      t
+    LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    WHERE t.project_id=pID;
+END
+//
+DELIMITER;
+
+
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
