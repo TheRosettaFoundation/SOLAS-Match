@@ -900,7 +900,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task_ids = preg_split ("/\,/", $post['ready_payment']);
                     foreach ($task_ids as $id) {                      
                         $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status['payment_status'] == 'Pending documentation') {
+                        if ($paid_status && $paid_status['payment_status'] == 'Pending documentation') {
                             $updated++;
                             $paid_status['payment_status'] = 'Ready for payment';
                             $paid_status['status_changed'] = date('Y-m-d H:i:s');
@@ -914,7 +914,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task_ids = preg_split ("/\,/", $post['pending_documentation']);
                     foreach ($task_ids as $id) {
                         $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status['payment_status'] == 'Ready for payment') {
+                        if ($paid_status && $paid_status['payment_status'] == 'Ready for payment') {
                             $updated++;
                             $paid_status['payment_status'] = 'Pending documentation';
                             $paid_status['status_changed'] = date('Y-m-d H:i:s');
@@ -928,7 +928,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task_ids = preg_split ("/\,/", $post['tasks_settled']);
                     foreach ($task_ids as $id) {
                         $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status['payment_status'] == 'Ready for payment') {
+                        if ($paid_status && $paid_status['payment_status'] == 'Ready for payment') {
                             $updated++;
                             $paid_status['payment_status'] = 'Settled';
                             $paid_status['status_changed'] = date('Y-m-d H:i:s');
@@ -943,13 +943,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $task_ids = preg_split ("/\,/", $post['ponum']);                    
                         foreach ($task_ids as $id) {
                             $paid_status = $taskDao->get_paid_status($id);
-                            if ($paid_status['purchase_order'] != (int)$post['po']) {
-                                $paid_status['payment_status'] = 'Unsettled';
-                                $paid_status['status_changed'] = date('Y-m-d H:i:s');
+                            if ($paid_status) {
+                                if ($paid_status['purchase_order'] != (int)$post['po']) {
+                                    $paid_status['payment_status'] = 'Unsettled';
+                                    $paid_status['status_changed'] = date('Y-m-d H:i:s');
+                                }
+                                $updated++;
+                                $paid_status['purchase_order'] = (int)$post['po'];
+                                $taskDao->update_paid_status($paid_status);
                             }
-                            $updated++;
-                            $paid_status['purchase_order'] = (int)$post['po'];
-                            $taskDao->update_paid_status($paid_status);
                         }
                         UserRouteHandler::flashNow('success', "$updated tasks purchase order number set.");
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
