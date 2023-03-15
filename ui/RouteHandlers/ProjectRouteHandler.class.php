@@ -940,7 +940,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 if (!empty($post['ponum']) && !empty($post['po'])) {
                     if (is_numeric($post['po'])) {
-                        $task_ids = preg_split ("/\,/", $post['ponum']);                    
+                        $task_ids = preg_split ("/\,/", $post['ponum']);
                         foreach ($task_ids as $id) {
                             $paid_status = $taskDao->get_paid_status($id);
                             if ($paid_status) {
