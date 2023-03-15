@@ -943,12 +943,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $task_ids = preg_split ("/\,/", $post['ponum']);
                         foreach ($task_ids as $id) {
                             $paid_status = $taskDao->get_paid_status($id);
-                            if ($paid_status) {
-                                if ($paid_status['purchase_order'] != (int)$post['po']) {
-                                    $paid_status['payment_status'] = 'Unsettled';
-                                    $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                                }
+                            if ($paid_status && $paid_status['purchase_order'] != (int)$post['po']) {
                                 $updated++;
+                                $paid_status['payment_status'] = 'Unsettled';
+                                $paid_status['status_changed'] = date('Y-m-d H:i:s');
                                 $paid_status['purchase_order'] = (int)$post['po'];
                                 $taskDao->update_paid_status($paid_status);
                             }
