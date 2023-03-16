@@ -718,7 +718,13 @@ error_log("createTaskDirectly: $args");
         if (empty($result)) return [];
         $paids = [];
         foreach ($result as $row) {
-            $paids[$row['id']] = $row['payment_status'];
+            $paids[$row['id']] = [
+                'payment_status' => $row['payment_status'],
+                'level' => $row['level'],
+                'purchase_order' => $row['purchase_order'],
+                'unit_rate' => $row['unit_rate'],
+                'status_changed' => $row['status_changed'],
+            ];
         }
         return $paids;
     }
