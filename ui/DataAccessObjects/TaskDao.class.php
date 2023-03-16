@@ -764,6 +764,8 @@ error_log("createTaskDirectly: $args");
         $po_ss_completed = [];
         foreach ($res['values'] as $row) {
             if (!is_numeric($row[0])) continue;
+            $row[0] = (int)$row[0];
+
             if ($row[10] == 'Completed') $po_ss_completed[$row[0]] = 1;
 
             if (empty($row[11])) $row[11] = '';
