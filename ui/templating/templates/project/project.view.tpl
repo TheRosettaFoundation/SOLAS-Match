@@ -1,6 +1,5 @@
 {include file="header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
-
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
@@ -425,7 +424,7 @@
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]}" /> </td>
+                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -489,14 +488,15 @@
                                     {if $isSiteAdmin}
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
-                                         <span>Paid&nbsp;
-                                         {if $get_payment_status_for_project[$task_id] == 'Unsettled'}
-                                          <span data-toggle="tooltip" data-placement="bottom" title="Unsettled"><i class="icon-remove" ></i> </span>
-                                         {elseif $get_payment_status_for_project[$task_id] == 'Ready for payment'}
+                                         <span><strong>Paid</strong>&nbsp;
+                                         {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
+                                          <br/>
+                                          <span data-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="icon-remove" ></i></span>
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
                                           <span data-toggle="tooltip" data-placement="bottom" title="Ready for payment"><i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
-                                         {elseif $get_payment_status_for_project[$task_id] == 'Pending documentation'}
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
                                           <span data-toggle="tooltip" data-placement="bottom" title="Pending documentation"><i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
-                                         {elseif $get_payment_status_for_project[$task_id] == 'Settled'}
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
                                           <span data-toggle="tooltip" data-placement="bottom" title="Settled"><i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                           {else}
                                            <span></span>

@@ -10281,7 +10281,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_payment_status_for_project`(IN 
 BEGIN
     SELECT
         t.id,
-        IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status
+        IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status,tp.level,tp.purchase_order,tp.unit_rate,tp.status_changed
     FROM      Tasks      t
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
     WHERE t.project_id=pID;
