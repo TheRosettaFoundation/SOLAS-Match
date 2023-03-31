@@ -247,7 +247,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <label for="sync_hubspot"><h2>Sync Hubspot</h2></label>
+                    <label for="sync_hubspot"><h2>Sync HubSpot</h2></label>
                 </td>
             </tr>
             {if isset($flash['sync_hubspot_error'])}

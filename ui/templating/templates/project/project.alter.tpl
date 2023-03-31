@@ -131,6 +131,9 @@
                     </div>
                     <label for="project_reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
                     <input type="text" name="project_reference" id="project_reference" value="{TemplateHelper::uiCleanseHTML($project->getReference())}" style="width: 400px" />
+
+                    <label for="project_hubspot" style="font-size: large"><strong>HubSpot Deal ID</strong></label>
+                    <input type="text" name="project_hubspot" id="project_hubspot" value="{$project_complete_date['deal_id']}" style="width: 400px" />
                 </td>
             </tr>
             <tr>

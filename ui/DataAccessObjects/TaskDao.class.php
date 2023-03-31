@@ -861,6 +861,8 @@ error_log("createTaskDirectly: $args");
         $found = 0;
         foreach ($res['values'] as $row) {
             if (!is_numeric($row[2])) continue;
+            $row[2] = (int)$row[2];
+            if ($row[2] < 1) continue;
             if ($row[2] == $deal_id) $found = 1;
 
             $hash = '';
@@ -869,10 +871,10 @@ error_log("createTaskDirectly: $args");
             $insert = -1;
             if (empty($deal_id_hashs[$row[2]])) {
                 $insert = 1;
-                error_log('Inserting Hubspot Deal: ' . $row[2]);
+                error_log('Inserting HubSpot Deal: ' . $row[2]);
             } elseif ($deal_id_hashs[$row[2]] != md5($hash)) {
                 $insert = 0;
-                error_log('Updating Hubspot Deal: ' . $row[2]);
+                error_log('Updating HubSpot Deal: ' . $row[2]);
             }
             if ($insert != -1) {
                 $args = LibAPI\PDOWrapper::cleanse($row[2]) . ',';

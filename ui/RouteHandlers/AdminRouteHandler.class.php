@@ -316,9 +316,9 @@ class AdminRouteHandler
 
             if (isset($post['sync_hubspot'])) {
                 if ($taskDao->update_hubspot_deals(0)) {
-                    UserRouteHandler::flashNow('sync_hubspot_success', "Hubspot Synchronized");
+                    UserRouteHandler::flashNow('sync_hubspot_success', 'HubSpot Synchronized');
                 } else {
-                    UserRouteHandler::flashNow('sync_hubspot_error', 'Hubspot NOT Synchronized');
+                    UserRouteHandler::flashNow('sync_hubspot_error', 'HubSpot NOT Synchronized');
                 }
             }
 
