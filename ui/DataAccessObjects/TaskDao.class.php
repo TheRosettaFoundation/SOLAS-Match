@@ -821,4 +821,100 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('insert_sync_po_event', LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()) . ',' . LibAPI\PDOWrapper::cleanse(count($ids)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(implode(',', $ids)));
         return count($ids) + 1;
     }
+
+    public function update_hubspot_deals($deal_id)
+    {
+        $ch = curl_init('https://www.googleapis.com/oauth2/v4/token');
+        $data = [
+            'client_id' => Common\Lib\Settings::get('google_ss.client_id'),
+            'client_secret' => Common\Lib\Settings::get('google_ss.client_secret'),
+            'refresh_token' => Common\Lib\Settings::get('google_ss.refresh_token'),
+            'grant_type' => 'refresh_token',
+        ];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['access_token'])) {
+            error_log("Failed to get Google access_token: $result");
+            return 0;
+        }
+        $access_token = $res['access_token'];
+        $ch = curl_init('https://sheets.googleapis.com/v4/spreadsheets/1eXrwnydULQwSBIJRlpkjZBTJtXb8ph1ZPaJ2h8jBEZQ/values/Deals');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['values'])) {
+            error_log("Failed to read data from Google: $result");
+            return 0;
+        }
+
+        $hubspot_deals = LibAPI\PDOWrapper::call('get_hubspot_deals', '');
+        if (empty($hubspot_deals)) $hubspot_deals = [];
+        $deal_id_hashs = [];
+        foreach ($hubspot_deals as $deal) $deal_id_hashs[$deal['deal_id']] = $deal['md5_hash'];
+
+        $found = 0;
+        foreach ($res['values'] as $row) {
+            if (!is_numeric($row[2])) continue;
+            if ($row[2] == $deal_id) $found = 1;
+
+            $hash = '';
+            foreach ($row as $v) $hash .= $v;
+
+            $insert = -1;
+            if (empty($deal_id_hashs[$row[2]])) {
+                $insert = 1;
+                error_log('Inserting Hubspot Deal: ' . $row[2]);
+            } elseif ($deal_id_hashs[$row[2]] != md5($hash)) {
+                $insert = 0;
+                error_log('Updating Hubspot Deal: ' . $row[2]);
+            }
+            if ($insert != -1) {
+                $args = LibAPI\PDOWrapper::cleanse($row[2]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[0]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr('') . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[1]) . ',';
+
+                $matches = [];
+                if (preg_match('#^(\d{1,2})/(\d{2})/(\d{4})$#', $row[4], $matches)) {
+                    if (strlen($matches[1]) == 1) $matches[1] = "0{$matches[1]}";
+                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[3]}-{$matches[2]}-{$matches[1]} 00:00:00") . ',';
+                } else $args .= 'NULL,';
+                if (preg_match('#^(\d{1,2})/(\d{2})/(\d{4})$#', $row[5], $matches)) {
+                    if (strlen($matches[1]) == 1) $matches[1] = "0{$matches[1]}";
+                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[3]}-{$matches[2]}-{$matches[1]} 23:59:59") . ',';
+                } else $args .= 'NULL,';
+
+                if (empty($row[6])) $row[6] = '0.0';
+                $row[6] = str_replace(['$', ','], ['', ''], $row[6]);
+                if (!is_numeric($row[6])) $row[6] = '0.0';
+                $args .= LibAPI\PDOWrapper::cleanse($row[6]) . ',';
+
+                if (empty($row[7])) $row[7] = '0.0';
+                $row[7] = str_replace(['$', ','], ['', ''], $row[7]);
+                if (!is_numeric($row[7])) $row[7] = '0.0';
+                $args .= LibAPI\PDOWrapper::cleanse($row[7]) . ',';
+
+                if (empty($row[8])) $row[8] = '0.0';
+                $row[8] = str_replace(['$', ','], ['', ''], $row[8]);
+                if (!is_numeric($row[8])) $row[8] = '0.0';
+                $args .= LibAPI\PDOWrapper::cleanse($row[8]) . ',';
+
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
+                $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
+                LibAPI\PDOWrapper::call('insert_update_hubspot_deal', "$insert,$args");
+                error_log("insert_update_hubspot_deal($insert,$args");
+            }
+        }
+        if (!empty($deal_id) && !$found) {
+            error_log("Not found!: update_hubspot_deals($deal_id)");
+            return -1;
+        }
+        return 1;
+    }
 }
