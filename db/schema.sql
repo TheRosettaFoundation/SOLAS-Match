@@ -1300,7 +1300,7 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (project_id),
   KEY key_complete_date (complete_date),
-  KEY (deal_id);
+  KEY (deal_id),
   CONSTRAINT `FK_project_complete_dates_project_id` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
