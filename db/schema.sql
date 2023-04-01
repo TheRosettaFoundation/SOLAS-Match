@@ -1297,8 +1297,10 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   project_id    INT(10) UNSIGNED NOT NULL,
   status        INT(10) UNSIGNED NOT NULL,
   complete_date DATETIME NOT NULL,
+  deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (project_id),
   KEY key_complete_date (complete_date),
+  KEY (deal_id);
   CONSTRAINT `FK_project_complete_dates_project_id` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -4958,10 +4960,6 @@ BEGIN
   update Tasks
     set Tasks.`task-status_id`=sID
     where Tasks.id=tID;
-
-  IF sID=3 THEN
-    call reset_project_complete(tID);
-  END IF;
 END//
 DELIMITER ;
 
@@ -9870,17 +9868,20 @@ BEGIN
 
     SELECT
         IFNULL(MAX(tcd.complete_date), '1000-01-01 00:00:00'),
-        MIN(IF(IFNULL(t.`task-status_id`, 0)!=4, 0, 1))
+        MIN(IF(IFNULL(ts.status_id, 0)=10, 0, IFNULL(t.`task-status_id`, 0)))
         INTO @project_complete_date, @project_complete
     FROM      Tasks             t
+    JOIN      tasks_status      ts  ON t.id=ts.task_id
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
         t.project_id=@pID AND
         t.cancelled=0
     GROUP BY t.project_id;
 
-    IF @project_complete THEN
+    IF     @project_complete=4 THEN
         UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=@pID;
+    ELSEIF @project_complete=3 THEN
+        UPDATE project_complete_dates SET status=2, complete_date=@project_complete_date WHERE project_id=@pID;
     ELSE
         UPDATE project_complete_dates SET status=0 WHERE project_id=@pID;
     END IF;
@@ -9895,17 +9896,20 @@ BEGIN
 
     SELECT
         IFNULL(MAX(tcd.complete_date), '1000-01-01 00:00:00'),
-        MIN(IF(IFNULL(t.`task-status_id`, 0)!=4, 0, 1))
+        MIN(IF(IFNULL(ts.status_id, 0)=10, 0, IFNULL(t.`task-status_id`, 0)))
         INTO @project_complete_date, @project_complete
     FROM      Tasks             t
+    JOIN      tasks_status      ts  ON t.id=ts.task_id
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     WHERE
         t.project_id=pID AND
         t.cancelled=0
     GROUP BY t.project_id;
 
-    IF @project_complete THEN
+    IF     @project_complete=4 THEN
         UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=pID;
+    ELSEIF @project_complete=3 THEN
+        UPDATE project_complete_dates SET status=2, complete_date=@project_complete_date WHERE project_id=pID;
     ELSE
         UPDATE project_complete_dates SET status=0 WHERE project_id=pID;
     END IF;
@@ -9919,6 +9923,22 @@ BEGIN
   IF 0=(SELECT cancelled FROM Tasks WHERE id=tID) THEN
     UPDATE project_complete_dates SET status=0 WHERE project_id=(SELECT project_id FROM Tasks WHERE id=tID LIMIT 1);
   END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_complete_date`(IN pID INT UNSIGNED)
+BEGIN
+    SELECT * FROM project_complete_dates WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_deal_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_deal_id`(IN pID INT UNSIGNED, IN dID BIGINT  UNSIGNED)
+BEGIN
+    UPDATE project_complete_dates SET deal_id=dID WHERE project_id=pID;
 END//
 DELIMITER ;
 
@@ -10023,6 +10043,8 @@ BEGIN
     INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time, comment)
     VALUES                               (    tID,       sID,        NOW(),       c);
 
+    call update_project_complete_date(tID);
+
     REPLACE INTO possible_completes (project_id)
     VALUES                         ((SELECT project_id FROM Tasks WHERE id=tID));
 END//
@@ -10038,6 +10060,8 @@ BEGIN
 
     INSERT INTO tasks_status_audit_trail (task_id, status_id, changed_time)
     VALUES                               (    tID,       sID,        NOW());
+
+    call update_project_complete_date(tID);
 END//
 DELIMITER ;
 
@@ -10063,6 +10087,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_tasks_status_cancelled`(IN t
 BEGIN
     INSERT INTO tasks_status_audit_trail (task_id, status_id, cancelled, changed_time, comment)
     VALUES                               (    tID,       sID,       cID,        NOW(),       c);
+
+    call update_project_complete_date(tID);
 END//
 DELIMITER ;
 

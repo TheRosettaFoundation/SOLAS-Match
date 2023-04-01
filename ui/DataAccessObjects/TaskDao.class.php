@@ -919,4 +919,18 @@ error_log("createTaskDirectly: $args");
         }
         return 1;
     }
+
+    public function get_project_complete_date($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_project_complete_date', LibAPI\PDOWrapper::cleanse($project_id));
+        if ($result) return $result[0];
+        return ['deal_id' => 0];
+    }
+
+    public function update_project_deal_id($project_id, $deal_id)
+    {
+        LibAPI\PDOWrapper::call('update_project_deal_id',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($deal_id));
+    }
 }
