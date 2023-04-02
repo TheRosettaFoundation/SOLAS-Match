@@ -907,6 +907,7 @@ error_log("createTaskDirectly: $args");
                 if (!is_numeric($row[8])) $row[8] = '0.0';
                 $args .= LibAPI\PDOWrapper::cleanse($row[8]) . ',';
 
+                if (empty($row[11])) $row[11] = '';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                 LibAPI\PDOWrapper::call('insert_update_hubspot_deal', "$insert,$args");
