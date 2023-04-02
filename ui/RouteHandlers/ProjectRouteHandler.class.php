@@ -1200,10 +1200,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                      if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
 
                                      if (!empty($post['project_hubspot']) && is_numeric($post['project_hubspot']) && ($post['project_hubspot'] = (int)$post['project_hubspot']) > 1) {
-                                         if ($post['project_hubspot'] != $taskDao->get_project_complete_date($project_id)['deal_id']) {
-                                             $taskDao->update_project_deal_id($project_id, $post['project_hubspot']);
-                                             if ($taskDao->update_hubspot_deals($post['project_hubspot']) != 1) UserRouteHandler::flash('error', 'Deal ID updated, even though it was not found in HubSpot table');
-                                         }
+                                         if ($post['project_hubspot'] != $taskDao->get_project_complete_date($project_id)['deal_id']) $taskDao->update_project_deal_id($project_id, $post['project_hubspot']);
+                                         if ($taskDao->update_hubspot_deals($post['project_hubspot']) != 1) UserRouteHandler::flash('error', 'Deal ID not found in HubSpot table');
                                      }
                                      return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop

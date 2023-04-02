@@ -1454,6 +1454,22 @@ CREATE TABLE IF NOT EXISTS `sync_po_events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `hubspot_deals` (
+  deal_id          BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  company_name     VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  company_id       VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  deal_name        VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  start_date       DATETIME,
+  expiration_date  DATETIME,
+  deal_total       FLOAT NOT NULL DEFAULT 0.0,
+  deal_partnership FLOAT NOT NULL DEFAULT 0.0,
+  deal_supplements FLOAT NOT NULL DEFAULT 0.0,
+  link_to_contract VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  md5_hash         BINARY(32) DEFAULT '00000000000000000000000000000000',
+  PRIMARY KEY (deal_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -10414,6 +10430,72 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status_status`(IN tID B
 BEGIN
     UPDATE TaskPaids SET payment_status=status, status_changed=NOW()
     WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_hubspot_deals`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_hubspot_deals`()
+BEGIN
+    SELECT * FROM hubspot_deals ORDER BY deal_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_update_hubspot_deal`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_hubspot_deal`(
+    IN do_insert          INT UNSIGNED,
+    IN p_deal_id          BIGINT UNSIGNED,
+    IN p_company_name     VARCHAR(255),
+    IN p_company_id       VARCHAR(255),
+    IN p_deal_name        VARCHAR(255),
+    IN p_start_date       DATETIME,
+    IN p_expiration_date  DATETIME,
+    IN p_deal_total       FLOAT,
+    IN p_deal_partnership FLOAT,
+    IN p_deal_supplements FLOAT,
+    IN p_link_to_contract VARCHAR(255),
+    IN p_md5_hash         BINARY(32))
+BEGIN
+    IF do_insert=1 THEN
+        INSERT INTO hubspot_deals (
+            deal_id,
+            company_name,
+            company_id,
+            deal_name,
+            start_date,
+            expiration_date,
+            deal_total,
+            deal_partnership,
+            deal_supplements,
+            link_to_contract,
+            md5_hash)
+        VALUES (
+            p_deal_id,
+            p_company_name,
+            p_company_id,
+            p_deal_name,
+            p_start_date,
+            p_expiration_date,
+            p_deal_total,
+            p_deal_partnership,
+            p_deal_supplements,
+            p_link_to_contract,
+            p_md5_hash);
+    ELSE
+        UPDATE hubspot_deals SET
+            company_name=p_company_name,
+            company_id=p_company_id,
+            deal_name=p_deal_name,
+            start_date=p_start_date,
+            expiration_date=p_expiration_date,
+            deal_total=p_deal_total,
+            deal_partnership=p_deal_partnership,
+            deal_supplements=p_deal_supplements,
+            link_to_contract=p_link_to_contract,
+            md5_hash=p_md5_hash
+        WHERE deal_id=p_deal_id;
+    END IF;
 END//
 DELIMITER ;
 
