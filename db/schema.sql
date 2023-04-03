@@ -9897,7 +9897,7 @@ BEGIN
     IF     @project_complete=4 THEN
         UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=@pID;
     ELSEIF @project_complete=3 THEN
-        UPDATE project_complete_dates SET status=2, complete_date=@project_complete_date WHERE project_id=@pID;
+        UPDATE project_complete_dates SET status=2 WHERE project_id=@pID;
     ELSE
         UPDATE project_complete_dates SET status=0 WHERE project_id=@pID;
     END IF;
@@ -9925,7 +9925,7 @@ BEGIN
     IF     @project_complete=4 THEN
         UPDATE project_complete_dates SET status=1, complete_date=@project_complete_date WHERE project_id=pID;
     ELSEIF @project_complete=3 THEN
-        UPDATE project_complete_dates SET status=2, complete_date=@project_complete_date WHERE project_id=pID;
+        UPDATE project_complete_dates SET status=2 WHERE project_id=pID;
     ELSE
         UPDATE project_complete_dates SET status=0 WHERE project_id=pID;
     END IF;
