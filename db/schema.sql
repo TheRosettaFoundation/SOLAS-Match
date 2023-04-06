@@ -1298,6 +1298,7 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   status        INT(10) UNSIGNED NOT NULL,
   complete_date DATETIME NOT NULL,
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  allocated_budget INT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (project_id),
   KEY key_complete_date (complete_date),
   KEY (deal_id),
@@ -9955,6 +9956,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_deal_id`(IN pID INT UNSIGNED, IN dID BIGINT  UNSIGNED)
 BEGIN
     UPDATE project_complete_dates SET deal_id=dID WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_allocated_budget`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_allocated_budget`(IN pID INT UNSIGNED, IN budget INT UNSIGNED)
+BEGIN
+    UPDATE project_complete_dates SET allocated_budget=budget WHERE project_id=pID;
 END//
 DELIMITER ;
 

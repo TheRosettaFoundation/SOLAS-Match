@@ -134,6 +134,9 @@
 
                     <label for="project_hubspot" style="font-size: large"><strong>HubSpot Deal ID</strong></label>
                     <input type="text" name="project_hubspot" id="project_hubspot" value="{$project_complete_date['deal_id']}" style="width: 400px" />
+
+                    <label for="project_allocated_budget" style="font-size: large"><strong>Allocated Budget</strong></label>
+                    <input type="text" name="project_allocated_budget" id="project_allocated_budget" value="{$project_complete_date['allocated_budget']}" style="width: 400px" />
                 </td>
             </tr>
             <tr>

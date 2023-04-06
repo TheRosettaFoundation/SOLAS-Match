@@ -934,4 +934,11 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($deal_id));
     }
+
+    public function update_project_allocated_budget($project_id, $allocated_budget)
+    {
+        LibAPI\PDOWrapper::call('update_project_allocated_budget',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($allocated_budget));
+    }
 }
