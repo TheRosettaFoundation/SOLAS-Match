@@ -1279,8 +1279,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $adminDao = new DAO\AdminDao();
         $userIsAdmin = $adminDao->isSiteAdmin($user_id);
-        // For some reason the existing Dart code excludes this case...
-        //$userIsAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $userIsAdmin;
         if ($userIsAdmin) {
             $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
         } else {
