@@ -39,7 +39,23 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 13.1
+
+- Project view now allows...
+  - Updating Tasks as ready for payment.
+  - Updating Tasks as pending documentation.
+  - Updating Tasks as settled.
+  - Updating Tasks with purchase order number.
+- It is now possible to add the HubSpot Deal ID to a Project (stored in the "project_complete_dates"). This is currently done in Project Edit.
+- The Allocated budget for the project can also be set there.
+- The HubSpot Google Sheet is imported into the "hubspot_deals" table when a project with a non zero Deal ID is edited OR if the new "Sync HubSpot" feature on the Admin page is used,
+- A new value for the "status" field has been added to "project_complete_dates". This is in addition to "0" (New) and "1" (Complete). The new "status" is "2" (In Progress) and is set when all non-cancelled Tasks are In Progress (but not all Complete).
+- A table "zahara_purchase_orders" now contains data from the Zahara Google Sheet.
+- The "Sync" button under "Sync PO Status with Paid Tasks" (in the Admin page) updates this table (as well as updating the "payment_status" for Paid Tasks).
+- In task view it is possible to set Purchase Order, Payment Status and Unit Rate and see Default Unit Rate and Total Expected Cost.
+
 ## Version 13.0
+
 - Move to twbplatform.org server.
 - Upgrade code and database tables to work with PHP8, MySQL 8 and QT6 (C++).
 - Had to handle errors and do retrys for SMTP because of remote SMTP server (kato.translatorswb.org).
