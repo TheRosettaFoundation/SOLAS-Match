@@ -568,9 +568,11 @@ a:hover{
                             <p>
                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                             </p>
+                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <p>
                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
+                            {/if}
                             <p>
                                 {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}

@@ -24,7 +24,7 @@
         </span>
 
         <div class="pull-right">
-            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && $task->getTaskType() <= Common\Enums\TaskTypeEnum::APPROVAL}
+            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary claim_btn">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>&nbsp;&nbsp;
             {/if}
@@ -85,9 +85,11 @@
 		                            <p>
 		                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
 		                            </p>
+                                {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
 		                            <p>
 		                            	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
 		                            </p>
+                                {/if}
 		                            <div>
 		                            	<p>
 			                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>

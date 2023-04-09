@@ -93,9 +93,11 @@
                             <p>
                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                             </p>
+                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <p>
                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
+                            {/if}
                             <p>
                                 {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}</strong>
                             </p>
