@@ -719,6 +719,10 @@ class TaskRouteHandler
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
         $task = $taskDao->getTask($taskId);
+        if ($task->getTaskType() > Common\Enums\TaskTypeEnum::APPROVAL) {
+            UserRouteHandler::flash('error', 'This type of task cannot be claimed');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
 //        if (!$task->getPublished() && !$adminDao->isSiteAdmin($user_id)) {
 //            UserRouteHandler::flash('error', 'This task is not published');
 //            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
