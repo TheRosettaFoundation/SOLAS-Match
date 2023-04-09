@@ -1098,12 +1098,14 @@ class TaskRouteHandler
         $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
+        if (!Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
         $task_file_info = $taskDao->getTaskInfo($task_id);
         $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
         $template_data = array_merge($template_data, array(
             "file_preview_path" => $file_path,
             "filename" => $task_file_info->getFilename()
         ));
+        } else $template_data['file_preview_path'] = '';
 
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
         if ($taskClaimed) $details_claimant = $taskDao->getUserClaimedTask($task_id);
