@@ -185,7 +185,7 @@
         </div>
         {/if}
 
-        {if ($isSiteAdmin || $isMember) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
+        {if ($isSiteAdmin || $isMember) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             {if !empty($memsource_task)}
                 <p>{Localisation::getTranslation('org_task_review_0')}</p>
                 <p>
