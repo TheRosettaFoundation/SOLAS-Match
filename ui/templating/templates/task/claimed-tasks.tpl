@@ -110,7 +110,7 @@
                             </p>
                             <p>
                                 {if $task->getWordCount()}
-                                    {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong>
+                                    {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}: <strong>{$task->getWordCount()}</strong>
                                 {/if}
                             </p>
                             <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
