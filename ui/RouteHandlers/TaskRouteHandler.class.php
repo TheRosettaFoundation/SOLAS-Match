@@ -1196,6 +1196,10 @@ class TaskRouteHandler
                     if ($isUserBlackListedForTask) {
                         UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
+                      if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
+                        $userDao->claimTask_shell($assgneeId, $task_id);
+                        UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                      } else {
                         $success = $userDao->claimTask($assgneeId, $task_id, $memsource_task, $task->getProjectId(), $task);
                         if ($success == 1) {
                             UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
@@ -1205,6 +1209,7 @@ class TaskRouteHandler
                         } else {
                             UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                         }
+                      }
                     }
                 }
                 $post['userIdOrEmail'] = '';
