@@ -3,10 +3,12 @@
     <thead>
         <th style="text-align: left"><strong>{Localisation::getTranslation('common_project')}</strong></th>
         <th>{Localisation::getTranslation('common_source_language')}</th>
+        {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
         <th>{Localisation::getTranslation('common_target_language')}</th>
+        {/if}
         <th>{Localisation::getTranslation('common_created')}</th>
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
-        <th>{Localisation::getTranslation('common_word_count')}</th>
+        <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
         {if isset($isMember)}<th>{Localisation::getTranslation('common_status')}</th>{/if}
     </thead>
     <tbody>
@@ -23,9 +25,11 @@
             <td>
                 {TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}
             </td>
+            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
             <td>
                 {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}
             </td>
+            {/if}
             <td>
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
             </td>
