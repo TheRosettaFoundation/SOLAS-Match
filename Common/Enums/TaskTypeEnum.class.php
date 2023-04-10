@@ -14,7 +14,7 @@ class TaskTypeEnum
     static $enum_to_UI;
     static $task_type_to_enum;
 
-    public static function init () {
+    public static function init() {
         $task_type_details = \SolasMatch\UI\DAO\ProjectDao::get_task_type_details();
         TaskTypeEnum::$enum_to_UI = [];
         TaskTypeEnum::$task_type_to_enum = [];

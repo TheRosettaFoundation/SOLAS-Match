@@ -532,6 +532,12 @@ class TaskDao
             $ret = Lib\PDOWrapper::call('unClaimTaskMemsource', $args);
 
             $task = self::getTask($taskId);
+            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
+                $result = $ret[0]['result'];
+                error_log("result: $result");
+                return $result;
+            }
+
             $project_tasks = self::get_tasks_for_project($task->getProjectId());
 
             $top_level = self::get_top_level($memsource_task['internalId']);
