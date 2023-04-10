@@ -1364,7 +1364,7 @@ class TaskRouteHandler
                 'projectAndOrgs' => $projectAndOrgs,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
-                'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
+                'matecat_url' => !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task'] ? $taskDao->get_matecat_url_regardless($task, $memsource_task) : '',
                 'paid_status' => $paid_status,
                 'total_expected_cost' => $total_expected_cost,
                 'taskStatusTexts' => $taskStatusTexts,
