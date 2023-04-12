@@ -1037,7 +1037,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_project'   => $memsource_project,
-                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
+                'matecat_analyze_url' => ($memsource_project && $memsource_project['memsource_project_uid'] != '') ? $taskDao->get_matecat_analyze_url($project_id, $memsource_project) : '',
                 'pm' => $pm,
                 'project' => $project,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation,

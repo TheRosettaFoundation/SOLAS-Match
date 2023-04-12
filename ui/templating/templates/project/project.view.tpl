@@ -384,7 +384,11 @@
                     <div>
                     
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
+                      {if TaskTypeEnum::$enum_to_UI[$tasks[0]->getTaskType()]['source_and_target']}
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                      {else}
+                        No Target
+                      {/if}
                     </span>
                     <span>
                         <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
@@ -464,10 +468,12 @@
                                             <a href="{urlFor name="org-task-complete" options="task_id.$task_id|org_id.$org_id"}">
                                                 {Localisation::getTranslation('common_complete')}
                                             </a>
+                                            {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                             <br />
                                             <a class="btn btn-primary" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-toggle="tooltip" data-placement="bottom" data-original-title="Download Output File">
                                                 <i class="icon-download-alt icon-white"></i>
                                             </a>
+                                            {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
@@ -634,7 +640,11 @@
 
                     <div style="display: inline-block; overflow-wrap: break-word;
                                     font-weight: bold; font-size: large; max-width: 70%">
+                      {if TaskTypeEnum::$enum_to_UI[$tasks[0]->getTaskType()]['source_and_target']}
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                      {else}
+                        No Target
+                      {/if}
                     </div>
                     <hr />
 
