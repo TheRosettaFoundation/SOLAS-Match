@@ -1,22 +1,28 @@
 <h2>{TemplateHelper::uiCleanseHTML($reviewedTask->getTitle())}</h2>
 
-{if $reviewedTask->getTaskType() != null && $reviewedTask->getTaskStatus() != null && ($reviewedTask->getTaskType() < 1 || $reviewedTask->getTaskType() > 6 || $reviewedTask->getTaskStatus() < 1 || $reviewedTask->getTaskStatus() > 4)}
+{if !TaskTypeEnum::$enum_to_UI[$reviewedTask->getTaskType()]['shell_task']}
+{if $reviewedTask->get_cancelled() != null && $reviewedTask->getTaskStatus() != null && ($reviewedTask->get_cancelled() < 1 || $reviewedTask->get_cancelled() > 2 || $reviewedTask->getTaskStatus() < 1 || $reviewedTask->getTaskStatus() > 4)}
     <!-- These contain $project_task['beginIndex'] and $project_task['endIndex'] -->
-    <h3>Starting segment: {$reviewedTask->getTaskType()}, ending segment: {$reviewedTask->getTaskStatus()}</h3>
+    <h3>Starting segment: {$reviewedTask->get_cancelled()}, ending segment: {$reviewedTask->getTaskStatus()}</h3>
+{/if}
 {/if}
 
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
+    {if !TaskTypeEnum::$enum_to_UI[$reviewedTask->getTaskType()]['shell_task']}
     <p>
         {if empty($is_chunked)}
         <h3>{sprintf(Localisation::getTranslation('task_review_form_0'), {urlFor name="download-task-latest-version" options="task_id.$id"})}</h3>
         {/if}
     </p>
+    {/if}
 {else}
     {assign var="id" value=$reviewedTask->getProjectId()}
+    {if !TaskTypeEnum::$enum_to_UI[$reviewedTask->getTaskType()]['shell_task']}
     <p>
         {sprintf(Localisation::getTranslation('task_review_form_1'), {urlFor name="download-project-file" options="project_id.$id"})}
     </p>
+    {/if}
 {/if}
 
 {if $reviewedTask->getId() != null && (empty($review) || $review->isNewReviewType())}

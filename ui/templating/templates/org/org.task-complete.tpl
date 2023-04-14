@@ -15,6 +15,7 @@
     {Localisation::getTranslation('org_task_review_0')}
     {/if}
 </p>
+{if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
 <p>
     {if !empty($allow_download) || !empty($memsource_task)}
     <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$taskId"}">
@@ -22,6 +23,7 @@
     </a>
     {/if}
 </p>
+{/if}
 
 <h2 class="page-header">
     {Localisation::getTranslation('org_task_review_review_this_file')}

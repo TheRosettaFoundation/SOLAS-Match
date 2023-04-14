@@ -2358,7 +2358,7 @@ class OrgRouteHandler
                             $dummyTask->setId($project_task['id']);
                             $dummyTask->setProjectId($task->getProjectId());
                             $dummyTask->setTitle($project_task['title']);
-                            $dummyTask->setTaskType($project_task['beginIndex']);
+                            $dummyTask->set_cancelled($project_task['beginIndex']);
                             $dummyTask->setTaskStatus($project_task['endIndex']);
                             $preReqs[] = $dummyTask;
                             error_log('preReqs for memsource PROOFREADING Task... ' . print_r($preReqs, true));

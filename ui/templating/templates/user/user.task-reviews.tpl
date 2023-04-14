@@ -29,9 +29,11 @@
                   </form>
               {/if}
             </h2>
+            {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
             <p>
                 {sprintf({Localisation::getTranslation('task_review_form_0')}, {urlFor name="download-task-latest-version" options="task_id.$id"})}
             </p>
+            {/if}
 
           {if $review->isNewReviewType()}
             <h3>
