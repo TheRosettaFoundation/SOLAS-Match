@@ -25,7 +25,7 @@
     {/if}
     
     {if $task->getWordCount()}
-        <p>{Localisation::getTranslation('common_word_count')} <strong>{$task->getWordCount()|number_format}</strong></p>
+        <p>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']} <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      
 	<p class="task_details">
         {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
