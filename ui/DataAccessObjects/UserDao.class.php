@@ -648,7 +648,7 @@ error_log("claimTask_shell($userId, $taskId)");
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
-        if ($memsource_task) {
+        if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             $memsource_user_uid = 0;
             $taskDao = new TaskDao();
             $claimant = $taskDao->getUserClaimedTask($task->getId());
