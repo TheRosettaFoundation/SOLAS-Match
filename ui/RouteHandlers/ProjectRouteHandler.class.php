@@ -1997,8 +1997,13 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $project_lang_pairs = [];
                 foreach ($tasks as $task) {
+                  if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_and_target']) {
                     $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
+                  } else {
+                    $targetLanguageCode = 'None';
+                    $targetLanguageName = 'None';
+                  }
                     if (empty($project_lang_pairs[$targetLanguageCode])) {
                         $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
