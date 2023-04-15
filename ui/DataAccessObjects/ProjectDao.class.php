@@ -1204,6 +1204,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     {
         $translations_not_all_complete = 0;
         if ($task->getTaskType() != Common\Enums\TaskTypeEnum::TRANSLATION && $memsource_task) {
+            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) return 1;
             $top_level = $this->get_top_level($memsource_task['internalId']);
             $project_tasks = $this->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
@@ -1229,6 +1230,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $translations_not_all_complete = [];
         foreach ($memsource_tasks as $memsource_task) {
             if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // This status can sometimes display as CLAIMED if not all translations are complete
+              if (Common\Enums\TaskTypeEnum::$enum_to_UI[$memsource_task['task-status_id']]['shell_task']) {
+                  $translations_not_all_complete[$memsource_task['id']] = 1;
+              } else {
                 $translations_not_all_complete[$memsource_task['id']] = 0;
                 if ($memsource_task['task-type_id'] != Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $top_level = $this->get_top_level($memsource_task['internalId']);
@@ -1245,6 +1249,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                         }
                     }
                 }
+              }
             }
         }
         return $translations_not_all_complete;
