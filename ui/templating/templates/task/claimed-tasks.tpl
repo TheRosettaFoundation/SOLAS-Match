@@ -41,11 +41,11 @@
                 <div class="filter-title">{Localisation::getTranslation('common_task_type')}</div>
                 <select name="taskTypes" id="taskTypes">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
-                    <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
-                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
-                    <option value="3" {if ($selectedTaskType === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
-                    <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
-                    <option value="6" {if ($selectedTaskType === 6)}selected="selected"{/if}>Proofreading and Approval</option>
+                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                        {if $ui['enabled']}
+                            <option value="{$ui['type_enum']}" {if ($selectedTaskType === {$ui['type_enum']})}selected="selected"{/if}>{$ui['type_text']}</option>
+                        {/if}
+                    {/foreach}
                 </select>
             </div>
             <div class="filter-block">
