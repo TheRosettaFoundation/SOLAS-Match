@@ -458,7 +458,7 @@ error_log("createTaskDirectly: $args");
     public function get_creator($project_id, $memsource_project = 0) {
         if ($memsource_project) {
             $projectDao = new ProjectDao();
-            if ($memsource_project['memsource_project_uid'] != '') {
+            if (!$memsource_project['shell_task']) {
                 $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_uid']);
             } else {
                 $user_id = $memsource_project['owner_user_id'];
