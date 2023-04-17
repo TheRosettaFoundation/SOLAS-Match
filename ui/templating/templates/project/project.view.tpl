@@ -32,6 +32,11 @@
                         {/if}
                     {/if}
                 {/if}
+                {if $isSiteAdmin}
+                    <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
+                        <i class="icon-wrench icon-white"></i> Add Shell Tasks
+                    </a>
+                {/if}
                 {if ($isOrgMember || $isAdmin)}
                     <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
