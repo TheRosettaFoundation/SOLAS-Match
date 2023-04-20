@@ -82,14 +82,14 @@
 		                            <h2>
                                     <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
 		                            </h2>
+                                {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
 		                            <p>
 		                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
 		                            </p>
-                                {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
+                                {/if}
 		                            <p>
 		                            	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
 		                            </p>
-                                {/if}
 		                            <div>
 		                            	<p>
 			                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>

@@ -28,14 +28,14 @@
 
     <table class="table table-striped" width="100%">
         <thead>
-            <th width="25%">{Localisation::getTranslation('common_source')}</th>
+            <th width="25%">{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{Localisation::getTranslation('common_source')}{/if}</th>
             <th width="25%">{Localisation::getTranslation('common_target')}</th>
             <th>{Localisation::getTranslation('common_tags')}</th>        
         </thead>
         <tbody>
             <tr>
-                <td>{TemplateHelper::getTaskSourceLanguage($task)}</td>
-                <td>{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{TemplateHelper::getTaskTargetLanguage($task)}{/if}</td>
+                <td>{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{TemplateHelper::getTaskSourceLanguage($task)}{/if}</td>
+                <td>{TemplateHelper::getTaskTargetLanguage($task)}</td>
                 <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
                 {if isset($task_tags) && is_array($task_tags)}
                     {foreach $task_tags as $tag}
