@@ -14,15 +14,15 @@
         {/foreach}
     </p>
 
+    {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
     <p>
         {Localisation::getTranslation('common_from')} <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
     </p>   
+    {/if}
 
-    {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
     <p>
         {Localisation::getTranslation('common_to')} <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
-    {/if}
 
     {assign var="currentTaskTags" value=$taskTags[$task->getId()]}
     {if !empty($taskTags)}

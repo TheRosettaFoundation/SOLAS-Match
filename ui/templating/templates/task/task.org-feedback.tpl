@@ -35,8 +35,8 @@
         <tbody>
 
             <tr>
-                <td>{TemplateHelper::getTaskSourceLanguage($task)}</td>
-                <td>{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{TemplateHelper::getTaskTargetLanguage($task)}{/if}</td>
+                <td>{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{TemplateHelper::getTaskSourceLanguage($task)}{/if}</td>
+                <td>{TemplateHelper::getTaskTargetLanguage($task)}</td>
                 <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
                 {if isset($task_tags) && is_array($task_tags)}
                     {foreach $task_tags as $tag}

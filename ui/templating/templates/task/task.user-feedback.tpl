@@ -28,7 +28,7 @@
 
     <table class="table table-striped" width="100%">
         <thead>
-            <th width="25%">{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{Localisation::getTranslation('common_source')}{/if}</th>
+            <th width="25%">{Localisation::getTranslation('common_source')}</th>
             <th width="25%">{Localisation::getTranslation('common_target')}</th>
             <th>{Localisation::getTranslation('common_tags')}</th>        
         </thead>
