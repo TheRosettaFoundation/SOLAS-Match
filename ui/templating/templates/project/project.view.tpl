@@ -389,11 +389,7 @@
                     <div>
                     
                     <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
-                      {if TaskTypeEnum::$enum_to_UI[$tasks[0]->getTaskType()]['source_and_target']}
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
-                      {else}
-                        No Target
-                      {/if}
                     </span>
                     <span>
                         <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
@@ -645,11 +641,7 @@
 
                     <div style="display: inline-block; overflow-wrap: break-word;
                                     font-weight: bold; font-size: large; max-width: 70%">
-                      {if TaskTypeEnum::$enum_to_UI[$tasks[0]->getTaskType()]['source_and_target']}
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
-                      {else}
-                        No Target
-                      {/if}
                     </div>
                     <hr />
 

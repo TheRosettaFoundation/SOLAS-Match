@@ -55,12 +55,12 @@
                                 {/if}
                             </h2>
                             <p>
+                              {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                                 &nbsp;|&nbsp;
-                              {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                              {/if}
                             	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             	&nbsp;|&nbsp;
-                              {/if}
                             	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$status_id]}</span>
 								&nbsp;|&nbsp;
 								<span class="process_deadline_utc" style="display: inline-block">{$deadline_timestamps[$task_id]}</span>
