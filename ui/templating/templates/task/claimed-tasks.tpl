@@ -166,7 +166,7 @@
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>
-                                {if $status_id == 3}
+                                {if $status_id == 3 && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                                     <a href="{$siteLocation}task/{$task_id}/user-feedback" class="btn btn-small btn-danger">
                                         {Localisation::getTranslation('claimed_tasks_unclaim_task')}
                                     </a>
