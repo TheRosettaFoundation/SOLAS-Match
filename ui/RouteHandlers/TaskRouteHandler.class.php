@@ -113,6 +113,18 @@ class TaskRouteHandler
             ->setName('task-view');
 
         $app->map(['GET', 'POST'],
+            '/task/{task_id}/search_translators_any_country_no_source[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_any_country_no_source')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('task-search_translators_any_country_no_source');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/search_translators_no_source[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_no_source')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('task-search_translators_no_source');
+
+        $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators_any_country[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_any_country')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
@@ -1384,12 +1396,22 @@ class TaskRouteHandler
         return UserRouteHandler::render("task/task.view.tpl", $response);
     }
 
-    public function task_search_translators_any_country(Request $request, Response $response, $args)
+    public function task_search_translators_any_country_no_source(Request $request, Response $response, $args)
     {
-        return $this->task_search_translators($request, $response, $args, true);
+        return $this->task_search_translators($request, $response, $args, 3);
     }
 
-    public function task_search_translators(Request $request, Response $response, $args, $any_country = false)
+    public function task_search_translators_no_source(Request $request, Response $response, $args)
+    {
+        return $this->task_search_translators($request, $response, $args, 2);
+    }
+
+    public function task_search_translators_any_country(Request $request, Response $response, $args)
+    {
+        return $this->task_search_translators($request, $response, $args, 1);
+    }
+
+    public function task_search_translators(Request $request, Response $response, $args, $any_country = 0)
     {
         global $template_data;
         $task_id = $args['task_id'];
@@ -1403,8 +1425,10 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        if ($any_country) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
-        else              $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
+        if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id);
+        elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id);
+        elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
+        else                       $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
         $users_in_invites_not_sent = array();
         foreach ($invites_not_sent as $user) {
             $users_in_invites_not_sent[$user['user_id']] = $user;

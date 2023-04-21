@@ -44,11 +44,25 @@
 		{include file="task/task.details.tpl"}
 
     <h3>Manual Sourcing</h3>
-    {if $any_country}
+    {if     $any_country == 3}
+        Sourcing is currently <strong>loose, ignoring source</strong>: Source users matching target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong><br />
+        If you want to source users ignoring source language matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators_no_source" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click here</a></strong>
+    {elseif $any_country == 2}
+        Sourcing is currently <strong>strict, ignoring source</strong>: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
+        If you want to source all users ignoring source language with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country_no_source" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click here</a></strong>
+    {elseif $any_country == 1}
         Sourcing is currently <strong>loose</strong>: Source users matching target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong><br />
+        If you want to source users ignoring source language matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators_no_source" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source all users ignoring source language with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country_no_source" options="task_id.$task_id"}">click here</a></strong><br />
         If you want to source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators" options="task_id.$task_id"}">click here</a></strong>
     {else}
         Sourcing is currently <strong>strict</strong>: Source users matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale<br />
+        If you want to source users ignoring source language matching exact "{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}" target locale <strong><a href="{urlFor name="task-search_translators_no_source" options="task_id.$task_id"}">click here</a></strong><br />
+        If you want to source all users ignoring source language with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country_no_source" options="task_id.$task_id"}">click here</a></strong><br />
         If you want to source all users with the target language "{$task->getTargetLocale()->getLanguageCode()}" <strong>irrespective of country</strong> <strong><a href="{urlFor name="task-search_translators_any_country" options="task_id.$task_id"}">click here</a></strong>
     {/if}
     <br /><br />
