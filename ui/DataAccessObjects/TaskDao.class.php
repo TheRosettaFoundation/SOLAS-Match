@@ -632,6 +632,22 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
+    public function list_task_invites_not_sent_no_source($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+        if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id);
+        elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id);
+
+    public function list_task_invites_not_sent_no_source_strict($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source_strict', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+
     public function list_task_invites_not_sent_strict($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_strict', LibAPI\PDOWrapper::cleanse($task_id));
@@ -653,9 +669,23 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
+    public function list_task_invites_not_sent_words_no_source($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_words_no_source', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+
     public function list_task_invites_not_sent_tags($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_tags', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+
+    public function list_task_invites_not_sent_tags_no_source($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_tags_no_source', LibAPI\PDOWrapper::cleanse($task_id));
         if (empty($result)) $result = array();
         return $result;
     }

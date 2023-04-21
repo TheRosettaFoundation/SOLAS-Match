@@ -1436,14 +1436,16 @@ class TaskRouteHandler
             $users_in_invites_not_sent[$user['user_id']] = $user;
         }
 
-        $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags($task_id);
+        if ($any_country < 2) $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags($task_id);
+        else                  $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags_no_source($task_id);
         $users_in_invites_not_sent_tags = array();
         foreach ($invites_not_sent_tags as $user) {
             $users_in_invites_not_sent_tags[$user['user_id']] = $user;
         }
 
         $all_users = array();
-        $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words($task_id);
+        if ($any_country < 2) $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words($task_id);
+        else                  $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words_no_source($task_id);
         $users_in_invites_not_sent_words = array();
         // $all_users first has those with highest word count (assuming they were not already invited)
         foreach ($invites_not_sent_words as $user) {
