@@ -1419,6 +1419,8 @@ class TaskRouteHandler
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $task       = $taskDao->getTask($task_id);
+        if ($any_country < 2 && Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['sourcing'] == 1) return $this->task_search_translators($request, $response, $args, 2);
+
         $project    = $projectDao->getProject($task->getProjectId());
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
