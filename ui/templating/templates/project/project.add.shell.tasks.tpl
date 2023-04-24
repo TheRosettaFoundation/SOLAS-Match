@@ -45,7 +45,13 @@
                 <tbody>
                     {for $count=0 to 19}
                         <tr>
-                            <td></td>
+                            <td>
+
+type_text or task_type_text ???
+if 'shell_task'??
+
+
+                            </td>
                             <td></td>
                             <td></td>
                             <td>
