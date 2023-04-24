@@ -21,7 +21,7 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                {Localisation::getTranslation('project_create_create_a_project')} <small>{Localisation::getTranslation('project_create_0')}</small><br>   
+                Add Shell Tasks to a Project<br />
                 <small>
                     {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
@@ -39,7 +39,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
+        <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
 
             <div id ="projFormTop" class="pull-left">
             <div class="projFormTopBlock">
