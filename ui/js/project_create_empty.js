@@ -13,27 +13,15 @@ var initial_selected_day;
 var userIsAdmin;
 
 // Errors
-var createProjectError;
 var titleError;
 var descriptionError;
-var wordCountError;
 var deadlineError;
 var impactError;
 var tagsError;
 var referenceError;
-var taskError;
 var project_create_set_source_language;
 var project_create_set_source_country;
-var project_create_set_target_language;
-var project_create_set_target_country;
-var duplicateLocale;
-var source_equals_target;
-var fileError;
 var imageError;
-
-// Target Languages
-var targetCount = 0;
-var maxTargetLanguages = 12;
 
 // Snapshot of Form Values when Submit clicked
 var title;
@@ -46,7 +34,6 @@ var selectedYear;
 var selectedDay;
 var selectedHour;
 var selectedMinute;
-var wordCountInput;
 var trackProject;
 var publish;
 
@@ -59,15 +46,6 @@ var projectFileData;
 var projectImageFile;
 var projectImageFileName;
 var projectImageFileData;
-
-var segmentationRequired;
-var translationRequired;
-var proofreadingRequired;
-
-var targetLanguageCode;
-var targetLanguageLanguage;
-var targetCountryCode;
-var targetCountryCountry;
 
 var duplicateProjectTitle = null;
 
@@ -88,13 +66,11 @@ function set_all_errors_for_submission()
 function set_errors_for_submission(id, id_for_div)
 {
   html = "";
-  if (titleError != null || descriptionError != null || wordCountError != null ||
-    deadlineError != null || impactError != null || createProjectError != null ||
+  if (titleError != null || descriptionError != null ||
+    deadlineError != null || impactError != null ||
     project_create_set_source_language != null ||
     project_create_set_source_country != null ||
-    project_create_set_target_language != null ||
-    project_create_set_target_country != null ||
-    tagsError != null || referenceError != null || taskError != null || duplicateLocale != null || fileError != null || imageError != null) {
+    tagsError != null || referenceError != null || imageError != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
       html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
       html += '<ol>';
@@ -103,12 +79,6 @@ function set_errors_for_submission(id, id_for_div)
         }
         if (descriptionError != null) {
           html += '<li>' + descriptionError + '</li>';
-        }
-        if (createProjectError != null) {
-          html += '<li>' + createProjectError + '</li>';
-        }
-        if (wordCountError != null) {
-          html += '<li>' + wordCountError + '</li>';
         }
         if (deadlineError != null) {
           html += '<li>' + deadlineError + '</li>';
@@ -122,29 +92,11 @@ function set_errors_for_submission(id, id_for_div)
         if (referenceError != null) {
           html += '<li>' + referenceError + '</li>';
         }
-        if (taskError != null) {
-          html += '<li>' + taskError + '</li>';
-        }
         if (project_create_set_source_language != null) {
           html += '<li>' + project_create_set_source_language + '</li>';
         }
         if (project_create_set_source_country != null) {
           html += '<li>' + project_create_set_source_country + '</li>';
-        }
-        if (project_create_set_target_language != null) {
-          html += '<li>' + project_create_set_target_language + '</li>';
-        }
-        if (project_create_set_target_country != null) {
-          html += '<li>' + project_create_set_target_country + '</li>';
-        }
-        if (duplicateLocale != null) {
-          html += '<li>' + duplicateLocale + '</li>';
-        }
-        if (source_equals_target != null) {
-          html += '<li>' + source_equals_target + '</li>';
-        }
-        if (fileError != null) {
-          html += '<li>' + fileError + '</li>';
         }
         if (imageError != null) {
           html += '<li>' + imageError + '</li>';
@@ -192,165 +144,7 @@ function loadingComplete()
 {
   document.getElementById("image_file_desc").innerHTML =
     parameters.getTranslation("project_create_upload_project_image") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
-
-  addMoreTargetLanguages(0);
-
   document.getElementById("loading_warning").innerHTML = "";
-}
-
-/**
- * Add target languages to the form.
- */
-function addMoreTargetLanguages(index)
-{
-  // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
-  // On the UI this shouldn't be an issue anyway because this function will disable the add button when
-  // adding a language pushes the targetCount to the max, so this is an extra safeguard.
-  if (targetCount < maxTargetLanguages) {
-    // Prepare the div elements that will make up the new target language section.
-    var targetLanguageRow = document.createElement("div"); // The main div, subdivided into the language/country
-    targetLanguageRow.id = "target_row_" + targetCount;    // selects and task type checkboxes
-    targetLanguageRow.className = "target-row bottom-line-border";
-
-    var targetLanguageCell = document.createElement("div"); // Sub-div for select elements
-    targetLanguageCell.className = "pull-left width-50";
-
-    // Create the select elements
-    var targetLanguageSelect = document.createElement("select");
-    targetLanguageSelect.style.width = "400px";
-    targetLanguageSelect.name = "target_language_" + targetCount;
-    targetLanguageSelect.id   = "target_language_" + targetCount;
-    targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
-
-    var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
-    taskTypesRow.id = "task-type-checkboxes";
-    taskTypesRow.className = "pull-left width-50";
-
-    var segmentationRequiredDiv = document.createElement("div");
-    segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
-
-    var segmentationCheckbox = document.createElement("input");
-    segmentationCheckbox.setAttribute("type", "checkbox");
-    segmentationCheckbox.title = parameters.getTranslation("project_create_10");
-    segmentationCheckbox.name = "segmentation_" + targetCount;
-    segmentationCheckbox.id   = "segmentation_" + targetCount;
-    segmentationCheckbox.value = "1";
-    segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
-
-    var translationRequiredDiv = document.createElement("div");
-    translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
-
-    var translationCheckbox = document.createElement("input");
-    translationCheckbox.setAttribute("type", "checkbox");
-    translationCheckbox.title = parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
-    translationCheckbox.name = "translation_" + targetCount;
-    translationCheckbox.id   = "translation_" + targetCount;
-    translationCheckbox.value = "1";
-    translationCheckbox.checked = true;
-    if (index != 0) translationCheckbox.disabled = true;
-
-    var proofreadingRequiredDiv = document.createElement("div");
-    proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
-
-    var proofreadingCheckbox = document.createElement("input");
-    proofreadingCheckbox.setAttribute("type", "checkbox");
-    proofreadingCheckbox.title = parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
-    proofreadingCheckbox.name = "proofreading_" + targetCount;
-    proofreadingCheckbox.id = "proofreading_" + targetCount;
-    proofreadingCheckbox.value = "1";
-    proofreadingCheckbox.checked = true;
-    if (index != 0) proofreadingCheckbox.disabled = true;
-
-    // Put the Select Elements into their div
-    targetLanguageCell.appendChild(targetLanguageSelect);
-
-    // Put the Select Elements' div into the main div
-    targetLanguageRow.appendChild(targetLanguageCell);
-
-    // Put the checkbox Input Elements into their own divs
-    segmentationRequiredDiv.appendChild(segmentationCheckbox);
-    if (index == 0) {
-    translationRequiredDiv.appendChild(translationCheckbox);
-    proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
-    }
-
-    // Put each checkbox div into the div that is to contain them all
-    // taskTypesRow.appendChild(segmentationRequiredDiv);
-    taskTypesRow.appendChild(translationRequiredDiv);
-    taskTypesRow.appendChild(proofreadingRequiredDiv);
-
-    // Put the div encompassing the three checkboxes into the main div
-    targetLanguageRow.appendChild(taskTypesRow);
-
-    // Add the completed target language "row" to the div containing all previously added target language "rows."
-    document.getElementById("targetLangSelectDiv").appendChild(targetLanguageRow);
-
-    targetCount++;
-    if (targetCount == 5) {
-      //window.alert(parameters.getTranslation("project_create_target_language_increase"));
-    }
-
-    // If maximum amount of target languages has been reached, display message to notify user.
-    if (targetCount >= maxTargetLanguages) {
-      var addBtn = document.getElementById("addTargetLanguageBtn");
-      addBtn.disabled = true;
-
-      document.getElementById("placeholder_for_maxTargetsReached").innerHTML = '<div class="alert alert-info" style="text-align: center">' + parameters.getTranslation("project_create_11") + '</div>';
-    } else {
-      document.getElementById("placeholder_for_maxTargetsReached").innerHTML = "";
-    }
-
-    var removeButton = document.getElementById("removeBottomTargetBtn");
-    if (removeButton != null) {
-      // Disable the remove button if there is only 1 target language on the form.
-      if (targetCount > 1) {
-        removeButton.disabled = false;
-      } else {
-        removeButton.disabled = true;
-      }
-    }
-  }
-}
-
-/**
- * Remove target languages
- */
-function removeTargetLanguage()
-{
-  if (targetCount > 1) {
-    targetCount--;
-    var targetLanguageRow = document.getElementById("target_row_" + targetCount);
-    targetLanguageRow.parentNode.removeChild(targetLanguageRow);
-
-    document.getElementById("placeholder_for_maxTargetsReached").innerHTML = "";
-    if (targetCount == 1) {
-      var removeButton = document.getElementById("removeBottomTargetBtn");
-      removeButton.disabled = true;
-    }
-    var addBtn = document.getElementById("addTargetLanguageBtn");
-    if (addBtn.disabled == true) {
-      addBtn.disabled = false;
-    }
-  }
-}
-
-/**
- * Set template languages
- */
-function setTemplateLanguages(template_number)
-{
-  while (targetCount > 1) {
-    removeTargetLanguage();
-  }
-
-  var templateObj = JSON.parse(document.getElementById("template" + template_number).innerHTML);
-
-  document.getElementById("sourceLanguageSelect").value = templateObj.source;
-
-  for (i = 0; i < templateObj.targets.length && i < maxTargetLanguages; i++) {
-    if (i > 0) addMoreTargetLanguages(i);
-    document.getElementById("target_language_" + i).value = templateObj.targets[i];
-  }
 }
 
 /**
@@ -359,22 +153,14 @@ function setTemplateLanguages(template_number)
 function validateForm()
 {
   // Reset error variables, clearing any previously displayed errors.
-  createProjectError = null;
   titleError = null;
   descriptionError = null;
-  wordCountError = null;
   deadlineError = null;
   impactError = null;
   tagsError = null;
   referenceError = null;
-  taskError = null;
   project_create_set_source_language = null;
   project_create_set_source_country = null;
-  project_create_set_target_language = null;
-  project_create_set_target_country = null;
-  duplicateLocale = null;
-  source_equals_target = null;
-  fileError = null;
   imageError = null;
 
   // Snapshot of Form Values when Submit clicked
@@ -388,8 +174,6 @@ function validateForm()
   selectedDay    = document.getElementById("selectedDay").value;
   selectedHour   = document.getElementById("selectedHour").value;
   selectedMinute = document.getElementById("selectedMinute").value;
-  // wordCountInput = document.getElementById("wordCountInput").value;
-  wordCountInput = null;
   // trackProject   = document.getElementById("trackProject").checked;
   // publish        = document.getElementById("publish").checked;
 
@@ -475,36 +259,6 @@ function validateLocalValues()
     }
   }
 
-  if (wordCountInput != null && wordCountInput != '') {
-    // If word count is set, ensure it is a valid natural number
-    var q = parseInt(wordCountInput);
-    if (isNaN(q)) {
-      wordCountError = parameters.getTranslation("project_create_27");
-      success = false;
-    }
-    project.wordCount = q;
-
-    // If word count is greater than 5000, and segmentation is not selected, display warning message to user.
-    if (project.wordCount > 5000) {
-      var i = 0;
-      var segmentationMissing = false;
-      while (false && i < targetCount && !segmentationMissing) {
-        var segmentationCheckbox = document.getElementById("segmentation_" + i);
-        if (!segmentationCheckbox.checked) {
-          segmentationMissing = true;
-        }
-        i++;
-      }
-      if (segmentationMissing && !window.confirm(parameters.getTranslation("project_create_22"))) {
-        success = false;
-      }
-    }
-  } else {
-    // Word count is not set
-    // wordCountError = parameters.getTranslation("project_create_27");
-    // success = false;
-  }
-
   if (!validateTagList(tagList)) {
     // Invalid tags detected, set error message
     tagsError = parameters.getTranslation('project_create_invalid_tags');
@@ -563,56 +317,6 @@ function validateLocalValues()
     project_create_set_source_country  = parameters.getTranslation("project_create_set_source_country");
     success = false;
   }
-
-  var encounteredSourceLocale = project.sourceLocale.languageCode.replace("#", "");
-  var encounteredLocales = [];
-  segmentationRequired   = [];
-  translationRequired    = [];
-  proofreadingRequired   = [];
-  targetLanguageCode     = [];
-  targetLanguageLanguage = [];
-  targetCountryCode      = [];
-  targetCountryCountry   = [];
-  for (var i = 0; i < targetCount; i++) {
-    // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
-    segmentationRequired[i] = false;
-    if (i == 0) {
-    translationRequired [i] = document.getElementById("translation_" + i).checked;
-    proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
-    } else {
-      translationRequired [i] = true;
-      proofreadingRequired[i] = true;
-    }
-
-    // If no task type is set, display error message
-    if (!segmentationRequired[i] && !translationRequired[i] && !proofreadingRequired[i]) {
-      taskError = parameters.getTranslation("project_create_29");
-      success = false;
-    }
-
-    targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
-    targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
-
-    if (targetLanguageCode[i] == 0) {
-      project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
-      success = false;
-    }
-
-    // If a duplicate locale is encountered, display error message
-    var encounteredLocale = targetLanguageCode[i].replace("#", "");
-    if ($.inArray(encounteredLocale, encounteredLocales) >= 0) {
-      duplicateLocale = parameters.getTranslation("project_create_28");
-      success = false;
-    } else {
-      encounteredLocales[i] = encounteredLocale;
-    }
-
-    if (encounteredSourceLocale == encounteredLocale) {
-      source_equals_target = "Source and Target Languages must be different.";
-      success = false;
-	}
-  }
-
   return success;
 }
 
@@ -667,27 +371,6 @@ function validateImageFileInput()
   } else {
     // No file provided
     return true;
-  }
-}
-
-/**
- * Called when the segmentation checkbox is clicked for a target language, disabling the
- * translation and proofreading checkboxes.
- */
-function segmentationClicked(target)
-{
-  var index = parseInt(target.id.substring(target.id.indexOf("_") + 1));
-
-  var transCheckbox = document.getElementById("translation_" + index);
-  var proofCheckbox = document.getElementById("proofreading_" + index);
-  if (target.checked) {
-    transCheckbox.checked = false;
-    transCheckbox.disabled = true;
-    proofCheckbox.checked = false;
-    proofCheckbox.disabled = true;
-  } else {
-    transCheckbox.disabled = false;
-    proofCheckbox.disabled = false;
   }
 }
 
@@ -782,7 +465,6 @@ function validateReferenceURL(reference)
 function checkTitleNotUsed()
 {
   if (userHash != null && document.getElementById("project_title").value != "") { // Make sure API call will succeed and the field is not empty
-    // DAOcheckProjectByNameNotExist(document.getElementById("project_title").value, noTitleConflict, titleConflict, errorFromServer);
     DAOcheckProjectByNameAndOrganisationNotExist(document.getElementById("project_title").value, org_id, noTitleConflict, titleConflict, errorFromServer);
   }
 }
@@ -802,44 +484,6 @@ function errorFromServer(jqXHR, textStatus, errorThrown)
   // If the project is not found, we get to here, which is OK
   // (we do not seem to get a normal error response functionExist/noTitleConflict although the response to the POST is 200 OK!)
   // console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);
-}
-
-/**
- * Calls the API to verify a project with the given title does not exist.
- *
- * handler functionNotExist called if it does not exist.
- * handler functionExist called if it does exist (this is the unexpected case).
- * handler functionOnFail called on failure of the API call.
- */
-function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, functionOnFail)
-{
-  $.ajax(
-    {
-      url: siteAPI + "v0/projects/getProjectByName/",
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + userHash
-      },
-      contentType: 'text/plain; charset=UTF-8',
-      processData: false,
-      data: title
-    }
-  )
-  .done(function (data, textStatus, jqXHR)
-      {
-        if (jqXHR.status < 400) {
-          if (jqXHR.responseText == "") {
-            functionNotExist(); // Expected Response (project not expected to exist)
-          } else {
-            functionExist(); // Unexpected Response
-          }
-        } else {
-          functionOnFail();
-          console.log("Error: getProjectByName returned " + jqXHR.status + " " + jqXHR.statusText);
-        }
-      }
-    )
-  .fail(functionOnFail);
 }
 
 /**
