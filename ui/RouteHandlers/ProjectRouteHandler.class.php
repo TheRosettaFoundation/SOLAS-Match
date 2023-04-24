@@ -42,6 +42,12 @@ class ProjectRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
             ->setName('project-create-empty');
 
+        $app->map(['GET', 'POST'],
+            '/project/{project_id}/add_shell_tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_add_shell_tasks')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('project-add-shell-tasks');
+
         $app->get(
             '/project/id/{project_id}/created[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreated')
