@@ -8,9 +8,6 @@
         <div id="user_id">{$user_id}</div>
         <div id="userIsAdmin">{$isSiteAdmin}</div>
 
-        <!-- Templates... -->
-        <div id="template_language_options">
-        </div>
     </span>
 
     <div class="grid_8">
@@ -46,16 +43,19 @@
                     {for $count=0 to 19}
                         <tr>
                             <td>
-
-type_text or task_type_text ???
-if 'shell_task'??
-
-
+                                <select name="task_type" id="task_type">
+                                    <option value="0"></option>
+                                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                                        {if $ui['shell_task']}
+                                            <option value="{$task_type}">{$ui['type_text']}</option>
+                                        {/if}
+                                    {/foreach}
+                                </select>
                             </td>
                             <td></td>
                             <td></td>
                             <td>
-                                <select name="targetLanguage" ID="targetLanguage">
+                                <select name="targetLanguage" id="targetLanguage">
                                     <option value="0"></option>
                                     {foreach from=$languages key=codes item=language}
                                         <option value="{$codes}" >{$language}</option>
