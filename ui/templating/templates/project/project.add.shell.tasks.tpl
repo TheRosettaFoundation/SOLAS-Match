@@ -6,7 +6,6 @@
         <div id="siteLocation">{$siteLocation}</div>
         <div id="siteAPI">{$siteAPI}</div>
         <div id="user_id">{$user_id}</div>
-        <div id="deadline_timestamp">{$deadline_timestamp}</div>
         <div id="userIsAdmin">{$isSiteAdmin}</div>
 
         <!-- Templates... -->
@@ -41,168 +40,42 @@
 
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
 
-            <div id ="projFormTop" class="pull-left">
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_title')}: <span style="color: red">*</span></h2>
-                    <p class="desc">{Localisation::getTranslation('project_create_1')}</p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_title" id="project_title" onblur="checkTitleNotUsed();"></textarea>
-                    <p style="margin-bottom:40px;"></p>
-                </div>
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_description')}: <span style="color: red">*</span></h2>
-                    <p class="desc">{Localisation::getTranslation('project_create_2')}</p>
-                    <textarea wrap="soft" cols="1" rows="8" style="width: 400px" name="project_description" id="project_description"></textarea>
-                    <p style="margin-bottom:37.5px;"></p>
-                </div>
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_impact')}: <span style="color: red">*</span></h2>
-                    <p class="desc">
-                        {Localisation::getTranslation('project_create_3')}<br/> {Localisation::getTranslation('project_create_4')}
-                    </p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_impact" id="project_impact"></textarea>
-                    <p style="margin-bottom:37.5px;"></p>
-                </div>
-                <div class="projFormInput">
-                <h2>{Localisation::getTranslation('common_reference')}:</h2>
-                <p class="desc">{Localisation::getTranslation('project_create_5')}</p>
-                <input type="text" style="width: 400px" name="project_reference" id="project_reference" />
-                </div>
-            </div>
+<table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+  <thead>
+list 20() in tables
+task type => word count units
+optional targte language
+word count
 
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('project_create_source_text')}: <span style="color: red">*</span></h2>
-                        <p id="source_text_desc" class="desc"></p>
-                        <input type="file" name="projectFile" id="projectFile" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_project_image')}</h2>
-                        <p id="image_file_desc" class="desc"></p>
-                        <p>If you do not upload an image, the most recent will be reused.</p>
-                        <input type="file" name="projectImageFile" id="projectImageFile" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom: 25px;">
-                        <h2>{Localisation::getTranslation('common_word_count')}:</h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_word_count')}</p>
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>This project is part of the emergency response to the Türkiye/Syria earthquake:</h2>
-                        <p class="desc">Check if that is the case.</p>
-                        <input type="checkbox" name="earthquake" id="earthquake" value="1" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_deadline')}: <span style="color: red">*</span></h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_7')}</p>
-                        <p>
-                            {Localisation::getTranslation('common_day')}:
-                            <select name="selectedDay" id="selectedDay" style="width: 4.0em">
-                            </select>
-                            {Localisation::getTranslation('common_month')}:
-                            <select onchange="selectedMonthChanged()" name="selectedMonth" id="selectedMonth" style="width: 8.0em">
-                                {html_options options=$month_list selected=$selected_month}
-                            </select>
-                            {Localisation::getTranslation('common_year')}:
-                            <select onchange="selectedYearChanged()" name="selectedYear" id="selectedYear" style="width: 5.0em">
-                                {html_options options=$year_list selected=$selected_year}
-                            </select>
-                            <input type="hidden" name="project_deadline" id="project_deadline" />
-                        </p>
-                        <p>
-                            {Localisation::getTranslation('common_hour')}:
-                            <select name="selectedHour" id="selectedHour" style="width: 4.0em">
-                                {html_options options=$hour_list selected=$selected_hour}
-                            </select>
-                            {Localisation::getTranslation('common_minute')}:
-                            <select name="selectedMinute" id="selectedMinute" style="width: 4.0em">
-                                {html_options options=$minute_list selected=$selected_minute}
-                            </select>
-                        </p>
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_tags')}:</h2>
-                        <p class="desc">
-                            {Localisation::getTranslation('project_create_8')}
-                            <br />
-                            {Localisation::getTranslation('project_create_separated_by')} {Localisation::getTranslation('project_create_seperator')}. 
-                            {Localisation::getTranslation('project_create_for_multiword_tags_joinwithhyphens')}
-                        </p>
-                        <input type="text" name="tagList" id="tagList" style="width: 400px" />
-                    </div>
-                </div>
-                {if $showRestrictTask}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
-                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
-                        <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
-                        <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
-                    </div>
-                </div>
-                {/if}
-            </div>
-        </div>
-        <div id ="projFormBottom">
-            <div id="loading_warning">
-                <p>{Localisation::getTranslation('common_loading')}</p>
-            </div>
-            <div id="projFormBottomBlockLeft">
-                <div id="sourceLanguageDiv">
-                    <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
-                    <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
-                        <option value="0"></option>
-                        {foreach from=$languages key=codes item=language}
-                            <option value="{$codes}" >{$language}</option>
-                        {/foreach}
-                    </select>
-                </div>
-                <br />
-                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
-            </div>
-            <div id="projFormBottomBlockRight">
-                <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
-                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
-                <div> <!-- <table border="0" width="100%"> -->
-                    <div>
-                        <!--
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('project_create_10')}">
-                            <strong>{Localisation::getTranslation('common_segmentation')}</strong>
-                        </div>
-                        -->
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}">
-                            <strong>{Localisation::getTranslation('common_translation')}</strong>
-                        </div>
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer')}">
-                            <strong>{Localisation::getTranslation('common_proofreading')}</strong>
-                        </div>
-                    </div>
-                </div> <!-- </table> -->
-            </div>
-        </div>
-        <div id="targetLangSelectDiv" class="pull-left"></div>
-        <div id="targetLangContainer" class="pull-left">
-        <div id="placeholder_for_maxTargetsReached"></div>
-                <button onclick="addMoreTargetLanguages(); return false;" class="btn btn-success" id="addTargetLanguageBtn">
-                    <i class="icon-upload icon-white"></i>
-                    {Localisation::getTranslation('project_create_add_more_target_languages')}
-                </button>
-                <button onclick="removeTargetLanguage(); return false;" class="btn btn-inverse" id="removeBottomTargetBtn" disabled="true">
-                   <i class="icon-fire icon-white"></i>
-                   {Localisation::getTranslation('common_remove')}
-                </button>
-            </div>
+
+    <th width="7%">ID</th>
+    <th width="25%">Title</th>
+    <th width="24%">Creator</th>
+    <th width="25%">Partner</th>
+    <th width="11%">Phrase TMS URL</th>
+    <th width="8%">Word Count</th>
+  </thead>
+
+  <tbody>
+  {foreach $all_users as $user_row}
+
+    <tr>
+      <td>{$user_row['project_id']}</td>
+      <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['title'])}</a></td>
+      {if !empty($user_row['creator_id'])}
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
+      {else}
+      <td></td>
+      {/if}
+      <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['organisation_id']}"}" target="_blank">{$user_row['name']|escape:'html':'UTF-8'}</a></td>
+      <td><a href="https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Phrase Project</a></td>
+      <td>{if $user_row['word-count'] != 1}{$user_row['word-count']}{else}None{/if}</td>
+    </tr>
+
+  {/foreach}
+  </tbody>
+
+</table>
 
             <div id="placeholder_for_errors_2"></div>
 
@@ -218,7 +91,7 @@
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
                     <button type="submit" onclick="return validateForm();" class="btn btn-success" name="create_project_button" id="create_project_button">
-                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                        <i class="icon-upload icon-white"></i> Add Shell Tasks to Project
                     </button>
                     <p style="margin-bottom:20px;"></p>
                 </div>
