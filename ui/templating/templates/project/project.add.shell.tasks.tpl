@@ -5,15 +5,9 @@
         <!-- Parameters... -->
         <div id="siteLocation">{$siteLocation}</div>
         <div id="siteAPI">{$siteAPI}</div>
-        <div id="maxfilesize">{$maxFileSize}</div>
-        <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
-        <div id="supportedImageFormats">{$supportedImageFormats}</div>
-        <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
         <div id="deadline_timestamp">{$deadline_timestamp}</div>
         <div id="userIsAdmin">{$isSiteAdmin}</div>
-        <div id="create_memsource">{$create_memsource}</div>
-        <div id="split">{if true || in_array($org_id, [860])}1{else}0{/if}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">
@@ -22,11 +16,6 @@
                 <option value="{$codes}" >{$language}</option>
             {/foreach}
         </div>
-
-        <!-- Template for predefined langauges... -->
-        <div id="template1">{$template1}</div>
-        <div id="template2">{$template2}</div>
-
     </span>
 
     <div class="grid_8">
@@ -36,20 +25,9 @@
                 <small>
                     {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
-                {if $isSiteAdmin}
-                    <div class="pull-right top_btn">
-                        <a href="{urlFor name="project-create-empty" options="org_id.$org_id"}" class="btn btn-success">
-                            <i class="icon-upload icon-white"></i> Create Empty Project
-                        </a>
-                    </div>
-                {/if}
             </h1>
         </div>           
     </div>  
-
-    {if isset($subscription_text)}
-        <div class="well pull-left">{$subscription_text}</div>
-    {/if}
 
     <div class="well pull-left" style="margin-bottom: 50px">
 
@@ -163,47 +141,6 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
-                {if $isSiteAdmin && !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Additional Private TM Keys</h2>
-                        <p class="desc">
-                            Zero or more additional TM keys, comma separated.
-                        </p>
-                        <input type="text" name="private_tm_key" id="private_tm_key" style="width: 400px" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Use MT Engine:</h2>
-                        <input type="checkbox" name="mt_engine" id="mt_engine" value="1" checked />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Pre-Translate 100%:</h2>
-                        <input type="checkbox" name="pretranslate_100" id="pretranslate_100" value="1" checked />
-                    </div>
-                </div>
-                {/if}
-                {if !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('project_create_publish_tasks')}:</h2>
-                        <p class="desc">
-                            {Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}
-                        </p>
-                        <input type="checkbox" name="publish" id="publish" value="1" checked />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_track_project')}:</h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_12')}</p>
-                        <input type="checkbox" name="trackProject" id="trackProject" value="1" checked />
-                    </div>
-                </div>
-                {/if}
                 {if $showRestrictTask}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
@@ -212,15 +149,6 @@
                         <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
                         <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
                         <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
-                    </div>
-                </div>
-                {/if}
-                {if $isSiteAdmin && !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Verification System Project:</h2>
-                        <p class="desc">If checked, this will become a Verification System Project (No TM, MT, lexiQA) revised by Senior Translators.</p>
-                        <input type="checkbox" name="testing_center" id="testing_center" value="1" />
                     </div>
                 </div>
                 {/if}
@@ -297,22 +225,6 @@
             </div>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
-
-    </div>
-
-    <br /><br />
-    <div>
-        <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
-            <i class="icon-upload icon-white"></i>
-            Set Source and Target Languages from Template 1
-        </button>
-    </div>
-    <br />
-    <div>
-        <button onclick="setTemplateLanguages(2); return false;" class="btn btn-success">
-            <i class="icon-upload icon-white"></i>
-            Set Source and Target Languages from Template 2
-        </button>
     </div>
 
 {include file="footer.tpl"}
