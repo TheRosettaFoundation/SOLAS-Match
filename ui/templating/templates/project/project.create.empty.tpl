@@ -80,23 +80,10 @@
             <div class="projFormTopBlock">
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('project_create_source_text')}: <span style="color: red">*</span></h2>
-                        <p id="source_text_desc" class="desc"></p>
-                        <input type="file" name="projectFile" id="projectFile" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('common_project_image')}</h2>
                         <p id="image_file_desc" class="desc"></p>
                         <p>If you do not upload an image, the most recent will be reused.</p>
                         <input type="file" name="projectImageFile" id="projectImageFile" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom: 25px;">
-                        <h2>{Localisation::getTranslation('common_word_count')}:</h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_word_count')}</p>
                     </div>
                 </div>
                 <div class="projFormInput">
@@ -148,47 +135,6 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
-                {if $isSiteAdmin && !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Additional Private TM Keys</h2>
-                        <p class="desc">
-                            Zero or more additional TM keys, comma separated.
-                        </p>
-                        <input type="text" name="private_tm_key" id="private_tm_key" style="width: 400px" />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Use MT Engine:</h2>
-                        <input type="checkbox" name="mt_engine" id="mt_engine" value="1" checked />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Pre-Translate 100%:</h2>
-                        <input type="checkbox" name="pretranslate_100" id="pretranslate_100" value="1" checked />
-                    </div>
-                </div>
-                {/if}
-                {if !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('project_create_publish_tasks')}:</h2>
-                        <p class="desc">
-                            {Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}
-                        </p>
-                        <input type="checkbox" name="publish" id="publish" value="1" checked />
-                    </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_track_project')}:</h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_12')}</p>
-                        <input type="checkbox" name="trackProject" id="trackProject" value="1" checked />
-                    </div>
-                </div>
-                {/if}
                 {if $showRestrictTask}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
@@ -197,15 +143,6 @@
                         <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
                         <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
                         <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
-                    </div>
-                </div>
-                {/if}
-                {if $isSiteAdmin && !$create_memsource}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>Verification System Project:</h2>
-                        <p class="desc">If checked, this will become a Verification System Project (No TM, MT, lexiQA) revised by Senior Translators.</p>
-                        <input type="checkbox" name="testing_center" id="testing_center" value="1" />
                     </div>
                 </div>
                 {/if}
@@ -225,41 +162,8 @@
                         {/foreach}
                     </select>
                 </div>
-                <br />
-                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
-            </div>
-            <div id="projFormBottomBlockRight">
-                <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
-                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
-                <div> <!-- <table border="0" width="100%"> -->
-                    <div>
-                        <!--
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('project_create_10')}">
-                            <strong>{Localisation::getTranslation('common_segmentation')}</strong>
-                        </div>
-                        -->
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}">
-                            <strong>{Localisation::getTranslation('common_translation')}</strong>
-                        </div>
-                        <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer')}">
-                            <strong>{Localisation::getTranslation('common_proofreading')}</strong>
-                        </div>
-                    </div>
-                </div> <!-- </table> -->
             </div>
         </div>
-        <div id="targetLangSelectDiv" class="pull-left"></div>
-        <div id="targetLangContainer" class="pull-left">
-        <div id="placeholder_for_maxTargetsReached"></div>
-                <button onclick="addMoreTargetLanguages(); return false;" class="btn btn-success" id="addTargetLanguageBtn">
-                    <i class="icon-upload icon-white"></i>
-                    {Localisation::getTranslation('project_create_add_more_target_languages')}
-                </button>
-                <button onclick="removeTargetLanguage(); return false;" class="btn btn-inverse" id="removeBottomTargetBtn" disabled="true">
-                   <i class="icon-fire icon-white"></i>
-                   {Localisation::getTranslation('common_remove')}
-                </button>
-            </div>
 
             <div id="placeholder_for_errors_2"></div>
 
@@ -283,21 +187,6 @@
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
 
-    </div>
-
-    <br /><br />
-    <div>
-        <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
-            <i class="icon-upload icon-white"></i>
-            Set Source and Target Languages from Template 1
-        </button>
-    </div>
-    <br />
-    <div>
-        <button onclick="setTemplateLanguages(2); return false;" class="btn btn-success">
-            <i class="icon-upload icon-white"></i>
-            Set Source and Target Languages from Template 2
-        </button>
     </div>
 
 {include file="footer.tpl"}
