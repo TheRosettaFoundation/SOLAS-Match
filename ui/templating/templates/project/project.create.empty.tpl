@@ -4,14 +4,12 @@
 
         <!-- Parameters... -->
         <div id="siteAPI">{$siteAPI}</div>
-        <div id="maxfilesize">{$maxFileSize}</div>
         <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
         <div id="supportedImageFormats">{$supportedImageFormats}</div>
         <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
         <div id="deadline_timestamp">{$deadline_timestamp}</div>
         <div id="userIsAdmin">{$isSiteAdmin}</div>
-        <div id="split">{if true || in_array($org_id, [860])}1{else}0{/if}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">

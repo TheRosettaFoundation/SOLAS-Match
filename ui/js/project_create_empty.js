@@ -4,7 +4,6 @@ var parameters; // Instance of Parameters Class holding data retrieved from Serv
 
 // Passed from PHP
 var siteAPI;
-var maxFileSize;
 var imageMaxFileSize;
 var supportedImageFormats;
 var org_id;
@@ -162,7 +161,6 @@ function set_errors_for_submission(id, id_for_div)
 function documentReady()
 {
   siteAPI          = getSetting("siteAPI");
-  maxFileSize      = document.getElementById("maxfilesize").innerHTML;
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
@@ -192,15 +190,6 @@ function documentReady()
 
 function loadingComplete()
 {
-  if (getSetting("split") == 1) {
-    document.getElementById("source_text_desc").innerHTML =
-      "Upload your source file for the project. Do not upload PDF files, ZIP files, or image files with text like JPG, PNG or GIF. If the total word count of the file exceeds 2000 words, it will be split into multiple tasks for translation. "
-      + parameters.getTranslation("common_maximum_file_size_is").replace("%s", maxFileSize / 1024 / 1024);
-  } else {
-  document.getElementById("source_text_desc").innerHTML =
-    parameters.getTranslation("project_create_6") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", maxFileSize / 1024 / 1024);
-  }
-
   document.getElementById("image_file_desc").innerHTML =
     parameters.getTranslation("project_create_upload_project_image") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
 
@@ -430,7 +419,7 @@ function validateForm()
   projectImageFile = null;
   projectImageFileData = null;
 
-  if (!validateLocalValues() || !validateFileInput() || !validateImageFileInput()) {
+  if (!validateLocalValues() || !validateImageFileInput()) {
     set_all_errors_for_submission();
     return false;
   }
@@ -625,62 +614,6 @@ function validateLocalValues()
   }
 
   return success;
-}
-
-/**
- * Validate the details of the project file provided.
- */
-function validateFileInput()
-{
-  var projectFileField = document.getElementById("projectFile");
-  var files = projectFileField.files;
-
-  // Ensure projectFileField is not null
-  if (projectFileField != null && files.length > 0) {
-    projectFile = files[0];
-    // Check if file is empty
-    if (projectFile.size > 0) {
-      // Check that file does not exceed the maximum allowed file size
-      if (projectFile.size <= maxFileSize) {
-        var extensionStartIndex = projectFile.name.lastIndexOf(".");
-        // Check that file has an extension
-        if (extensionStartIndex > 0) {
-          projectFileName = projectFile.name;
-          var extension = projectFileName.substring(extensionStartIndex + 1);
-          if (extension != extension.toLowerCase()) {
-            extension = extension.toLowerCase();
-            projectFileName = projectFileName.substring(0, extensionStartIndex + 1) + extension;
-            window.alert(parameters.getTranslation("project_create_18"));
-          }
-
-          if (extension == "pdf") {
-            // If file is a pdf, warn user that PDFs are difficult to work with
-            if (!window.confirm(parameters.getTranslation("project_create_19"))) {
-              return false;
-            }
-          }
-
-          return true;
-        } else {
-          // File has no extension
-          fileError = parameters.getTranslation("project_create_20");
-          return false;
-        }
-      } else {
-        // File is too big
-        fileError = parameters.getTranslation("project_create_21");
-        return false;
-      }
-    } else {
-      // File is empty
-      fileError = parameters.getTranslation("project_create_17");
-      return false;
-    }
-  } else {
-    // No file provided
-    fileError = parameters.getTranslation("project_create_16");
-    return false;
-  }
 }
 
 /**
