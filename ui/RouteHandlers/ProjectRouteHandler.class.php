@@ -36,6 +36,12 @@ class ProjectRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
             ->setName('project-create');
 
+        $app->map(['GET', 'POST'],
+            '/project/{org_id}/create_empty[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_create_empty')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('project-create-empty');
+
         $app->get(
             '/project/id/{project_id}/created[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreated')

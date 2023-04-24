@@ -3,7 +3,6 @@
 var parameters; // Instance of Parameters Class holding data retrieved from Server (e.g. Translations)
 
 // Passed from PHP
-var siteLocation;
 var siteAPI;
 var maxFileSize;
 var imageMaxFileSize;
@@ -163,7 +162,6 @@ function set_errors_for_submission(id, id_for_div)
  */
 function documentReady()
 {
-  siteLocation     = getSetting("siteLocation");
   siteAPI          = getSetting("siteAPI");
   maxFileSize      = document.getElementById("maxfilesize").innerHTML;
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
