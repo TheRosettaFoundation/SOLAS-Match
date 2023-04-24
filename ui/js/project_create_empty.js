@@ -12,7 +12,6 @@ var user_id;
 var deadline_timestamp;
 var initial_selected_day;
 var userIsAdmin;
-var create_memsource;
 
 // Errors
 var createProjectError;
@@ -167,7 +166,6 @@ function documentReady()
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
-  create_memsource = document.getElementById("create_memsource").innerHTML;
   userIsAdmin      = document.getElementById("userIsAdmin").innerHTML;
   if (userIsAdmin == 1) {
     userIsAdmin = true;
@@ -260,7 +258,7 @@ function addMoreTargetLanguages(index)
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.value = "1";
     translationCheckbox.checked = true;
-    if (create_memsource == 1 && index != 0) translationCheckbox.disabled = true;
+    if (index != 0) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -272,7 +270,7 @@ function addMoreTargetLanguages(index)
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
-    if (create_memsource == 1 && index != 0) proofreadingCheckbox.disabled = true;
+    if (index != 0) proofreadingCheckbox.disabled = true;
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
@@ -282,7 +280,7 @@ function addMoreTargetLanguages(index)
 
     // Put the checkbox Input Elements into their own divs
     segmentationRequiredDiv.appendChild(segmentationCheckbox);
-    if (create_memsource != 1 || index == 0) {
+    if (index == 0) {
     translationRequiredDiv.appendChild(translationCheckbox);
     proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
     }
@@ -589,7 +587,7 @@ function validateLocalValues()
   for (var i = 0; i < targetCount; i++) {
     // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
     segmentationRequired[i] = false;
-    if (create_memsource != 1 || i == 0) {
+    if (i == 0) {
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
     } else {
