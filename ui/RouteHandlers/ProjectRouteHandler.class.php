@@ -1660,6 +1660,281 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return UserRouteHandler::render("project/project.create.tpl", $response);
     }
 
+    public function project_create_empty(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+
+        $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $subscriptionDao = new DAO\SubscriptionDao();
+        $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        if ($post = $request->getParsedBody()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
+                    || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
+                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
+                    ) {
+                // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
+                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
+            } else {
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+                $project = new Common\Protobufs\Models\Project();
+
+                $project->setTitle(mb_substr($post['project_title'], 0, 128));
+                $project->setDescription($post['project_description']);
+                $project->setDeadline($post['project_deadline']);
+                $project->setImpact($post['project_impact']);
+                $project->setReference($post['project_reference']);
+                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
+
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
+                $project->setSourceLocale($sourceLocale);
+
+                $project->setOrganisationId($org_id);
+                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+
+                $project->clearTag();
+                if (!empty($post['tagList'])) {
+                    $tagLabels = explode(' ', $post['tagList']);
+                    foreach ($tagLabels as $tagLabel) {
+                        $tagLabel = trim($tagLabel);
+                        if (!empty($tagLabel)) {
+                            $tag = new Common\Protobufs\Models\Tag();
+                            $tag->setLabel($tagLabel);
+                            $project->addTag($tag);
+                        }
+                    }
+                }
+                if (!empty($post['earthquake'])) {
+                    $tag = new Common\Protobufs\Models\Tag();
+                    $tag->setLabel('2023-turkeysyria');
+                    $project->addTag($tag);
+                }
+
+                try {
+                    $project = $projectDao->createProject($project);
+                    error_log('Created Project Empty: ' . $post['project_title']);
+                } catch (\Exception $e) {
+                    $project = null;
+                }
+                if (empty($project) || $project->getId() <= 0) {
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
+                } else {
+                    $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
+                    if (!$memsource_project) {
+                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
+                        try {
+                            $projectDao->deleteProject($project->getId());
+                        } catch (\Exception $e) {
+                        }
+                    } else {
+                        $image_failed = false;
+                        if (!empty($_FILES['projectImageFile']['name'])) {
+                            $projectImageFileName = $_FILES['projectImageFile']['name'];
+                            $extensionStartIndex = strrpos($projectImageFileName, '.');
+                            // Check that file has an extension
+                            if ($extensionStartIndex > 0) {
+                                $extension = substr($projectImageFileName, $extensionStartIndex + 1);
+                                $extension = strtolower($extension);
+                                $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
+
+                                // Check that the file extension is valid for an image
+                                if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
+                                    $image_failed = true;
+                                }
+                            } else {
+                                // File has no extension
+                                $image_failed = true;
+                            }
+
+                            if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
+                                    ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                                $image_failed = true;
+                            } else {
+                                $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                                $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                                list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                                if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                    try {
+                                        $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                        $success = true;
+                                    } catch (\Exception $e) {
+                                        $success = false;
+                                    }
+                                } else { // Resize the image
+                                    $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                    $newWidth  = floor($width * $ratio);
+                                    $newHeight = floor($height * $ratio);
+
+                                    $img = '';
+                                    if ($extension == 'gif') {
+                                        $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
+                                        $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                    } elseif ($extension == 'png') {
+                                        $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                        $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                    } else {
+                                        $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                    }
+
+                                    $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                    if (!empty($img) && $tci !== false) {
+                                        if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                            imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                            // If we did not get this far, give up and use the un-resized image
+                                        }
+                                    }
+
+                                    $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                    if ($data !== false) {
+                                        try {
+                                            $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                            $success = true;
+                                        } catch (\Exception $e) {
+                                            $success = false;
+                                        }
+                                    } else {
+                                        $success = false;
+                                    }
+                                }
+                                if (!$success) {
+                                    $image_failed = true;
+                                }
+                            }
+                        } else { // If no image uploaded, copy an old one
+                            if ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id)) {
+                                $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
+                                if (!empty($image_files)) {
+                                    $image_file = $image_files[0];
+                                    $project_id = $project->getId();
+                                    $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
+                                    mkdir($destination, 0755);
+                                    $ext = pathinfo($image_file, PATHINFO_EXTENSION);
+                                    copy($image_file, "$destination/image.$ext");
+                                    $projectDao->set_uploaded_approved($project_id);
+                                }
+                            }
+                        }
+                        if ($image_failed) {
+                            UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
+                            try {
+                                $projectDao->deleteProject($project->getId());
+                            } catch (\Exception $e) {
+                            }
+                        } else {
+                            // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
+                            try {
+                                $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                                $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                                if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+
+                                // Create a topic in the Community forum (Discourse) and a project in Asana
+                                error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+                                try {
+                                   $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
+                                } catch (\Exception $e) {
+                                    error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+                                }
+                                try {
+                                    UserRouteHandler::flash('success', 'Project Created');
+                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
+                                } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
+                                }
+                            } catch (\Exception $e) {
+                                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                                try {
+                                    error_log('projectCreate deleteProject(' . $project->getId() . ")");
+                                    $projectDao->deleteProject($project->getId());
+                                } catch (\Exception $e) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $month_list = array(
+            1 => Lib\Localisation::getTranslation('common_january'),
+            2 => Lib\Localisation::getTranslation('common_february'),
+            3 => Lib\Localisation::getTranslation('common_march'),
+            4 => Lib\Localisation::getTranslation('common_april'),
+            5 => Lib\Localisation::getTranslation('common_may'),
+            6 => Lib\Localisation::getTranslation('common_june'),
+            7 => Lib\Localisation::getTranslation('common_july'),
+            8 => Lib\Localisation::getTranslation('common_august'),
+            9 => Lib\Localisation::getTranslation('common_september'),
+            10 => Lib\Localisation::getTranslation('common_october'),
+            11 => Lib\Localisation::getTranslation('common_november'),
+            12 => Lib\Localisation::getTranslation('common_december'),
+        );
+
+        $year_list = array();
+        $yeari = (int)date('Y');
+        for ($i = 0; $i < 10; $i++) {
+            $year_list[$yeari] = $yeari;
+            $yeari++;
+        }
+        $hour_list = array();
+        for ($i = 0; $i < 24; $i++) {
+            $hour_list[$i] = $i;
+        }
+        $minute_list = array();
+        $minutei = (int)date('Y');
+        for ($i = 0; $i < 60; $i++) {
+            $minute_list[$i] = $i;
+        }
+        $week = strtotime('+1 week');
+        $selected_year   = (int)date('Y', $week);
+        $selected_month  = (int)date('n', $week);
+        $selected_day    = (int)date('j', $week);
+        $selected_hour   = (int)date('G', $week); // These are UTC, they will be recalculated to local time by JavaScript (we do not know what the local time zone is)
+        $selected_minute = 0;
+        $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/project_create_empty.js\"></script>";
+
+        $template_data = array_merge($template_data, array(
+            "siteLocation"          => Common\Lib\Settings::get('site.location'),
+            "siteAPI"               => Common\Lib\Settings::get('site.api'),
+            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
+            "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
+            "org_id"         => $org_id,
+            "user_id"        => $user_id,
+            "extra_scripts"  => $extraScripts,
+            'deadline_timestamp' => $deadline_timestamp,
+            'selected_day'   => $selected_day,
+            'month_list'     => $month_list,
+            'selected_month' => $selected_month,
+            'year_list'      => $year_list,
+            'selected_year'  => $selected_year,
+            'hour_list'      => $hour_list,
+            'selected_hour'  => $selected_hour,
+            'minute_list'    => $minute_list,
+            'selected_minute'=> $selected_minute,
+            'languages'      => $projectDao->generate_language_selection(1),
+            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
+            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
+            'sesskey'        => $sesskey,
+        ));
+        return UserRouteHandler::render('project/project.create.empty.tpl', $response);
+    }
+
     /**
      * Generate and return a random string of the specified length.
      *
