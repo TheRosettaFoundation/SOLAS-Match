@@ -72,8 +72,8 @@ function validateForm()
         fail = true;
       }
       var quantity = parseInt(document.getElementById("quantity_" + i).value);
-      if (isNaN(quantity)) {
-        quantity_error = "You must specify a valid integer Quantity";
+      if (isNaN(quantity) || quantity <= 1) {
+        quantity_error = "You must specify a valid (>1) integer Quantity";
         fail = true;
       }
       if (document.getElementById("target_language_" + i).value == "0") {
