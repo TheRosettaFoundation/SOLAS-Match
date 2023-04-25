@@ -1967,6 +1967,129 @@ $language_options[$selection['language_code'] . '-' . $selection['country_code']
                     }
 ]]]
                 }
+[[[[[[[[[[[
+            $task = new Common\Protobufs\Models\Task();
+
+            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+            $project_id = $memsource_project['project_id'];
+            $task->setProjectId($project_id);
+            $task->setTitle(mb_substr((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName'], 0, 128));
+
+            $project = $projectDao->getProject($project_id);
+
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Common\Protobufs\Models\Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+
+            $taskTargetLocale = new Common\Protobufs\Models\Locale();
+            list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
+            $taskTargetLocale->setLanguageCode($target_language);
+            $taskTargetLocale->setCountryCode($target_country);
+            $task->setTargetLocale($taskTargetLocale);
+
+            if (empty($part['workflowLevel'])) {
+                error_log("Can't find workflowLevel in new jobPart {$part['uid']} for: {$part['fileName']}, assuming Translation");
+                $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            } elseif ($part['workflowLevel'] > 12) {
+                error_log("Don't support workflowLevel > 12: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            } else {
+                $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
+                $taskType = $workflow_levels[$part['workflowLevel'] - 1];
+                error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
+                if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType])) $taskType = Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType];
+                elseif ($taskType == '' && $part['workflowLevel'] == 1) {
+                    $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                    $workflow_levels = ['Translation'];
+                } else {
+                    error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
+                    continue;
+                }
+            }
+            $task->setTaskType($taskType);
+
+            if (!empty($part['wordsCount'])) {
+                $task->setWordCount($part['wordsCount']);
+                $task->set_word_count_original($part['wordsCount']);
+                $projectDao->queue_asana_project($project_id);
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION || $part['workflowLevel'] == 1) {
+                    if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
+                        $project_languages = $projectDao->get_memsource_project_languages($project_id);
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages['kp_target_language_pairs']} + {$part['wordsCount']}");//(**)
+                        if (!empty($project_languages['kp_target_language_pairs'])) {
+                            $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+                            if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
+                                $projectDao->add_to_project_word_count($project_id, $part['wordsCount']);
+                            }
+                        }
+                    }
+                }
+            } else {
+                $task->setWordCount(1);
+            }
+
+            $self_service_project = $projectDao->get_memsource_self_service_project($part['project']['id']);
+            if ($self_service_project) {
+                $deadline = strtotime($project->getDeadline());
+                $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
+                $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
+                $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
+                $now = time();
+                $total = $deadline - $now;
+                if ($total < 0) $total = 0;
+                if ($deadline_less_7_days < $now) { // We are squashed for time
+                    $deadline_less_4_days = $deadline - $total*4/7;
+                    $deadline_less_1_days = $deadline - $total*1/7;
+                }
+                if ($self_service_project['split']) {
+                    $deadline_less_4_days = $deadline - $total*45/100;
+                    $deadline_less_1_days = $deadline - $total*5/100;
+                }
+
+                // If there is only 1 workflow, give all the time to that
+                if (!empty($part['project']['lastWorkflowLevel']) && $part['project']['lastWorkflowLevel'] == 1) $deadline_less_4_days = $deadline_less_1_days;
+
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
+                else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
+                $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
+
+                $task->setPublished(1);
+            } else {
+                if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
+                else                          $task->setDeadline($project->getDeadline());
+
+                $task->setPublished(0);
+            }
+
+            $task_id = $taskDao->createTaskDirectly($task);
+            if (!$task_id) {
+                error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+            error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
+
+            $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                empty($part['internalId'])    ? 0 : $part['internalId'],
+                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                0);
+error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success");//(**)
+
+            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+            $project_restrictions = $taskDao->get_project_restrictions($project_id);
+            if ($project_restrictions && (
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                        ||
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+                $taskDao->setRestrictedTask($task_id);
+            }
+]]]]]]]]]]]
             }
 
                 $sourceLocale = new Common\Protobufs\Models\Locale();
