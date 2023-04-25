@@ -1965,7 +1965,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $task = new Common\Protobufs\Models\Task();
                     $task->setProjectId($project_id);
-                    $task->setTitle(mb_substr((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName'], 0, 128));
+                    $task->setTitle($project->getTitle());
                     $projectSourceLocale = $project->getSourceLocale();
 
                     $taskSourceLocale = new Common\Protobufs\Models\Locale();
