@@ -1678,17 +1678,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
-        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
-            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
-        }
-        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if ($post = $request->getParsedBody()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
-                    || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
-                    || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
-                    ) {
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'project_create_empty')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+
+            if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline']) ||
+                !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -1951,20 +1947,19 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
-        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
-            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
-        }
-        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if ($post = $request->getParsedBody()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
-                    || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
-                    || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
-                    ) {
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'project_add_shell_tasks')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+no            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
+var quantity = parseInt(document.getElementById("quantity_" + i).value);
+<select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}">
+<td><input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" /></td>
+<select name="target_language_{$count}" id="target_language_{$count}">
+
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
 
