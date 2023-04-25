@@ -66,12 +66,12 @@ function task_type_changed_{$count}() {
                                 </select>
                             </td>
                             <td id="unit_{$count}"></td>
-                            <td></td>
+                            <td><input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" /></td>
                             <td>
-                                <select name="targetLanguage_{$count}" id="targetLanguage_{$count}">
+                                <select name="target_language_{$count}" id="target_language_{$count}">
                                     <option value="0"></option>
                                     {foreach from=$languages key=codes item=language}
-                                        <option value="{$codes}" >{$language}</option>
+                                        <option value="{$codes}">{$language}</option>
                                     {/foreach}
                                 </select>
                             </td>
