@@ -1,22 +1,9 @@
 {include file="header.tpl"}
 
-    <span class="hidden">
-
-        <!-- Parameters... -->
-        <div id="siteLocation">{$siteLocation}</div>
-        <div id="siteAPI">{$siteAPI}</div>
-        <div id="user_id">{$user_id}</div>
-        <div id="userIsAdmin">{$isSiteAdmin}</div>
-
-    </span>
-
     <div class="grid_8">
         <div class="page-header">
             <h1>
                 Add Shell Tasks to a Project<br />
-                <small>
-                    {Localisation::getTranslation('common_denotes_a_required_field')}
-                </small>
             </h1>
         </div>           
     </div>  
@@ -42,15 +29,8 @@
                 <tbody>
 <script type="text/javascript>
 // Errors
-var titleError;
-var descriptionError;
-var deadlineError;
-var impactError;
-var tagsError;
-var referenceError;
-var project_create_set_source_language;
-var project_create_set_source_country;
-var imageError;
+var quantity_error;
+var language_error;
 
 function set_all_errors_for_submission()
 {
@@ -61,40 +41,15 @@ function set_all_errors_for_submission()
 function set_errors_for_submission(id, id_for_div)
 {
   html = "";
-  if (titleError != null || descriptionError != null ||
-    deadlineError != null || impactError != null ||
-    project_create_set_source_language != null ||
-    project_create_set_source_country != null ||
-    tagsError != null || referenceError != null || imageError != null) {
+  if (quantity_error != null || language_error != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
-      html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
+      html += '<h3>Please correct the following errors:</h3>';
       html += '<ol>';
-        if (titleError != null) {
-          html += '<li>' + titleError + '</li>';
+        if (quantity_error != null) {
+          html += '<li>' + quantity_error + '</li>';
         }
-        if (descriptionError != null) {
-          html += '<li>' + descriptionError + '</li>';
-        }
-        if (deadlineError != null) {
-          html += '<li>' + deadlineError + '</li>';
-        }
-        if (tagsError != null) {
-          html += '<li>' + tagsError + '</li>';
-        }
-        if (impactError != null) {
-          html += '<li>' + impactError + '</li>';
-        }
-        if (referenceError != null) {
-          html += '<li>' + referenceError + '</li>';
-        }
-        if (project_create_set_source_language != null) {
-          html += '<li>' + project_create_set_source_language + '</li>';
-        }
-        if (project_create_set_source_country != null) {
-          html += '<li>' + project_create_set_source_country + '</li>';
-        }
-        if (imageError != null) {
-          html += '<li>' + imageError + '</li>';
+        if (language_error != null) {
+          html += '<li>' + language_error + '</li>';
         }
       html += '</ol>';
     html += '</div>';
@@ -105,61 +60,33 @@ function set_errors_for_submission(id, id_for_div)
 function validateForm()
 {
   // Reset error variables, clearing any previously displayed errors.
-  titleError = null;
-  descriptionError = null;
-  deadlineError = null;
-  impactError = null;
-  tagsError = null;
-  referenceError = null;
-  project_create_set_source_language = null;
-  project_create_set_source_country = null;
-  imageError = null;
+  quantity_error = null;
+  language_error = null;
 
-  // Snapshot of Form Values when Submit clicked
-  title          = document.getElementById("project_title").value
-  description    = document.getElementById("project_description").value
-  impact         = document.getElementById("project_impact").value
-  reference      = document.getElementById("project_reference").value;
-  tagList        = document.getElementById("tagList").value;
-  selectedMonth  = document.getElementById("selectedMonth").value;
-  selectedYear   = document.getElementById("selectedYear").value;
-  selectedDay    = document.getElementById("selectedDay").value;
-  selectedHour   = document.getElementById("selectedHour").value;
-  selectedMinute = document.getElementById("selectedMinute").value;
-  // trackProject   = document.getElementById("trackProject").checked;
-  // publish        = document.getElementById("publish").checked;
+  var fail = false;
 
-  project.organisationId = org_id;
-  project.title = title;
-  project.description = description;
-  project.impact = impact;
-  project.reference = reference;
-  project.createdTime = "";
-  project.status = "";
-  project.imageUploaded = false;
-  project.imageApproved = false;
-
-  var sourceLocale = new Object();
-  sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
-  sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
-  project.sourceLocale = sourceLocale;
-
-  project.tag = [];
-  if (tagList.length > 0) {
-    var tagListParsed = parseTagsInput(tagList);
-    if (tagListParsed.length > 0) {
-      project.tag = tagListParsed;
+  for (i=0; i<20; i++) {
+    if (document.getElementById("task_type_" + i).value != "0") {
+      if (document.getElementById("quantity_" + i).value == "") {
+        quantity_error = "You must specify a Quantity if you specify a Task Type";
+        fail = true;
+      }
+      var quantity = parseInt(document.getElementById("quantity_" + i).value);
+      if (isNaN(quantity)) {
+        quantity_error = "You must specify a valid integer Quantity";
+        fail = true;
+      }
+      if (document.getElementById("target_language_" + i).value == "0") {
+        language_error = "You must specify a Target Language if you specify a Task Type";
+        fail = true;
+      }
     }
   }
 
-  projectImageFile = null;
-  projectImageFileData = null;
-
-  if (!validateLocalValues() || !validateImageFileInput()) {
+  if (fail) {
     set_all_errors_for_submission();
     return false;
   }
-
   return true;
 }
 
