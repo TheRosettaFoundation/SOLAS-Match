@@ -1940,12 +1940,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         global $app, $template_data;
         $project_id = $args['project_id'];
 
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
-        $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -1982,94 +1978,34 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task->setWordCount($quantity);
                     $task->set_word_count_original($quantity);
 
+                    $task->setDeadline($project->getDeadline());
+                    $task->setPublished(0);
+
                     $projectDao->queue_asana_project($project_id);
 
-                $deadline = strtotime($project->getDeadline());
-                $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
-                $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
-                $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
-                $now = time();
-                $total = $deadline - $now;
-                if ($total < 0) $total = 0;
-                if ($deadline_less_7_days < $now) { // We are squashed for time
-                    $deadline_less_4_days = $deadline - $total*4/7;
-                    $deadline_less_1_days = $deadline - $total*1/7;
-                }
-                if ($self_service_project['split']) {
-                    $deadline_less_4_days = $deadline - $total*45/100;
-                    $deadline_less_1_days = $deadline - $total*5/100;
-                }
+                    $task_id = $taskDao->createTaskDirectly($task);
+                    if (!$task_id) {
+                        error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
+                        continue;
+                    }
+                    error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
 
-                // If there is only 1 workflow, give all the time to that
-                if (!empty($part['project']['lastWorkflowLevel']) && $part['project']['lastWorkflowLevel'] == 1) $deadline_less_4_days = $deadline_less_1_days;
-
-                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
-                else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
-                $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
-
-                $task->setPublished(1);
-            } else {
-                if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
-                else                          $task->setDeadline($project->getDeadline());
-
-                $task->setPublished(0);
-            }
-
-            $task_id = $taskDao->createTaskDirectly($task);
-            if (!$task_id) {
-                error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
-                continue;
-            }
-            error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
-
-            $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
-                empty($part['internalId'])    ? 0 : $part['internalId'],
-                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
-                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
-                empty($part['endIndex'])      ? 0 : $part['endIndex'],
-                0);
+                    $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                        empty($part['internalId'])    ? 0 : $part['internalId'],
+                        empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                        empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                        empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                        0);
 error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success");//(**)
 
-            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-            $project_restrictions = $taskDao->get_project_restrictions($project_id);
-            if ($project_restrictions && (
-                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
-                        ||
-                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
-                $taskDao->setRestrictedTask($task_id);
-            }
-]]]]]]]]]]]
-
-
-
+                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                 }
             }
-
-        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/project_create_empty.js\"></script>";
-
+        }
         $template_data = array_merge($template_data, array(
-            "siteLocation"          => Common\Lib\Settings::get('site.location'),
-            "siteAPI"               => Common\Lib\Settings::get('site.api'),
-            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
-            "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
-            "org_id"         => $org_id,
-            "user_id"        => $user_id,
-            "extra_scripts"  => $extraScripts,
-            'deadline_timestamp' => $deadline_timestamp,
-            'selected_day'   => $selected_day,
-            'month_list'     => $month_list,
-            'selected_month' => $selected_month,
-            'year_list'      => $year_list,
-            'selected_year'  => $selected_year,
-            'hour_list'      => $hour_list,
-            'selected_hour'  => $selected_hour,
-            'minute_list'    => $minute_list,
-            'selected_minute'=> $selected_minute,
-            'languages'      => $projectDao->generate_language_selection(1),
-            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
-            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
+            'siteLocation'   => Common\Lib\Settings::get('site.location'),
+            'project_id'     => $project_id,
+            'languages'      => $projectDao->generate_language_selection(),
             'sesskey'        => $sesskey,
         ));
         return UserRouteHandler::render('project/project.project.add.shell.tasks.tpl', $response);
