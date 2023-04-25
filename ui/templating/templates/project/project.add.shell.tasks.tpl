@@ -40,10 +40,23 @@
                     <th width="25%">Target Language</th>
                 </thead>
                 <tbody>
+<script type="text/javascript>
+var units = ["",
+    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+        "{$ui['unit_measurement']}",
+    {/foreach}
+];
+</script>
                     {for $count=0 to 19}
+<script type="text/javascript>
+function task_type_changed_{$count}() {
+    var task_type = document.getElementById("task_type_{$count}").value;
+    document.getElementById(unit_{$count}).innerHTML = units[task_type];
+}
+</script>
                         <tr>
                             <td>
-                                <select name="task_type" id="task_type">
+                                <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}">
                                     <option value="0"></option>
                                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                                         {if $ui['shell_task']}
@@ -52,10 +65,10 @@
                                     {/foreach}
                                 </select>
                             </td>
-                            <td></td>
+                            <td id="unit_{$count}"></td>
                             <td></td>
                             <td>
-                                <select name="targetLanguage" id="targetLanguage">
+                                <select name="targetLanguage_{$count}" id="targetLanguage_{$count}">
                                     <option value="0"></option>
                                     {foreach from=$languages key=codes item=language}
                                         <option value="{$codes}" >{$language}</option>
