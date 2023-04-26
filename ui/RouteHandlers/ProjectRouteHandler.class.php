@@ -1733,134 +1733,128 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (empty($project) || $project->getId() <= 0) {
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
-                    $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
-                    if (!$memsource_project) {
-                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
-                        try {
-                            $projectDao->deleteProject($project->getId());
-                        } catch (\Exception $e) {
-                        }
-                    } else {
-                        $image_failed = false;
-                        if (!empty($_FILES['projectImageFile']['name'])) {
-                            $projectImageFileName = $_FILES['projectImageFile']['name'];
-                            $extensionStartIndex = strrpos($projectImageFileName, '.');
-                            // Check that file has an extension
-                            if ($extensionStartIndex > 0) {
-                                $extension = substr($projectImageFileName, $extensionStartIndex + 1);
-                                $extension = strtolower($extension);
-                                $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
+                    $project_id = $project->getId();
+                    $projectDao->set_memsource_project($project_id, $project_id, $project_id, $user_id, $user_id, ['', '', '', '', '', '', '', '', '', '', '', '']);
+                    $memsource_project = $projectDao->get_memsource_project($project_id);
 
-                                // Check that the file extension is valid for an image
-                                if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
-                                    $image_failed = true;
-                                }
-                            } else {
-                                // File has no extension
+                    $image_failed = false;
+                    if (!empty($_FILES['projectImageFile']['name'])) {
+                        $projectImageFileName = $_FILES['projectImageFile']['name'];
+                        $extensionStartIndex = strrpos($projectImageFileName, '.');
+                        // Check that file has an extension
+                        if ($extensionStartIndex > 0) {
+                            $extension = substr($projectImageFileName, $extensionStartIndex + 1);
+                            $extension = strtolower($extension);
+                            $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
+
+                            // Check that the file extension is valid for an image
+                            if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
                                 $image_failed = true;
                             }
+                        } else {
+                            // File has no extension
+                            $image_failed = true;
+                        }
 
-                            if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
-                                    ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
-                                $image_failed = true;
-                            } else {
-                                $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
-                                $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
-                                list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+                        if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
+                                ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                            $image_failed = true;
+                        } else {
+                            $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                            $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                            list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
 
-                                if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                            if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                try {
+                                    $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                    $success = true;
+                                } catch (\Exception $e) {
+                                    $success = false;
+                                }
+                            } else { // Resize the image
+                                $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                $newWidth  = floor($width * $ratio);
+                                $newHeight = floor($height * $ratio);
+
+                                $img = '';
+                                if ($extension == 'gif') {
+                                    $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
+                                    $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                } elseif ($extension == 'png') {
+                                    $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                    $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                } else {
+                                    $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                }
+
+                                $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                if (!empty($img) && $tci !== false) {
+                                    if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                        imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                        // If we did not get this far, give up and use the un-resized image
+                                    }
+                                }
+
+                                $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                if ($data !== false) {
                                     try {
                                         $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                         $success = true;
                                     } catch (\Exception $e) {
                                         $success = false;
                                     }
-                                } else { // Resize the image
-                                    $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
-                                    $newWidth  = floor($width * $ratio);
-                                    $newHeight = floor($height * $ratio);
-
-                                    $img = '';
-                                    if ($extension == 'gif') {
-                                        $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
-                                        $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
-                                    } elseif ($extension == 'png') {
-                                        $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
-                                        $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
-                                    } else {
-                                        $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
-                                    }
-
-                                    $tci = imagecreatetruecolor($newWidth, $newHeight);
-                                    if (!empty($img) && $tci !== false) {
-                                        if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
-                                            imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
-                                            // If we did not get this far, give up and use the un-resized image
-                                        }
-                                    }
-
-                                    $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
-                                    if ($data !== false) {
-                                        try {
-                                            $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
-                                            $success = true;
-                                        } catch (\Exception $e) {
-                                            $success = false;
-                                        }
-                                    } else {
-                                        $success = false;
-                                    }
-                                }
-                                if (!$success) {
-                                    $image_failed = true;
+                                } else {
+                                    $success = false;
                                 }
                             }
-                        } else { // If no image uploaded, copy an old one
-                            if ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id)) {
-                                $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
-                                if (!empty($image_files)) {
-                                    $image_file = $image_files[0];
-                                    $project_id = $project->getId();
-                                    $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
-                                    mkdir($destination, 0755);
-                                    $ext = pathinfo($image_file, PATHINFO_EXTENSION);
-                                    copy($image_file, "$destination/image.$ext");
-                                    $projectDao->set_uploaded_approved($project_id);
-                                }
+                            if (!$success) {
+                                $image_failed = true;
                             }
                         }
-                        if ($image_failed) {
-                            UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
-                            try {
-                                $projectDao->deleteProject($project->getId());
-                            } catch (\Exception $e) {
+                    } else { // If no image uploaded, copy an old one
+                        if ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id)) {
+                            $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
+                            if (!empty($image_files)) {
+                                $image_file = $image_files[0];
+                                $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
+                                mkdir($destination, 0755);
+                                $ext = pathinfo($image_file, PATHINFO_EXTENSION);
+                                copy($image_file, "$destination/image.$ext");
+                                $projectDao->set_uploaded_approved($project_id);
                             }
-                        } else {
-                            // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
-                            try {
-                                $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
-                                $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
-                                if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+                        }
+                    }
+                    if ($image_failed) {
+                        UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
+                        try {
+                            $projectDao->deleteProject($project_id);
+                        } catch (\Exception $e) {
+                        }
+                    } else {
+                        // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
+                        try {
+                            $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                            $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                            if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project_id, $restrict_translate_tasks, $restrict_revise_tasks);
 
-                                // Create a topic in the Community forum (Discourse) and a project in Asana
-                                error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
-                                try {
-                                   $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
-                                } catch (\Exception $e) {
-                                    error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
-                                }
-                                try {
-                                    UserRouteHandler::flash('success', 'Project Created');
-                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
-                                } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
-                                }
+                            // Create a topic in the Community forum (Discourse) and a project in Asana
+                            error_log('projectCreate create_discourse_topic(' . $project_id . ", $target_languages)");
+                            try {
+                               $this->create_discourse_topic($project_id, $target_languages, 0, !empty($post['earthquake']));
                             } catch (\Exception $e) {
-                                UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
-                                try {
-                                    error_log('projectCreate deleteProject(' . $project->getId() . ")");
-                                    $projectDao->deleteProject($project->getId());
-                                } catch (\Exception $e) {
-                                }
+                                error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+                            }
+                            try {
+                                UserRouteHandler::flash('success', 'Project Created');
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project_id)));
+                            } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
+                            }
+                        } catch (\Exception $e) {
+                            UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                            try {
+                                error_log('projectCreate deleteProject(' . $project_id . ")");
+                                $projectDao->deleteProject($project_id);
+                            } catch (\Exception $e) {
                             }
                         }
                     }
