@@ -1990,14 +1990,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     error_log("Added Shell Task: $task_id");
 
-                    $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
-                        empty($part['internalId'])    ? 0 : $part['internalId'],
-                        empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
-                        empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
-                        empty($part['endIndex'])      ? 0 : $part['endIndex'],
-                        0);
-error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success");//(**)
-
+                    $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                 }
             }
