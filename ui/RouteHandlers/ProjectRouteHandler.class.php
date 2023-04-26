@@ -1909,7 +1909,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/project_create_empty.js\"></script>";
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "siteAPI"               => Common\Lib\Settings::get('site.api'),
             "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
@@ -1931,7 +1931,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
-        ));
+        ]);
         return UserRouteHandler::render('project/project.create.empty.tpl', $response);
     }
 
@@ -2002,12 +2002,12 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 }
             }
         }
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'siteLocation'   => Common\Lib\Settings::get('site.location'),
             'project_id'     => $project_id,
             'languages'      => $projectDao->generate_language_selection(),
             'sesskey'        => $sesskey,
-        ));
+        ]);
         return UserRouteHandler::render('project/project.project.add.shell.tasks.tpl', $response);
     }
 
