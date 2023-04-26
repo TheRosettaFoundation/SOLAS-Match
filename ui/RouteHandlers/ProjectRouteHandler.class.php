@@ -1985,10 +1985,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $task_id = $taskDao->createTaskDirectly($task);
                     if (!$task_id) {
-                        error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
+                        error_log('Failed to add Shell Task');
                         continue;
                     }
-                    error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
+                    error_log("Added Shell Task: $task_id");
 
                     $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                         empty($part['internalId'])    ? 0 : $part['internalId'],
