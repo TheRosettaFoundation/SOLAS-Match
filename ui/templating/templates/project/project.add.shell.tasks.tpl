@@ -92,7 +92,7 @@ function validateForm()
 
 var units = ["",
     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-        "{$ui['unit_measurement']}",
+        "{$ui['pricing_and_recognition_unit_text']}",
     {/foreach}
 ];
 </script>
