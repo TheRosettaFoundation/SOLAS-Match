@@ -227,7 +227,7 @@ class ProjectRouteHandler
             }
         }
 
-        // Create a topic in the Community forum (Discourse) and a project in Asana
+        // Create a topic in the Community forum (Discourse)
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
             $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']]);
@@ -1567,7 +1567,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
                                         if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
 
-                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+                                        // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
                                            $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
@@ -1837,10 +1837,25 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
                             if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project_id, $restrict_translate_tasks, $restrict_revise_tasks);
 
-                            // Create a topic in the Community forum (Discourse) and a project in Asana
+                            // Create a topic in the Community forum (Discourse)
+NEED $target_languages index to select
+[[LIKE
+                                        $target_languages = '';
+                                        $targetCount = 0;
+                                        if (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages = $trommons_language_code . '-' . $trommons_country_code;
+                                        }
+                                        $targetCount++;
+                                        while (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
+                                            $targetCount++;
+                                        }
+]]
                             error_log('projectCreate create_discourse_topic(' . $project_id . ", $target_languages)");
                             try {
-                               $this->create_discourse_topic($project_id, $target_languages, 0, !empty($post['earthquake']));
+                               $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => $user_id], !empty($post['earthquake']));
                             } catch (\Exception $e) {
                                 error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                             }
