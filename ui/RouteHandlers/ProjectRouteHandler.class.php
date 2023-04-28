@@ -2341,6 +2341,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $project_lang_pairs = [];
                 foreach ($tasks as $task) {
+                    $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
+                    $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($project_lang_pairs[$targetLanguageCode])) {
                         $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
