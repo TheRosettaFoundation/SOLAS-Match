@@ -787,12 +787,13 @@ $replace = array(
         LibAPI\PDOWrapper::call('dequeue_asana_project', LibAPI\PDOWrapper::cleanse($project_id));
     }
 
-    public function set_asana_task($project_id, $language_code_source, $language_code_target, $asana_task_id)
+    public function set_asana_task($project_id, $language_code_source, $language_code_target, $type_category, $asana_task_id)
     {
         LibAPI\PDOWrapper::call('set_asana_task',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_category) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($asana_task_id));
     }
 
@@ -802,7 +803,7 @@ $replace = array(
         if (empty($result)) return [];
         $results = [];
         foreach ($result as $r) {
-            $results[$r['language_code_target']] = $r;
+            $results[$r['language_code_target'] . ':' . $r['type_category']] = $r;
         }
         return $results;
     }

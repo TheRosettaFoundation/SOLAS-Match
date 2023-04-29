@@ -419,6 +419,7 @@ CREATE TABLE IF NOT EXISTS `AsanaTasks` (
   project_id INT(10) UNSIGNED NOT NULL,
   language_code_source VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   language_code_target VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  type_category        INT UNSIGNED NOT NULL DEFAULT 1,
   asana_task_id        VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `project_id` (`project_id`),
   CONSTRAINT `FK_AsanaTasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -9255,10 +9256,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_asana_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_task`(IN pID INT, IN code_source VARCHAR(10), IN code_target VARCHAR(10), IN asana_id VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_task`(IN pID INT, IN code_source VARCHAR(10), IN code_target VARCHAR(10), IN cID UNSIGNED INT, IN asana_id VARCHAR(30))
 BEGIN
-    INSERT INTO AsanaTasks (project_id, language_code_source, language_code_target, asana_task_id)
-    VALUES                 (       pID,          code_source,          code_target,      asana_id);
+    INSERT INTO AsanaTasks (project_id, language_code_source, language_code_target, type_category, asana_task_id)
+    VALUES                 (       pID,          code_source,          code_target,           cID,      asana_id);
 END//
 DELIMITER ;
 

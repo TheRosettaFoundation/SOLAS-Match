@@ -2342,7 +2342,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
                     $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
-                    $asana_task_split_key = "$targetLanguageCode:{Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category']}";
+                    $asana_task_split_key = "$targetLanguageCode:" . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($asana_task_splits[$asana_task_split_key])) {
                         $asana_task_splits[$asana_task_split_key] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'type_category' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category']];
@@ -2352,7 +2352,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
-ADD TO AsanaTasks category??
                 $dequeue = true;
                 foreach ($asana_task_splits as $key => $asana_task_split) {
                     if (empty($asana_tasks[$key])) {
@@ -2365,6 +2364,7 @@ ADD TO AsanaTasks category??
                     }
                     $targetLocale = $asana_task_split['targetLanguageName'];
                     $targetLocale_code = $asana_task_split['targetLanguageCode'];
+??? = $asana_task_split['type_category'];
 
                     $ch = curl_init($url);
 
