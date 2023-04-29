@@ -2364,7 +2364,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     }
                     $targetLocale = $asana_task_split['targetLanguageName'];
                     $targetLocale_code = $asana_task_split['targetLanguageCode'];
-??? = $asana_task_split['type_category'];
+                    $type_category = $asana_task_split['type_category'];
 
                     $ch = curl_init($url);
 
@@ -2373,7 +2373,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
-                    // https://app.asana.com/0/1200067882657242/board
                     if ($create) {
                         $target_name_asana = $targetLocale;
                         if (!empty($selections[$targetLocale_code])) $target_name_asana = $selections[$targetLocale_code];
@@ -2418,7 +2417,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
                     curl_close($ch);
-                    error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+                    error_log("POST/PUT Asana task ($targetLocale_code, $type_category), result: $result");
 
                     $asana_task_details = json_decode($result, true);
                     if (!empty($asana_task_details['errors'][0]['message'])) {
@@ -2434,7 +2433,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                         $result = curl_exec($ch);
                         curl_close($ch);
-                        error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+                        error_log("POST/PUT Asana task ($targetLocale_code, $type_category), result: $result");
                       } elseif (strpos($asana_task_details['errors'][0]['message'], 'Usually waiting and then retrying') !== false) {
                         $dequeue = false;
                       }
@@ -2444,7 +2443,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         $asana_task_details = json_decode($result, true);
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
-                            $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                            $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
                         }
                     }
                 }
