@@ -2339,20 +2339,22 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 else               $asana_project = '1200067882657242';
 
                 $tasks = $projectDao->getProjectTasksArray($projectId);
-                $project_lang_pairs = [];
+                $asana_task_splits = [];
                 foreach ($tasks as $task) {
                     $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
+                    $asana_task_split_key = "$targetLanguageCode:{Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category']}";
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
-                    if (empty($project_lang_pairs[$targetLanguageCode])) {
-                        $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName];
-                        foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] = 0;
+                    if (empty($asana_task_splits[$asana_task_split_key])) {
+                        $asana_task_splits[$asana_task_split_key] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'type_category' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category']];
+                        foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
-                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $project_lang_pairs[$targetLanguageCode][$to_enum] += $task['wordCount'];
+                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
+ADD TO AsanaTasks category??
                 $dequeue = true;
-                foreach ($project_lang_pairs as $key => $project_lang_pair) {
+                foreach ($asana_task_splits as $key => $asana_task_split) {
                     if (empty($asana_tasks[$key])) {
                         $create = true;
                         $url = 'https://app.asana.com/api/1.0/tasks';
@@ -2361,13 +2363,13 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         $url = 'https://app.asana.com/api/1.0/tasks/' . $asana_tasks[$key]['asana_task_id'];
                         error_log('Updating Asana task: ' . $asana_tasks[$key]['asana_task_id']);
                     }
-                    $targetLocale = $project_lang_pair['targetLanguageName'];
-                    $targetLocale_code = $project_lang_pair['targetLanguageCode'];
+                    $targetLocale = $asana_task_split['targetLanguageName'];
+                    $targetLocale_code = $asana_task_split['targetLanguageCode'];
 
                     $ch = curl_init($url);
 
                     $wordCount = 0; // Pick the first nonzero...
-                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $project_lang_pair[$to_enum];
+                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $asana_task_split[$to_enum];
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
