@@ -2368,8 +2368,14 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
                     $ch = curl_init($url);
 
-                    $wordCount = 0; // Pick the first nonzero...
-                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0) $wordCount = $asana_task_split[$to_enum];
+                    $wordCount = 0; // Pick the first nonzero wordcount for type_enum (but use zero wordcount if not a Phrase type)...
+                    foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0 && Common\Enums\TaskTypeEnum::$enum_to_UI[$to_enum]['type_category'] == 1) $wordCount = $asana_task_split[$to_enum];
+[[
+$quantities
+Task name (e.g. DTP Signoff)
+Measurement amount and unit (e.g. 3 pages for DTP)
+Pricing/labor amount and unit (e.g. 90 minutes for DTP)
+]]
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
@@ -2389,6 +2395,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 "1200269602122253" => $source_code_asana,
                                 "1200067882657251" => $target_name_asana,
                                 "1200269602122255" => $target_code_asana,
+                                '8888888888888888' => "$type_category",
+                                '9999999999999999' => $quantities,
                                 "1200226775862070" => $project_url,
                                 '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
                                 "1200269602122257" => "$projectId"
