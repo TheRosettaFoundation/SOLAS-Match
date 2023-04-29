@@ -2345,10 +2345,13 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $asana_task_split_key = "$targetLanguageCode:" . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($asana_task_splits[$asana_task_split_key])) {
-                        $asana_task_splits[$asana_task_split_key] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'type_category' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category']];
+                        $asana_task_splits[$asana_task_split_key] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'type_category' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'], 'quantities' => ''];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
+//Add to top of quantities(**) We don't have: Measurement amount
+//Measurement amount and unit (e.g. 3 pages for DTP); pages == Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_unit_for_later_stats']
+                    $asana_task_splits[$asana_task_split_key]['quantities'] .= "{Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text']}: {$task['wordCount']} {Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text']}\n";
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
@@ -2365,17 +2368,12 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $targetLocale = $asana_task_split['targetLanguageName'];
                     $targetLocale_code = $asana_task_split['targetLanguageCode'];
                     $type_category = $asana_task_split['type_category'];
+                    $quantities = $asana_task_split['quantities'];
 
                     $ch = curl_init($url);
 
                     $wordCount = 0; // Pick the first nonzero wordcount for type_enum (but use zero wordcount if not a Phrase type)...
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($wordCount == 0 && Common\Enums\TaskTypeEnum::$enum_to_UI[$to_enum]['type_category'] == 1) $wordCount = $asana_task_split[$to_enum];
-[[
-$quantities
-Task name (e.g. DTP Signoff)
-Measurement amount and unit (e.g. 3 pages for DTP)
-Pricing/labor amount and unit (e.g. 90 minutes for DTP)
-]]
 
                     // https://developers.asana.com/docs/create-a-task
                     // https://developers.asana.com/docs/update-a-task
