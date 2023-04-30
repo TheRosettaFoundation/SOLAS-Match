@@ -8198,7 +8198,7 @@ BEGIN
     JOIN TaskClaims tc ON t.id=tc.task_id
     WHERE
         tc.user_id IN (
-            SELECT 
+            SELECT
                 uqp1.user_id
             FROM Tasks t1
             JOIN UserQualifiedPairs uqp1 ON
@@ -8222,11 +8222,158 @@ BEGIN
     JOIN Tags      t ON ut.tag_id=t.id 
     WHERE
         ut.user_id IN (
-            SELECT 
+            SELECT
                 uqp1.user_id
             FROM Tasks t1
             JOIN UserQualifiedPairs uqp1 ON
                 t1.`language_id-source`=uqp1.language_id_source AND
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY ut.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_no_source_strict`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source_strict`(IN `taskID` INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        CASE
+            WHEN MAX(uqp.qualification_level=1) THEN 'Translator'
+            WHEN MAX(uqp.qualification_level=2) THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level=3) THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Tasks                            t
+    JOIN Projects                         p ON t.project_id=p.id
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id
+    LEFT JOIN Languages                  ln ON u.language_id=ln.id
+    LEFT JOIN Countries                  cn ON u.country_id=cn.id
+    LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
+    LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
+    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
+    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
+    WHERE
+        t.id=taskID AND
+        tis.user_id IS NULL AND
+        (st.user_id IS NULL OR st.type=0) AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+        )
+    GROUP BY uqp.user_id
+    ORDER BY uqp.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_no_source`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source`(IN `taskID` INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        CASE
+            WHEN MAX(uqp.qualification_level=1) THEN 'Translator'
+            WHEN MAX(uqp.qualification_level=2) THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level=3) THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Tasks                            t
+    JOIN Projects                         p ON t.project_id=p.id
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-target`=uqp.language_id_target AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id
+    LEFT JOIN Languages                  ln ON u.language_id=ln.id
+    LEFT JOIN Countries                  cn ON u.country_id=cn.id
+    LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
+    LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
+    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
+    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
+    WHERE
+        t.id=taskID AND
+        tis.user_id IS NULL AND
+        (st.user_id IS NULL OR st.type=0) AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+        )
+    GROUP BY uqp.user_id
+    ORDER BY uqp.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_words_no_source`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_words_no_source`(IN `taskID` INT)
+BEGIN
+    SELECT
+        tc.user_id,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4,                                                             t.`word-count`, 0)) AS words_delivered,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4 AND (tc.`claimed-time` > DATE_SUB(NOW(), INTERVAL 3 MONTH)), t.`word-count`, 0)) AS words_delivered_last_3_months
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE
+        tc.user_id IN (
+            SELECT
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY tc.user_id
+    ORDER BY words_delivered DESC, tc.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_tags_no_source`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_tags_no_source`(IN `taskID` INT)
+BEGIN
+    SELECT
+        ut.user_id,
+        GROUP_CONCAT(t.label ORDER BY t.label ASC SEPARATOR ', ') AS user_liked_tags
+    FROM UserTags ut
+    JOIN Tags      t ON ut.tag_id=t.id
+    WHERE
+        ut.user_id IN (
+            SELECT
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
                 t1.`language_id-target`=uqp1.language_id_target
             WHERE
                 t1.id=taskID)
