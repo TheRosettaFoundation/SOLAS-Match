@@ -545,7 +545,6 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (1, "Segmentation"),
   (2, "Translation"),
@@ -570,6 +569,20 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (22,'Plain Language assessment'),
   (23,'Plain Language editing'),
   (24,'Plain Language training');
+
+
+CREATE TABLE IF NOT EXISTS `task_type_categorys` (
+  type_category      INT UNSIGNED NOT NULL,
+  type_category_text VARCHAR(50) NOT NULL,
+  PRIMARY KEY (type_category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO task_type_categorys VALUES
+(1, 'Existing/Phrase Services'),
+(2, 'Terminology'),
+(3, 'DTP'),
+(4, 'Audiovisual Services'),
+(5, 'Translation Services'),
+(6, 'Editing');
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
