@@ -1995,7 +1995,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'languages'      => $projectDao->generate_language_selection(),
             'sesskey'        => $sesskey,
         ]);
-        return UserRouteHandler::render('project/project.project.add.shell.tasks.tpl', $response);
+        return UserRouteHandler::render('project/project.add.shell.tasks.tpl', $response);
     }
 
     /**
