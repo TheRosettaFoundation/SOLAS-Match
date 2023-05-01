@@ -552,6 +552,24 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (3, "Proofreading"),
   (4, "Desegmentation"),
   (6, "Proofreading and Approval");
+  ( 7,'Terminology translation'),
+  ( 8,'DTP signoff'),
+  ( 9,'Voice recording'),
+  (10,'Subtitle Translation'),
+  (11,'Subtitle Revision'),
+  (12,'Captioning'),
+  (13,'Transcription'),
+  (14,'Voiceover'),
+  (15,'lexiQA quality assurance'),
+  (16,'Alignment'),
+  (17,'SME review'),
+  (18,'QA on Phrase'),
+  (19,'Language Quality Assessment'),
+  (20,'Monolingual proofreading',),
+  (21,'MTPE'),
+  (22,'Plain Language assessment'),
+  (23,'Plain Language editing'),
+  (24,'Plain Language training');
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
