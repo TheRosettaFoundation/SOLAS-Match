@@ -27,7 +27,7 @@
                     <th width="25%">Target Language</th>
                 </thead>
                 <tbody>
-<script type="text/javascript>
+<script type="text/javascript">
 // Errors
 var quantity_error;
 var language_error;
@@ -97,7 +97,7 @@ var units = ["",
 ];
 </script>
                     {for $count=0 to 19}
-<script type="text/javascript>
+<script type="text/javascript">
 function task_type_changed_{$count}() {
     var task_type = document.getElementById("task_type_{$count}").value;
     document.getElementById(unit_{$count}).innerHTML = units[task_type];
