@@ -532,7 +532,12 @@ class TaskDao
             $ret = Lib\PDOWrapper::call('unClaimTaskMemsource', $args);
 
             $task = self::getTask($taskId);
-            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
+            $task_type_details = Lib\PDOWrapper::call('get_task_type_details', '');
+            $enum_to_UI = [];
+            foreach ($task_type_details as $task_type_detail) {
+                $enum_to_UI[$task_type_detail['type_enum']] = $task_type_detail;
+            }
+            if ($enum_to_UI[$task->getTaskType()]['shell_task']) {
                 $result = $ret[0]['result'];
                 error_log("result: $result");
                 return $result;
