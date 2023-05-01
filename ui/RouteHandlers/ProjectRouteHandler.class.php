@@ -2351,7 +2351,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
 //Add to top of quantities(**) We don't have: Measurement amount
 //Measurement amount and unit (e.g. 3 pages for DTP); pages == Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_unit_for_later_stats']
-                    $asana_task_splits[$asana_task_split_key]['quantities'] .= "{Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text']}: {$task['wordCount']} {Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text']}\n";
+                    $asana_task_splits[$asana_task_split_key]['quantities'] .= '';//"{Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text']}: {$task['wordCount']} {Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text']}\n";
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
