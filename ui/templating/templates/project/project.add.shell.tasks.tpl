@@ -107,7 +107,7 @@ alert("units[task_type]" + units[task_type]);
 </script>
                         <tr>
                             <td>
-                                <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}">
+                                <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}()">
                                     <option value="0"></option>
                                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                                         {if $ui['shell_task']}
