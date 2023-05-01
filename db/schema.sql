@@ -539,6 +539,7 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+# Be very carefull of deleteing any of these they will cascade DELETEs
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -564,13 +565,13 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (17,'SME review'),
   (18,'QA on Phrase'),
   (19,'Language Quality Assessment'),
-  (20,'Monolingual proofreading',),
+  (20,'Monolingual proofreading'),
   (21,'MTPE'),
   (22,'Plain Language assessment'),
   (23,'Plain Language editing'),
   (24,'Plain Language training');
 
-
+# Be very carefull of deleteing any of these they will cascade DELETEs
 CREATE TABLE IF NOT EXISTS `task_type_categorys` (
   type_category      INT UNSIGNED NOT NULL,
   type_category_text VARCHAR(50) NOT NULL,
@@ -1415,7 +1416,7 @@ INSERT INTO task_type_details VALUES
 (21,5,1,0,1,1,1,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    '',                         '??(**)',       '??(**)', '??(**)',       '??(**)', 0.000, 0.00),
 (22,6,1,0,1,1,0,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.333, 4.17),
 (23,6,1,0,1,1,0,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
-(24,6,1,0,1,1,0,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
+(24,6,1,0,1,1,0,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17)
 ;
 
 
@@ -9470,7 +9471,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_asana_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_task`(IN pID INT, IN code_source VARCHAR(10), IN code_target VARCHAR(10), IN cID UNSIGNED INT, IN asana_id VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_task`(IN pID INT, IN code_source VARCHAR(10), IN code_target VARCHAR(10), IN cID INT UNSIGNED, IN asana_id VARCHAR(30))
 BEGIN
     INSERT INTO AsanaTasks (project_id, language_code_source, language_code_target, type_category, asana_task_id)
     VALUES                 (       pID,          code_source,          code_target,           cID,      asana_id);
