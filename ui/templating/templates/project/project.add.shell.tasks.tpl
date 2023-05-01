@@ -100,6 +100,8 @@ var units = ["",
 <script type="text/javascript">
 function task_type_changed_{$count}() {
     var task_type = document.getElementById("task_type_{$count}").value;
+alert("task_type" + task_type);
+alert("units[task_type]" + units[task_type]);
     document.getElementById(unit_{$count}).innerHTML = units[task_type];
 }
 </script>
