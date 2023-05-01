@@ -1943,7 +1943,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'project_add_shell_tasks')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             $selections = $projectDao->generate_language_selection();
             for ($count = 0; $count < 20; $count++) {
-                if (!empty($post["task_type_$count"]) {
+                if (!empty($post["task_type_$count"])) {
                     $task_type = (int)$post["task_type_$count"];
                     $quantity = (int)$post["quantity_$count"];
                     $target_language = $post["target_language_$count"];
