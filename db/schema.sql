@@ -1367,20 +1367,56 @@ CREATE TABLE IF NOT EXISTS `selections` (
 
 
 CREATE TABLE IF NOT EXISTS `task_type_details` (
-  type_enum         INT(10) UNSIGNED NOT NULL,
-  enabled           INT(10) UNSIGNED NOT NULL,
-  type_text         VARCHAR(50) NOT NULL,
-  type_text_short   VARCHAR(50) NOT NULL,
-  colour            VARCHAR(50) NOT NULL,
-  claimed_template  VARCHAR(50) NOT NULL,
-  show_section      VARCHAR(50) NOT NULL,
-  memsource_name    VARCHAR(50) NOT NULL,
-  for_self_managed  INT(10) UNSIGNED NOT NULL,
-  visible_community INT(10) UNSIGNED NOT NULL,
-  unit_measurement  VARCHAR(50) NOT NULL,
-  unit_rate         FLOAT NOT NULL,
-  PRIMARY KEY (type_enum)
+  type_enum                         INT UNSIGNED NOT NULL,
+  type_category                     INT UNSIGNED NOT NULL,
+  enabled                           INT UNSIGNED NOT NULL,
+  for_self_managed                  INT UNSIGNED NOT NULL,
+  visible_community                 INT UNSIGNED NOT NULL,
+  shell_task                        INT UNSIGNED NOT NULL, # 1 => Shell Task
+  source_and_target                 INT UNSIGNED NOT NULL, # 1 => Has both Source and Target
+  sourcing                          INT UNSIGNED NOT NULL, # 0 => Pair (strict & loose), 1 => Target only (strict & loose), 2 => Pair and Target only (strict & loose)
+  type_text                         VARCHAR(50)  NOT NULL,
+  type_text_short                   VARCHAR(50)  NOT NULL,
+  colour                            VARCHAR(50)  NOT NULL,
+  claimed_template                  VARCHAR(50)  NOT NULL,
+  show_section                      VARCHAR(50)  NOT NULL,
+  memsource_name                    VARCHAR(50)  NOT NULL,
+  unit_count_text                   VARCHAR(50)  NOT NULL, # e.g. "Word Count" [was common_word_count]
+  unit_count_text_short             VARCHAR(50)  NOT NULL, # e.g. "words" [was project_profile_display_words]
+  pricing_and_recognition_unit_text VARCHAR(50)  NOT NULL,
+  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours; value to be entered soemwhere????(**)
+  unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
+  rate_for_recognition              FLOAT        NOT NULL,
+  PRIMARY KEY (type_enum),
+          KEY FK_type_category (type_category),
+  CONSTRAINT FK_type_category FOREIGN KEY (type_category) REFERENCES task_type_categorys (type_category) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO task_type_details VALUES
+( 1,1,0,0,1,0,1,0,'Segmentation',               'Segmentation',               '#B02323','task/task.claimed-segmentation.tpl',  'SEGMENTATION', '',                         'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+( 2,1,1,1,1,0,1,0,'Translation',                'Translation',                '#1D8A11','task/task.claimed-translation.tpl',   'TRANSLATION',  'Translation',              'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+( 3,1,1,1,1,0,1,0,'Revising',                   'Revising',                   '#1064C4','task/task.claimed-proofreading.tpl',  'REVISING',     'Revision',                 'Word Count',   'words',  'Words',        'Words',  0.025, 0.50),
+( 4,1,0,0,1,0,1,0,'Desegmentation',             'Desegmentation',             '#B02060','task/task.claimed-desegmentation.tpl','SEGMENTATION', '',                         'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+( 5,1,0,0,1,0,1,0,'QA??',                       'QA??',                       '#B02323','',                                    'QUALITY',      '',                         'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+( 6,1,1,0,1,0,1,0,'Proofreading and Approval',  'Proofreading',               '#B02060','task/task.claimed-approval.tpl',      'APPROVAL',     'Proofreading and Approval','Word Count',   'words',  'Words',        'Words',  0.025, 0.25),
+( 7,2,1,0,1,1,1,0,'Terminology translation',    'Terminology translation',    '#B02323','',                                    'SHELLTASK',    '',                         'Terms',        'terms',  'Terms',        'Terms',  0.050,10.00),
+( 8,3,1,0,1,1,1,2,'DTP signoff',                'DTP signoff',                '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Pages',  1.667, 4.17),
+( 9,4,1,0,1,1,0,1,'Voice recording',            'Voice recording',            '#B02323','',                                    'VOICEREC',     '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667,13.33),
+(10,4,1,0,1,1,1,0,'Subtitle Translation',       'Subtitle Translation',       '#B02323','',                                    'SHELLTASK',    '',                         'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+(11,4,1,0,1,1,1,0,'Subtitle Revision',          'Subtitle Revision',          '#B02323','',                                    'SHELLTASK',    '',                         'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
+(12,4,1,0,1,1,0,1,'Captioning',                 'Captioning',                 '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  1.667, 5.83),
+(13,4,1,0,1,1,0,1,'Transcription',              'Transcription',              '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
+(14,4,1,0,1,1,0,1,'Voiceover',                  'Voiceover',                  '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
+(15,5,1,0,1,1,1,0,'lexiQA quality assurance',   'lexiQA quality assurance',   '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
+(16,5,1,0,1,1,1,0,'Alignment',                  'Alignment',                  '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
+(17,5,1,0,1,1,1,0,'SME review',                 'SME review',                 '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
+(18,5,1,0,1,1,1,0,'QA on Phrase',               'QA on Phrase',               '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
+(19,5,1,0,1,1,1,0,'Language Quality Assessment','Language Quality Assessment','#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',0.333, 5.83),
+(20,5,1,0,1,1,0,1,'Monolingual proofreading',   'Monolingual proofreading',   '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',0.500,16.67),
+(21,5,1,0,1,1,1,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    '',                         '??(**)',       '??(**)', '??(**)',       '??(**)', 0.000, 0.00),
+(22,6,1,0,1,1,0,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.333, 4.17),
+(23,6,1,0,1,1,0,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
+(24,6,1,0,1,1,0,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
+;
 
 
 CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
