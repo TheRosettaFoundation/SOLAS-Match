@@ -21,15 +21,18 @@
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
-                    <th width="25%">Task Type</th>
-                    <th width="25%">Unit</th>
-                    <th width="25%">Quantity</th>
-                    <th width="25%">Target Language</th>
+                    <th width="20%">Task Type</th>
+                    <th width="18%">Unit</th>
+                    <th width="12%">Quantity</th>
+                    <th width="20%">Target Language</th>
+                    <th width="18%">Source Unit</th>
+                    <th width="12%">Source Quantity</th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
 // Errors
 var quantity_error;
+var source_quantity_error;
 var language_error;
 
 function set_all_errors_for_submission()
@@ -41,12 +44,15 @@ function set_all_errors_for_submission()
 function set_errors_for_submission(id, id_for_div)
 {
   html = "";
-  if (quantity_error != null || language_error != null) {
+  if (quantity_error != null || source_quantity_error != null || language_error != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
       html += '<h3>Please correct the following errors:</h3>';
       html += '<ol>';
         if (quantity_error != null) {
           html += '<li>' + quantity_error + '</li>';
+        }
+        if (source_quantity_error != null) {
+          html += '<li>' + source_quantity_error + '</li>';
         }
         if (language_error != null) {
           html += '<li>' + language_error + '</li>';
@@ -61,6 +67,7 @@ function validateForm()
 {
   // Reset error variables, clearing any previously displayed errors.
   quantity_error = null;
+  source_quantity_error = null;
   language_error = null;
 
   var fail = false;
@@ -71,9 +78,18 @@ function validateForm()
         quantity_error = "You must specify a Quantity if you specify a Task Type";
         fail = true;
       }
+      if (document.getElementById("source_quantity_" + i).value == "") {
+        source_quantity_error = "You must specify a Source Quantity if you specify a Task Type";
+        fail = true;
+      }
       var quantity = parseInt(document.getElementById("quantity_" + i).value);
       if (isNaN(quantity) || quantity <= 1) {
         quantity_error = "You must specify a valid (>1) integer Quantity";
+        fail = true;
+      }
+      var source_quantity = parseInt(document.getElementById("source_quantity_" + i).value);
+      if (isNaN(source_quantity) || source_quantity <= 1) {
+        source_quantity_error = "You must specify a valid (>1) integer Source Quantity";
         fail = true;
       }
       if (document.getElementById("target_language_" + i).value == "0") {
@@ -95,12 +111,18 @@ var units = ["",
         "{$ui['pricing_and_recognition_unit_text']}",
     {/foreach}
 ];
+var source_units = ["",
+    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+        "{$ui['source_unit_for_later_stats']}",
+    {/foreach}
+];
 </script>
                     {for $count=0 to 19}
 <script type="text/javascript">
 function task_type_changed_{$count}() {
     var task_type = document.getElementById("task_type_{$count}").value;
     document.getElementById("unit_{$count}").innerHTML = units[task_type];
+    document.getElementById("source_unit_{$count}").innerHTML = source_units[task_type];
 }
 </script>
                         <tr>
@@ -124,6 +146,8 @@ function task_type_changed_{$count}() {
                                     {/foreach}
                                 </select>
                             </td>
+                            <td id="source_unit_{$count}"></td>
+                            <td><input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" /></td>
                         </tr>
                     {/for}
                 </tbody>
