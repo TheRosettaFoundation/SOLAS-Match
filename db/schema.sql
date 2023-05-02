@@ -1385,7 +1385,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   unit_count_text                   VARCHAR(50)  NOT NULL, # e.g. "Word Count" [was common_word_count]
   unit_count_text_short             VARCHAR(50)  NOT NULL, # e.g. "words" [was project_profile_display_words]
   pricing_and_recognition_unit_text VARCHAR(50)  NOT NULL,
-  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours; value to be entered soemwhere????(**)
+  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours
   unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
   rate_for_recognition              FLOAT        NOT NULL,
   PRIMARY KEY (type_enum),
@@ -1413,7 +1413,7 @@ INSERT INTO task_type_details VALUES
 (18,5,1,0,1,1,1,0,'QA on Phrase',               'QA on Phrase',               '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
 (19,5,1,0,1,1,1,0,'Language Quality Assessment','Language Quality Assessment','#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',0.333, 5.83),
 (20,5,1,0,1,1,0,1,'Monolingual proofreading',   'Monolingual proofreading',   '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Minutes',0.500,16.67),
-(21,5,1,0,1,1,1,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    '',                         '??(**)',       '??(**)', '??(**)',       '??(**)', 0.000, 0.00),
+(21,5,1,0,1,1,1,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    '',                         'Word Count',   'words',  'Words',        'Words',  0.000, 0.00),
 (22,6,1,0,1,1,0,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.333, 4.17),
 (23,6,1,0,1,1,0,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
 (24,6,1,0,1,1,0,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    '',                         'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17)
