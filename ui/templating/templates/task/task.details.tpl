@@ -263,10 +263,10 @@
         <thead>
             <th>Purchase Order</th>
             <th>Payment Status</th>
-            <th>Unit Rate (?????????????)</th>
-            <th>Default Unit Rate (?????????)</th>
+            <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
+            <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
             <th>Total Expected Cost</th>
-            <th>Source Units (????)</th>
+            <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </thead>
         <tr align="center">
             <td>
@@ -320,9 +320,9 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
-                    <input type="submit" class="btn btn-primary" name="unit_rate_submit" value="Submit" />
-                    <input type="hidden" name="mark_unit_rate" value="1" />
+                    <input type='text' value="{$paid_status['source_units']}" name="source_units" id="source_units" />
+                    <input type="submit" class="btn btn-primary" name="source_units_submit" value="Submit" />
+                    <input type="hidden" name="mark_source_units" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
