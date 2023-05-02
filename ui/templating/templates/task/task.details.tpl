@@ -263,9 +263,10 @@
         <thead>
             <th>Purchase Order</th>
             <th>Payment Status</th>
-            <th>Unit Rate</th>
-            <th>Default Unit Rate</th>
+            <th>Unit Rate (?????????????)</th>
+            <th>Default Unit Rate (?????????)</th>
             <th>Total Expected Cost</th>
+            <th>Source Units (????)</th>
         </thead>
         <tr align="center">
             <td>
@@ -316,6 +317,14 @@
             </td>
             <td>
                 ${round($total_expected_cost, 2)}
+            </td>
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
+                    <input type="submit" class="btn btn-primary" name="unit_rate_submit" value="Submit" />
+                    <input type="hidden" name="mark_unit_rate" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
             </td>
         </tr>
     </table>
