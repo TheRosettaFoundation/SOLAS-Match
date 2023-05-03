@@ -2348,13 +2348,19 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $asana_task_split_key = "$targetLanguageCode:" . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($asana_task_splits[$asana_task_split_key])) {
-                        $asana_task_splits[$asana_task_split_key] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'type_category' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'], 'quantities' => ''];
+                        $asana_task_splits[$asana_task_split_key] = [
+                            'targetLanguageCode' => $targetLanguageCode,
+                            'targetLanguageName' => $targetLanguageName,
+                            'type_category'      => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'],
+                            'type_category_text' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category_text']
+                            'quantities'         => ''];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
-//Add to top of quantities(**) We don't have: Measurement amount
-//Measurement amount and unit (e.g. 3 pages for DTP); pages == Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_unit_for_later_stats']
-                    $asana_task_splits[$asana_task_split_key]['quantities'] .= Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text'] . ': ' . $task['wordCount'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text'] . "\n";
+                    $asana_task_splits[$asana_task_split_key]['quantities'] .=
+                        Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text'] . ': ' .
+                        $task['source_quantity'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_unit_for_later_stats'] . ', ' .
+                        $task['wordCount']       . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text'] . "\n";
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
@@ -2368,10 +2374,11 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         $url = 'https://app.asana.com/api/1.0/tasks/' . $asana_tasks[$key]['asana_task_id'];
                         error_log('Updating Asana task: ' . $asana_tasks[$key]['asana_task_id']);
                     }
-                    $targetLocale = $asana_task_split['targetLanguageName'];
-                    $targetLocale_code = $asana_task_split['targetLanguageCode'];
-                    $type_category = $asana_task_split['type_category'];
-                    $quantities = $asana_task_split['quantities'];
+                    $targetLocale =       $asana_task_split['targetLanguageName'];
+                    $targetLocale_code =  $asana_task_split['targetLanguageCode'];
+                    $type_category =      $asana_task_split['type_category'];
+                    $type_category_text = $asana_task_split['type_category_text'];
+                    $quantities =         $asana_task_split['quantities'];
 
                     $ch = curl_init($url);
 
@@ -2396,7 +2403,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 "1200269602122253" => $source_code_asana,
                                 "1200067882657251" => $target_name_asana,
                                 "1200269602122255" => $target_code_asana,
-                                '8888888888888888' => "$type_category",
+                                '8888888888888888' => $type_category_text,
                                 '9999999999999999' => $quantities,
                                 "1200226775862070" => $project_url,
                                 '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
@@ -2426,7 +2433,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
                     curl_close($ch);
-                    error_log("POST/PUT Asana task ($targetLocale_code, $type_category), result: $result");
+                    error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text), result: $result");
 
                     $asana_task_details = json_decode($result, true);
                     if (!empty($asana_task_details['errors'][0]['message'])) {
@@ -2442,7 +2449,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                         $result = curl_exec($ch);
                         curl_close($ch);
-                        error_log("POST/PUT Asana task ($targetLocale_code, $type_category), result: $result");
+                        error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text), result: $result");
                       } elseif (strpos($asana_task_details['errors'][0]['message'], 'Usually waiting and then retrying') !== false) {
                         $dequeue = false;
                       }
