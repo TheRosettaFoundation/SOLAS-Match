@@ -1004,6 +1004,7 @@ if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wo
             }
             $task->setWordCount($job['wordsCount']);
             $task->set_word_count_original($job['wordsCount']);
+            $task->set_source_quantity($job['wordsCount']);
             $this->queue_asana_project($project_id);
             if ($this->first_workflow($taskType, $memsource_project)) {
                 $project_languages = $this->get_memsource_project_languages($project_id);

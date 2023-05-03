@@ -607,6 +607,9 @@ class ModelFactory
         if (isset($modelData['wordCount'])) {
             $ret->setWordCount($modelData['wordCount']);
         }
+        if (isset($modelData['source_quantity'])) {
+            $ret->set_source_quantity($modelData['source_quantity']);
+        }
         if (isset($modelData['createdTime'])) {
             $ret->setCreatedTime($modelData['createdTime']);
         }

@@ -10,6 +10,7 @@ class Task
   public $deadline;
   public $wordCount;
   public $word_count_original;
+  public $source_quantity;
   public $createdTime;
   public $sourceLocale;
   public $targetLocale;
@@ -26,6 +27,7 @@ class Task
     $this->deadline = '';
     $this->wordCount = null;
     $this->word_count_original = 0;
+    $this->source_quantity = 0;
     $this->createdTime = '';
     $this->sourceLocale = null;
     $this->targetLocale = null;
@@ -101,6 +103,14 @@ class Task
 
   public function set_word_count_original($word_count_original) {
     $this->word_count_original = $word_count_original;
+  }
+
+  public function get_source_quantity() {
+    return $this->source_quantity;
+  }
+
+  public function set_source_quantity($source_quantity) {
+    $this->source_quantity = $source_quantity;
   }
 
   public function getCreatedTime() {

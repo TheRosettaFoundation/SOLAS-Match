@@ -369,6 +369,7 @@ class ProjectRouteHandler
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
                 $task->set_word_count_original($part['wordsCount']);
+                $task->set_source_quantity($part['wordsCount']);
                 $projectDao->queue_asana_project($project_id);
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION || $part['workflowLevel'] == 1) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
@@ -1971,6 +1972,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task->setTaskType($task_type);
                     $task->setWordCount($quantity);
                     $task->set_word_count_original($quantity);
+$task->set_source_quantity(???);
 
                     $task->setDeadline($project->getDeadline());
                     $task->setPublished(0);

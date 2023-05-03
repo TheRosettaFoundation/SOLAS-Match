@@ -477,6 +477,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `word-count` int(11) DEFAULT NULL,
    word_count_original INT(10) UNSIGNED NOT NULL DEFAULT 0,
+   source_quantity     INT UNSIGNED NOT NULL DEFAULT 0,
   `language_id-source` int(10) unsigned NOT NULL,
   `language_id-target` int(10) unsigned NOT NULL,
   `country_id-source` int(10) unsigned NOT NULL,
@@ -3087,6 +3088,7 @@ BEGIN
 
   select t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
             word_count_original,
+            source_quantity,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -5279,7 +5281,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN wordCount_original INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN pub bit(1), IN can INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN wordCount_original INT, IN sourceQuantity INT UNSIGNED, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(4), IN `tCC` VARCHAR(4), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN pub bit(1), IN can INT)
 BEGIN
 
         if id='' then set id=null;end if;
@@ -5311,8 +5313,8 @@ BEGIN
                 set @tID=null;
                 select l.id into @tID from Languages l where l.code=tCode;
 
-                INSERT INTO Tasks (project_id, title, `word-count`, word_count_original, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, published)
-                VALUES            ( projectID,  name,    wordCount,  wordCount_original,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      dLine,       taskType,          tStatus,       pub);
+                INSERT INTO Tasks (project_id, title, `word-count`, word_count_original, source_quantity, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, published)
+                VALUES            ( projectID,  name,    wordCount,  wordCount_original,  sourceQuantity,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      dLine,       taskType,          tStatus,       pub);
                  call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
                 call reset_project_complete(LAST_INSERT_ID());
@@ -5370,6 +5372,10 @@ BEGIN
 
                 IF wordCount_original!=(SELECT t.word_count_original FROM Tasks t WHERE t.id=id)
                     THEN UPDATE Tasks t SET t.word_count_original=wordCount_original WHERE t.id=id;
+                END IF;
+
+                IF sourceQuantity!=(SELECT t.source_quantity FROM Tasks t WHERE t.id=id)
+                    THEN UPDATE Tasks t SET t.source_quantity=sourceQuantity WHERE t.id=id;
                 END IF;
 
                 if taskComment is not null
