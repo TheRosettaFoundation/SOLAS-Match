@@ -10201,7 +10201,12 @@ DROP PROCEDURE IF EXISTS `get_task_type_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_type_details`()
 BEGIN
-    SELECT * FROM task_type_details ORDER BY type_enum;
+    SELECT
+        ttd.*,
+        ttc.type_category_text
+    FROM task_type_details   ttd
+    JOIN task_type_categorys ttc ON ttd.type_category=ttc.type_category
+    ORDER BY type_enum;
 END//
 DELIMITER ;
 
