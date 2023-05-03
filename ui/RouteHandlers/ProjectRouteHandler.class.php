@@ -1947,8 +1947,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (!empty($post["task_type_$count"])) {
                     $task_type = (int)$post["task_type_$count"];
                     $quantity = (int)$post["quantity_$count"];
+                    $source_quantity = (int)$post["source_quantity_$count"];
                     $target_language = $post["target_language_$count"];
-                    if (empty(Common\Enums\TaskTypeEnum::$enum_to_UI[$task_type]) || $quantity <= 1 || empty($selections[$target_language])) continue;
+                    if (empty(Common\Enums\TaskTypeEnum::$enum_to_UI[$task_type]) || $quantity <= 1 || $source_quantity < 1 || empty($selections[$target_language])) continue;
 
                     list($target_language, $target_country) = $projectDao->convert_selection_to_language_country($target_language);
                     $project = $projectDao->getProject($project_id);
@@ -1972,7 +1973,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task->setTaskType($task_type);
                     $task->setWordCount($quantity);
                     $task->set_word_count_original($quantity);
-$task->set_source_quantity(???);
+                    $task->set_source_quantity($source_quantity);
 
                     $task->setDeadline($project->getDeadline());
                     $task->setPublished(0);

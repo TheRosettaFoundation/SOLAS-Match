@@ -88,8 +88,8 @@ function validateForm()
         fail = true;
       }
       var source_quantity = parseInt(document.getElementById("source_quantity_" + i).value);
-      if (isNaN(source_quantity) || source_quantity <= 1) {
-        source_quantity_error = "You must specify a valid (>1) integer Source Quantity";
+      if (isNaN(source_quantity) || source_quantity < 1) {
+        source_quantity_error = "You must specify a valid (>0) integer Source Quantity";
         fail = true;
       }
       if (document.getElementById("target_language_" + i).value == "0") {

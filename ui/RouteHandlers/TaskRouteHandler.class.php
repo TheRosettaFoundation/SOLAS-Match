@@ -1305,7 +1305,7 @@ class TaskRouteHandler
                     $task->set_source_quantity((int)$post['source_quantity']);
                     $taskDao->updateTask($task);
                     UserRouteHandler::flashNow('success', 'Source Units updated.');
-                } else UserRouteHandler::flashNow('error', 'Source Units must be a positive number.');
+                } else UserRouteHandler::flashNow('error', 'Source Units must be a (>0) integer.');
             }
         }
 
