@@ -1300,6 +1300,13 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
                 } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
+            if ($isSiteAdmin && isset($post['mark_source_quantity'])) {
+                if ((int)$post['source_quantity'] > 0) {
+                    $task->set_source_quantity((int)$post['source_quantity']);
+                    $taskDao->updateTask($task);
+                    UserRouteHandler::flashNow('success', 'Source Units updated.');
+                } else UserRouteHandler::flashNow('error', 'Source Units must be a positive number.');
+            }
         }
 
         $taskMetaData = array();
