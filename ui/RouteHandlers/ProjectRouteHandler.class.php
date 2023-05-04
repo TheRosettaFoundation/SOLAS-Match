@@ -2377,7 +2377,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                             'targetLanguageName' => $targetLanguageName,
                             'type_category'      => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'],
                             'type_category_text' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category_text'],
-];
                             'quantities'         => ''];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
