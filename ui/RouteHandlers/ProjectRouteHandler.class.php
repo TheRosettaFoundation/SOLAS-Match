@@ -868,6 +868,58 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
+
+                if (!empty($post['complete_selected_tasks']) || !empty($post['uncomplete_selected_tasks'])) {
+                    $tasks = [];
+                    if (!empty($post['complete_selected_tasks'])) {
+                        $task_ids = preg_split ("/\,/", $post['complete_selected_tasks']);
+                        $published = true;
+[[[
+            if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+//(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+
+              if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
+                $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+                $taskDao->sendTaskUploadNotifications($task_id, 1);
+                $taskDao->set_task_complete_date($task_id);
+                error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
+              }
+            }
+]]]
+                    }
+                    if (!empty($post['uncomplete_selected_tasks'])) {
+                        $task_ids = preg_split ("/\,/", $post['uncomplete_selected_tasks']);
+                        $published = false;
+[[[
+                if ($taskDao->taskIsClaimed($task_id)) {
+                    if (empty($part['project']['id'])) {
+                        error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
+                        continue;
+                    }
+                    $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                    if (empty($memsource_project)) {
+                        error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
+                        continue;
+                    }
+                    $user_id = $projectDao->getUserClaimedTask($task_id);
+                    if ($user_id) {
+                        $taskDao->unclaimTask($task_id, $user_id);
+                        $taskDao->sendOrgFeedbackDeclined($task_id, $user_id, $memsource_project);
+                    }
+                    error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
+                }
+]]]
+                    }
+                    foreach ($task_ids as $id) {
+                        $tasks[] = $taskDao->getTask($id);
+                    }
+                    foreach ($tasks as $project_task) {
+                        $project_task->setPublished($published);
+                        $taskDao->updateTask($project_task);
+                    }
+                    UserRouteHandler::flashNow('success', count($tasks) . ' tasks now marked as published/unpublished.');
+                }
             }
             if($isSiteAdmin) {
                 if (!empty($post['tasks_as_paid'])) {
