@@ -877,7 +877,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                            //$taskDao->sendTaskUploadNotifications($task_id, 1);
                            $taskDao->set_task_complete_date($task_id);
-                           error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
+                           error_log("Shell Task Marked Completed task_id: $task_id, by $user_id");
                            $number++;
                         }
                     }
@@ -886,12 +886,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (!empty($post['uncomplete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['uncomplete_selected_tasks']) as $task_id) {
                         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$taskDao->getTask($task_id)->getTaskType()]['shell_task'] && $taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
-                            if ($u_id = $projectDao->getUserClaimedTask($task_id)) {
-                                $taskDao->unclaimTask($task_id, $u_id);
-                                $taskDao->sendOrgFeedbackDeclined($task_id, $u_id, $memsource_project);
-                            error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $u_id, memsource job: {$part['uid']}");
+                            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
+                            error_log("Shell Task Marked UnCompleted task_id: $task_id, by $user_id");
                             $number++;
-                            }
                         }
                     }
                     UserRouteHandler::flashNow('success', "$number completed shell tasks now marked as claimed.");
