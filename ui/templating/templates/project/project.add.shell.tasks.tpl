@@ -149,7 +149,7 @@ function task_type_changed_{$count}() {
                                 </select>
                             </td>
                             <td id="source_unit_{$count}"></td>
-                            <td><input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" /></td>
+                            <td><input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" width="20px" /></td>
                         </tr>
                     {/for}
                 </tbody>
