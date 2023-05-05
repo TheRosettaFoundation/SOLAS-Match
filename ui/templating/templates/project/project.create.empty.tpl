@@ -3,6 +3,7 @@
     <span class="hidden">
 
         <!-- Parameters... -->
+        <div id="siteLocation">{$siteLocation}</div>
         <div id="siteAPI">{$siteAPI}</div>
         <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
         <div id="supportedImageFormats">{$supportedImageFormats}</div>
