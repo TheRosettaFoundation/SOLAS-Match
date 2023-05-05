@@ -1992,6 +1992,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
                     $task->setSourceLocale($taskSourceLocale);
 
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
                     $taskTargetLocale = new Common\Protobufs\Models\Locale();
                     $taskTargetLocale->setLanguageCode($target_language);
                     $taskTargetLocale->setCountryCode($target_country);
