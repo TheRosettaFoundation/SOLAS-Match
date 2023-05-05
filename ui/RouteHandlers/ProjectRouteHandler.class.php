@@ -1962,6 +1962,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
+        $project = $projectDao->getProject($project_id);
+        $memsource_project = $projectDao->get_memsource_project($project_id);
+
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if ($post = $request->getParsedBody()) {
@@ -1976,12 +1979,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if (empty(Common\Enums\TaskTypeEnum::$enum_to_UI[$task_type]) || $quantity <= 1 || $source_quantity < 1 || empty($selections[$target_language])) continue;
 
                     list($target_language, $target_country) = $projectDao->convert_selection_to_language_country($target_language);
-                    $project = $projectDao->getProject($project_id);
-                    $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $task = new Common\Protobufs\Models\Task();
                     $task->setProjectId($project_id);
-                    $task->setTitle($project->getTitle());
+                    if (empty($post["title_$count"])) $task->setTitle($project->getTitle());
+                    else                              $task->setTitle($post["title_$count"]);
                     $projectSourceLocale = $project->getSourceLocale();
 
                     $taskSourceLocale = new Common\Protobufs\Models\Locale();
@@ -2019,6 +2021,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $template_data = array_merge($template_data, [
             'siteLocation'   => Common\Lib\Settings::get('site.location'),
             'project_id'     => $project_id,
+            'project'        => $project,
             'languages'      => $projectDao->generate_language_selection(),
             'sesskey'        => $sesskey,
         ]);

@@ -3,7 +3,7 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                Add Shell Tasks to a Project<br />
+                Add Shell Tasks to: {$project->getTitle()|escape:'html':'UTF-8'}<br />
             </h1>
         </div>           
     </div>  
@@ -21,12 +21,13 @@
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
-                    <th width="20%">Task Type</th>
-                    <th width="18%">Unit</th>
-                    <th width="12%">Quantity</th>
+                    <th width="13%">Optional Task Name (will default to Project)</th>
+                    <th width="15%">Task Type</th>
+                    <th width="15%">Unit</th>
+                    <th width="11%">Quantity</th>
                     <th width="20%">Target Language</th>
-                    <th width="18%">Source Unit</th>
-                    <th width="12%">Source Quantity</th>
+                    <th width="15%">Source Unit</th>
+                    <th width="11%">Source Quantity</th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
@@ -126,6 +127,7 @@ function task_type_changed_{$count}() {
 }
 </script>
                         <tr>
+                            <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                             <td>
                                 <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}()">
                                     <option value="0"></option>
