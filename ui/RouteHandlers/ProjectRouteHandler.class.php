@@ -1970,6 +1970,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if ($post = $request->getParsedBody()) {
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'project_add_shell_tasks')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             $selections = $projectDao->generate_language_selection();
+            $number = 0;
             for ($count = 0; $count < 20; $count++) {
                 if (!empty($post["task_type_$count"])) {
                     $task_type = (int)$post["task_type_$count"];
@@ -2015,8 +2016,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    $number++;
                 }
             }
+            UserRouteHandler::flash('success', "$number Shell Tasks Added");
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', ['project_id' => $project_id]));
         }
         $template_data = array_merge($template_data, [
             'siteLocation'   => Common\Lib\Settings::get('site.location'),
