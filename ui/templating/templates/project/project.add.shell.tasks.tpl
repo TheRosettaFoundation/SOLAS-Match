@@ -21,11 +21,11 @@
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
-                    <th width="25%">Optional Task Name<br />(will default to Project)</th>
                     <th width="15%">Task Type</th>
                     <th width="20%">Quantity</th>
                     <th width="20%">Target Language</th>
                     <th width="20%">Source Quantity</th>
+                    <th width="25%">Optional Task Name<br />(will default to Project)</th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
@@ -125,7 +125,6 @@ function task_type_changed_{$count}() {
 }
 </script>
                         <tr>
-                            <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                             <td>
                                 <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}()">
                                     <option value="0"></option>
@@ -152,6 +151,7 @@ function task_type_changed_{$count}() {
                                 <input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" /><br />
                                 <div id="source_unit_{$count}"></div>
                             </td>
+                            <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                         </tr>
                     {/for}
                 </tbody>
