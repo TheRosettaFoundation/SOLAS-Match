@@ -2347,10 +2347,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
-                if ($projectId < 28433) { // Before cutover
-                    $projectDao->dequeue_asana_project($projectId);
-                    break;
-                }
+//                if ($projectId < 28433) { // Before cutover
+//                    $projectDao->dequeue_asana_project($projectId);
+//                    break;
+//                }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
@@ -2457,6 +2457,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
+
+error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text)");
+/*
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                     else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -2488,8 +2491,11 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                       }
                     }
 
+*/
                     if ($create) {
-                        $asana_task_details = json_decode($result, true);
+//(**)REMOEV COMMENT and nect                        $asana_task_details = json_decode($result, true);
+$asana_task_details = [];
+$asana_task_details['data']['gid'] = 'xyz';
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
