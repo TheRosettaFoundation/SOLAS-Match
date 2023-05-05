@@ -21,7 +21,7 @@
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
-                    <th width="25%">Optional Task Name (will default to Project)</th>
+                    <th width="25%">Optional Task Name<br />(will default to Project)</th>
                     <th width="15%">Task Type</th>
                     <th width="20%">Quantity</th>
                     <th width="20%">Target Language</th>
