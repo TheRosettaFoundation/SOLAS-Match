@@ -139,7 +139,7 @@ function task_type_changed_{$count}() {
                                 </select>
                             </td>
                             <td id="unit_{$count}"></td>
-                            <td><input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" /></td>
+                            <td><input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" style="width:20px" /></td>
                             <td>
                                 <select name="target_language_{$count}" id="target_language_{$count}">
                                     <option value="0"></option>
@@ -149,7 +149,7 @@ function task_type_changed_{$count}() {
                                 </select>
                             </td>
                             <td id="source_unit_{$count}"></td>
-                            <td><input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" style="width:20px" /></td>
+                            <td><input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" style="width:22px" /></td>
                         </tr>
                     {/for}
                 </tbody>
