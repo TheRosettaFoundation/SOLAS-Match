@@ -2499,7 +2499,7 @@ error_log(print_r($data, true));
                     if ($create) {
 //(**)REMOEV COMMENT and nect                        $asana_task_details = json_decode($result, true);
 $asana_task_details = [];
-$asana_task_details['data']['gid'] = 'xyz1';
+$asana_task_details['data']['gid'] = 'xyz2';
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
