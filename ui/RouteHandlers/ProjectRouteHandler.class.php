@@ -2461,6 +2461,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     $payload = json_encode($data);
 
 error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text)");
+error_log(print_r($data, true));
 /*
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
