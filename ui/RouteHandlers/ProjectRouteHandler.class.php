@@ -2380,7 +2380,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
                     $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
-                    $asana_task_split_key = "$targetLanguageCode:" . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'];
+                    $asana_task_split_key = "$targetLanguageCode:" . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_category'];
                     $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
                     if (empty($asana_task_splits[$asana_task_split_key])) {
                         $asana_task_splits[$asana_task_split_key] = [
@@ -2393,9 +2393,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                     }
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
                     $asana_task_splits[$asana_task_split_key]['quantities'] .=
-                        Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_text'] . ': ' .
-                        $task['source_quantity'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['source_unit_for_later_stats'] . ', ' .
-                        $task['wordCount']       . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['pricing_and_recognition_unit_text'] . "\n";
+                        Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_text'] . ': ' .
+                        $task['source_quantity'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['source_unit_for_later_stats'] . ', ' .
+                        $task['wordCount']       . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['pricing_and_recognition_unit_text'] . "\n";
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
