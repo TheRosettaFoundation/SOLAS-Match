@@ -1759,6 +1759,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
                     $project_id = $project->getId();
+                    mkdir(Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/", 0755);
+
                     $projectDao->set_memsource_project($project_id, $project_id, $project_id, $user_id, $user_id, ['', '', '', '', '', '', '', '', '', '', '', '']);
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
@@ -2384,8 +2386,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         $asana_task_splits[$asana_task_split_key] = [
                             'targetLanguageCode' => $targetLanguageCode,
                             'targetLanguageName' => $targetLanguageName,
-                            'type_category'      => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category'],
-                            'type_category_text' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['task-type_id']]['type_category_text'],
+                            'type_category'      => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_category'],
+                            'type_category_text' => Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_category_text'],
                             'quantities'         => ''];
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
