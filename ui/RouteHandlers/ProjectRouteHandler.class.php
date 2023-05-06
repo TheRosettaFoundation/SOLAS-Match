@@ -2441,7 +2441,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 '8888888888888888' => $type_category_text,
                                 '9999999999999999' => $quantities,
                                 "1200226775862070" => $project_url,
-                                '1202126000618445' => $taskDao->get_matecat_analyze_url($projectId, $memsource_project),
+                                '1202126000618445' => ($memsource_project && !(int)$memsource_project['memsource_project_uid']) ? $taskDao->get_matecat_analyze_url($projectId, $memsource_project) : '',
                                 "1200269602122257" => "$projectId"
                             ),
                             "due_at" => $objDateTime->format('c'),
@@ -2453,6 +2453,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                             "custom_fields" => array(
                                 "1200067882657247" => $wordCount,
                                 "1200067882657245" => $org_name,
+                                '9999999999999999' => $quantities,
                             ),
                             "due_at" => $objDateTime->format('c'),
                             ));
