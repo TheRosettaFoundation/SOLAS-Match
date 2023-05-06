@@ -355,20 +355,15 @@ class ProjectRouteHandler
                 $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
                 $taskType = $workflow_levels[$part['workflowLevel'] - 1];
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
-error_log("taskType:XXX{$taskType}XXX");
-if ($taskType === '') error_log("taskType === ''");
-if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType])) error_log('Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType]: ' . Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType] . 'XXX');
                 if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType])) $taskType = Common\Enums\TaskTypeEnum::$task_type_to_enum[$taskType];
                 elseif ($taskType == '' && $part['workflowLevel'] == 1) {
                     $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-error_log("taskType:XXX{$taskType}XXX");
                     $workflow_levels = ['Translation'];
                 } else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
                     continue;
                 }
             }
-error_log("taskType:XXX{$taskType}XXX");
             $task->setTaskType($taskType);
 
             if (!empty($part['wordsCount'])) {
@@ -2354,10 +2349,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
-//                if ($projectId < 28433) { // Before cutover
-//                    $projectDao->dequeue_asana_project($projectId);
-//                    break;
-//                }
+                if ($projectId < 28433) { // Before cutover
+                    $projectDao->dequeue_asana_project($projectId);
+                    break;
+                }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
@@ -2465,10 +2460,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
-
-error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text)");
-error_log(print_r($data, true));
-/*
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                     else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -2500,11 +2491,8 @@ error_log(print_r($data, true));
                       }
                     }
 
-*/
                     if ($create) {
-//(**)REMOEV COMMENT and nect                        $asana_task_details = json_decode($result, true);
-$asana_task_details = [];
-$asana_task_details['data']['gid'] = 'xyz4';
+                        $asana_task_details = json_decode($result, true);
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
