@@ -15,7 +15,7 @@
             <h3>
                 <p>{Localisation::getTranslation('common_note')}</p>
             </h3>            
-            {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
+            {if $task_status_id == TaskStatusEnum::IN_PROGRESS || $task_status_id == TaskStatusEnum::CLAIMED}
                 <p>{Localisation::getTranslation('task_alter_0')} {Localisation::getTranslation('task_alter_1')}</p>
             {else if $task_status_id == TaskStatusEnum::COMPLETE}
                 <p>{Localisation::getTranslation('task_alter_2')} {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>

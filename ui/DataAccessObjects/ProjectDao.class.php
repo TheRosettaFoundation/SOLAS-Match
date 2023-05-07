@@ -1232,13 +1232,10 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $translations_not_all_complete = [];
         foreach ($memsource_tasks as $memsource_task) {
             if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // This status can sometimes display as CLAIMED if not all translations are complete
-error_log('id: ' . $memsource_task['id'] . ',  status: ' . $memsource_task['task-status_id']);
               if (Common\Enums\TaskTypeEnum::$enum_to_UI[$memsource_task['task-type_id']]['shell_task']) {
                   $translations_not_all_complete[$memsource_task['id']] = 1;
-error_log('id: ' . $memsource_task['id'] . ',  translations_not_all_complete: ' . $translations_not_all_complete[$memsource_task['id']]);
               } else {
                 $translations_not_all_complete[$memsource_task['id']] = 0;
-error_log('id: ' . $memsource_task['id'] . ',  translations_not_all_complete: ' . $translations_not_all_complete[$memsource_task['id']]);
                 if ($memsource_task['task-type_id'] != Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $top_level = $this->get_top_level($memsource_task['internalId']);
                     foreach ($project_tasks as $project_task) {
@@ -1247,7 +1244,6 @@ error_log('id: ' . $memsource_task['id'] . ',  translations_not_all_complete: ' 
                                 if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                     if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
                                         $translations_not_all_complete[$memsource_task['id']] = 1;
-error_log('id: ' . $memsource_task['id'] . ',  translations_not_all_complete: ' . $translations_not_all_complete[$memsource_task['id']]);
                                         error_log("identify_claimed_but_not_yet_in_progress($project_id), translations_not_all_complete {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
                                     }
                                 }
