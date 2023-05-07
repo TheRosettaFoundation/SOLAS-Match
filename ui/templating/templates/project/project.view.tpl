@@ -325,21 +325,40 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
+<!-- temp -->
             <form id="complete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
-                    <i class="icon-check icon-black" style="margin-left:-2px;"></i> Set Status of Selected Shell Tasks to Complete
+                <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
+                    <i class="fa fa-pause" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Waiting
                 </a>
-                <input type="hidden" name="complete_selected_tasks" value="1" />
+                <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
             <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#uncomplete_selected_tasks').submit();"   style="color:#000000;margin-right:52px;">
+                <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
+                    <i class="fa fa-pause" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Waiting
+                </a>
+                <input type="hidden" name="uncomplete_selected_tasks" value="" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+
+{if false}
+            <form id="complete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
+                    <i class="icon-check icon-black" style="margin-left:-2px;"></i> Set Status of Selected Shell Tasks to Complete
+                </a>
+                <input type="hidden" name="complete_selected_tasks" value="" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+
+            <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:52px;">
                     <i class="icon-remove-circle icon-black" style="margin-left:-2px;"></i> Set Status of Selected Shell Tasks from Complete to Claimed
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+{/if}
 
             <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
