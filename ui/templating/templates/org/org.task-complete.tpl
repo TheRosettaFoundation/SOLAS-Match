@@ -11,7 +11,7 @@
     {else}
         {Localisation::getTranslation("org_task_review_claimant_unavailable")}
     {/if}
-    {if !empty($allow_download) || !empty($memsource_task)}
+    {if !empty($allow_download) || !empty($memsource_task) && !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
     {Localisation::getTranslation('org_task_review_0')}
     {/if}
 </p>
