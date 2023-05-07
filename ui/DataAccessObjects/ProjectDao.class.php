@@ -1228,14 +1228,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     public function identify_claimed_but_not_yet_in_progress($project_id)
     {
         $memsource_tasks = $this->get_tasks_for_project($project_id);
-error_log('count($memsource_tasks) : ' . count($memsource_tasks));
         $project_tasks = $memsource_tasks;
         $translations_not_all_complete = [];
         foreach ($memsource_tasks as $memsource_task) {
-error_log('id: ' . $memsource_task['id']);
             if ($memsource_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // This status can sometimes display as CLAIMED if not all translations are complete
 error_log('id: ' . $memsource_task['id'] . ',  status: ' . $memsource_task['task-status_id']);
-              if (Common\Enums\TaskTypeEnum::$enum_to_UI[$memsource_task['task-status_id']]['shell_task']) {
+              if (Common\Enums\TaskTypeEnum::$enum_to_UI[$memsource_task['task-type_id']]['shell_task']) {
                   $translations_not_all_complete[$memsource_task['id']] = 1;
 error_log('id: ' . $memsource_task['id'] . ',  translations_not_all_complete: ' . $translations_not_all_complete[$memsource_task['id']]);
               } else {
