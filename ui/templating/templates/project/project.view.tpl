@@ -328,7 +328,7 @@
 <!-- temp -->
             <form id="complete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-check icon-black"></i> Set Shell Tasks Status Complete
+                    <i class="icon-check icon-black"></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
 <!-- temp                                                 Set Status of Selected to Waiting -->
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
@@ -337,7 +337,7 @@
 
             <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-remove-circle icon-black"></i> Set Shell Tasks back to Claimed
+                    <i class="icon-remove-circle icon-black"></i> Set Shell Tasks back to&nbsp;&nbsp;&nbsp;Claimed
 <!-- temp                                                         Set Status of Selected to Waiting -->
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
