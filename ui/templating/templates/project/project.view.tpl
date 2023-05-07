@@ -328,7 +328,7 @@
 <!-- temp -->
             <form id="complete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-check icon-black" ></i> Set Status of Selected to Waiting
+                    <i class="icon-check icon-black"></i> Set Status of Selected to Waiting
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -336,7 +336,7 @@
 
             <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="fa fa-pause" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Waiting
+                    <i class="icon-remove-circle icon-black"></i> Set Status of Selected to Waiting
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
