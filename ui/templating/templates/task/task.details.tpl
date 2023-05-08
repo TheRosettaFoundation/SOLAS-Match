@@ -258,17 +258,26 @@
     </table>
 {/if}
 
-{if !empty($isSiteAdmin) && !empty($paid_status)}
+{if !empty($isSiteAdmin)}
     <table width="100%" class="table table-striped">
         <thead>
+          {if !empty($paid_status)}
             <th>Purchase Order</th>
             <th>Payment Status</th>
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
             <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
             <th>Total Expected Cost</th>
+          {else}
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          {/if}
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </thead>
         <tr align="center">
+{if !empty($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
@@ -318,6 +327,13 @@
             <td>
                 ${round($total_expected_cost, 2)}
             </td>
+          {else}
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          {/if}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
