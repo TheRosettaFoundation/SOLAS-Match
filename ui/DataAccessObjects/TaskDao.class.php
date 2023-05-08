@@ -463,6 +463,7 @@ error_log("createTaskDirectly: $args");
             $projectDao = new ProjectDao();
             if ((int)$memsource_project['owner_uid']) $user_id = (int)$memsource_project['owner_uid'];
             else                                      $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_uid']);
+error_log("memsource_project['owner_uid']: {$memsource_project['owner_uid']}, user_id: $user_id");
             if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server            if (!$user_id) $user_id = 3297;
             $result = $projectDao->get_user($user_id);
