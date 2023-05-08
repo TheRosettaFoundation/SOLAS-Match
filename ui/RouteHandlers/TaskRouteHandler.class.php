@@ -1405,25 +1405,21 @@ class TaskRouteHandler
 
     public function task_search_translators_any_country_no_source(Request $request, Response $response, $args)
     {
-error_log("task_search_translators_any_country_no_source any_country: $any_country");
         return $this->task_search_translators($request, $response, $args, 3);
     }
 
     public function task_search_translators_no_source(Request $request, Response $response, $args)
     {
-error_log("task_search_translators_no_source any_country: $any_country");
         return $this->task_search_translators($request, $response, $args, 2);
     }
 
     public function task_search_translators_any_country(Request $request, Response $response, $args)
     {
-error_log("task_search_translators_any_country any_country: $any_country");
         return $this->task_search_translators($request, $response, $args, 1);
     }
 
     public function task_search_translators(Request $request, Response $response, $args, $any_country = 0)
     {
-error_log("task_search_translators any_country: $any_country");
         global $template_data;
         $task_id = $args['task_id'];
 
@@ -1438,10 +1434,6 @@ error_log("task_search_translators any_country: $any_country");
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-if     ($any_country == 3) error_log("_no_source($task_id) just target lang");
-elseif ($any_country == 2) error_log("_no_source_strict($task_id) target lang/country");
-elseif ($any_country == 1) error_log("($task_id) source lang & target Lang");
-else                       error_log("_strict($task_id) source lang & target lang/country");
         if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id);
         elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id);
         elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
