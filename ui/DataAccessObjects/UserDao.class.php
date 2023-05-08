@@ -679,6 +679,7 @@ error_log("claimTask_shell($userId, $taskId)");
             }
             curl_close($ch);
         }
+else error_log('SKIPED BECAUSE SHELL');
     }
 
     public function create_memsource_user($user_id)
