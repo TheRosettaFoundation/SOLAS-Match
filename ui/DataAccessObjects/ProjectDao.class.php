@@ -881,7 +881,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid, $project_id);
-error_log(print_r($jobs, true));
         if (empty($jobs)) return 0;
 
         $memsource_project = $this->get_memsource_project($project_id); // Workflow could have been updated

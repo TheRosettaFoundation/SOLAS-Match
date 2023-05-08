@@ -1959,6 +1959,7 @@ error_log("claimTask_shell($userId, $taskId)");
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
         $result = curl_exec($ch);
+error_log($result);
         $result = json_decode($result, true);
         curl_close($ch);
         if (!isset($result['projectWorkflowSteps'])) return [];
