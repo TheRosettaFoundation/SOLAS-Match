@@ -539,7 +539,7 @@ class TaskDao
             }
             if ($enum_to_UI[$task->getTaskType()]['shell_task']) {
                 $result = $ret[0]['result'];
-                error_log("result: $result");
+                error_log("result (Shell): $result");
                 return $result;
             }
 
