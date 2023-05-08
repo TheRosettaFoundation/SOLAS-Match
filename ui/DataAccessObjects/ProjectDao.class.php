@@ -906,6 +906,10 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
+                if ((int)$uid) {
+                    error_log("Sync Skipping Shell Task $uid");
+                    continue;
+                }
                 if (empty($jobs[$uid])) {
                     if ($parent_tasks_filter && !in_array($project_task['id'], $parent_tasks_filter)) continue;
                     $this->adjust_for_deleted_task($memsource_project, $project_task);
