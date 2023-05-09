@@ -579,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `task_type_categorys` (
   PRIMARY KEY (type_category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO task_type_categorys VALUES
-(1, 'Existing/Phrase Services'),
+(1, 'Phrase Services'),
 (2, 'Terminology'),
 (3, 'DTP'),
 (4, 'Audiovisual Services'),
