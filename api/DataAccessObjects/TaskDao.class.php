@@ -195,24 +195,6 @@ class TaskDao
         return $result[0]["result"];
     }
 
-    // Send a message to the backend to calculate the score all users and one task
-    private static function calculateTaskScore($taskId)
-    {
-        $mMessagingClient = new Lib\MessagingClient();
-        if ($mMessagingClient->init()) {
-            $request = new Common\Protobufs\Requests\UserTaskScoreRequest();
-            $request->setTaskId($taskId);
-            $message = $mMessagingClient->createMessageFromProto($request);
-            $mMessagingClient->sendTopicMessage(
-                $message,
-                $mMessagingClient->MainExchange,
-                $mMessagingClient->TaskScoreTopic
-            );
-        } else {
-            echo "Failed to Initialize messaging client";
-        }
-    }
-    
     //! Get the list of Tags associated with the specified Task
     /*!
       Get the list of Tags associated with the specified Task

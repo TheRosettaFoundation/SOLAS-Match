@@ -11,7 +11,6 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Project.php";
 require_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
-require_once __DIR__."/../lib/MessagingClient.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 //! Project Data Access Object for setting getting data about Projects in the API
