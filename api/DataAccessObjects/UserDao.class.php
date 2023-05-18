@@ -925,4 +925,29 @@ class UserDao
     {
         Lib\PDOWrapper::call('update_terms_accepted', Lib\PDOWrapper::cleanse($user_id) . ",$accepted_level");
     }
+
+    public static function insert_queue_request(
+        $queue,
+        $type,
+        $user_id,
+        $badge_id,
+        $org_id,
+        $project_id,
+        $task_id,
+        $claimant_id,
+        $feedback)
+    {
+        if empty($feedback) $feedback = '';
+        $args =
+            Lib\PDOWrapper::cleanse($queue) . ',' .
+            Lib\PDOWrapper::cleanse($type) . ',' .
+            Lib\PDOWrapper::cleanse($user_id) . ',' .
+            Lib\PDOWrapper::cleanse($badge_id) . ',' .
+            Lib\PDOWrapper::cleanse($org_id) . ',' .
+            Lib\PDOWrapper::cleanse($project_id) . ',' .
+            Lib\PDOWrapper::cleanse($task_id) . ',' .
+            Lib\PDOWrapper::cleanse($claimant_id) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($feedback);
+        Lib\PDOWrapper::call('insert_queue_request', $args);
+    }
 }
