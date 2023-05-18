@@ -10,6 +10,9 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
 require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
+define("PROJECTQUEUE",        "3");
+define("UserReferenceEmail", "21");
+
 class UserDao
 {
     public static function getLoggedInUser($token = null)
@@ -607,19 +610,18 @@ class UserDao
         return null;
     }
 
-    public static function requestReference($userId)
+    public static function requestReference($user_id)
     {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $request = new Common\Protobufs\Emails\UserReferenceEmail();
-            $request->setUserId($userId);
-            $message = $messagingClient->createMessageFromProto($request);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->UserReferenceRequestTopic
-            );
-        }
+        self::insert_queue_request(
+            PROJECTQUEUE,
+            UserReferenceEmail,
+            $user_id,
+            0,
+            0,
+            0,
+            0,
+            0,
+            '');
     }
 
     public static function trackProject($projectID, $userID)
