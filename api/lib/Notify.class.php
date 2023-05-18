@@ -6,32 +6,8 @@ use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\Common as Common;
 
-require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
-
-//\DrSlump\Protobuf::autoload();
-
-require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
-require_once __DIR__."/../../Common/protobufs/emails/UserTaskCancelled.php";
-require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
-require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipRefused.php";
-require_once __DIR__."/../../Common/protobufs/emails/TaskArchived.php";
-require_once __DIR__."/../../Common/protobufs/emails/TaskClaimed.php";
-require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
-require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
-require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
-require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
-require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/ProjectImageApprovedEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/ProjectImageDisapprovedEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/ProjectImageUploadedEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/ProjectImageRemovedEmail.php";
-
-require_once __DIR__."/../../Common/protobufs/Requests/TaskUploadNotificationRequest.php";
-require_once __DIR__.'/../../Common/protobufs/Requests/OrgCreatedNotificationRequest.php';
-require_once __DIR__.'/../../Common/protobufs/notifications/TaskRevokedNotification.php';
 
 class Notify
 {

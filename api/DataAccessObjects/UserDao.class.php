@@ -8,8 +8,6 @@ use \SolasMatch\Common as Common;
 require_once __DIR__."/../../Common/protobufs/models/User.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
-require_once __DIR__."/../lib/MessagingClient.class.php";
-require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 class UserDao
