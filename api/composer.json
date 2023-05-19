@@ -2,7 +2,6 @@
     "require": {
         "slim/slim": "4.*",
         "slim/psr7": "^1.4",
-        "league/oauth2-server": "dev-master#54ffa58e7b4553a16e889ef15b29b0c1e0323b24",
-        "videlalvaro/php-amqplib": "dev-master#2e0548069731bba38335bcf29318865b8e4d1b27"
+        "league/oauth2-server": "dev-master#54ffa58e7b4553a16e889ef15b29b0c1e0323b24"
     }
 }
