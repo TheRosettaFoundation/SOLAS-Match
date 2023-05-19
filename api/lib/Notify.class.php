@@ -9,6 +9,9 @@ use \SolasMatch\Common as Common;
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
 
+require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
+require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
+
 define("PROJECTQUEUE",                     "3");
 
 define("EmailVerification",               "13");
@@ -249,53 +252,25 @@ class Notify
         error_log("notifyUserClaimedTask($user_id, $task_id)");
     }
 
-[[[
-    public function sendOrgFeedback($taskId, $userId, $claimantId, $feedback)
-        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
-        $feedback->getTaskId();
-        $feedback->getUserId();
-        $feedback->getClaimantId();
-        $feedback->getFeedback();
-
-    public function sendOrgFeedbackDeclined($task_id, $claimant_id, $memsource_project)
-        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
-        $feedbackData->setTaskId($task_id);
-        $feedbackData->setUserId($user_id);
-        $feedbackData->setClaimantId($claimant_id);
-        $feedbackData->setFeedback($feedback);
-]]]
-    public static function notifyOrgClaimedTask($user_id, $task_id)
+    public static function notifyOrgClaimedTask($claimant_id, $task_id)
     {
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($task_id);
         if (!empty($subscribed_users)) {
-            $messagingClient = new Lib\MessagingClient();
-            if ($messagingClient->init()) {
-                $message_type = new Common\Protobufs\Emails\TaskClaimed();
-                $message_type->setTaskId($task_id);
-                $message_type->setTranslatorId($user_id);
-                foreach ($subscribed_users as $user) {
-                    $message_type->setUserId($user->getId());
-                    $message = $messagingClient->createMessageFromProto($message_type);
-                    $messagingClient->sendTopicMessage(
-                        $message,
-                        $messagingClient->MainExchange,
-                        $messagingClient->TaskClaimedTopic
-                    );
-error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->getId());
-                }
+            foreach ($subscribed_users as $user) {
+                $user_id = $user->getId();
+                DAO\UserDao::insert_queue_request(
+                    PROJECTQUEUE,
+                    TaskClaimed,
+                    $user_id,
+                    0,
+                    0,
+                    0,
+                    $task_id,
+                    $claimant_id,
+                    '');
+                error_log("notifyOrgClaimedTask($claimant_id, $task_id) Send to: $user_id");
             }
         }
-                        TaskClaimedEmailGenerator::run(queue_request["user_id"].toInt(), queue_request["task_id"].toInt(), queue_request["claimant_id"].toInt());
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        TaskClaimed,
-        !!$user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
-        !!$task_id,
-        !!$claimant_id,
-        $feedback);
     }
 
     public static function sendTaskUploadNotifications($task_id)
