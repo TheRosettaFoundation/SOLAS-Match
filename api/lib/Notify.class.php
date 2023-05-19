@@ -11,29 +11,6 @@ require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 
-define("PROJECTQUEUE",                     "3");
-
-define("EmailVerification",               "13");
-define("PasswordResetEmail",               "5");
-define("UserBadgeAwardedEmail",           "22");
-define("BannedLogin",                     "14");
-define("UserReferenceEmail",              "21");
-define("OrgCreatedNotificationRequest",  "100");
-define("OrgMembershipAccepted",            "3");
-define("OrgMembershipRefused",             "4");
-define("ProjectImageUploadedEmail",       "29");
-define("ProjectImageApprovedEmail",       "31");
-define("ProjectImageDisapprovedEmail",    "32");
-define("ProjectImageRemovedEmail",        "30");
-define("TaskArchived",                     "6");
-define("OrgFeedback",                     "18");
-define("UserTaskClaim",                    "2");
-define("TaskClaimed",                      "7");
-define("TaskUploadNotificationRequest",  "101");
-define("TaskRevokedNotification",        "102");
-define("UserFeedback",                    "11");
-define("UserTaskCancelled",               "36");
-
 class Notify
 {
     public static function sendEmailVerification($user_id)

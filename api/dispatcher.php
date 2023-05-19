@@ -50,6 +50,29 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
+define("PROJECTQUEUE",                     "3");
+
+define("EmailVerification",               "13");
+define("PasswordResetEmail",               "5");
+define("UserBadgeAwardedEmail",           "22");
+define("BannedLogin",                     "14");
+define("UserReferenceEmail",              "21");
+define("OrgCreatedNotificationRequest",  "100");
+define("OrgMembershipAccepted",            "3");
+define("OrgMembershipRefused",             "4");
+define("ProjectImageUploadedEmail",       "29");
+define("ProjectImageApprovedEmail",       "31");
+define("ProjectImageDisapprovedEmail",    "32");
+define("ProjectImageRemovedEmail",        "30");
+define("TaskArchived",                     "6");
+define("OrgFeedback",                     "18");
+define("UserTaskClaim",                    "2");
+define("TaskClaimed",                      "7");
+define("TaskUploadNotificationRequest",  "101");
+define("TaskRevokedNotification",        "102");
+define("UserFeedback",                    "11");
+define("UserTaskCancelled",               "36");
+
 require_once 'v0/Admins.php';
 require_once 'v0/Badges.php';
 require_once 'v0/Countries.php';
