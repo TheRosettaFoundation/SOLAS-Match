@@ -106,29 +106,29 @@ class Notify
 
     public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
     {
-            if ($accepted) {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        OrgMembershipAccepted,
-        !!$user_id,
-            0,
-        !!$org_id,
-            0,
-            0,
-            0,
-        $feedback);
-            } else {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        OrgMembershipRefused,
-        !!$user_id,
-            0,
-        !!$org_id,
-            0,
-            0,
-            0,
-        $feedback);
-            }
+        if ($accepted) {
+            DAO\UserDao::insert_queue_request(
+                PROJECTQUEUE,
+                OrgMembershipAccepted,
+                $user_id,
+                0,
+                $org_id,
+                0,
+                0,
+                0,
+                '');
+        } else {
+            DAO\UserDao::insert_queue_request(
+                PROJECTQUEUE,
+                OrgMembershipRefused,
+                $user_id,
+                0,
+                $org_id,
+                0,
+                0,
+                0,
+                '');
+        }
     }
 
     public static function sendProjectImageUploaded($project_id)
@@ -149,44 +149,41 @@ class Notify
     {
         $project = DAO\ProjectDao::getProject($project_id);
         $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
-
         if (!empty($orgAdmins)) {
-                foreach ($orgAdmins as $user) {
-                    $user_id = $user->getId();
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        ProjectImageApprovedEmail,
-        !!$user_id,
-            0,
-            0,
-        !!$project_id,
-            0,
-            0,
-        $feedback);
+            foreach ($orgAdmins as $user) {
+                $user_id = $user->getId();
+                DAO\UserDao::insert_queue_request(
+                    PROJECTQUEUE,
+                    ProjectImageApprovedEmail,
+                    $user_id,
+                    0,
+                    0,
+                    $project_id,
+                    0,
+                    0,
+                    '');
+            }
         }
     }
-  }
 
     public static function sendProjectImageDisapprovedEmail($project_id)
     {
         $project = DAO\ProjectDao::getProject($project_id);
         $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
-
         if (!empty($orgAdmins)) {
-                foreach ($orgAdmins as $user) {
-                    $user_id = $user->getId();
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        ProjectImageDisapprovedEmail,
-        !!$user_id,
-            0,
-            0,
-        !!$project_id,
-            0,
-            0,
-        $feedback);
-
-                }
+            foreach ($orgAdmins as $user) {
+                $user_id = $user->getId();
+                DAO\UserDao::insert_queue_request(
+                    PROJECTQUEUE,
+                    ProjectImageDisapprovedEmail,
+                    $user_id,
+                    0,
+                    0,
+                    $project_id,
+                    0,
+                    0,
+                    '');
+            }
         }
     }
 
@@ -207,23 +204,21 @@ class Notify
     public static function sendTaskArchivedNotifications($task_id, $subscribedUsers)
     {
         if (!empty($subscribedUsers)) {
-
-                foreach ($subscribedUsers as $user) {
-                    $user_id = $user->getId();
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-        TaskArchived,
-        !!$user_id,
-            0,
-            0,
-            0,
-        !!$task_id,
-            0,
-        $feedback);
-                }
+            foreach ($subscribedUsers as $user) {
+                $user_id = $user->getId();
+                DAO\UserDao::insert_queue_request(
+                    PROJECTQUEUE,
+                    TaskArchived,
+                    $user_id,
+                    0,
+                    0,
+                    0,
+                    $task_id,
+                    0,
+                    '');
+            }
         }
     }
-
 
     public static function sendOrgFeedback($feedback)
     {
@@ -251,26 +246,23 @@ class Notify
 
     public static function notifyUserClaimedTask($user_id, $task_id)
     {
-error_log("notifyUserClaimedTask($user_id, $task_id)");
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        UserTaskClaim,
-        !!$user_id,
+            UserTaskClaim,
+            $user_id,
             0,
             0,
             0,
-        !!$task_id,
+            $task_id,
             0,
-        $feedback);
-
-error_log("notifyUserClaimedTask($user_id, $task_id) After Send");
+            '');
+        error_log("notifyUserClaimedTask($user_id, $task_id)");
     }
 
     public static function notifyOrgClaimedTask($user_id, $task_id)
     {
-error_log("notifyOrgClaimedTask($user_id, $task_id)");
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($task_id);
-        if (!empty($subscribed_users) && count($subscribed_users) > 0) {
+        if (!empty($subscribed_users)) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskClaimed();
@@ -355,18 +347,16 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
 
     public static function notifyUserTaskCancelled($user_id, $task_id)
     {
-error_log("notifyUserTaskCancelled($user_id, $task_id)");
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        UserTaskCancelled,
-        !!$user_id,
+            UserTaskCancelled,
+            $user_id,
             0,
             0,
             0,
-        !!$task_id,
+            $task_id,
             0,
-        $feedback);
-error_log("notifyUserTaskCancelled($user_id, $task_id) After Send");
-
+            '');
+        error_log("notifyUserTaskCancelled($user_id, $task_id)");
     }
 }
