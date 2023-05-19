@@ -7,7 +7,6 @@ use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/Settings.class.php";
-require_once __DIR__."/../vendor/autoload.php";
 
 require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
