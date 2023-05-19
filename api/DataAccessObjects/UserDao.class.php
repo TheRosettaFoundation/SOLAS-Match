@@ -939,7 +939,7 @@ class UserDao
         $claimant_id,
         $feedback)
     {
-        if empty($feedback) $feedback = '';
+        if (empty($feedback)) $feedback = '';
         $args =
             Lib\PDOWrapper::cleanse($queue) . ',' .
             Lib\PDOWrapper::cleanse($type) . ',' .
