@@ -131,21 +131,19 @@ class Notify
             }
     }
 
-
     public static function sendProjectImageUploaded($project_id)
     {
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        ProjectImageUploadedEmail,
+            ProjectImageUploadedEmail,
             0,
             0,
             0,
-        !!$project_id,
+            $project_id,
             0,
             0,
-        $feedback);
+            '');
     }
-
 
     public static function sendProjectImageApprovedEmail($project_id)
     {
@@ -196,16 +194,15 @@ class Notify
     {
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        ProjectImageRemovedEmail,
+            ProjectImageRemovedEmail,
             0,
             0,
             0,
-        !!$project_id,
+            $project_id,
             0,
             0,
-        $feedback);
+            '');
     }
-
 
     public static function sendTaskArchivedNotifications($task_id, $subscribedUsers)
     {
@@ -252,7 +249,6 @@ class Notify
         !!$feedback);
     }
 
-
     public static function notifyUserClaimedTask($user_id, $task_id)
     {
 error_log("notifyUserClaimedTask($user_id, $task_id)");
@@ -269,7 +265,6 @@ error_log("notifyUserClaimedTask($user_id, $task_id)");
 
 error_log("notifyUserClaimedTask($user_id, $task_id) After Send");
     }
-
 
     public static function notifyOrgClaimedTask($user_id, $task_id)
     {
@@ -306,38 +301,33 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
         $feedback);
     }
 
-
-
     public static function sendTaskUploadNotifications($task_id)
     {
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        TaskUploadNotificationRequest,
+            TaskUploadNotificationRequest,
             0,
             0,
             0,
             0,
-        !!$task_id,
+            $task_id,
             0,
-        $feedback);
+            '');
     }
-
-
 
     public static function sendTaskRevokedNotifications($task_id, $claimant_id)
     {
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        TaskRevokedNotification,
+            TaskRevokedNotification,
             0,
             0,
             0,
             0,
-        !!$task_id,
-        !!$claimant_id,
-        $feedback);
+            $task_id,
+            $claimant_id,
+            '');
     }
-
 
     public static function sendUserFeedback($feedback)
     {
@@ -362,7 +352,6 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
         !!$claimant_id,
         !!$feedback);
     }
-
 
     public static function notifyUserTaskCancelled($user_id, $task_id)
     {
