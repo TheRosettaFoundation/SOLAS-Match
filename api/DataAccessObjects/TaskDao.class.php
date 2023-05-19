@@ -12,7 +12,6 @@ use \SolasMatch\API\Lib as Lib;
   database using stored procedures.
 */
 
-require_once __DIR__."/../../Common/protobufs/Requests/UserTaskScoreRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/Task.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__."/../lib/PDOWrapper.class.php";
