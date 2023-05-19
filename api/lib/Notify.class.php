@@ -222,26 +222,16 @@ class Notify
 
     public static function sendOrgFeedback($feedback)
     {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $message = $messagingClient->createMessageFromProto($feedback);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->OrgFeedbackTopic
-            );
-        }
-                        OrgFeedbackGenerator::run(queue_request["claimant_id"].toInt(), queue_request["task_id"].toInt(), queue_request["user_id"].toInt(), queue_request["feedback"].toString());  // user_id is admin or owner
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        OrgFeedback,
-        !!$user_id,
+            OrgFeedback,
+            $feedback->getUserId(),
             0,
-        $org_id,
+            $org_id,
             0,
-        !!$task_id,
-        !!$claimant_id,
-        !!$feedback);
+            $feedback->getTaskId(),
+            $feedback->getClaimantId(),
+            $feedback->getFeedback());
     }
 
     public static function notifyUserClaimedTask($user_id, $task_id)
@@ -259,6 +249,21 @@ class Notify
         error_log("notifyUserClaimedTask($user_id, $task_id)");
     }
 
+[[[
+    public function sendOrgFeedback($taskId, $userId, $claimantId, $feedback)
+        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
+        $feedback->getTaskId();
+        $feedback->getUserId();
+        $feedback->getClaimantId();
+        $feedback->getFeedback();
+
+    public function sendOrgFeedbackDeclined($task_id, $claimant_id, $memsource_project)
+        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
+        $feedbackData->setTaskId($task_id);
+        $feedbackData->setUserId($user_id);
+        $feedbackData->setClaimantId($claimant_id);
+        $feedbackData->setFeedback($feedback);
+]]]
     public static function notifyOrgClaimedTask($user_id, $task_id)
     {
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($task_id);
@@ -323,26 +328,16 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
 
     public static function sendUserFeedback($feedback)
     {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $message = $messagingClient->createMessageFromProto($feedback);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->UserFeedbackTopic
-            );
-        }
-                        UserFeedbackGenerator::run(queue_request["claimant_id"].toInt(), queue_request["task_id"].toInt(), queue_request["feedback"].toString());
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
-        UserFeedback,
-        $user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
-        !!$task_id,
-        !!$claimant_id,
-        !!$feedback);
+            UserFeedback,
+            0,
+            0,
+            0,
+            0,
+            $feedback->getTaskId(),
+            $feedback->getClaimantId(),
+            $feedback->getFeedback());
     }
 
     public static function notifyUserTaskCancelled($user_id, $task_id)
