@@ -111,22 +111,22 @@ class Notify
             PROJECTQUEUE,
         OrgMembershipAccepted,
         !!$user_id,
-        $badge_id,
+            0,
         !!$org_id,
-        $project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
+            0,
         $feedback);
             } else {
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         OrgMembershipRefused,
         !!$user_id,
-        $badge_id,
+            0,
         !!$org_id,
-        $project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
+            0,
         $feedback);
             }
     }
@@ -137,12 +137,12 @@ class Notify
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         ProjectImageUploadedEmail,
-        $user_id,
-        $badge_id,
-        $org_id,
+            0,
+            0,
+            0,
         !!$project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
         $feedback);
     }
 
@@ -159,11 +159,11 @@ class Notify
             PROJECTQUEUE,
         ProjectImageApprovedEmail,
         !!$user_id,
-        $badge_id,
-        $org_id,
+            0,
+            0,
         !!$project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
         $feedback);
         }
     }
@@ -181,11 +181,11 @@ class Notify
             PROJECTQUEUE,
         ProjectImageDisapprovedEmail,
         !!$user_id,
-        $badge_id,
-        $org_id,
+            0,
+            0,
         !!$project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
         $feedback);
 
                 }
@@ -197,12 +197,12 @@ class Notify
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         ProjectImageRemovedEmail,
-        $user_id,
-        $badge_id,
-        $org_id,
+            0,
+            0,
+            0,
         !!$project_id,
-        $task_id,
-        $claimant_id,
+            0,
+            0,
         $feedback);
     }
 
@@ -217,11 +217,11 @@ class Notify
             PROJECTQUEUE,
         TaskArchived,
         !!$user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
+            0,
+            0,
+            0,
         !!$task_id,
-        $claimant_id,
+            0,
         $feedback);
                 }
         }
@@ -244,9 +244,9 @@ class Notify
             PROJECTQUEUE,
         OrgFeedback,
         !!$user_id,
-        $badge_id,
+            0,
         $org_id,
-        $project_id,
+            0,
         !!$task_id,
         !!$claimant_id,
         !!$feedback);
@@ -260,11 +260,11 @@ error_log("notifyUserClaimedTask($user_id, $task_id)");
             PROJECTQUEUE,
         UserTaskClaim,
         !!$user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
+            0,
+            0,
+            0,
         !!$task_id,
-        $claimant_id,
+            0,
         $feedback);
 
 error_log("notifyUserClaimedTask($user_id, $task_id) After Send");
@@ -308,30 +308,17 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
 
 
 
-    public static function sendTaskUploadNotifications($task_id, $version)
+    public static function sendTaskUploadNotifications($task_id)
     {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $messageProto = new Common\Protobufs\Requests\TaskUploadNotificationRequest();
-            $messageProto->setTaskId($task_id);
-            $messageProto->setFileVersion($version);
-            $message = $messagingClient->createMessageFromProto($messageProto);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->TaskUploadNotificationTopic
-            );
-        }
-                        SendTaskUploadNotifications::run(queue_request["task_id"].toInt());
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         TaskUploadNotificationRequest,
-        $user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
+            0,
+            0,
+            0,
+            0,
         !!$task_id,
-        $claimant_id,
+            0,
         $feedback);
     }
 
@@ -339,27 +326,13 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
 
     public static function sendTaskRevokedNotifications($task_id, $claimant_id)
     {
-        $client = new Lib\MessagingClient();
-        if ($client->init()) {
-            $messageProto = new Common\Protobufs\Notifications\TaskRevokedNotification();
-            $messageProto->setTaskId($task_id);
-            $messageProto->setClaimantId($claimant_id);
-            $message = $client->createMessageFromProto($messageProto);
-            $client->sendTopicMessage(
-                $message,
-                $client->MainExchange,
-                $client->TaskRevokedTopic
-            );
-        }
-
-                        TaskRevokedNotificationHandler::run(queue_request["task_id"].toInt(), queue_request["claimant_id"].toInt());
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         TaskRevokedNotification,
-        $user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
+            0,
+            0,
+            0,
+            0,
         !!$task_id,
         !!$claimant_id,
         $feedback);
@@ -394,30 +367,17 @@ error_log("notifyOrgClaimedTask($user_id, $task_id) After Send to: " . $user->ge
     public static function notifyUserTaskCancelled($user_id, $task_id)
     {
 error_log("notifyUserTaskCancelled($user_id, $task_id)");
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $message_type = new Common\Protobufs\Emails\UserTaskCancelled();
-            $message_type->setUserId($user_id);
-            $message_type->setTaskId($task_id);
-            $message = $messagingClient->createMessageFromProto($message_type);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->UserTaskCancelledTopic
-            );
-error_log("notifyUserTaskCancelled($user_id, $task_id) After Send");
-        }
-
-                        UserTaskCancelledEmailGenerator::run(queue_request["user_id"].toInt(), queue_request["task_id"].toInt());
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
         UserTaskCancelled,
         !!$user_id,
-        $badge_id,
-        $org_id,
-        $project_id,
+            0,
+            0,
+            0,
         !!$task_id,
-        $claimant_id,
+            0,
         $feedback);
+error_log("notifyUserTaskCancelled($user_id, $task_id) After Send");
+
     }
 }
