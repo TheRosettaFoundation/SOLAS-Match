@@ -206,7 +206,7 @@ class Notify
             OrgFeedback,
             $feedback->getUserId(),
             0,
-            $org_id,
+            0,
             0,
             $feedback->getTaskId(),
             $feedback->getClaimantId(),

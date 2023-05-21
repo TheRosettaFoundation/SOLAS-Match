@@ -501,6 +501,7 @@ error_log("createTaskDirectly: $args");
 
     public function get_matecat_url_regardless($task, $memsource_task)
     {
+        if (empty($memsource_task)) return '';
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/135305&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }
