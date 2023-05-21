@@ -1305,6 +1305,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function set_dateDue_in_memsource_for_project($memsource_project, $deadline)
     {
+        if (empty($memsource_project)) return;
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
         $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
