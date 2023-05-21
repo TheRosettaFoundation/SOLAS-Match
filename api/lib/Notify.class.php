@@ -29,7 +29,6 @@ class Notify
 
     public static function sendPasswordResetEmail($user_id)
     {
-self::sendTaskUploadNotifications(90688);
         DAO\UserDao::insert_queue_request(
             PROJECTQUEUE,
             PasswordResetEmail,
