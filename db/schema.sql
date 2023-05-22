@@ -1540,6 +1540,49 @@ CREATE TABLE IF NOT EXISTS `hubspot_deals` (
   PRIMARY KEY (deal_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `emails` (
+  id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  recipient_id INT UNSIGNED NOT NULL,
+  sender       VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  recipient    VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  subject      VARCHAR(255),
+  body         MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  priority     INT UNSIGNED NOT NULL DEFAULT 2,
+  logged_time  DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  KEY (priority),
+  KEY (logged_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `queue_requests` (
+  id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  queue           INT UNSIGNED NOT NULL,
+  type            INT UNSIGNED NOT NULL,
+  user_id         BIGINT UNSIGNED NOT NULL,
+  badge_id        BIGINT UNSIGNED NOT NULL,
+  org_id          INT UNSIGNED NOT NULL,
+  project_id      INT UNSIGNED NOT NULL,
+  task_id         BIGINT UNSIGNED NOT NULL,
+  claimant_id     INT UNSIGNED NOT NULL,
+  feedback        MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  request_handled INT UNSIGNED NOT NULL DEFAULT 0,
+  logged_time     DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  KEY (request_handled),
+  KEY (logged_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `qxt_smtp_emails` (
+  email_request_id BIGINT UNSIGNED NOT NULL,
+  qxt_smtp_mail_id    INT UNSIGNED NOT NULL,
+  success             INT UNSIGNED NOT NULL DEFAULT 0,
+  error_code          INT UNSIGNED NOT NULL DEFAULT 0,
+  logged_time         DATETIME NOT NULL,
+  KEY (email_request_id),
+  KEY (qxt_smtp_mail_id),
+  KEY (logged_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 /*---------------------------------------end of tables---------------------------------------------*/
 
@@ -10732,6 +10775,143 @@ BEGIN
             md5_hash=p_md5_hash
         WHERE deal_id=p_deal_id;
     END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_qxt_smtp_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_qxt_smtp_email`(
+    IN p_email_request_id BIGINT UNSIGNED,
+    IN p_qxt_smtp_mail_id    INT UNSIGNED)
+BEGIN
+    INSERT INTO qxt_smtp_emails (
+        email_request_id,
+        qxt_smtp_mail_id,
+        logged_time)
+    VALUES (
+        p_email_request_id,
+        p_qxt_smtp_mail_id,
+        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_qxt_smtp_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_qxt_smtp_email`(IN p_qxt_smtp_mail_id INT UNSIGNED, IN p_success INT UNSIGNED, IN p_error_code INT UNSIGNED)
+BEGIN
+    UPDATE qxt_smtp_emails
+    SET
+        success=p_success,
+        error_code=p_error_code
+    WHERE
+        qxt_smtp_mail_id=p_qxt_smtp_mail_id AND
+        logged_time>DATE_FORMAT(DATE_SUB(NOW(), INTERVAL IF(TIME(NOW())<"04:50:55", 1, 0) day), "%Y-%m-%d 04:50:55");
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `queue_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_email`(
+    IN p_recipient_id INT UNSIGNED,
+    IN p_sender       VARCHAR(128),
+    IN p_recipient    VARCHAR(128),
+    IN p_subject      VARCHAR(128),
+    IN p_body         MEDIUMTEXT,
+    IN p_priority     INT UNSIGNED)
+BEGIN
+    INSERT INTO emails (
+        recipient_id,
+        sender,
+        recipient,
+        subject,
+        body,
+        priority,
+        logged_time)
+    VALUES (
+        p_recipient_id,
+        p_sender,
+        p_recipient,
+        p_subject,
+        p_body,
+        p_priority,
+        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_email_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_email_request`()
+BEGIN
+    SELECT * FROM emails
+    WHERE priority!=0
+    ORDER BY priority DESC
+    LIMIT 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `mark_email_request_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_email_request_sent`(IN eID BIGINT UNSIGNED)
+BEGIN
+    UPDATE emails SET priority=0 WHERE id=eID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_queue_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_queue_request`(
+    IN p_queue       INT UNSIGNED,
+    IN p_type        INT UNSIGNED,
+    IN p_user_id     INT UNSIGNED,
+    IN p_badge_id    INT UNSIGNED,
+    IN p_org_id      INT UNSIGNED,
+    IN p_project_id  INT UNSIGNED,
+    IN p_task_id     BIGINT UNSIGNED,
+    IN p_claimant_id INT UNSIGNED,
+    IN p_feedback    MEDIUMTEXT)
+BEGIN
+    INSERT INTO queue_requests (
+        queue,
+        type,
+        user_id,
+        badge_id,
+        org_id,
+        project_id,
+        task_id,
+        claimant_id,
+        feedback,
+        logged_time)
+    VALUES (
+        p_queue,
+        p_type,
+        p_user_id,
+        p_badge_id,
+        p_org_id,
+        p_project_id,
+        p_task_id,
+        p_claimant_id,
+        p_feedback,
+        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_request`(IN p_queue INT UNSIGNED)
+BEGIN
+    SELECT * FROM queue_requests
+    WHERE
+        request_handled=0 AND
+        queue=p_queue
+    LIMIT 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `mark_queue_request_handled`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_queue_request_handled`(IN qID BIGINT UNSIGNED)
+BEGIN
+    UPDATE queue_requests SET request_handled=1 WHERE id=qID;
 END//
 DELIMITER ;
 
