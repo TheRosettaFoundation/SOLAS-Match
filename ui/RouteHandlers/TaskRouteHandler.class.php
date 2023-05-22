@@ -1211,6 +1211,7 @@ class TaskRouteHandler
                       if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
                         $userDao->claimTask_shell($assgneeId, $task_id);
                         UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $task->getProjectId())));
                       } else {
                         $success = $userDao->claimTask($assgneeId, $task_id, $memsource_task, $task->getProjectId(), $task);
                         if ($success == 1) {
