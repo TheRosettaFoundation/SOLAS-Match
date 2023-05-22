@@ -551,7 +551,9 @@ error_log("claimTask_shell($userId, $taskId)");
       $taskDao = new TaskDao();
       $memsource_task = $projectDao->get_memsource_task($task_id);
       $task_ids = [$task_id];
-      if ($cancelled && $memsource_project && $memsource_task) {
+      WRONG!!!!!!!(**)$shell_task = $memsource_project && (int)$memsource_project['memsource_project_uid'];
+      (**)ALSO DONT WNAT PHRASE TO CANCEL SHELL TASKS
+      (**)if ($cancelled && $memsource_project && $memsource_task && !$shell_task) {
           $top_level = $projectDao->get_top_level($memsource_task['internalId']);
           $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
           $task_ids = [];
@@ -584,7 +586,6 @@ error_log("claimTask_shell($userId, $taskId)");
             $memsource_user_uid = 0;
             if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
 
-            $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
             $deadline = $task->getDeadline();
             $status = 'CANCELLED';
             if (!$cancelled) {
@@ -602,16 +603,21 @@ error_log("claimTask_shell($userId, $taskId)");
             ];
             if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
             error_log(print_r($data, true));
+
+(**)IF DONT WANT TO DO...
+            $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             $result = curl_exec($ch);
             curl_close($ch);
+(**)END DONT WANT TO DO
 
             if ($cancelled) {
                 $task->set_cancelled(1);
                 if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+(**)IF DONT WANT TO DO...
                     $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -633,6 +639,7 @@ error_log("claimTask_shell($userId, $taskId)");
                             }
                         }
                     }
+(**)END DONT WANT TO DO
                 }
                 $task->setPublished(0);
                 $taskDao->updateTask($task);
