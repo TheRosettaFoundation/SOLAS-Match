@@ -551,7 +551,7 @@ error_log("claimTask_shell($userId, $taskId)");
       $taskDao = new TaskDao();
       $memsource_task = $projectDao->get_memsource_task($task_id);
       $task_ids = [$task_id];
-      $shell_task = $memsource_task && (int)$memsource_task['memsource_task_uid'];
+      $shell_task = $memsource_task && (int)$memsource_task['memsource_task_uid']; // A Phrase uid will not be an int (casts to 0), for a Shell Task this contains task_id (an int)
       if ($cancelled && $memsource_project && $memsource_task && !$shell_task) {
           $top_level = $projectDao->get_top_level($memsource_task['internalId']);
           $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
@@ -575,6 +575,7 @@ error_log("claimTask_shell($userId, $taskId)");
         if ($details_claimant) $user_id = $details_claimant->getId();
 
         if ($memsource_project && $memsource_task) {
+error_log("herex $task_id");
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
             $memsource_task_uid = $memsource_task['memsource_task_uid'];
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
