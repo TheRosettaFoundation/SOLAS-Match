@@ -546,6 +546,7 @@ error_log("claimTask_shell($userId, $taskId)");
 
     public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment)
     {
+      if (!$memsource_project) return 0;
       error_log("function propagate_cancelled($cancelled... $task_id)");
       $projectDao = new ProjectDao();
       $taskDao = new TaskDao();
@@ -575,7 +576,6 @@ error_log("claimTask_shell($userId, $taskId)");
         if ($details_claimant) $user_id = $details_claimant->getId();
 
         if ($memsource_project && $memsource_task) {
-error_log("herex $task_id");
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
             $memsource_task_uid = $memsource_task['memsource_task_uid'];
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
