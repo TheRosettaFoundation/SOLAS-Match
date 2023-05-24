@@ -22,11 +22,11 @@
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
                     <th width="15%">Task Type</th>
-                    <th width="18%">Quantity</th>
+                    <th width="15%">Quantity</th>
                     <th width="20%">Target Language</th>
-                    <th width="18%">Source Quantity</th>
+                    <th width="15%">Source Quantity</th>
                     <th width="25%">Optional Task Name<br />(will default to Project)</th>
-                    <th width="4%"></th>
+                    <th width="10%"></th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
