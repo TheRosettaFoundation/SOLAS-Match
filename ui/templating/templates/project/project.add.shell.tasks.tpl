@@ -120,6 +120,7 @@ var source_units = ["",
 function duplicate(count) {
     for (i=0; i<20; i++) {
         if (document.getElementById("task_type_" + i).value == "0") {
+/*
             document.getElementById("task_type_" + i).value       = document.getElementById("task_type_" + count).value;
             document.getElementById("quantity_" + i).value        = document.getElementById("quantity_" + count).value;
             document.getElementById("target_language_" + i).value = document.getElementById("target_language_" + count).value;
@@ -128,6 +129,7 @@ function duplicate(count) {
             var task_type = document.getElementById("task_type_" + i).value;
             document.getElementById("unit_" + i").innerHTML = units[task_type];
             document.getElementById("source_unit_" + i).innerHTML = source_units[task_type];
+*/
         }
     }
 }
