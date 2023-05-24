@@ -291,7 +291,7 @@ function validateLocalValues()
   // Parse project deadline info
   var projectDeadline = new Date(selectedYear, selectedMonth - 1, selectedDay, selectedHour, selectedMinute);
   if (projectDeadline != null) {
-    if (projectDeadline > (new Date()) && (userIsAdmin || projectDeadline >= deadline_timestamp)) {
+    if ((userIsAdmin || (projectDeadline > (new Date()))) && (userIsAdmin || projectDeadline >= deadline_timestamp)) {
       var m = projectDeadline.getUTCMonth() + 1;
       if (m < 10) {
         m = "0" + m;
