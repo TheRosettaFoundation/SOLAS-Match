@@ -128,6 +128,7 @@ function duplicate(count) {
             var task_type = document.getElementById("task_type_" + i).value;
             document.getElementById("unit_" + i).innerHTML = units[task_type];
             document.getElementById("source_unit_" + i).innerHTML = source_units[task_type];
+            break;
         }
     }
 }
