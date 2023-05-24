@@ -1272,12 +1272,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             11 => Lib\Localisation::getTranslation('common_november'),
             12 => Lib\Localisation::getTranslation('common_december'),
         );
-        $year_list = array();
-        $yeari = (int)date('Y');
-        for ($i = 0; $i < 10; $i++) {
-            $year_list[$yeari] = $yeari;
-            $yeari++;
-        }
         $hour_list = array();
         for ($i = 0; $i < 24; $i++) {
             $hour_list[$i] = $i;
@@ -1291,6 +1285,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $project = $projectDao->getProject($project_id);
         $deadline = $project->getDeadline();
         $selected_year   = (int)substr($deadline,  0, 4);
+        $year_list = [];
+        if ($selected_year < $yeari) $year_list[$selected_year] = $selected_year;
+        $yeari = (int)date('Y');
+        for ($i = 0; $i < 10; $i++) {
+            $year_list[$yeari] = $yeari;
+            $yeari++;
+        }
         $selected_month  = (int)substr($deadline,  5, 2);
         $selected_day    = (int)substr($deadline,  8, 2);
         $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
