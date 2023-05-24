@@ -25,8 +25,9 @@
                     <th width="13%">Quantity</th>
                     <th width="20%">Target Language</th>
                     <th width="13%">Source Quantity</th>
-                    <th width="25%">Optional Task Name<br />(will default to Project)</th>
-                    <th width="14%"></th>
+                    <th width="15%">Optional Task Name<br />(will default to Project)</th>
+                    <th width="18%">Task Comment</th>
+                    <th width="6%"></th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
@@ -125,6 +126,7 @@ function duplicate(count) {
             document.getElementById("target_language_" + i).value = document.getElementById("target_language_" + count).value;
             document.getElementById("source_quantity_" + i).value = document.getElementById("source_quantity_" + count).value;
             document.getElementById("title_" + i).value           = document.getElementById("title_" + count).value;
+            document.getElementById("comment_" + i).value         = document.getElementById("comment_" + count).value;
             var task_type = document.getElementById("task_type_" + i).value;
             document.getElementById("unit_" + i).innerHTML = units[task_type];
             document.getElementById("source_unit_" + i).innerHTML = source_units[task_type];
@@ -169,6 +171,7 @@ function task_type_changed_{$count}() {
                                 <div id="source_unit_{$count}"></div>
                             </td>
                             <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
+                            <td><input type='text' name="comment_{$count}" id="comment_{$count}" value="" /></td>
                             <td>
                                 <button onclick="duplicate({$count}); return false;" title="Duplicate">&#8659;</button>
                             </td>

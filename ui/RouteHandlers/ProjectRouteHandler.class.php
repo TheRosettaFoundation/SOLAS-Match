@@ -2006,6 +2006,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task->setWordCount($quantity);
                     $task->set_word_count_original($quantity);
                     $task->set_source_quantity($source_quantity);
+                    $task->setComment($post["comment_$count"]);
 
                     $task->setDeadline($project->getDeadline());
                     $task->setPublished(0);
