@@ -117,7 +117,7 @@ var source_units = ["",
     {/foreach}
 ];
 
-duplicate(count) {
+function duplicate(count) {
     for (i=0; i<20; i++) {
         if (document.getElementById("task_type_" + i).value == "0") {
             document.getElementById("task_type_" + i).value       = document.getElementById("task_type_" + count).value;
