@@ -22,10 +22,11 @@
             <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
                 <thead>
                     <th width="15%">Task Type</th>
-                    <th width="20%">Quantity</th>
+                    <th width="18%">Quantity</th>
                     <th width="20%">Target Language</th>
-                    <th width="20%">Source Quantity</th>
+                    <th width="18%">Source Quantity</th>
                     <th width="25%">Optional Task Name<br />(will default to Project)</th>
+                    <th width="4%"></th>
                 </thead>
                 <tbody>
 <script type="text/javascript">
@@ -152,6 +153,7 @@ function task_type_changed_{$count}() {
                                 <div id="source_unit_{$count}"></div>
                             </td>
                             <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
+                            <td>Dup</td>
                         </tr>
                     {/for}
                 </tbody>
