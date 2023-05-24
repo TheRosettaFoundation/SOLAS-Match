@@ -116,6 +116,21 @@ var source_units = ["",
         "{$ui['source_unit_for_later_stats']}",
     {/foreach}
 ];
+
+duplicate(count) {
+    for (i=0; i<20; i++) {
+        if (document.getElementById("task_type_" + i).value == "0") {
+            document.getElementById("task_type_" + i).value       = document.getElementById("task_type_" + count).value;
+            document.getElementById("quantity_" + i).value        = document.getElementById("quantity_" + count).value;
+            document.getElementById("target_language_" + i).value = document.getElementById("target_language_" + count).value;
+            document.getElementById("source_quantity_" + i).value = document.getElementById("source_quantity_" + count).value;
+            document.getElementById("title_" + i).value           = document.getElementById("title_" + count).value;
+            var task_type = document.getElementById("task_type_" + i).value;
+            document.getElementById("unit_" + i").innerHTML = units[task_type];
+            document.getElementById("source_unit_" + i).innerHTML = source_units[task_type];
+        }
+    }
+}
 </script>
                     {for $count=0 to 19}
 <script type="text/javascript">
@@ -154,7 +169,7 @@ function task_type_changed_{$count}() {
                             </td>
                             <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                             <td>
-                                <button type="submit" onclick="duplicate();" alt="Duplicate">&#8659;</button>
+                                <button type="submit" onclick="duplicate({$count});" title="Duplicate">&#8659;</button>
                             </td>
                         </tr>
                     {/for}
