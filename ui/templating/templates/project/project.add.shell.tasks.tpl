@@ -154,7 +154,7 @@ function task_type_changed_{$count}() {
                             </td>
                             <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                             <td>
-                                <button type="submit" onclick="duplicate();">Dup</button>
+                                <small><button type="submit" onclick="duplicate();">Dup</button></small>
                             </td>
                         </tr>
                     {/for}
