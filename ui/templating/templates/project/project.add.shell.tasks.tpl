@@ -26,7 +26,7 @@
                     <th width="20%">Target Language</th>
                     <th width="13%">Source Quantity</th>
                     <th width="15%">Optional Task Name<br />(will default to Project)</th>
-                    <th width="18%">Task Comment</th>
+                    <th width="18%">Optional Task Comment</th>
                     <th width="6%"></th>
                 </thead>
                 <tbody>
