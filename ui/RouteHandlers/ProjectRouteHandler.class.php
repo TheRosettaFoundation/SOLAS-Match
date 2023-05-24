@@ -1286,8 +1286,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline = $project->getDeadline();
         $selected_year   = (int)substr($deadline,  0, 4);
         $year_list = [];
-        if ($selected_year < $yeari) $year_list[$selected_year] = $selected_year;
         $yeari = (int)date('Y');
+        if ($selected_year < $yeari) $year_list[$selected_year] = $selected_year;
         for ($i = 0; $i < 10; $i++) {
             $year_list[$yeari] = $yeari;
             $yeari++;
