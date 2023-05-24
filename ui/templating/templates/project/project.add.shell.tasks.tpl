@@ -19,7 +19,7 @@
         <div id="placeholder_for_errors_1"></div>
 
         <form method="post" action="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
-            <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+            <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped" style="margin-left: 0%;">
                 <thead>
                     <th width="15%">Task Type</th>
                     <th width="13%">Quantity</th>
