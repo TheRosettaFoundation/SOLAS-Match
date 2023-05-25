@@ -147,10 +147,9 @@ function task_type_changed_{$count}() {
                             <td>
                                 <select name="task_type_{$count}" id="task_type_{$count}" onchange="task_type_changed_{$count}()">
                                     <option value="0"></option>
+                                    {assign var="type_category_text" value="Terminology"}
                                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                                        {assign var="type_category_text" value="Terminology"}
                                         {if $ui['shell_task']}
-<option value="0">if {$ui['type_category_text']}(ui)!={$type_category_text}(var): ===</option>
                                             {if $ui['type_category_text'] != $type_category_text}
                                             <option value="0">=======================</option>
                                             {assign var="type_category_text" value=$ui['type_category_text']}
