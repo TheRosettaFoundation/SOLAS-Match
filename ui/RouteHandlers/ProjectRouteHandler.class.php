@@ -2351,7 +2351,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
-                if ($projectId < 28433) { // Before cutover
+                if ($projectId < 28433*0) { // Before cutover (**)REMOVE *0
                     $projectDao->dequeue_asana_project($projectId);
                     break;
                 }
@@ -2440,22 +2440,23 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 "1200269602122253" => $source_code_asana,
                                 "1200067882657251" => $target_name_asana,
                                 "1200269602122255" => $target_code_asana,
-                                '8888888888888888' => $type_category_text,
-                                '9999999999999999' => $quantities,
+                                '1204581772156605' => $type_category_text,
+                                '1204581656972591' => $quantities,
                                 "1200226775862070" => $project_url,
                                 '1202126000618445' => ($memsource_project && !(int)$memsource_project['memsource_project_uid']) ? $taskDao->get_matecat_analyze_url($projectId, $memsource_project) : '',
                                 "1200269602122257" => "$projectId"
                             ),
                             "due_at" => $objDateTime->format('c'),
-                            "notes" => "KP Project details per language pair, Project ID: $projectId",
+                            "notes" => "TWB Platform details for Task area/language pair, Project ID: $projectId",
                             ));
+$data['data']['name'] = 'TEST PLEASE IGNORE ' . $data['data']['name'];//(**)
                             if (!$self_service) $data['data']['assignee'] = $pm;
                     } else {
                         $data = array('data' => array(
                             "custom_fields" => array(
                                 "1200067882657247" => $wordCount,
                                 "1200067882657245" => $org_name,
-                                '9999999999999999' => $quantities,
+                                '1204581656972591' => $quantities,
                             ),
                             "due_at" => $objDateTime->format('c'),
                             ));
