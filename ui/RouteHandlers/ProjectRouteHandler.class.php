@@ -2463,6 +2463,7 @@ $data['data']['name'] = 'TEST PLEASE IGNORE ' . $data['data']['name'];//(**)
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
+error_log("payload: $payload");//(**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                     else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
