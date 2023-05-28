@@ -1251,7 +1251,7 @@ class TaskRouteHandler
                    );
                    if (!empty($post['revokeTask'])) {
                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                       error_log("taskView revokeTask: $task_id");
+                       error_log("taskView revokeTask: $task_id by $user_id");
                        $taskDao->updateTask($task);
                        $userDao->unclaimTask($details_claimant->getId(), $task_id, null);
                        UserRouteHandler::flash(
@@ -1606,7 +1606,7 @@ class TaskRouteHandler
                     }
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-                        error_log("taskOrgFeedback");
+                        error_log("taskOrgFeedback revokeTask: $task_id by $user_id");
                         $taskDao->updateTask($task);
                         if ($claimant != null) {
                             $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
@@ -1701,6 +1701,7 @@ class TaskRouteHandler
                         $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
                     }
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
+                        error_log("taskUserFeedback revokeTask: $task_id by $user_id");
                         if ($claimant != null) {
                             $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, $post['feedback']);
                         } else {
