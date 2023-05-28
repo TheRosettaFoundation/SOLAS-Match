@@ -39,6 +39,55 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 14
+
+- Removed Rabbit MQ from the system because our drivers are very old.
+- Added a table "emails" which queues outgoing emails. This is read by our SMTP driver and as emails are handed over to SMTP sent they are marked as such, but not immediately deleted so we can resent if there is a major failure.
+- Added a table "qxt_smtp_emails" in which the SMTP driver contains a reference to the previous table and are marked as sent when sent over the socket to the remote SMTP server. Likewise these are not deleted so we can work out what to resend if that is necessary.
+- Added a table "queue_requests" in which requests to the C++ from the PHP and also from internal schedulers (timed tasks). These are read in 3 different queues with different priorities for action. Likewise these are not deleted immediately when run.
+- Addressed this security request: https://github.com/TheRosettaFoundation/SOLAS-Match/pull/1291
+- Addressed this security request: https://github.com/TheRosettaFoundation/SOLAS-Match/pull/1292
+- Added the following Shell Tasks...
+  - ( 7,'Terminology translation'),
+  - ( 8,'DTP signoff'),
+  - ( 9,'Voice recording'),
+  - (10,'Subtitle Translation'),
+  - (11,'Subtitle Revision'),
+  - (12,'Captioning'),
+  - (13,'Transcription'),
+  - (14,'Voiceover'),
+  - (15,'lexiQA quality assurance'),
+  - (16,'Alignment'),
+  - (17,'SME review'),
+  - (18,'QA on Phrase'),
+  - (19,'Language Quality Assessment'),
+  - (20,'Monolingual proofreading'),
+  - (21,'MTPE'),
+  - (22,'Plain Language assessment'),
+  - (23,'Plain Language editing'),
+  - (24,'Plain Language training');
+- Expanded "task_type_details" table and used these fields to support Shell Tasks. Here are the fields...
+  - type_enum                         INT UNSIGNED NOT NULL,
+  - type_category                     INT UNSIGNED NOT NULL,
+  - enabled                           INT UNSIGNED NOT NULL,
+  - for_self_managed                  INT UNSIGNED NOT NULL,
+  - visible_community                 INT UNSIGNED NOT NULL,
+  - shell_task                        INT UNSIGNED NOT NULL, # 1 => Shell Task
+  - source_and_target                 INT UNSIGNED NOT NULL, # 1 => Has both Source and Target
+  - sourcing                          INT UNSIGNED NOT NULL, # 0 => Pair (strict & loose), 1 => Target only (strict & loose), 2 => Pair and Target only (strict & loose)
+  - type_text                         VARCHAR(50)  NOT NULL,
+  - type_text_short                   VARCHAR(50)  NOT NULL,
+  - colour                            VARCHAR(50)  NOT NULL,
+  - claimed_template                  VARCHAR(50)  NOT NULL,
+  - show_section                      VARCHAR(50)  NOT NULL,
+  - memsource_name                    VARCHAR(50)  NOT NULL,
+  - unit_count_text                   VARCHAR(50)  NOT NULL, # e.g. "Word Count" [was common_word_count]
+  - unit_count_text_short             VARCHAR(50)  NOT NULL, # e.g. "words" [was project_profile_display_words]
+  - pricing_and_recognition_unit_text VARCHAR(50)  NOT NULL,
+  - source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours
+  - unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
+  - rate_for_recognition              FLOAT        NOT NULL,
+
 ## Version 13.1
 
 - Project view now allows...
