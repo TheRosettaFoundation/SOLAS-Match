@@ -866,6 +866,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     foreach ($task_ids as $id) {
                         $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment);
                     }
+                    error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, IDs: " . $post['cancel']);
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
@@ -918,6 +919,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $taskDao->setTaskStatus($id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                         }
                     }
+                    error_log("Tasks potentially Marked PENDING_CLAIM by $user_id, IDs: " . $post['status_as_unclaimed']);
                 }
 
                 if (!empty($post['status_as_waiting'])) {
@@ -931,6 +933,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             }
                         }
                     }
+                    error_log("Tasks potentially Marked WAITING_FOR_PREREQUISITES by $user_id, IDs: " . $post['status_as_waiting']);
                 }
                 $updated = 0;
                 if (!empty($post['ready_payment'])) {
