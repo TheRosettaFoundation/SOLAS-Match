@@ -691,7 +691,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 } else {
                     $task->setPublished(false);
                 }
-                error_log("setPublished");
+                error_log('projectView setPublished(' . $post['publishedTask'] . ') ' . $post['task_id'] . " by $user_id");
                 $taskDao->updateTask($task);
             }
 
@@ -838,10 +838,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if (!empty($post['unpublish_selected_tasks'])) {
                         $task_ids = preg_split ("/\,/", $post['unpublish_selected_tasks']);
                         $published = false;
+                        error_log("Tasks Marked Unpublished by $user_id, IDs: " . $post['unpublish_selected_tasks']);
                     }
                     if(!empty($post['publish_selected_tasks'])) {
                         $task_ids = preg_split ("/\,/", $post['publish_selected_tasks']);
                         $published = true;
+                        error_log("Tasks Marked Published by $user_id, IDs: " . $post['publish_selected_tasks']);
                     }
                     
                     foreach ($task_ids as $id) {
