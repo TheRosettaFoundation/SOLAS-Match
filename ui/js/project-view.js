@@ -428,7 +428,7 @@ function select() {
     //Cancel Task
     $(document).on('change', 'select[name="cancel_task"]', function() {
         var valueSelected = this.value;
-        if(valueSelected == "other") {
+        if (valueSelected == "other" || !parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             $("[name=reason]").show();
             $("[name=reason_text]").show();
             $("[name=reason]").bind("change paste keyup", function() {

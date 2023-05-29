@@ -1,5 +1,11 @@
 {include file="header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
+
+<span class="hidden">
+    <!-- Parameters... -->
+    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
+</span>
+
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
@@ -726,6 +732,7 @@
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
+  <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
   <select name="cancel_task" id="cancel_task" style="width:450px;">
     <option value="">--Select--</option>
