@@ -22,11 +22,11 @@
             <table id="myTable" class="container table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-left: 0%;">
                 <thead>
                     <th width="15%">Task Type</th>
-                    <th width="13%">Quantity</th>
                     <th width="20%">Target Language</th>
                     <th width="13%">Source Quantity</th>
+                    <th width="13%">Pricing Quantity</th>
                     <th width="15%">Optional Task Name<br />(will default to Project)</th>
-                    <th width="18%">Optional Task Comment</th>
+                    <th width="18%">Optional Task URL</th>
                     <th width="6%"></th>
                 </thead>
                 <tbody>
@@ -160,10 +160,6 @@ function task_type_changed_{$count}() {
                                 </select>
                             </td>
                             <td>
-                                <input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" /><br />
-                                <div id="unit_{$count}"></div>
-                            </td>
-                            <td>
                                 <select name="target_language_{$count}" id="target_language_{$count}">
                                     <option value="0"></option>
                                     {foreach from=$languages key=codes item=language}
@@ -174,6 +170,10 @@ function task_type_changed_{$count}() {
                             <td>
                                 <input type='text' name="source_quantity_{$count}" id="source_quantity_{$count}" value="" /><br />
                                 <div id="source_unit_{$count}"></div>
+                            </td>
+                            <td>
+                                <input type='text' name="quantity_{$count}" id="quantity_{$count}" value="" /><br />
+                                <div id="unit_{$count}"></div>
                             </td>
                             <td><input type='text' name="title_{$count}" id="title_{$count}" value="" /></td>
                             <td><input type='text' name="comment_{$count}" id="comment_{$count}" value="" /></td>
