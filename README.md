@@ -89,6 +89,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - rate_for_recognition              FLOAT        NOT NULL,
 - If a Partner cancels a task, they must enter a reason (not just in the "other" case).
 - More information is given before confirming task cancellation about what exactly happens: "Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks."
+- A Partner now cannot create a revision only project.
 
 ## Version 13.1
 

@@ -604,6 +604,10 @@ function validateLocalValues()
       taskError = parameters.getTranslation("project_create_29");
       success = false;
     }
+    if (!userIsAdmin && !translationRequired[i]) {
+      taskError = "The <strong>Translation Task Type</strong> must be set for each <strong>Target Language</strong>.";
+      success = false;
+    }
 
     targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
