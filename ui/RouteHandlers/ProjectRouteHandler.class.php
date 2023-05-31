@@ -2024,7 +2024,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     error_log("Added Shell Task: $task_id");
 
-                    if (!empty($post["comment_$count"])) $taskDao->insert_task_url($task_id, $post["comment_$count"]);
+                    if (!empty($post["comment_$count"])) {
+                        $url = $post["comment_$count"];
+                        if (!preg_match('#^(http|https)://#i', $url)) $url = "https://$url";
+                        $taskDao->insert_task_url($task_id, $url);
+                    }
                     $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                     $number++;
