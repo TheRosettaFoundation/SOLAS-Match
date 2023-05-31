@@ -2011,7 +2011,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task->setWordCount($quantity);
                     $task->set_word_count_original($quantity);
                     $task->set_source_quantity($source_quantity);
-                    $task->setComment($post["comment_$count"]);
 
                     $task->setDeadline($project->getDeadline());
                     $task->setPublished(0);
@@ -2025,6 +2024,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     error_log("Added Shell Task: $task_id");
 
+                    if (!empty($post["comment_$count"])) $taskDao->insert_task_url($task_id, $post["comment_$count"]);
                     $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                     $number++;
