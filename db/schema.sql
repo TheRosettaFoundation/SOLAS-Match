@@ -10916,6 +10916,51 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `task_urls` (
+  task_id BIGINT UNSIGNED NOT NULL,
+  url     VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY FK_task_urls_task_id (task_id),
+  CONSTRAINT FK_task_urls_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_task_url`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_url`(
+    IN p_task_id BIGINT UNSIGNED,
+    IN p_url     VARCHAR(255))
+BEGIN
+    INSERT INTO task_urls (
+        task_id,
+        url)
+    VALUES (
+        p_task_id,
+        p_url);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_task_url`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_task_url`(
+    IN p_task_id BIGINT UNSIGNED,
+    IN p_url     VARCHAR(255))
+BEGIN
+    UPDATE task_urls
+    SET
+        url=p_url
+    WHERE
+        task_id=p_task_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_task_url`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_url`(IN p_task_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM task_urls WHERE task_id=p_task_id;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
