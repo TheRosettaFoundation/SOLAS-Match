@@ -116,7 +116,7 @@
                     {if $site_admin && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>
                     <label for="shell_task_url" style="font-size: large"><strong>Shell Task Work URL</strong></label>
-                    <input type="text" name="shell_task_url" id="shell_task_url" value="{shell_task_url}" style="width: 400px" />
+                    <input type="text" name="shell_task_url" id="shell_task_url" value="{$shell_task_url}" style="width: 400px" />
                     {/if}
                 </td>             
             </tr>
