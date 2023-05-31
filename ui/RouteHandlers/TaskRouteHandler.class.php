@@ -342,7 +342,7 @@ class TaskRouteHandler
                 $memsource_tasks[$taskId] = $memsource_task;
                 if (!$memsource_task || $projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
                 else                                                                                               $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
-                if (Common\Enums\TaskTypeEnum::$enum_to_UI[$topTask->getTaskType()]['shell_task'] && ($shell_task_url = $taskDao->get_task_url($task_id))) $shell_task_urls[$taskId] = $shell_task_url;
+                if (Common\Enums\TaskTypeEnum::$enum_to_UI[$topTask->getTaskType()]['shell_task'] && ($shell_task_url = $taskDao->get_task_url($taskId))) $shell_task_urls[$taskId] = $shell_task_url;
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
 
