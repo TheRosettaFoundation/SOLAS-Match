@@ -1031,8 +1031,10 @@ class TaskRouteHandler
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
                 if ($site_admin && !empty($post['shell_task_url'])) {
-                    if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $post['shell_task_url']);
-                    else                                  $taskDao->insert_task_url($task_id, $post['shell_task_url']);
+                    $url = $post['shell_task_url'];
+                    if (!preg_match('#^(http|https)://#i', $url)) $url = "https://$url";
+                    if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);
+                    else                                  $taskDao->insert_task_url($task_id, $url);
                 }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
               }
