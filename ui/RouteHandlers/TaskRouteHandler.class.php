@@ -1078,6 +1078,7 @@ class TaskRouteHandler
             'site_admin'          => $site_admin,
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
+            'shell_task_url'      => $taskDao->get_task_url($task_id),
             'allow_downloads'     => $allow_downloads,
         ));
 
