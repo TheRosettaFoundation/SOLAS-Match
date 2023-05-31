@@ -129,7 +129,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<strong>{if !empty($memsource_task)}Phrase TMS{else}Kató TM{/if} URL for Task:</strong><hr/>{/if}
+                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong><hr/>{/if}
                 </td>
             </tr>
             <tr valign="top">

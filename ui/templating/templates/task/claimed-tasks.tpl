@@ -163,6 +163,13 @@
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
                                 {/if}
+
+                               {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
+                                    <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                        Work using this URL
+                                    </a>
+                                {/if}
+
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>

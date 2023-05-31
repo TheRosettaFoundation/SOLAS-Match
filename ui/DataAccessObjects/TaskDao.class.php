@@ -992,7 +992,7 @@ error_log("createTaskDirectly: $args");
     public function get_task_url($task_id)
     {
         $result = LibAPI\PDOWrapper::call('get_task_url', LibAPI\PDOWrapper::cleanse($task_id));
-        if (empty($result)) return 0;
-        return $result[0];
+        if (empty($result)) return '';
+        return $result[0]['url'];
     }
 }
