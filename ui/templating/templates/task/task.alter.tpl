@@ -112,6 +112,12 @@
 
                     <label for="word_count" style="font-size: large"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
                     <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !$site_admin}{if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}{/if} style="width: 400px" />
+
+                    {if TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                    <p style="margin-bottom:40px;"/>
+                    <label for="shell_task_url" style="font-size: large"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
+                    <input type="text" name="shell_task_url" id="shell_task_url" maxlength="6" value="{$task->getWordCount()}" {if !$site_admin}{if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}{/if} style="width: 400px" />
+                    {/if}
                 </td>             
             </tr>
             <tr>

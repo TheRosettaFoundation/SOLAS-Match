@@ -87,7 +87,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours
   - unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
   - rate_for_recognition              FLOAT        NOT NULL,
-- A new table "task_urls" which contains an optional URL link which will be displayed in the Task View and can be used for editing Shell Tasks.
+- A new table "task_urls" which contains an optional URL link which will be displayed in the Task View (for admins), Claimed Tasks and Claimed email and can be used for working on Shell Tasks.
 - If a Partner cancels a task, they must enter a reason (not just in the "other" case).
 - More information is given before confirming task cancellation about what exactly happens: "Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks."
 - A Partner now cannot create a revision only project.
