@@ -978,14 +978,14 @@ error_log("createTaskDirectly: $args");
     public function insert_task_url($task_id, $url)
     {
         LibAPI\PDOWrapper::call('insert_task_url',
-            LibAPI\PDOWrapper::cleanse($task_id),
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($url));
     }
 
     public function update_task_url($task_id, $url)
     {
         LibAPI\PDOWrapper::call('update_task_url',
-            LibAPI\PDOWrapper::cleanse($task_id),
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($url));
     }
 
