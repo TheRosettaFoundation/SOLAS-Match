@@ -996,6 +996,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         UserRouteHandler::flashNow('success', "$updated tasks purchase order number set.");
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
                 }
+
+                if (!empty($post['complete_task'])) {
+                    $task_id = $post['task_id'];
+                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+                    //$taskDao->sendTaskUploadNotifications($task_id, 1);
+                    $taskDao->set_task_complete_date($task_id);
+                    error_log("Shell Task Marked Completed task_id: $task_id, by $user_id");
+                    UserRouteHandler::flashNow('success', 'Claimed shell task now marked as complete.');
+                }
             }
         }
 
