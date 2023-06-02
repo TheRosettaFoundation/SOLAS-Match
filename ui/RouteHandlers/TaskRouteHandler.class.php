@@ -1514,6 +1514,10 @@ class TaskRouteHandler
       });
     </script>";
 
+        $paid_status = $taskDao->get_paid_status($task_id);
+        $total_expected_cost = 0;
+        if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
+
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
@@ -1531,6 +1535,8 @@ class TaskRouteHandler
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,
             'any_country'     => $any_country,
+            'paid_status'     => $paid_status,
+            'total_expected_cost' => $total_expected_cost,
         ));
 
         return UserRouteHandler::render("task/task.search_translators.tpl", $response);
