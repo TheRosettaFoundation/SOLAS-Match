@@ -546,7 +546,7 @@ error_log("createTaskDirectly: $args");
         $args = LibAPI\PDOWrapper::cleanse($task_id) . "," . LibAPI\PDOWrapper::cleanse($user_id);
         $result = LibAPI\PDOWrapper::call('claimTask', $args);
       if ($success = $result[0]['result']) {
-        $this->update_task_rate_from_user($task_id, $user_id)
+        $this->update_task_rate_from_user($task_id, $user_id);
 
         if ($make_tasks_claimable) {
             $projectDao = new ProjectDao();
@@ -563,7 +563,7 @@ error_log("createTaskDirectly: $args");
     {
         $result = LibAPI\PDOWrapper::call('claimTask', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if ($success = $result[0]['result']) {
-            $this->update_task_rate_from_user($task_id, $user_id)
+            $this->update_task_rate_from_user($task_id, $user_id);
 
             // Add corresponding task(s) to deny list for translator
             $projectDao = new ProjectDao();
