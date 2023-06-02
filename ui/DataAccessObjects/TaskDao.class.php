@@ -545,6 +545,8 @@ error_log("createTaskDirectly: $args");
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id) . "," . LibAPI\PDOWrapper::cleanse($user_id);
         $result = LibAPI\PDOWrapper::call('claimTask', $args);
+      if ($success = $result[0]['result']) {
+        $this->update_task_rate_from_user($task_id, $user_id)
 
         if ($make_tasks_claimable) {
             $projectDao = new ProjectDao();
@@ -553,14 +555,16 @@ error_log("createTaskDirectly: $args");
 
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
-
-        return $result[0]['result'];
+      }
+        return $success;
     }
 
     public function claimTaskAndDeny($task_id, $user_id, $memsource_task)
     {
         $result = LibAPI\PDOWrapper::call('claimTask', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if ($success = $result[0]['result']) {
+            $this->update_task_rate_from_user($task_id, $user_id)
+
             // Add corresponding task(s) to deny list for translator
             $projectDao = new ProjectDao();
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
@@ -586,6 +590,16 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
         return $success;
+    }
+
+    public function update_task_rate_from_user($task_id, $user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_rate_for_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return;
+        $paid_status = $this->get_paid_status($task_id)
+        $paid_status['unit_rate'] = $result[0]['unit_rate'];
+        $this->update_paid_status($paid_status);
+        error_log("update_task_rate_from_user($task_id, $user_id): " . $paid_status['unit_rate']);
     }
 
     public function unClaimTask($task_id, $user_id, $userFeedback = null)

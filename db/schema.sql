@@ -10961,6 +10961,36 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `user_rate_pairs` (
+  user_id            INT UNSIGNED NOT NULL,
+  task_type          INT UNSIGNED NOT NULL,
+  language_id_source INT UNSIGNED NOT NULL,
+  language_id_target INT UNSIGNED NOT NULL,
+  unit_rate          FLOAT NOT NULL,
+  KEY FK_user_rate_pairs_user (user_id),
+  CONSTRAINT FK_user_rate_pairs_user               FOREIGN KEY (user_id)            REFERENCES Users     (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_user_rate_pairs_language_id_source FOREIGN KEY (language_id_source) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP PROCEDURE IF EXISTS `get_user_rate_for_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_rate_for_task`(IN tID INT UNSIGNED, IN uID INT UNSIGNED)
+BEGIN
+    SELECT urp.*
+    FROM user_rate_pairs urp
+    JOIN Tasks             t ON
+        urp.language_id_source=t.`language_id-source` AND
+        urp.language_id_target=t.`language_id-target` AND
+        urp.task_type=t.`task-type_id`
+    WHERE
+        urp.user_id=uID AND
+        t.id=tID;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
