@@ -10979,14 +10979,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_rate_for_task`(IN tID INT UNSIGNED, IN uID INT UNSIGNED)
 BEGIN
     SELECT urp.*
-    FROM user_rate_pairs urp
-    JOIN Tasks             t ON
-        urp.language_id_source=t.`language_id-source` AND
-        urp.language_id_target=t.`language_id-target` AND
-        urp.task_type=t.`task-type_id`
+    FROM Tasks               t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN user_rate_pairs   urp ON
+        t.`language_id-target`=urp.language_id_target AND
+        t.`task-type_id`=urp.task_type AND
+        (urp.language_id_source=t.`language_id-source` OR ttd.source_and_target=0)
     WHERE
-        urp.user_id=uID AND
-        t.id=tID;
+        t.id=tID AND
+        urp.user_id=uID;
 END//
 DELIMITER ;
 
