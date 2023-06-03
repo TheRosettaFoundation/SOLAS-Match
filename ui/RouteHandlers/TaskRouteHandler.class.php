@@ -1449,6 +1449,9 @@ class TaskRouteHandler
         elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id);
         elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
         else                       $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
+error_log("any_country: $any_country");
+error_log(count($invites_not_sent));
+error_log(print_r($invites_not_sent, true));
         $users_in_invites_not_sent = array();
         foreach ($invites_not_sent as $user) {
             $users_in_invites_not_sent[$user['user_id']] = $user;
