@@ -703,6 +703,13 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
+    public function list_task_invites_not_sent_rates($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_rates', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function list_task_invites_sent($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_sent', LibAPI\PDOWrapper::cleanse($task_id));

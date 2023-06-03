@@ -92,6 +92,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - If a Partner cancels a task, they must enter a reason (not just in the "other" case).
 - More information is given before confirming task cancellation about what exactly happens: "Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks."
 - Once assigned, task "unit_rate" is updated to the linguist rate for the task's type and language pair (which is set for linguists whose rate differs from the default, these are contained in the table "user_rate_pairs").
+- If a linguist has a non default unit rate corresponding to a task, it is displayed in search translators.
 - The box with "Unit Rate for Labor minutes" etc. has been added to search_tranlators (if paid).
 - A Partner now cannot create a revision only project.
 

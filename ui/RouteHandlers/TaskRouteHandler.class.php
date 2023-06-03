@@ -1461,6 +1461,12 @@ class TaskRouteHandler
             $users_in_invites_not_sent_tags[$user['user_id']] = $user;
         }
 
+        $task_invites_not_sent_rates = $taskDao->list_task_invites_not_sent_rates($task_id);
+        $users_in_task_invites_not_sent_rates = [];
+        foreach ($task_invites_not_sent_rates as $user) {
+            $users_in_task_invites_not_sent_rates[$user['user_id']] = $user;
+        }
+
         $all_users = array();
         if ($any_country < 2) $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words($task_id);
         else                  $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words_no_source($task_id);
@@ -1482,6 +1488,11 @@ class TaskRouteHandler
                 } else {
                     $user['user_liked_tags'] = '';
                 }
+                if (!empty($users_in_task_invites_not_sent_rates[$user['user_id']])) {
+                    $user['unit_rate'] = $users_in_task_invites_not_sent_rates[$user['user_id']]['unit_rate'];
+                } else {
+                    $user['unit_rate'] = '';
+                }
                 $all_users[] = $user;
             }
         }
@@ -1495,6 +1506,11 @@ class TaskRouteHandler
                     $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
                 } else {
                     $user['user_liked_tags'] = '';
+                }
+                if (!empty($users_in_task_invites_not_sent_rates[$user['user_id']])) {
+                    $user['unit_rate'] = $users_in_task_invites_not_sent_rates[$user['user_id']]['unit_rate'];
+                } else {
+                    $user['unit_rate'] = '';
                 }
                 $all_users[] = $user;
             }

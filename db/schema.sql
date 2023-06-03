@@ -10991,6 +10991,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_rates`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_rates`(IN taskID BIGINT UNSIGNED)
+BEGIN
+    SELECT
+        urp.*
+    FROM Tasks               t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN user_rate_pairs   urp ON
+        t.`language_id-target`=urp.language_id_target AND
+        t.`task-type_id`=urp.task_type AND
+        (t.`language_id-source`=urp.language_id_source OR ttd.source_and_target=0)
+    WHERE
+        t.id=taskID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
