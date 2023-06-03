@@ -36,7 +36,7 @@
                 <small>
                     {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
-                {if $isSiteAdmin}
+                {if false && $isSiteAdmin}
                     <div class="pull-right top_btn">
                         <a href="{urlFor name="project-create-empty" options="org_id.$org_id"}" class="btn btn-success">
                             <i class="icon-upload icon-white"></i> Create Empty Project
