@@ -1088,7 +1088,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_project'   => $memsource_project,
-                'matecat_analyze_url' => ($memsource_project && !(int)$memsource_project['memsource_project_uid']) ? $taskDao->get_matecat_analyze_url($project_id, $memsource_project) : '',
+                'matecat_analyze_url' => ($memsource_project && !preg_match('/^\d*$/', $memsource_project['memsource_project_uid'])) ? $taskDao->get_matecat_analyze_url($project_id, $memsource_project) : '',
                 'pm' => $pm,
                 'project' => $project,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
@@ -2461,7 +2461,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 '1204581772156605' => $type_category_text,
                                 '1204581656972591' => $quantities,
                                 "1200226775862070" => $project_url,
-                                '1202126000618445' => ($memsource_project && !(int)$memsource_project['memsource_project_uid']) ? $taskDao->get_matecat_analyze_url($projectId, $memsource_project) : '',
+                                '1202126000618445' => ($memsource_project && !preg_match('/^\d*$/', $memsource_project['memsource_project_uid'])) ? $taskDao->get_matecat_analyze_url($projectId, $memsource_project) : '',
                                 "1200269602122257" => "$projectId"
                             ),
                             "due_at" => $objDateTime->format('c'),
