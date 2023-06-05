@@ -906,7 +906,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
-                if ((int)$uid) {
+                if (preg_match('/^\d*$/', $uid)) {
                     error_log("Sync Skipping Shell Task $uid");
                     continue;
                 }
