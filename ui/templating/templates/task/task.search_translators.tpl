@@ -112,14 +112,13 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="6%">Send Invite?</th>
-    <th width="11%">Display Name</th>
-    <th width="15%">Email</th>
-    <th width="15%">Name</th>
+    <th width="13%">Display Name</th>
+    <th width="17%">Email</th>
+    <th width="17%">Name</th>
     <th width="10%">Qualification Level</th>
     <th width="13%">Native Language</th>
-    <th width="8%">Country</th>
+    <th width="10%">Country</th>
     <th width="8%">Words Delivered (last 3 months)</th>
-    <th width="8%">User Liked Tags</th>
     <th width="6%">User Unit Rate</th>
   </thead>
 
@@ -134,7 +133,6 @@
       <td>{$user_row['language_name_native']}</td>
       <td>{$user_row['country_name_native']}</td>
       <td>{$user_row['words_delivered']} ({$user_row['words_delivered_last_3_months']})</td>
-      <td>{$user_row['user_liked_tags']}</td>
       <td>{if !empty($user_row['unit_rate'])}${/if}{$user_row['unit_rate']}</td>
     </tr>
   {/foreach}

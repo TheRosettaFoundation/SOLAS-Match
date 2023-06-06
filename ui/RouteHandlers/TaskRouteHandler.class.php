@@ -1454,13 +1454,6 @@ class TaskRouteHandler
             $users_in_invites_not_sent[$user['user_id']] = $user;
         }
 
-        if ($any_country < 2) $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags($task_id);
-        else                  $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags_no_source($task_id);
-        $users_in_invites_not_sent_tags = array();
-        foreach ($invites_not_sent_tags as $user) {
-            $users_in_invites_not_sent_tags[$user['user_id']] = $user;
-        }
-
         $task_invites_not_sent_rates = $taskDao->list_task_invites_not_sent_rates($task_id);
         $users_in_task_invites_not_sent_rates = [];
         foreach ($task_invites_not_sent_rates as $user) {
@@ -1483,11 +1476,6 @@ class TaskRouteHandler
                 $user['level']                = $users_in_invites_not_sent[$user['user_id']]['level'];
                 $user['language_name_native'] = $users_in_invites_not_sent[$user['user_id']]['language_name_native'];
                 $user['country_name_native']  = $users_in_invites_not_sent[$user['user_id']]['country_name_native'];
-                if (!empty($users_in_invites_not_sent_tags[$user['user_id']])) {
-                    $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
-                } else {
-                    $user['user_liked_tags'] = '';
-                }
                 if (!empty($users_in_task_invites_not_sent_rates[$user['user_id']])) {
                     $user['unit_rate'] = $users_in_task_invites_not_sent_rates[$user['user_id']]['unit_rate'];
                 } else {
@@ -1502,11 +1490,6 @@ class TaskRouteHandler
             if (empty($users_in_invites_not_sent_words[$user['user_id']])) {
                 $user['words_delivered'] = '';
                 $user['words_delivered_last_3_months'] = '';
-                if (!empty($users_in_invites_not_sent_tags[$user['user_id']])) {
-                    $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
-                } else {
-                    $user['user_liked_tags'] = '';
-                }
                 if (!empty($users_in_task_invites_not_sent_rates[$user['user_id']])) {
                     $user['unit_rate'] = $users_in_task_invites_not_sent_rates[$user['user_id']]['unit_rate'];
                 } else {
