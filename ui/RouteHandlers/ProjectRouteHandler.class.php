@@ -2412,10 +2412,12 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] = 0;
                     }
                     foreach (Common\Enums\TaskTypeEnum::$task_type_to_enum as $to_enum) if ($task['taskType'] == $to_enum) $asana_task_splits[$asana_task_split_key][$to_enum] += $task['wordCount'];
-                    $asana_task_splits[$asana_task_split_key]['quantities'] .=
-                        Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_text'] . ': ' .
-                        $task['source_quantity'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['source_unit_for_later_stats'] . ', ' .
-                        $task['wordCount']       . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['pricing_and_recognition_unit_text'] . "\n";
+                    $source_quantity_text = $task['source_quantity'] . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['source_unit_for_later_stats'];
+                    $wordCount_text       = $task['wordCount']       . ' ' . Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['pricing_and_recognition_unit_text'];
+                    $full_line = Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['type_text'] . ': ' . $source_quantity_text;
+                    if ($source_quantity_text != $wordCount_text) $full_line .= ', ' . $wordCount_text;
+                    $full_line .= "\n";
+                    $asana_task_splits[$asana_task_split_key]['quantities'] .= $full_line;
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
