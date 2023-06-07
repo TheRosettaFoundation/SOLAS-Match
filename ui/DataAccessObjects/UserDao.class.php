@@ -540,7 +540,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 error_log("claimTask_shell($userId, $taskId)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
-        LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
+        LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',3,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
         $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
     }
 

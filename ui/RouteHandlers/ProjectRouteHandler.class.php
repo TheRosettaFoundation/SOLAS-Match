@@ -884,7 +884,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                            $number++;
                         }
                     }
-                    UserRouteHandler::flashNow('success', "$number claimed shell tasks now marked as complete.");
+                    UserRouteHandler::flashNow('success', "$number in progress shell tasks now marked as complete.");
                 }
                 if (!empty($post['uncomplete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['uncomplete_selected_tasks']) as $task_id) {
@@ -894,7 +894,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $number++;
                         }
                     }
-                    UserRouteHandler::flashNow('success', "$number completed shell tasks now marked as claimed.");
+                    UserRouteHandler::flashNow('success', "$number completed shell tasks now marked as in progress.");
                 }
 
                 if (!empty($post['tasks_as_paid'])) {
@@ -1003,7 +1003,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     //$taskDao->sendTaskUploadNotifications($task_id, 1);
                     $taskDao->set_task_complete_date($task_id);
                     error_log("Shell Task Marked Completed task_id: $task_id, by $user_id");
-                    UserRouteHandler::flashNow('success', 'Claimed shell task now marked as complete.');
+                    UserRouteHandler::flashNow('success', 'In progress shell task now marked as complete.');
                 }
             }
         }

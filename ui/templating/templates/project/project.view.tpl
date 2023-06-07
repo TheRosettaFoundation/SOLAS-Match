@@ -341,7 +341,7 @@
 
             <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-remove-circle icon-black"></i> Set Shell Tasks back to&nbsp;&nbsp;&nbsp;Claimed
+                    <i class="icon-remove-circle icon-black"></i> Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -475,6 +475,16 @@
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                                {if $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                    <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                                        <input type="hidden" name="task_id" value="{$task_id}" />
+                                                        <input type="hidden" name="complete_task" value="1" />
+                                                        <a class="btn btn-small" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                                                            <i class="icon-check icon-black"></i>
+                                                        </a>
+                                                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                    </form>
+                                                {/if}
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
                                           {if $isSiteAdmin}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
