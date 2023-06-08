@@ -2370,8 +2370,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
                 if ($projectId < 28433) { // Before cutover
-//                    $projectDao->dequeue_asana_project($projectId);
-//                    break;
+                    $projectDao->dequeue_asana_project($projectId);
+                    break;
                 }
 error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
@@ -2482,7 +2482,6 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                         if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
-error_log("POST/PUT payload: $payload");
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                     else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -2490,7 +2489,7 @@ error_log("POST/PUT payload: $payload");
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-//                    $result = curl_exec($ch);
+                    $result = curl_exec($ch);
                     curl_close($ch);
                     error_log("POST/PUT Asana task ($targetLocale_code, $type_category_text), result: $result");
 
