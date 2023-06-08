@@ -172,6 +172,9 @@
     <table width="100%" class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            <th>Mark Shell Task Complete</th>
+            {/if}
             <th>Cancelled?</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
             {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
@@ -198,6 +201,18 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            <td>
+                <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    <input type="hidden" name="complete_task" value="1" />
+                    <a class="btn btn-small" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                        <i class="icon-check icon-black"></i>
+                    </a>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            {/if}
             <td>
                 {if $task->get_cancelled()}
                     <a href="#" class="btn btn-small btn-inverse" disabled>
