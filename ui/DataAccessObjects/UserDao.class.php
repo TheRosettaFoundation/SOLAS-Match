@@ -6,6 +6,9 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
+define("PROJECTQUEUE", "3");
+define("UserTaskCancelled", "36");
+
 require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
@@ -648,6 +651,18 @@ error_log("claimTask_shell($userId, $taskId)");
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
             $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
+
+            $creator = $taskDao->get_creator($memsource_project['project_id'], $memsource_project); // email owner (or projects@translatorswithoutborders.org for self service)
+            $args =
+                LibAPI\PDOWrapper::cleanse(PROJECTQUEUE) . ',' .
+                LibAPI\PDOWrapper::cleanse(UserTaskCancelled) . ',' .
+                LibAPI\PDOWrapper::cleanse($creator['id']) . ',' .
+                '0,0,0,' .
+                LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+                '0,' .
+                LibAPI\PDOWrapper::cleanseWrapStr('');
+            LibAPI\PDOWrapper::call('insert_queue_request', $args);
+            error_log("notifyUserTaskCancelled[creator]({$creator['id']}, $task_id)");
         }
       }
       return count($task_ids);
