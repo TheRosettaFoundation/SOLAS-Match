@@ -58,6 +58,11 @@
         <br />
         <br />
         {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
+        <br />
+        The platform is hosted by Azure through a donation from Microsoft<br />
+        <a href="https://microsoft.com" target="_blank">
+            <img alt="Microsoft" style="border-width:0;" src="{urlFor name='home'}ui/img/Microsoft-logo_rgb_c-gray.png" />
+        </a>
         </div>
         <div class="span4" style="text-align: center;margin-left:895px;margin-top:-25px;">
                                 	<a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
