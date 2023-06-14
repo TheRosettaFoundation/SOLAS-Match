@@ -3847,10 +3847,12 @@ BEGIN
             (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
             `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+            ,
+            cancelled
         FROM Tasks t
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (taskStatus is null or t.`task-status_id` = taskStatus)
+        AND (taskStatus IS NULL OR (t.`task-status_id`=taskStatus AND NOT (taskStatus=3 AND t.cancelled)))
         ORDER BY
             CASE
              WHEN orderBy = 1 THEN `created-time`
@@ -3882,7 +3884,7 @@ BEGIN
         FROM Tasks t
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (taskStatus is null or t.`task-status_id` = taskStatus);
+        AND (taskStatus IS NULL OR (t.`task-status_id`=taskStatus AND NOT (taskStatus=3 AND t.cancelled)));
 END//
 DELIMITER ;
 
