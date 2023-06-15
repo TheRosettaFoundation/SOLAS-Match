@@ -3850,7 +3850,7 @@ BEGIN
         FROM Tasks t
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (taskStatus is null or t.`task-status_id` = taskStatus)
+        AND (taskStatus IS NULL OR (t.`task-status_id`=taskStatus AND NOT (taskStatus=3 AND t.cancelled)))
         ORDER BY
             CASE
              WHEN orderBy = 1 THEN `created-time`
@@ -3882,7 +3882,7 @@ BEGIN
         FROM Tasks t
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (taskStatus is null or t.`task-status_id` = taskStatus);
+        AND (taskStatus IS NULL OR (t.`task-status_id`=taskStatus AND NOT (taskStatus=3 AND t.cancelled)));
 END//
 DELIMITER ;
 
