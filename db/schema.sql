@@ -10968,11 +10968,13 @@ CREATE TABLE IF NOT EXISTS `user_rate_pairs` (
   task_type          INT UNSIGNED NOT NULL,
   language_id_source INT UNSIGNED NOT NULL,
   language_id_target INT UNSIGNED NOT NULL,
+  country_id_target  INT UNSIGNED NOT NULL,
   unit_rate          FLOAT NOT NULL,
   KEY FK_user_rate_pairs_user (user_id),
   CONSTRAINT FK_user_rate_pairs_user               FOREIGN KEY (user_id)            REFERENCES Users     (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_user_rate_pairs_language_id_source FOREIGN KEY (language_id_source) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_rate_pairs_country_id_target  FOREIGN KEY (country_id_target)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -10985,6 +10987,7 @@ BEGIN
     JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN user_rate_pairs   urp ON
         t.`language_id-target`=urp.language_id_target AND
+        t.`country_id-target`=urp.country_id_target AND
         t.`task-type_id`=urp.task_type AND
         (urp.language_id_source=t.`language_id-source` OR ttd.source_and_target=0)
     WHERE
@@ -11003,6 +11006,7 @@ BEGIN
     JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN user_rate_pairs   urp ON
         t.`language_id-target`=urp.language_id_target AND
+        t.`country_id-target`=urp.country_id_target AND
         t.`task-type_id`=urp.task_type AND
         (t.`language_id-source`=urp.language_id_source OR ttd.source_and_target=0)
     WHERE
