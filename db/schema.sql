@@ -10971,6 +10971,7 @@ CREATE TABLE IF NOT EXISTS `user_rate_pairs` (
   country_id_target  INT UNSIGNED NOT NULL,
   unit_rate          FLOAT NOT NULL,
   KEY FK_user_rate_pairs_user (user_id),
+  KEY user_rate_pairs_target (language_id_target, country_id_target, task_type),
   CONSTRAINT FK_user_rate_pairs_user               FOREIGN KEY (user_id)            REFERENCES Users     (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_user_rate_pairs_language_id_source FOREIGN KEY (language_id_source) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
