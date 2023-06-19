@@ -92,6 +92,12 @@ class UserRouteHandler
             ->setName('user-private-profile');
 
         $app->map(['GET', 'POST'],
+            '/{user_id}/user_rate_pairs[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_rate_pairs')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('user_rate_pairs');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/googleregister[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:googleregister')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
@@ -1789,6 +1795,187 @@ class UserRouteHandler
         return UserRouteHandler::render('user/user-private-profile.tpl', $response);
     }
 
+    public static function user_rate_pairs(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $user_id = $args['user_id'];
+
+        $userDao = new DAO\UserDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $user = $userDao->getUser($user_id);
+        if (!is_object($user)) {
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
+        }
+
+        list($source_options, $target_options) = $userDao->generate_user_rate_pair_selections();
+        $user_rate_pairs = $userDao->get_user_rate_pairs($user_id);
+
+        if ($post = $request->getParsedBody()) {
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'user_rate_pairs')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+            for ($i = 0; $i < 121; $i++) {
+                if (!empty($post["language_id_source_$i"]) && !empty($post["language_country_id_target_$i"]) && !empty($post["task_type_$i"]) && !empty($post["unit_rate_$i"]) && is_numeric($post["unit_rate_$i"])) {
+                    $target = explode('-', $post["language_country_id_target_$i"]);
+                    $post["unit_rate_$i"] = (float)$post["unit_rate_$i"];
+                    $found = false;
+                    foreach ($user_rate_pairs as $user_rate_pair) {
+                        if (($post["language_id_source_$i"] == $user_rate_pair['language_id_source']) &&
+                            ($target[0] == $user_rate_pair['language_id_target']) &&
+                            ($target[1] == $user_rate_pair['country_id_target']) &&
+                            ($post["task_type_$i"] == $user_rate_pair['task_type'])
+                        ) {
+                            $found = true;
+                            if ($post["unit_rate_$i"] != $user_rate_pair['unit_rate']) {
+                                $userDao->update_user_rate_pair(
+                                    $user_id,
+                                    $post["task_type_$i"],
+                                    $post["language_id_source_$i"],
+                                    $target[0],
+                                    $target[1],
+                                    $post["unit_rate_$i"]
+                                );
+                            }
+                        }
+                    }
+                    if (!$found) {
+                        $userDao->create_user_rate_pair(
+                            $user_id,
+                            $post["task_type_$i"],
+                            $post["language_id_source_$i"],
+                            $target[0],
+                            $target[1],
+                            $post["unit_rate_$i"]
+                        );
+                    }
+                }
+            }
+            foreach ($user_rate_pairs as $user_rate_pair) {
+                $found = false;
+                for ($i = 0; $i < 121; $i++) {
+                    if (!empty($post["language_id_source_$i"]) && !empty($post["language_country_id_target_$i"]) && !empty($post["task_type_$i"]) && !empty($post["unit_rate_$i"]) && is_numeric($post["unit_rate_$i"])) {
+                        $target = explode('-', $post["language_country_id_target_$i"]);
+                        if (($post["language_id_source_$i"] == $user_rate_pair['language_id_source']) &&
+                            ($target[0] == $user_rate_pair['language_id_target']) &&
+                            ($target[1] == $user_rate_pair['country_id_target']) &&
+                            ($post["task_type_$i"] == $user_rate_pair['task_type'])
+                        ) {
+                            $found = true;
+                        }
+                    }
+                }
+                if (!$found) {
+                     $userDao->remove_user_rate_pair(
+                        $user_id,
+                        $user_rate_pair['task_type'],
+                        $user_rate_pair['language_id_source'],
+                        $user_rate_pair['language_id_target'],
+                        $user_rate_pair['country_id_target']
+                    );
+                }
+            }
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
+        }
+        if (empty($user_rate_pairs)) {
+            $user_rate_pairs = [['task_type' => '', 'language_id_source' => '', 'language_country_id_target' => '', 'unit_rate' => '']];
+        }
+
+        $task_type = '';
+        $source_lang = '';
+        $target_lang = '';
+        foreach (Common\Enums\TaskTypeEnum::$enum_to_UI as $key => $ui) {
+            if ($ui['enabled']) $task_type .= "<option value=$key>{$ui['type_text']}</option>";
+        }
+        foreach ($source_options as $key => $language) {
+            $source_lang .= "<option value=$key>$language</option>";
+        }
+        foreach ($target_options as $key => $language) {
+            $target_lang .= "<option value=$key>$language</option>";
+        }
+
+        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
+        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
+        $extra_scripts .= '<script type="text/javascript">
+        var row_count = 0;
+
+        $(document).ready(function() {
+            $("#tool_type").tooltip();
+            $("#tool_source").tooltip();
+            $("#tool_target").tooltip();
+            $("#tool_rate").tooltip();
+
+            row_count = parseInt(getSetting("user_rate_pairs_count"));
+            for (let row = 0 ; row < row_count; row++) {
+                add_row(row);
+                if (getSetting("user_rate_pair_language_id_source_" + row) != "") {
+                    $("#task_type_"                  + row).select2().val(getSetting("user_rate_pair_task_type_"                  + row)).trigger("change");
+                    $("#language_id_source_"         + row).select2().val(getSetting("user_rate_pair_language_id_source_"         + row)).trigger("change");
+                    $("#language_country_id_target_" + row).select2().val(getSetting("user_rate_pair_language_country_id_target_" + row)).trigger("change");
+                    $("#unit_rate_"                  + row).val(getSetting("user_rate_pair_unit_rate_" + row));
+                }
+            }
+        });
+
+        function add_row(row) {
+            var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + row + "\"/>");
+            var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row + "\" id=\"task_type_"                  + row + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
+            f_task_type.change(function () {
+                var type = $("#task_type_" + row).select2().val();
+                $("#unit_rate_"       + row).val(        $("#default_unit_rate_"     + type).html());
+                $("#unit_count_text_" + row).html("$/" + $("#unit_count_text_short_" + type).html());
+            });
+            var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row + "\" id=\"language_id_source_"         + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
+            var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row + "\" id=\"language_country_id_target_" + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");
+            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row + "\" id=\"unit_rate_"                  + row + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" /><br /><div id=\"unit_count_text_" + row +  "\"></div></div>");
+            fieldWrapper.append(f_task_type);
+            fieldWrapper.append(f_source);
+            fieldWrapper.append(f_target);
+            fieldWrapper.append(f_unit_rate);
+
+            if (row == 0) {
+                var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Add another rate pair.\" /><div>");
+                fieldWrapper.append(addButton);
+            } else {
+                var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\" /><div>");
+                removeButton.click(function() {
+                    row_count--;
+                    $(this).parent().remove();
+                });
+                fieldWrapper.append(removeButton);
+            }
+            $("#buildyourform").append(fieldWrapper);
+            $(".field_select_lang").select2({
+                placeholder: "--Select a language--",
+            });
+            $(".field_select_type").select2({
+                placeholder: "--Select a task type--",
+            });
+        }
+
+        $(document).on("click", "#add", function(e) {
+            e.preventDefault();
+            add_row(row_count++);
+        });
+        </script>';
+
+        $template_data = array_merge($template_data, array(
+            'siteLocation'     => Common\Lib\Settings::get('site.location'),
+            'siteAPI'          => Common\Lib\Settings::get('site.api'),
+            'user'             => $user,
+            'user_id'          => $user_id,
+            'user_rate_pairs'       => $user_rate_pairs,
+            'user_rate_pairs_count' => count($user_rate_pairs),
+            'extra_scripts' => $extra_scripts,
+            'sesskey'       => $sesskey,
+        ));
+
+        return UserRouteHandler::render('user/user_rate_pairs.tpl', $response);
+    }
+
     public function native_languages(Request $request, Response $response, $args)
     {
         $term = $args['term'];
@@ -2396,6 +2583,7 @@ error_log("result: $result");//(**)
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
+            'user_rate_pairs'    => $isSiteAdmin ? $userDao->get_user_rate_pairs($user_id) : 0,
         ));
 
         if ($private_access || $isSiteAdmin) {

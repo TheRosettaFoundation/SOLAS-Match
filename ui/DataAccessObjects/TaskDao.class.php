@@ -597,6 +597,7 @@ error_log("createTaskDirectly: $args");
         $result = LibAPI\PDOWrapper::call('get_user_rate_for_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) return;
         $paid_status = $this->get_paid_status($task_id);
+        if (empty($paid_status)) return;
         $paid_status['unit_rate'] = $result[0]['unit_rate'];
         $this->update_paid_status($paid_status);
         error_log("update_task_rate_from_user($task_id, $user_id): " . $paid_status['unit_rate']);

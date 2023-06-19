@@ -229,6 +229,35 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
                         {/if}
+                        {if !empty($user_rate_pairs) && $isSiteAdmin}
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3>Language Rate Pairs</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {foreach from=$user_rate_pairs item=user_rate_pair}
+                                        <p>
+                                            {$user_rate_pair['selection_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['unit_count_text']})
+                                        </p>
+                                    {/foreach}
+                                </td>
+                            </tr>
+                        {/if}
+                        {if $isSiteAdmin}
+                            <tr>
+                                <td>
+                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
+                                        <i class="icon-list icon-white"></i> Edit Linguist Unit Rate Exceptions
+                                    </a>
+                                </td>
+                            </tr>
+                        {/if}
 
                             <tr>
                                 <td>

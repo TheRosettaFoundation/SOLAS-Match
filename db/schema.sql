@@ -10968,11 +10968,14 @@ CREATE TABLE IF NOT EXISTS `user_rate_pairs` (
   task_type          INT UNSIGNED NOT NULL,
   language_id_source INT UNSIGNED NOT NULL,
   language_id_target INT UNSIGNED NOT NULL,
+  country_id_target  INT UNSIGNED NOT NULL,
   unit_rate          FLOAT NOT NULL,
   KEY FK_user_rate_pairs_user (user_id),
+  KEY user_rate_pairs_target (language_id_target, country_id_target, task_type),
   CONSTRAINT FK_user_rate_pairs_user               FOREIGN KEY (user_id)            REFERENCES Users     (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_user_rate_pairs_language_id_source FOREIGN KEY (language_id_source) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT FK_user_rate_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_rate_pairs_country_id_target  FOREIGN KEY (country_id_target)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -10985,6 +10988,7 @@ BEGIN
     JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN user_rate_pairs   urp ON
         t.`language_id-target`=urp.language_id_target AND
+        t.`country_id-target`=urp.country_id_target AND
         t.`task-type_id`=urp.task_type AND
         (urp.language_id_source=t.`language_id-source` OR ttd.source_and_target=0)
     WHERE
@@ -11003,10 +11007,101 @@ BEGIN
     JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN user_rate_pairs   urp ON
         t.`language_id-target`=urp.language_id_target AND
+        t.`country_id-target`=urp.country_id_target AND
         t.`task-type_id`=urp.task_type AND
         (t.`language_id-source`=urp.language_id_source OR ttd.source_and_target=0)
     WHERE
         t.id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `generate_user_rate_pair_selections`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_user_rate_pair_selections`()
+BEGIN
+    SELECT
+        s.*,
+        l.`en-name` AS selection_source,
+        l.id AS lid,
+        c.id AS cid
+    FROM selections s
+    JOIN Languages  l ON s.language_code=l.code
+    JOIN Countries  c ON s.country_code=c.code
+    WHERE s.enabled=1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_rate_pairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_rate_pairs`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT
+        urp.*,
+        CONCAT(urp.language_id_target, '-', urp.country_id_target) AS language_country_id_target,
+        ttd.unit_count_text,
+        tt.name AS task_type_text,
+        ls.`en-name` AS selection_source,
+        st.selection AS selection_target
+    FROM user_rate_pairs   urp
+    JOIN task_type_details ttd ON urp.task_type=ttd.type_enum
+    JOIN TaskTypes          tt ON urp.task_type=tt.id
+    JOIN Languages          ls ON urp.language_id_source=ls.id
+    JOIN Languages          lt ON urp.language_id_target=lt.id
+    JOIN Countries          ct ON urp.country_id_target=ct.id
+    JOIN selections         st ON lt.code=st.language_code AND ct.code=st.country_code
+    WHERE
+        urp.user_id=uID
+    ORDER BY ls.`en-name`, st.selection, ttd.type_category, urp.task_type;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `create_user_rate_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_user_rate_pair`(IN uID INT UNSIGNED, IN tt INT UNSIGNED, IN lIDs INT UNSIGNED, IN lIDt INT UNSIGNED, IN cIDt INT UNSIGNED, IN rate FLOAT)
+BEGIN
+    INSERT INTO user_rate_pairs (
+        user_id,
+        task_type,
+        language_id_source,
+        language_id_target,
+        country_id_target,
+        unit_rate
+    ) VALUES (
+        uID,
+        tt,
+        lIDs,
+        lIDt,
+        cIDt,
+        rate
+    );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_user_rate_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user_rate_pair`(IN uID INT UNSIGNED, IN tt INT UNSIGNED, IN lIDs INT UNSIGNED, IN lIDt INT UNSIGNED, IN cIDt INT UNSIGNED, IN rate FLOAT)
+BEGIN
+    UPDATE user_rate_pairs SET unit_rate=rate
+    WHERE
+        user_id=uID AND
+        task_type=tt AND
+        language_id_source=lIDs AND
+        language_id_target=lIDt AND
+        country_id_target=cIDt;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_rate_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_rate_pair`(IN uID INT UNSIGNED, IN tt INT UNSIGNED, IN lIDs INT UNSIGNED, IN lIDt INT UNSIGNED, IN cIDt INT UNSIGNED)
+BEGIN
+    DELETE FROM user_rate_pairs
+    WHERE
+        user_id=uID AND
+        task_type=tt AND
+        language_id_source=lIDs AND
+        language_id_target=lIDt AND
+        country_id_target=cIDt;
 END//
 DELIMITER ;
 
