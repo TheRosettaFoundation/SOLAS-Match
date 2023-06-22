@@ -2580,6 +2580,7 @@ error_log("result: $result");//(**)
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
+            'user_rate_pairs'    => $isSiteAdmin ? $userDao->get_user_rate_pairs($user_id) : 0,
         ));
 
         if ($private_access || $isSiteAdmin) {
