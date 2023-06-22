@@ -29,13 +29,13 @@
     <form method="post" id="user_rate_pairs" action="{urlFor name="user_rate_pairs" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <div id="buildyourform">
             <div class="row-fluid" >
-                <div class="span4">
+                <div class="span2">
                     <label class="clear_brand required"><strong>Task Type</strong>       <i class="icon-question-sign" id="tool_type"   data-toggle="tooltip" title="Task Type for which this Rate applies."></i></label>
                 </div>
-                <div class="span5">
+                <div class="span3">
                     <label class="clear_brand required"><strong>Source Language</strong> <i class="icon-question-sign" id="tool_source" data-toggle="tooltip" title="Source Language for which this Rate applies."></i></label>
                 </div>
-                <div class="span5">
+                <div class="span4">
                     <label class="clear_brand required"><strong>Target Language</strong> <i class="icon-question-sign" id="tool_target" data-toggle="tooltip" title="Target Locale for which this Rate applies."></i></label>
                 </div>
                 <div class="span2">
