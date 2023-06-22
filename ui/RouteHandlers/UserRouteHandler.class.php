@@ -1878,7 +1878,7 @@ class UserRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
         }
         if (empty($user_rate_pairs)) {
-            $user_rate_pairs = [['task_type, => '', 'language_id_source' => '', 'language_country_id_target' => '', 'unit_rate' => '']];
+            $user_rate_pairs = [['task_type' => '', 'language_id_source' => '', 'language_country_id_target' => '', 'unit_rate' => '']];
         }
 
         $task_type = '';
