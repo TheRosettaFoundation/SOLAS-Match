@@ -1842,7 +1842,7 @@ class UserRouteHandler
                     if (!$found) {
                         $userDao->create_user_rate_pair(
                             $user_id,
-                            $post["task_type_$i"]
+                            $post["task_type_$i"],
                             $post["language_id_source_$i"],
                             $target[0],
                             $target[1],
