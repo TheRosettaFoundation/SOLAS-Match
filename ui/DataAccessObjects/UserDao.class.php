@@ -2433,4 +2433,60 @@ error_log(print_r($result, true));//(**)
         }
         return $return;
     }
+
+    public function generate_user_rate_pair_selections()
+    {
+        $selections = LibAPI\PDOWrapper::call('generate_user_rate_pair_selections', '');
+        $source_options = [];
+        $target_options = [];
+        foreach ($selections as $selection) {
+            $source_options[$selection['lid']] = $selection['selection_source'];
+            $target_options[$selection['lid'] . '-' . $selection['cid']] = $selection['selection'];
+        }
+        asort($source_options);
+        asort($target_options);
+        return [$source_options, $target_options];
+    }
+
+    public function create_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target, $unit_rate)
+    {
+        LibAPI\PDOWrapper::call('create_user_rate_pair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_type) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($unit_rate));
+            error_log("create_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target, $unit_rate)");
+    }
+
+    public function update_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target, $unit_rate)
+    {
+        LibAPI\PDOWrapper::call('update_user_rate_pair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_type) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($unit_rate));
+            error_log("update_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target, $unit_rate)");
+    }
+
+    public function get_user_rate_pairs($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_rate_pairs', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function remove_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target)
+    {
+        LibAPI\PDOWrapper::call('remove_user_rate_pair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_type) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target));
+            error_log("remove_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target)");
+    }
 }
