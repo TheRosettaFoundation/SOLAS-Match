@@ -1925,7 +1925,7 @@ class UserRouteHandler
             var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row_count + "\" id=\"task_type_"                  + row_count + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
             var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row_count + "\" id=\"language_id_source_"         + row_count + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
             var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row_count + "\" id=\"language_country_id_target_" + row_count + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");
-            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row_count + "\" id=\"unit_rate_"                  + row_count + "\" class=\"field_unit_rate\" type=\"text\" value=\"XXX\" style=\"width: 50%\" />                            </div>");
+            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row_count + "\" id=\"unit_rate_"                  + row_count + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" />                            </div>");
             fieldWrapper.append(f_task_type);
             fieldWrapper.append(f_source);
             fieldWrapper.append(f_target);
