@@ -1915,7 +1915,7 @@ class UserRouteHandler
                     $("#task_type_"                  + row_count).select2().val(getSetting("user_rate_pair_task_type_"                  + row_count)).trigger("change");
                     $("#language_id_source_"         + row_count).select2().val(getSetting("user_rate_pair_language_id_source_"         + row_count)).trigger("change");
                     $("#language_country_id_target_" + row_count).select2().val(getSetting("user_rate_pair_language_country_id_target_" + row_count)).trigger("change");
-alert(getSetting("user_rate_pair_unit_rate_" + row_count));
+alert($("#unit_rate"                   + row_count + ":text").val());
                     $("#unit_rate"                   + row_count + ":text").val(getSetting("user_rate_pair_unit_rate_" + row_count));
                 }
             }
