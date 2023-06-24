@@ -1947,7 +1947,7 @@ class UserRouteHandler
                 placeholder: "--Select a language--",
             });
             $(".field_select_type").select2({
-                placeholder: "--Select a type--",
+                placeholder: "--Select a task type--",
             });
         }
 
