@@ -1900,7 +1900,7 @@ class UserRouteHandler
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
-        var row_count = 0;
+        var row_count = parseInt(getSetting("user_rate_pairs_count"));
 
         $(document).ready(function() {
             $("#tool_type").tooltip();
@@ -1908,30 +1908,29 @@ class UserRouteHandler
             $("#tool_target").tooltip();
             $("#tool_rate").tooltip();
 
-            var user_rate_pairs_count = parseInt(getSetting("user_rate_pairs_count"));
-            for ( ; row_count < user_rate_pairs_count; row_count++) {
-                add_row();
-                if (getSetting("user_rate_pair_language_id_source_" + row_count) != "") {
-                    $("#task_type_"                  + row_count).select2().val(getSetting("user_rate_pair_task_type_"                  + row_count)).trigger("change");
-                    $("#language_id_source_"         + row_count).select2().val(getSetting("user_rate_pair_language_id_source_"         + row_count)).trigger("change");
-                    $("#language_country_id_target_" + row_count).select2().val(getSetting("user_rate_pair_language_country_id_target_" + row_count)).trigger("change");
-                    $("#unit_rate_"                  + row_count).val(getSetting("user_rate_pair_unit_rate_" + row_count));
+            for (let row = 0 ; row < row_count; row++) {
+                add_row(row);
+                if (getSetting("user_rate_pair_language_id_source_" + row) != "") {
+                    $("#task_type_"                  + row).select2().val(getSetting("user_rate_pair_task_type_"                  + row)).trigger("change");
+                    $("#language_id_source_"         + row).select2().val(getSetting("user_rate_pair_language_id_source_"         + row)).trigger("change");
+                    $("#language_country_id_target_" + row).select2().val(getSetting("user_rate_pair_language_country_id_target_" + row)).trigger("change");
+                    $("#unit_rate_"                  + row).val(getSetting("user_rate_pair_unit_rate_" + row));
                 }
             }
         });
 
-        function add_row() {
-            var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + row_count + "\"/>");
-            var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row_count + "\" id=\"task_type_"                  + row_count + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
-            var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row_count + "\" id=\"language_id_source_"         + row_count + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
-            var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row_count + "\" id=\"language_country_id_target_" + row_count + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");
-            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row_count + "\" id=\"unit_rate_"                  + row_count + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" />                            </div>");
+        function add_row(row) {
+            var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + row + "\"/>");
+            var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row + "\" id=\"task_type_"                  + row + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
+            var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row + "\" id=\"language_id_source_"         + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
+            var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row + "\" id=\"language_country_id_target_" + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");
+            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row + "\" id=\"unit_rate_"                  + row + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" />                            </div>");
             fieldWrapper.append(f_task_type);
             fieldWrapper.append(f_source);
             fieldWrapper.append(f_target);
             fieldWrapper.append(f_unit_rate);
 
-            if (row_count == 0) {
+            if (row == 0) {
                 var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Add another rate pair.\" /><div>");
                 fieldWrapper.append(addButton);
             } else {
@@ -1954,7 +1953,7 @@ class UserRouteHandler
         $(document).on("click", "#add", function(e) {
             e.preventDefault();
             row_count++;
-            add_row();
+            add_row(row_count);
         });
         </script>';
 
