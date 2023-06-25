@@ -1900,7 +1900,7 @@ class UserRouteHandler
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
-        var row_count = parseInt(getSetting("user_rate_pairs_count"));
+        var row_count = 0;
 
         $(document).ready(function() {
             $("#tool_type").tooltip();
@@ -1908,6 +1908,7 @@ class UserRouteHandler
             $("#tool_target").tooltip();
             $("#tool_rate").tooltip();
 
+            row_count = parseInt(getSetting("user_rate_pairs_count"));
             for (let row = 0 ; row < row_count; row++) {
                 add_row(row);
                 if (getSetting("user_rate_pair_language_id_source_" + row) != "") {
