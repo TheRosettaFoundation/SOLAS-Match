@@ -1956,8 +1956,7 @@ class UserRouteHandler
 
         $(document).on("click", "#add", function(e) {
             e.preventDefault();
-            row_count++;
-            add_row(row_count);
+            add_row(row_count++);
         });
         </script>';
 
