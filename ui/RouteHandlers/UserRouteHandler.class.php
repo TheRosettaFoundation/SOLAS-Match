@@ -1924,7 +1924,9 @@ class UserRouteHandler
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + row + "\"/>");
             var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row + "\" id=\"task_type_"                  + row + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
             f_task_type.change(function () {
-                alert(row);
+                var type = $("#task_type_" + row).select2().val();
+                $("#unit_rate_"       + row).val(        $("#default_unit_rate_"     + type).html());
+                $("#unit_count_text_" + row).html("$/" + $("#unit_count_text_short_" + type).html());
             });
             var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row + "\" id=\"language_id_source_"         + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
             var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row + "\" id=\"language_country_id_target_" + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");

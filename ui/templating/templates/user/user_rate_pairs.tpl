@@ -15,6 +15,10 @@
         <div id="user_rate_pair_unit_rate_{$i}">{$user_rate_pair['unit_rate']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
+    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+        <div id="default_unit_rate_{$task_type}">{$ui['unit_rate']}</div>
+        <div id="unit_count_text_short_{$task_type}">{$ui['unit_count_text_short']}</div>
+    {/foreach}
 </span>
 
 <div class="well">
