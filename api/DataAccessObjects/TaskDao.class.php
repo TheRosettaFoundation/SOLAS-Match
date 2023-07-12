@@ -566,7 +566,7 @@ class TaskDao
             $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
             $ch = curl_init($url);
             $deadline = $task->getDeadline();
-            $data = ['status' => 'DECLINED', 'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'];
+            $data = ['status' => 'NEW', 'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'];
             $payload = json_encode($data);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
