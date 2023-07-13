@@ -1386,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   unit_count_text                   VARCHAR(50)  NOT NULL, # e.g. "Word Count" [was common_word_count]
   unit_count_text_short             VARCHAR(50)  NOT NULL, # e.g. "words" [was project_profile_display_words]
   pricing_and_recognition_unit_text VARCHAR(50)  NOT NULL,
-  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours
+  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Minutes
   unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
   rate_for_recognition              FLOAT        NOT NULL,
   PRIMARY KEY (type_enum),
