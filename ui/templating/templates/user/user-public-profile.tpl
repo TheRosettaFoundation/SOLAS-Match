@@ -243,7 +243,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
                                             {$user_rate_pair['selection_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
-                                            ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['unit_count_text']})
+                                            ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
                                 </td>

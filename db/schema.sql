@@ -11038,7 +11038,7 @@ BEGIN
     SELECT
         urp.*,
         CONCAT(urp.language_id_target, '-', urp.country_id_target) AS language_country_id_target,
-        ttd.unit_count_text,
+        ttd.pricing_and_recognition_unit_text_hours,
         tt.name AS task_type_text,
         ls.`en-name` AS selection_source,
         st.selection AS selection_target
