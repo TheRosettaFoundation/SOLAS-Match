@@ -1383,6 +1383,7 @@ class TaskRouteHandler
 
         $total_expected_cost = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
+        if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_cost /= 60;
 
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
@@ -1516,6 +1517,7 @@ class TaskRouteHandler
         $paid_status = $taskDao->get_paid_status($task_id);
         $total_expected_cost = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
+        if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_cost /= 60;
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
