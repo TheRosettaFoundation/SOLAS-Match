@@ -1849,11 +1849,12 @@ error_log("claimTask_shell($userId, $taskId)");
             LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
 
-    public function insert_print_request($user_id, $user_word_count, $cert_type, $loggedInUserId, $valid_key)
+    public function insert_print_request($user_id, $user_word_count, $hours_donated_for_cert, $cert_type, $loggedInUserId, $valid_key)
     {
         LibAPI\PDOWrapper::call('insert_print_request',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanse($user_word_count) . ',' .
+            LibAPI\PDOWrapper::cleanse($hours_donated_for_cert) . ',' .
             LibAPI\PDOWrapper::cleanse($cert_type) . ',' .
             LibAPI\PDOWrapper::cleanse($loggedInUserId) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($valid_key));
