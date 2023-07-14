@@ -56,7 +56,6 @@ require_once 'Common/Enums/HttpMethodEnum.class.php';
 require_once 'Common/Enums/NotificationIntervalEnum.class.php';
 require_once 'Common/Enums/TaskStatusEnum.class.php';
 require_once 'Common/Enums/TaskTypeEnum.class.php';
-require_once 'Common/Enums/TaskTypeHourEnum.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
