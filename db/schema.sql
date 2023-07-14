@@ -1494,6 +1494,7 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
   user_id         INT NOT NULL,
   date_of_request DATETIME NOT NULL,
   word_count      INT NOT NULL,
+  hours_donated_for_cert INT NOT NULL DEFAULT 0,
   type_of_request INT NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
   request_by      INT NOT NULL,
   valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -10493,11 +10494,11 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_print_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN hc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
 BEGIN
     INSERT INTO UserRequest
-               (user_id, date_of_request, word_count, type_of_request, request_by, valid_key)
-        VALUES (    uID,           NOW(),         wc,             tor,         rb,        vk);
+               (user_id, date_of_request, word_count, hours_donated_for_cert, type_of_request, request_by, valid_key)
+        VALUES (    uID,           NOW(),         wc,                     hc,             tor,         rb,        vk);
 END//
 DELIMITER ;
 
