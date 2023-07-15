@@ -2412,7 +2412,7 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
-            if (isset($post['PrintRequest']) || isset($post['PrintRequestLetter']) {
+            if (isset($post['PrintRequest']) || isset($post['PrintRequestLetter'])) {
                 $request_type = 0;
                 if (isset($post['PrintRequestLetter'])) $request_type = 1;
                 $userDao->insert_print_request($user_id, $request_type, $loggedInUserId);
