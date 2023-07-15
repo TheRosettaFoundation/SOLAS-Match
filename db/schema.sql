@@ -9765,46 +9765,29 @@ BEGIN
         IFNULL(SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_translated,
         IFNULL(SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_proofread,
         IFNULL(SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_approved,
-        IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`=2 OR t.`task-type_id`=3 OR t.`task-type_id`=6) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+              IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated,
+        ROUND(IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),          0))                                                                                            AS hours_donated,
+        ROUND(IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours_for_cert), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)*0.005) AS hours_donated_for_cert,
+              IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated_for_cert,
         ROUND(
-            IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) +
-            IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.5 +
-            IFNULL(SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.25 +
+            IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.rate_for_recognition), 0) +
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
         ROUND(
             IFNULL(SUM(
                 IF(
-                    t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
                     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
+                    t.`word-count`, 0)*ttd.rate_for_recognition
             ), 0) +
-            IFNULL(SUM(
-                IF(
-                    t.`task-type_id`=3 AND
-                    tp.task_id IS NULL AND
-                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
-                    sco.start IS NOT NULL AND
-                    t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
-            ), 0)*0.5 +
-            IFNULL(SUM(
-                IF(
-                    t.`task-type_id`=6 AND
-                    tp.task_id IS NULL AND
-                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
-                    sco.start IS NOT NULL AND
-                    t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
-            ), 0)*0.25 +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
         ) AS strategic_points,
         0 AS taskscompleted
     FROM Tasks       t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
@@ -9826,6 +9809,9 @@ UNION
         0 AS words_proofread,
         0 AS words_approved,
         (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+        0 AS hours_donated,
+        0 AS hours_donated_for_cert,
+        0 AS words_donated_for_cert,
         ROUND(
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
@@ -9933,6 +9919,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not up to date with get_points_for_badges
 DROP PROCEDURE IF EXISTS `get_points_for_badges_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges_details`(IN uID INT)

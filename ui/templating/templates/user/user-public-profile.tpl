@@ -342,6 +342,24 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                         </td></tr>
                         {/if}
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
+                        </div>
+                        </td></tr>
+
+                        {if $private_access || $isSiteAdmin}
+                        <tr><td>
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                        </td></tr>
+                        <tr><td>
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
+                        </td></tr>
+                        {/if}
 
                         <tr>
                             <td>
@@ -637,60 +655,51 @@ If a language is to be removed from this list, the community will be informed be
 <hr/>
 <div class="page-header">
 {if !empty($valid_key_certificate)}
-{assign var="valid_key" value=$valid_key_certificate[0]}
- <a  href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
-                <i class="icon-print icon-white"></i> Generate Certificate
-            </a>
+    {assign var="valid_key" value=$valid_key_certificate[0]}
+    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+        <i class="icon-print icon-white"></i> Generate Certificate
+    </a>
 {/if}
- <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class=""> 
- <input type="hidden" name="request_type" value="0" />
- <input type="hidden" name="user_id" value="{$this_user->getId()}" />
- <input type="hidden" name="user_word_count" value="{$user_badges['words_donated']}" />    
-                <input type="submit" class="btn btn-primary" name="PrintRequest" 
-                    value="Request Certification of Volunteer Activity" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-            <table id="printrequest" class="display" style="width:100%">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<table id="printrequest" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>Request Date</th>
                 <th>Request Made By</th>
                 <th>No of Words upon Request</th>
+                <th>No of Hours upon Request</th>
                 <th>Validation Key</th>
             </tr>
         </thead>
-       
+
     </table>
-    
 </div>
+
 <div class="page-header">
 {if !empty($valid_key_reference_letter)}
-{assign var="valid_key" value=$valid_key_reference_letter[0]}
- <a  href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
-                <i class="icon-print icon-white"></i> Generate Letter
-            </a>
+    {assign var="valid_key" value=$valid_key_reference_letter[0]}
+    <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+        <i class="icon-print icon-white"></i> Generate Letter
+    </a>
 {/if}
- <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class=""> 
- <input type="hidden" name="request_type" value="1" />
- <input type="hidden" name="user_id" value="{$this_user->getId()}" />
- <input type="hidden" name="user_word_count" value="{$user_badges['words_donated']}" /> 
-               
-                <input type="submit" class="btn btn-primary" name="PrintRequestLetter" 
-                    value="Request Reference Letter" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-            <table id="printrequestletter" class="display" style="width:100%">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="PrintRequestLetter" value="Request Reference Letter" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<table id="printrequestletter" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>Request Date</th>
                 <th>Request Made By</th>
                 <th>No of Words upon Request</th>
+                <th>No of Hours upon Request</th>
                 <th>Validation Key</th>
             </tr>
         </thead>
-       
+
     </table>
     
 </div>
