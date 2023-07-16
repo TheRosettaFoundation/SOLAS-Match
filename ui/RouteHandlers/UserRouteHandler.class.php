@@ -2841,7 +2841,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         foreach ($user_tasks as $item) {
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . '</li>';
             if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
-            else                                                                                $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
+            else                                                                               $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
         }
         asort($languages);
         ksort($word_types);
@@ -2852,16 +2852,13 @@ public static function downloadletter(Request $request, Response $response, $arg
         $hour_words = '';
         if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
 
-        $org_details = [];
-        foreach ($user_tasks as $key => $item) {
-            $org_details[] = $projectDao->get_project_org_name($item['projectId']);
+        $orgs = [];
+        foreach ($user_tasks as $item) {
+            $org_name = $projectDao->get_project_org_name($item['projectId']);
+            $orgs[$org_name] = "<li>$org_name</li>";
         }
-        $unique_orgs = array_unique($org_details, SORT_REGULAR);
-
-        $partners1 = '';       
-        foreach ($unique_orgs as $item) {
-            $partners1 .= "<li>$item</li>";
-        }
+        asort($orgs);
+        $orgs = implode('', $orgs);
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2931,7 +2928,7 @@ div.test {
 <ul>$languages</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
-$partners1
+$orgs
 </ul>
 </div>
 EOF;
