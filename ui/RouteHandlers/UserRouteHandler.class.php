@@ -2716,10 +2716,10 @@ error_log("result: $result");//(**)
 
         $languages = [];
         foreach ($user_tasks as $item) {
-            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ', ';
         }
         asort($languages);
-        $languages = implode(', ', $languages);
+        $languages = $this->join_with_and($languages, ',', ' and');
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2840,15 +2840,15 @@ public static function downloadletter(Request $request, Response $response, $arg
         $hour_types = [];
         foreach ($user_tasks as $item) {
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . '</li>';
-            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
-            else                                                                               $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
+            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
+            else                                                                               $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
         }
         asort($languages);
         ksort($word_types);
         ksort($hour_types);
-        $languages = implode(', ', $languages);
-        $word_types = implode(', ', $word_types);
-        $hour_types = implode(', ', $hour_types);
+        $languages = $this->join_with_and($languages, '</li>', ' and</li>');
+        $word_types = $this->join_with_and($word_types, ',', ' and');
+        $hour_types = $this->join_with_and($hour_types, '</li>', ' and');
         $hour_words = '';
         if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
 
@@ -2858,7 +2858,7 @@ public static function downloadletter(Request $request, Response $response, $arg
             $orgs[$org_name] = "<li>$org_name</li>";
         }
         asort($orgs);
-        $orgs = implode('', $orgs);
+        $orgs = $this->join_with_and($orgs, '</li>', ' and</li>');
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2938,6 +2938,13 @@ EOF;
         $file_name = 'Reference_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
         $pdf->Output($file_name, 'I');
         exit;	
+    }
+
+    public static function join_with_and($array, $sub, $with) {
+        $n = count($array);
+        if ($n > 1) $array[$n - 2] = str_replace($sub, $with, $array[$n - 2]);
+        if ($n)     $array[$n - 1] = str_replace(', ',    '', $array[$n - 1]);
+        return implode($array, '');
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
