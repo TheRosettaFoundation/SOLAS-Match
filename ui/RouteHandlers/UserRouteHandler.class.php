@@ -2933,7 +2933,7 @@ div.test {
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
-<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $word_types tasks.$hour_words$hours_words$firstName has delivered work in the following language combination[s]:
+<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $word_types tasks. $hour_words$hours_words$firstName has delivered work in the following language combination[s]:
 <ul>$language_combinations</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
