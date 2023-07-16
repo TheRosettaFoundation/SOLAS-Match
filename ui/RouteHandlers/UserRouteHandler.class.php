@@ -2944,7 +2944,7 @@ EOF;
         $n = count($array);
         if ($n > 1) $array[$n - 2] = str_replace($sub, $with, $array[$n - 2]);
         if ($n)     $array[$n - 1] = str_replace(', ',    '', $array[$n - 1]);
-        return implode($array, '');
+        return implode('', $array);
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
