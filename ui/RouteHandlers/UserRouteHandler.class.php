@@ -2715,7 +2715,7 @@ error_log("result: $result");//(**)
         $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
 
         $languages = [];
-        foreach ($user_tasks as $value) {
+        foreach ($user_tasks as $item) {
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
         }
         asort($languages);
@@ -2838,10 +2838,10 @@ public static function downloadletter(Request $request, Response $response, $arg
         $languages = [];
         $word_types = [];
         $hour_types = [];
-        foreach ($user_tasks as $value) {
-            $languages[$value['sourceLanguageName'] . ' to ' . $value['targetLanguageName']] = '<li>' . $value['sourceLanguageName'] . ' to ' . $value['targetLanguageName'] . '</li>';
-            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['convert_to_words']) $word_types[$value['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['type_text'];
-            else                                                                                $hour_types[$value['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['type_text'];
+        foreach ($user_tasks as $item) {
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . '</li>';
+            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
+            else                                                                                $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'];
         }
         asort($languages);
         ksort($word_types);
@@ -2853,14 +2853,14 @@ public static function downloadletter(Request $request, Response $response, $arg
         if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
 
         $org_details = [];
-        foreach ($user_tasks as $key => $value) {
-            $org_details[] = $projectDao->get_project_org_name($value['projectId']);
+        foreach ($user_tasks as $key => $item) {
+            $org_details[] = $projectDao->get_project_org_name($item['projectId']);
         }
         $unique_orgs = array_unique($org_details, SORT_REGULAR);
 
         $partners1 = '';       
-        foreach ($unique_orgs as $value) {
-            $partners1 .= "<li>$value</li>";
+        foreach ($unique_orgs as $item) {
+            $partners1 .= "<li>$item</li>";
         }
 
         $createdtime = $user->getCreatedTime();
