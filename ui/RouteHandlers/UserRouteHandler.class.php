@@ -2716,14 +2716,10 @@ error_log("result: $result");//(**)
 
         $languages = [];
         foreach ($user_tasks as $value) {
-            $languages[] = ['sourceLanguageName' => $value['sourceLanguageName'], 'targetLanguageName' => $value['targetLanguageName']];
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
         }
-        $prepend = '';
-        $language_combinations = '';
-        foreach (array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
-            $prepend = ', ';
-        }
+        asort($languages);
+        $languages = implode(', ', $languages);
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2795,7 +2791,7 @@ $html = <<<EOF
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase">$name</span>
         <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since.
-        <br />$firstName has donated $word_count words providing language services in: $language_combinations.
+        <br />$firstName has donated $word_count words providing language services in: $languages.
         <br />$hours_words
         <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
         <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
@@ -2843,12 +2839,14 @@ public static function downloadletter(Request $request, Response $response, $arg
         $word_types = [];
         $hour_types = [];
         foreach ($user_tasks as $value) {
-            $languages[] = ['sourceLanguageName' => $value['sourceLanguageName'], 'targetLanguageName' => $value['targetLanguageName']];
+            $languages[$value['sourceLanguageName'] . ' to ' . $value['targetLanguageName']] = '<li>' . $value['sourceLanguageName'] . ' to ' . $value['targetLanguageName'] . '</li>';
             if (Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['convert_to_words']) $word_types[$value['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['type_text'];
             else                                                                                $hour_types[$value['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$value['taskType']]['type_text'];
         }
+        asort($languages);
         ksort($word_types);
         ksort($hour_types);
+        $languages = implode(', ', $languages);
         $word_types = implode(', ', $word_types);
         $hour_types = implode(', ', $hour_types);
         $hour_words = '';
@@ -2863,10 +2861,6 @@ public static function downloadletter(Request $request, Response $response, $arg
         $partners1 = '';       
         foreach ($unique_orgs as $value) {
             $partners1 .= "<li>$value</li>";
-        }
-        $language_combinations = '';
-        foreach (array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . '</li>';
         }
 
         $createdtime = $user->getCreatedTime();
@@ -2934,7 +2928,7 @@ div.test {
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
 <br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $word_types tasks. $hour_words$hours_words$firstName has delivered work in the following language combination[s]:
-<ul>$language_combinations</ul>
+<ul>$languages</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
 $partners1
