@@ -2719,7 +2719,7 @@ error_log("result: $result");//(**)
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ', ';
         }
         asort($languages);
-        $languages = $this->join_with_and($languages, ',', ' and');
+        $languages = UserRouteHandler::join_with_and($languages, ',', ' and');
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2846,9 +2846,9 @@ public static function downloadletter(Request $request, Response $response, $arg
         asort($languages);
         ksort($word_types);
         ksort($hour_types);
-        $languages = $this->join_with_and($languages, '</li>', ' and</li>');
-        $word_types = $this->join_with_and($word_types, ',', ' and');
-        $hour_types = $this->join_with_and($hour_types, '</li>', ' and');
+        $languages = UserRouteHandler::join_with_and($languages, '</li>', ' and</li>');
+        $word_types = UserRouteHandler::join_with_and($word_types, ',', ' and');
+        $hour_types = UserRouteHandler::join_with_and($hour_types, '</li>', ' and');
         $hour_words = '';
         if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
 
@@ -2858,7 +2858,7 @@ public static function downloadletter(Request $request, Response $response, $arg
             $orgs[$org_name] = "<li>$org_name</li>";
         }
         asort($orgs);
-        $orgs = $this->join_with_and($orgs, '</li>', ' and</li>');
+        $orgs = UserRouteHandler::join_with_and($orgs, '</li>', ' and</li>');
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
