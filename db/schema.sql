@@ -1424,6 +1424,144 @@ INSERT INTO task_type_details VALUES
 (23,6,1,0,1,1,0,1,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0),
 (24,6,1,0,1,1,0,1,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0)
 ;
+/*
+# "Labour Hours" or "Words" etc. for when user enters pricing rates
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=2;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=3;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=4;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=5;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=6;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Terms' WHERE type_enum=7;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=10;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=11;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=21;
+
+# For when pricing rates per hour are used to multiply minutes
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=1;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=2;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=3;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=4;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=5;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=6;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=7;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=8;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=9;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=10;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=11;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=12;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=13;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=14;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=15;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=16;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=17;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=18;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=19;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=20;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=21;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=22;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=23;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=24;
+
+# Convert to Words Donated for Badge
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_words=10 WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=21;
+
+# Convert to Hours Donated for Badge
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=1;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=4;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=5;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=21;
+
+# Unit rate per Word or Hour etc.
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=1;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=2;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=3;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=4;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=5;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=6;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=7;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=8;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=9;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=10;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=11;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=12;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=13;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=14;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=15;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=16;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=17;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=18;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=19;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=20;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=21;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=22;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=23;
+UPDATE task_type_details SET unit_rate=?? WHERE type_enum=24;
+
+# Point rate per Word or Minute etc.
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=1;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=2;
+UPDATE task_type_details SET rate_for_recognition= 0.5     WHERE type_enum=3;
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=4;
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=5;
+UPDATE task_type_details SET rate_for_recognition= 0.25    WHERE type_enum=6;
+UPDATE task_type_details SET rate_for_recognition=10       WHERE type_enum=7;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=8;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=9;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=10;
+UPDATE task_type_details SET rate_for_recognition= 0.5     WHERE type_enum=11;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=12;
+UPDATE task_type_details SET rate_for_recognition= 6.66667 WHERE type_enum=13;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=14;
+UPDATE task_type_details SET rate_for_recognition= 5       WHERE type_enum=15;
+UPDATE task_type_details SET rate_for_recognition= 6.66667 WHERE type_enum=16;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=17;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=18;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=19;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=20;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=21;
+UPDATE task_type_details SET rate_for_recognition= 5       WHERE type_enum=22;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=23;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=24;
+
+# Convert to Hours Donated for Certificate
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=1;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.002     WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=4;
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=5;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.00125   WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.05      WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=8;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=9;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.002     WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=12;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=13;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=14;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=15;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=16;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=17;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=18;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=19;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=20;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=21;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=22;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=23;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=24;
+*/
 
 
 CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
