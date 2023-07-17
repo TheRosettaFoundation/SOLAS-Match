@@ -2946,12 +2946,12 @@ error_log(print_r($array, true));
 error_log("n: $n");
 error_log("array[$n - 3]" . $array[array_keys($array)[$n - 3]]);
 error_log("array[$n - 2]" . $array[array_keys($array)[$n - 2]]);
-error_log("array[$n - 1]" . $array[array_keys($array)[$n - 1]));
+error_log("array[$n - 1]" . $array[array_keys($array)[$n - 1]]);
         if ($n > 1) $array[array_keys($array)[$n - 2]] = str_replace($sub, $with, $array[array_keys($array)[$n - 2]]);
         if ($n)     $array[array_keys($array)[$n - 1]] = str_replace(', ',    '', $array[array_keys($array)[$n - 1]]);
 error_log("array[$n - 3]" . $array[array_keys($array)[$n - 3]]);
 error_log("array[$n - 2]" . $array[array_keys($array)[$n - 2]]);
-error_log("array[$n - 1]" . $array[array_keys($array)[$n - 1]));
+error_log("array[$n - 1]" . $array[array_keys($array)[$n - 1]]);
 error_log("----------------------------");
         return implode('', $array);
     }
