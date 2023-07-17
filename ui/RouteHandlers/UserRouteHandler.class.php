@@ -2942,8 +2942,16 @@ EOF;
 
     public static function join_with_and($array, $sub, $with) {
         $n = count($array);
+error_log("n: $n");
+error_log("array[$n - 3]" . $array[$n - 3]);
+error_log("array[$n - 2]" . $array[$n - 2]);
+error_log("array[$n - 1]" . $array[$n - 1]);
         if ($n > 1) $array[$n - 2] = str_replace($sub, $with, $array[$n - 2]);
         if ($n)     $array[$n - 1] = str_replace(', ',    '', $array[$n - 1]);
+error_log("array[$n - 3]" . $array[$n - 3]);
+error_log("array[$n - 2]" . $array[$n - 2]);
+error_log("array[$n - 1]" . $array[$n - 1]);
+error_log("----------------------------");
         return implode('', $array);
     }
 
