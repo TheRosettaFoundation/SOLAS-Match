@@ -2719,7 +2719,7 @@ error_log("result: $result");//(**)
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ', ';
         }
         asort($languages);
-        $languages = UserRouteHandler::join_with_and($languages, ',', ' and');
+        $languages = UserRouteHandler::join_with_and($languages, ',', ', and');
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
@@ -2839,7 +2839,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $word_types = [];
         $hour_types = [];
         foreach ($user_tasks as $item) {
-            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . '</li>';
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ',</li>';
             if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
             else                                                                               $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
         }
@@ -2847,15 +2847,15 @@ public static function downloadletter(Request $request, Response $response, $arg
         ksort($word_types);
         ksort($hour_types);
         $languages = UserRouteHandler::join_with_and($languages, '</li>', ' and</li>');
-        $word_types = UserRouteHandler::join_with_and($word_types, ',', ' and');
-        $hour_types = UserRouteHandler::join_with_and($hour_types, '</li>', ' and');
+        $word_types = UserRouteHandler::join_with_and($word_types, ',', ', and');
+        $hour_types = UserRouteHandler::join_with_and($hour_types, ',', ', and');
         $hour_words = '';
         if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
 
         $orgs = [];
         foreach ($user_tasks as $item) {
             $org_name = $projectDao->get_project_org_name($item['projectId']);
-            $orgs[$org_name] = "<li>$org_name</li>";
+            $orgs[$org_name] = "<li>$org_name,</li>";
         }
         asort($orgs);
         $orgs = UserRouteHandler::join_with_and($orgs, '</li>', ' and</li>');
@@ -2943,7 +2943,7 @@ EOF;
     public static function join_with_and($array, $sub, $with) {
         $n = count($array);
         if ($n > 1) $array[array_keys($array)[$n - 2]] = str_replace($sub, $with, $array[array_keys($array)[$n - 2]]);
-        if ($n)     $array[array_keys($array)[$n - 1]] = str_replace(', ',    '', $array[array_keys($array)[$n - 1]]);
+        if ($n)     $array[array_keys($array)[$n - 1]] = str_replace(',',     '', $array[array_keys($array)[$n - 1]]);
         return implode('', $array);
     }
 
