@@ -2941,6 +2941,7 @@ EOF;
     }
 
     public static function join_with_and($array, $sub, $with) {
+error_log(print_r($array, true));
         $n = count($array);
 error_log("n: $n");
 error_log("array[$n - 3]" . $array[$n - 3]);
