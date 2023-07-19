@@ -2723,7 +2723,7 @@ error_log("result: $result");//(**)
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
+        $since = $datetime->format('F') . ' ' . $datetime->format('Y');
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
@@ -2856,7 +2856,7 @@ public static function downloadletter(Request $request, Response $response, $arg
 
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
+        $since = $datetime->format('F') . ' ' . $datetime->format('Y');
         $today = date('d F Y');
         $pageDimension = ['500,300'];
 
