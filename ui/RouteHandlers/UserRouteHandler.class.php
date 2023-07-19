@@ -2836,21 +2836,15 @@ public static function downloadletter(Request $request, Response $response, $arg
         $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
 
         $languages = [];
-        $word_types = [];
-        $hour_types = [];
+        $types = [];
         foreach ($user_tasks as $item) {
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ',</li>';
-            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['convert_to_words']) $word_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
-            else                                                                               $hour_types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
+            $types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
         }
         asort($languages);
-        ksort($word_types);
-        ksort($hour_types);
+        ksort($types);
         $languages = UserRouteHandler::join_with_and($languages, '</li>', ' and</li>');
-        $word_types = UserRouteHandler::join_with_and($word_types, ',', ', and');
-        $hour_types = UserRouteHandler::join_with_and($hour_types, ',', ', and');
-        $hour_words = '';
-        if ($hour_types) $hour_words = "$firstName has also completed $hour_types tasks. ";
+        $types = UserRouteHandler::join_with_and($types, ',', ', and');
 
         $orgs = [];
         foreach ($user_tasks as $item) {
@@ -2924,7 +2918,7 @@ div.test {
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
-<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $word_types tasks. $hour_words$hours_words$firstName has delivered work in the following language combination[s]:
+<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $types tasks. $hours_words$firstName has delivered work in the following language combination[s]:
 <ul>$languages</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
