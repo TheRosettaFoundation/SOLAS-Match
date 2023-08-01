@@ -1256,10 +1256,10 @@ class UserRouteHandler
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
-        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>';
+        $extra_scripts .= '<script src="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'ui/js/additional-methods.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
-        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
+        $extra_scripts .= '<link href="'  . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'resources/css/select2.min.css" rel="stylesheet" />';
+        $extra_scripts .= '<script src="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'ui/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
@@ -1896,8 +1896,8 @@ class UserRouteHandler
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
-        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
+        $extra_scripts .= '<link href="'  . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'resources/css/select2.min.css" rel="stylesheet" />';
+        $extra_scripts .= '<script src="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'ui/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
         var row_count = 0;
