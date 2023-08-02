@@ -1545,14 +1545,14 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .
             $args);
         LibAPI\PDOWrapper::call('insert_post_analysis',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .//(**)Manuel needed Phrase one???
             $args);
     }
@@ -1592,7 +1592,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .
             LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .
             $args);
@@ -1600,7 +1600,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .//(**)Manuel needed Phrase one???
             LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .//(**)Manuel needed Phrase one???
             $args);
