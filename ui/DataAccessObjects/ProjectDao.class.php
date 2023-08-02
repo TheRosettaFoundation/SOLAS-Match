@@ -1416,6 +1416,24 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $result[0]['task_id'];
     }
 
+    public function insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level, $type)
+    {
+        $result = LibAPI\PDOWrapper::call('insert_analysis_request', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($source_workflow_level), LibAPI\PDOWrapper::cleanse($compare_workflow_level), LibAPI\PDOWrapper::cleanse($type));
+        return $result[0]['id'];
+    }
+
+    public function update_analysis_request($id, $code)
+    {
+        LibAPI\PDOWrapper::call('update_analysis_request', LibAPI\PDOWrapper::cleanse($id), LibAPI\PDOWrapper::cleanse($code));
+    }
+
+    public function get_analysis_request()
+    {
+        $result = LibAPI\PDOWrapper::call('get_analysis_request', '');
+        if (empty($result)) return 0;
+        return $result[0];
+    }
+
     public function get_analysis_data($data, $data_indexes) {
         $args = [];
         foreach ($data_indexes as $index) {
