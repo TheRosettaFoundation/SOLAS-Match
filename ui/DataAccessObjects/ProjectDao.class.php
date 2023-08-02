@@ -1541,7 +1541,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             ['match0', 'editingTime', 'tm'],
             ['match0', 'editingTime', 'mt'],
             ['match0', 'editingTime', 'nt'],
-        ];
+        ]);
         error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
@@ -1587,7 +1587,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             ['transMemoryMatches', 'match0', 'segments'],
             ['transMemoryMatches', 'match0', 'words'],
             ['transMemoryMatches', 'match0', 'percent'],
-        ];
+        ]);
 
         error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
