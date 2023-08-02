@@ -808,7 +808,7 @@ class UserDao
         if (!empty($response_data) && !empty($response_data[0]['id']) && count($response_data) == 1) {
             $id = $response_data[0]['id'];
             $ch = curl_init(Common\Lib\Settings::get('discourse.url') . "/admin/users/$id.json");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['delete_posts' => false, 'block_email' => false, 'block_urls' => false, 'block_ip' => false]));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['delete_posts' => true, 'block_email' => false, 'block_urls' => false, 'block_ip' => false]));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
