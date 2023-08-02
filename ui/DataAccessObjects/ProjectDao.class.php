@@ -1410,6 +1410,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $result[0]['name'];
     }
 
+    public function get_task_analysis_trigger()
+    {
+        $result = LibAPI\PDOWrapper::call('get_task_analysis_trigger', '');
+        return $result[0]['task_id'];
+    }
+
     public function get_analysis_data($data, $data_indexes) {
         $args = [];
         foreach ($data_indexes as $index) {
