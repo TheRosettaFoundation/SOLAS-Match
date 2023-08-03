@@ -2372,11 +2372,11 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $translation_level = 0;
                 foreach ($workflow_levels as $level => $name) if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
 
-                $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => ['uid' => $memsource_task_uid], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true]);
+                $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true]);
 
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                     if ($translation_level) {
-                        $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => ['uid' => $memsource_task_uid], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level]);
+                        $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level]);
 
                         // Find all Translation(s) which overlap with this Revision
                         $top_level = $this->get_top_level($memsource_task['internalId']);
@@ -2386,7 +2386,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                 if ($project_task['workflowLevel'] == $translation_level) {
                                     if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                         if (($memsource_task['beginIndex'] != $project_task['beginIndex']) || ($memsource_task['endIndex'] != $project_task['endIndex'])) // Not identical
-                                            $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => ['uid' => $project_task['memsource_task_uid']], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel']]);
+                                            $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel']]);
                                     }
                                 }
                             }
