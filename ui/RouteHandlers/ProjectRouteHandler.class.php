@@ -2364,7 +2364,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
             }
 
-            if (($task_id = $projectDao->get_task_analysis_trigger()) && $memsource_task = $projectDao->get_memsource_task($task_id) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
+            if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
                 $task = $taskDao->getTask($task_id);
                 $this_level = $memsource_task['workflowLevel'];
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
