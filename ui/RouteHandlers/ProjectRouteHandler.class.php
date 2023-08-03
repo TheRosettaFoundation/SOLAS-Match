@@ -2364,7 +2364,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
             }
 
-            if ($task_id = $projectDao->get_task_analysis_trigger() && $memsource_task = $projectDao->get_memsource_task($task_id) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
+            if (($task_id = $projectDao->get_task_analysis_trigger()) && $memsource_task = $projectDao->get_memsource_task($task_id) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
                 $task = $taskDao->getTask($task_id);
                 $this_level = $memsource_task['workflowLevel'];
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
@@ -2373,7 +2373,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 foreach ($workflow_levels as $level => $name) if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
 
                 $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => ['uid' => $memsource_task_uid], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true]);
-//(**)need to pass levels???
 
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                     if ($translation_level) {
