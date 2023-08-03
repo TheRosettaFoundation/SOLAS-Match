@@ -2408,7 +2408,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $ch = curl_init("https://cloud.memsource.com/web/api2/v3/projects/$memsource_project_uid/analyses?name=$id");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($re, CURLOPT_TIMEOUT, 300);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
                 if ($error_number = curl_errno($ch)) {
                     $responseCode = -2;
@@ -2439,7 +2439,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                     $ch = curl_init("https://cloud.memsource.com/web/api2/v1/analyses/$analyse_uid/download?format=JSON");
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                    curl_setopt($re, CURLOPT_TIMEOUT, 300);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                                     $result = curl_exec($ch);
                                     if ($error_number = curl_errno($ch)) {
                                         $responseCode = -5;
@@ -2664,7 +2664,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($re, CURLOPT_TIMEOUT, 300);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
         if ($error_number = curl_errno($ch)) {
             error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) Curl error ($error_number): " . curl_error($ch));
