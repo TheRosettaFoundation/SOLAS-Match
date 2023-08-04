@@ -129,6 +129,9 @@ class ProjectRouteHandler
             case 'JOB_DUE_DATE_CHANGED':
                 $this->update_task_due_date($hook);
                 break;
+            case 'ANALYSIS_CREATED':
+file_put_contents('hook', print_r(json_decode($body, true), true));
+                break;
         }
         die;
     }
