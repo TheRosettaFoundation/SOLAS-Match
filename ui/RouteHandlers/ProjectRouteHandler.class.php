@@ -2460,9 +2460,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                             if ($success && !empty($resultset['analyseLanguageParts'][0]['data']['repetitions'])) {
                                 $projectDao->update_analysis_request($id, 1);
 
-                                $user = $taskDao->getUserClaimedTask($task_id);
-                                $claimant_id = 0;
-                                if ($user) $claimant_id = $details_claimant->getId();
+                                $claimant_id = $projectDao->getUserClaimedTask($task_id);
                                 if ($analysis['type']) {
                                     $projectDao->insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $resultset['analyseLanguageParts'][0]['data']);
                                 } else {
