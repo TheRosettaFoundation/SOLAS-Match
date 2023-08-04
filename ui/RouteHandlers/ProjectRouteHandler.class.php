@@ -130,7 +130,7 @@ class ProjectRouteHandler
                 $this->update_task_due_date($hook);
                 break;
             case 'ANALYSIS_CREATED':
-file_put_contents('hook', print_r(json_decode($body, true), true));
+file_put_contents('/repo/SOLAS-Match/backup/uploads/hook', print_r(json_decode($body, true), true));
                 break;
         }
         die;
