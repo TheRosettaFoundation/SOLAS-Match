@@ -2398,87 +2398,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 }
             }
 
-            if ($analysis = $projectDao->get_analysis_request()) {
-                $id = $analysis['id'];
-                $task_id = $analysis['task_id'];
-                $task = $taskDao->getTask($task_id);
-
-                $source_workflow_level = $analysis['source_workflow_level'];
-                $compare_workflow_level =  $analysis['compare_workflow_level'];
-                $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
-                $memsource_project_uid = $memsource_project['memsource_project_uid'];
-
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v3/projects/$memsource_project_uid/analyses?name=$id");
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-                $result = curl_exec($ch);
-                if ($error_number = curl_errno($ch)) {
-                    $responseCode = -2;
-                    error_log("projects/$memsource_project_uid/analyses ($task_id, $id) Curl error ($error_number): " . curl_error($ch));
-                } else {
-                    $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE) + 1000;
-                    error_log("projects/$memsource_project_uid/analyses ($task_id, $id) responseCode: $responseCode");
-                    $resultset = json_decode($result, true);
-                    error_log(print_r($resultset, true));
-                }
-                curl_close($ch);
-
-                if ($responseCode != 1200) $projectDao->update_analysis_request($id, $responseCode);
-                else {
-                    if (!$resultset) {
-                        error_log("projects/$memsource_project_uid/analyses ($task_id, $id) Bad JSON");
-                        $projectDao->update_analysis_request($id, -3);
-                    } else {
-                        if (empty($resultset['content'])) {
-                            error_log("projects/$memsource_project_uid/analyses ($task_id, $id) No 'content'");
-                            $projectDao->update_analysis_request($id, -4);
-                        } else {
-                            $success = 0;
-                            foreach ($resultset['content'] as $content) {
-                                if ($content['name'] == $id) {
-                                    $analyse_uid = $content['uid'];
-
-                                    $ch = curl_init("https://cloud.memsource.com/web/api2/v1/analyses/$analyse_uid/download?format=JSON");
-                                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
-                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                    curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-                                    $result = curl_exec($ch);
-                                    if ($error_number = curl_errno($ch)) {
-                                        $responseCode = -5;
-                                        error_log("analyses/$analyse_uid/download ($task_id, $id) Curl error ($error_number): " . curl_error($ch));
-                                    } else {
-                                        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE) + 2000;
-                                        error_log("analyses/$analyse_uid/download ($task_id, $id) responseCode: $responseCode");
-                                        $resultset = json_decode($result, true);
-                                        error_log(print_r($resultset, true));
-                                    }
-                                    curl_close($ch);
-
-                                    if ($responseCode != 2200) $projectDao->update_analysis_request($id, $responseCode);
-                                    else $success = 1;
-                                    break;
-                                }
-                            }
-                            if ($success && !empty($resultset['analyseLanguageParts'][0]['data']['repetitions'])) {
-                                $projectDao->update_analysis_request($id, 1);
-
-                                $claimant_id = $projectDao->getUserClaimedTask($task_id);
-                                if ($analysis['type']) {
-                                    $projectDao->insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $resultset['analyseLanguageParts'][0]['data']);
-                                } else {
-                                    $projectDao->insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $resultset['analyseLanguageParts'][0]['data']);
-                                }
-                            }
-                            else  {
-                                error_log("projects/$memsource_project_uid/analyses ($task_id, $id) No matching: content['name'] == $id");
-                                $projectDao->update_analysis_request($id, -6);
-                            }
-                        }
-                    }
-                }
-            }
-
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
@@ -2656,7 +2575,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
     {
         $projectDao = new DAO\ProjectDao();
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
-        $id = $projectDao->insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level, $data['type'] == 'PostAnalyse' ? 1 : 0);
+        $id = $projectDao->insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level);
         $data['name'] = "$id";
 
         $ch = curl_init('https://cloud.memsource.com/web/api2/v1/analyses/byProviders');
@@ -2677,7 +2596,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             error_log(print_r($resultset, true));
         }
         curl_close($ch);
-        if ($responseCode != 200) $projectDao->update_analysis_request($id, $responseCode);
+        if ($responseCode != 200 || empty($resultset['analyses'][0]['analyse']['id'])) $projectDao->update_analysis_request($id, 0, $responseCode);
+        else                                                                           $projectDao->update_analysis_request($id, $resultset['analyses'][0]['analyse']['id'], $responseCode);
     }
 
     public function project_get_wordcount(Request $request, Response $response, $args)
