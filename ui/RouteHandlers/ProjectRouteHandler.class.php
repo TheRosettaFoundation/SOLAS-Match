@@ -642,6 +642,33 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
+    private function save_analysis($hook)
+    {
+        $hook = $hook['analyse'];
+        $projectDao = new DAO\ProjectDao();
+        if (!empty($hook['analyseLanguageParts'][0]['data']['repetitions']) && !empty($hook['analyseLanguageParts'][0]['jobs'][0]['uid'])) {
+            //$hook['id']
+            //if ($analysis = $projectDao->get_analysis_request($analyse_id)) {}
+            //    $id = $analysis['id'];
+            //    $task_id = $analysis['task_id'];
+            //    $source_workflow_level = $analysis['source_workflow_level'];
+            //    $compare_workflow_level =  $analysis['compare_workflow_level'];
+            //    $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+            //    $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($hook['analyseLanguageParts'][0]['jobs'][0]['uid']);
+            if ($memsource_task) {
+                $task_id = $memsource_task['task_id'];
+                $claimant_id = $projectDao->getUserClaimedTask($task_id);
+                $analyse_uid = $hook['uid'];
+                $memsource_project_uid = $hook['project']['uid'];
+$source_workflow_level = 0; $compare_workflow_level = 0;
+//$task = $taskDao->getTask($task_id);
+                if ($hook['type'] == 'PostAnalyse') $projectDao->insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $hook['analyseLanguageParts'][0]['data']);
+                if ($hook['type'] == 'Compare')  $projectDao->insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $hook['analyseLanguageParts'][0]['data']);
+            } else error_log('ANALYSIS_CREATED Bad job uid');
+        } else error_log('ANALYSIS_CREATED Bad hook');
+    }
+
     public function projectView(Request $request, Response $response, $args)
     {
         global $app, $template_data;
