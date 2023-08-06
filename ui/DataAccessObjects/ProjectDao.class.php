@@ -1416,7 +1416,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         return $result[0]['task_id'];
     }
 
-    public function insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level, $type)
+    public function insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level)
     {
         $result = LibAPI\PDOWrapper::call('insert_analysis_request', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' . LibAPI\PDOWrapper::cleanse($compare_workflow_level));
         return $result[0]['id'];
