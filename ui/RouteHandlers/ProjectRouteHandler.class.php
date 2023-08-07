@@ -2407,7 +2407,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
                     if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                         if ($translation_level) {
-                            $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level, 'name' => $task->getTitle()]);
+                            $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level, 'name' => "Compare R{$memsource_task['internalId']} to T"]);
 
                             // Find all Translation(s) which overlap with this Revision
                             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
@@ -2417,7 +2417,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                     if ($project_task['workflowLevel'] == $translation_level) {
                                         if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                             if (($memsource_task['beginIndex'] != $project_task['beginIndex']) || ($memsource_task['endIndex'] != $project_task['endIndex'])) // Not identical
-                                                $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel'], 'name' => $task->getTitle()]);
+                                                $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel'], 'name' => "Compare T{$project_task['internalId']} to R"]);
                                         }
                                     }
                                 }
