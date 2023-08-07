@@ -130,7 +130,6 @@ class ProjectRouteHandler
                 $this->update_task_due_date($hook);
                 break;
             case 'ANALYSIS_CREATED':
-file_put_contents('/repo/SOLAS-Match/backup/uploads/hook', print_r(json_decode($body, true), true), FILE_APPEND);
                 $this->save_analysis($hook);
                 break;
         }
@@ -2410,7 +2409,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                         $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level]);
 
                         // Find all Translation(s) which overlap with this Revision
-                        $top_level = $this->get_top_level($memsource_task['internalId']);
+                        $top_level = $projectDao->get_top_level($memsource_task['internalId']);
                         $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
                         foreach ($project_tasks as $project_task) {
                             if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
