@@ -2396,27 +2396,29 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
                 $task = $taskDao->getTask($task_id);
-                $this_level = $memsource_task['workflowLevel'];
-                $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
-                $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
-                $translation_level = 0;
-                foreach ($workflow_levels as $level => $name) if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
+                if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
+                    $this_level = $memsource_task['workflowLevel'];
+                    $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+                    $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
+                    $translation_level = 0;
+                    foreach ($workflow_levels as $level => $name) if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
 
-                $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true]);
+                    $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true]);
 
-                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                    if ($translation_level) {
-                        $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level]);
+                    if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                        if ($translation_level) {
+                            $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level]);
 
-                        // Find all Translation(s) which overlap with this Revision
-                        $top_level = $projectDao->get_top_level($memsource_task['internalId']);
-                        $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
-                        foreach ($project_tasks as $project_task) {
-                            if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                                if ($project_task['workflowLevel'] == $translation_level) {
-                                    if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
-                                        if (($memsource_task['beginIndex'] != $project_task['beginIndex']) || ($memsource_task['endIndex'] != $project_task['endIndex'])) // Not identical
-                                            $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel']]);
+                            // Find all Translation(s) which overlap with this Revision
+                            $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+                            $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
+                            foreach ($project_tasks as $project_task) {
+                                if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                                    if ($project_task['workflowLevel'] == $translation_level) {
+                                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                            if (($memsource_task['beginIndex'] != $project_task['beginIndex']) || ($memsource_task['endIndex'] != $project_task['endIndex'])) // Not identical
+                                                $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel']]);
+                                        }
                                     }
                                 }
                             }
