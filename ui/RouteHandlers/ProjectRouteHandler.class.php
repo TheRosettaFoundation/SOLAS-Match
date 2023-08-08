@@ -664,7 +664,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         } else error_log('ANALYSIS_CREATED Bad hook');
     }
 
-    public function get_workflow_levels($project_id);
+    public function get_workflow_levels($project_id) {
         $projectDao = new DAO\ProjectDao();
         $memsource_project = $projectDao->get_memsource_project($project_id);
         $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
