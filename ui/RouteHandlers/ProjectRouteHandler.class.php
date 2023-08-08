@@ -645,27 +645,36 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     {
         $hook = $hook['analyse'];
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
         if (!empty($hook['analyseLanguageParts'][0]['data']['repetitions']) && !empty($hook['analyseLanguageParts'][0]['jobs'][0]['uid'])) {
-            //$hook['id']
-            //if ($analysis = $projectDao->get_analysis_request($analyse_id)) {}
-            //    $id = $analysis['id'];
-            //    $task_id = $analysis['task_id'];
-            //    $source_workflow_level = $analysis['source_workflow_level'];
-            //    $compare_workflow_level =  $analysis['compare_workflow_level'];
-            //    $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
-            //    $memsource_project_uid = $memsource_project['memsource_project_uid'];
             $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($hook['analyseLanguageParts'][0]['jobs'][0]['uid']);
             if ($memsource_task) {
                 $task_id = $memsource_task['task_id'];
                 $claimant_id = $projectDao->getUserClaimedTask($task_id);
                 $analyse_uid = $hook['uid'];
                 $memsource_project_uid = $hook['project']['uid'];
-$source_workflow_level = 0; $compare_workflow_level = 0;
-//$task = $taskDao->getTask($task_id);
-                if ($hook['type'] == 'PostAnalyse') $projectDao->insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $hook['analyseLanguageParts'][0]['data']);
-                if ($hook['type'] == 'Compare')  $projectDao->insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $hook['analyseLanguageParts'][0]['data']);
+                $task = $taskDao->getTask($task_id);
+                list($translation_level, $revision_level) = $this->get_workflow_levels($task->getProjectId());
+                $this_level = $memsource_task['workflowLevel'];
+                $compare_workflow_level = $translation_level;
+                if ($translation_level == $this_level) $compare_workflow_level = $revision_level;
+                if ($hook['type'] == 'PostAnalyse') $projectDao->insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $this_level, $hook['analyseLanguageParts'][0]['data']);
+                if ($hook['type'] == 'Compare')  $projectDao->insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $this_level, $compare_workflow_level, $hook['analyseLanguageParts'][0]['data']);
             } else error_log('ANALYSIS_CREATED Bad job uid');
         } else error_log('ANALYSIS_CREATED Bad hook');
+    }
+
+    public function get_workflow_levels($project_id);
+        $projectDao = new DAO\ProjectDao();
+        $memsource_project = $projectDao->get_memsource_project($project_id);
+        $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
+        $translation_level = 0;
+        $revision_level = 0;
+        foreach ($workflow_levels as $level => $name) {
+            if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
+            if (!$revision_level    && $name == 'Translation') $revision_level    = $level + 1;
+        }
+        return [$translation_level, $revision_level];
     }
 
     public function projectView(Request $request, Response $response, $args)
@@ -2397,17 +2406,13 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
                 $task = $taskDao->getTask($task_id);
                 if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
+                    list($translation_level, $revision_level) = $this->get_workflow_levels($task->getProjectId());
                     $this_level = $memsource_task['workflowLevel'];
-                    $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
-                    $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
-                    $translation_level = 0;
-                    foreach ($workflow_levels as $level => $name) if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
-
-                    $this->insert_analysis_request($task_id, $this_level, 0, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true, 'name' => $task->getTitle()]);
+                    $this->insert_analysis_request($task_id, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'PostAnalyse', 'transMemoryPostEditing' => true, 'nonTranslatablePostEditing' => true, 'machineTranslatePostEditing' => true, 'name' => $task->getTitle()]);
 
                     if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                         if ($translation_level) {
-                            $this->insert_analysis_request($task_id, $this_level, $translation_level, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level, 'name' => "Compare R{$memsource_task['internalId']} to T"]);
+                            $this->insert_analysis_request($task_id, ['jobs' => [['uid' => $memsource_task_uid]], 'type' => 'Compare', 'compareWorkflowLevel' => $translation_level, 'name' => "Compare R{$memsource_task['internalId']} to T"]);
 
                             // Find all Translation(s) which overlap with this Revision
                             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
@@ -2417,7 +2422,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                     if ($project_task['workflowLevel'] == $translation_level) {
                                         if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                             if (($memsource_task['beginIndex'] != $project_task['beginIndex']) || ($memsource_task['endIndex'] != $project_task['endIndex'])) // Not identical
-                                                $this->insert_analysis_request($project_task['task_id'], $translation_level, $this_level, ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel'], 'name' => "Compare T{$project_task['internalId']} to R"]);
+                                                $this->insert_analysis_request($project_task['task_id'], ['jobs' => [['uid' => $project_task['memsource_task_uid']]], 'type' => 'Compare', 'compareWorkflowLevel' => $memsource_task['workflowLevel'], 'name' => "Compare T{$project_task['internalId']} to R"]);
                                         }
                                     }
                                 }
@@ -2600,12 +2605,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         die;
     }
 
-    public function insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level, $data)
+    public function insert_analysis_request($task_id, $data)
     {
         $projectDao = new DAO\ProjectDao();
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
-        $id = $projectDao->insert_analysis_request($task_id, $source_workflow_level, $compare_workflow_level);
-
         $ch = curl_init('https://cloud.memsource.com/web/api2/v1/analyses/byProviders');
         $payload = json_encode($data);
         error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level, $id) payload: $payload");
@@ -2614,18 +2617,14 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
-        if ($error_number = curl_errno($ch)) {
-            error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) Curl error ($error_number): " . curl_error($ch));
-            $responseCode = -1;
-        } else {
+        if ($error_number = curl_errno($ch)) error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) Curl error ($error_number): " . curl_error($ch));
+        else {
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) responseCode: $responseCode");
             $resultset = json_decode($result, true);
             error_log(print_r($resultset, true));
         }
         curl_close($ch);
-        if ($responseCode != 200 || empty($resultset['analyses'][0]['analyse']['id'])) $projectDao->update_analysis_request($id, 0, $responseCode);
-        else                                                                           $projectDao->update_analysis_request($id, $resultset['analyses'][0]['analyse']['id'], $responseCode);
     }
 
     public function project_get_wordcount(Request $request, Response $response, $args)
