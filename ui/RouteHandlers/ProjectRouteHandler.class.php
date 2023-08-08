@@ -672,7 +672,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $revision_level = 0;
         foreach ($workflow_levels as $level => $name) {
             if (!$translation_level && $name == 'Translation') $translation_level = $level + 1;
-            if (!$revision_level    && $name == 'Translation') $revision_level    = $level + 1;
+            if (!$revision_level    && $name == 'Revision'   ) $revision_level    = $level + 1;
         }
         return [$translation_level, $revision_level];
     }
