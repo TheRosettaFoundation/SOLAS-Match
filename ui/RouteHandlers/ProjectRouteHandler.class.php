@@ -2611,7 +2611,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
         $ch = curl_init('https://cloud.memsource.com/web/api2/v1/analyses/byProviders');
         $payload = json_encode($data);
-        error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level, $id) payload: $payload");
+        error_log("analyses/byProviders ($task_id) payload: $payload");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -2620,7 +2620,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         if ($error_number = curl_errno($ch)) error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) Curl error ($error_number): " . curl_error($ch));
         else {
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) responseCode: $responseCode");
+            error_log("analyses/byProviders ($task_id) responseCode: $responseCode");
             $resultset = json_decode($result, true);
             error_log(print_r($resultset, true));
         }
