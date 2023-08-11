@@ -1377,6 +1377,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   shell_task                        INT UNSIGNED NOT NULL, # 1 => Shell Task
   source_and_target                 INT UNSIGNED NOT NULL, # 1 => Has both Source and Target
   sourcing                          INT UNSIGNED NOT NULL, # 0 => Pair (strict & loose), 1 => Target only (strict & loose), 2 => Pair and Target only (strict & loose)
+  divide_rate_by_60                 INT UNSIGNED NOT NULL,
   type_text                         VARCHAR(50)  NOT NULL,
   type_text_short                   VARCHAR(50)  NOT NULL,
   colour                            VARCHAR(50)  NOT NULL,
@@ -1386,39 +1387,181 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   unit_count_text                   VARCHAR(50)  NOT NULL, # e.g. "Word Count" [was common_word_count]
   unit_count_text_short             VARCHAR(50)  NOT NULL, # e.g. "words" [was project_profile_display_words]
   pricing_and_recognition_unit_text VARCHAR(50)  NOT NULL,
-  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Hours
+  pricing_and_recognition_unit_text_hours VARCHAR(50) NOT NULL, # e.g. "Words", "Labor hours",
+  source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Minutes
   unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
   rate_for_recognition              FLOAT        NOT NULL,
+  convert_to_words                  FLOAT        NOT NULL DEFAULT 0,
+  convert_to_hours                  FLOAT        NOT NULL DEFAULT 0.0166667,
+  convert_to_hours_for_cert         FLOAT        NOT NULL DEFAULT 0,
   PRIMARY KEY (type_enum),
           KEY FK_type_category (type_category),
   CONSTRAINT FK_type_category FOREIGN KEY (type_category) REFERENCES task_type_categorys (type_category) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO task_type_details VALUES
-( 1,1,0,0,1,0,1,0,'Segmentation',               'Segmentation',               '#B02323','task/task.claimed-segmentation.tpl',  'SEGMENTATION', 'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-( 2,1,1,1,1,0,1,0,'Translation',                'Translation',                '#1D8A11','task/task.claimed-translation.tpl',   'TRANSLATION',  'Translation',              'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-( 3,1,1,1,1,0,1,0,'Revising',                   'Revising',                   '#1064C4','task/task.claimed-proofreading.tpl',  'REVISING',     'Revision',                 'Word Count',   'words',  'Words',        'Words',  0.025, 0.50),
-( 4,1,0,0,1,0,1,0,'Desegmentation',             'Desegmentation',             '#B02060','task/task.claimed-desegmentation.tpl','SEGMENTATION', 'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-( 5,1,0,0,1,0,1,0,'QA??',                       'QA??',                       '#B02323','',                                    'QUALITY',      'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-( 6,1,1,0,1,0,1,0,'Proofreading and Approval',  'Proofreading',               '#B02060','task/task.claimed-approval.tpl',      'APPROVAL',     'Proofreading and Approval','Word Count',   'words',  'Words',        'Words',  0.025, 0.25),
-( 7,2,1,0,1,1,1,0,'Terminology translation',    'Terminology translation',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',  0.050,10.00),
-( 8,3,1,0,1,1,1,2,'DTP signoff',                'DTP signoff',                '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Pages',  1.667, 4.17),
-( 9,4,1,0,1,1,0,1,'Voice recording',            'Voice recording',            '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667,13.33),
-(10,4,1,0,1,1,1,0,'Subtitle Translation',       'Subtitle Translation',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-(11,4,1,0,1,1,1,0,'Subtitle Revision',          'Subtitle Revision',          '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.065, 1.00),
-(12,4,1,0,1,1,0,1,'Captioning',                 'Captioning',                 '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Words',  1.667, 5.83),
-(13,4,1,0,1,1,0,1,'Transcription',              'Transcription',              '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
-(14,4,1,0,1,1,0,1,'Voiceover',                  'Voiceover',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
-(15,5,1,0,1,1,1,0,'lexiQA quality assurance',   'lexiQA quality assurance',   '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
-(16,5,1,0,1,1,1,0,'Alignment',                  'Alignment',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
-(17,5,1,0,1,1,1,0,'SME review',                 'SME review',                 '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 4.17),
-(18,5,1,0,1,1,1,0,'QA on Phrase',               'QA on Phrase',               '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',1.667, 5.83),
-(19,5,1,0,1,1,1,0,'Language Quality Assessment','Language Quality Assessment','#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',0.333, 5.83),
-(20,5,1,0,1,1,0,1,'Monolingual proofreading',   'Monolingual proofreading',   '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Minutes',0.500,16.67),
-(21,5,1,0,1,1,1,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',  0.000, 0.00),
-(22,6,1,0,1,1,0,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Words',  0.333, 4.17),
-(23,6,1,0,1,1,0,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17),
-(24,6,1,0,1,1,0,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Words',  0.667, 4.17)
+( 1,1,0,0,1,0,1,0,0,'Segmentation',               'Segmentation',               '#B02323','task/task.claimed-segmentation.tpl',  'SEGMENTATION', 'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+( 2,1,1,1,1,0,1,0,0,'Translation',                'Translation',                '#1D8A11','task/task.claimed-translation.tpl',   'TRANSLATION',  'Translation',              'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+( 3,1,1,1,1,0,1,0,0,'Revising',                   'Revising',                   '#1064C4','task/task.claimed-proofreading.tpl',  'REVISING',     'Revision',                 'Word Count',   'words',  'Words',        'Labor hours','Words',  0.025, 0.50,0,0.0166667,0),
+( 4,1,0,0,1,0,1,0,0,'Desegmentation',             'Desegmentation',             '#B02060','task/task.claimed-desegmentation.tpl','SEGMENTATION', 'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+( 5,1,0,0,1,0,1,0,0,'QA??',                       'QA??',                       '#B02323','',                                    'QUALITY',      'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+( 6,1,1,0,1,0,1,0,0,'Proofreading and Approval',  'Proofreading',               '#B02060','task/task.claimed-approval.tpl',      'APPROVAL',     'Proofreading and Approval','Word Count',   'words',  'Words',        'Labor hours','Words',  0.025, 0.25,0,0.0166667,0),
+( 7,2,1,0,1,1,1,0,0,'Terminology translation',    'Terminology translation',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Labor hours','Terms',  0.050,10.00,0,0.0166667,0),
+( 8,3,1,0,1,1,1,2,1,'DTP signoff',                'DTP signoff',                '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',  1.667, 4.17,0,0.0166667,0),
+( 9,4,1,0,1,1,0,1,1,'Voice recording',            'Voice recording',            '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667,13.33,0,0.0166667,0),
+(10,4,1,0,1,1,1,0,0,'Subtitle Translation',       'Subtitle Translation',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+(11,4,1,0,1,1,1,0,0,'Subtitle Revision',          'Subtitle Revision',          '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
+(12,4,1,0,1,1,0,1,1,'Captioning',                 'Captioning',                 '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  1.667, 5.83,0,0.0166667,0),
+(13,4,1,0,1,1,0,1,1,'Transcription',              'Transcription',              '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
+(14,4,1,0,1,1,0,1,1,'Voiceover',                  'Voiceover',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
+(15,5,1,0,1,1,1,0,1,'lexiQA quality assurance',   'lexiQA quality assurance',   '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
+(16,5,1,0,1,1,1,0,1,'Alignment',                  'Alignment',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
+(17,5,1,0,1,1,1,0,1,'SME review',                 'SME review',                 '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
+(18,5,1,0,1,1,1,0,1,'QA on Phrase',               'QA on Phrase',               '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
+(19,5,1,0,1,1,1,0,1,'Language Quality Assessment','Language Quality Assessment','#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',0.333, 5.83,0,0.0166667,0),
+(20,5,1,0,1,1,0,1,1,'Monolingual proofreading',   'Monolingual proofreading',   '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',0.500,16.67,0,0.0166667,0),
+(21,5,1,0,1,1,1,0,0,'MTPE',                       'MTPE',                       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.000, 0.00,0,0.0166667,0),
+(22,6,1,0,1,1,0,1,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.333, 4.17,0,0.0166667,0),
+(23,6,1,0,1,1,0,1,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0),
+(24,6,1,0,1,1,0,1,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0)
 ;
+/*
+# "Labour Hours" or "Words" etc. for when user enters pricing rates
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=2;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=3;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=4;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=5;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=6;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Terms' WHERE type_enum=7;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=10;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=11;
+UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=21;
+
+# For when pricing rates per hour are used to multiply minutes
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=1;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=2;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=3;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=4;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=5;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=6;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=7;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=8;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=9;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=10;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=11;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=12;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=13;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=14;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=15;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=16;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=17;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=18;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=19;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=20;
+UPDATE task_type_details SET divide_rate_by_60=0 WHERE type_enum=21;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=22;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=23;
+UPDATE task_type_details SET divide_rate_by_60=1 WHERE type_enum=24;
+
+# Convert to Words Donated for Badge
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_words=10 WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_words=1  WHERE type_enum=21;
+
+# Convert to Hours Donated for Badge
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=1;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=4;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=5;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_hours=0 WHERE type_enum=21;
+
+# Unit rate per Word or Hour etc.
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=1;
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=2;
+UPDATE task_type_details SET unit_rate=  0.025  WHERE type_enum=3;
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=4;
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=5;
+UPDATE task_type_details SET unit_rate=  0.025  WHERE type_enum=6;
+UPDATE task_type_details SET unit_rate=  0.650  WHERE type_enum=7;
+UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=8;
+UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=9;
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=10;
+UPDATE task_type_details SET unit_rate=  0.025  WHERE type_enum=11;
+UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=12;
+UPDATE task_type_details SET unit_rate=100.0    WHERE type_enum=13;
+UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=14;
+UPDATE task_type_details SET unit_rate= 75.0    WHERE type_enum=15;
+UPDATE task_type_details SET unit_rate=100.0    WHERE type_enum=16;
+UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=17;
+UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=18;
+UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=19;
+UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=20;
+UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=21;
+UPDATE task_type_details SET unit_rate= 75.0    WHERE type_enum=22;
+UPDATE task_type_details SET unit_rate= 125.0   WHERE type_enum=23;
+UPDATE task_type_details SET unit_rate= 125.0   WHERE type_enum=24;
+
+# Point rate per Word or Minute etc.
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=1;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=2;
+UPDATE task_type_details SET rate_for_recognition= 0.5     WHERE type_enum=3;
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=4;
+UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=5;
+UPDATE task_type_details SET rate_for_recognition= 0.25    WHERE type_enum=6;
+UPDATE task_type_details SET rate_for_recognition=10       WHERE type_enum=7;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=8;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=9;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=10;
+UPDATE task_type_details SET rate_for_recognition= 0.5     WHERE type_enum=11;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=12;
+UPDATE task_type_details SET rate_for_recognition= 6.66667 WHERE type_enum=13;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=14;
+UPDATE task_type_details SET rate_for_recognition= 5       WHERE type_enum=15;
+UPDATE task_type_details SET rate_for_recognition= 6.66667 WHERE type_enum=16;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=17;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=18;
+UPDATE task_type_details SET rate_for_recognition= 4.16667 WHERE type_enum=19;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=20;
+UPDATE task_type_details SET rate_for_recognition= 1       WHERE type_enum=21;
+UPDATE task_type_details SET rate_for_recognition= 5       WHERE type_enum=22;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=23;
+UPDATE task_type_details SET rate_for_recognition= 8.33333 WHERE type_enum=24;
+
+# Convert to Hours Donated for Certificate
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=1;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=2;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.002     WHERE type_enum=3;
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=4;
+UPDATE task_type_details SET convert_to_hours_for_cert=0         WHERE type_enum=5;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.00125   WHERE type_enum=6;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.05      WHERE type_enum=7;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=8;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=9;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=10;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.002     WHERE type_enum=11;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=12;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=13;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=14;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=15;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=16;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=17;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=18;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=19;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=20;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum=21;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=22;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=23;
+UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=24;
+*/
 
 
 CREATE TABLE IF NOT EXISTS `taskclaims_required_to_make_claimable` (
@@ -1489,6 +1632,7 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
   user_id         INT NOT NULL,
   date_of_request DATETIME NOT NULL,
   word_count      INT NOT NULL,
+  hours_donated_for_cert INT NOT NULL DEFAULT 0,
   type_of_request INT NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
   request_by      INT NOT NULL,
   valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -7802,6 +7946,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_complete_date`(IN `tID` IN
 BEGIN
     REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (tID, now());
     call update_project_complete_date(tID);
+    INSERT INTO task_analysis_triggers VALUES (tID);
 END//
 DELIMITER ;
 
@@ -9759,46 +9904,29 @@ BEGIN
         IFNULL(SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_translated,
         IFNULL(SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_proofread,
         IFNULL(SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_approved,
-        IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-type_id`=2 OR t.`task-type_id`=3 OR t.`task-type_id`=6) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+              IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated,
+        ROUND(IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),          0))                                                                                            AS hours_donated,
+        ROUND(IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours_for_cert), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)*0.005) AS hours_donated_for_cert,
+              IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated_for_cert,
         ROUND(
-            IFNULL(SUM(IF(t.`task-type_id`=2 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) +
-            IFNULL(SUM(IF(t.`task-type_id`=3 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.5 +
-            IFNULL(SUM(IF(t.`task-type_id`=6 AND tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0)*0.25 +
+            IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.rate_for_recognition), 0) +
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
         ROUND(
             IFNULL(SUM(
                 IF(
-                    t.`task-type_id`=2 AND
                     tp.task_id IS NULL AND
                     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
+                    t.`word-count`, 0)*ttd.rate_for_recognition
             ), 0) +
-            IFNULL(SUM(
-                IF(
-                    t.`task-type_id`=3 AND
-                    tp.task_id IS NULL AND
-                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
-                    sco.start IS NOT NULL AND
-                    t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
-            ), 0)*0.5 +
-            IFNULL(SUM(
-                IF(
-                    t.`task-type_id`=6 AND
-                    tp.task_id IS NULL AND
-                    (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
-                    sco.start IS NOT NULL AND
-                    t.`created-time`>=sco.start,
-                    t.`word-count`, 0)
-            ), 0)*0.25 +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
         ) AS strategic_points,
         0 AS taskscompleted
     FROM Tasks       t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
@@ -9820,6 +9948,9 @@ UNION
         0 AS words_proofread,
         0 AS words_approved,
         (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
+        0 AS hours_donated,
+        0 AS hours_donated_for_cert,
+        0 AS words_donated_for_cert,
         ROUND(
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
@@ -9927,6 +10058,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not up to date with get_points_for_badges
 DROP PROCEDURE IF EXISTS `get_points_for_badges_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_points_for_badges_details`(IN uID INT)
@@ -10488,11 +10620,11 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_print_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN hc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
 BEGIN
     INSERT INTO UserRequest
-               (user_id, date_of_request, word_count, type_of_request, request_by, valid_key)
-        VALUES (    uID,           NOW(),         wc,             tor,         rb,        vk);
+               (user_id, date_of_request, word_count, hours_donated_for_cert, type_of_request, request_by, valid_key)
+        VALUES (    uID,           NOW(),         wc,                     hc,             tor,         rb,        vk);
 END//
 DELIMITER ;
 
@@ -11038,7 +11170,7 @@ BEGIN
     SELECT
         urp.*,
         CONCAT(urp.language_id_target, '-', urp.country_id_target) AS language_country_id_target,
-        ttd.unit_count_text,
+        ttd.pricing_and_recognition_unit_text_hours,
         tt.name AS task_type_text,
         ls.`en-name` AS selection_source,
         st.selection AS selection_target
@@ -11102,6 +11234,502 @@ BEGIN
         language_id_source=lIDs AND
         language_id_target=lIDt AND
         country_id_target=cIDt;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `task_analysis_triggers` (
+  task_id BIGINT UNSIGNED NOT NULL,
+  KEY (task_id),
+  CONSTRAINT `FK_task_analysis_triggers_task_id` FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP PROCEDURE IF EXISTS `get_task_analysis_trigger`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_analysis_trigger`()
+BEGIN
+    SET @tID=NULL;
+    SELECT task_id INTO @tID FROM task_analysis_triggers ORDER BY task_id LIMIT 1;
+    IF @tID IS NOT NULL THEN
+        SELECT @tID AS task_id;
+        DELETE FROM task_analysis_triggers WHERE task_id=@tID;
+    ELSE
+        SELECT 0 AS task_id;
+    END IF;
+END//
+DELIMITER ;
+
+
+CREATE TABLE post_analysis_s (
+  task_id                    BIGINT UNSIGNED NOT NULL,
+  claimant_id                INT UNSIGNED NOT NULL,
+  analyse_uid                VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_project_uid      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level             INT NOT NULL,
+  repetitions_segments       FLOAT NOT NULL,
+  repetitions_words          FLOAT NOT NULL,
+  repetitions_percent        FLOAT NOT NULL,
+  repetitions_editingTime    FLOAT NOT NULL,
+  match100_segments_tm       FLOAT NOT NULL,
+  match100_segments_mt       FLOAT NOT NULL,
+  match100_segments_nt       FLOAT NOT NULL,
+  match100_words_tm          FLOAT NOT NULL,
+  match100_words_mt          FLOAT NOT NULL,
+  match100_words_nt          FLOAT NOT NULL,
+  match100_percent_tm        FLOAT NOT NULL,
+  match100_percent_mt        FLOAT NOT NULL,
+  match100_percent_nt        FLOAT NOT NULL,
+  match100_editingTime_tm    FLOAT NOT NULL,
+  match100_editingTime_mt    FLOAT NOT NULL,
+  match100_editingTime_nt    FLOAT NOT NULL,
+  match95_segments_tm        FLOAT NOT NULL,
+  match95_segments_mt        FLOAT NOT NULL,
+  match95_segments_nt        FLOAT NOT NULL,
+  match95_words_tm           FLOAT NOT NULL,
+  match95_words_mt           FLOAT NOT NULL,
+  match95_words_nt           FLOAT NOT NULL,
+  match95_percent_tm         FLOAT NOT NULL,
+  match95_percent_mt         FLOAT NOT NULL,
+  match95_percent_nt         FLOAT NOT NULL,
+  match95_editingTime_tm     FLOAT NOT NULL,
+  match95_editingTime_mt     FLOAT NOT NULL,
+  match95_editingTime_nt     FLOAT NOT NULL,
+  match85_segments_tm        FLOAT NOT NULL,
+  match85_segments_mt        FLOAT NOT NULL,
+  match85_segments_nt        FLOAT NOT NULL,
+  match85_words_tm           FLOAT NOT NULL,
+  match85_words_mt           FLOAT NOT NULL,
+  match85_words_nt           FLOAT NOT NULL,
+  match85_percent_tm         FLOAT NOT NULL,
+  match85_percent_mt         FLOAT NOT NULL,
+  match85_percent_nt         FLOAT NOT NULL,
+  match85_editingTime_tm     FLOAT NOT NULL,
+  match85_editingTime_mt     FLOAT NOT NULL,
+  match85_editingTime_nt     FLOAT NOT NULL,
+  match75_segments_tm        FLOAT NOT NULL,
+  match75_segments_mt        FLOAT NOT NULL,
+  match75_segments_nt        FLOAT NOT NULL,
+  match75_words_tm           FLOAT NOT NULL,
+  match75_words_mt           FLOAT NOT NULL,
+  match75_words_nt           FLOAT NOT NULL,
+  match75_percent_tm         FLOAT NOT NULL,
+  match75_percent_mt         FLOAT NOT NULL,
+  match75_percent_nt         FLOAT NOT NULL,
+  match75_editingTime_tm     FLOAT NOT NULL,
+  match75_editingTime_mt     FLOAT NOT NULL,
+  match75_editingTime_nt     FLOAT NOT NULL,
+  match50_segments_tm        FLOAT NOT NULL,
+  match50_segments_mt        FLOAT NOT NULL,
+  match50_segments_nt        FLOAT NOT NULL,
+  match50_words_tm           FLOAT NOT NULL,
+  match50_words_mt           FLOAT NOT NULL,
+  match50_words_nt           FLOAT NOT NULL,
+  match50_percent_tm         FLOAT NOT NULL,
+  match50_percent_mt         FLOAT NOT NULL,
+  match50_percent_nt         FLOAT NOT NULL,
+  match50_editingTime_tm     FLOAT NOT NULL,
+  match50_editingTime_mt     FLOAT NOT NULL,
+  match50_editingTime_nt     FLOAT NOT NULL,
+  match0_segments_tm         FLOAT NOT NULL,
+  match0_segments_mt         FLOAT NOT NULL,
+  match0_segments_nt         FLOAT NOT NULL,
+  match0_words_tm            FLOAT NOT NULL,
+  match0_words_mt            FLOAT NOT NULL,
+  match0_words_nt            FLOAT NOT NULL,
+  match0_percent_tm          FLOAT NOT NULL,
+  match0_percent_mt          FLOAT NOT NULL,
+  match0_percent_nt          FLOAT NOT NULL,
+  match0_editingTime_tm      FLOAT NOT NULL,
+  match0_editingTime_mt      FLOAT NOT NULL,
+  match0_editingTime_nt      FLOAT NOT NULL,
+  saved_time                 DATETIME NOT NULL,
+  KEY (task_id),
+  KEY (claimant_id),
+  KEY (analyse_uid),
+  KEY (memsource_project_uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE compare_analysis_s (
+  task_id               BIGINT UNSIGNED NOT NULL,
+  claimant_id           INT UNSIGNED NOT NULL,
+  analyse_uid           VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  sourceWorkflowLevel   INT NOT NULL,
+  compareWorkflowLevel  INT NOT NULL,
+  repetitions_segments  FLOAT NOT NULL,
+  repetitions_words     FLOAT NOT NULL,
+  repetitions_percent   FLOAT NOT NULL,
+  match100_segments     FLOAT NOT NULL,
+  match100_words        FLOAT NOT NULL,
+  match100_percent      FLOAT NOT NULL,
+  match95_segments      FLOAT NOT NULL,
+  match95_words         FLOAT NOT NULL,
+  match95_percent       FLOAT NOT NULL,
+  match85_segments      FLOAT NOT NULL,
+  match85_words         FLOAT NOT NULL,
+  match85_percent       FLOAT NOT NULL,
+  match75_segments      FLOAT NOT NULL,
+  match75_words         FLOAT NOT NULL,
+  match75_percent       FLOAT NOT NULL,
+  match50_segments      FLOAT NOT NULL,
+  match50_words         FLOAT NOT NULL,
+  match50_percent       FLOAT NOT NULL,
+  match0_segments       FLOAT NOT NULL,
+  match0_words          FLOAT NOT NULL,
+  match0_percent        FLOAT NOT NULL,
+  saved_time            DATETIME NOT NULL,
+  KEY (task_id),
+  KEY (claimant_id),
+  KEY (analyse_uid),
+  KEY (memsource_project_uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP PROCEDURE IF EXISTS `insert_post_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_post_analysis`(
+    IN p_task_id               BIGINT UNSIGNED,
+    IN p_claimant_id           INT UNSIGNED,
+    IN p_analyse_uid           VARCHAR(30),
+    IN p_memsource_project_uid VARCHAR(30),
+    IN p_workflow_level        INT,
+    IN p_repetitions_segments FLOAT,
+    IN p_repetitions_words FLOAT,
+    IN p_repetitions_percent FLOAT,
+    IN p_repetitions_editingTime FLOAT,
+    IN p_match100_segments_tm FLOAT,
+    IN p_match100_segments_mt FLOAT,
+    IN p_match100_segments_nt FLOAT,
+    IN p_match100_words_tm FLOAT,
+    IN p_match100_words_mt FLOAT,
+    IN p_match100_words_nt FLOAT,
+    IN p_match100_percent_tm FLOAT,
+    IN p_match100_percent_mt FLOAT,
+    IN p_match100_percent_nt FLOAT,
+    IN p_match100_editingTime_tm FLOAT,
+    IN p_match100_editingTime_mt FLOAT,
+    IN p_match100_editingTime_nt FLOAT,
+    IN p_match95_segments_tm FLOAT,
+    IN p_match95_segments_mt FLOAT,
+    IN p_match95_segments_nt FLOAT,
+    IN p_match95_words_tm FLOAT,
+    IN p_match95_words_mt FLOAT,
+    IN p_match95_words_nt FLOAT,
+    IN p_match95_percent_tm FLOAT,
+    IN p_match95_percent_mt FLOAT,
+    IN p_match95_percent_nt FLOAT,
+    IN p_match95_editingTime_tm FLOAT,
+    IN p_match95_editingTime_mt FLOAT,
+    IN p_match95_editingTime_nt FLOAT,
+    IN p_match85_segments_tm FLOAT,
+    IN p_match85_segments_mt FLOAT,
+    IN p_match85_segments_nt FLOAT,
+    IN p_match85_words_tm FLOAT,
+    IN p_match85_words_mt FLOAT,
+    IN p_match85_words_nt FLOAT,
+    IN p_match85_percent_tm FLOAT,
+    IN p_match85_percent_mt FLOAT,
+    IN p_match85_percent_nt FLOAT,
+    IN p_match85_editingTime_tm FLOAT,
+    IN p_match85_editingTime_mt FLOAT,
+    IN p_match85_editingTime_nt FLOAT,
+    IN p_match75_segments_tm FLOAT,
+    IN p_match75_segments_mt FLOAT,
+    IN p_match75_segments_nt FLOAT,
+    IN p_match75_words_tm FLOAT,
+    IN p_match75_words_mt FLOAT,
+    IN p_match75_words_nt FLOAT,
+    IN p_match75_percent_tm FLOAT,
+    IN p_match75_percent_mt FLOAT,
+    IN p_match75_percent_nt FLOAT,
+    IN p_match75_editingTime_tm FLOAT,
+    IN p_match75_editingTime_mt FLOAT,
+    IN p_match75_editingTime_nt FLOAT,
+    IN p_match50_segments_tm FLOAT,
+    IN p_match50_segments_mt FLOAT,
+    IN p_match50_segments_nt FLOAT,
+    IN p_match50_words_tm FLOAT,
+    IN p_match50_words_mt FLOAT,
+    IN p_match50_words_nt FLOAT,
+    IN p_match50_percent_tm FLOAT,
+    IN p_match50_percent_mt FLOAT,
+    IN p_match50_percent_nt FLOAT,
+    IN p_match50_editingTime_tm FLOAT,
+    IN p_match50_editingTime_mt FLOAT,
+    IN p_match50_editingTime_nt FLOAT,
+    IN p_match0_segments_tm FLOAT,
+    IN p_match0_segments_mt FLOAT,
+    IN p_match0_segments_nt FLOAT,
+    IN p_match0_words_tm FLOAT,
+    IN p_match0_words_mt FLOAT,
+    IN p_match0_words_nt FLOAT,
+    IN p_match0_percent_tm FLOAT,
+    IN p_match0_percent_mt FLOAT,
+    IN p_match0_percent_nt FLOAT,
+    IN p_match0_editingTime_tm FLOAT,
+    IN p_match0_editingTime_mt FLOAT,
+    IN p_match0_editingTime_nt FLOAT)
+BEGIN
+    INSERT INTO post_analysis_s (
+        task_id,
+        claimant_id,
+        analyse_uid,
+        memsource_project_uid,
+        workflow_level,
+        repetitions_segments,
+        repetitions_words,
+        repetitions_percent,
+        repetitions_editingTime,
+        match100_segments_tm,
+        match100_segments_mt,
+        match100_segments_nt,
+        match100_words_tm,
+        match100_words_mt,
+        match100_words_nt,
+        match100_percent_tm,
+        match100_percent_mt,
+        match100_percent_nt,
+        match100_editingTime_tm,
+        match100_editingTime_mt,
+        match100_editingTime_nt,
+        match95_segments_tm,
+        match95_segments_mt,
+        match95_segments_nt,
+        match95_words_tm,
+        match95_words_mt,
+        match95_words_nt,
+        match95_percent_tm,
+        match95_percent_mt,
+        match95_percent_nt,
+        match95_editingTime_tm,
+        match95_editingTime_mt,
+        match95_editingTime_nt,
+        match85_segments_tm,
+        match85_segments_mt,
+        match85_segments_nt,
+        match85_words_tm,
+        match85_words_mt,
+        match85_words_nt,
+        match85_percent_tm,
+        match85_percent_mt,
+        match85_percent_nt,
+        match85_editingTime_tm,
+        match85_editingTime_mt,
+        match85_editingTime_nt,
+        match75_segments_tm,
+        match75_segments_mt,
+        match75_segments_nt,
+        match75_words_tm,
+        match75_words_mt,
+        match75_words_nt,
+        match75_percent_tm,
+        match75_percent_mt,
+        match75_percent_nt,
+        match75_editingTime_tm,
+        match75_editingTime_mt,
+        match75_editingTime_nt,
+        match50_segments_tm,
+        match50_segments_mt,
+        match50_segments_nt,
+        match50_words_tm,
+        match50_words_mt,
+        match50_words_nt,
+        match50_percent_tm,
+        match50_percent_mt,
+        match50_percent_nt,
+        match50_editingTime_tm,
+        match50_editingTime_mt,
+        match50_editingTime_nt,
+        match0_segments_tm,
+        match0_segments_mt,
+        match0_segments_nt,
+        match0_words_tm,
+        match0_words_mt,
+        match0_words_nt,
+        match0_percent_tm,
+        match0_percent_mt,
+        match0_percent_nt,
+        match0_editingTime_tm,
+        match0_editingTime_mt,
+        match0_editingTime_nt,
+        saved_time)
+    VALUES (
+        p_task_id,
+        p_claimant_id,
+        p_analyse_uid,
+        p_memsource_project_uid,
+        p_workflow_level,
+        p_repetitions_segments,
+        p_repetitions_words,
+        p_repetitions_percent,
+        p_repetitions_editingTime,
+        p_match100_segments_tm,
+        p_match100_segments_mt,
+        p_match100_segments_nt,
+        p_match100_words_tm,
+        p_match100_words_mt,
+        p_match100_words_nt,
+        p_match100_percent_tm,
+        p_match100_percent_mt,
+        p_match100_percent_nt,
+        p_match100_editingTime_tm,
+        p_match100_editingTime_mt,
+        p_match100_editingTime_nt,
+        p_match95_segments_tm,
+        p_match95_segments_mt,
+        p_match95_segments_nt,
+        p_match95_words_tm,
+        p_match95_words_mt,
+        p_match95_words_nt,
+        p_match95_percent_tm,
+        p_match95_percent_mt,
+        p_match95_percent_nt,
+        p_match95_editingTime_tm,
+        p_match95_editingTime_mt,
+        p_match95_editingTime_nt,
+        p_match85_segments_tm,
+        p_match85_segments_mt,
+        p_match85_segments_nt,
+        p_match85_words_tm,
+        p_match85_words_mt,
+        p_match85_words_nt,
+        p_match85_percent_tm,
+        p_match85_percent_mt,
+        p_match85_percent_nt,
+        p_match85_editingTime_tm,
+        p_match85_editingTime_mt,
+        p_match85_editingTime_nt,
+        p_match75_segments_tm,
+        p_match75_segments_mt,
+        p_match75_segments_nt,
+        p_match75_words_tm,
+        p_match75_words_mt,
+        p_match75_words_nt,
+        p_match75_percent_tm,
+        p_match75_percent_mt,
+        p_match75_percent_nt,
+        p_match75_editingTime_tm,
+        p_match75_editingTime_mt,
+        p_match75_editingTime_nt,
+        p_match50_segments_tm,
+        p_match50_segments_mt,
+        p_match50_segments_nt,
+        p_match50_words_tm,
+        p_match50_words_mt,
+        p_match50_words_nt,
+        p_match50_percent_tm,
+        p_match50_percent_mt,
+        p_match50_percent_nt,
+        p_match50_editingTime_tm,
+        p_match50_editingTime_mt,
+        p_match50_editingTime_nt,
+        p_match0_segments_tm,
+        p_match0_segments_mt,
+        p_match0_segments_nt,
+        p_match0_words_tm,
+        p_match0_words_mt,
+        p_match0_words_nt,
+        p_match0_percent_tm,
+        p_match0_percent_mt,
+        p_match0_percent_nt,
+        p_match0_editingTime_tm,
+        p_match0_editingTime_mt,
+        p_match0_editingTime_nt,
+        NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_compare_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_compare_analysis`(
+    IN p_task_id               BIGINT UNSIGNED,
+    IN p_claimant_id           INT UNSIGNED,
+    IN p_analyse_uid           VARCHAR(30),
+    IN p_memsource_project_uid VARCHAR(30),
+    IN p_sourceWorkflowLevel   INT,
+    IN p_compareWorkflowLevel  INT,
+    IN p_repetitions_segments  FLOAT,
+    IN p_repetitions_words     FLOAT,
+    IN p_repetitions_percent   FLOAT,
+    IN p_match100_segments     FLOAT,
+    IN p_match100_words        FLOAT,
+    IN p_match100_percent      FLOAT,
+    IN p_match95_segments      FLOAT,
+    IN p_match95_words         FLOAT,
+    IN p_match95_percent       FLOAT,
+    IN p_match85_segments      FLOAT,
+    IN p_match85_words         FLOAT,
+    IN p_match85_percent       FLOAT,
+    IN p_match75_segments      FLOAT,
+    IN p_match75_words         FLOAT,
+    IN p_match75_percent       FLOAT,
+    IN p_match50_segments      FLOAT,
+    IN p_match50_words         FLOAT,
+    IN p_match50_percent       FLOAT,
+    IN p_match0_segments       FLOAT,
+    IN p_match0_words          FLOAT,
+    IN p_match0_percent        FLOAT)
+BEGIN
+    INSERT INTO compare_analysis_s (
+        task_id,
+        claimant_id,
+        analyse_uid,
+        memsource_project_uid,
+        sourceWorkflowLevel,
+        compareWorkflowLevel,
+        repetitions_segments,
+        repetitions_words,
+        repetitions_percent,
+        match100_segments,
+        match100_words,
+        match100_percent,
+        match95_segments,
+        match95_words,
+        match95_percent,
+        match85_segments,
+        match85_words,
+        match85_percent,
+        match75_segments,
+        match75_words,
+        match75_percent,
+        match50_segments,
+        match50_words,
+        match50_percent,
+        match0_segments,
+        match0_words,
+        match0_percent,
+        saved_time)
+    VALUES (
+        p_task_id,
+        p_claimant_id,
+        p_analyse_uid,
+        p_memsource_project_uid,
+        p_sourceWorkflowLevel,
+        p_compareWorkflowLevel,
+        p_repetitions_segments,
+        p_repetitions_words,
+        p_repetitions_percent,
+        p_match100_segments,
+        p_match100_words,
+        p_match100_percent,
+        p_match95_segments,
+        p_match95_words,
+        p_match95_percent,
+        p_match85_segments,
+        p_match85_words,
+        p_match85_percent,
+        p_match75_segments,
+        p_match75_words,
+        p_match75_percent,
+        p_match50_segments,
+        p_match50_words,
+        p_match50_percent,
+        p_match0_segments,
+        p_match0_words,
+        p_match0_percent,
+        NOW());
 END//
 DELIMITER ;
 

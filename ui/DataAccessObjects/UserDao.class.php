@@ -1849,14 +1849,16 @@ error_log("claimTask_shell($userId, $taskId)");
             LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
 
-    public function insert_print_request($user_id, $user_word_count, $cert_type, $loggedInUserId, $valid_key)
+    public function insert_print_request($user_id, $cert_type, $loggedInUserId)
     {
+        $user_badges = $this->get_points_for_badges($user_id);
         LibAPI\PDOWrapper::call('insert_print_request',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($user_word_count) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_badges['words_donated_for_cert']) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_badges['hours_donated_for_cert']) . ',' .
             LibAPI\PDOWrapper::cleanse($cert_type) . ',' .
             LibAPI\PDOWrapper::cleanse($loggedInUserId) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($valid_key));
+            LibAPI\PDOWrapper::cleanseWrapStr(uniqid()));
     }
 
     public function get_print_request_by_user($user_id, $request_type)
@@ -2414,7 +2416,8 @@ error_log(print_r($result, true));//(**)
     public function get_points_for_badges($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0];
+        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0, 'words_donated_for_cert' => 0, 'hours_donated_for_cert' => 0];
+
         return $result[0];
     }
 
@@ -2423,15 +2426,6 @@ error_log(print_r($result, true));//(**)
         $result = LibAPI\PDOWrapper::call('getUserTasks', LibAPI\PDOWrapper::cleanse($user_id). ',' . LibAPI\PDOWrapper::cleanse($limit). ',' . LibAPI\PDOWrapper::cleanse($offset));
         if (empty($result)) return [];
         return $result;
-    }
-
-    public function group_user_tasks_by($array, $key)
-    {
-        $return = [];
-        foreach ($array as $val) {
-            $return[$val[$key]][] = $val;
-        }
-        return $return;
     }
 
     public function generate_user_rate_pair_selections()

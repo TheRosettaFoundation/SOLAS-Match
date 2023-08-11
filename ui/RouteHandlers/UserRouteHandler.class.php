@@ -1925,12 +1925,12 @@ class UserRouteHandler
             var f_task_type  = $("<div class=\"span3\"><select name=\"task_type_"                  + row + "\" id=\"task_type_"                  + row + "\" class=\"field_select_type\"><option value>--Select a task type--</option>' . $task_type   . '</select></div>");
             f_task_type.change(function () {
                 var type = $("#task_type_" + row).select2().val();
-                $("#unit_rate_"       + row).val(        $("#default_unit_rate_"     + type).html());
-                $("#unit_count_text_" + row).html("$/" + $("#unit_count_text_short_" + type).html());
+                $("#unit_rate_" + row).val(        $("#default_unit_rate_"                       + type).html());
+                $("#unit_text_" + row).html("$/" + $("#pricing_and_recognition_unit_text_hours_" + type).html());
             });
             var f_source     = $("<div class=\"span3\"><select name=\"language_id_source_"         + row + "\" id=\"language_id_source_"         + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $source_lang . '</select></div>");
             var f_target     = $("<div class=\"span3\"><select name=\"language_country_id_target_" + row + "\" id=\"language_country_id_target_" + row + "\" class=\"field_select_lang\"><option value>--Select a language--</option>'  . $target_lang . '</select></div>");
-            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row + "\" id=\"unit_rate_"                  + row + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" /><br /><div id=\"unit_count_text_" + row +  "\"></div></div>");
+            var f_unit_rate  = $("<div class=\"span2\"><input  name=\"unit_rate_"                  + row + "\" id=\"unit_rate_"                  + row + "\" class=\"field_unit_rate\" type=\"text\" value=\"\" style=\"width: 50%\" /><br /><div id=\"unit_text_" + row +  "\"></div></div>");
             fieldWrapper.append(f_task_type);
             fieldWrapper.append(f_source);
             fieldWrapper.append(f_target);
@@ -2412,13 +2412,11 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Posted to Asana');
             }
 
-            if (isset($post['PrintRequest'])) {
-                $userDao->insert_print_request($post['user_id'], $post['user_word_count'], 0, $loggedInUserId, uniqid());
+            if (isset($post['PrintRequest']) || isset($post['PrintRequestLetter'])) {
+                $request_type = 0;
+                if (isset($post['PrintRequestLetter'])) $request_type = 1;
+                $userDao->insert_print_request($user_id, $request_type, $loggedInUserId);
                 UserRouteHandler::flashNow('success', 'Print request made for user');
-            }
-            if (isset($post['PrintRequestLetter'])) {
-                 $userDao->insert_print_request($post['user_id'], $post['user_word_count'], 1, $loggedInUserId, uniqid());
-                 UserRouteHandler::flashNow('success', 'Print request made for user');
             }
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
@@ -2512,6 +2510,7 @@ error_log("result: $result");//(**)
                     { data: "date_of_request" },
                     { data: "request_by" },
                     { data: "word_count" },
+                    { data: "hours_donated_for_cert" },
                     { data: "valid_key",
                         "render": function ( data, type, row, meta ) {
                             return data;
@@ -2532,6 +2531,7 @@ error_log("result: $result");//(**)
                     { data: "date_of_request" },
                     { data: "request_by" },
                     { data: "word_count" },
+                    { data: "hours_donated_for_cert" },
                     { data: "valid_key",
                         "render": function ( data, type, row, meta ) {
                             return data;
@@ -2552,7 +2552,6 @@ error_log("result: $result");//(**)
                     },
                     dataType: "json"
                 }).done(function(response) {
-                    // console.log(response);
                     setTimeout(function() {
                         window.open("/"+response.file_name+"/generatevolunteercertificate", "_blank");
                     }, 2000);
@@ -2626,6 +2625,9 @@ error_log("result: $result");//(**)
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $bkey = bin2hex("$encrypted::$iv");
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("-$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $hourkey = bin2hex("$encrypted::$iv");
 
         $howheard = $userDao->getUserHowheards($user_id);
         if (empty($howheard)) {
@@ -2646,6 +2648,7 @@ error_log("result: $result");//(**)
             'user_badge_name'        => !empty($userPersonalInfo) ? wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n') : '',
             'key'                    => $key,
             'bkey'                   => $bkey,
+            'hourkey'                => $hourkey,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
@@ -2685,6 +2688,7 @@ error_log("result: $result");//(**)
                 'date_of_request' => $print_data[$key]['date_of_request'],
                 'request_by' => '<a href="/' . $print_data[$key]['request_by'] . '/profile" target="_blank">' . $firstName . '</a>',
                 'word_count' => $print_data[$key]['word_count'],
+                'hours_donated_for_cert' => $print_data[$key]['hours_donated_for_cert'],
                 'valid_key' =>  $print_data[$key]['valid_key']
             ]);
         }
@@ -2698,91 +2702,44 @@ error_log("result: $result");//(**)
         $valid_key = $args['valid_key'];
         $userDao = new DAO\UserDao();
         $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
-        $user = $userDao->getUser($print_data_by_key[0]['user_id']);
-        $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
+        $user_id = $print_data_by_key[0]['user_id'];
+        $user = $userDao->getUser($user_id);
+        $userinfo = $userDao->getUserPersonalInformation($user_id);
         $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $firstName = $userinfo->firstName;
         $lastName = $userinfo->lastName;
         $word_count = $print_data_by_key[0]['word_count'];
-        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
-        $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
+        $hours_words = '';
+        $hours_donated_for_cert = $print_data_by_key[0]['hours_donated_for_cert'];
+        if ($hours_donated_for_cert) $hours_words = "In total, $firstName donated $hours_donated_for_cert hours in volunteering for TWB / CLEAR Global.";
+        $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
+
         $languages = [];
-        foreach($user_tasks as $key => $value) {
-            array_push($languages, [
-                'sourceLanguageName' => $value['sourceLanguageName'],
-                'targetLanguageName' => $value['targetLanguageName']
-            ]);
+        foreach ($user_tasks as $item) {
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ', ';
         }
-        $prepend = '';
-        $language_combinations = '';
+        asort($languages);
+        $languages = UserRouteHandler::join_with_and($languages, ',', ', and');
 
-        foreach (array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= $prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'];
-            $prepend = ', ';
-        }
-        $grouped_tasks_word_count = [];
-        foreach ($grouped_tasks as $key =>$value) {
-            foreach ($grouped_tasks[$key] as $kk => $vv) {
-                array_push($grouped_tasks_word_count, [
-                    'wordcount' => $vv['wordCount'],
-                    'key' => $key ]);
-            }
-        }
-
-        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) {
-            if (!isset($carry[$item['key']])) {
-                $carry[$item['key']] = ['key' => $item['key'], 'wordcount' => $item['wordcount']];
-            } else {
-                $carry[$item['key']]['wordcount'] += $item['wordcount'];
-            } 
-            return $carry;
-        });
-
-        foreach ($total_wordcount_by_tasktype as $key => $value) {
-            if ($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                $translation_hrs =  (int)$value['wordcount'] / Common\Enums\TaskTypeHourEnum::TRANSLATION;
-            } else if ($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
-            } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
-                $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            } 
-        }
-        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
-        $displayname = $user->getDisplayName();
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
-        $locales = $user->getSecondaryLocales();
+        $since = $datetime->format('F') . ' ' . $datetime->format('Y');
 
-        // Create new PDF document
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
-        $pdf->SetTitle('Volunteer Certificate - ' . $name);
+        $pdf->SetTitle("Volunteer Certificate - $name");
         $pdf->SetSubject('Generate Certificate');
         $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
-
-        // set default header data
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-        $pdf->setFooterData(array(0,64,0), array(0,64,128));
-
-        // remove default header/footer
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, [0, 64, 255], [0, 64, 128]);
+        $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
-        // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
@@ -2793,13 +2750,12 @@ error_log("result: $result");//(**)
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
         $pdf->AddPage('L');
-        $pdf->SetLineStyle( array( 'width' => 5, 'color' => array(232, 153, 28)));
-        $pdf->Line(0,0,$pdf->getPageWidth(),0); 
-        $pdf->Line($pdf->getPageWidth(),0,$pdf->getPageWidth(),$pdf->getPageHeight());
-        $pdf->Line(0,$pdf->getPageHeight(),$pdf->getPageWidth(),$pdf->getPageHeight());
-        $pdf->Line(0,0,0,$pdf->getPageHeight());
+        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
+        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
 
-        // Set some content to print
 $html = <<<EOF
         <style>
         div.test {
@@ -2833,11 +2789,11 @@ $html = <<<EOF
         </tr></table>
         <div class="test">
         <br /><br />This is to certify that
-        <br /><br /><br /><span class="uppercase"> $name </span>
-        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since and contributed a 
-        <br />total of $word_count words (equivalent to $hours hours) upon providing language services in the language combination(s):
-        <br /> $language_combinations. 
-        <br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
+        <br /><br /><br /><span class="uppercase">$name</span>
+        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since.
+        <br />$firstName has donated $word_count words providing language services in: $languages.
+        <br />$hours_words
+        <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
         <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
         </div>
         <div class="footer-main">
@@ -2848,13 +2804,12 @@ $html = <<<EOF
         <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
         </div>
 EOF;
-    // output the HTML content
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->Cell(20, 10, "Issued on ".date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');   
-    $pdf->Cell(0, 9, "Ref: ". $valid_key, 0, false, 'R', 0, '', 0, false, 'T', 'M' );
+    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
     $pdf->lastPage();
 
-    $file_name = 'Certificate_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
+    $file_name = 'Certificate_' . $firstName . '_' .$lastName . '_' . date('Y-m-d') . '.pdf';
     $pdf->Output($file_name, 'I');
     exit;
     }
@@ -2867,102 +2822,56 @@ public static function downloadletter(Request $request, Response $response, $arg
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         $print_data_by_key = $userDao->get_print_request_by_valid_key($valid_key); 
-        $user = $userDao->getUser($print_data_by_key[0]['user_id']);
-        $userinfo = $userDao->getUserPersonalInformation($print_data_by_key[0]['user_id']);
+        $user_id = $print_data_by_key[0]['user_id'];
+        $user = $userDao->getUser($user_id);
+        $userinfo = $userDao->getUserPersonalInformation($user_id);
         $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $firstName = $userinfo->firstName;
         $firstName = $userinfo->firstName;
         $lastName = $userinfo->lastName;
         $word_count = $print_data_by_key[0]['word_count'];
-
-        $user_tasks = $userDao->get_user_tasks($print_data_by_key[0]['user_id'], 1000000, 0);
-        $grouped_tasks = $userDao->group_user_tasks_by($user_tasks, 'taskType');
+        $hours_words = '';
+        $hours_donated_for_cert = $print_data_by_key[0]['hours_donated_for_cert'];
+        if ($hours_donated_for_cert) $hours_words = "In total, $firstName donated $hours_donated_for_cert hours in volunteering for TWB / CLEAR Global. ";
+        $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
 
         $languages = [];
-        foreach ($user_tasks as $key => $value) {
-            array_push($languages,[
-                'sourceLanguageName' => $value['sourceLanguageName'],
-                'targetLanguageName' => $value['targetLanguageName']
-            ]);
+        $types = [];
+        foreach ($user_tasks as $item) {
+            $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ',</li>';
+            $types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
         }
+        asort($languages);
+        ksort($types);
+        $languages = UserRouteHandler::join_with_and($languages, '</li>', ' and</li>');
+        $types = UserRouteHandler::join_with_and($types, ',', ', and');
 
-        $projectIds = [];
-        foreach ($user_tasks as $key => $value) {
-            array_push($projectIds, [
-                'projectId' => $value['projectId']
-            ]);
+        $orgs = [];
+        foreach ($user_tasks as $item) {
+            $org_name = $projectDao->get_project_org_name($item['projectId']);
+            $orgs[$org_name] = "<li>$org_name,</li>";
         }
-        $projects = array_unique($projectIds, SORT_REGULAR);
-        
-        $org_details = [];
-        foreach ($projects as $key => $value) {
-            $org_name = $projectDao->get_project_org_name($value['projectId']);
-            array_push($org_details, $org_name);
-        }
-        $unique_orgs = array_unique($org_details, SORT_REGULAR);
+        asort($orgs);
+        $orgs = UserRouteHandler::join_with_and($orgs, '</li>', ' and</li>');
 
-        $prepend = '';
-        $partners1 = '';       
-        //$partners = implode(', ', $unique_orgs);
-        foreach($unique_orgs as $key => $value) {
-            $partners1 .= '<li>'.$value.'</li>';
-
-        }
-        $language_combinations = '';
-        foreach(array_unique($languages, SORT_REGULAR) as $item) {
-            $language_combinations .= '<li>'.$prepend.$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'].'</li>';
-            $prepend = '';
-        }
- 
-        $grouped_tasks_word_count = [];
-        foreach ($grouped_tasks as $key =>$value) {  
-            foreach ($grouped_tasks[$key] as $kk => $vv) {
-                array_push($grouped_tasks_word_count, [
-                    'wordcount' => $vv['wordCount'],
-                    'key' => $key]);
-            }
-        }
-        $total_wordcount_by_tasktype = array_reduce($grouped_tasks_word_count, function($carry, $item) {
-            if (!isset($carry[$item['key']])) {
-                $carry[$item['key']] = ['key'=>$item['key'],'wordcount'=>$item['wordcount']];
-            } else {
-                $carry[$item['key']]['wordcount'] += $item['wordcount'];
-            }
-            return $carry;
-        });
-
-        foreach ($total_wordcount_by_tasktype as $key => $value) {
-            if ($key == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                $translation_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::TRANSLATION;
-            } else if ($key == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $proofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::PROOFREADING;
-            } else if ($key == Common\Enums\TaskTypeEnum::APPROVAL) {
-                $transproofread_hrs =  (int)$value['wordcount'] /Common\Enums\TaskTypeHourEnum::APPROVAL;
-            } 
-        }
-
-        $hours = round($translation_hrs+$proofread_hrs+$transproofread_hrs);
-        $displayname = $user->getDisplayName();
         $createdtime = $user->getCreatedTime();
         $datetime = new \DateTime($createdtime);
-        $since = $datetime->format('F') . ', ' . $datetime->format('Y');
-        $locales = $user->getSecondaryLocales();
+        $since = $datetime->format('F') . ' ' . $datetime->format('Y');
         $today = date('d F Y');
-        $pageDimension = array('500,300');
+        $pageDimension = ['500,300'];
 
         $pdf = new \MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
-        $pdf->SetTitle('Volunteer Letter - ' . $name);
+        $pdf->SetTitle("Volunteer Letter - $name");
         $pdf->SetSubject('Generate Certificate');
         $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-        $pdf->setFooterData(array(0,64,0), array(0,64,128));
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, [0, 64, 255], [0, 64, 128]);
+        $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
         $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(true);
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-      // $pdf->SetMargins(20, 10, 10);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(60);
         $pdf->CustomKey = $valid_key;
@@ -2977,7 +2886,6 @@ public static function downloadletter(Request $request, Response $response, $arg
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 8, '', false);
         $pdf->AddPage();
-// Set some content to print
 $html = <<<EOF
 <style>
 div.test {
@@ -3010,11 +2918,11 @@ div.test {
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
-<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing language-related tasks in the following language combination[s]:
-<ul>$language_combinations</ul>
+<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $types tasks. $hours_words$firstName has delivered work in the following language combination[s]:
+<ul>$languages</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
-$partners1
+$orgs
 </ul>
 </div>
 EOF;
@@ -3024,6 +2932,13 @@ EOF;
         $file_name = 'Reference_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
         $pdf->Output($file_name, 'I');
         exit;	
+    }
+
+    public static function join_with_and($array, $sub, $with) {
+        $n = count($array);
+        if ($n > 1) $array[array_keys($array)[$n - 2]] = str_replace(       $sub,    $with, $array[array_keys($array)[$n - 2]]);
+        if ($n)     $array[array_keys($array)[$n - 1]] = str_replace([', ', ','], ['', ''], $array[array_keys($array)[$n - 1]]);
+        return implode('', $array);
     }
 
     public static function profile_shared_with_key(Request $request, Response $response, $args)
@@ -3076,8 +2991,19 @@ EOF;
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        if ($user_id > 0) {
+            $badge_title = 'WORDS DONATED';
+        } else {
+            $badge_title = 'HOURS DONATED';
+            $user_id = -$user_id;
+        }
         $userDao = new DAO\UserDao();
         $user_badges = $userDao->get_points_for_badges($user_id);
+        if ($badge_title == 'WORDS DONATED') {
+            $badge_quantity = $user_badges['words_donated'];
+        } else {
+            $badge_quantity = $user_badges['hours_donated'];
+        }
 
         header('Content-type: image/png');
         header('X-Frame-Options: ALLOWALL');
@@ -3091,11 +3017,11 @@ EOF;
         $top = 740;
         $color = imagecolorallocate($logo, 232, 153, 28);
         $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
-        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $user_badges['words_donated']);
+        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_quantity);
         $left = 750;
         $top = 840;
         $color = imagecolorallocate($logo, 87, 110, 130);
-        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, 'WORDS DONATED');
+        imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_title);
         $size = 70;
         $left = 595;
         $top = 522;

@@ -17,7 +17,7 @@
     {/foreach}
     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
         <div id="default_unit_rate_{$task_type}">{$ui['unit_rate']}</div>
-        <div id="unit_count_text_short_{$task_type}">{$ui['unit_count_text_short']}</div>
+        <div id="pricing_and_recognition_unit_text_hours_{$task_type}">{$ui['pricing_and_recognition_unit_text_hours']}</div>
     {/foreach}
 </span>
 

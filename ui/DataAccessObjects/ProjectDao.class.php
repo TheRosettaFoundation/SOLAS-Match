@@ -1409,4 +1409,174 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         if (empty($result)) return '';
         return $result[0]['name'];
     }
+
+    public function get_task_analysis_trigger()
+    {
+        $result = LibAPI\PDOWrapper::call('get_task_analysis_trigger', '');
+        return $result[0]['task_id'];
+    }
+
+    public function get_analysis_data($data, $data_indexes) {
+        $args = [];
+        foreach ($data_indexes as $index) {
+            if (count($index) == 2) {
+                if (empty($data[$index[0]][$index[1]])) $args[] = 0;
+                else $args[] = LibAPI\PDOWrapper::cleanse($data[$index[0]][$index[1]]);
+            } else {
+                if (empty($data[$index[0]][$index[1]][$index[2]])) $args[] = 0;
+                else $args[] = LibAPI\PDOWrapper::cleanse($data[$index[0]][$index[1]][$index[2]]);
+            }
+        }
+        return implode(',', $args);
+    }
+
+    public function insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $workflow_level, $data)
+    {
+        $args = $this->get_analysis_data($data, [
+            ['repetitions', 'segments'],
+            ['repetitions', 'words'],
+            ['repetitions', 'percent'],
+            ['repetitions', 'editingTime'],
+
+            ['transMemoryMatches', 'match100', 'segments'],
+            ['machineTranslationMatches', 'match100', 'segments'],
+            ['nonTranslatablesMatches', 'match100', 'segments'],
+            ['transMemoryMatches', 'match100', 'words'],
+            ['machineTranslationMatches', 'match100', 'words'],
+            ['nonTranslatablesMatches', 'match100', 'words'],
+            ['transMemoryMatches', 'match100', 'percent'],
+            ['machineTranslationMatches', 'match100', 'percent'],
+            ['nonTranslatablesMatches', 'match100', 'percent'],
+            ['transMemoryMatches', 'match100', 'editingTime'],
+            ['machineTranslationMatches', 'match100', 'editingTime'],
+            ['nonTranslatablesMatches', 'match100', 'editingTime'],
+
+            ['transMemoryMatches', 'match95', 'segments'],
+            ['machineTranslationMatches', 'match95', 'segments'],
+            ['nonTranslatablesMatches', 'match95', 'segments'],
+            ['transMemoryMatches', 'match95', 'words'],
+            ['machineTranslationMatches', 'match95', 'words'],
+            ['nonTranslatablesMatches', 'match95', 'words'],
+            ['transMemoryMatches', 'match95', 'percent'],
+            ['machineTranslationMatches', 'match95', 'percent'],
+            ['nonTranslatablesMatches', 'match95', 'percent'],
+            ['transMemoryMatches', 'match95', 'editingTime'],
+            ['machineTranslationMatches', 'match95', 'editingTime'],
+            ['nonTranslatablesMatches', 'match95', 'editingTime'],
+
+            ['transMemoryMatches', 'match85', 'segments'],
+            ['machineTranslationMatches', 'match85', 'segments'],
+            ['nonTranslatablesMatches', 'match85', 'segments'],
+            ['transMemoryMatches', 'match85', 'words'],
+            ['machineTranslationMatches', 'match85', 'words'],
+            ['nonTranslatablesMatches', 'match85', 'words'],
+            ['transMemoryMatches', 'match85', 'percent'],
+            ['machineTranslationMatches', 'match85', 'percent'],
+            ['nonTranslatablesMatches', 'match85', 'percent'],
+            ['transMemoryMatches', 'match85', 'editingTime'],
+            ['machineTranslationMatches', 'match85', 'editingTime'],
+            ['nonTranslatablesMatches', 'match85', 'editingTime'],
+
+            ['transMemoryMatches', 'match75', 'segments'],
+            ['machineTranslationMatches', 'match75', 'segments'],
+            ['nonTranslatablesMatches', 'match75', 'segments'],
+            ['transMemoryMatches', 'match75', 'words'],
+            ['machineTranslationMatches', 'match75', 'words'],
+            ['nonTranslatablesMatches', 'match75', 'words'],
+            ['transMemoryMatches', 'match75', 'percent'],
+            ['machineTranslationMatches', 'match75', 'percent'],
+            ['nonTranslatablesMatches', 'match75', 'percent'],
+            ['transMemoryMatches', 'match75', 'editingTime'],
+            ['machineTranslationMatches', 'match75', 'editingTime'],
+            ['nonTranslatablesMatches', 'match75', 'editingTime'],
+
+            ['transMemoryMatches', 'match50', 'segments'],
+            ['machineTranslationMatches', 'match50', 'segments'],
+            ['nonTranslatablesMatches', 'match50', 'segments'],
+            ['transMemoryMatches', 'match50', 'words'],
+            ['machineTranslationMatches', 'match50', 'words'],
+            ['nonTranslatablesMatches', 'match50', 'words'],
+            ['transMemoryMatches', 'match50', 'percent'],
+            ['machineTranslationMatches', 'match50', 'percent'],
+            ['nonTranslatablesMatches', 'match50', 'percent'],
+            ['transMemoryMatches', 'match50', 'editingTime'],
+            ['machineTranslationMatches', 'match50', 'editingTime'],
+            ['nonTranslatablesMatches', 'match50', 'editingTime'],
+
+            ['transMemoryMatches', 'match0', 'segments'],
+            ['machineTranslationMatches', 'match0', 'segments'],
+            ['nonTranslatablesMatches', 'match0', 'segments'],
+            ['transMemoryMatches', 'match0', 'words'],
+            ['machineTranslationMatches', 'match0', 'words'],
+            ['nonTranslatablesMatches', 'match0', 'words'],
+            ['transMemoryMatches', 'match0', 'percent'],
+            ['machineTranslationMatches', 'match0', 'percent'],
+            ['nonTranslatablesMatches', 'match0', 'percent'],
+            ['transMemoryMatches', 'match0', 'editingTime'],
+            ['machineTranslationMatches', 'match0', 'editingTime'],
+            ['nonTranslatablesMatches', 'match0', 'editingTime'],
+        ]);
+        error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .
+            $args);
+        LibAPI\PDOWrapper::call('insert_post_analysis',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .
+            $args);
+    }
+
+    public function insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $data)
+    {
+        $args = $this->get_analysis_data($data, [
+            ['repetitions', 'segments'],
+            ['repetitions', 'words'],
+            ['repetitions', 'percent'],
+
+            ['transMemoryMatches', 'match100', 'segments'],
+            ['transMemoryMatches', 'match100', 'words'],
+            ['transMemoryMatches', 'match100', 'percent'],
+
+            ['transMemoryMatches', 'match95', 'segments'],
+            ['transMemoryMatches', 'match95', 'words'],
+            ['transMemoryMatches', 'match95', 'percent'],
+
+            ['transMemoryMatches', 'match85', 'segments'],
+            ['transMemoryMatches', 'match85', 'words'],
+            ['transMemoryMatches', 'match85', 'percent'],
+
+            ['transMemoryMatches', 'match75', 'segments'],
+            ['transMemoryMatches', 'match75', 'words'],
+            ['transMemoryMatches', 'match75', 'percent'],
+
+            ['transMemoryMatches', 'match50', 'segments'],
+            ['transMemoryMatches', 'match50', 'words'],
+            ['transMemoryMatches', 'match50', 'percent'],
+
+            ['transMemoryMatches', 'match0', 'segments'],
+            ['transMemoryMatches', 'match0', 'words'],
+            ['transMemoryMatches', 'match0', 'percent'],
+        ]);
+
+        error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .
+            LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .
+            $args);
+        LibAPI\PDOWrapper::call('insert_compare_analysis',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($claimant_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($analyse_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .
+            LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .
+            $args);
+    }
 }
