@@ -342,6 +342,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                         </td></tr>
                         {/if}
+                        {if !empty($user_badges['hours_donated'])}
                         <tr><td>
                         <div class="containerBox">
                             <div class="text-box">
@@ -359,6 +360,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         <tr><td>
                             <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
                         </td></tr>
+                        {/if}
                         {/if}
 
                         <tr>
