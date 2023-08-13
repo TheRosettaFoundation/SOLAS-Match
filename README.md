@@ -39,6 +39,11 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 14.1
+
+- A Phrase analysis and appropriate compare analyses are generated when a Phrase task is completed and stored in the TWB Platform database.
+- Recognition points now include Shell Tasks. There is now also an hours badge for those tasks that do not have word counts.
+
 ## Version 14
 
 - Removed Rabbit MQ from the system because our drivers are very old.
