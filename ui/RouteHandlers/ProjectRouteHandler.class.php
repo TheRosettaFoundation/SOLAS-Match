@@ -2617,7 +2617,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
-        if ($error_number = curl_errno($ch)) error_log("analyses/byProviders ($task_id, $source_workflow_level, $compare_workflow_level) Curl error ($error_number): " . curl_error($ch));
+        if ($error_number = curl_errno($ch)) error_log("analyses/byProviders ($task_id) Curl error ($error_number): " . curl_error($ch));
         else {
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             error_log("analyses/byProviders ($task_id) responseCode: $responseCode");
