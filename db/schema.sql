@@ -7238,6 +7238,7 @@ BEGIN
     LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
     LEFT JOIN Users            u2 ON tv.user_id=u2.id
     WHERE t.`task-status_id`<3
+          AND cancelled=0
     ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
