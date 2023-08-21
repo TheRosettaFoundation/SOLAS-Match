@@ -1406,6 +1406,7 @@ INSERT INTO task_type_details VALUES
 ( 5,1,0,0,1,0,1,0,0,'QA??',                       'QA??',                       '#B02323','',                                    'QUALITY',      'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
 ( 6,1,1,0,1,0,1,0,0,'Proofreading and Approval',  'Proofreading',               '#B02060','task/task.claimed-approval.tpl',      'APPROVAL',     'Proofreading and Approval','Word Count',   'words',  'Words',        'Labor hours','Words',  0.025, 0.25,0,0.0166667,0),
 ( 7,2,1,0,1,1,1,0,0,'Terminology translation',    'Terminology translation',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Labor hours','Terms',  0.050,10.00,0,0.0166667,0),
+(25,2,1,0,1,1,1,0,0,'Terminology revision',       'Terminology revision',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',  0.250, 5.00,5,0        ,0.025),
 ( 8,3,1,0,1,1,1,2,1,'DTP signoff',                'DTP signoff',                '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',  1.667, 4.17,0,0.0166667,0),
 ( 9,4,1,0,1,1,0,1,1,'Voice recording',            'Voice recording',            '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667,13.33,0,0.0166667,0),
 (10,4,1,0,1,1,1,0,0,'Subtitle Translation',       'Subtitle Translation',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Labor hours','Words',  0.065, 1.00,0,0.0166667,0),
@@ -1492,23 +1493,24 @@ UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=4;
 UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=5;
 UPDATE task_type_details SET unit_rate=  0.025  WHERE type_enum=6;
 UPDATE task_type_details SET unit_rate=  0.650  WHERE type_enum=7;
-UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=8;
-UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=9;
+UPDATE task_type_details SET unit_rate=  0.25   WHERE type_enum=25;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=8;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=9;
 UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=10;
 UPDATE task_type_details SET unit_rate=  0.025  WHERE type_enum=11;
-UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=12;
-UPDATE task_type_details SET unit_rate=100.0    WHERE type_enum=13;
-UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=14;
-UPDATE task_type_details SET unit_rate= 75.0    WHERE type_enum=15;
-UPDATE task_type_details SET unit_rate=100.0    WHERE type_enum=16;
-UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=17;
-UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=18;
-UPDATE task_type_details SET unit_rate= 62.5    WHERE type_enum=19;
-UPDATE task_type_details SET unit_rate=125.0    WHERE type_enum=20;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=12;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=13;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=14;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=15;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=16;
+UPDATE task_type_details SET unit_rate= 30.0    WHERE type_enum=17;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=18;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=19;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=20;
 UPDATE task_type_details SET unit_rate=  0.065  WHERE type_enum=21;
-UPDATE task_type_details SET unit_rate= 75.0    WHERE type_enum=22;
-UPDATE task_type_details SET unit_rate= 125.0   WHERE type_enum=23;
-UPDATE task_type_details SET unit_rate= 125.0   WHERE type_enum=24;
+UPDATE task_type_details SET unit_rate= 20.0    WHERE type_enum=22;
+UPDATE task_type_details SET unit_rate= 40.0    WHERE type_enum=23;
+UPDATE task_type_details SET unit_rate= 40.0    WHERE type_enum=24;
 
 # Point rate per Word or Minute etc.
 UPDATE task_type_details SET rate_for_recognition= 0       WHERE type_enum=1;
@@ -10384,7 +10386,7 @@ BEGIN
         ttc.type_category_text
     FROM task_type_details   ttd
     JOIN task_type_categorys ttc ON ttd.type_category=ttc.type_category
-    ORDER BY type_enum;
+    ORDER BY type_category, type_enum;
 END//
 DELIMITER ;
 
