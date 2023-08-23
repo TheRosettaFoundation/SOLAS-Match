@@ -23,7 +23,6 @@
             {else}
                 {Localisation::getTranslation('common_organisation_profile')}
             {/if}
-            <small>{sprintf(Localisation::getTranslation('org_public_profile_an_organisation_of'), Settings::get("site.name"))}</small>
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
@@ -36,7 +35,10 @@
                             {/if}
                             {if $isSiteAdmin}
                             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                                <i class="icon-upload icon-white"></i> New Phrase Project
+                            </a>
+                            <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
+                                <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>
                             {/if}
                             {if false}
@@ -65,7 +67,10 @@
                     {/if}
                             {if $isMember && $isSiteAdmin}
                             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                                <i class="icon-upload icon-white"></i> New Phrase Project
+                            </a>
+                            <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
+                                <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>
                             {/if}
                 </div>

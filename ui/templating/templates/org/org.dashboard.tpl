@@ -42,8 +42,11 @@
             {/if}
 
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
-            </a>  
+                <i class="icon-upload icon-white"></i> New Phrase Project
+            </a>
+            <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
+                <i class="icon-upload icon-white"></i> New non-Phrase Project
+            </a>
         </div>
                 
         <hr />           
