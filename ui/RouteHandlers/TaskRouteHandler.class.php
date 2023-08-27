@@ -1296,7 +1296,21 @@ class TaskRouteHandler
                         ||
                     $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment'
                         ||
-                    $paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Settled')
+                    $paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Settled'
+                        ||
+                    $paid_status['payment_status'] == 'Unsettled'             && $post['mark_payment_status'] == 'In-kind'
+                        ||
+                    $paid_status['payment_status'] == 'Unsettled'             && $post['mark_payment_status'] == 'In-house'
+                        ||
+                    $paid_status['payment_status'] == 'Unsettled'             && $post['mark_payment_status'] == 'Waived'
+                        ||
+                    $paid_status['payment_status'] == 'In-kind'               && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'In-house'              && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'Waived'                && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Waived')
                 {
                     $paid_status['payment_status'] = $post['mark_payment_status'];
                     $paid_status['status_changed'] = date('Y-m-d H:i:s');

@@ -303,6 +303,32 @@
             </td>
             <td>
                 {$paid_status['payment_status']}
+                {if $paid_status['payment_status'] == 'Unsettled'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="hidden" name="mark_payment_status" value="In-kind" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to In-house" />
+                        <input type="hidden" name="mark_payment_status" value="In-house" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Waived" />
+                        <input type="hidden" name="mark_payment_status" value="Waived" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+
+                {if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Unsettled" />
+                        <input type="hidden" name="mark_payment_status" value="Unsettled" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+
                 {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                         {if $paid_status['payment_status'] == 'Pending documentation'}
@@ -320,6 +346,11 @@
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                             <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Settled" />
                             <input type="hidden" name="mark_payment_status" value="Settled" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Waived" />
+                        <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}

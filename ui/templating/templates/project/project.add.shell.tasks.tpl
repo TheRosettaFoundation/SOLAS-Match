@@ -107,6 +107,11 @@ function validateForm()
   return true;
 }
 
+var task_types = [0,
+    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+        {$ui['type_enum']},
+    {/foreach}
+];
 var units = ["",
     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
         "{$ui['pricing_and_recognition_unit_text']}",
@@ -138,9 +143,9 @@ function duplicate(count) {
                     {for $count=0 to 19}
 <script type="text/javascript">
 function task_type_changed_{$count}() {
-    var task_type = document.getElementById("task_type_{$count}").value;
-    document.getElementById("unit_{$count}").innerHTML = units[task_type];
-    document.getElementById("source_unit_{$count}").innerHTML = source_units[task_type];
+    var task_type = parseInt(document.getElementById("task_type_{$count}").value);
+    document.getElementById("unit_{$count}").innerHTML = units[task_types.indexOf(task_type)];
+    document.getElementById("source_unit_{$count}").innerHTML = source_units[task_types.indexOf(task_type)];
 }
 </script>
                         <tr>
