@@ -116,7 +116,7 @@ class Middleware
                 $adminDao = new DAO\AdminDao();
                 $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
                 if ($isAdmin) {
-                    $template_data = array_merge($template_data, ['site_admin' => true]);
+                    $template_data = array_merge($template_data, ['site_admin' => $isAdmin]);
                 }
               } catch (Common\Exceptions\SolasMatchException $e) {
                 Common\Lib\UserSession::clearCurrentUserID();
@@ -244,11 +244,11 @@ class Middleware
     {
         global $app;
 
-        if ($this->isSiteAdmin()) {
+        if ($this->isSiteAdmin() & SITE_ADMIN) {
             return $handler->handle($request);
         }
 
-        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Site Admin login required to access page.');
 
         Common\Lib\UserSession::setReferer($request->getUri());
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
