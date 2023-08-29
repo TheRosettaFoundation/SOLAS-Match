@@ -38,7 +38,7 @@
                         {/if}
                     {/if}
                 {/if}
-                {if false && $isSiteAdmin && !empty($memsource_project)}
+                {if $isSiteAdmin && !empty($memsource_project)}
                     <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
                         <i class="icon-wrench icon-white"></i> Add Shell Tasks
                     </a>

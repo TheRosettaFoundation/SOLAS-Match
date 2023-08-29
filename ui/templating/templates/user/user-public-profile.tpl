@@ -249,7 +249,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
                         {/if}
-                        {if false && $isSiteAdmin}
+                        {if $isSiteAdmin}
                             <tr>
                                 <td>
                                     <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
