@@ -145,7 +145,7 @@ class TaskRouteHandler
         $app->map(['GET', 'POST'],
             '/task/{task_id}/org-feedback[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskOrgFeedback')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask_incl_community_officer')
             ->setName('task-org-feedback');
 
         $app->map(['GET', 'POST'],

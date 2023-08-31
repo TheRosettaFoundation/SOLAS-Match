@@ -324,17 +324,15 @@ class Middleware
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
      */
-    public function authUserForOrgTask(Request $request, RequestHandler $handler)
+    public function authUserForOrgTask(Request $request, RequestHandler $handler, $community = 0)
     {
         global $app;
 
-        if ($this->isSiteAdmin()) {
+        if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) {
             return $handler->handle($request);
         }
-
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
-        $userDao = new DAO\UserDao();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
@@ -342,24 +340,17 @@ class Middleware
         if (!empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject($task->getProjectId());
-            
             $org_id = $project->getOrganisationId();
             $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-            if ($user_id) {
-                $user_orgs = $userDao->getUserOrgs($user_id);
-                if (!is_null($user_orgs)) {
-                    foreach ($user_orgs as $orgObject) {
-                        if ($orgObject->getId() == $org_id) {
-                            return $handler->handle($request);
-                        }
-                    }
-                }
-            }
+            if ($user_id && $this->is_org_admin($user_id, $org_id) & (NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
-       
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+    }
+
+    public function authUserForOrgTask_incl_community_officer(Request $request, RequestHandler $handler)
+    {
+        return $this->authUserForOrgTask(Request $request, RequestHandler $handler, COMMUNITY_OFFICER);
     }
 
     public function authUserForOrgProject(Request $request, RequestHandler $handler)
