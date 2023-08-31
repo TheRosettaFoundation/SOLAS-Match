@@ -261,8 +261,6 @@ class Middleware
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
-
-        $taskDao = new DAO\TaskDao();
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $task_id = $route->getArgument('task_id');
@@ -270,18 +268,24 @@ class Middleware
         if ($ret = $this->user_not_logged_in($request)) return $ret;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+
         $claimant = null;
         if (!empty($task_id)) {
+            $taskDao = new DAO\TaskDao();
+            $projectDao = new DAO\ProjectDao();
+            $task = $taskDao->getTask($task_id);
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_id = $project->getOrganisationId();
+            if ($this->is_org_admin($user_id, $org_id) & (NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+
             $claimant = $taskDao->getUserClaimedTask($task_id);
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
-//error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         }
-
         return $handler->handle($request);
     }
 
