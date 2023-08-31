@@ -115,31 +115,31 @@ class TaskRouteHandler
         $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators_any_country_no_source[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_any_country_no_source')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-search_translators_any_country_no_source');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators_no_source[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_no_source')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-search_translators_no_source');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators_any_country[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators_any_country')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-search_translators_any_country');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_search_translators')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-search_translators');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/task_invites_sent/{sesskey}[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_invites_sent')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-invites_sent');
 
         $app->map(['GET', 'POST'],
