@@ -922,7 +922,7 @@ class TaskRouteHandler
         }
 
         $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-        $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
+        $adminAccess = $site_admin | $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
         $copy_task = unserialize(serialize($task));
 
