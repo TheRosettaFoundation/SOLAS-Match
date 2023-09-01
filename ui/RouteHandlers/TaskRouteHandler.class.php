@@ -1139,7 +1139,7 @@ class TaskRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if (($isOrgMember || $isSiteAdmin) && isset($post['published'])) {
+            if ((($isOrgMember | $isSiteAdmin) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER) && isset($post['published'])) {
                 if ($post['published']) {
                     $task->setPublished(1);
                 } else {
@@ -1178,7 +1178,7 @@ class TaskRouteHandler
                 }
             }
 
-            if (isset($post['paid_status'])) {
+            if (($isSiteAdmin  & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['paid_status'])) {
                 if ($post['paid_status'] == 2) {
                     $taskDao->set_paid_status($task_id);
                     UserRouteHandler::flashNow('success', 'The task is now marked as paid.');
