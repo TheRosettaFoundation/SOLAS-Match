@@ -264,6 +264,18 @@ class Middleware
         return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
     }
 
+    public function authIsSiteAdmin_any_or_org_admin_or_po(Request $request, RequestHandler $handler)
+    {
+        global $app;
+
+        if ($this->isSiteAdmin_any_or_org_admin_any() & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Admin login required to access page.');
+
+        Common\Lib\UserSession::setReferer($request->getUri());
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+    }
+
     public function authenticateUserForTask(Request $request, RequestHandler $handler)
     {
         global $app;

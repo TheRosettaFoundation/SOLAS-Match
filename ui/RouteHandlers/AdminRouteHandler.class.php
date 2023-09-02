@@ -1,3 +1,4 @@
+authIsSiteAdmin_any_or_org_admin_or_po
 authIsSiteAdmin
 authIsSiteAdmin_or_PO
 authIsSiteAdmin_any
@@ -20,7 +21,7 @@ class AdminRouteHandler
         $app->map(['GET', 'POST'],
             '/admin[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:adminDashboard')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po')
             ->setName('site-admin-dashboard');
 
         $app->map(['GET', 'POST'],
