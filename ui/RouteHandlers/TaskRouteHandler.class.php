@@ -1248,7 +1248,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($details_claimant && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['feedback'])) {
+            if ($details_claimant && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['feedback'])) {
                if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
@@ -1280,7 +1280,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
-            if ($isSiteAdmin && isset($post['mark_purchase_order'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_purchase_order'])) {
                 if (is_numeric($post['purchase_order'])) {
                     if ($paid_status['purchase_order'] != (int)$post['purchase_order']) {
                         $paid_status['payment_status'] = 'Unsettled';
@@ -1291,7 +1291,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Purchase Order updated.');
                 } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
             }
-            if ($isSiteAdmin && isset($post['mark_payment_status'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_payment_status'])) {
                 if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
                         ||
                     $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment'
@@ -1304,14 +1304,14 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Payment Status updated.');
                 } else UserRouteHandler::flashNow('error', 'Payment Status Invalid.');
             }
-            if ($isSiteAdmin && isset($post['mark_unit_rate'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_unit_rate'])) {
                 if (is_numeric($post['unit_rate'])) {
                     $paid_status['unit_rate'] = $post['unit_rate'];
                     $taskDao->update_paid_status($paid_status);
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
                 } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
-            if ($isSiteAdmin && isset($post['mark_source_quantity'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_source_quantity'])) {
                 if ((int)$post['source_quantity'] > 0) {
                     $task->set_source_quantity((int)$post['source_quantity']);
                     $taskDao->updateTask($task);
@@ -1368,7 +1368,7 @@ class TaskRouteHandler
                     );
                 }
             }
-            if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
+            if (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
 
         if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);
