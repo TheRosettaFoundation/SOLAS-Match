@@ -1189,7 +1189,7 @@ class TaskRouteHandler
                 $paid_status = $taskDao->get_paid_status($task_id);
             }
 
-            if (!$taskClaimed && $isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
+            if (!$taskClaimed && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
                 $emailOrUserId = trim($post['userIdOrEmail']);
                 if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
                 $userToBeAssigned = null;
