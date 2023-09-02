@@ -1237,7 +1237,7 @@ class TaskRouteHandler
                 }
                 $post['userIdOrEmail'] = '';
             }
-            if (!$taskClaimed && $isSiteAdmin && !empty($post['userIdOrEmailDenyList'])) {
+            if (!$taskClaimed && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && !empty($post['userIdOrEmailDenyList'])) {
                 $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
                 if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
                 else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
@@ -1248,7 +1248,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($details_claimant && $isSiteAdmin && isset($post['feedback'])) {
+            if ($details_claimant && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['feedback'])) {
                if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
