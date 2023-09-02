@@ -1,3 +1,6 @@
+authIsSiteAdmin
+authIsSiteAdmin_or_PO
+authIsSiteAdmin_any
 <?php
 
 namespace SolasMatch\UI\RouteHandlers;

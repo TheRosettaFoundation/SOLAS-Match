@@ -240,11 +240,11 @@ class Middleware
         return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
     }
 
-    public function authIsSiteAdmin(Request $request, RequestHandler $handler)
+    public function authIsSiteAdmin(Request $request, RequestHandler $handler, $roles = 0)
     {
         global $app;
 
-        if ($this->isSiteAdmin() & SITE_ADMIN) {
+        if ($this->isSiteAdmin() & (SITE_ADMIN | $roles)) {
             return $handler->handle($request);
         }
 
@@ -252,6 +252,16 @@ class Middleware
 
         Common\Lib\UserSession::setReferer($request->getUri());
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+    }
+
+    public function authIsSiteAdmin_or_PO(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER);
+    }
+
+    public function authIsSiteAdmin_any(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
     }
 
     public function authenticateUserForTask(Request $request, RequestHandler $handler)
