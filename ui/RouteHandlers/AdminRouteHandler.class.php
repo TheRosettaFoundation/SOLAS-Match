@@ -263,6 +263,8 @@ class AdminRouteHandler
     {
         global $template_data;
         $userId = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($userId);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
@@ -270,7 +272,6 @@ class AdminRouteHandler
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             $userDao = new DAO\UserDao();
-            $adminDao = new DAO\AdminDao();
             $taskDao = new DAO\TaskDao();
             $statsDao = new DAO\StatisticsDao();
 
@@ -283,7 +284,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (!empty($post['search_organisation'])) {
+            if ($isSiteAdmin && !empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_organisation_results', $items_found);
@@ -292,7 +293,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (!empty($post['search_project'])) {
+            if (!empty($post['search_project'])) {;;;;;;;;;;Admin ALL and NGO/NGO PO
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_project_results', $items_found);
@@ -309,7 +310,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (isset($post['sync_po'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_po'])) {
                 if ($number = $taskDao->sync_po()) {
                     $number--;
                     UserRouteHandler::flashNow('sync_po_success', "Purchase Orders Synchronized (Payment Status for $number Tasks Changed)");
@@ -318,7 +319,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (isset($post['sync_hubspot'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_hubspot'])) {
                 if ($taskDao->update_hubspot_deals(0)) {
                     UserRouteHandler::flashNow('sync_hubspot_success', 'HubSpot Synchronized');
                 } else {
