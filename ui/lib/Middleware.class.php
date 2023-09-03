@@ -268,7 +268,7 @@ class Middleware
     {
         global $app;
 
-        if ($this->isSiteAdmin_any_or_org_admin_any() & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+        if ($this->isSiteAdmin_any_or_org_admin_or_po_for_any_org() & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Admin login required to access page.');
 
