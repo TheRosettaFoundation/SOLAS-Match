@@ -264,7 +264,7 @@ class AdminRouteHandler
         global $template_data;
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($userId);
+        $isSiteAdmin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
@@ -284,7 +284,7 @@ class AdminRouteHandler
                 }
             }
 
-            if ($isSiteAdmin && !empty($post['search_organisation'])) {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_organisation_results', $items_found);
@@ -327,17 +327,17 @@ class AdminRouteHandler
                 }
             }
 
-            if (isset($post['addAdmin'])) {
+            if (($isSiteAdmin & SITE_ADMIN) && isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
                     $adminDao->createSiteAdmin($user->getId());
                 }
             }
-            if (isset($post['revokeAdmin'])) {
+            if (($isSiteAdmin & SITE_ADMIN) && isset($post['revokeAdmin'])) {
                 $adminDao->removeSiteAdmin($post['userId']);
             }
             
-            if (isset($post['banOrg']) && $post['orgName'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new DAO\OrganisationDao();
                 $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
