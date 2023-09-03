@@ -183,7 +183,7 @@ class AdminRouteHandler
         $app->map(['GET', 'POST'],
             '/user_task_languages/{code}',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_languages')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('user_task_languages');
 
         $app->map(['GET', 'POST'],
