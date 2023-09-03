@@ -1,4 +1,4 @@
-authIsSiteAdmin_any_or_org_admin_or_po
+authIsSiteAdmin_any_or_org_admin_or_po_for_any_org
 authIsSiteAdmin
 authIsSiteAdmin_or_PO
 authIsSiteAdmin_any
@@ -21,7 +21,7 @@ class AdminRouteHandler
         $app->map(['GET', 'POST'],
             '/admin[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:adminDashboard')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po_for_any_org')
             ->setName('site-admin-dashboard');
 
         $app->map(['GET', 'POST'],
@@ -165,7 +165,7 @@ class AdminRouteHandler
         $app->map(['GET', 'POST'],
             '/search_users_by_language_pair[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:search_users_by_language_pair')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po_for_any_org')
             ->setName('search_users_by_language_pair');
 
         $app->map(['GET', 'POST'],

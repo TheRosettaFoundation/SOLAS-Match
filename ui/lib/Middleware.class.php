@@ -264,7 +264,7 @@ class Middleware
         return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
     }
 
-    public function authIsSiteAdmin_any_or_org_admin_or_po(Request $request, RequestHandler $handler)
+    public function authIsSiteAdmin_any_or_org_admin_or_po_for_any_org(Request $request, RequestHandler $handler)
     {
         global $app;
 
