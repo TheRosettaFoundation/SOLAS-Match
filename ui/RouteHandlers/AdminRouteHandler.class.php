@@ -1,7 +1,3 @@
-authIsSiteAdmin_any_or_org_admin_or_po_for_any_org
-authIsSiteAdmin
-authIsSiteAdmin_or_PO
-authIsSiteAdmin_any
 <?php
 
 namespace SolasMatch\UI\RouteHandlers;
