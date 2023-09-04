@@ -291,7 +291,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (!empty($post['search_project'])) {;;;;;;;;;;Admin ALL and NGO/NGO PO
+            if (!empty($post['search_project'])) {
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_project_results', $items_found);
