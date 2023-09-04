@@ -350,7 +350,7 @@ class AdminRouteHandler
                 }
                 $adminDao->banOrg($bannedOrg);
             }
-            if (isset($post['banUser']) && $post['userEmail'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['banUser']) && $post['userEmail'] != '') {
                 $bannedUser = new Common\Protobufs\Models\BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
@@ -363,13 +363,13 @@ class AdminRouteHandler
                 $adminDao->banUser($bannedUser);
             }
             
-            if (isset($post['unBanOrg']) && $post['orgId'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['unBanOrg']) && $post['orgId'] != '') {
                 $adminDao->unBanOrg($post['orgId']);
             }
-            if (isset($post['unBanUser']) && $post['userId'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['unBanUser']) && $post['userId'] != '') {
                 $adminDao->unBanUser($post['userId']);
             }
-            if (isset($post['deleteUser']) && $post['userEmail'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['deleteUser']) && $post['userEmail'] != '') {
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
