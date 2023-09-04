@@ -264,6 +264,9 @@ class AdminRouteHandler
         global $template_data;
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+
         $isSiteAdmin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -271,7 +274,6 @@ class AdminRouteHandler
         if ($post = $request->getParsedBody()) {
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            $userDao = new DAO\UserDao();
             $taskDao = new DAO\TaskDao();
             $statsDao = new DAO\StatisticsDao();
 
@@ -384,7 +386,7 @@ class AdminRouteHandler
                     );
                 }
             }
-            if (isset($post['revokeTask']) && $post['revokeTask'] != '') {
+            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
                 $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if ($taskId && !is_null($userToRevokeFrom)) {
@@ -411,12 +413,7 @@ class AdminRouteHandler
             }
         }
         
-        $adminDao = new DAO\AdminDao();
-        $userDao = new DAO\UserDao();
-        $orgDao = new DAO\OrganisationDao();
-        
         $adminList = $adminDao->getSiteAdmins();
-        
         $bannedOrgList = $adminDao->getBannedOrgs();
         $bannedOrgNames = array();
         $orgBannerAdminNames = array();
