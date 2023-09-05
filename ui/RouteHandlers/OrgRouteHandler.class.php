@@ -43,13 +43,13 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/{org_id}/request/queue[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgRequestQueue')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-request-queue');
 
         $app->map(['GET', 'POST'],
             '/org/{org_id}/private[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPrivateProfile')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-private-profile');
 
         $app->map(['GET', 'POST'],
@@ -61,13 +61,13 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/{org_id}/manage/{badge_id}[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgManageBadge')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-manage-badge');
 
         $app->map(['GET', 'POST'],
             '/org/{org_id}/create/badge[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgCreateBadge')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-create-badge');
 
         $app->map(['GET', 'POST'],
@@ -79,25 +79,25 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/{org_id}/edit/{badge_id}[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgEditBadge')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-edit-badge');
 
         $app->get(
             '/org/{org_id}/task/{task_id}/complete[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskComplete')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-task-complete');
 
         $app->map(['GET', 'POST'],
             '/org/{org_id}/task/{task_id}/review[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskReview')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-task-review');
 
         $app->get(
             '/org/{org_id}/task/{task_id}/reviews[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskReviews')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-task-reviews');
     }
 

@@ -311,35 +311,26 @@ class Middleware
         return $handler->handle($request);
     }
 
-    public function authUserForOrg(Request $request, RequestHandler $handler)
+    public function authUserForOrg(Request $request, RequestHandler $handler, $community = 0)
     {
         global $app;
 
-        if ($this->isSiteAdmin()) {
-            return $handler->handle($request);
-        }
-        $userDao = new DAO\UserDao();
-        $orgDao = new DAO\OrganisationDao();
+        if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) return $handler->handle($request);
 
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $org_id = $route->getArgument('org_id');
         if (!empty($org_id)) {
-            if ($user_id) {
-                $user_orgs = $userDao->getUserOrgs($user_id);
-                if (!is_null($user_orgs)) {
-                    foreach ($user_orgs as $orgObject) {
-                        if ($orgObject->getId() == $org_id) {
-                            return $handler->handle($request);
-                        }
-                    }
-                }
-            }
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
+            if ($user_id && $this->is_org_admin($user_id, $org_id) & (NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
-        
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+    }
+
+    public function authUserForOrg_incl_community_officer(Request $request, RequestHandler $handler)
+    {
+        return $this->authUserForOrg(Request $request, RequestHandler $handler, COMMUNITY_OFFICER);
     }
 
     /*
@@ -350,9 +341,8 @@ class Middleware
     {
         global $app;
 
-        if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) {
-            return $handler->handle($request);
-        }
+        if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) return $handler->handle($request);
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
@@ -379,31 +369,18 @@ class Middleware
     {
         global $app;
 
-        if ($this->isSiteAdmin()) {
-            return $handler->handle($request);
-        }
+        if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER)) return $handler->handle($request);
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $project_id = $route->getArgument('project_id');
-        $userDao = new DAO\UserDao();
-        $projectDao = new DAO\ProjectDao();
-        
         if (!empty($project_id)) {
-            $user_id = Common\Lib\UserSession::getCurrentUserID();
-            $userOrgs = $userDao->getUserOrgs($user_id);
+            $projectDao = new DAO\ProjectDao();
             $project = $projectDao->getProject($project_id);
-            $project_orgid = $project->getOrganisationId();
-
-            if ($userOrgs) {
-                foreach ($userOrgs as $org) {
-                    if ($org->getId() == $project_orgid) {
-                        return $handler->handle($request);
-                    }
-                }
-            }
+            $org_id = $project->getOrganisationId();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
+            if ($user_id && $this->is_org_admin($user_id, $org_id) & (NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
-
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
