@@ -570,7 +570,8 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (21,'MTPE'),
   (22,'Plain Language assessment'),
   (23,'Plain Language editing'),
-  (24,'Plain Language training');
+  (24,'Plain Language training'),
+  (25,'Terminology revision');
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
 CREATE TABLE IF NOT EXISTS `task_type_categorys` (
