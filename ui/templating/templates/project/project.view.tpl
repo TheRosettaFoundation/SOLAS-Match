@@ -538,24 +538,17 @@
                                     {if $isSiteAdmin}
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
-                                         <span><strong>Paid</strong>&nbsp;
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
-                                          <br/>
                                           <span data-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="icon-remove" ></i></span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
-                                          <br/>
                                           <span data-toggle="tooltip" data-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
-                                          <br/>
                                           <span data-toggle="tooltip" data-placement="bottom" title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
-                                          <br/>
                                           <span data-toggle="tooltip" data-placement="bottom" title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                           {else}
-                                          <span></span>
+                                          PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} {$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
-                                         
-                                          </span>
                                      {else}
                                          <span>-</span>
                                      {/if}
