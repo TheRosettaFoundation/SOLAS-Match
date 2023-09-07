@@ -1304,6 +1304,12 @@ class TaskRouteHandler
                         ||
                     $paid_status['payment_status'] == 'Unsettled'             && $post['mark_payment_status'] == 'Waived'
                         ||
+                    $paid_status['payment_status'] == 'In-kind'               && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'In-house'              && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'Waived'                && $post['mark_payment_status'] == 'Unsettled'
+                        ||
                     $paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Waived')
                 {
                     $paid_status['payment_status'] = $post['mark_payment_status'];
