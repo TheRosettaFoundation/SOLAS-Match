@@ -12,7 +12,7 @@
     <div id="org_id">{$org_id}</div>
     <div id="user_id">{$user_id}</div>
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
-    <div id="userIsAdmin">{$userIsAdmin}</div>
+    <div id="userIsAdmin">{$userIsAdmin}</div>($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER) WANT it to be 1 if allowed else 0
 </span>
 
 <div class="grid_8">
