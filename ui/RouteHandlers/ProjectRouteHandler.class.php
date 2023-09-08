@@ -719,7 +719,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['revokeTaskId']);
             }
 
-            if (([[$isAdmin]] [|| $isOrgMember]) && isset($post['publishedTask']) && isset($post['task_id'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
                 } else {
@@ -781,6 +781,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             if (isset($post['deleteTask'])) {
                 $taskDao->deleteTask($post['task_id']);
                 UserRouteHandler::flashNow(
@@ -788,13 +789,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     sprintf(Lib\Localisation::getTranslation('project_view_15'), $task->getTitle())
                 );
             }
-
             if (isset($post['archiveTask'])) {
                 $taskDao->archiveTask($post['task_id'], $user_id);
                 UserRouteHandler::flashNow(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
+            }
             }
 
             if (isset($post['trackOrganisation'])) {
@@ -866,7 +867,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
-            if ([[$isAdmin]] || [[$isOrgMember]]) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
                     $tasks = [];
                     if (!empty($post['unpublish_selected_tasks'])) {
@@ -906,7 +907,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
-            if ([[$isSiteAdmin]]) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 $number = 0;
                 if (!empty($post['complete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['complete_selected_tasks']) as $task_id) {
@@ -1042,7 +1043,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
         }
 
-        if ([[$isOrgMember]] || [[$isAdmin]]) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
