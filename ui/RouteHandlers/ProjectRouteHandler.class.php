@@ -699,8 +699,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
-
+$roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
         $isAdmin = $isOrgAdmin || $isSiteAdmin;
@@ -1124,13 +1123,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
+                'roles'         => $roles,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_project'   => $memsource_project,
                 'matecat_analyze_url' => ($memsource_project && !preg_match('/^\d*$/', $memsource_project['memsource_project_uid'])) ? $taskDao->get_matecat_analyze_url($project_id, $memsource_project) : '',
                 'pm' => $pm,
                 'project' => $project,
-                'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
                 'get_paid_for_project' => $taskDao->get_paid_for_project($project_id),
                 'get_payment_status_for_project' => $taskDao->get_payment_status_for_project($project_id),
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),

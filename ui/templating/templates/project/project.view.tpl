@@ -3,7 +3,7 @@
 
 <span class="hidden">
     <!-- Parameters... -->
-    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
+    <div id="isSiteAdmin">{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}1{else}0{/if}</div>
 </span>
 
     <h1 class="page-header">
@@ -14,7 +14,7 @@
         {assign var="project_id" value=$project->getId()}
         <div class="pull-right">
             <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                {if $isSiteAdmin && !empty($matecat_analyze_url)}
+                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                     <input type="hidden" name="copyChunks" value="1" />
                     <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
                         <i class="icon-upload icon-white"></i> Sync Phrase TMS
@@ -23,22 +23,7 @@
                         <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                     </a>
                 {/if}
-                {if (!$isOrgMember)}
-                    {if false}
-                        {if ($userSubscribedToOrganisation)}
-                            <input type="hidden" name="trackOrganisation" value="0" />
-                                <a class="btn btn-small btn-inverse pull-right" onclick="$('#trackedOrganisationForm').submit();" >
-                                    <i class="icon-remove-circle icon-white"></i>{Localisation::getTranslation('org_public_profile_untrack_organisation')}
-                                </a>
-                        {else}
-                            <input type="hidden" name="trackOrganisation" value="1" />
-                                <a class="btn btn-small pull-right" onclick="$('#trackedOrganisationForm').submit();" >
-                                    <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
-                                </a>
-                        {/if}
-                    {/if}
-                {/if}
-                {if $isSiteAdmin && !empty($memsource_project)}
+                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) && !empty($memsource_project)}
                     <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
                         <i class="icon-wrench icon-white"></i> Add Shell Tasks
                     </a>
@@ -159,7 +144,7 @@
                     <td></td>
                     <td style = "text-align:center;">
                     	{if $project->getImageUploaded()}
-	                        {if $isSiteAdmin}
+                          {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
 	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
@@ -296,7 +281,7 @@
             </form>
         {/if}
 
-        {if $isSiteAdmin}
+        {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
             <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
                     <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
@@ -436,7 +421,7 @@
                                  <th>{Localisation::getTranslation('common_title')}</th>
                                  <th>{Localisation::getTranslation('common_status')}</th>       
                                  <th>{Localisation::getTranslation('common_type')}</th> 
-                                {if $isSiteAdmin}
+                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                                  <th>Paid?</th>
                                 {/if}
                                  <th>Cancelled?</th>
@@ -466,7 +451,7 @@
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             {Localisation::getTranslation('common_unclaimed')}
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                          {if $isSiteAdmin}
+                                          {if $isSiteAdmin}($roles & (SITE_ADMIN | PROJECT_OFFICER)) ADD COMMUNITY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
@@ -486,7 +471,7 @@
                                                     </form>
                                                 {/if}
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
-                                          {if $isSiteAdmin}
+                                          {if $isSiteAdmin}($roles & (SITE_ADMIN | PROJECT_OFFICER)) AD DCOMMUNITY!!!!!!!!!!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
@@ -496,7 +481,7 @@
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
                                              <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
@@ -535,7 +520,7 @@
                                             </small>
                                         </strong>
                                     </td>
-                                    {if $isSiteAdmin}
+                                    {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
@@ -632,7 +617,7 @@
                                                  </button> 
                                                 </div>
                                             {else}
-                                                {if $isSiteAdmin}
+                                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
                                                 <a class="btn btn-small btn-inverse"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
