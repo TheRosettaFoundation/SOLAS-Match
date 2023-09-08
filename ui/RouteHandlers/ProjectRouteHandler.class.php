@@ -698,11 +698,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
-        $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-$roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
-        $isOrgAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id);
-        $isAdmin = $isOrgAdmin || $isSiteAdmin;
+        $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
 
         if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
             UserRouteHandler::flash('error', 'You cannot access this project!');
@@ -723,7 +719,7 @@ $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
                 $task = $taskDao->getTask($post['revokeTaskId']);
             }
 
-            if (($isAdmin || $isOrgMember) && isset($post['publishedTask']) && isset($post['task_id'])) {
+            if (([[$isAdmin]] [|| $isOrgMember]) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
                 } else {
@@ -870,7 +866,7 @@ $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
-            if ($isAdmin || $isOrgMember) {
+            if ([[$isAdmin]] || [[$isOrgMember]]) {
                 if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
                     $tasks = [];
                     if (!empty($post['unpublish_selected_tasks'])) {
@@ -910,7 +906,7 @@ $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
-            if ($isSiteAdmin) {
+            if ([[$isSiteAdmin]]) {
                 $number = 0;
                 if (!empty($post['complete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['complete_selected_tasks']) as $task_id) {
@@ -1046,7 +1042,7 @@ $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
             }
         }
 
-        if ($isOrgMember || $isAdmin) {
+        if ([[$isOrgMember]] || [[$isAdmin]]) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
@@ -1120,9 +1116,6 @@ $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
 
         $template_data = array_merge($template_data, array(
                 'sesskey'       => $sesskey,
-                "isOrgMember"   => $isOrgMember,
-                "isAdmin"       => $isAdmin,
-                "isSiteAdmin"   => $isSiteAdmin,
                 'roles'         => $roles,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
