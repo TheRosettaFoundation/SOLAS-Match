@@ -28,7 +28,7 @@
                         <i class="icon-wrench icon-white"></i> Add Shell Tasks
                     </a>
                 {/if}
-                {if ($isOrgMember || $isAdmin)}
+                {if $roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                     <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
                     </a> 
@@ -235,7 +235,7 @@
                 
     <p style="margin-bottom:40px;"/>
 
-{if isset($user) && ($isOrgMember || $isAdmin)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <hr />    
     <h1 class="page-header" style="margin-bottom: 60px">
         {Localisation::getTranslation('project_view_tasks')}
@@ -263,7 +263,7 @@
             </a>
             <ul id="menu3" class="dropdown-menu" role="menu" aria-labelledby="drop5">
 
-        {if $isAdmin || $isOrgMember}
+        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#publish_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
                     <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
@@ -451,7 +451,7 @@
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             {Localisation::getTranslation('common_unclaimed')}
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                          {if $isSiteAdmin}($roles & (SITE_ADMIN | PROJECT_OFFICER)) ADD COMMUNITY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                          {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
@@ -460,7 +460,7 @@
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
@@ -471,7 +471,7 @@
                                                     </form>
                                                 {/if}
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
-                                          {if $isSiteAdmin}($roles & (SITE_ADMIN | PROJECT_OFFICER)) AD DCOMMUNITY!!!!!!!!!!!;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                          {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
