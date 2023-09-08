@@ -250,8 +250,10 @@
                 <option value="all_revision_tasks">Select all Revision Tasks</option>
                 <option value="all_revtrans_tasks">Select all Translation and Revision</option>
                 <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
+                {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                 <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
                 <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
+                {/if}
                 <option value="delesect_all">Deselect all</option>
             </select>
         </span>
