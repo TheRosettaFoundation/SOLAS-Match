@@ -10,7 +10,7 @@
         <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
         <div id="deadline_timestamp">{$deadline_timestamp}</div>
-        <div id="userIsAdmin">{$isSiteAdmin}</div>
+        <div id="userIsAdmin">{$isSiteAdmin}</div>SITE AND PROJ OFF
 
         <!-- Templates... -->
         <div id="template_language_options">
