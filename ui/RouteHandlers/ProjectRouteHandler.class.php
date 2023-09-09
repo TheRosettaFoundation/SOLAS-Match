@@ -1362,12 +1362,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         $adminDao = new DAO\AdminDao();
-        $userIsAdmin = $adminDao->isSiteAdmin($user_id);
-        if ($userIsAdmin) {
-            $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
-        } else {
-            $userIsAdmin = 0;
-        }
+        $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectAlter3.js\"></script>";
@@ -1398,7 +1393,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'countries'      => $countries,
             'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
-            'userIsAdmin'    => $userIsAdmin,
+            'roles'             => $roles ,
             'enter_analyse_url' => 0,
             'memsource_project' => $memsource_project,
             'project_complete_date' => $taskDao->get_project_complete_date($project_id),
