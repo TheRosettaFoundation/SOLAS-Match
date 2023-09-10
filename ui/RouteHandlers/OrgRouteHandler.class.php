@@ -425,7 +425,6 @@ class OrgRouteHandler
         $tagDao = new DAO\TagDao();
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($current_user_id);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
@@ -517,7 +516,7 @@ class OrgRouteHandler
 
         $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
-            "isSiteAdmin"   => $isSiteAdmin,
+'roles' => $roles,
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
