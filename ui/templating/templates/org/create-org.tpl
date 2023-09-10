@@ -1,7 +1,5 @@
 {include file="header.tpl"}
 
-{if $isSiteAdmin || (Settings::get('site.org_creation') == 'y')}
-
 <h1 class="page-header">
     {Localisation::getTranslation('create_org_create_an_organisation')}
     <small>
@@ -35,7 +33,5 @@
 {Localisation::getTranslation('thank_registering_organisation')}
 </h1>
 {Localisation::getTranslation('registrations_twb')}
-
-{/if}
 
 {include file="footer.tpl"}

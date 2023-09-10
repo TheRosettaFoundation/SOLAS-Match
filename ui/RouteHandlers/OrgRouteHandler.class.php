@@ -31,7 +31,7 @@ class OrgRouteHandler
         $app->get(
             '/org/{org_id}/org_dashboard[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:org_orgDashboard')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('org-projects');
 
         $app->get(
@@ -394,9 +394,6 @@ class OrgRouteHandler
             }
         }
 
-        $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-
         $template_data = array_merge($template_data, array(
             'org'  => $org,
             'org2' => $org2,
@@ -413,7 +410,6 @@ class OrgRouteHandler
             'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
             'errorOccured' => $errorOccured,
             'errorList'    => $errorList,
-            'isSiteAdmin'  => $isSiteAdmin,
             'sesskey'      => $sesskey,
         ));
 
