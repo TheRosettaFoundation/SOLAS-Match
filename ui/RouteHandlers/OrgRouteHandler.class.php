@@ -25,13 +25,13 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/dashboard[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgDashboard')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po_for_any_org')
             ->setName('org-dashboard');
 
         $app->get(
             '/org/{org_id}/org_dashboard[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:org_orgDashboard')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-projects');
 
         $app->get(
