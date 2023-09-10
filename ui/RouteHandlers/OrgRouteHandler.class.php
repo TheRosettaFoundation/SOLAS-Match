@@ -474,7 +474,6 @@ class OrgRouteHandler
                 }
             }
         }
-        
         if ($my_organisations) {
             $orgs = array();
             $templateData = array();
@@ -498,7 +497,7 @@ class OrgRouteHandler
             $adminForOrg = array();
             foreach ($orgs as $orgAdminTest) {
                 $adminForOrg[$orgAdminTest->getId()] = false;
-                if ($isSiteAdmin || $adminDao->isOrgAdmin($orgAdminTest->getId(), $current_user_id)) {
+                if ($adminDao->get_roles($current_user_id, $orgAdminTest->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                     $adminForOrg[$orgAdminTest->getId()] = true;
                 }
             }
@@ -516,7 +515,7 @@ class OrgRouteHandler
 
         $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
-'roles' => $roles,
+            'roles'         => $adminDao->get_roles($current_user_id),
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
