@@ -1393,7 +1393,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'countries'      => $countries,
             'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
-            'roles'             => $roles ,
+            'roles'             => $roles,
             'enter_analyse_url' => 0,
             'memsource_project' => $memsource_project,
             'project_complete_date' => $taskDao->get_project_complete_date($project_id),
@@ -1725,7 +1725,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'create_memsource'=> $create_memsource,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
-            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
+            'roles'          => $adminDao->get_roles($user_id, $org_id),
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
@@ -1992,7 +1992,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'selected_minute'=> $selected_minute,
             'languages'      => $projectDao->generate_language_selection(1),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
-            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
+            'roles'          => $adminDao->get_roles($user_id, $org_id),
             'sesskey'        => $sesskey,
         ]);
         return UserRouteHandler::render('project/project.create.empty.tpl', $response);

@@ -19,7 +19,7 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/create[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:createOrg')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
             ->setName('create-org');
 
         $app->map(['GET', 'POST'],
