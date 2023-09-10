@@ -707,6 +707,7 @@ class OrgRouteHandler
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
+        $adminDao = new DAO\AdminDao();
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
@@ -972,7 +973,7 @@ class OrgRouteHandler
                 }
             }
 
-            if (isset($post['deleteId'])) {
+            if (isset($post['deleteId']) && ($adminDao->get_roles($userId) & SITE_ADMIN)) {
                 $deleteId = $post['deleteId'];
                 if ($deleteId) {
                     if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
@@ -991,9 +992,7 @@ class OrgRouteHandler
             }
         }
 
-        $adminDao = new DAO\AdminDao();
-        //if ($adminDao->isOrgAdmin($org->getId(), $userId) || $adminDao->isSiteAdmin($userId)) { [}]
-        if ($adminDao->isSiteAdmin($userId)) {
+        if ($adminDao->get_roles($userId) & SITE_ADMIN) {
             $template_data = array_merge($template_data, array('orgAdmin' => true));
         }
         
