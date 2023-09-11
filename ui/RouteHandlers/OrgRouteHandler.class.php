@@ -1920,12 +1920,6 @@ class OrgRouteHandler
 
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($currentUser->getId(), $org_id);
 
-        $adminAccess = false;
-        if ($adminDao->isSiteAdmin($currentUser->getId()) == 1 ||
-                $adminDao->isOrgAdmin($org->getId(), $currentUser->getId()) == 1) {
-            $adminAccess = true;
-        }
-
         $org_badges = array();
         $user_list = array();
 
@@ -1981,12 +1975,10 @@ class OrgRouteHandler
                 'sources'      => $this->generateOptions($this->possibleLanguages(), $org2->getSources()),
                 'targets'      => $this->generateOptions($this->possibleLanguages(), $org2->getTargets()),
                 'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
-                'isMember'  => $isMember,
+                'roles'      => $roles,
                 'orgMembers' => $orgMemberList,
-                'adminAccess' => $adminAccess,
                 'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
-                'isSiteAdmin' => $isSiteAdmin,
                 'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,
                 'no_subscription' => $no_subscription,
