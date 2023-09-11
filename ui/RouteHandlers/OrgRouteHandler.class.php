@@ -1836,25 +1836,8 @@ class OrgRouteHandler
             }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
-[[[WIP
-                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-                                    <button type="submit" name="revokeAdmin" value="{$member->getId()}" class="btn btn-inverse"
-
-                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="revokePO" value="{$member->getId()}" class="btn btn-inverse"
-
-                                {else}
-                                    <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse"
-
-                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-
-                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
-
-                                {else}
-                                    <button type="submit" name="makeOrgPO" value="{$member->getId()}" class="btn btn-success"
-]]]
             if (isset($post['revokeUser'])) {
+NO ROLE
                 $userId = $post['revokeUser'];
                 $user = $userDao->getUser($userId);
                 if ($user) {
@@ -1882,11 +1865,23 @@ class OrgRouteHandler
                     UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
                 }
             } elseif (isset($post['revokeOrgAdmin'])) {
+AND MAKE PO
                 $userId = $post['revokeOrgAdmin'];
                 error_log("Called revokeOrgAdmin($userId, $org_id)");
                 $adminDao->removeOrgAdmin($userId, $org_id);
+            } elseif (isset($post['revokeOrgPO'])) {
+AND MAKE LINGUIST
+                $userId = $post['revokeOrgPO'];
+                error_log("Called revokeOrgPO($userId, $org_id)");
+                $adminDao->removeOrgAdmin($userId, $org_id);
             } elseif (isset($post['makeOrgAdmin'])) {
+MAKE ORG ADMIN
                 $userId = $post['makeOrgAdmin'];
+                error_log("Called createOrgAdmin($userId, $org_id)");
+                $adminDao->createOrgAdmin($userId, $org_id);
+            } elseif (isset($post['makeOrgPO'])) {
+MAKE ORG PO
+                $userId = $post['makeOrgPO'];
                 error_log("Called createOrgAdmin($userId, $org_id)");
                 $adminDao->createOrgAdmin($userId, $org_id);
             }

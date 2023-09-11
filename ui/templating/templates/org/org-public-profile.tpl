@@ -733,12 +733,12 @@
                         {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
                             <td>
                                 {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-                                    <button type="submit" name="revokeAdmin" value="{$member->getId()}" class="btn btn-inverse"
+                                    <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse"
                                             onclick="return confirm('Are you sure you want to revoke admin role from this user?')">
                                         <i class="icon-fire icon-white"></i> Remove Admin Role and Make Project Officer
                                     </button>
                                 {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="revokePO" value="{$member->getId()}" class="btn btn-inverse"
+                                    <button type="submit" name="revokeOrgPO" value="{$member->getId()}" class="btn btn-inverse"
                                             onclick="return confirm('Are you sure you want to revoke project officer role from this user?')">
                                         <i class="icon-fire icon-white"></i> Remove Project Officer Role and Make Linguist
                                     </button>
