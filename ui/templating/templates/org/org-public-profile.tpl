@@ -26,22 +26,26 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
-                    {if !$isMember}
-                        <form id="trackedOrganisationForm" method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            {if $isMember || $adminAccess}
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                             </a>
                             {/if}
-                            {if $isSiteAdmin}
+
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> New Phrase Project
                             </a>
+                            {/if}
+
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                             <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>
                             {/if}
+
                             {if false}
+                        <form id="trackedOrganisationForm" method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
                             </a>
@@ -56,22 +60,8 @@
                                     <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
                                 </a>
                             {/if}
-                            {/if}
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
-                    {/if}
-                    {if $isMember && $adminAccess}
-                        <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
-                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
-                        </a>
-                    {/if}
-                            {if $isMember && $isSiteAdmin}
-                            <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> New Phrase Project
-                            </a>
-                            <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> New non-Phrase Project
-                            </a>
                             {/if}
                 </div>
             {/if}
@@ -179,7 +169,7 @@
                                     </td>
                                 </tr>
 
-                                {if $isMember || $adminAccess}
+                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST)}
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
@@ -577,7 +567,7 @@
 
         {if isset($user)}
 
-            {if $isMember || $adminAccess}
+            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('org_public_profile_create_badge')}
                 </a>
@@ -592,7 +582,7 @@
             <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
             <th>{Localisation::getTranslation('common_description')}</th>
 
-            {if $isMember || $adminAccess}
+            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                 <th>{Localisation::getTranslation('common_edit')}</th>
                 <th>{Localisation::getTranslation('common_assign')}</th>
                 <th>{Localisation::getTranslation('common_delete')}</th>
@@ -609,7 +599,7 @@
                 <td width="35%">
                     {TemplateHelper::uiCleanseHTML($badge->getDescription())}
                 </td>
-                {if ($isMember || $adminAccess) && isset($user)}
+                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('org_public_profile_edit_badge')}
@@ -643,7 +633,7 @@
 {/if}
       
 
-{if false && ($isMember || $adminAccess)}
+{if false && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))}
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          {Localisation::getTranslation('org_public_profile_membership_requests')}
@@ -706,7 +696,7 @@
  {/if}
 
 
-{if $isMember || $adminAccess}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
         <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
@@ -771,7 +761,7 @@
     {/if}
 {/if}
 
-{if $isSiteAdmin}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         Subscription
@@ -830,7 +820,7 @@
     </form>
 {/if}
 
-{if $adminAccess}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         {Localisation::getTranslation('required_qualification_level')}<br />
