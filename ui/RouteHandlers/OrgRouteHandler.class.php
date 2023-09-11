@@ -1681,7 +1681,7 @@ class OrgRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
-        $isSiteAdmin = $adminDao->isSiteAdmin($currentUser->getId());
+        $roles = $adminDao->get_roles($currentUser->getId(), $org_id);
         $start_dateError = '';
         if ($isSiteAdmin) {
             $extra_scripts = "
