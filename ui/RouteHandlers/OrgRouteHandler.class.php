@@ -1681,7 +1681,9 @@ class OrgRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
-        $roles = $adminDao->get_roles($currentUser->getId(), $org_id);
+        $current_user_id = $currentUser->getId();
+        $roles = $adminDao->get_roles($current_user_id, $org_id);
+
         $start_dateError = '';
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
             $extra_scripts = "
@@ -1837,33 +1839,10 @@ class OrgRouteHandler
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
             if (isset($post['revokeUser'])) {
-NO ROLE
                 $userId = $post['revokeUser'];
-                $user = $userDao->getUser($userId);
-                if ($user) {
-                    $userName = $user->getDisplayName();
-                    if ($userDao->leaveOrganisation($userId, $org_id)) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            sprintf(
-                                Lib\Localisation::getTranslation('org_public_profile_26'),
-                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
-                                $userName
-                            )
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            sprintf(
-                                Lib\Localisation::getTranslation('org_public_profile_27'),
-                                $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)),
-                                $userName
-                            )
-                        );
-                    }
-                } else {
-                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
-                }
+                $userDao->leaveOrganisation($userId, $org_id);
+                UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
+                error_log("leaveOrganisation($userId, $org_id) by $current_user_id");
             } elseif (isset($post['revokeOrgAdmin'])) {
 AND MAKE PO
                 $userId = $post['revokeOrgAdmin'];
@@ -1887,9 +1866,8 @@ MAKE ORG PO
             }
             }
             if (isset($post['trackOrganisation'])) {
-                $user_id = $currentUser->getId();
                 if ($post['trackOrganisation']) {
-                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
+                    $userTrackOrganisation = $userDao->trackOrganisation($current_user_id, $org_id);
                     if ($userTrackOrganisation) {
                         UserRouteHandler::flashNow(
                             "success",
@@ -1899,7 +1877,7 @@ MAKE ORG PO
                         UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
                     }
                 } else {
-                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($current_user_id, $org_id);
                     if ($userUntrackOrganisation) {
                         UserRouteHandler::flashNow(
                             "success",
@@ -1923,7 +1901,7 @@ MAKE ORG PO
                 } else {
                     $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
                 }
-            } elseif (($isSiteAdmin || $adminDao->isOrgAdmin($org_id, $currentUser->getId())) && !empty($post['required_qualification_level'])) {
+            } elseif (($isSiteAdmin || $adminDao->isOrgAdmin($org_id, $current_user_id)) && !empty($post['required_qualification_level'])) {
                 $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
             }
         }
@@ -1931,13 +1909,13 @@ MAKE ORG PO
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         if (!empty($orgMemberList) && count($orgMemberList) > 0) {
             foreach ($orgMemberList as $member) {
-                if ($currentUser->getId() ==  $member->getId()) {
+                if ($current_user_id ==  $member->getId()) {
                     $isMember = true;
                 }
             }
         }
 
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($currentUser->getId(), $org_id);
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($current_user_id, $org_id);
 
         $org_badges = array();
         $user_list = array();
