@@ -26,7 +26,7 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
-                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
                             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                             </a>
@@ -695,7 +695,6 @@
      <p style="margin-bottom: 40px" />               
  {/if}
 
-
 {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
@@ -711,7 +710,7 @@
                 <thead>
                     <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
                     <th>{Localisation::getTranslation('org_public_profile_username')}</th>
-                    {if $adminAccess}
+                    {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
                         <th>{Localisation::getTranslation('org_public_profile_remove_user')}</th>
                         <th>{Localisation::getTranslation('org_public_profile_alter_permissions')}</th>
                     {/if}
@@ -720,16 +719,18 @@
                     {foreach $orgMembers as $member}
                         <tr>
                             <td>
-                                {if $memberIsAdmin[{$member->getId()}]}
+                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
                                     <span class="marker org-admin-marker">{Localisation::getTranslation('org_public_profile_administrator')}</span>
+                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
+                                    <span class="marker org-member-marker">Project Officer</span>
                                 {else}
-                                    <span class="marker org-member-marker">{Localisation::getTranslation('org_public_profile_member')}</span >
+                                    <span class="marker org-member-marker">Linguist</span>
                                 {/if}
                             </td>
                             <td>
                                 <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{TemplateHelper::uiCleanseHTML($member->getDisplayName())}</a>
                             </td>
-                        {if $adminAccess}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
                             <td>
                                 <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
                                         onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_membership')}')">
