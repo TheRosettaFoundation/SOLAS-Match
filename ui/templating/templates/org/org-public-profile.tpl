@@ -711,8 +711,8 @@
                     <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
                     <th>{Localisation::getTranslation('org_public_profile_username')}</th>
                     {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
-                        <th>{Localisation::getTranslation('org_public_profile_remove_user')}</th>
-                        <th>{Localisation::getTranslation('org_public_profile_alter_permissions')}</th>
+                        <th>Remove Role</th>
+                        <th>Add Role</th>
                     {/if}
                 </thead>
                 <tbody>
@@ -732,21 +732,34 @@
                             </td>
                         {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
                             <td>
-                                <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
-                                        onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_membership')}')">
-                                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_membership')}
-                                </button>
-                            </td>
-                            <td>
-                                {if $memberIsAdmin[{$member->getId()}]}
-                                    <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse" 
-                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_admin')}')">
-                                            <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_administrator')}
+                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
+                                    <button type="submit" name="revokeAdmin" value="{$member->getId()}" class="btn btn-inverse"
+                                            onclick="return confirm('Are you sure you want to revoke admin role from this user?')">
+                                        <i class="icon-fire icon-white"></i> Remove Admin Role and Make Project Officer
+                                    </button>
+                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
+                                    <button type="submit" name="revokePO" value="{$member->getId()}" class="btn btn-inverse"
+                                            onclick="return confirm('Are you sure you want to revoke project officer role from this user?')">
+                                        <i class="icon-fire icon-white"></i> Remove Project Officer Role and Make Linguist
                                     </button>
                                 {else}
+                                    <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse"
+                                            onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
+                                        <i class="icon-fire icon-white"></i> Remove Linguist Permanently from this Organization
+                                    </button>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
+                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
                                     <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
                                             onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_make_admin')}')"> 
                                             <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_administrator')}
+                                    </button>
+                                {else}
+                                    <button type="submit" name="makeOrgPO" value="{$member->getId()}" class="btn btn-success"
+                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_make_admin')}')">Are you sure you want to make this user a project officer of this organization?
+                                            <i class="icon-star icon-white"></i> Create Project Officer
                                     </button>
                                 {/if}
                             </td>
