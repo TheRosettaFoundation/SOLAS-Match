@@ -1683,7 +1683,7 @@ class OrgRouteHandler
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $roles = $adminDao->get_roles($currentUser->getId(), $org_id);
         $start_dateError = '';
-        if ($isSiteAdmin) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
             $extra_scripts = "
             <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
             <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/start_datePicker.js\"></script>";
@@ -1746,6 +1746,7 @@ class OrgRouteHandler
                 }
             }
             
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
                     $user = $userDao->getUserByEmail($post['email']);
@@ -1832,7 +1833,28 @@ class OrgRouteHandler
                         sprintf(Lib\Localisation::getTranslation('common_invalid_userid'), $user_id)
                     );
                 }
-            } elseif (isset($post['revokeUser'])) {
+            }
+            }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
+[[[WIP
+                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
+                                    <button type="submit" name="revokeAdmin" value="{$member->getId()}" class="btn btn-inverse"
+
+                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
+                                    <button type="submit" name="revokePO" value="{$member->getId()}" class="btn btn-inverse"
+
+                                {else}
+                                    <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse"
+
+                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
+
+                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
+                                    <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
+
+                                {else}
+                                    <button type="submit" name="makeOrgPO" value="{$member->getId()}" class="btn btn-success"
+]]]
+            if (isset($post['revokeUser'])) {
                 $userId = $post['revokeUser'];
                 $user = $userDao->getUser($userId);
                 if ($user) {
@@ -1867,7 +1889,9 @@ class OrgRouteHandler
                 $userId = $post['makeOrgAdmin'];
                 error_log("Called createOrgAdmin($userId, $org_id)");
                 $adminDao->createOrgAdmin($userId, $org_id);
-            } elseif (isset($post['trackOrganisation'])) {
+            }
+            }
+            if (isset($post['trackOrganisation'])) {
                 $user_id = $currentUser->getId();
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
