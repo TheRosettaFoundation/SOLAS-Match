@@ -1887,19 +1887,22 @@ class OrgRouteHandler
                         );
                     }
                 }
-            } elseif ($isSiteAdmin && isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
-                    $start_date = date("Y-m-d H:i:s", $validTime);
-                    $comment = '';
-                    if (!empty($post['comment'])) $comment = $post['comment'];
-                    $level = $post['level'];
-                    error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
-                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
-                } else {
-                    $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
+            }
+            if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER) {
+                if (isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
+                    if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
+                        $start_date = date("Y-m-d H:i:s", $validTime);
+                        $comment = '';
+                        if (!empty($post['comment'])) $comment = $post['comment'];
+                        $level = $post['level'];
+                        error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
+                        $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
+                    } else {
+                        $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
+                    }
+                } elseif (!empty($post['required_qualification_level'])) {
+                    $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
                 }
-            } elseif (($isSiteAdmin || $adminDao->isOrgAdmin($org_id, $current_user_id)) && !empty($post['required_qualification_level'])) {
-                $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
             }
         }
         $isMember = false;
