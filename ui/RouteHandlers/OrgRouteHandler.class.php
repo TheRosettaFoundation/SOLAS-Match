@@ -1905,22 +1905,12 @@ class OrgRouteHandler
                 }
             }
         }
-        $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
-        if (!empty($orgMemberList) && count($orgMemberList) > 0) {
-            foreach ($orgMemberList as $member) {
-                if ($current_user_id ==  $member->getId()) {
-                    $isMember = true;
-                }
-            }
-        }
-
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($current_user_id, $org_id);
+        $org_badges = [];
+        $user_list = [];
 
-        $org_badges = array();
-        $user_list = array();
-
-        if ($isMember || $adminAccess) {
+        if ($adminAccess) {
             $requests = $orgDao->getMembershipRequests($org_id);
             if (!empty($requests) && count($requests) > 0) {
                 foreach ($requests as $memRequest) {
@@ -1933,7 +1923,7 @@ class OrgRouteHandler
             
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
-                    $memberIsAdmin[$orgMember->getId()] = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
+                    $memberIsAdmin[$orgMember->getId()] = $adminDao->get_roles($org_id, $orgMember->getId());
                 }
             }
         }
