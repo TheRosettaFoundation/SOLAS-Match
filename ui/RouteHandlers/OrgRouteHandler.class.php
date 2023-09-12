@@ -1724,7 +1724,7 @@ class OrgRouteHandler
             $org2->setOftens('');
         }
 
-        $memberIsAdmin = array();
+        $memberIsAdmin = [];
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -1908,19 +1908,20 @@ class OrgRouteHandler
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($current_user_id, $org_id);
         $org_badges = [];
-        $user_list = [];
+        //$user_list = [];
 
-        if ($adminAccess) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            /*
             $requests = $orgDao->getMembershipRequests($org_id);
-            if (!empty($requests) && count($requests) > 0) {
+            if (!empty($requests)) {
                 foreach ($requests as $memRequest) {
                     $user = $userDao->getUser($memRequest->getUserId());
                     $user_list[] = $user;
                 }
             }
-
+            */
             $org_badges = $orgDao->getOrgBadges($org_id);
-            
+
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
                     $memberIsAdmin[$orgMember->getId()] = $adminDao->get_roles($org_id, $orgMember->getId());
@@ -1929,7 +1930,8 @@ class OrgRouteHandler
         }
 
         $no_subscription = true;
-        if ($isSiteAdmin) {
+        $subscription = [];
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
             $subscription = $orgDao->getSubscription($org_id);
             if (empty($subscription)) {
                 $subscription = array(
@@ -1941,8 +1943,6 @@ class OrgRouteHandler
             } else {
                 $no_subscription = false;
             }
-        } else {
-            $subscription = array();
         }
 
         $siteName = Common\Lib\Settings::get("site.name");
@@ -1972,7 +1972,7 @@ class OrgRouteHandler
                 'subscription' => $subscription,
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
-                "membershipRequestUsers" => $user_list,
+                //"membershipRequestUsers" => $user_list,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 

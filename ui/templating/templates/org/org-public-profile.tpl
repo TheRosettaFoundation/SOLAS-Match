@@ -576,7 +576,7 @@
     </h1>  
     <p style="margin-bottom: 40px" />   
 
-{if $org_badges != NULL && count($org_badges) > 0}                
+{if !empty($org_badges)}
     <table class="table table-striped">
         <thead>            
             <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
@@ -645,7 +645,7 @@
      </h1>                  
      <p style="margin-bottom: 40px" />               
 
-     {if isset($membershipRequestUsers) && count($membershipRequestUsers) > 0}
+     {if !empty($membershipRequestUsers)}
          <table class="table table-striped">
              <thead>            
                  <th style="text-align: left"><strong>{Localisation::getTranslation('common_name')}</strong></th>
@@ -704,7 +704,7 @@
             <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
         </a>
     </h1>
-    {if isset($orgMembers) && count($orgMembers) > 0}
+    {if !empty($orgMembers)}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
             <table class="table table-striped">
                 <thead>
