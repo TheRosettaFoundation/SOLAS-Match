@@ -1838,32 +1838,29 @@ class OrgRouteHandler
             }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
-            if (isset($post['revokeUser'])) {
-                $userId = $post['revokeUser'];
-                $userDao->leaveOrganisation($userId, $org_id);
-                UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
-                error_log("leaveOrganisation($userId, $org_id) by $current_user_id");
-            } elseif (isset($post['revokeOrgAdmin'])) {
-AND MAKE PO
-                $userId = $post['revokeOrgAdmin'];
-                error_log("Called revokeOrgAdmin($userId, $org_id)");
-                $adminDao->removeOrgAdmin($userId, $org_id);
-            } elseif (isset($post['revokeOrgPO'])) {
-AND MAKE LINGUIST
-                $userId = $post['revokeOrgPO'];
-                error_log("Called revokeOrgPO($userId, $org_id)");
-                $adminDao->removeOrgAdmin($userId, $org_id);
-            } elseif (isset($post['makeOrgAdmin'])) {
-MAKE ORG ADMIN
-                $userId = $post['makeOrgAdmin'];
-                error_log("Called createOrgAdmin($userId, $org_id)");
-                $adminDao->createOrgAdmin($userId, $org_id);
-            } elseif (isset($post['makeOrgPO'])) {
-MAKE ORG PO
-                $userId = $post['makeOrgPO'];
-                error_log("Called createOrgAdmin($userId, $org_id)");
-                $adminDao->createOrgAdmin($userId, $org_id);
-            }
+                if (isset($post['revokeUser'])) {
+                    $user_id = $post['revokeUser'];
+                    $userDao->leaveOrganisation($user_id, $org_id);
+                    UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
+                    error_log("leaveOrganisation($user_id, $org_id) by $current_user_id");
+                } elseif (isset($post['revokeOrgAdmin'])) {
+                    $user_id = $post['revokeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
+                    error_log("revokeOrgAdmin($user_id, $org_id) by $current_user_id");
+                } elseif (isset($post['revokeOrgPO'])) {
+                    $user_id = $post['revokeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_PROJECT_OFFICER, NGO_LINGUIST);
+                    error_log("revokeOrgPO($user_id, $org_id) by $current_user_id");
+                } elseif (isset($post['makeOrgAdmin'])) {
+                    $user_id = $post['makeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                    error_log("makeOrgAdmin($user_id, $org_id) by $current_user_id");
+                } elseif (isset($post['makeOrgPO'])) {
+                    $user_id = $post['makeOrgPO'];
+                    $user_id = $post['makeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
+                    error_log("makeOrgPO($user_id, $org_id) by $current_user_id");
+                }
             }
             if (isset($post['trackOrganisation'])) {
                 if ($post['trackOrganisation']) {
