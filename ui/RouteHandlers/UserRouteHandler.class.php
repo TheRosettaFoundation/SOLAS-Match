@@ -94,7 +94,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             '/{user_id}/user_rate_pairs[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_rate_pairs')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('user_rate_pairs');
 
         $app->map(['GET', 'POST'],
@@ -124,43 +124,43 @@ class UserRouteHandler
         $app->get(
             '/users_review[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_review')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('users_review');
 
         $app->map(['GET', 'POST'],
             '/users_new[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('users_new');
 
         $app->get(
             '/users_tracked[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('users_tracked');
 
         $app->map(['GET', 'POST'],
             '/add_tracking_code[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('add_tracking_code');
 
         $app->get(
             '/download_users_tracked[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download_users_tracked');
 
         $app->get(
             '/download_users_new[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download_users_new');
 
         $app->get(
             '/download_users_new_unreviewed[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
