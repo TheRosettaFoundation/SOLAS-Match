@@ -3110,14 +3110,17 @@ EOF;
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        $isSiteAdmin = false;
-        if (!empty($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) $isSiteAdmin = true;
+        $task = $taskDao->getTask($taskId);
+        $project = $projectDao->getProject($task->getProjectId());
+        $roles = 0;
+        if (!empty($loggedInUserId)) $roles = $adminDao->get_roles($loggedInUserId, $project->getOrganisationId());
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        if ($isSiteAdmin && $request->getMethod() === 'POST') {
+        if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && $request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if (!empty($post['user_id'])) $taskDao->delete_review($taskId, $post['user_id']);
@@ -3133,7 +3136,7 @@ EOF;
         $template_data = array_merge($template_data, array(
             'task'          => $task,
             'reviews'       => $reviews,
-            'isSiteAdmin'   => $isSiteAdmin,
+            'roles'         => $roles,
             'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts
         ));
