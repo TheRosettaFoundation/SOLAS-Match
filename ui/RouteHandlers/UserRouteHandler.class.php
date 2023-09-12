@@ -42,6 +42,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             '/{user_id}/change_email[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:changeEmail')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('change-email');
 
         $app->map(['GET', 'POST'],
@@ -594,7 +595,7 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('common_new_email_already_used');
             }
 
-            if (!$error && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
+            if (!$error && ($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
                 $user = $userDao->getUser($user_id);
                 if (!($error = $userDao->changeEmail($user_id, $post['email'], $user->getEmail()))) {
                     UserRouteHandler::flashNow('success', '');
@@ -3117,8 +3118,7 @@ EOF;
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
-        $roles = 0;
-        if (!empty($loggedInUserId)) $roles = $adminDao->get_roles($loggedInUserId, $project->getOrganisationId());
+        $roles = $adminDao->get_roles($loggedInUserId, $project->getOrganisationId());
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && $request->getMethod() === 'POST') {
