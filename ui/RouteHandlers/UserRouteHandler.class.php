@@ -218,6 +218,7 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
+        $adminDao = new DAO\AdminDao();
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
@@ -404,7 +405,7 @@ class UserRouteHandler
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
-            $org_admin = $userDao->is_admin_or_org_member($user_id);
+            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER);
         }
 
         $template_data = array_merge($template_data, array(
