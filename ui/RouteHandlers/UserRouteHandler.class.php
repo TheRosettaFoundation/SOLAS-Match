@@ -2082,7 +2082,7 @@ class UserRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return $response;
+        if ($user_id != $loggedInUserId && !($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) return $response;
 
         $user = $userDao->getUser($user_id);
 
@@ -2134,7 +2134,7 @@ class UserRouteHandler
         $certification = $userDao->getUserCertificationByID($id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return $response;
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) return $response;
 
         $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
 
