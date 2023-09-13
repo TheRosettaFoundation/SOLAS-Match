@@ -1100,7 +1100,7 @@ class UserRouteHandler
                             ) {
                                 $found = true;
 
-                                if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
+                                if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
                                     $userDao->updateUserQualifiedPair(
                                         $user_id,
                                         $language_code_source,
@@ -1113,9 +1113,9 @@ class UserRouteHandler
                             }
                         }
                         if (!$found) {
-                            if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
+                            if (!($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) $post["qualification_level_$i"] = 1;
 
-                            if (!$isSiteAdmin && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
+                            if (!($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
                                 if ($userDao->get_tracked_registration_for_verified($user_id)) {
                                     if (!empty($post['nativeLanguageSelect']) && ($language_code_target === $post['nativeLanguageSelect'])) { // Only make verified if target matches native language 
                                         $post["qualification_level_$i"] = 2; // Verified Translator
@@ -1172,14 +1172,14 @@ class UserRouteHandler
                     if (isset($post['interval'])) {
                         if ($post['interval'] == 0 || $post['interval'] == 10) {
                             $userDao->removeTaskStreamNotification($user_id);
-                            if ($post['interval'] == 10 && $isSiteAdmin) $userDao->set_special_translator($user_id, 1);
+                            if ($post['interval'] == 10 && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) $userDao->set_special_translator($user_id, 1);
                         } else {
                             $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                             $notifData->setUserId($user_id);
                             $notifData->setInterval($post['interval']);
                             $notifData->setStrict(true);
                             $userDao->requestTaskStreamNotification($notifData);
-                            if ($isSiteAdmin) $userDao->set_special_translator($user_id, 0);
+                            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) $userDao->set_special_translator($user_id, 0);
                         }
                     }
 
@@ -1263,7 +1263,7 @@ class UserRouteHandler
             $(".countclick").hide();
 
             //Admin
-            var admin = "'.$isSiteAdmin.'";
+            var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
                 return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
             }, "Please enter a different value, values must not be the same." );
@@ -1642,7 +1642,7 @@ class UserRouteHandler
 
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
-            var admin = "'.$isSiteAdmin.'";
+            var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
 
             if (admin == "1") {
                 fieldWrapper.append(fTypee);
