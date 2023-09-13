@@ -1038,8 +1038,7 @@ class UserRouteHandler
         $howheard_list      = $userDao->getHowheardList($user_id);
         $certification_list = $userDao->getCertificationList($user_id);
 
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
 
         if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
@@ -2022,12 +2021,7 @@ class UserRouteHandler
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
 
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        } else {
-            $isSiteAdmin = false;
-        }
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
 
         if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
@@ -2060,8 +2054,7 @@ class UserRouteHandler
         $template_data = array_merge($template_data, array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
             'siteAPI'           => Common\Lib\Settings::get('site.api'),
-DEL            'isSiteAdmin'       => $isSiteAdmin,
-$roles =
+            'roles'             => $roles,
             'user'              => $user,
             'user_id'           => $user_id,
             'userPersonalInfo'  => $userPersonalInfo,
