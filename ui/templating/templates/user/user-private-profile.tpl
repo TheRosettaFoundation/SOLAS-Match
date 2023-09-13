@@ -16,7 +16,7 @@
         <div id="userQualifiedPairQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
-    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
+    <div id="isSiteAdmin">{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}1{else}0{/if}</div>
     <div id="capabilityCount">{$capabilityCount}</div>
     <div id="expertiseCount">{$expertiseCount}</div>
 
@@ -169,7 +169,7 @@
                         <div class="span4">
                             <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="We encourage translators to translate into their native language."></i></label>
                         </div>
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                         <div class="span2">
                             <label class="clear_brand required"><strong>Qualification Level</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
                         </div>
@@ -179,7 +179,7 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span6 clear_brand">
-                        {if !$isSiteAdmin}
+                        {if !($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             {if !(isset($intervalId))}
                                 {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                             {/if}
@@ -214,7 +214,7 @@
                             >
                                 {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
                             </option>
-                            {if $isSiteAdmin}
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                             <option value="10">
                                 Set this volunteer as in-kind sponsor
                             </option>
