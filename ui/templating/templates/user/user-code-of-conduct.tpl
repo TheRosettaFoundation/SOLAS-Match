@@ -6,7 +6,7 @@
     <div id="siteLocation">{$siteLocation}</div>
     <div id="siteAPI">{$siteAPI}</div>
     <div id="user_id">{$user_id}</div>
-    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
+    <div id="isSiteAdmin">{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}1{else}0{/if}</div>
 </span>
 
 {if isset($user)}
