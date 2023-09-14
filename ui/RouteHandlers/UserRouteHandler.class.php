@@ -2949,7 +2949,7 @@ EOF;
             'user_has_strategic_languages' => 0,
             'user_badges'            => $userDao->get_points_for_badges($user_id),
             'user_badge_name'        => wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n'),
-            'isSiteAdmin'            => 0,
+            'roles'                  => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,
             'no_header'              => 1,
