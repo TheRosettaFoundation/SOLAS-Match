@@ -2318,9 +2318,6 @@ class UserRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        $template_data = array_merge($template_data, ['isSiteAdmin' => $isSiteAdmin]);
-
         $private_access = 0;
         if ($loggedInUserId == $user_id) $private_access = 1;
 
@@ -2338,7 +2335,6 @@ class UserRouteHandler
             $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
             if ($userPersonalInfo && $userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
-            // error_log("Error getting user personal info: $e");
         }
 
         $testing_center_projects_by_code = [];
@@ -2630,6 +2626,7 @@ error_log("result: $result");//(**)
 
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
+            'roles'                  => $roles,
             'user_badges'            => $userDao->get_points_for_badges($user_id),
             'user_badge_name'        => !empty($userPersonalInfo) ? wordwrap($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName(), 20, '\n') : '',
             'key'                    => $key,
