@@ -209,12 +209,12 @@
                                             </strong>
 
                                             {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                            {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $button_count.$pair == 0}
+                                            {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) && $button_count.$pair == 0}
                                                 {$button_count.$pair=1}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
                                                 <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
-                                                {if empty($testing_center_projects_by_code[$pair]) || $isSiteAdmin}
+                                                {if empty($testing_center_projects_by_code[$pair]) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                                                     <input type="submit" class="add_click_handler btn btn-primary" name="btnSubmit" value="Get Verified" />
                                                 {else}
                                                     <input type="submit" class="btn btn-primary" name="btnSubmit" value="Get Verified" onclick="
@@ -229,7 +229,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
                         {/if}
-                        {if !empty($user_rate_pairs) && $isSiteAdmin}
+                        {if !empty($user_rate_pairs) && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             <tr>
                                 <td style="padding-bottom: 10px"/>
                             </tr>
@@ -249,7 +249,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
                         {/if}
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                             <tr>
                                 <td>
                                     <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
@@ -289,7 +289,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
 
-                            {if $private_access || $isSiteAdmin}
+                            {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             <tr>
                                 <td>
                                     <h3>Share this link with anyone you wish to see your profile:</h3>
@@ -301,7 +301,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </td>
                             </tr>
                             {/if}
-                            {if $isSiteAdmin}
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                             <tr>
                                 <td style="padding-bottom: 10px" />
                             </tr>
@@ -334,7 +334,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         </div>
                         </td></tr>
 
-                        {if $private_access || $isSiteAdmin}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                         <tr><td>
                             <h3>Use the link below to embed the above badge in another system:</h3>
                         </td></tr>
@@ -353,7 +353,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         </div>
                         </td></tr>
 
-                        {if $private_access || $isSiteAdmin}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                         <tr><td>
                             <h3>Use the link below to embed the above badge in another system:</h3>
                         </td></tr>
@@ -378,7 +378,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </td>
                         </tr>
 
-                        {if $isSiteAdmin && !empty($supported_ngos_paid)}
+                        {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($supported_ngos_paid)}
                         <tr>
                             <td>
                                 <h3>NGOs supported with paid projects</h3>
@@ -405,8 +405,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <ul>
                         {foreach from=$certifications item=certification}
                         <li>
-                        {if $private_access || $isSiteAdmin}
-                            {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
+                            {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Mark Reviewed" />
                                 <input type="hidden" name="certification_id" value="{$certification['id']}" />
@@ -416,7 +416,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                            {else}
                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
                            {/if}
-                            {if $isSiteAdmin}
+                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                     <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this certificate?')" />
                                     <input type="hidden" name="certification_id" value="{$certification['id']}" />
@@ -432,11 +432,11 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </td>
                         </tr>
 
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                         <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a></td></tr>
                         {/if}
 
-                        {if $private_access || $isSiteAdmin}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr>
@@ -460,7 +460,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
     </tr>
 </table>
 
-{if $private_access || $isSiteAdmin}
+{if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
 </div>
@@ -653,7 +653,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 {/if}
 
-{if $isSiteAdmin}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
 <hr/>
 <div class="page-header">
 {if !empty($valid_key_certificate)}
@@ -904,7 +904,7 @@ If a language is to be removed from this list, the community will be informed be
     <p style="margin-bottom:50px;"/>
 {/if}
 
-{if $private_access || $isSiteAdmin}
+{if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
     {if !empty($badges)}
         <div class='page-header'>
             <h1>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small>
@@ -938,7 +938,7 @@ If a language is to be removed from this list, the community will be informed be
         <p style="margin-bottom:50px;"/>
     {/if}
 
-{if $private_access || $isSiteAdmin}
+{if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
