@@ -2341,7 +2341,7 @@ class UserRouteHandler
         $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
         $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
-        $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
+        $show_create_memsource_user = ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER));
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -2362,7 +2362,7 @@ class UserRouteHandler
                 $template_data = array_merge($template_data, array("requestSuccess" => true));
             }
 
-            if ($isSiteAdmin && isset($post['requestDocuments'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['requestDocuments'])) {
                 $ch = curl_init('https://app.asana.com/api/1.0/tasks');
                 $pm = $userDao->getUser($loggedInUserId);
                 $pm_info = $userDao->getUserPersonalInformation($loggedInUserId);
@@ -2401,7 +2401,7 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Print request made for user');
             }
 
-            if ($isSiteAdmin && !empty($post['admin_comment'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
                     UserRouteHandler::flashNow('error', 'You must enter a comment and a score between 1 and 5');
                 } else {
@@ -2409,11 +2409,11 @@ error_log("result: $result");//(**)
                 }
             }
 
-            if ($isSiteAdmin && !empty($post['mark_comment_delete'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_comment_delete'])) {
                 $userDao->delete_admin_comment($post['comment_id']);
             }
 
-            if ($isSiteAdmin && !empty($post['mark_adjust_points'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_adjust_points'])) {
                 if (empty($post['comment']) || !is_numeric($post['points'])) {
                     UserRouteHandler::flashNow('error', 'You must enter a comment and integer points');
                 } else {
@@ -2421,11 +2421,11 @@ error_log("result: $result");//(**)
                 }
             }
 
-            if ($isSiteAdmin && !empty($post['mark_points_delete'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_points_delete'])) {
                 $userDao->delete_adjust_points($post['comment_id']);
             }
 
-            if ($isSiteAdmin && !empty($post['mark_adjust_points_strategic'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_adjust_points_strategic'])) {
                 if (empty($post['comment']) || !is_numeric($post['points'])) {
                     UserRouteHandler::flashNow('error', 'You must enter a comment and integer points');
                 } else {
@@ -2433,11 +2433,11 @@ error_log("result: $result");//(**)
                 }
             }
 
-            if ($isSiteAdmin && !empty($post['mark_points_delete_strategic'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_points_delete_strategic'])) {
                 $userDao->delete_adjust_points_strategic($post['comment_id']);
             }
 
-            if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_reviewed'])) {
                 $userDao->updateUserHowheard($user_id, 1);
             }
 
@@ -2448,11 +2448,11 @@ error_log("result: $result");//(**)
                 } else UserRouteHandler::flashNow('error', "Unable to create Memsource user for $user_id");
             }
 
-            if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_certification_reviewed'])) {
                 $userDao->updateCertification($post['certification_id'], 1);
             }
 
-            if ($isSiteAdmin && !empty($post['mark_certification_delete'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_certification_delete'])) {
                 $userDao->deleteCertification($post['certification_id']);
             }
         }
@@ -2564,10 +2564,10 @@ error_log("result: $result");//(**)
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
-            'user_rate_pairs'    => $isSiteAdmin ? $userDao->get_user_rate_pairs($user_id) : 0,
+            'user_rate_pairs'    => ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? $userDao->get_user_rate_pairs($user_id) : 0,
         ));
 
-        if ($private_access || $isSiteAdmin) {
+        if ($private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
@@ -2619,7 +2619,7 @@ error_log("result: $result");//(**)
         }
 
         $uuid = 0;
-        if ($isSiteAdmin) $uuid = $userDao->get_password_reset_request_uuid($user_id);
+        if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) $uuid = $userDao->get_password_reset_request_uuid($user_id);
 
         $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id, 0);
         $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id, 1);
