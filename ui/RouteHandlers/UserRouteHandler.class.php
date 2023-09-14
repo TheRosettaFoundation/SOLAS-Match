@@ -2314,21 +2314,15 @@ class UserRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($loggedInUserId);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-            $template_data = array_merge($template_data, ['isSiteAdmin' => $isSiteAdmin]);
-        } else {
-            $isSiteAdmin = 0;
-            $template_data = array_merge($template_data, ['isSiteAdmin' => 0]);
-        }
+        $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        $template_data = array_merge($template_data, ['isSiteAdmin' => $isSiteAdmin]);
 
         $private_access = 0;
-        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = 1;
-        }
+        if ($loggedInUserId == $user_id) $private_access = 1;
 
         $user = null;
         try {

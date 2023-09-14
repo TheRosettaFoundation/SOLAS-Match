@@ -18,23 +18,23 @@
                 </td>
                 <td>                    
                     <div class="pull-right">
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
                                 <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
                                 <a href="{urlFor name="create-org"}" class="btn btn-success"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
-                        {if ($private_access && !$is_admin_or_org_member) || $isSiteAdmin}
+                        {if ($private_access && !$is_admin_or_org_member) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                         {/if}
-                        {if $isSiteAdmin && $howheard['reviewed'] == 0}
+                        {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <input type="submit" class="btn btn-primary" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -69,7 +69,7 @@
 {/if}
 
 
-{if isset($this_user) && ($private_access || $isSiteAdmin || $receive_credit)}
+{if isset($this_user) && ($private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) || $receive_credit)}
 
 <span class="hidden">
 <div id="dialog_for_verification" title="Perform a translation test?">
@@ -94,11 +94,11 @@
                                  </td>
                              </tr>
                         {/if}
-                        {if $private_access || $isSiteAdmin}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             <tr>
                                 <td>
                                     {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
-                                    {if $isSiteAdmin}
+                                    {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
@@ -106,7 +106,7 @@
                                 </td>
                             </tr>
                         {/if}
-                        {if $isSiteAdmin}
+                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
                             {if !empty($uuid)}
                             <tr>
                                 <td>
