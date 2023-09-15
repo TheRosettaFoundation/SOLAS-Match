@@ -774,12 +774,11 @@ class UserRouteHandler
                     if ($request_url) {
                         return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
-[[[WAS
-                        if ($userDao->is_admin_or_org_member($user->getId())) {
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-]]]
                         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                            if ($userDao->terms_accepted($user->getId()) < 3) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-code-of-conduct', array('user_id' => $user->getId())));
+                            $terms_accepted = $userDao->terms_accepted($user->getId());
+                            // Next line should not happen in this path?
+                            if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
+                            if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
@@ -874,18 +873,10 @@ class UserRouteHandler
                 if ($request_url) {
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
-[[[WAS
-                    if ($userDao->is_admin_or_org_member($user->getId())) {
-]]]
+                    $terms_accepted = $userDao->terms_accepted($user->getId());
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-
-                            if ($userDao->terms_accepted($user->getId()) == 1) {
-                                // Since they are logged in (via Google)...
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
-                            }
-
-
-if ($userDao->terms_accepted($user->getId()) < 3) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-code-of-conduct', array('user_id' => $user->getId())));
+                        if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
+                        if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
@@ -896,7 +887,7 @@ if ($userDao->terms_accepted($user->getId()) < 3) return $response->withStatus(3
                             }
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
-                            if ($userDao->terms_accepted($user->getId()) == 1) {
+                            if ($terms_accepted == 1) {
                                 // Since they are logged in (via Google)...
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             }
