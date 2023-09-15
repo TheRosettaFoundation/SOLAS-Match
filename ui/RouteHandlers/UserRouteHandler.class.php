@@ -1783,7 +1783,6 @@ class UserRouteHandler
             'howheard_list'     => $howheard_list,
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
-            'profile_completed' => !empty($_SESSION['profile_completed']),
             'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
@@ -1998,8 +1997,15 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
-        if (!$userDao->is_admin_or_org_member($user_id)) {
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($loggedInUserId);
+        if (!($user_id == $loggedInUserId || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) {
+            UserRouteHandler::flash('error', 'You do not have rights to edit this user');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+        }
+
+        if (!($userDao->get_special_registration($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
         }
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -2012,7 +2018,7 @@ class UserRouteHandler
 
         if (!is_object($user)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
         $userPersonalInfo = null;
@@ -2020,8 +2026,6 @@ class UserRouteHandler
             $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
-
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
 
         if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
@@ -2038,8 +2042,9 @@ class UserRouteHandler
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
+                    $notify = $userDao->terms_accepted($user_id) < 3;
                     $userDao->update_terms_accepted($user_id, 3);
-                    $userDao->NotifyRegistered($user_id);
+                    if ($notify) $userDao->NotifyRegistered($user_id);
 
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
@@ -2054,7 +2059,6 @@ class UserRouteHandler
         $template_data = array_merge($template_data, array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
             'siteAPI'           => Common\Lib\Settings::get('site.api'),
-            'roles'             => $roles,
             'user'              => $user,
             'user_id'           => $user_id,
             'userPersonalInfo'  => $userPersonalInfo,
