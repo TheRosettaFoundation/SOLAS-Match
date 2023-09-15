@@ -2038,8 +2038,9 @@ class UserRouteHandler
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
+                    $notify = $userDao->terms_accepted($user_id) < 3;
                     $userDao->update_terms_accepted($user_id, 3);
-                    $userDao->NotifyRegistered($user_id);
+                    if ($notify) $userDao->NotifyRegistered($user_id);
 
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
