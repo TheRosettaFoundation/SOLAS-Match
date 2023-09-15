@@ -770,11 +770,14 @@ class UserRouteHandler
 
                     $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
-                    //Redirect to homepage, or the page the page user was previously on e.g. if their
-                    //session timed out and they are logging in again.
+                    // Redirect to homepage, or the page the page user was previously on e.g. if their session timed out and they are logging in again.
                     if ($request_url) {
                         return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
+[[[WAS
+                        if ($userDao->is_admin_or_org_member($user->getId())) {
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+]]]
                         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                             if ($userDao->terms_accepted($user->getId()) < 3) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-code-of-conduct', array('user_id' => $user->getId())));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -871,9 +874,18 @@ class UserRouteHandler
                 if ($request_url) {
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
+[[[WAS
+                    if ($userDao->is_admin_or_org_member($user->getId())) {
+]]]
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+
+                            if ($userDao->terms_accepted($user->getId()) == 1) {
+                                // Since they are logged in (via Google)...
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
+                            }
+
+
 if ($userDao->terms_accepted($user->getId()) < 3) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-code-of-conduct', array('user_id' => $user->getId())));
-WHER WHEN GET TO GOOGLE REGISTER
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
