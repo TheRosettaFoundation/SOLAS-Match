@@ -99,22 +99,22 @@ class Middleware
         }
 
         $userDao = new DAO\UserDao();
-        if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
+        if (!is_null($current_user_id = Common\Lib\UserSession::getCurrentUserID())) {
+            $current_user = $userDao->getUser($current_user_id);
             if (!is_null($current_user)) {
               try {
                 $template_data = array_merge($template_data, ['user' => $current_user]);
-                $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
+                $org_array = $userDao->getUserOrgs($current_user_id);
                 if ($org_array && count($org_array) > 0) {
                     $template_data = array_merge($template_data, ['user_is_organisation_member' => true]);
                 }
 
-                $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
+                $tasks = $userDao->getUserTasks($current_user_id);
                 if ($tasks && count($tasks) > 0) {
                     $template_data = array_merge($template_data, ['user_has_active_tasks' => true]);
                 }
                 $adminDao = new DAO\AdminDao();
-                $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+                $isAdmin = $adminDao->isSiteAdmin($current_user_id);
                 if ($isAdmin) {
                     $template_data = array_merge($template_data, ['site_admin' => $isAdmin]);
                 }
@@ -169,8 +169,8 @@ class Middleware
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
-            $userDao = new DAO\UserDao();
-            if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+            $adminDao = new DAO\AdminDao();
+            if (!($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
@@ -217,8 +217,8 @@ class Middleware
         if ($this->isUserBanned()) return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
-            $userDao = new DAO\UserDao();
-            if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+            $adminDao = new DAO\AdminDao();
+            if (!($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
@@ -268,7 +268,13 @@ class Middleware
     {
         global $app;
 
-        if ($this->isSiteAdmin_any_or_org_admin_any_for_any_org() & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+        if (!Common\Lib\UserSession::getCurrentUserID()) {
+            Common\Lib\UserSession::setReferer($request->getUri());
+            \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+            return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+        }
+
+        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Admin login required to access page.');
 

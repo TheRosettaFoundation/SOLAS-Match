@@ -263,7 +263,7 @@ class AdminRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $isSiteAdmin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org();
+        $roles = $adminDao->get_roles($userId);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
@@ -282,7 +282,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_organisation'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_organisation_results', $items_found);
@@ -308,7 +308,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_po'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_po'])) {
                 if ($number = $taskDao->sync_po()) {
                     $number--;
                     UserRouteHandler::flashNow('sync_po_success', "Purchase Orders Synchronized (Payment Status for $number Tasks Changed)");
@@ -317,7 +317,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_hubspot'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_hubspot'])) {
                 if ($taskDao->update_hubspot_deals(0)) {
                     UserRouteHandler::flashNow('sync_hubspot_success', 'HubSpot Synchronized');
                 } else {
@@ -325,17 +325,17 @@ class AdminRouteHandler
                 }
             }
 
-            if (($isSiteAdmin & SITE_ADMIN) && isset($post['addAdmin'])) {
+            if (($roles & SITE_ADMIN) && isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
                     $adminDao->createSiteAdmin($user->getId());
                 }
             }
-            if (($isSiteAdmin & SITE_ADMIN) && isset($post['revokeAdmin'])) {
+            if (($roles & SITE_ADMIN) && isset($post['revokeAdmin'])) {
                 $adminDao->removeSiteAdmin($post['userId']);
             }
             
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['banOrg']) && $post['orgName'] != '') {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new DAO\OrganisationDao();
                 $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
@@ -348,7 +348,7 @@ class AdminRouteHandler
                 }
                 $adminDao->banOrg($bannedOrg);
             }
-            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['banUser']) && $post['userEmail'] != '') {
+            if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['banUser']) && $post['userEmail'] != '') {
                 $bannedUser = new Common\Protobufs\Models\BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
@@ -361,13 +361,13 @@ class AdminRouteHandler
                 $adminDao->banUser($bannedUser);
             }
             
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['unBanOrg']) && $post['orgId'] != '') {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['unBanOrg']) && $post['orgId'] != '') {
                 $adminDao->unBanOrg($post['orgId']);
             }
-            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['unBanUser']) && $post['userId'] != '') {
+            if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['unBanUser']) && $post['userId'] != '') {
                 $adminDao->unBanUser($post['userId']);
             }
-            if (($isSiteAdmin & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['deleteUser']) && $post['userEmail'] != '') {
+            if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['deleteUser']) && $post['userEmail'] != '') {
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
@@ -382,7 +382,7 @@ class AdminRouteHandler
                     );
                 }
             }
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
                 $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if ($taskId && !is_null($userToRevokeFrom)) {
