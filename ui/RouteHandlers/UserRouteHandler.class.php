@@ -2642,7 +2642,6 @@ error_log("result: $result");//(**)
             'hourkey'                => $hourkey,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
-            'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
             'howheard'               => $howheard,
             'url_list'               => $userDao->getURLList($user_id),
             'expertise_list'         => $userDao->getExpertiseList($user_id),

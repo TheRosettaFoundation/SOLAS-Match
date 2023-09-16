@@ -29,7 +29,7 @@
                                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
-                        {if ($private_access && !$is_admin_or_org_member) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
+                        {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
