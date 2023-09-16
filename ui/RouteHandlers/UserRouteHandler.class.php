@@ -992,6 +992,13 @@ class UserRouteHandler
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
 
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($loggedInUserId);
+        if (!($user_id == $loggedInUserId || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) {
+            UserRouteHandler::flash('error', 'You do not have rights to edit this user');
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+        }
+
         if (!empty($_SESSION['track_code'])) {
             $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
             unset($_SESSION['track_code']);
@@ -1041,8 +1048,6 @@ class UserRouteHandler
         $expertise_list     = $userDao->getExpertiseList($user_id);
         $howheard_list      = $userDao->getHowheardList($user_id);
         $certification_list = $userDao->getCertificationList($user_id);
-
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
 
         if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
@@ -2005,7 +2010,7 @@ class UserRouteHandler
         $roles = $adminDao->get_roles($loggedInUserId);
         if (!($user_id == $loggedInUserId || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) {
             UserRouteHandler::flash('error', 'You do not have rights to edit this user');
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         if (!($userDao->get_special_registration($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
