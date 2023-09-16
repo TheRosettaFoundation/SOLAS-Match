@@ -929,9 +929,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        if ($user_id != $loggedInUserId && !$isSiteAdmin) {
+        if ($user_id != Common\Lib\UserSession::getCurrentUserID()) {
             UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
