@@ -40,6 +40,11 @@ class UserRouteHandler
             ->setName('register_track');
 
         $app->map(['GET', 'POST'],
+            '/special_registration/{reg_data}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
+            ->setName('special_registration');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/change_email[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:changeEmail')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
@@ -438,6 +443,7 @@ class UserRouteHandler
     {
         global $app, $template_data;
         if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
+        if (!empty($args['reg_data']))   $_SESSION['reg_data']   = $args['reg_data'];
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
