@@ -774,12 +774,14 @@ class UserRouteHandler
                     if ($request_url) {
                         return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
+                        $terms_accepted = $userDao->terms_accepted($user->getId());
+                        if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId());
+
                         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                            $terms_accepted = $userDao->terms_accepted($user->getId());
                             // Next line should not happen in this path?
                             if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
                             if ($nativeLocale && $nativeLocale->getLanguageCode()) {
@@ -874,10 +876,12 @@ class UserRouteHandler
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     $terms_accepted = $userDao->terms_accepted($user->getId());
+                    if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId());
+
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                         if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                         if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
@@ -950,6 +954,11 @@ class UserRouteHandler
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
             if ($userDao->terms_accepted($user_id) < 2) $userDao->update_terms_accepted($user_id, 2);
+
+            if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                $userDao->update_terms_accepted($user_id, 3);
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
+            }
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
             $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
