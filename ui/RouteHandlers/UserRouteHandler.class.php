@@ -781,7 +781,7 @@ class UserRouteHandler
                         return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
                         $terms_accepted = $userDao->terms_accepted($user->getId());
-                        if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId());
+                        if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
 
                         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                             // Next line should not happen in this path?
@@ -882,7 +882,7 @@ class UserRouteHandler
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     $terms_accepted = $userDao->terms_accepted($user->getId());
-                    if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId());
+                    if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
 
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                         if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
