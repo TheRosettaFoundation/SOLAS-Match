@@ -442,12 +442,16 @@ class UserRouteHandler
     public function register(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
-        if (!empty($args['reg_data']))   $_SESSION['reg_data']   = $args['reg_data'];
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
+        $adminDao = new DAO\AdminDao();
 
+        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
+        if (!empty($args['reg_data'])) {
+            $_SESSION['reg_data']   = $args['reg_data'];
+            [$special_email, $special_error] = $adminDao->get_special_registration();
+        }
         $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');
         $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');
 
@@ -781,10 +785,8 @@ class UserRouteHandler
                         return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
                         $terms_accepted = $userDao->terms_accepted($user->getId());
-                        if ($terms_accepted < 2) {
-                            $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
-                            if ($message) UserRouteHandler::flash('error', $message);
-                        }
+                        if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
+
                         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                             // Next line should not happen in this path?
                             if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
@@ -884,10 +886,8 @@ class UserRouteHandler
                     return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     $terms_accepted = $userDao->terms_accepted($user->getId());
-                    if ($terms_accepted < 2) {
-                        $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
-                        if ($message) UserRouteHandler::flash('error', $message);
-                    }
+                    if ($terms_accepted < 2) $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
+
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                         if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                         if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
