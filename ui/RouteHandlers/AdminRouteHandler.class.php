@@ -282,7 +282,8 @@ class AdminRouteHandler
                 }
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_organisation'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
+            if (!empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_organisation_results', $items_found);
@@ -299,8 +300,9 @@ class AdminRouteHandler
                     UserRouteHandler::flashNow('search_project_fail', 'Not Found');
                 }
             }
+            }
 
-            if (isset($post['verify'])) {
+            if (isset($post['verify']) &&  (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) || $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($post['userEmail']))) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
                     UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                 } else {
