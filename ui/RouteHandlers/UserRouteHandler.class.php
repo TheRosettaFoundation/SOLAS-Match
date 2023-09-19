@@ -448,9 +448,15 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
+        $email = '';
+        $error = null;
         if (!empty($args['reg_data'])) {
-            $_SESSION['reg_data']   = $args['reg_data'];
-            [$special_email, $special_error] = $adminDao->get_special_registration();
+            $_SESSION['reg_data'] = $args['reg_data'];
+            [$email, $error] = $adminDao->get_special_registration();
+            if ($error) {
+                UserRouteHandler::flashNow('error', $error);
+                $template_data = array_merge($template_data, ['disabled' => 1]);
+            }
         }
         $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');
         $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');
@@ -511,8 +517,7 @@ class UserRouteHandler
         </script>';
         $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
-        $error = null;
-        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2 && !$error) {
             $post = $request->getParsedBody();
             $ip = $_SERVER['REMOTE_ADDR'];
             // post request to Google recaptcha server
@@ -540,7 +545,7 @@ class UserRouteHandler
 
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
-            if (!Lib\Validator::validateEmail($post['email'])) {
+            if (!Lib\Validator::validateEmail($post['email']) || ($email && $post['email'] != $email)) {
                 $error = Lib\Localisation::getTranslation('register_1');
             } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
                 $error = Lib\Localisation::getTranslation('register_2');
@@ -576,8 +581,10 @@ class UserRouteHandler
                     UserRouteHandler::flashNow('error', $error);
                 }
             }
+        } else {
+            if ($email) $template_data = array_merge($template_data, ['email' => $email]);
         }
-        if ($error !== null) {
+        if ($error) {
             $template_data = array_merge($template_data, array("error" => $error));
         }
         return UserRouteHandler::render("user/register.tpl", $response);

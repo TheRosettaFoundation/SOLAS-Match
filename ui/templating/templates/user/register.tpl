@@ -66,6 +66,7 @@
     <div class="span4">
     </div>
     <div class="span4">
+    {if (empty($disabled))}
       <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="first_name" class="required "><strong>First name</strong></label>
             <input type="text" name="first_name" id="first_name" placeholder="First name" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
@@ -118,6 +119,7 @@
                               data-logo_alignment="left">
                           </div>
                     </div>
+    {/if}
     </div>
   </div>
 </div>
