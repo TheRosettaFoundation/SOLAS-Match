@@ -921,8 +921,7 @@ class TaskRouteHandler
             }
         }
 
-        $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-        $adminAccess = $site_admin | $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID(), $project->getOrganisationId());
 
         $copy_task = unserialize(serialize($task));
 
@@ -960,7 +959,7 @@ class TaskRouteHandler
                 if (!$memsource_task) $task->setTargetLocale($targetLocale);
             }
 
-            if ($site_admin || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
                     $projectDao->queue_asana_project($task->getProjectId());
@@ -974,7 +973,7 @@ class TaskRouteHandler
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
-                   if ($site_admin || $date >= $task->getDeadline()) {
+                   if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                         $userDao = new DAO\UserDao();
@@ -1027,10 +1026,10 @@ class TaskRouteHandler
               if (empty($word_count_err) && empty($deadlineError)) {
                 $taskDao->updateTask($task);
 
-                if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
+                if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
-                if ($site_admin && !empty($post['shell_task_url'])) {
+                if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && !empty($post['shell_task_url'])) {
                     $url = $post['shell_task_url'];
                     if (!preg_match('#^(http|https)://#i', $url)) $url = "https://$url";
                     if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);
@@ -1077,9 +1076,8 @@ class TaskRouteHandler
             "publishStatus"      => $publishStatus,
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             'restrictTaskStatus'  => $restrictTaskStatus,
-            'site_admin'          => $site_admin,
-            'adminAccess'         => $adminAccess,
-            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
+            'roles'               => $roles,
+            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id), ... $po
             'shell_task_url'      => $taskDao->get_task_url($task_id),
             'allow_downloads'     => $allow_downloads,
         ));
