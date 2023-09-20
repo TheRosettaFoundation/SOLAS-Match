@@ -799,7 +799,7 @@ class TaskRouteHandler
             'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
             'memsource_task' => $memsource_task,
             'translations_not_all_complete' => $projectDao->are_translations_not_all_complete($task, $memsource_task),
-            'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
+            'isSiteAdmin'    => $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER),
         ));
 
         return UserRouteHandler::render("task/task.claimed.tpl", $response);
@@ -1101,7 +1101,6 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         $task = $taskDao->getTask($task_id);
         if (is_null($task)) {
@@ -1115,7 +1114,9 @@ class TaskRouteHandler
 
         $project = $projectDao->getProject($task->getProjectId());
         $org_id = $project->getOrganisationId();
-        $isOrgMember = $userDao->is_admin_or_member_for_org($user_id, $org_id);
+        $roles = $adminDao->get_roles($user_id, $org_id);
+        $isSiteAdmin = $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
+        $isOrgMember = $roles & (NGO_ADMIN | NGO_PROJECT_OFFICER);
         $memsource_task = $projectDao->get_memsource_task($task_id);
         $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
 
@@ -1139,7 +1140,7 @@ class TaskRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if ((($isOrgMember | $isSiteAdmin) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER) && isset($post['published'])) {
+            if ((($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['published'])) {
                 if ($post['published']) {
                     $task->setPublished(1);
                 } else {
@@ -1178,7 +1179,7 @@ class TaskRouteHandler
                 }
             }
 
-            if (($isSiteAdmin  & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['paid_status'])) {
+            if (($roles  & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['paid_status'])) {
                 if ($post['paid_status'] == 2) {
                     $taskDao->set_paid_status($task_id);
                     UserRouteHandler::flashNow('success', 'The task is now marked as paid.');
@@ -1189,7 +1190,7 @@ class TaskRouteHandler
                 $paid_status = $taskDao->get_paid_status($task_id);
             }
 
-            if (!$taskClaimed && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
+            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
                 $emailOrUserId = trim($post['userIdOrEmail']);
                 if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
                 $userToBeAssigned = null;
@@ -1237,7 +1238,7 @@ class TaskRouteHandler
                 }
                 $post['userIdOrEmail'] = '';
             }
-            if (!$taskClaimed && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && !empty($post['userIdOrEmailDenyList'])) {
+            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && !empty($post['userIdOrEmailDenyList'])) {
                 $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
                 if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
                 else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
@@ -1248,7 +1249,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($details_claimant && (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['feedback'])) {
+            if ($details_claimant && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['feedback'])) {
                if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
@@ -1280,7 +1281,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_purchase_order'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_purchase_order'])) {
                 if (is_numeric($post['purchase_order'])) {
                     if ($paid_status['purchase_order'] != (int)$post['purchase_order']) {
                         $paid_status['payment_status'] = 'Unsettled';
@@ -1291,7 +1292,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Purchase Order updated.');
                 } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
             }
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_payment_status'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_payment_status'])) {
                 if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
                         ||
                     $paid_status['payment_status'] == 'Pending documentation' && $post['mark_payment_status'] == 'Ready for payment'
@@ -1318,14 +1319,14 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Payment Status updated.');
                 } else UserRouteHandler::flashNow('error', 'Payment Status Invalid.');
             }
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_unit_rate'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_unit_rate'])) {
                 if (is_numeric($post['unit_rate'])) {
                     $paid_status['unit_rate'] = $post['unit_rate'];
                     $taskDao->update_paid_status($paid_status);
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
                 } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
-            if (($isSiteAdmin & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_source_quantity'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_source_quantity'])) {
                 if ((int)$post['source_quantity'] > 0) {
                     $task->set_source_quantity((int)$post['source_quantity']);
                     $taskDao->updateTask($task);
@@ -1382,7 +1383,7 @@ class TaskRouteHandler
                     );
                 }
             }
-            if (($isSiteAdmin | $isOrgMember) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
         }
 
         if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);
