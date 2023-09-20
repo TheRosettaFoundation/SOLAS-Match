@@ -172,12 +172,12 @@
     <table width="100%" class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && $po && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
             {/if}
             <th>Cancelled?</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
-            {if !empty($isSiteAdmin) && isset($paid_status)}<th>Paid?</th>{/if}
+            {if !empty($po) && isset($paid_status)}<th>Paid?</th>{/if}
             {if !empty($details_claimant)}
             <th>{Localisation::getTranslation('common_claimed_date')}</th>
             <th>{Localisation::getTranslation('common_claimed_by')}</th>
@@ -201,7 +201,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && $isSiteAdmin && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && $po && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <td>
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -241,7 +241,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
-            {if !empty($isSiteAdmin) && isset($paid_status)}
+            {if !empty($po) && isset($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -273,7 +273,7 @@
     </table>
 {/if}
 
-{if !empty($isSiteAdmin)}
+{if !empty($po)}
     <table width="100%" class="table table-striped">
         <thead>
           {if !empty($paid_status)}

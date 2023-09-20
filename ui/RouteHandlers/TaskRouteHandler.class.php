@@ -1115,8 +1115,6 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $org_id = $project->getOrganisationId();
         $roles = $adminDao->get_roles($user_id, $org_id);
-        $isSiteAdmin = $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
-        $isOrgMember = $roles & (NGO_ADMIN | NGO_PROJECT_OFFICER);
         $memsource_task = $projectDao->get_memsource_task($task_id);
         $trackTaskView = $taskDao->recordTaskView($task_id, $user_id);
 
@@ -1347,7 +1345,7 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        if ($isOrgMember || $isSiteAdmin) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
         }
 
@@ -1407,8 +1405,9 @@ class TaskRouteHandler
                 "project" => $project,
                 'task' => $task,
                 'taskMetaData' => $taskMetaData,
-                "isMember" => $isOrgMember,
-                "isSiteAdmin" => $isSiteAdmin,
+                'isMember'     => $roles & (NGO_ADMIN | NGO_PROJECT_OFFICER),
+                'isSiteAdmin'  => $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER),
+                'po'           => $roles & (SITE_ADMIN | PROJECT_OFFICER),
                 'alsoViewedTasks' => $alsoViewedTasks,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'deadline_timestamps' => $deadline_timestamps,
@@ -1543,6 +1542,7 @@ class TaskRouteHandler
             'other_task_ids'  => $taskDao->getOtherPendingChunks($task_id),
             'project'         => $project,
             'isSiteAdmin'     => 1,
+            'po'              => 1,
             'isMember'        => 1,
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
             'memsource_task'  => $memsource_task,
