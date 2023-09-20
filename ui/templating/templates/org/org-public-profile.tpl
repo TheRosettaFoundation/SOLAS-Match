@@ -169,7 +169,7 @@
                                     </td>
                                 </tr>
 
-                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST)}
+                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>

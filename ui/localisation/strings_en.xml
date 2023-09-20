@@ -308,7 +308,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="org_private_profile_delete_fail">Unable to delete organization. Please try again later.</string> 
 
     <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of TWB Platform</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible to Organization Members and TWB Platform Administrators only</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organization Members (but not Linguists) and TWB Platform Administrators only</string>
     <string name="org_private_profile_organisation_overview">Overview of Organization including Vision, Mission<br />and Target Beneficiary Communities</string>
     <string name="org_private_profile_organisation_activity">Area of Activity</string>
     <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
