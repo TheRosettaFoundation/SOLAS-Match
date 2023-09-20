@@ -655,6 +655,9 @@ If a language is to be removed from this list, the community will be informed be
 
 {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
 <hr/>
+{/if}
+
+{if $roles & (SITE_ADMIN | COMMUNITY_OFFICER)}
 <div class="page-header">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
@@ -705,6 +708,9 @@ If a language is to be removed from this list, the community will be informed be
     </table>
     
 </div>
+{/if}
+
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
