@@ -1612,7 +1612,6 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
         $project = $projectDao->getProject($task->getProjectId());
@@ -1696,7 +1695,7 @@ class TaskRouteHandler
             "task" => $task,
             "taskClaimedDate" => $taskClaimedDate,
             "claimant" => $claimant,
-            'isSiteAdmin' => $isSiteAdmin,
+            'isSiteAdmin' => $adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER),
             "task_tags" => $task_tags
         ));
 
