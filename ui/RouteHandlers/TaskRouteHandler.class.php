@@ -229,7 +229,7 @@ class TaskRouteHandler
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
-            if (!$adminDao->isSiteAdmin($loggedInUserId)) {
+            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
                 UserRouteHandler::flash('error', 'You are not authorized to view this page');
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
@@ -450,7 +450,7 @@ class TaskRouteHandler
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
-            if (!$adminDao->isSiteAdmin($loggedInUserId)) {
+            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
                 UserRouteHandler::flash('error', "You are not authorized to view this page"); //need to move to strings.xml
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
