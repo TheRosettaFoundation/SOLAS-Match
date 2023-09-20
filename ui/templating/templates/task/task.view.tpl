@@ -119,7 +119,7 @@
 		
 		    {include file="task/task.details.tpl"} 
 
-        {if $po && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+        {if ($po || $isMember) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
             <div class="well">
             <table><tr>
               <td>
