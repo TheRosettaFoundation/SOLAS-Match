@@ -959,7 +959,7 @@ class TaskRouteHandler
                 if (!$memsource_task) $task->setTargetLocale($targetLocale);
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
                     $projectDao->queue_asana_project($task->getProjectId());
