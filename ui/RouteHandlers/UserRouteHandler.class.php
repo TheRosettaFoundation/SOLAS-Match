@@ -110,9 +110,9 @@ class UserRouteHandler
             ->setName('googleregister');
 
         $app->map(['GET', 'POST'],
-            '/{user_id}/user-code-of-conduct[/]',
+            '/{user_id}/user-admin-profile[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userCodeOfConduct')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
@@ -2695,6 +2695,7 @@ error_log("result: $result");//(**)
             'uuid' => $uuid,
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
+            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }

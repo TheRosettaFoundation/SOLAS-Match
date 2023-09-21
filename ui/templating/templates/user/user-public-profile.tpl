@@ -30,9 +30,15 @@
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))}
+                          {if $admin_role}
+                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn btn-primary'>
+                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
+                            </a>
+                          {else}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
+                          {/if}
                         {/if}
                         {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">

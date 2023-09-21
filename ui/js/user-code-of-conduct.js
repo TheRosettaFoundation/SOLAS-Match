@@ -92,18 +92,6 @@ function validateForm()
       return false;
   }
 
-  if (!document.getElementById("conduct").checked) {
-    alertError = "You must agree to the TWB code of conduct to proceed.";
-    set_all_errors_for_submission();
-    return false;
-  }
-
-  if (!document.getElementById("twbprivacy").checked) {
-    alertError = "You must agree to the TWB privacy policy to proceed.";
-    set_all_errors_for_submission();
-    return false;
-  }
-
   return true;
 }
 

@@ -17,15 +17,18 @@
             {else}
                 {Localisation::getTranslation('user_private_profile_private_profile')}
             {/if}
-            <small>Accept TWB Code of Conduct</small><br>
+
+            <div class="pull-right">
+                <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
+                    <i class="icon-wrench icon-white"></i> Edit Full Linguist Profile Details
+                </a>
+            </div>
+
+            <br />
             <small>{Localisation::getTranslation('common_denotes_a_required_field')}</small>
         </h1>
     </div>
 {/if}
-
-<div class="well alert-info">
-    <p><strong>Please take a few moments to accept the Translator Code of Conduct. You will need to fill in this form to continue accessing TWB Platform. Thank you!
-</div>
 
 <div class="well">
 
@@ -53,18 +56,9 @@
                 <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
                 <br /><br />
-
-                <label for='conduct'><strong>Please read the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct</a>: <span style="color: red">*</span></strong></label>
-                <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct.<br /><br />
             </td></tr>
 
             <tr><td>
-                <hr/>
-            </td></tr>
-
-            <tr><td>
-                <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
-                <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I have read and agree to the Translators without Borders Privacy Policy.
                 <hr/>
             </td></tr>
 
