@@ -168,7 +168,7 @@
 </div>
 
 {assign var="task_id" value=$task->getId()}
-{if isset($isOrgMember)}
+{if isset($show_actions)}
     <table width="100%" class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>

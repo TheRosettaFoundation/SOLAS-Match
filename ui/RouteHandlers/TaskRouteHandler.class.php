@@ -1344,7 +1344,7 @@ class TaskRouteHandler
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-            $template_data = array_merge($template_data, array("isOrgMember" => $isOrgMember));
+            $template_data = array_merge($template_data, ['show_actions' => 1]);
         }
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView3.js");
