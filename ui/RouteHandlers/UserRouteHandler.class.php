@@ -2695,7 +2695,7 @@ error_log("result: $result");//(**)
             'uuid' => $uuid,
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
-            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
+            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
