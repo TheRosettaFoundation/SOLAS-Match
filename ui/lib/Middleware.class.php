@@ -162,7 +162,7 @@ class Middleware
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
             $adminDao = new DAO\AdminDao();
-            if (!($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
+            if (!$adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id'])) {
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
@@ -210,7 +210,7 @@ class Middleware
 
         if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
             $adminDao = new DAO\AdminDao();
-            if (!($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
+            if (!$adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id'])) {
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'You must fill in your profile before continuing');
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
@@ -266,7 +266,7 @@ class Middleware
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
-        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id'])) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Admin login required to access page.');
 

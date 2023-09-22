@@ -411,7 +411,7 @@ class UserRouteHandler
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
-            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER);
+            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
         $template_data = array_merge($template_data, array(
@@ -796,7 +796,7 @@ class UserRouteHandler
                             $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
                             if ($message) UserRouteHandler::flash('error', $message);
                         }
-                        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId())) {
                             // Next line should not happen in this path?
                             if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
@@ -899,7 +899,7 @@ class UserRouteHandler
                         $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
                         if ($message) UserRouteHandler::flash('error', $message);
                     }
-                    if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                    if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId())) {
                         if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                         if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
@@ -976,7 +976,7 @@ class UserRouteHandler
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
             if ($userDao->terms_accepted($user_id) < 2) $userDao->update_terms_accepted($user_id, 2);
 
-            if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
                 $userDao->update_terms_accepted($user_id, 3);
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
             }
@@ -2043,7 +2043,7 @@ class UserRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
-        if (!($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) {
+        if (!$adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
         }
 
@@ -2690,7 +2690,7 @@ error_log("result: $result");//(**)
             'uuid' => $uuid,
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
-            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER),
+            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
