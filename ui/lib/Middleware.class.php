@@ -222,20 +222,21 @@ class Middleware
 
         return 0;
     }
-    
-    public function isSiteAdmin()
-    {
-        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            return false;
-        }
-        $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-    }
 
     public function authIsSiteAdmin(Request $request, RequestHandler $handler, $roles = 0)
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (empty($_SESSION['user_id'])) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin($_SESSION['user_id']);
+    }
+]]
         if ($this->isSiteAdmin() & (SITE_ADMIN | $roles)) {
             return $handler->handle($request);
         }
@@ -278,6 +279,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -313,6 +324,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) return $handler->handle($request);
 
         $routeContext = RouteContext::fromRequest($request);
@@ -339,6 +360,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER | $community)) return $handler->handle($request);
 
         $taskDao = new DAO\TaskDao();
@@ -367,6 +398,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin() & (SITE_ADMIN | PROJECT_OFFICER)) return $handler->handle($request);
 
         $routeContext = RouteContext::fromRequest($request);
@@ -387,6 +428,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
@@ -413,6 +464,16 @@ class Middleware
     {
         global $app;
 
+[[    
+    public function isSiteAdmin()
+    {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
+            return false;
+        }
+        $adminDao = new DAO\AdminDao();
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+    }
+]]
         if ($this->isSiteAdmin()) {
             return $handler->handle($request);
         }
