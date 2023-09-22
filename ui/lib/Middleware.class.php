@@ -227,19 +227,8 @@ class Middleware
     {
         global $app;
 
-[[    
-    public function isSiteAdmin()
-    {
-        if (empty($_SESSION['user_id'])) {
-            return false;
-        }
         $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin($_SESSION['user_id']);
-    }
-]]
-        if ($this->isSiteAdmin() & (SITE_ADMIN | $roles)) {
-            return $handler->handle($request);
-        }
+        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id'] & (SITE_ADMIN | $roles)))) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Site Admin login required to access page.');
 
@@ -279,39 +268,22 @@ class Middleware
     {
         global $app;
 
-[[    
-    public function isSiteAdmin()
-    {
-        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            return false;
-        }
-        $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-    }
-]]
-        if ($this->isSiteAdmin()) {
-            return $handler->handle($request);
-        }
+        if ($ret = $this->user_not_logged_in($request)) return $ret;
+        $user_id = $_SESSION['user_id'];
+
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $task_id = $route->getArgument('task_id');
+        if (empty($task_id)) return $handler->handle($request);
 
-        if ($ret = $this->user_not_logged_in($request)) return $ret;
+        $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+        $task = $taskDao->getTask($task_id);
+        $project = $projectDao->getProject($task->getProjectId());
+        if ($adminDao->get_roles($user_id, $project->getOrganisationId())) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
 
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-        $claimant = null;
-        if (!empty($task_id)) {
-            $taskDao = new DAO\TaskDao();
-            $projectDao = new DAO\ProjectDao();
-            $task = $taskDao->getTask($task_id);
-            $project = $projectDao->getProject($task->getProjectId());
-            $org_id = $project->getOrganisationId();
-            if ($this->is_org_admin($user_id, $org_id) & (NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
-
-            $claimant = $taskDao->getUserClaimedTask($task_id);
-        }
-        if ($claimant) {
+        if ($claimant = $taskDao->getUserClaimedTask($task_id)) {
             if ($user_id != $claimant->getId()) {
                 \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -573,3 +545,5 @@ class Middleware
         return $handler->handle($request);
     }
 }
+        $adminDao = new DAO\AdminDao();
+        if (!empty($_SESSION['user_id']) && (($roles = $adminDao->get_roles($_SESSION['user_id'])) & (SITE_ADMIN | $roles_add))) return $handler->handle($request);
