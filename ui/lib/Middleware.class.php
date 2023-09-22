@@ -104,20 +104,12 @@ class Middleware
             if (!is_null($current_user)) {
               try {
                 $template_data = array_merge($template_data, ['user' => $current_user]);
-                $org_array = $userDao->getUserOrgs($current_user_id);
-                if ($org_array && count($org_array) > 0) {
-                    $template_data = array_merge($template_data, ['user_is_organisation_member' => true]);
-                }
-
-                $tasks = $userDao->getUserTasks($current_user_id);
-                if ($tasks && count($tasks) > 0) {
-                    $template_data = array_merge($template_data, ['user_has_active_tasks' => true]);
-                }
                 $adminDao = new DAO\AdminDao();
-                $isAdmin = $adminDao->isSiteAdmin($current_user_id);
-                if ($isAdmin) {
-                    $template_data = array_merge($template_data, ['site_admin' => $isAdmin]);
-                }
+                $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($current_user_id);
+                if ($roles) $template_data = array_merge($template_data, ['dashboard' => 1]);
+                $tasks = $userDao->getUserTasks($current_user_id);
+                if (!empty($tasks)) $template_data = array_merge($template_data, ['user_has_active_tasks' => 1]);
+                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) $template_data = array_merge($template_data, ['site_admin' => 1]);
               } catch (Common\Exceptions\SolasMatchException $e) {
                 Common\Lib\UserSession::clearCurrentUserID();
                 Common\Lib\UserSession::clearAccessToken();

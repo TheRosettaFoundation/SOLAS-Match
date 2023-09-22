@@ -226,7 +226,7 @@
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
                         {/if}
-                        {if isset($user_is_organisation_member)||isset($site_admin)}
+                        {if isset($dashboard)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
                                  <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
                              </li>
