@@ -448,25 +448,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserOrOrgForOrgBadge');
     }
     
-    // Does User have required badge
-    public static function authenticateUserHasBadge(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserHasBadge');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (self::isSiteAdmin($user->getId())) {
-            return $handler->handle($request);
-        }
-        $userId = $user->getId();
-
-        $routeContext = RouteContext::fromRequest($request);
-        $route = $routeContext->getRoute();
-        $badgeId = $route->getArgument('badgeId');
-        if ($badgeId != null && DAO\BadgeDao::validateUserBadge($userId, $badgeId)) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserHasBadge');
-    }
-
     public static function authenticateIsUserBanned(Request $request, RequestHandler $handler)
     {
         $routeContext = RouteContext::fromRequest($request);
