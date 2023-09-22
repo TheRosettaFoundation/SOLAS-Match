@@ -53,20 +53,6 @@ class AdminDao extends BaseDao
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
-    public function isSiteAdmin($userId)
-    {
-        $request = "{$this->siteApi}v0/admins/isSiteAdmin/$userId";
-        $response = $this->client->call(null, $request);
-        return $response;
-    }
-    
-    public function isOrgAdmin($orgId, $userId)
-    {
-        $request = "{$this->siteApi}v0/admins/isOrgAdmin/$orgId/$userId";
-        $response = $this->client->call(null, $request);
-        return $response;
-    }
-    
     public function getBannedUsers()
     {
         $request = "{$this->siteApi}v0/admins/getBannedUsers";

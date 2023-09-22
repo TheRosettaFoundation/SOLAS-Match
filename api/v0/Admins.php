@@ -33,16 +33,6 @@ class Admins
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
         $app->get(
-            '/api/v0/admins/isOrgAdmin/{orgId}/{userId}/',
-            '\SolasMatch\API\V0\Admins:isOrgAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/admins/isSiteAdmin/{userId}/',
-            '\SolasMatch\API\V0\Admins:isSiteAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/admins/getBannedUser/{userId}/',
             '\SolasMatch\API\V0\Admins:getBannedUser')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -149,26 +139,6 @@ class Admins
         $userId = $args['userId'];
         DAO\AdminDao::removeOrgAdmin($userId, $orgId);
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function isOrgAdmin(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $userId = $args['userId'];
-        $ret = 0;
-        $ret = DAO\AdminDao::isAdmin($userId, $orgId);
-        if (is_null($orgId)) {
-            $ret = 0;
-        }
-        return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
-    public static function isSiteAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $ret = false;
-        $ret = DAO\AdminDao::isAdmin($userId, null);
-        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function getBannedUser(Request $request, Response $response, $args)
