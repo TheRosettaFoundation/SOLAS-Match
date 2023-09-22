@@ -63,31 +63,6 @@ class Middleware
     /*
      * Check for authorising users to create tasks. This function should be available to
      * orgainisation members, admins, and general users who have claimed a segmentation task on that project
-     */
-    public static function authUserOrOrgForTaskCreation(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOrOrgForTaskCreation');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (self::isSiteAdmin($user->getId())) {
-            return $handler->handle($request);
-        }
-        $userId = $user->getId();
-        $task = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $task = $client->deserialize($task, '\SolasMatch\Common\Protobufs\Models\Task');
-
-        $projectId = $task->getProjectId();
-        $project = DAO\ProjectDao::getProject($projectId);
-        $orgId = $project->getOrganisationId();
-        if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForTaskCreation');
-    }
-
-    /*
-     * Check for authorising users to create tasks. This function should be available to
-     * orgainisation members, admins, and general users who have claimed a segmentation task on that project
      *  
      */
     public static function authUserOrOrgForTaskCreationPassingTaskId(Request $request, RequestHandler $handler)
