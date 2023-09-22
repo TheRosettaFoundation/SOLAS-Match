@@ -363,34 +363,19 @@ class Middleware
     {
         global $app;
 
-[[    
-    public function isSiteAdmin()
-    {
-        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            return false;
-        }
+        $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-    }
-]]
-        if ($this->isSiteAdmin()) {
-            return $handler->handle($request);
-        }
+
+        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id'] & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) return $handler->handle($request);
         
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $project_id = $route->getArgument('project_id');
-        $projectDao = new DAO\ProjectDao();
         
         if (!empty($project_id)) {
             $project = $projectDao->getProject($project_id);
-            $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
-
-            if ($projectImageApprovedAndUploaded) {
-                return $handler->handle($request);
-            }
+            if ($project->getImageApproved() && $project->getImageUploaded()) return $handler->handle($request);
         }
-
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
