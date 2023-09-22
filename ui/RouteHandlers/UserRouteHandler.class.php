@@ -2097,7 +2097,6 @@ class UserRouteHandler
             'user'              => $user,
             'user_id'           => $user_id,
             'userPersonalInfo'  => $userPersonalInfo,
-            'profile_completed' => !empty($_SESSION['profile_completed']),
             'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts'     => $extra_scripts,
             'sesskey'           => $sesskey,
