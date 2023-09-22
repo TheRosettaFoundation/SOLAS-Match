@@ -384,49 +384,20 @@ class Middleware
     {
         global $app;
 
-[[    
-    public function isSiteAdmin()
-    {
-        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            return false;
-        }
-        $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
-    }
-]]
-        if ($this->isSiteAdmin()) {
-            return $handler->handle($request);
-        }
-
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
-        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $task_id = $route->getArgument('task_id');
-        if (!empty($task_id)) {
+        if (!empty($_SESSION['user_id'] && !empty($task_id)) {
             $task = $taskDao->getTask($task_id);
-            if ($taskDao->getUserClaimedTask($task_id)) {
-                return $handler->handle($request);
-            }
+            if ($taskDao->getUserClaimedTask($task_id)) return $handler->handle($request); // weird
 
             $project = $projectDao->getProject($task->getProjectId());
-            $org_id = $project->getOrganisationId();
-            $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-            if ($user_id) {
-                $user_orgs = $userDao->getUserOrgs($user_id);
-                if (!is_null($user_orgs)) {
-                    foreach ($user_orgs as $orgObject) {
-                        if ($orgObject->getId() == $org_id) {
-                            return $handler->handle($request);
-                        }
-                    }
-                }
-            }
+            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId())) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
-       
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
@@ -493,5 +464,3 @@ class Middleware
         return $handler->handle($request);
     }
 }
-        $adminDao = new DAO\AdminDao();
-        if (!empty($_SESSION['user_id']) && (($roles = $adminDao->get_roles($_SESSION['user_id'])) & (SITE_ADMIN | $roles_add))) return $handler->handle($request);
