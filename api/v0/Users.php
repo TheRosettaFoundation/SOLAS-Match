@@ -260,11 +260,6 @@ class Users
             '\SolasMatch\API\V0\Users:userSubscribedToOrganisation')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
-        $app->delete(
-            '/api/v0/users/leaveOrg/{userId}/{orgId}/',
-            '\SolasMatch\API\V0\Users:userLeaveOrg')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrAdminForOrg');
-
         $app->get(
             '/api/v0/users/{email}/auth/code/',
             '\SolasMatch\API\V0\Users:getAuthCode');
@@ -833,17 +828,6 @@ error_log("userClaimTask($userId, $taskId)");
             DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId),
             null
         );
-    }
-
-    public static function userLeaveOrg(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $orgId = $args['orgId'];
-        $data = DAO\OrganisationDao::revokeMembership($orgId, $userId);
-        if (is_array($data)) {
-            $data = $data[0];
-        }
-        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getAuthCode(Request $request, Response $response, $args)

@@ -112,27 +112,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authUserForProjectImage');
     }
 
-    /*
-     * Does the user Id match the Id of the resources owner
-     * Or is it matching the Id of the organisations admin
-     */
-    public static function authUserOrAdminForOrg(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOrAdminForOrg');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (self::isSiteAdmin($user->getId())) {
-            return $handler->handle($request);
-        }
-        $routeContext = RouteContext::fromRequest($request);
-        $route = $routeContext->getRoute();
-        $userId = $route->getArgument('userId');
-        $orgId = $route->getArgument('orgId');
-        if ($userId == $user->getId() || DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authUserOrAdminForOrg');
-    }
-
     private static function isSiteAdmin($userId)
     {
         return DAO\AdminDao::isAdmin($userId, null);
