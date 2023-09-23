@@ -35,25 +35,6 @@ class AdminDao
         return $ret;
     }
     
-    //! Remove a User from the site admin list
-    /*!
-      Remove a user from the site admin list.
-      @param int $userId is the id of the User being removed from the site admin list
-      @return Returns 1 on succes, 0 on failure
-    */
-    public static function removeAdmin($userId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId)
-                .",".Lib\PDOWrapper::cleanseNullOrWrapStr(null);
-        $result = Lib\PDOWrapper::call("removeAdmin", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        
-        return $ret;
-    }
-    
     //! Add a User as an administrator to an organisation
     /*!
       Adds a User to the Organisation Administrator list. This is called when an organisation os created

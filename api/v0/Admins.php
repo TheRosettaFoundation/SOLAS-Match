@@ -86,11 +86,6 @@ class Admins
             '\SolasMatch\API\V0\Admins:unBanOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-        $app->delete(
-            '/api/v0/admins/{userId}/',
-            '\SolasMatch\API\V0\Admins:deleteSiteAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
-
         $app->get(
             '/api/v0/admins/',
             '\SolasMatch\API\V0\Admins:getSiteAdmins')
@@ -185,13 +180,6 @@ class Admins
     {
         $userId = $args['userId'];
         DAO\AdminDao::addSiteAdmin($userId);
-        return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function deleteSiteAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        DAO\AdminDao::removeAdmin($userId);
         return API\Dispatcher::sendResponse($response, null, null);
     }
 

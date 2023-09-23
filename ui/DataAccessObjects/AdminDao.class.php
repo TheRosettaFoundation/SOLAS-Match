@@ -59,8 +59,7 @@ class AdminDao extends BaseDao
     
     public function removeOrgAdmin($userId, $orgId)
     {
-        $request = "{$this->siteApi}v0/admins/removeOrgAdmin/$orgId/$userId";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+HERE
     }
     
     public function getBannedUsers()
