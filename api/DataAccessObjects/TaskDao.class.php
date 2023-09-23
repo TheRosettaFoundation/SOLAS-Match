@@ -108,49 +108,6 @@ class TaskDao
         return $tasks;
     }
     
-    //! Retrieve TaskReview objects from the database
-    /*!
-      Retrieve a list of TaskReview objects. The resultant list can be filtered using the input arguments. If any of
-      the input args are null then they will be ignored.
-      @param int $projectId is the id of a Project
-      @param int $taskId is the id of a Task
-      @param int $userId is the id of a User
-      @param int $corrections is a value between 1 and 5 where 1 is poor and 5 is good
-      @param int $grammar is a value between 1 and 5 where 1 is poor and 5 is good
-      @param int $spelling is a value between 1 and 5 where 1 is poor and 5 is good
-      @param int $consistency is a value between 1 and 5 where 1 is poor and 5 is good
-      @param String $comment is the comment related to the requested TaskReview
-    */
-    public static function getTaskReviews(
-        $projectId = null,
-        $taskId = null,
-        $userId = null,
-        $corrections = null,
-        $grammar = null,
-        $spelling = null,
-        $consistency = null,
-        $comment = null
-    ) {
-        $args = Lib\PDOWrapper::cleanseNull($projectId).",".
-            Lib\PDOWrapper::cleanseNull($taskId).",".
-            Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNull($corrections).",".
-            Lib\PDOWrapper::cleanseNull($grammar).",".
-            Lib\PDOWrapper::cleanseNull($spelling).",".
-            Lib\PDOWrapper::cleanseNull($consistency).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($comment);
-        $reviews = null;
-        $result = Lib\PDOWrapper::call("getTaskReviews", $args);
-        if ($result) {
-            $reviews = array();
-            foreach ($result as $row) {
-                $reviews[] = Common\Lib\ModelFactory::buildModel('TaskReview', $row);
-            }
-        }
-
-        return $reviews;
-    }
-
     //! Delete a Task from the database
     /*!
       Permanently delete a Task from the database.

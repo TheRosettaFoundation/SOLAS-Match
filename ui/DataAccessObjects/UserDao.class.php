@@ -148,10 +148,9 @@ class UserDao extends BaseDao
 
     public function getUserTaskReviews($userId, $taskId)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/review";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\TaskReview", $request);
-        return $ret;
+        $result = LibAPI\PDOWrapper::call('getTaskReviews', 'NULL,' . LibAPI\PDOWrapper::cleanseNull($taskId) . ',' . LibAPI\PDOWrapper::cleanseNull($userId) . ',NULL,NULL,NULL,NULL,NULL');
+        if (empty($result)) return null;
+        return Common\Lib\ModelFactory::buildModel('TaskReview', $result[0]);
     }
 
     public function getUserTaskStreamNotification($userId)

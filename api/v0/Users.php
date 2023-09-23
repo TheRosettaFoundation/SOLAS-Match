@@ -40,11 +40,6 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUserbadgesByID')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserOrOrgForOrgBadge');
 
-        $app->get(
-            '/api/v0/users/{userId}/tasks/{taskId}/review/',
-            '\SolasMatch\API\V0\Users:getUserTaskReview')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTask');
-
         $app->post(
             '/api/v0/users/{userId}/tasks/{taskId}/',
             '\SolasMatch\API\V0\Users:userClaimTask')
@@ -398,14 +393,6 @@ class Users
         $userId = $args['userId'];
         $data = DAO\UserDao::getUserTaskStreamNotification($userId);
         return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function getUserTaskReview(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $taskId = $args['taskId'];
-        $reviews = DAO\TaskDao::getTaskReviews(null, $taskId, $userId);
-        return API\Dispatcher::sendResponse($response, $reviews[0], null);
     }
 
     public static function userUnClaimTask(Request $request, Response $response, $args)

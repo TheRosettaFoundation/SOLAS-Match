@@ -53,10 +53,14 @@ class ProjectDao extends BaseDao
 
     public function getProjectReviews($projectId)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/projects/$projectId/reviews";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\TaskReview"), $request);
-        return $ret;
+        $reviews = [];
+        $result = LibAPI\PDOWrapper::call('getTaskReviews', LibAPI\PDOWrapper::cleanseNull($projectId) . ',NULL,NULL,NULL,NULL,NULL,NULL,NULL');
+        if ($result) {
+            foreach ($result as $row) {
+                $reviews[] = Common\Lib\ModelFactory::buildModel('TaskReview', $row);
+            }
+        }
+        return $reviews;
     }
 
     public function getProjectTags($projectId)

@@ -48,11 +48,6 @@ class Tasks
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForClaimedTask');
 
         $app->get(
-            '/api/v0/tasks/{taskId}/reviews/',
-            '\SolasMatch\API\V0\Tasks:getTaskReview')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForClaimedTask');
-
-        $app->get(
             '/api/v0/tasks/{taskId}/tags/',
             '\SolasMatch\API\V0\Tasks:getTasksTags');
 
@@ -180,13 +175,6 @@ class Tasks
     {
         $taskId = $args['taskId'];
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTaskPreReqs($taskId), null);
-    }
-
-    public static function getTaskReview(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $review = DAO\TaskDao::getTaskReviews(null, $taskId);
-        return API\Dispatcher::sendResponse($response, $review, null);
     }
 
     public static function getTasksTags(Request $request, Response $response, $args)
