@@ -108,36 +108,6 @@ class TaskDao
         return $tasks;
     }
     
-    //! Submit a Review of a Task
-    /*!
-      Provide a Review for a Task. Reviews can be used to help understand the quality of a volunteers work as well as
-      the quality of the source files uploaded by the Organisation.
-      @param TaskReview $review is a model that holds the details of the Task Review
-      @return Returns 1 if the review was submitted successfully, 0 otherwise
-    */
-    public static function submitReview($review)
-    {
-        $comment = $review->getComment();
-        if (!empty($comment)) $comment = substr($comment, 0, 8192);
-
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($review->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNull($review->getTaskId()).",".
-            Lib\PDOWrapper::cleanseNull($review->getUserId()).",".
-            Lib\PDOWrapper::cleanseNull($review->getCorrections()).",".
-            Lib\PDOWrapper::cleanseNull($review->getGrammar()).",".
-            Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
-            Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
-            Lib\PDOWrapper::cleanseNull($review->getReviseTaskId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($comment);
-        $result = Lib\PDOWrapper::call('submitTaskReview', $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-
-        return $ret;
-    }
-
     //! Retrieve TaskReview objects from the database
     /*!
       Retrieve a list of TaskReview objects. The resultant list can be filtered using the input arguments. If any of

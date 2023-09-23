@@ -238,53 +238,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForClaimedTask');
     }
     
-    //Test if the User is a member of the Organisation that created
-    //the task or has worked on one of the tasks of which this is a prerequisite
-    public static function authenticateUserToSubmitReview(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserToSubmitReview');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
-        $userId = $user->getId();
-
-        $client = new Common\Lib\APIHelper('.json');
-        $review = (string)$request->getBody();
-        $review = $client->deserialize($review, '\SolasMatch\Common\Protobufs\Models\TaskReview');
-
-        $hasFollowupTask = false;
-        /*
-         * If the taskId is null this indicates the user is not reviewing a task but the project file itself
-         * all users who have claimed a task on the project can review it esentialy but it may not be
-         * accessable through the UI for all cases
-         */
-        if (!is_null($review->getTaskId())) {
-            $nextTasks = DAO\TaskDao::getTasksFromPreReq($review->getTaskId(), $review->getProjectId());
-            foreach ($nextTasks as $nextTask) {
-                if (!is_null($nextTask) && DAO\TaskDao::hasUserClaimedTask($userId, $nextTask->getId())) {
-                    $hasFollowupTask = true;
-                }
-            }
-        } else {
-            $userTasks = DAO\TaskDao::getUserTasks($userId);
-            foreach ($userTasks as $task) {
-                if ($task->getProjectId() == $review->getProjectId()) {
-                    $hasFollowupTask = true;
-                }
-            }
-        }
-        if ($review->getProjectId() != null) {
-            $project = DAO\ProjectDao::getProject($review->getProjectId());
-        }
-        $orgId = $project->getOrganisationId();
-            
-        if ($hasFollowupTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserToSubmitReview');
-    }
-
     // Has the User claimed a task on this project or is the user a member of the organisation that created the project
     public static function authenticateUserOrOrgForProjectTask(Request $request, RequestHandler $handler)
     {
@@ -404,3 +357,4 @@ class Middleware
 }
         if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
 $userOrgList = DAO\UserDao::findOrganisationsUserBelongsTo($userId);
+DAO\TaskDao::getTasksFromPreReq

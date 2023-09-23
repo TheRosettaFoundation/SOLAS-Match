@@ -292,9 +292,24 @@ error_log("createTaskDirectly: $args");
 
     public function submitReview($review)
     {
-        $request = "{$this->siteApi}v0/tasks/reviews";
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $review);
-        return $response;
+        $comment = $review->getComment();
+        if (!empty($comment)) $comment = substr($comment, 0, 8192);
+
+        $ret = null;
+        $args = LibAPI\PDOWrapper::cleanseNull($review->getProjectId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getTaskId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getUserId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getCorrections()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getGrammar()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getSpelling()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getConsistency()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($review->getReviseTaskId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($comment);
+        $result = LibAPI\PDOWrapper::call('submitTaskReview', $args);
+        if ($result) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
     }
 
     public function sendTaskUploadNotifications($taskId, $type)

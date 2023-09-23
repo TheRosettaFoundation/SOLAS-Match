@@ -97,11 +97,6 @@ class Tasks
             '\SolasMatch\API\V0\Tasks:getProofreadTask')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-        $app->post(
-            '/api/v0/tasks/reviews/',
-            '\SolasMatch\API\V0\Tasks:submitReview')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserToSubmitReview');
-
         $app->get(
             '/api/v0/tasks/topTasksCount/',
             '\SolasMatch\API\V0\Tasks:getTopTasksCount');
@@ -265,14 +260,6 @@ class Tasks
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getProofreadTask($taskId), null);
     }   
     
-    public static function submitReview(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $review = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\TaskReview");
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::submitReview($review), null);
-    }
-
     public static function getTopTasks(Request $request, Response $response)
     {
         $limit = API\Dispatcher::clenseArgs($request, 'limit', 15);
