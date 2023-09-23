@@ -243,25 +243,19 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserForOrgBadge');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
         $userId = $user->getId();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $badgeId = $route->getArgument('badgeId');
         $badge = DAO\BadgeDao::getBadge($badgeId);
-
         $orgId = $badge->getOwnerId();
                     
         // cases where the orgId is null signify a system badge
         // badge ids 6, 7, 8... refer to the user controlled system badges
-        if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
-            return $handler->handle($request);
-        } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8, 10, 11, 12, 13))) {
-            return $handler->handle($request);
-        }
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        elseif ($orgId == null && in_array($badgeId, array(6, 7, 8, 10, 11, 12, 13))) return $handler->handle($request);
+
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserForOrgBadge');
     }
 
@@ -271,9 +265,7 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserOrOrgForOrgBadge');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
+        $loggedInId = $user->getId();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
@@ -281,20 +273,15 @@ class Middleware
         //in this function userId refers to the id being tested which may not be the currently logged in user
         $badgeId = $route->getArgument('badgeId');
         $badge = DAO\BadgeDao::getBadge($badgeId);
-
-        $loggedInId = $user->getId();
         $orgId = $badge->getOwnerId();
                     
-        if ($userId == $user->getId()) {
-            return $handler->handle($request);
-        } elseif ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $loggedInId) || DAO\AdminDao::isAdmin($loggedInId, $orgId))) {
+        if ($userId == $loggedInId) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($loggedInId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
             /*
              * currently this checks if the orgId is not Null
              * cases where the orgId is null signify a system badge
              * using this middleware function will lead to errors unless those are accounted for
              */
-             return $handler->handle($request);
-        }
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserOrOrgForOrgBadge');
     }
     
