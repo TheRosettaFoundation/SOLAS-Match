@@ -194,7 +194,7 @@ class Middleware
         $orgId = $project->getOrganisationId();
 
         if ($userId == $current_user) return $handler->handle($request);
-        elseif ($orgId != null && (DAO\AdminDao::get_roles($current_user, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($current_user, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForTask');
     }
@@ -204,19 +204,16 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserForClaimedTask');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+        $userId = $user->getId();
+        if (DAO\AdminDao::get_roles($userId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
             return $handler->handle($request);
         }
-        $userId = $user->getId();
-
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $taskId = $route->getArgument('taskId');
             
-        $hasTask = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
-        if ($hasTask) {
-            return $handler->handle($request);
-        }
+        if (DAO\TaskDao::hasUserClaimedTask($userId, $taskId)) return $handler->handle($request);
+
         return self::return_error($request, 'The user does not have permission to access the current resource authUserForClaimedTask');
     }
     
@@ -225,25 +222,19 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOrOrgForClaimedTask');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
         $userId = $user->getId();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $taskId = $route->getArgument('taskId');
-            
         $task = DAO\TaskDao::getTask($taskId);
-
         $projectId = $task->getProjectId();
         $project = DAO\ProjectDao::getProject($projectId);
-
         $orgId = $project->getOrganisationId();
-        $hasTask = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
-        if ($hasTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
+
+        if (DAO\TaskDao::hasUserClaimedTask($userId, $taskId)) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForClaimedTask');
     }
     
