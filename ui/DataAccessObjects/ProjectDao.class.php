@@ -67,19 +67,6 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
-    public function createProject($project)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/projects";
-        $ret = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Project",
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $project
-        );
-        return $ret;
-    }
-
     public function createProjectDirectly($project)
     {
         $sourceLocale = $project->getSourceLocale();

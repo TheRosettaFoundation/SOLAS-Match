@@ -101,11 +101,6 @@ class Projects
             '\SolasMatch\API\V0\Projects:getProjects')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-        $app->post(
-            '/api/v0/projects/',
-            '\SolasMatch\API\V0\Projects:createProject')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
-
         $app->get(
             '/api/v0/archivedProjects/',
             '\SolasMatch\API\V0\Projects:getArchivedProjects')
@@ -233,51 +228,6 @@ class Projects
     public static function getProjects(Request $request, Response $response)
     {
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getProjects(), null);
-    }
-
-    private static function addTrackProjectForUsers($userIds, $projectId)
-    {
-        foreach($userIds as $userId) {
-            try {
-                DAO\UserDao::trackProject($projectId, $userId);
-                error_log(sprintf('User %s tracks project %s', $userId, $projectId));
-            } catch (Exception $e) {
-                error_log('Error auto-tracking project ' . $projectId);
-            }
-        }
-    }
-
-    private static function getAutoFollowAdminIds()
-    {
-        $result = array();
-        try {
-            $adminIdsString = trim(Common\Lib\Settings::get('site.autofollow_admin_ids'));
-            if ($adminIdsString) {
-                $result = array_map('intval', explode(',', $adminIdsString));
-            }
-        } catch(Exception $e) {
-            error_log($e->getMessage());
-        }
-        return $result;
-    }
-
-    public static function createProject(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
-        $project = DAO\ProjectDao::save($data);
-        if (!is_null($project) && $project->getId() > 0) {
-            // Auto track the project for admins
-            $admins = self::getAutoFollowAdminIds();
-            self::addTrackProjectForUsers($admins, $project->getId());
-            return API\Dispatcher::sendResponse($response, $project, null);
-        } else {
-            return API\Dispatcher::sendResponse($response,
-                "Project details conflict with existing data",
-                Common\Enums\HttpStatusEnum::CONFLICT
-            );
-        }
     }
 
     public static function getArchivedProjects(Request $request, Response $response)

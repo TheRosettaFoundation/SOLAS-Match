@@ -39,14 +39,11 @@ class BadgeDao extends BaseDao
 
     public function createBadge($badge)
     {
-        $request = "{$this->siteApi}v0/badges";
-        $response = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Badge",
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $badge
-        );
-        return $response;
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($badge->getId()) . ','.
+            LibAPI\PDOWrapper::cleanseNull($badge->getOwnerId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($badge->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($badge->getDescription());
+        LibAPI\PDOWrapper::call('badgeInsertAndUpdate', $args);
     }
 
     public function updateBadge($badge)

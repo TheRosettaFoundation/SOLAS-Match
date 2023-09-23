@@ -45,11 +45,6 @@ class Badges
             '/api/v0/badges/',
             '\SolasMatch\API\V0\Badges:getBadges')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->post(
-            '/api/v0/badges/',
-            '\SolasMatch\API\V0\Badges:createBadge')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
     }
 
     public static function getUsersWithBadge(Request $request, Response $response, $args)
@@ -95,15 +90,6 @@ class Badges
     public static function getBadges(Request $request, Response $response)
     {
         return Dispatcher::sendResponse($response, DAO\BadgeDao::getBadges(), null);
-    }
-
-    public static function createBadge(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
-        $data->setId("");
-        return Dispatcher::sendResponse($response, DAO\BadgeDao::insertAndUpdateBadge($data), null);
     }
 }
 

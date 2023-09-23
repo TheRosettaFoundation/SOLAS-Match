@@ -1470,7 +1470,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 try {
-                    $project = $projectDao->createProject($project);
+                    $project = $projectDao->createProjectDirectly($project);
                     error_log('Created Project: ' . $post['project_title']);
                 } catch (\Exception $e) {
                     $project = null;
@@ -1792,7 +1792,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 try {
-                    $project = $projectDao->createProject($project);
+                    $project = $projectDao->createProjectDirectly($project);
                     error_log('Created Project Empty: ' . $post['project_title']);
                 } catch (\Exception $e) {
                     $project = null;

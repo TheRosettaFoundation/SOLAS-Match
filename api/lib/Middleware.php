@@ -111,23 +111,7 @@ class Middleware
         }
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateSiteAdmin');
     }
-    
-    // Is the user a member of ANY Organisation
-    public static function authenticateUserMembership(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserMembership');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
-        $userId = $user->getId();
-        $userOrgList = DAO\UserDao::findOrganisationsUserBelongsTo($userId);
-        if ($userOrgList != null && count($userOrgList) > 0) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserMembership');
-    }
-    
+
     // Is the user an Admin of the Organisation releated to the request
     public static function authenticateOrgAdmin(Request $request, RequestHandler $handler)
     {
@@ -457,3 +441,4 @@ class Middleware
     }
 }
         if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
+$userOrgList = DAO\UserDao::findOrganisationsUserBelongsTo($userId);
