@@ -77,27 +77,6 @@ class AdminDao
         return $ret;
     }
     
-    //! Remove a user from the Organisation Administrators List
-    /*!
-      Removes a User from the Organisation administrator list. Can only be called by Site Admins or
-      administrators of the Organisation
-      @param int $userId is the ID of the user being removed
-      @param int $orgId is the of the Organisation being affected
-      @return Returns 1 on success, 0 on failure
-    */
-    public static function removeOrgAdmin($userId, $orgId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId)
-                .",".Lib\PDOWrapper::cleanseNull($orgId);
-        $result = Lib\PDOWrapper::call("removeAdmin", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        
-        return $ret;
-    }
-    
     //! Bans a User to stop them from logging in
     /*!
       Ban a User to stop them from logging in. Users can only be banned by site admins. Bans can last

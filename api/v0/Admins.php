@@ -72,11 +72,6 @@ class Admins
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->delete(
-            '/api/v0/admins/removeOrgAdmin/{orgId}/{userId}/',
-            '\SolasMatch\API\V0\Admins:deleteOrgAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
-
-        $app->delete(
             '/api/v0/admins/revokeTask/{taskId}/{userId}/',
             '\SolasMatch\API\V0\Admins:revokeTaskFromUser')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
@@ -107,14 +102,6 @@ class Admins
         $orgId = $args['orgId'];
         $userId = $args['userId'];
         DAO\AdminDao::addOrgAdmin($userId, $orgId);
-        return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function deleteOrgAdmin(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $userId = $args['userId'];
-        DAO\AdminDao::removeOrgAdmin($userId, $orgId);
         return API\Dispatcher::sendResponse($response, null, null);
     }
 
