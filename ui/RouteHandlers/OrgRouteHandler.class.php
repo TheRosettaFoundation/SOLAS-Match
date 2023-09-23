@@ -2142,10 +2142,7 @@ class OrgRouteHandler
         $claimantProfile = "";
         if ($claimant != null) {
             $claimantProfile = $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
-            $userName = $userDao->getUserRealName($claimant->getId());
-            if (is_null($userName) || $userName == '') {
-                $userName = $claimant->getDisplayName();
-            }
+            $userName = $claimant->getDisplayName();
         }
 
         $task = $taskDao->getTask($taskId);

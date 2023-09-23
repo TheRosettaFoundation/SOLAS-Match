@@ -60,18 +60,10 @@ class Middleware
         return $handler->handle($request);
     }
     
-    /*
-     * Check for authorising users to create tasks. This function should be available to
-     * orgainisation members, admins, and general users who have claimed a segmentation task on that project
-     *  
-     */
     public static function authUserOrOrgForTaskCreationPassingTaskId(Request $request, RequestHandler $handler)
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOrOrgForTaskCreationPassingTaskId');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
         $userId = $user->getId();
 
         $routeContext = RouteContext::fromRequest($request);
@@ -82,9 +74,7 @@ class Middleware
         $projectId = $task->getProjectId();
         $project = DAO\ProjectDao::getProject($projectId);
         $orgId = $project->getOrganisationId();
-        if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
+        if (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForTaskCreationPassingTaskId');
     }
 
@@ -112,7 +102,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authUserForProjectImage');
     }
 
-    // Is the user a site admin
     public static function authenticateSiteAdmin(Request $request, RequestHandler $handler)
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateSiteAdmin');
@@ -467,3 +456,4 @@ class Middleware
         return $response->withStatus(Common\Enums\HttpStatusEnum::FORBIDDEN);
     }
 }
+        if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {

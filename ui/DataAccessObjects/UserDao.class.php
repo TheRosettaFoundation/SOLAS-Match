@@ -73,14 +73,6 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserRealName($userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/realName";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function isUserVerified($userId)
     {
         $ret = false;

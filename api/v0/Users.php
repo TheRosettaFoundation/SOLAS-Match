@@ -121,11 +121,6 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
-            '/api/v0/users/{userId}/realName/',
-            '\SolasMatch\API\V0\Users:getUserRealName')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserMembership');
-
-        $app->get(
             '/api/v0/users/{userId}/verified/',
             '\SolasMatch\API\V0\Users:isUserVerified');
 
@@ -492,12 +487,6 @@ class Users
         $userId = $args['userId'];
         DAO\UserDao::requestReference($userId);
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function getUserRealName(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        return API\Dispatcher::sendResponse($response, DAO\UserDao::getUserRealName($userId), null);
     }
 
     public static function isUserVerified(Request $request, Response $response, $args)
