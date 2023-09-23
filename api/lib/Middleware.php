@@ -112,22 +112,17 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateSiteAdmin');
     }
 
-    // Is the user an Admin of the Organisation releated to the request
     public static function authenticateOrgAdmin(Request $request, RequestHandler $handler)
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateOrgAdmin');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
         $userId = $user->getId();
 
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $orgId = $route->getArgument('orgId');
-        if ($orgId != null && DAO\AdminDao::isAdmin($userId, $orgId)) {
-            return $handler->handle($request);
-        }
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateOrgAdmin');
     }
     
