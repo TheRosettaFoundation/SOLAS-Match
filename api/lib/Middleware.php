@@ -238,39 +238,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForClaimedTask');
     }
     
-    // Has the User claimed a task on this project or is the user a member of the organisation that created the project
-    public static function authenticateUserOrOrgForProjectTask(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateUserOrOrgForProjectTask');
-        $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            return $handler->handle($request);
-        }
-        $userId = $user->getId();
-
-        $routeContext = RouteContext::fromRequest($request);
-        $route = $routeContext->getRoute();
-        $projectId = $route->getArgument('projectId');
-
-        $tasks = DAO\ProjectDao::getProjectTasks($projectId);
-        $hasTask = false;
-        if (!is_null($tasks)) {
-            foreach ($tasks as $taskObject) {
-                if (DAO\TaskDao::hasUserClaimedTask($userId, $taskObject->getId())) {
-                    $hasTask = true;
-                }
-            }
-        }
-
-        $project = DAO\ProjectDao::getProject($projectId);
-        $orgId = $project->getOrganisationId();
-
-        if ($hasTask || ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)))) {
-            return $handler->handle($request);
-        }
-        return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserOrOrgForProjectTask');
-    }
-
     //Is the current user a member of the Organisation who created the Badge in question
     public static function authenticateUserForOrgBadge(Request $request, RequestHandler $handler)
     {

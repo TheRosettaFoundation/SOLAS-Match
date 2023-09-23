@@ -32,11 +32,6 @@ class Projects
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
         $app->get(
-            '/api/v0/projects/{projectId}/reviews/',
-            '\SolasMatch\API\V0\Projects:getProjectTaskReviews')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserOrOrgForProjectTask');
-
-        $app->get(
             '/api/v0/projects/{projectId}/tasks/',
             '\SolasMatch\API\V0\Projects:getProjectTasks')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -123,13 +118,6 @@ class Projects
         $ret = null;
         $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
         return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
-    public static function getProjectTaskReviews(Request $request, Response $response, $args)
-    {
-        $projectId = $args['projectId'];
-        $reviews = DAO\TaskDao::getTaskReviews($projectId);
-        return API\Dispatcher::sendResponse($response, $reviews, null);
     }
 
     public static function getProjectTasks(Request $request, Response $response, $args)

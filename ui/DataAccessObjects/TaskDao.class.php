@@ -138,13 +138,14 @@ class TaskDao extends BaseDao
 
     public function getTaskReviews($taskId)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/tasks/$taskId/reviews";
-        $ret = $this->client->call(
-            array("\SolasMatch\Common\Protobufs\Models\TaskReview"),
-            $request
-        );
-        return $ret;
+        $reviews = [];
+        $result = LibAPI\PDOWrapper::call('getTaskReviews', 'NULL,' . LibAPI\PDOWrapper::cleanseNull($taskId) . ',NULL,NULL,NULL,NULL,NULL,NULL');
+        if ($result) {
+            foreach ($result as $row) {
+                $reviews[] = Common\Lib\ModelFactory::buildModel('TaskReview', $row);
+            }
+        }
+        return $reviews;
     }
 
     public function delete_review($task_id, $user_id)
