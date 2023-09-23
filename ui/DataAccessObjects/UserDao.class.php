@@ -340,14 +340,6 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function leaveOrganisation($userId, $orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/leaveOrg/$userId/$orgId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $ret;
-    }
-
     public function addUserBadge($userId, $badge)
     {
         $ret = null;

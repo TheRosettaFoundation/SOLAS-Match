@@ -1840,9 +1840,9 @@ class OrgRouteHandler
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = $post['revokeUser'];
-                    $userDao->leaveOrganisation($user_id, $org_id);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, LINGUIST);
                     UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
-                    error_log("leaveOrganisation($user_id, $org_id) by $current_user_id");
+                    error_log("revokeUser($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['revokeOrgAdmin'])) {
                     $user_id = $post['revokeOrgAdmin'];
                     $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
