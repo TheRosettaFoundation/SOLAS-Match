@@ -301,24 +301,4 @@ class AdminDao
         
         return $ret;
     }
-    
-    //! Determins if a user is a Site/Organisation Admin
-    /*!
-      If a valid organisation id is passed then this function determines if a user is on the organisation's
-      administrator list. If null is passed for the organisation id this function determines if the user is a
-      site administrator
-      @param int $userId is the id of the User being checked
-      @param int $orgId is the id of the organisation being checked or null for site admin checks
-      @return Return 1 if the user is an admin, returns false otherwise
-    */
-    public static function isAdmin($userId, $orgId)
-    {
-        $ret = false;
-        $args = Lib\PDOWrapper::cleanse($userId).",".Lib\PDOWrapper::cleanseNullOrWrapStr($orgId);
-        $result = Lib\PDOWrapper::call("isAdmin", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        return $ret;
-    }
 }

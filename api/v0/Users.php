@@ -318,11 +318,6 @@ class Users
             '/api/v0/users/register/',
             '\SolasMatch\API\V0\Users:register');
 
-        $app->post(
-            '/api/v0/users/changeEmail/',
-            '\SolasMatch\API\V0\Users:changeEmail')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
-
         $app->put(
             '/api/v0/users/{userId}/',
             '\SolasMatch\API\V0\Users:updateUser')
@@ -999,23 +994,6 @@ error_log("userClaimTask($userId, $taskId)");
         DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
         $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
         
-        return API\Dispatcher::sendResponse($response, $registered, null);
-    }
-
-    public static function changeEmail(Request $request, Response $response)
-    {
-        $user = DAO\UserDao::getLoggedInUser();
-        if (!is_null($user) && DAO\AdminDao::isAdmin($user->getId(), null)) {
-            $data = (string)$request->getBody();
-            $client = new Common\Lib\APIHelper('.json');
-            $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
-
-            // password field has been repurposed to hold User for which email is to be changed
-            $registered = DAO\UserDao::changeEmail($data->getPassword(), $data->getEmail());
-        }
-        else {
-            $registered = null;
-        }
         return API\Dispatcher::sendResponse($response, $registered, null);
     }
 

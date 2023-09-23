@@ -1201,12 +1201,7 @@ error_log("claimTask_shell($userId, $taskId)");
     public function changeEmail($user_id, $email, $old_email)
     {
         error_log("changeEmail($user_id, $email, $old_email)");
-        $registerData = new Common\Protobufs\Models\Register();
-        $registerData->setEmail($email);
-        $registerData->setPassword("$user_id"); // Repurpose field to hold User for which email is to be changed
-        $request = "{$this->siteApi}v0/users/changeEmail";
-        $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
-        if (!$registered) return 'Did not change email in TWB Platform.';
+        LibAPI\PDOWrapper::call('changeEmail', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email));
 
         $error = '';
         $record = $this->get_memsource_user_record($old_email);
