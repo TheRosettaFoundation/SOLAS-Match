@@ -11,8 +11,8 @@ class AdminDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
-        $this->siteApi = Common\Lib\Settings::get("site.api");
+        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
+        $this->siteApi = Common\Lib\Settings::get('site.api');
     }
 
     public function getSiteAdmins()
@@ -20,6 +20,82 @@ class AdminDao extends BaseDao
         $request = "{$this->siteApi}v0/admins";
         $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $response;
+[[
+    //! Get User objects of Site/Organisation Administrators
+    /*!
+      Used to retrieve Users that are either site admins or organisation admins.
+      @param int $orgId is the id of the organisation the user is an admin of or null if site admin
+      @return Returns a list of User objects or null
+    */
+    public static function getAdmins($userId = null, $orgId = null)
+    {
+        $ret = null;
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($userId)
+                .",".Lib\PDOWrapper::cleanseNull($orgId);
+        $result = Lib\PDOWrapper::call("getAdmin", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $user) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $user);
+            }
+        }
+        return $ret;
+    }
+   
+]]
+[[update oR MAKE NEW
+DROP PROCEDURE IF EXISTS `getAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+
+  IF userId = null OR userId = '' THEN SET userId = NULL; END IF;
+  IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;
+
+  IF userId IS NOT null AND orgId IS NOT null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
+
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.user_id = userId AND a.organisation_id = orgId;
+  ELSEIF userId IS NOT null AND orgId IS null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
+
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.user_id = userId AND a.organisation_id is null;
+  ELSEIF userId IS null AND orgId IS NOT null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
+
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE a.organisation_id = orgId;
+  ELSEIF userId IS null AND orgId IS null THEN
+    SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce,u.`created-time` as created_time
+
+    FROM Users u JOIN Admins a ON a.user_id = u.id
+    WHERE (a.organisation_id is null or a.organisation_id = orgId);
+  END IF;
+END//
+DELIMITER ;
+]]
     }
     
     public function getOrgAdmins($orgId)

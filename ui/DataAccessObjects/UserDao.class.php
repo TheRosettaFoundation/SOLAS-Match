@@ -1129,25 +1129,6 @@ error_log("claimTask_shell($userId, $taskId)");
         LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', $args);
     }
 
-    public function addOrgAdmin($user_id, $org_id)
-    {
-        $args = LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($org_id);
-        LibAPI\PDOWrapper::call('acceptMemRequest', $args);
-        LibAPI\PDOWrapper::call('addAdmin', $args);
-    }
-
-    public function is_admin_or_org_member($user_id)
-    {
-        $result = LibAPI\PDOWrapper::call('is_admin_or_org_member', LibAPI\PDOWrapper::cleanse($user_id));
-        return $result[0]['result'];
-    }
-
-    public function is_admin_or_member_for_org($user_id, $org_id)
-    {
-        $result = LibAPI\PDOWrapper::call('is_admin_or_member_for_org', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
-        return $result[0]['result'];
-    }
-
     public function getOrgIDUsingName($org_name)
     {
         $org_id = 0;

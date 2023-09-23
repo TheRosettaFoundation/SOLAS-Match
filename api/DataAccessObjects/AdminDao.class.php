@@ -16,27 +16,6 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 {
-    //! Get User objects of Site/Organisation Administrators
-    /*!
-      Used to retrieve Users that are either site admins or organisation admins.
-      @param int $orgId is the id of the organisation the user is an admin of or null if site admin
-      @return Returns a list of User objects or null
-    */
-    public static function getAdmins($userId = null, $orgId = null)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($userId)
-                .",".Lib\PDOWrapper::cleanseNull($orgId);
-        $result = Lib\PDOWrapper::call("getAdmin", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("User", $user);
-            }
-        }
-        return $ret;
-    }
-    
     //! Used to add a site administrator
     /*!
       Add a site administrator. Can only be called by existing site admins.
