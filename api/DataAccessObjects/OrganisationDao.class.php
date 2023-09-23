@@ -18,26 +18,6 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class OrganisationDao
 {
-    //! Determine if a User is a member of a given Organisation
-    /*!
-      Determines if a User is a Member of a specific Organisation. Organisation Members can create Projects on
-      behalf of that Organisation and can manipulate Organisation details.
-      @param int $orgId is the id of an Organisation
-      @param int $userId is the of the User
-      @return Returns '1' if the User is a member of the Organisation, '0' otherwise
-    */
-    public static function isMember($orgId, $userId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($orgId).",".
-            Lib\PDOWrapper::cleanseNull($userId);
-        $result = Lib\PDOWrapper::call("orgHasMember", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        return $ret;
-    }
-
     //! Retrieve a single Organisation from the database
     /*!
       Gets a single Organisation object from the database. If a valid Organisation id is passed then that Organisation
@@ -61,7 +41,6 @@ class OrganisationDao
                 $org = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
             }
         }
-
         return $org;
     }
 

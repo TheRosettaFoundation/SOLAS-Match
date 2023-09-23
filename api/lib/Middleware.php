@@ -322,6 +322,3 @@ class Middleware
         return $response->withStatus(Common\Enums\HttpStatusEnum::FORBIDDEN);
     }
 }
-        if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
-$userOrgList = DAO\UserDao::findOrganisationsUserBelongsTo($userId);
-DAO\TaskDao::getTasksFromPreReq

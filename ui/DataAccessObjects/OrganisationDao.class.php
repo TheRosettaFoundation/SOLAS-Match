@@ -112,14 +112,6 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    public function isMember($orgId, $userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/isMember/$orgId/$userId";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function createOrg($org, $userId)
     {
         $ret = null;
@@ -131,7 +123,6 @@ class OrganisationDao extends BaseDao
             $org
         );
         switch($this->client->getResponseCode()) {
-        
             default:
                 return $ret;
         
@@ -139,8 +130,6 @@ class OrganisationDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
                 break;
         }
-        
-        
     }
 
     public function updateOrg($org)

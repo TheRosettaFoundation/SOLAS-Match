@@ -176,29 +176,6 @@ class TaskDao
         return $ret;
     }
     
-    //! Get a list of Tasks that have the specified Task/Project as a prereq
-    /*!
-      If a valid taskId is passed then it will get all Tasks that have the specified Task as a prerequisite. If a valid
-      projectId is passed it will get all the root Tasks (all Tasks with no prereqs) for the specified Project. If they
-      are both valid it will select based on the $taskId.
-      @param int $taskId is the id of a Task
-      @param int $projectId is the id of a Project
-      @return Returns an array of Task objects
-    */
-    public static function getTasksFromPreReq($taskId, $projectId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($taskId).",".Lib\PDOWrapper::cleanseNull($projectId);
-        $result = Lib\PDOWrapper::call("getTasksFromPreReq", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
-            }
-        }
-        return $ret;
-    }
-
     //! Get a list of the most recently created Tasks
     /*!
       Get a list of the most recently created Task objects. This will only return Task objects that are in the

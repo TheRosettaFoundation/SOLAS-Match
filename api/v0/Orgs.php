@@ -81,11 +81,6 @@ class Orgs
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
         $app->get(
-            '/api/v0/orgs/isMember/{orgId}/{userId}/',
-            '\SolasMatch\API\V0\Orgs:isMember')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/orgs/getByName/{name}/',
             '\SolasMatch\API\V0\Orgs:getOrgByName')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -210,14 +205,6 @@ class Orgs
             DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
         }
         return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
-    public static function isMember(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $userId = $args['userId'];
-        $data = DAO\OrganisationDao::isMember($orgId, $userId);
-        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getOrgByName(Request $request, Response $response, $args)
