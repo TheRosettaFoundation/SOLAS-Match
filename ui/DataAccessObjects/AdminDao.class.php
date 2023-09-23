@@ -17,67 +17,26 @@ class AdminDao extends BaseDao
 
     public function getSiteAdmins()
     {
-        $request = "{$this->siteApi}v0/admins";
-        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
-        return $response;
-[[
-    //! Get User objects of Site/Organisation Administrators
-    /*!
-      Used to retrieve Users that are either site admins or organisation admins.
-      @param int $orgId is the id of the organisation the user is an admin of or null if site admin
-      @return Returns a list of User objects or null
-    */
-    public static function getAdmins($userId = null, $orgId = null)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($userId)
-                .",".Lib\PDOWrapper::cleanseNull($orgId);
-        $result = Lib\PDOWrapper::call("getAdmin", $args);
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('getAdmin', '0,0,' . LINGUIST);
         if ($result) {
-            $ret = array();
             foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("User", $user);
+                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
             }
         }
         return $ret;
     }
-   
-]]
-[[update oR MAKE NEW
-pass 0 if needed
-DROP PROCEDURE IF EXISTS `getAdmin`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN uID INT UNSIGNED, IN oID INT UNSIGNED)
-BEGIN
-    SELECT
-        u.id,
-        u.`display-name` AS display_name,
-        u.email,
-        u.password,
-        u.biography,
-        (SELECT `en-name` FROM Languages l WHERE l.id = u.language_id) AS languageName,
-        (SELECT code      FROM Languages l WHERE l.id = u.language_id) AS languageCode,
-        (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
-        (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
-        u.nonce,
-        u.`created-time` AS created_time
-    FROM Users  u
-    JOIN Admins a ON u.id=a.user_id
-    WHERE
-        (a.user_id=uID OR uID=0) AND
-        a.organisation_id=oID);
-REALLY ADMINS!!!
-MASK NEEDED AS INDEX
-END//
-DELIMITER ;
-]]
-    }
     
     public function getOrgAdmins($orgId)
     {
-        $request = "{$this->siteApi}v0/admins/getOrgAdmins/$orgId";
-        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
-        return $response;
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('getAdmin', '0,' . LibAPI\PDOWrapper::cleanse($orgId) . ',0');
+        if ($result) {
+            foreach ($result as $user) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
+            }
+        }
+        return $ret;
     }
 
     public function createSiteAdmin($userId)

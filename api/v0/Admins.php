@@ -17,16 +17,6 @@ class Admins
     {
         global $app;
 
-        $app->get(
-            '/api/v0/admins/getOrgAdmin/{userId}/{orgId}',
-            '\SolasMatch\API\V0\Admins:getOrgAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/admins/getOrgAdmins/{orgId}/',
-            '\SolasMatch\API\V0\Admins:getOrgAdmins')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->put(
             '/api/v0/admins/createOrgAdmin/{orgId}/{userId}/',
             '\SolasMatch\API\V0\Admins:createOrgAdmin')
@@ -110,19 +100,6 @@ class Admins
             '/api/v0/admins/',
             '\SolasMatch\API\V0\Admins:getSiteAdmins')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-    }
-
-    public static function getOrgAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId, $orgId), null);
-    }
-
-    public static function getOrgAdmins(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(null, $orgId), null);
     }
 
     public static function createOrgAdmin(Request $request, Response $response, $args)
