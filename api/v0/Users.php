@@ -205,16 +205,6 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
-            '/api/v0/users/{userId}/secondaryLanguages/',
-            '\SolasMatch\API\V0\Users:getSecondaryLanguages')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->post(
-            '/api/v0/users/{userId}/secondaryLanguages/',
-            '\SolasMatch\API\V0\Users:createSecondaryLanguage')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
-
-        $app->get(
             '/api/v0/users/{userId}/organisations/',
             '\SolasMatch\API\V0\Users:getUserTrackedOrganisations')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
@@ -239,11 +229,6 @@ class Users
         $app->post(
             '/api/v0/users/email/{user_id}/send_password_reset_verification/',
             '\SolasMatch\API\V0\Users:send_password_reset_verification');
-
-        $app->delete(
-            '/api/v0/users/removeSecondaryLanguage/{userId}/{languageCode}/{countryCode}/',
-            '\SolasMatch\API\V0\Users:deleteSecondaryLanguage')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
             '/api/v0/users/subscribedToOrganisation/{userId}/{organisationId}/',
@@ -725,22 +710,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getSecondaryLanguages(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $data = DAO\UserDao::getSecondaryLanguages($userId);
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function createSecondaryLanguage(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Locale");
-        return API\Dispatcher::sendResponse($response, DAO\UserDao::createSecondaryLanguage($userId, $data), null);
-    }
-
     public static function getUserTrackedOrganisations(Request $request, Response $response, $args)
     {
         $userId = $args['userId'];
@@ -780,15 +749,6 @@ error_log("userClaimTask($userId, $taskId)");
     {
         Lib\Notify::sendPasswordResetEmail($args['user_id']);
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function deleteSecondaryLanguage(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $languageCode = $args['languageCode'];
-        $countryCode = $args['countryCode'];
-        $data = DAO\UserDao::deleteSecondaryLanguage($userId, $languageCode, $countryCode);
-        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function userSubscribedToOrganisation(Request $request, Response $response, $args)

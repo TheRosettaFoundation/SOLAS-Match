@@ -647,62 +647,6 @@ class UserDao
             Lib\PDOWrapper::cleanse($accepted));
     }
     
-    public static function createSecondaryLanguage($userId, $locale)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode());
-        $result = Lib\PDOWrapper::call("userSecondaryLanguageInsert", $args);
-        if ($result) {
-            $ret = Common\Lib\ModelFactory::buildModel("Locale", $result[0]);
-        }
-        if (count(self::getSecondaryLanguagesArray($userId)) > 1) {
-            BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::POLYGLOT);
-        }
-        return $ret;
-    }
-
-    public static function getSecondaryLanguagesArray($userId = null)
-    {
-        $ret = array();
-        $args = Lib\PDOWrapper::cleanseNull($userId);
-        $result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args);
-        if ($result) {
-            foreach ($result as $locale) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Locale", $locale);
-            }
-        }
-        return $ret;
-    }
-    
-    public static function getSecondaryLanguages($userId = null)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId);
-        $result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $locale) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Locale", $locale);
-            }
-        }
-        return $ret;
-    }
-    
-    public static function deleteSecondaryLanguage($userId, $languageCode, $countryCode)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($languageCode).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($countryCode);
-        $result = Lib\PDOWrapper::call("deleteUserSecondaryLanguage", $args);
-        if ($result) {
-            return $result[0]['result'];
-        }
-        return $ret;
-    }
-    
     public static function deleteUser($user_id)
     {
         $user = self::getUser($user_id);
