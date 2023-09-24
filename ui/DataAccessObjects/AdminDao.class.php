@@ -39,29 +39,6 @@ class AdminDao extends BaseDao
         return $ret;
     }
 
-    public function createSiteAdmin($userId, $role)
-    {
-        $this->adjust_org_admin($userId, 0, 0, $role);
-    }
-    
-    public function removeSiteAdmin($userId)
-    {
-        $this->adjust_org_admin($userId, 0, SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER, 0);
-        $request = "{$this->siteApi}v0/admins/$userId";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-    }
-    
-    public function createOrgAdmin($userId, $orgId)
-    {
-        $request = "{$this->siteApi}v0/admins/createOrgAdmin/$orgId/$userId";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-    }
-    
-    public function removeOrgAdmin($userId, $orgId)
-    {
-HERE
-    }
-    
     public function getBannedUsers()
     {
         $request = "{$this->siteApi}v0/admins/getBannedUsers";

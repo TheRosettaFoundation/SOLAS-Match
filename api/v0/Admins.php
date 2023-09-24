@@ -17,11 +17,6 @@ class Admins
     {
         global $app;
 
-        $app->put(
-            '/api/v0/admins/createOrgAdmin/{orgId}/{userId}/',
-            '\SolasMatch\API\V0\Admins:createOrgAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
-
         $app->get(
             '/api/v0/admins/getBannedUser/{userId}/',
             '\SolasMatch\API\V0\Admins:getBannedUser')
@@ -61,16 +56,6 @@ class Admins
             '\SolasMatch\API\V0\Admins:banOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
 
-        $app->get(
-            '/api/v0/admins/{userId}/',
-            '\SolasMatch\API\V0\Admins:getSiteAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->put(
-            '/api/v0/admins/{userId}/',
-            '\SolasMatch\API\V0\Admins:createSiteAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
-
         $app->delete(
             '/api/v0/admins/revokeTask/{taskId}/{userId}/',
             '\SolasMatch\API\V0\Admins:revokeTaskFromUser')
@@ -85,19 +70,6 @@ class Admins
             '/api/v0/admins/unBanOrg/{orgId}/',
             '\SolasMatch\API\V0\Admins:unBanOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
-
-        $app->get(
-            '/api/v0/admins/',
-            '\SolasMatch\API\V0\Admins:getSiteAdmins')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-    }
-
-    public static function createOrgAdmin(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $userId = $args['userId'];
-        DAO\AdminDao::addOrgAdmin($userId, $orgId);
-        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function getBannedUser(Request $request, Response $response, $args)
@@ -170,17 +142,6 @@ class Admins
         return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function getSiteAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId), null);
-    }
-
-    public static function getSiteAdmins(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(), null);
-    }
-    
     public static function revokeTaskFromUser(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];

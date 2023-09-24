@@ -328,13 +328,13 @@ class AdminRouteHandler
             }
 
             if (($roles & SITE_ADMIN) && isset($post['addAdmin'])) {
-                $user = $userDao->getUserByEmail($post['userEmail'], $post['admin_type']);
+                $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
-                    $adminDao->createSiteAdmin($user->getId());
+                    $adminDao->adjust_org_admin($user->getId(), 0, 0, $post['admin_type']);
                 }
             }
             if (($roles & SITE_ADMIN) && isset($post['revokeAdmin'])) {
-                $adminDao->removeSiteAdmin($post['userId']);
+                $adminDao->adjust_org_admin($post['userId'], 0, SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER, 0);
             }
             
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['banOrg']) && $post['orgName'] != '') {

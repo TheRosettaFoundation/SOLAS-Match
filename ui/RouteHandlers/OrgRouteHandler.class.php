@@ -625,6 +625,7 @@ class OrgRouteHandler
 
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -635,35 +636,13 @@ class OrgRouteHandler
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
-                    $new_org_member = $userDao->getUserByEmail($post['email']);
-                    if (!is_null($new_org_member))
-                    {
-                        $success = $orgDao->addMember($post['email'], $org_id);
-                        if ($success) {
-                            UserRouteHandler::flashNow(
-                                "success",
-                                sprintf(
-                                    Lib\Localisation::getTranslation('common_successfully_added_member'),
-                                    $post['email'],
-                                    $org->getName()
-                                )
-                            );
-                        } else {
-                            UserRouteHandler::flashNow(
-                                "error",
-                                sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $post['email'])
-                            );
-                        }
-                    } else {
-                        $email = $post['email'];
-                        UserRouteHandler::flashNow(
-                            "error",
-                            sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
-                        );
-                    }
-                } else {
-                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
-                }
+                    $email = $post['email'];
+                    $new_org_member = $userDao->getUserByEmail($email);
+                    if (!is_null($new_org_member)) {
+                        $adminDao->adjust_org_admin($new_org_member->getId(), $org_id, 0, NGO_LINGUIST);
+                        UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('common_successfully_added_member'), $email, $org->getName()));
+                    } else UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email));
+                } else UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('common_no_valid_email'));
             } elseif (isset($post['accept'])) {
                 if ($user_id = $post['user_id']) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);

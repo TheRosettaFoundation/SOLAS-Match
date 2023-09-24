@@ -75,11 +75,6 @@ class Orgs
             '\SolasMatch\API\V0\Orgs:getUsersTrackingOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
 
-        $app->put(
-            '/api/v0/orgs/addMember/{email}/{orgId}/',
-            '\SolasMatch\API\V0\Orgs:addMember')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
-
         $app->get(
             '/api/v0/orgs/getByName/{name}/',
             '\SolasMatch\API\V0\Orgs:getOrgByName')
@@ -192,19 +187,6 @@ class Orgs
         $organisationId = $args['organisationId'];
         $data = DAO\OrganisationDao::getUsersTrackingOrg($organisationId);
         return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function addMember(Request $request, Response $response, $args)
-    {
-        $email = $args['email'];
-        $orgId = $args['orgId'];
-        $ret = false;
-        $user = DAO\UserDao::getUser(null, $email);
-        if (!is_null($user)) {
-            $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
-            DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
-        }
-        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function getOrgByName(Request $request, Response $response, $args)
