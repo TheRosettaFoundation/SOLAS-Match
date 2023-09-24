@@ -83,33 +83,6 @@ class Notify
             '');
     }
 
-    public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
-    {
-        if ($accepted) {
-            DAO\UserDao::insert_queue_request(
-                PROJECTQUEUE,
-                OrgMembershipAccepted,
-                $user_id,
-                0,
-                $org_id,
-                0,
-                0,
-                0,
-                '');
-        } else {
-            DAO\UserDao::insert_queue_request(
-                PROJECTQUEUE,
-                OrgMembershipRefused,
-                $user_id,
-                0,
-                $org_id,
-                0,
-                0,
-                0,
-                '');
-        }
-    }
-
     public static function sendProjectImageUploaded($project_id)
     {
         DAO\UserDao::insert_queue_request(
@@ -122,48 +95,6 @@ class Notify
             0,
             0,
             '');
-    }
-
-    public static function sendProjectImageApprovedEmail($project_id)
-    {
-        $project = DAO\ProjectDao::getProject($project_id);
-        $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
-        if (!empty($orgAdmins)) {
-            foreach ($orgAdmins as $user) {
-                $user_id = $user->getId();
-                DAO\UserDao::insert_queue_request(
-                    PROJECTQUEUE,
-                    ProjectImageApprovedEmail,
-                    $user_id,
-                    0,
-                    0,
-                    $project_id,
-                    0,
-                    0,
-                    '');
-            }
-        }
-    }
-
-    public static function sendProjectImageDisapprovedEmail($project_id)
-    {
-        $project = DAO\ProjectDao::getProject($project_id);
-        $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
-        if (!empty($orgAdmins)) {
-            foreach ($orgAdmins as $user) {
-                $user_id = $user->getId();
-                DAO\UserDao::insert_queue_request(
-                    PROJECTQUEUE,
-                    ProjectImageDisapprovedEmail,
-                    $user_id,
-                    0,
-                    0,
-                    $project_id,
-                    0,
-                    0,
-                    '');
-            }
-        }
     }
 
     public static function sendProjectImageRemoved($project_id)

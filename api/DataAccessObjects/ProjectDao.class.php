@@ -574,19 +574,8 @@ class ProjectDao
         $project = self::getProject((int)$projectId);
         $project->setImageApproved($status);
         $result = self::save($project);
-        if ($result)
-        {
-            if ($status)
-            {
-                Lib\Notify::sendProjectImageApprovedEmail($projectId);
-            } else
-            {
-                Lib\Notify::sendProjectImageDisapprovedEmail($projectId);
-            }
-            return 1;
-        } else {
-            return 0;
-        }
+        if ($result) return 1;
+        return 0;
     }
 
     public static function getPhysicalProjectFilePath($project_id, $filename) {
