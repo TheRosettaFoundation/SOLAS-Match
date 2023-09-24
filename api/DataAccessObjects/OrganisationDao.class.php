@@ -13,7 +13,6 @@ use \SolasMatch\Common as Common;
 */
 
 require_once __DIR__."/../../Common/protobufs/models/Organisation.php";
-require_once __DIR__."/../../Common/protobufs/models/MembershipRequest.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class OrganisationDao

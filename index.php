@@ -69,7 +69,6 @@ require_once 'Common/protobufs/models/Badge.php';
 require_once 'Common/protobufs/models/Language.php';
 require_once 'Common/protobufs/models/Country.php';
 require_once 'Common/protobufs/models/TaskMetadata.php';
-require_once 'Common/protobufs/models/MembershipRequest.php';
 require_once 'Common/protobufs/models/UserTaskStreamNotification.php';
 require_once 'Common/protobufs/models/TaskReview.php';
 

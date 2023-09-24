@@ -5,7 +5,6 @@ namespace SolasMatch\Common\Lib;
 use \SolasMatch\Common\Protobufs\Models as Models;
 use \SolasMatch\Common\Protobufs\Emails as Emails;
 
-require_once __DIR__."/../protobufs/models/MembershipRequest.php";
 require_once __DIR__."/../protobufs/models/ArchivedTask.php";
 require_once __DIR__."/../protobufs/models/Register.php";
 require_once __DIR__."/../protobufs/models/Country.php";
@@ -43,9 +42,6 @@ class ModelFactory
 
         switch($modelName)
         {
-            case "MembershipRequest":
-                $ret = self::generateMembershipRequest($modelData);
-                break;
             case "ArchivedTask":
                 $ret = self::generateArchivedTask($modelData);
                 break;
@@ -125,22 +121,6 @@ class ModelFactory
                 echo "Unable to build model $modelName";
         }
 
-        return $ret;
-    }
-
-    private static function generateMembershipRequest($modelData)
-    {
-        $ret = new Models\MembershipRequest();
-        $ret ->setId($modelData["id"]);
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
-        }
-        if (isset($modelData['org_id'])) {
-            $ret->setOrgId($modelData['org_id']);
-        }
-        if (isset($modelData['request_time'])) {
-            $ret->setRequestTime($modelData['request_time']);
-        }
         return $ret;
     }
 
