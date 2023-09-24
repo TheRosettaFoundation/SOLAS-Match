@@ -16,25 +16,6 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 {
-    //! Used to add a site administrator
-    /*!
-      Add a site administrator. Can only be called by existing site admins.
-      @param int $userId is the id of the User that is being added as a site admin
-      @return Returns 1 on success, 0 on failure
-    */
-    public static function addSiteAdmin($userId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId)
-                .",".Lib\PDOWrapper::cleanseNullOrWrapStr(null);
-        $result = Lib\PDOWrapper::call("addAdmin", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        
-        return $ret;
-    }
-    
     //! Add a User as an administrator to an organisation
     /*!
       Adds a User to the Organisation Administrator list. This is called when an organisation os created

@@ -39,14 +39,14 @@ class AdminDao extends BaseDao
         return $ret;
     }
 
-    public function createSiteAdmin($userId)
+    public function createSiteAdmin($userId, $role)
     {
-        $request = "{$this->siteApi}v0/admins/$userId";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $this->adjust_org_admin($userId, 0, 0, $role);
     }
     
     public function removeSiteAdmin($userId)
     {
+        $this->adjust_org_admin($userId, 0, SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER, 0);
         $request = "{$this->siteApi}v0/admins/$userId";
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }

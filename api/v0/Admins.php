@@ -176,13 +176,6 @@ class Admins
         return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins($userId), null);
     }
 
-    public static function createSiteAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        DAO\AdminDao::addSiteAdmin($userId);
-        return API\Dispatcher::sendResponse($response, null, null);
-    }
-
     public static function getSiteAdmins(Request $request, Response $response)
     {
         return API\Dispatcher::sendResponse($response, DAO\AdminDao::getAdmins(), null);

@@ -328,7 +328,7 @@ class AdminRouteHandler
             }
 
             if (($roles & SITE_ADMIN) && isset($post['addAdmin'])) {
-                $user = $userDao->getUserByEmail($post['userEmail']);
+                $user = $userDao->getUserByEmail($post['userEmail'], $post['admin_type']);
                 if (is_object($user)) {
                     $adminDao->createSiteAdmin($user->getId());
                 }

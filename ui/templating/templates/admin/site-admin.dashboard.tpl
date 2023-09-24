@@ -297,9 +297,14 @@
                     <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
+                    <select name="admin_type">
+                        <option value="{COMMUNITY_OFFICER}">Community Officer</option>
+                        <option value="{PROJECT_OFFICER}">Project Officer</option>
+                        <option value="{SITE_ADMIN}">Site Admin</option>
+                    </select>
                     <button class="btn btn-success" type="submit" name="addAdmin" value="1">
                         <i class="icon-star icon-white"></i>
-                        {Localisation::getTranslation('site_admin_dashboard_add_admin')}
+                        Add this Role to this User
                     </button>
                 </td>
             </tr>
