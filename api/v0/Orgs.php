@@ -30,21 +30,6 @@ class Orgs
             '\SolasMatch\API\V0\Orgs:getOrgArchivedProject')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-        $app->post(
-            '/api/v0/orgs/{orgId}/requests/{uid}/',
-            '\SolasMatch\API\V0\Orgs:createMembershipRequests')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->put(
-            '/api/v0/orgs/{orgId}/requests/{uid}/',
-            '\SolasMatch\API\V0\Orgs:acceptMembershipRequests')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
-
-        $app->delete(
-            '/api/v0/orgs/{orgId}/requests/{uid}/',
-            '\SolasMatch\API\V0\Orgs:rejectMembershipRequests')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
-
         $app->get(
             '/api/v0/orgs/{orgId}/projects/',
             '\SolasMatch\API\V0\Orgs:getOrgProjects')
@@ -63,11 +48,6 @@ class Orgs
         $app->get(
             '/api/v0/orgs/{orgId}/members/',
             '\SolasMatch\API\V0\Orgs:getOrgMembers')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/orgs/{orgId}/requests/',
-            '\SolasMatch\API\V0\Orgs:getMembershipRequests')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
@@ -144,29 +124,6 @@ class Orgs
         return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
-    public static function createMembershipRequests(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $uid = $args['uid'];
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::requestMembership($uid, $orgId), null);
-    }
-
-    public static function acceptMembershipRequests(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $uid = $args['uid'];
-        Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, true);
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::acceptMemRequest($orgId, $uid), null);
-    }
-
-    public static function rejectMembershipRequests(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $uid = $args['uid'];
-        Lib\Notify::notifyUserOrgMembershipRequest($uid, $orgId, false);
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::refuseMemRequest($orgId, $uid), null);
-    }
-
     public static function getOrgProjects(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
@@ -217,12 +174,6 @@ class Orgs
     {
         $orgId = $args['orgId'];
         return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgMembers($orgId), null);
-    }
-
-    public static function getMembershipRequests(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getMembershipRequests($orgId), null);
     }
 
     public static function getOrg(Request $request, Response $response, $args)

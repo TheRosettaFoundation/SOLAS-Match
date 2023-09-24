@@ -43,26 +43,6 @@
                                 <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>
                             {/if}
-
-                            {if false}
-                        <form id="trackedOrganisationForm" method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
-                                <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
-                            </a>
-                            {if $userSubscribedToOrganisation}
-                                <input type="hidden" name="trackOrganisation" value="0" />
-                                <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
-                                    <i class="icon-remove-circle icon-white"></i>{Localisation::getTranslation('org_public_profile_untrack_organisation')}
-                                </a>
-                            {else}
-                                <input type="hidden" name="trackOrganisation" value="1" />
-                                <a class="btn btn-small" onclick="$('#trackedOrganisationForm').submit();" >
-                                    <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
-                                </a>
-                            {/if}
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                            {/if}
                 </div>
             {/if}
         </h1>
@@ -632,69 +612,6 @@
     <p style="margin-bottom:20px;"></p>
 {/if}
       
-
-{if false && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))}
-     <p style="margin-bottom: 40px" />         
-     <h1 class="page-header">
-         {Localisation::getTranslation('org_public_profile_membership_requests')}
-         <small>{Localisation::getTranslation('org_public_profile_membership_request_overview')}</small>
-
-             <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                 <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
-             </a>
-     </h1>                  
-     <p style="margin-bottom: 40px" />               
-
-     {if !empty($membershipRequestUsers)}
-         <table class="table table-striped">
-             <thead>            
-                 <th style="text-align: left"><strong>{Localisation::getTranslation('common_name')}</strong></th>
-                 <th><strong>{Localisation::getTranslation('common_biography')}</strong></th>
-                 <th>{Localisation::getTranslation('org_public_profile_accept')}</th>
-                 <th>{Localisation::getTranslation('org_public_profile_deny')}</th>
-             </thead>
-             <tbody>
-             {foreach $membershipRequestUsers as $nonMember}
-                 <tr>
-                     {assign var="user_id" value=$nonMember->getId()}                        
-                     {if $nonMember->getDisplayName() != ''}
-                         <td style="text-align: left">
-                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($nonMember->getDisplayName())}</a>
-                         </td>
-                     {/if}
-                     <td width="50%">
-                         <i>
-                         {if $nonMember->getBiography() != ''}
-                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($nonMember->getBiography())}
-                         {else}
-                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
-                         {/if}
-                         </i>
-                     </td>
-                     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                         <input type="hidden" name="user_id" value="{$nonMember->getId()}" />
-                         <td>
-                             <input type="submit" name="accept" value="    Accept Request" class="btn btn-primary" />
-                             <i class="icon-ok-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                         </td>
-                         <td>
-                             <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
-                             <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
-                         </td>
-                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                     </form>
-                 </tr>
-             {/foreach}
-             </tbody>
-         </table>   
-     {else}
-         <p class="alert alert-info">
-             {Localisation::getTranslation('org_public_profile_no_membership_requests_associated')}
-         </p>
-     {/if}
-     <p style="margin-bottom: 40px" />               
- {/if}
-
 {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}

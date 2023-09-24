@@ -104,14 +104,6 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    public function getMembershipRequests($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/requests";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\MembershipRequest"), $request);
-        return $ret;
-    }
-
     public function createOrg($org, $userId)
     {
         $ret = null;
@@ -171,28 +163,6 @@ class OrganisationDao extends BaseDao
         $request = "{$this->siteApi}v0/orgs/$orgId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
-    }
-
-    public function createMembershipRequest($orgId, $userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        return $ret;
-    }
-
-    public function acceptMembershipRequest($orgId, $userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        return $ret;
-    }
-
-    public function rejectMembershipRequest($orgId, $userId)
-    {
-        $request = "{$this->siteApi}v0/orgs/$orgId/requests/$userId";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
 
     public function getUsersTrackingOrg($orgisationId)
