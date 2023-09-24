@@ -97,11 +97,15 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserOrgs($userId)
+    public function getUserOrgs($user_id)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/orgs";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Organisation"), $request);
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('findOrganisationsUserBelongsTo', LibAPI\PDOWrapper::cleanse($user_id));
+        if ($result) {
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('Organisation', $row);
+            }
+        }
         return $ret;
     }
 

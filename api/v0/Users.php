@@ -119,11 +119,6 @@ class Users
             '/api/v0/users/{userId}/verified/',
             '\SolasMatch\API\V0\Users:isUserVerified');
 
-        $app->get(
-            '/api/v0/users/{userId}/orgs/',
-            '\SolasMatch\API\V0\Users:getUserOrgs')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->post(
             '/api/v0/users/{userId}/badges/',
             '\SolasMatch\API\V0\Users:addUserbadges')
@@ -461,12 +456,6 @@ class Users
         $userId = $args['userId'];
         $ret = DAO\UserDao::isUserVerified($userId);
         return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
-    public static function getUserOrgs(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        return API\Dispatcher::sendResponse($response, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null);
     }
 
     public static function addUserbadges(Request $request, Response $response, $args)

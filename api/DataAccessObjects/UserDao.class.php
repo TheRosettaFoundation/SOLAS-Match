@@ -285,20 +285,6 @@ class UserDao
         return $ret;
     }
 
-    public static function findOrganisationsUserBelongsTo($user_id)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("findOrganisationsUserBelongsTo", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
-            }
-        }
-        return $ret;
-    }
-
     public static function getUserTaskStreamNotification($userId)
     {
         $ret = null;
