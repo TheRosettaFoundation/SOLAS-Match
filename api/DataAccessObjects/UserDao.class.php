@@ -203,7 +203,7 @@ class UserDao
     {
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
-        if (!self::is_admin_or_org_member($userId)) {
+        if (!self::isSiteAdmin_any_or_org_admin_any_for_any_org($userId)) {
         Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
         }
         return $response[0]['result'];
@@ -214,17 +214,18 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($email);
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
-            if (!self::is_admin_or_org_member($response[0]['result'])) {
+            if (!self::isSiteAdmin_any_or_org_admin_any_for_any_org($response[0]['result'])) {
             Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
             }
         }
         return $response[0]['result'];
     }
 
-    public static function is_admin_or_org_member($userId)
+    public static function isSiteAdmin_any_or_org_admin_any_for_any_org($userId)
     {
-        $result = Lib\PDOWrapper::call('is_admin_or_org_member', Lib\PDOWrapper::cleanse($userId));
-        return $result[0]['result'];
+        $result = Lib\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', Lib\PDOWrapper::cleanse($userId));
+        if (empty($result) return 0;
+        return 1;
     }
 
     public static function getRegisteredUser($uuid)
