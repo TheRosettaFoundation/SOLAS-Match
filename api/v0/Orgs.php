@@ -48,7 +48,7 @@ class Orgs
         $app->get(
             '/api/v0/orgs/{orgId}/trackingUsers/',
             '\SolasMatch\API\V0\Orgs:getUsersTrackingOrg')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
+            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
         $app->get(
             '/api/v0/orgs/getByName/{name}/',
