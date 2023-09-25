@@ -46,11 +46,6 @@ class Orgs
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/orgs/{orgId}/members/',
-            '\SolasMatch\API\V0\Orgs:getOrgMembers')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/orgs/{orgId}/trackingUsers/',
             '\SolasMatch\API\V0\Orgs:getUsersTrackingOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgMember');
@@ -168,12 +163,6 @@ class Orgs
     {
         $orgId = $args['orgId'];
         return API\Dispatcher::sendResponse($response, DAO\BadgeDao::getOrgBadges($orgId), null);
-    }
-
-    public static function getOrgMembers(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::getOrgMembers($orgId), null);
     }
 
     public static function getOrg(Request $request, Response $response, $args)

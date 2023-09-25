@@ -1736,7 +1736,7 @@ class OrgRouteHandler
                 }
             }
         }
-        $orgMemberList = $orgDao->getOrgMembers($org_id);
+        $orgMemberList = $adminDao->getOrgMembers($org_id);
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($current_user_id, $org_id);
         $org_badges = [];
 

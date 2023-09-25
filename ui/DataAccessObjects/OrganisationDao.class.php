@@ -96,14 +96,6 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    public function getOrgMembers($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/members";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
-        return $ret;
-    }
-
     public function createOrg($org, $userId)
     {
         $ret = null;

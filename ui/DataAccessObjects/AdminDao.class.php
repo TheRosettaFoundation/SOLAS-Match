@@ -27,7 +27,7 @@ class AdminDao extends BaseDao
         return $ret;
     }
     
-    public function getOrgAdmins($orgId)
+    public function getOrgMembers($orgId)
     {
         $ret = [];
         $result = LibAPI\PDOWrapper::call('getAdmin', '0,' . LibAPI\PDOWrapper::cleanse($orgId) . ',0');

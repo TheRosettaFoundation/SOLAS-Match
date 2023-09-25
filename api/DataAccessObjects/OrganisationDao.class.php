@@ -129,27 +129,6 @@ class OrganisationDao
         return $ret;
     }
     
-    //! Used to get a list of Users that are members of the given Organisation
-    /*!
-      Get a list of the Users that are members of this Organisation. Only returns Users that have an entry in the
-      OrganisationMembers table for this Organisation.
-      @param int $orgId is the id of the Organisation whose members will be returned
-      @return Returns an Array of Users that are members of the specified Organisation or null
-    */
-    public static function getOrgMembers($orgId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($orgId);
-        $result = Lib\PDOWrapper::call("getOrgMembers", $args);
-        if ($result) {
-            foreach ($result as $user) {
-                $ret[]= Common\Lib\ModelFactory::buildModel("User", $user);
-            }
-        }
-        
-        return $ret;
-    }
-
     //! Create/Update an Organisation
     /*!
       Used to create or update an Organisation. If the Organisation object passed to this function contains an
