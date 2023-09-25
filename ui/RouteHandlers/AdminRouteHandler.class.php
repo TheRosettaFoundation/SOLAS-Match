@@ -292,7 +292,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (!empty($post['search_project'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_project'])) {
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_project_results', $items_found);
@@ -302,7 +302,7 @@ class AdminRouteHandler
             }
             }
 
-            if (isset($post['verify']) &&  (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) || $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($post['userEmail']))) {
+            if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($post['userEmail'])))) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
                     UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                 } else {
@@ -384,7 +384,7 @@ class AdminRouteHandler
                     );
                 }
             }
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
                 $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if ($taskId && !is_null($userToRevokeFrom)) {
