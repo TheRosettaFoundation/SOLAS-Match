@@ -50,8 +50,7 @@
     <hr />
 {/if}
 
-3 + 2... org only
-XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
         <table style="width: 40%">
             <tr>
@@ -71,8 +70,7 @@ XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | 
     <hr />
 {/if}
 
-3 + 2 ... org only
-XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_user_fail'])}
             <p class="alert alert-error">{$flash['search_user_fail']}</p>
@@ -177,8 +175,7 @@ XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | 
     <hr />
 {/if}
 
-SITE, COMMITY and SITE FOR NGO
-XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | COMMUNITY_OFFICER | NGO_ADMIN)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -298,8 +295,7 @@ XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | 
     <hr />
 {/if}
 
-HE says SITE & PO, NGO admin?????????????????????????????... wrong?
-XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
