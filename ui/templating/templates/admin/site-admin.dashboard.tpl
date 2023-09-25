@@ -10,7 +10,7 @@
 </div>
 
 <div class="well">
-$roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>
     <p><a href="{urlFor name="complete_matecat"}" target="_blank">List all complete tasks.</a></p>
     <p><a href="{urlFor name="unclaimed_tasks"}" target="_blank">List all tasks still unclaimed and the email address of their creators.</a></p>
@@ -48,8 +48,10 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
     <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
     <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
     <hr />
+{/if}
 
 3 + 2... org only
+XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
         <table style="width: 40%">
             <tr>
@@ -67,8 +69,10 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
 3 + 2 ... org only
+XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_user_fail'])}
             <p class="alert alert-error">{$flash['search_user_fail']}</p>
@@ -101,8 +105,9 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
-3 ONLY
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_organisation_fail'])}
             <p class="alert alert-error">{$flash['search_organisation_fail']}</p>
@@ -135,8 +140,9 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
-3 only + 2 if no other way
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_project_fail'])}
             <p class="alert alert-error">{$flash['search_project_fail']}</p>
@@ -169,8 +175,10 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
 SITE, COMMITY and SITE FOR NGO
+XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -212,8 +220,9 @@ SITE, COMMITY and SITE FOR NGO
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
-site admin, PO
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -249,8 +258,9 @@ site admin, PO
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
-site admin, PO
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -286,8 +296,10 @@ site admin, PO
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
 
 HE says SITE & PO, NGO admin?????????????????????????????... wrong?
+XXX{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -321,14 +333,14 @@ HE says SITE & PO, NGO admin?????????????????????????????... wrong?
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 
-HE says SITE & PO, NGO admin?????????????????????????????... wrong?
     {if !empty($adminList)}
         <hr/>
         {include file="admin/admin.site-admins-list.tpl" adminList=$adminList adminUserId=$adminUserId}
         <hr/>
     {/if}    
+{/if}
 
-SITE & PO
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
@@ -372,14 +384,14 @@ SITE & PO
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 
-SITE & PO
     {if !empty($bannedOrgList)}
         <hr/>
         {include file="admin/admin.banned-orgs-list.tpl" bannedOrgList=$bannedOrgList adminUserId=$adminUserId}
         <hr/>
     {/if}  
+{/if}
         
-SITE ADMIN, COMM OFF
+{if $roles & (SITE_ADMIN | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
@@ -422,14 +434,14 @@ SITE ADMIN, COMM OFF
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 
-SITE ADMIN, COMM OFF
     {if !empty($bannedUserList)}
         <hr/>
         {include file="admin/admin.banned-users-list.tpl" bannedUserList=$bannedUserList adminUserId=$adminUserId}
         <hr/>
     {/if} 
+{/if}
 
-SYS admin, COMMUNITY OFF    
+{if $roles & (SITE_ADMIN | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -471,8 +483,9 @@ SYS admin, COMMUNITY OFF
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr/>
+{/if}
 
-$roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
@@ -515,5 +528,6 @@ $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 </div>
+{/if}
 
 {include file='footer.tpl'}
