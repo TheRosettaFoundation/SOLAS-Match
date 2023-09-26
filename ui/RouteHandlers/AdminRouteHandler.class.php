@@ -161,7 +161,7 @@ class AdminRouteHandler
         $app->map(['GET', 'POST'],
             '/search_users_by_language_pair[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:search_users_by_language_pair')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_org_admin_or_po_for_any_org')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('search_users_by_language_pair');
 
         $app->map(['GET', 'POST'],
@@ -273,7 +273,7 @@ class AdminRouteHandler
             $taskDao = new DAO\TaskDao();
             $statsDao = new DAO\StatisticsDao();
 
-            if (!empty($post['search_user'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_user'])) {
                 $items_found = $statsDao->search_user($post['search_user']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_user_results', $items_found);
@@ -337,7 +337,7 @@ class AdminRouteHandler
                 $adminDao->adjust_org_admin($post['userId'], 0, SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER, 0);
             }
             
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['banOrg']) && $post['orgName'] != '') {
+            if (($roles & SITE_ADMIN) && isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new DAO\OrganisationDao();
                 $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));

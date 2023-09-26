@@ -50,7 +50,7 @@
     <hr />
 {/if}
 
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
         <table style="width: 40%">
             <tr>
@@ -70,7 +70,7 @@
     <hr />
 {/if}
 
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_user_fail'])}
             <p class="alert alert-error">{$flash['search_user_fail']}</p>
@@ -336,7 +336,7 @@
     {/if}    
 {/if}
 
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
+{if $roles & (SITE_ADMIN)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard" options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>
             <tr>
