@@ -2392,7 +2392,8 @@ class UserRouteHandler
 
             if (isset($post['revoke'])) {
                 $org_id = $post['org_id'];
-                $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, LINGUIST);
+                $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
+                $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
             }
 
             if (isset($post['referenceRequest'])) {
