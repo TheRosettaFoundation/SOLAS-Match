@@ -230,8 +230,7 @@ class Orgs
             $org = DAO\OrganisationDao::insertAndUpdate($data);
             $user = DAO\UserDao::getLoggedInUser();
             if (!is_null($org) && $org->getId() > 0) {
-                error_log('Calling addOrgAdmin(' . $user->getId() . ', ' . $org->getId() . ')');
-                DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
+                DAO\AdminDao::add_org_TWB_contact($org->getId(), $user->getId());
                 Lib\Notify::sendOrgCreatedNotifications($org->getId());
             }
             return API\Dispatcher::sendResponse($response, $org, null);

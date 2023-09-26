@@ -16,29 +16,11 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao
 {
-    //! Add a User as an administrator to an organisation
-    /*!
-      Adds a User to the Organisation Administrator list. This is called when an organisation os created
-      to add the user that created it as an administrator. Can only be called by site admins and administrators
-      of the organisation defined by the params
-      @param int $userId is the id of the iser being added to the organisation administrator list
-      @param int $orgId is the id of an organisation
-      @return Returns 1 on success, 0 on failure
-    */
-    public static function addOrgAdmin($userId, $orgId)
+    public static function add_org_TWB_contact($org_id, $user_id)
     {
-        $ret = null;
-        OrganisationDao::acceptMemRequest($orgId, $userId);
-        $args = Lib\PDOWrapper::cleanseNull($userId)
-                .",".Lib\PDOWrapper::cleanseNull($orgId);
-        $result = Lib\PDOWrapper::call("addAdmin", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        
-        return $ret;
+        Lib\PDOWrapper::call('add_org_TWB_contact', Lib\PDOWrapper::cleanse($org_id) . ',' . Lib\PDOWrapper::cleanse($user_id));
     }
-    
+
     //! Bans a User to stop them from logging in
     /*!
       Ban a User to stop them from logging in. Users can only be banned by site admins. Bans can last
