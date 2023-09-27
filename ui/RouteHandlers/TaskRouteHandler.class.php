@@ -1447,7 +1447,9 @@ class TaskRouteHandler
 
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
-        $task       = $taskDao->getTask($task_id);
+        $adminDao   = new DAO\AdminDao();
+
+        $task = $taskDao->getTask($task_id);
         if ($any_country < 2 && Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['sourcing'] == 1) return $this->task_search_translators($request, $response, $args, 2);
 
         $project    = $projectDao->getProject($task->getProjectId());
@@ -1456,10 +1458,12 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id);
-        elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id);
-        elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
-        else                       $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id);
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
+
+        if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id, $roles);
+        elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id, $roles);
+        elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id, $roles);
+        else                       $invites_not_sent = $taskDao->list_task_invites_not_sent_strict($task_id, $roles);
         $users_in_invites_not_sent = array();
         foreach ($invites_not_sent as $user) {
             $users_in_invites_not_sent[$user['user_id']] = $user;
