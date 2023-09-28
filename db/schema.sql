@@ -11842,6 +11842,15 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `create_empty_role`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_empty_role`(IN uID INT UNSIGNED)
+BEGIN
+    INSERT INTO Admins (user_id, organisation_id, roles)
+    VALUES             (    uID,               0,     0);
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
