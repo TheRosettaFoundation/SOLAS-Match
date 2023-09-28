@@ -11913,6 +11913,27 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `current_user_is_NGO_admin_or_PO_for_special_registration_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `current_user_is_NGO_admin_or_PO_for_special_registration_email`(IN uID INT UNSIGNED, IN mail VARCHAR(128))
+BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+    SELECT *
+    FROM special_registrations sr
+    JOIN Admins                 a ON a.user_id=uID AND sr.org_id=a.organisatons_id AND sr.org_id!=0
+    WHERE
+        sr.email=mail AND
+        (a.roles & (@NGO_ADMIN | @NGO_PROJECT_OFFICER))!=0
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
