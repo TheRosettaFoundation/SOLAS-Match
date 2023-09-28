@@ -11859,6 +11859,30 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `adjust_org_admin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_org_admin`(IN uID INT UNSIGNED, IN oID INT UNSIGNED, IN remove BIGINT UNSIGNED, IN add BIGINT UNSIGNED)
+BEGIN
+# remove and add must both refer to site roles for oID=0 OR NGO roles for oid!=0, but not a mixture
+    IF oID=0 THEN
+        UPDATE Admins
+        SET roles=(roles&~remove)|add
+        WHERE user_id=uID;
+    ELSE
+        IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=oID) THEN
+            UPDATE Admins
+            SET roles=(roles&~remove)|add
+            WHERE
+                user_id=uID AND
+                organisation_id=oID;
+        ELSE
+            INSERT INTO Admins (user_id, organisation_id, roles)
+            VALUES             (    uID,             oID,   add | (SELECT roles FROM Admins WHERE user_id=uID AND organisation_id=0));
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
