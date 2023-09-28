@@ -8436,7 +8436,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_strict`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_strict`(IN `taskID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_strict`(IN taskID INT, IN site_admin INT)
 BEGIN
     SELECT
         u.id AS user_id,
@@ -8465,16 +8465,14 @@ BEGIN
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
-    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
-    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+         JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        a.user_id IS NULL AND
-        o.user_id IS NULL AND
+        ((site_admin>0 AND a.roles=LINGUIST) OR (a.roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id))
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -8488,7 +8486,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `list_task_invites_not_sent`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent`(IN `taskID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent`(IN taskID INT, IN site_admin INT)
 BEGIN
     SELECT
         u.id AS user_id,
@@ -8516,16 +8514,14 @@ BEGIN
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
-    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
-    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+         JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        a.user_id IS NULL AND
-        o.user_id IS NULL AND
+        ((site_admin>0 AND a.roles=LINGUIST) OR (a.roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id))
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -8587,7 +8583,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_no_source_strict`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source_strict`(IN `taskID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source_strict`(IN taskID INT, IN site_admin INT)
 BEGIN
     SELECT
         u.id AS user_id,
@@ -8615,16 +8611,14 @@ BEGIN
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
-    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
-    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+         JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        a.user_id IS NULL AND
-        o.user_id IS NULL AND
+        ((site_admin>0 AND a.roles=LINGUIST) OR (a.roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id))
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -8638,7 +8632,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_no_source`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source`(IN `taskID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_no_source`(IN taskID INT, IN site_admin INT)
 BEGIN
     SELECT
         u.id AS user_id,
@@ -8665,16 +8659,14 @@ BEGIN
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
-    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
-    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+         JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        a.user_id IS NULL AND
-        o.user_id IS NULL AND
+        ((site_admin>0 AND a.roles=LINGUIST) OR (a.roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id))
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
