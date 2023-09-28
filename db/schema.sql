@@ -11851,6 +11851,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_roles`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_roles`(IN uID INT UNSIGNED, IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM Admins WHERE user_id=uID AND (organisation_id=oID OR organisation_id=0) ORDER BY organisation_id DESC LIMIT 1;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
