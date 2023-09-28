@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS `Admins` (
   organisation_id INT UNSIGNED NOT NULL,
   roles           BIGINT UNSIGNED NOT NULL,
   UNIQUE INDEX user_id (user_id, organisation_id),
+  KEY          organisation_id (organisation_id),
   KEY          roles (roles),
-  CONSTRAINT FK_Admins_Organisations FOREIGN KEY (organisation_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT FK_Admins_Users         FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
