@@ -2308,25 +2308,38 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN uID INT UNSIGNED)
 BEGIN
-  IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
-    call getOrg(null,null,null,null,null,null,null,null,null);
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+  IF EXISTS (SELECT * FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    CALL getOrg(null, null, null, null, null, null, null, null, null);
   ELSE
-    SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
-        o.`regional-focus` as regionalFocus
-    FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
-    WHERE om.user_id = id
-    UNION
-    SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
-        o.`regional-focus` as regionalFocus
-    FROM Organisations o
-    JOIN Admins a ON
-    a.organisation_id=o.id
-    WHERE a.user_id=id;
+    SELECT
+      o.id,
+      o.name,
+      o.biography,
+      o.`home-page` AS homepage,
+      o.`e-mail` AS email,
+      o.address,
+      o.city,
+      o.country,
+      o.`regional-focus` AS regionalFocus
+    FROM Admins        a
+    JOIN Organisations o ON a.organisation_id=o.id
+    WHERE
+        a.user_id=uID AND
+        a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0;
   END IF;
 END//
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `finishRegistration`;
 DELIMITER //
