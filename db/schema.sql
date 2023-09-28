@@ -15,12 +15,13 @@ SET FOREIGN_KEY_CHECKS=0;
 
 
 CREATE TABLE IF NOT EXISTS `Admins` (
-  `user_id` INT(10) UNSIGNED NOT NULL,
-  `organisation_id` INT(10) UNSIGNED NULL,
-  UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
-  INDEX `FK_Admins_Organisations` (`organisation_id`),
-  CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+  user_id         INT UNSIGNED NOT NULL,
+  organisation_id INT UNSIGNED NOT NULL,
+  roles           BIGINT UNSIGNED NOT NULL,
+  UNIQUE INDEX user_id (user_id, organisation_id),
+  KEY          roles (roles),
+  CONSTRAINT FK_Admins_Organisations FOREIGN KEY (organisation_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_Admins_Users         FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -11736,6 +11737,33 @@ BEGIN
         NOW());
 END//
 DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `special_registrations` (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  roles        BIGINT UNSIGNED NOT NULL,
+  email        VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  used         INT UNSIGNED NOT NULL,  # 0 => no, 1 => yes, 2 => yes but email mismatch so became LINGUIST
+  org_id       INT UNSIGNED NOT NULL,
+  admin_id     INT UNSIGNED NOT NULL,
+  user_id      INT UNSIGNED NOT NULL,
+  date_created DATETIME DEFAULT NULL,
+  date_expires DATETIME DEFAULT NULL,
+  date_used    DATETIME DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY         (email),
+  KEY         (org_id),
+  CONSTRAINT FK_special_registrations_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `org_TWB_contacts` (
+  org_id       INT UNSIGNED NOT NULL,
+  user_id      INT UNSIGNED NOT NULL,
+  date_created DATETIME DEFAULT NULL,
+  CONSTRAINT FK_org_TWB_contacts_org_id  FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_org_TWB_contacts_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 /*---------------------------------------end of procs----------------------------------------------*/
