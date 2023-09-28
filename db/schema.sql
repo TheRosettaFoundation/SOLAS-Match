@@ -2450,7 +2450,7 @@ BEGIN
         WHERE
             a.roles!=exclude AND
             a.roles!=0 AND
-            a.organisation_id=0 AND;
+            a.organisation_id=0;
     ELSE
         SELECT
             u.id,
