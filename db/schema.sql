@@ -2282,6 +2282,9 @@ BEGIN
         DELETE FROM Admins
         WHERE user_id=userId;
 
+        DELETE FROM special_registrations
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
