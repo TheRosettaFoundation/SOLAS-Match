@@ -11883,6 +11883,36 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_special_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration`(IN reg_data BINARY(32), IN reg_key BINARY(32), IN uID INT UNSIGNED, IN mail VARCHAR(128))
+BEGIN
+    SELECT UNHEX(reg_data) INTO @binary_reg_data;
+    IF @binary_reg_data IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_reg_data, UNHEX(reg_key)) INTO @decrypted;
+        IF @decrypted IS NOT NULL THEN
+            SELECT
+                *,
+                IF(NOW()>date_expires, 1, 0) AS expired,
+                IF(email!=mail,        1, 0) AS mismatch
+            FROM special_registrations
+            WHERE
+                id=@decrypted;
+
+            UPDATE special_registrations
+            SET
+                user_id=uID,
+                date_used=NOW(),
+                used=IF(email=mail, 1, 2)
+            WHERE
+                id=@decrypted AND
+                uID>0 AND
+                used=0;
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
