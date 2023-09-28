@@ -11817,6 +11817,32 @@ CREATE TABLE IF NOT EXISTS `org_TWB_contacts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_for_any_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_for_any_org`(IN uID INT UNSIGNED)
+BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
+
+    SELECT *
+    FROM Admins
+    WHERE
+        user_id=uID AND
+        (roles & @admin_roles)>0
+    ORDER BY
+        (roles & @admin_roles) DESC
+        LIMIT 1;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
