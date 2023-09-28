@@ -3912,9 +3912,25 @@ BEGIN
     IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
     IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
 
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
     SET @isSiteAdmin = 0;
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+    SET @NGO_list = '';
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
+    END IF;
+
+    SET @site_linguist = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&@LINGUIST!=0) THEN
+        SET @site_linguist = 1;
+    ELSE
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
     SELECT
@@ -3951,6 +3967,7 @@ BEGIN
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
+        (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
             @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
@@ -3975,7 +3992,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for getUserTopTasksCount
 DROP PROCEDURE IF EXISTS `getUserTopTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasksCount` (IN `uID` INT, IN `strict` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
@@ -3984,9 +4000,25 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
     SET @isSiteAdmin = 0;
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+    SET @NGO_list = '';
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
+    END IF;
+
+    SET @site_linguist = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&@LINGUIST!=0) THEN
+        SET @site_linguist = 1;
+    ELSE
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
     SELECT COUNT(*) AS result FROM (
@@ -4010,6 +4042,7 @@ BEGIN
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
+        AND (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0)
         AND
         (
             @isSiteAdmin=1 OR
