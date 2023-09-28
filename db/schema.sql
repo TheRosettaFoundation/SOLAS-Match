@@ -2409,23 +2409,58 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getAdmins`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN `orgId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN oID INT UNSIGNED, IN exclude INT UNSIGNED)
 BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
 
-  IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;
-
-  SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography,
-            (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
-            (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
-            (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
-            (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
-            u.nonce,u.`created-time` as created_time
-
-        FROM Users u JOIN Admins a ON a.user_id = u.id
-
-        WHERE (a.organisation_id is null or a.organisation_id = orgId);
+    IF oID=0 THEN
+        SELECT
+            u.id,
+            u.`display-name` AS display_name,
+            u.email,
+            u.password,
+            u.biography,
+            (SELECT `en-name` FROM Languages l WHERE l.id = u.language_id) AS languageName,
+            (SELECT code      FROM Languages l WHERE l.id = u.language_id) AS languageCode,
+            (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
+            (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
+            u.nonce,
+            u.`created-time` AS created_time
+        FROM Admins a
+        JOIN Users  u ON a.user_id=u.id
+        WHERE
+            a.roles!=exclude AND
+            a.roles!=0 AND
+            a.organisation_id=0 AND;
+    ELSE
+        SELECT
+            u.id,
+            u.`display-name` AS display_name,
+            u.email,
+            u.password,
+            u.biography,
+            (SELECT `en-name` FROM Languages l WHERE l.id = u.language_id) AS languageName,
+            (SELECT code      FROM Languages l WHERE l.id = u.language_id) AS languageCode,
+            (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
+            (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
+            u.nonce,
+            u.`created-time` AS created_time
+        FROM Admins a
+        JOIN Users  u ON a.user_id=u.id
+        WHERE
+            a.organisation_id=oID AND
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST)!=exclude AND
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST)!=0;
+    END IF;
 END//
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `getAdminsForOrg`;
 DELIMITER //
