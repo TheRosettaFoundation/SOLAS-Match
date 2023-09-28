@@ -9855,18 +9855,18 @@ BEGIN
     DECLARE uID INT;
     DECLARE mail VARCHAR(128) CHARSET utf8mb4 COLLATE 'utf8mb4_unicode_ci';
 
+    SET @LINGUIST=            1;
+
     SELECT u.id, u.email INTO uID, mail
     FROM      Users               u
+    JOIN      Admins              a ON u.id=a.user_id
     LEFT JOIN TermsAcceptedUsers ta ON u.id=ta.user_id
-    LEFT JOIN Admins              a ON u.id=a.user_id
-    LEFT JOIN OrganisationMembers o ON u.id=o.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
+        a.role=@LINGUIST AND
         u.`created-time`>'2021-10-25 07:00:00' AND
-        u.`created-time`<(NOW() - INTERVAL 204 HOUR) AND
-        a.user_id IS NULL AND
-        o.user_id IS NULL
-        ORDER BY u.`created-time`
+        u.`created-time`<(NOW() - INTERVAL 204 HOUR)
+    ORDER BY u.`created-time`
     LIMIT 1;
 
     IF uID IS NOT NULL THEN
