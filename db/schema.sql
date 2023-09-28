@@ -6594,23 +6594,21 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTask`(IN `taskID` INT, IN `userID` INT)
 BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
     IF EXISTS (
         SELECT 1
         FROM Admins
         WHERE
             user_id=userID AND
-            organisation_id IS NULL
-    ) THEN
-        SELECT 0 AS result;
-
-    ELSEIF EXISTS (
-        SELECT 1
-        FROM Tasks                t
-        JOIN Projects             p ON t.project_id=p.id
-        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
-        WHERE
-            t.id=taskID AND
-            om.user_id=userID
+            organisation_id=0 AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6621,7 +6619,8 @@ BEGIN
         JOIN Admins              oa ON p.organisation_id=oa.organisation_id
         WHERE
             t.id=taskID AND
-            oa.user_id=userID
+            oa.user_id=userID AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6663,23 +6662,21 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTaskButAllowTranslatorToDownload`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTaskButAllowTranslatorToDownload`(IN `taskID` INT, IN `userID` INT)
 BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
     IF EXISTS (
         SELECT 1
         FROM Admins
         WHERE
             user_id=userID AND
-            organisation_id IS NULL
-    ) THEN
-        SELECT 0 AS result;
-
-    ELSEIF EXISTS (
-        SELECT 1
-        FROM Tasks                t
-        JOIN Projects             p ON t.project_id=p.id
-        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
-        WHERE
-            t.id=taskID AND
-            om.user_id=userID
+            organisation_id=0 AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6690,7 +6687,8 @@ BEGIN
         JOIN Admins              oa ON p.organisation_id=oa.organisation_id
         WHERE
             t.id=taskID AND
-            oa.user_id=userID
+            oa.user_id=userID AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6760,22 +6758,21 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
 BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
     IF EXISTS (
         SELECT 1
         FROM Admins
         WHERE
             user_id=userID AND
-            organisation_id IS NULL
-    ) THEN
-        SELECT 0 AS result;
-
-    ELSEIF EXISTS (
-        SELECT 1
-        FROM Projects             p
-        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
-        WHERE
-            p.id=projectID AND
-            om.user_id=userID
+            organisation_id=0 AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6785,7 +6782,8 @@ BEGIN
         JOIN Admins              oa ON p.organisation_id=oa.organisation_id
         WHERE
             p.id=projectID AND
-            oa.user_id=userID
+            oa.user_id=userID AND
+            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
