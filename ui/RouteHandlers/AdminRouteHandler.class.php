@@ -302,7 +302,7 @@ class AdminRouteHandler
             }
             }
 
-            if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($post['userEmail'])))) {
+            if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($userId, $post['userEmail'])))) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
                     UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                 } else {
