@@ -111,4 +111,71 @@ class AdminDao extends BaseDao
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $response;
     }
+
+    public function get_roles($user_id, $org_id = 0)
+    {
+        $result = LibAPI\PDOWrapper::call('get_roles', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+        if empty($result) return 0;
+        return $result[0]['roles'];
+    }
+
+    public function isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', LibAPI\PDOWrapper::cleanse($user_id));
+        if empty($result) return 0;
+        return $result[0]['roles'];
+    }
+
+    public function adjust_org_admin($user_id, $org_id, $remove, $add)
+    {
+        LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id), LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
+    }
+
+    public function current_user_is_NGO_admin_or_PO_for_special_registration_email($user_id, $email)
+    {
+        return LibAPI\PDOWrapper::call('current_user_is_NGO_admin_or_PO_for_special_registration_email', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
+    }
+
+    public function get_special_registration()
+    {
+        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+
+        if (empty($result)) $error = 'This link is invalid.';
+        else {
+            $special_registration = $result[0];
+
+            $error = null;
+            if     ($special_registration['used'])    $error = 'This link has already been used to register, you cannot register.';
+            elseif ($special_registration['expired']) $error = 'This link has expired, you cannot register.';
+        }
+        if ($error) {
+            unset($_SESSION['reg_data']);
+            return ['', $error];
+        }
+        return [$special_registration['email'], null];
+    }
+
+    public function copy_roles_from_special_registration($user_id, $email)
+    {
+        if (empty($_SESSION['reg_data'])) {
+            $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
+            return 0;
+        }
+        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
+        if (empty($result)) {
+            error_log("Bad reg_data: {$_SESSION['reg_data']}");
+            unset($_SESSION['reg_data']);
+            return "Bad reg_data: {$_SESSION['reg_data']}.";
+        }
+        unset($_SESSION['reg_data']);
+
+        $special_registration = $result[0];
+        if ($special_registration['mismatch']) {
+            $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
+            error_log("special_registration[mismatch] on: $email (not {$special_registration['email']}), making $user_id LINGUIST");
+            return "Expected special registration email: {$special_registration['email']}, got $email from Google, can't give special role, gave TWB linguist.";
+        }
+        $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, $special_registration['roles']);
+        return 0;
+    }
 }
