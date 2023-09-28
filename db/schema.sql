@@ -11934,6 +11934,15 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `add_org_TWB_contact`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_org_TWB_contact`(IN oID INT UNSIGNED, IN uID INT UNSIGNED)
+BEGIN
+    INSERT INTO org_TWB_contacts (org_id, user_id, date_created)
+    VALUES                       (   oID,     uID,        NOW());
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
