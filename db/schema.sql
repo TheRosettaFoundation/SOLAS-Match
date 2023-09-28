@@ -17,7 +17,7 @@ SET FOREIGN_KEY_CHECKS=0;
 CREATE TABLE IF NOT EXISTS `Admins` (
   user_id         INT UNSIGNED NOT NULL,
   organisation_id INT UNSIGNED NOT NULL,
-  roles           BIGINT UNSIGNED NOT NULL,
+  roles           BIGINT UNSIGNED NOT NULL DEFAULT 0,
   UNIQUE INDEX user_id (user_id, organisation_id),
   KEY          organisation_id (organisation_id),
   KEY          roles (roles),
