@@ -1720,7 +1720,7 @@ class OrgRouteHandler
                     }
                 }
             }
-            if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
                 if (isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
                     if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
                         $start_date = date("Y-m-d H:i:s", $validTime);
