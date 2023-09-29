@@ -739,6 +739,7 @@ class UserRouteHandler
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
+        $adminDao = new DAO\AdminDao();
 
         $error = null;
         if ($request->getMethod() === 'POST') {
