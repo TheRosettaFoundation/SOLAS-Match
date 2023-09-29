@@ -7,7 +7,7 @@
         <th>{Localisation::getTranslation('common_created')}</th>
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
         <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
-        {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
     </thead>
     <tbody>
         <tr>
@@ -41,7 +41,7 @@
                 </span>
                 <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
             </td>
-            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
+            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                 <td>
                     {assign var="status_id" value=$task->getTaskStatus()}
                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
@@ -129,7 +129,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong><hr/>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong><hr/>{/if}
                 </td>
             </tr>
             <tr valign="top">
@@ -138,7 +138,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" target="_blank">{$matecat_url}</a>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" target="_blank">{$matecat_url}</a>{/if}
                 </td>
             </tr>
             {/if}
@@ -172,12 +172,12 @@
     <table width="100%" class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN | $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
             {/if}
             <th>Cancelled?</th>
             <th>{Localisation::getTranslation('common_tracking')}</th>
-            {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER)) && isset($paid_status)}<th>Paid?</th>{/if}
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && isset($paid_status)}<th>Paid?</th>{/if}
             {if !empty($details_claimant)}
             <th>{Localisation::getTranslation('common_claimed_date')}</th>
             <th>{Localisation::getTranslation('common_claimed_by')}</th>
@@ -201,7 +201,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN | $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <td>
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -241,7 +241,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
-            {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER)) && isset($paid_status)}
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && isset($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -273,7 +273,7 @@
     </table>
 {/if}
 
-{if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
     <table width="100%" class="table table-striped">
         <thead>
           {if !empty($paid_status)}

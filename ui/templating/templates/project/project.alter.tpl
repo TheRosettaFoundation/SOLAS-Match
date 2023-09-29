@@ -12,7 +12,7 @@
     <div id="org_id">{$org_id}</div>
     <div id="user_id">{$user_id}</div>
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
-    <div id="userIsAdmin">{$roles & ($SITE_ADMIN | $PROJECT_OFFICER) ? 1 : 0}</div>
+    <div id="userIsAdmin">{$roles & ($SITE_ADMIN + $PROJECT_OFFICER) ? 1 : 0}</div>
 </span>
 
 <div class="grid_8">
@@ -23,7 +23,7 @@
                 <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
             </span>
             <div class="pull-right">
-                {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                 <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="btn btn-danger" onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                 </a>
@@ -61,8 +61,8 @@
                     <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="wordCountInput" style="font-size: large"><strong>{Localisation::getTranslation('common_word_count')}</strong><span style="color: red">*</span></label>
-                    <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !($roles & ($SITE_ADMIN | $PROJECT_OFFICER))}disabled{/if} />
-                    {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
+                    <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} />
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <br />
                     <button onclick="updatewordCount(); return false;" class="btn btn-primary" id="updatewordCountBtn">
                         <i class="icon-refresh icon-white"></i>{Localisation::getTranslation('common_submit')} {Localisation::getTranslation('common_word_count')}
@@ -132,7 +132,7 @@
                     <label for="project_reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
                     <input type="text" name="project_reference" id="project_reference" value="{TemplateHelper::uiCleanseHTML($project->getReference())}" style="width: 400px" />
 
-                    {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <label for="project_hubspot" style="font-size: large"><strong>HubSpot Deal ID</strong></label>
                     <input type="text" name="project_hubspot" id="project_hubspot" value="{$project_complete_date['deal_id']}" style="width: 400px" />
 

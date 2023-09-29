@@ -50,7 +50,7 @@
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
-                    {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div style="margin-bottom:20px;">
                         <label for="required_qualification_level" style="font-size: large"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
                         <select name="required_qualification_level" id="required_qualification_level" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
@@ -111,9 +111,9 @@
                     <p style="margin-bottom:40px;"/>
 
                     <label for="word_count" style="font-size: large"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN | $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
+                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
 
-                    {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>
                     <label for="shell_task_url" style="font-size: large"><strong>Shell Task Work URL</strong></label>
                     <input type="text" name="shell_task_url" id="shell_task_url" value="{$shell_task_url}" style="width: 400px" />
