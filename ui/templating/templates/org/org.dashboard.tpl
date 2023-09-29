@@ -107,7 +107,7 @@
                         </a>
                     </td>
                     <td>
-                        {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                             {if !isset($sesskey)}{assign var="sesskey" value="0"}{/if}
                             <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="btn btn-inverse" 
                             onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
