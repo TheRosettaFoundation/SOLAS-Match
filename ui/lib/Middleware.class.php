@@ -391,7 +391,7 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $task_id = $route->getArgument('task_id');
-        if (!empty($_SESSION['user_id'] && !empty($task_id)) {
+        if (!empty($_SESSION['user_id']) && !empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             if ($taskDao->getUserClaimedTask($task_id)) return $handler->handle($request); // weird
 
