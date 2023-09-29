@@ -207,7 +207,7 @@ class AdminDao
     public static function get_roles($user_id, $org_id = 0)
     {
         $result = Lib\PDOWrapper::call('get_roles', Lib\PDOWrapper::cleanse($user_id) . ',' . Lib\PDOWrapper::cleanse($org_id));
-        if empty($result) return 0;
+        if (empty($result)) return 0;
         return $result[0]['roles'];
     }
 }

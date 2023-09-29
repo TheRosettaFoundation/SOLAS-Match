@@ -309,7 +309,7 @@ class Middleware
 
     public function authUserForOrg_incl_community_officer(Request $request, RequestHandler $handler)
     {
-        return $this->authUserForOrg(Request $request, RequestHandler $handler, COMMUNITY_OFFICER);
+        return $this->authUserForOrg($request, $handler, COMMUNITY_OFFICER);
     }
 
     /*
