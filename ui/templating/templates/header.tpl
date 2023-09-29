@@ -335,10 +335,10 @@
 		{/if}
         <br/>
         <br/>
-{SITE_ADMIN=         64)
-{PROJECT_OFFICER=    32)
-{COMMUNITY_OFFICER=  16)
-{NGO_ADMIN=           8)
-{NGO_PROJECT_OFFICER= 4)
-{NGO_LINGUIST=        2)
-{LINGUIST=            1)
+{SITE_ADMIN=         64}
+{PROJECT_OFFICER=    32}
+{COMMUNITY_OFFICER=  16}
+{NGO_ADMIN=           8}
+{NGO_PROJECT_OFFICER= 4}
+{NGO_LINGUIST=        2}
+{LINGUIST=            1}
