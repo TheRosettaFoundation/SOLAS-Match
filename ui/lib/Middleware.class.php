@@ -327,7 +327,7 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $task_id = $route->getArgument('task_id');
-        if (!empty($_SESSION['user_id']) && !empty($task_id) {
+        if (!empty($_SESSION['user_id']) && !empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject($task->getProjectId());
             if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
