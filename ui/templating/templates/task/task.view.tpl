@@ -28,7 +28,7 @@
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary claim_btn">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>&nbsp;&nbsp;
             {/if}
-            {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))}
+            {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER))}
                 <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary' style="margin-top: -12.5%;margin-right: 45%;">
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
@@ -119,7 +119,7 @@
 		
 		    {include file="task/task.details.tpl"} 
 
-        {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+        {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
             <div class="well">
             <table><tr>
               <td>
@@ -160,7 +160,7 @@
 
         <p style="margin-bottom: 40px" />
 
-        {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
+        {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
         <div class="well">
             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
@@ -185,7 +185,7 @@
         </div>
         {/if}
 
-        {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+        {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             {if !empty($memsource_task)}
                 <p>{Localisation::getTranslation('org_task_review_0')}</p>
                 <p>

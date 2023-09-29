@@ -19,7 +19,7 @@
         {foreach $reviews as $review}
             <h2>
             	{sprintf({Localisation::getTranslation('task_review_count')}, {$count})}
-              {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+              {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
                   <form id="delete_review_form{$count}" method="post" action="{urlFor name="user-task-reviews" options="task_id.$id"}">
                       <input type="hidden" name="user_id" value="{$review->getUserId()}" />
                       <a class="btn btn-small btn-inverse" onclick="if (confirm('Are you sure you want to delete this review?')) $('#delete_review_form{$count}').submit();" >

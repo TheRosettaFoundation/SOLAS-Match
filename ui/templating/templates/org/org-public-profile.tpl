@@ -26,19 +26,19 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
-                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
+                            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN)}
                             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                             </a>
                             {/if}
 
-                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+                            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
                             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> New Phrase Project
                             </a>
                             {/if}
 
-                            {if $roles & (SITE_ADMIN | PROJECT_OFFICER)}
+                            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER)}
                             <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>
@@ -149,7 +149,7 @@
                                     </td>
                                 </tr>
 
-                                {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+                                {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
@@ -547,7 +547,7 @@
 
         {if isset($user)}
 
-            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
                 <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('org_public_profile_create_badge')}
                 </a>
@@ -562,7 +562,7 @@
             <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
             <th>{Localisation::getTranslation('common_description')}</th>
 
-            {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+            {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
                 <th>{Localisation::getTranslation('common_edit')}</th>
                 <th>{Localisation::getTranslation('common_assign')}</th>
                 <th>{Localisation::getTranslation('common_delete')}</th>
@@ -579,7 +579,7 @@
                 <td width="35%">
                     {TemplateHelper::uiCleanseHTML($badge->getDescription())}
                 </td>
-                {if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($user)}
+                {if ($roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)) && isset($user)}
                     <td>
                         <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
                             <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('org_public_profile_edit_badge')}
@@ -612,7 +612,7 @@
     <p style="margin-bottom:20px;"></p>
 {/if}
       
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)}
+{if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN | $NGO_PROJECT_OFFICER)}
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
         <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
@@ -627,7 +627,7 @@
                 <thead>
                     <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
                     <th>{Localisation::getTranslation('org_public_profile_username')}</th>
-                    {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
+                    {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN)}
                         <th>Remove Role</th>
                         <th>Add Role</th>
                     {/if}
@@ -647,7 +647,7 @@
                             <td>
                                 <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{TemplateHelper::uiCleanseHTML($member->getDisplayName())}</a>
                             </td>
-                        {if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)}
+                        {if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER | $NGO_ADMIN)}
                             <td>
                                 {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
                                     <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse"
@@ -692,7 +692,7 @@
     {/if}
 {/if}
 
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
+{if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         Subscription
@@ -751,7 +751,7 @@
     </form>
 {/if}
 
-{if $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)}
+{if $roles & ($SITE_ADMIN | $PROJECT_OFFICER | $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         {Localisation::getTranslation('required_qualification_level')}<br />
