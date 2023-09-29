@@ -338,7 +338,7 @@ class Middleware
 
     public function authUserForOrgTask_incl_community_officer(Request $request, RequestHandler $handler)
     {
-        return $this->authUserForOrgTask(Request $request, RequestHandler $handler, COMMUNITY_OFFICER);
+        return $this->authUserForOrgTask($request, $handler, COMMUNITY_OFFICER);
     }
 
     public function authUserForOrgProject(Request $request, RequestHandler $handler)
