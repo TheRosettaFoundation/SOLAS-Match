@@ -1077,7 +1077,7 @@ class TaskRouteHandler
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             'restrictTaskStatus'  => $restrictTaskStatus,
             'roles'               => $roles,
-            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id), ... $po
+            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'shell_task_url'      => $taskDao->get_task_url($task_id),
             'allow_downloads'     => $allow_downloads,
         ));
