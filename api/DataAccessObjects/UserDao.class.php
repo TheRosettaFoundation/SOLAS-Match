@@ -224,7 +224,7 @@ class UserDao
     public static function isSiteAdmin_any_or_org_admin_any_for_any_org($userId)
     {
         $result = Lib\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', Lib\PDOWrapper::cleanse($userId));
-        if (empty($result) return 0;
+        if (empty($result)) return 0;
         return 1;
     }
 
