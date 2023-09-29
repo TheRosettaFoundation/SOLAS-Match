@@ -256,6 +256,7 @@ class Middleware
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
+        $adminDao = new DAO\AdminDao();
         if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($_SESSION['user_id'])) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Admin login required to access page.');
