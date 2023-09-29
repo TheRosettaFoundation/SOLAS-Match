@@ -2468,8 +2468,8 @@ BEGIN
         JOIN Users  u ON a.user_id=u.id
         WHERE
             a.organisation_id=oID AND
-            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST)!=exclude AND
-            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST)!=0;
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=exclude AND
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=0;
     END IF;
 END//
 DELIMITER ;
