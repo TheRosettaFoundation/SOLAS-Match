@@ -13,6 +13,14 @@ mb_internal_encoding('UTF-8');
 
 require __DIR__ . '/vendor/autoload.php';
 
+define("SITE_ADMIN",         64);
+define("PROJECT_OFFICER",    32);
+define("COMMUNITY_OFFICER",  16);
+define("NGO_ADMIN",           8);
+define("NGO_PROJECT_OFFICER", 4);
+define("NGO_LINGUIST",        2);
+define("LINGUIST",            1);
+
 require_once __DIR__ . '/lib/Middleware.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/OAuth2Exception.php';
 require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/ClientException.php';
