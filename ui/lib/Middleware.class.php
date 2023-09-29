@@ -281,7 +281,7 @@ class Middleware
         $adminDao = new DAO\AdminDao();
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
-        if ($adminDao->get_roles($user_id, $project->getOrganisationId())) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+        if ($adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
 
         if ($claimant = $taskDao->getUserClaimedTask($task_id)) {
             if ($user_id != $claimant->getId()) {
