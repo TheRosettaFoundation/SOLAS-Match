@@ -238,12 +238,12 @@ class Middleware
 
     public function authIsSiteAdmin_or_PO(Request $request, RequestHandler $handler)
     {
-        return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER);
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER);
     }
 
     public function authIsSiteAdmin_any(Request $request, RequestHandler $handler)
     {
-        return $this->authIsSiteAdmin(Request $request, RequestHandler $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
     }
 
     public function authIsSiteAdmin_any_or_org_admin_or_po_for_any_org(Request $request, RequestHandler $handler)
