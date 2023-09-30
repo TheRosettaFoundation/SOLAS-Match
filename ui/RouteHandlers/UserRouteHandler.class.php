@@ -3204,6 +3204,13 @@ EOF;
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
+        $smarty->assign('SITE_ADMIN',         64);
+        $smarty->assign('PROJECT_OFFICER',    32);
+        $smarty->assign('COMMUNITY_OFFICER',  16);
+        $smarty->assign('NGO_ADMIN',           8);
+        $smarty->assign('NGO_PROJECT_OFFICER', 4);
+        $smarty->assign('NGO_LINGUIST',        2);
+        $smarty->assign('LINGUIST',            1);
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 

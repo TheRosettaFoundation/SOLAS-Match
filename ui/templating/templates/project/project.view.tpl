@@ -9,12 +9,6 @@
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
-
-
-ROLES{$roles}
-SITE_ADMIN + PROJECT_OFFICER {$SITE_ADMIN + $PROJECT_OFFICER};;; {$SITE_ADMIN} {$PROJECT_OFFICER} 
-
-
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
