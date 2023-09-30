@@ -6608,7 +6608,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6620,7 +6620,7 @@ BEGIN
         WHERE
             t.id=taskID AND
             oa.user_id=userID AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6676,7 +6676,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6688,7 +6688,7 @@ BEGIN
         WHERE
             t.id=taskID AND
             oa.user_id=userID AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6772,7 +6772,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -6783,7 +6783,7 @@ BEGIN
         WHERE
             p.id=projectID AND
             oa.user_id=userID AND
-            a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -8472,7 +8472,7 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=LINGUIST) OR (a.roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND roles=LINGUIST) OR (roles=NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
