@@ -3922,15 +3922,15 @@ BEGIN
 
     SET @isSiteAdmin = 0;
     SET @NGO_list = '';
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
     END IF;
 
     SET @site_linguist = 0;
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&@LINGUIST!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
         SET @site_linguist = 1;
     ELSE
-        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&NGO_LINGUIST!=0 GROUP BY user_id;
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
     SELECT
@@ -4010,15 +4010,15 @@ BEGIN
 
     SET @isSiteAdmin = 0;
     SET @NGO_list = '';
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
     END IF;
 
     SET @site_linguist = 0;
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND a.roles&@LINGUIST!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
         SET @site_linguist = 1;
     ELSE
-        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&NGO_LINGUIST!=0 GROUP BY user_id;
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
     SELECT COUNT(*) AS result FROM (
