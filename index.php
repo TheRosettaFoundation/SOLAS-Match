@@ -46,13 +46,13 @@ function gc($maxlifetime)
 
 require_once __DIR__ . '/ui/vendor/autoload.php';
 
-define("SITE_ADMIN",         64);
-define("PROJECT_OFFICER",    32);
-define("COMMUNITY_OFFICER",  16);
-define("NGO_ADMIN",           8);
-define("NGO_PROJECT_OFFICER", 4);
-define("NGO_LINGUIST",        2);
-define("LINGUIST",            1);
+define('SITE_ADMIN',         64);
+define('PROJECT_OFFICER',    32);
+define('COMMUNITY_OFFICER',  16);
+define('NGO_ADMIN',           8);
+define('NGO_PROJECT_OFFICER', 4);
+define('NGO_LINGUIST',        2);
+define('LINGUIST',            1);
 
 require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
