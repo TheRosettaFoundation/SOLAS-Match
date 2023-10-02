@@ -11942,7 +11942,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record`(IN
 BEGIN
     SELECT
         *,
-        CONCAT(HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
     WHERE id=special_registration_id;
 END//
