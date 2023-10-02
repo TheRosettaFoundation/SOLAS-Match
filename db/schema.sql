@@ -11936,6 +11936,19 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_special_registration_record`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
+BEGIN
+    SELECT
+        *,
+        CONCAT('https://twbplatform.org/special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
+    FROM special_registrations
+    WHERE id=special_registration_id;
+
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `current_user_is_NGO_admin_or_PO_for_special_registration_email`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `current_user_is_NGO_admin_or_PO_for_special_registration_email`(IN uID INT UNSIGNED, IN mail VARCHAR(128))
