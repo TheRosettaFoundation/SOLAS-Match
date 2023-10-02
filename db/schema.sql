@@ -7198,8 +7198,19 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_special_registration`;
+    DELIMITER //
+    CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_special_registration`( IN rol BIGINT UNSIGNED, IN em VARCHAR(128), IN oID INT UNSIGNED, IN aID INT UNSIGNED)
+    BEGIN
+        INSERT INTO  special_registrations ( roles , email , used , org_id , admin_id    , date_created     , date_expires)
+        VALUES                             ( rol    , em    , 0   ,   oID   , aID, NOW()  , DATE_ADD(NOW()  ,INTERVAL 1 MONTH));
+        SELECT LAST_INSERT_ID() AS id;
+    END//
+    DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
-DELIMITER //
+DELIMITER //e
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
 BEGIN
     SELECT
@@ -7261,6 +7272,8 @@ BEGIN
     ORDER BY scores.project_id DESC;
 END//
 DELIMITER ;
+
+
 
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //

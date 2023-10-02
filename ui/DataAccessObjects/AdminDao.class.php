@@ -27,6 +27,16 @@ class AdminDao extends BaseDao
         }
         return $ret;
     }
+
+    public function setUserRole($role, $email, $org_id, $admin_id) 
+    {       
+        $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
+                LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+                LibAPI\PDOWrapper::cleanse($admin_id);
+        $result = LibAPI\PDOWrapper::call('insert_special_registration' , $args);
+        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");              
+    }
     
     public function getOrgMembers($orgId)
     {
@@ -129,7 +139,7 @@ class AdminDao extends BaseDao
 
     public function adjust_org_admin($user_id, $org_id, $remove, $add)
     {
-        LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id), LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
+        LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
     }
 
     public function current_user_is_NGO_admin_or_PO_for_special_registration_email($user_id, $email)

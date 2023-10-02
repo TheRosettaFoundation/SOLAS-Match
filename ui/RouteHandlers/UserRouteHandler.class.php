@@ -209,6 +209,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download');
+
+            $app->map(['GET', 'POST'],
+            '/{org_id}/invite_admins[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_admins')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('invite_admins');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -655,6 +661,60 @@ class UserRouteHandler
         $template_data = array_merge($template_data, array('uuid' => $uuid));
 
         return UserRouteHandler::render("user/email.verification.tpl", $response);
+    }
+    
+    public function invite_admins(Request $request, Response $response, $args)
+    {
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
+        $org_id = $args['org_id'];
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+       
+              
+        if ($request->getMethod() === 'POST') 
+        {
+            $post = $request->getParsedBody();
+            $newRole = $post['role_'] ;
+            $email = $post['email'];
+            $used = 0;
+            
+            $userExist = $userDao->getUserByEmail(trim($email), null);
+            if($userExist)
+            {
+                if ($userDao->isUserVerified($user_id)) 
+                    {
+                        // Not sure how roles datatype works  
+
+                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                        $used = 1; 
+                                                                                      
+                    }
+                else 
+                    {
+                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
+                    }
+            }
+            else
+            {
+                //sendInviteEmail
+                $adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
+
+            }
+            
+                  
+           
+        }
+        else 
+        {
+            echo '<script>console.log(' . json_encode("no posted data") . ');</script>';
+        }
+
+        //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
+
+        
+        return UserRouteHandler::render("user/invite-admin.tpl",$response);
+
     }
 
     public function passwordReset(Request $request, Response $response, $args)
