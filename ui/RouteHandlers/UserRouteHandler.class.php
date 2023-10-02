@@ -209,6 +209,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download');
+
+            $app->map(['GET', 'POST'],
+            '/{org_id}/invite_admins[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_admins')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('invite_admins');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -655,6 +661,11 @@ class UserRouteHandler
         $template_data = array_merge($template_data, array('uuid' => $uuid));
 
         return UserRouteHandler::render("user/email.verification.tpl", $response);
+    }
+    
+    public function invite_admins (Request $request, Response $response, $args ){
+
+        
     }
 
     public function passwordReset(Request $request, Response $response, $args)
