@@ -11938,7 +11938,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_special_registration_record`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
 BEGIN
     SELECT
         *,
