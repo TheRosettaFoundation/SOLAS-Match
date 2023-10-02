@@ -663,9 +663,10 @@ class UserRouteHandler
         return UserRouteHandler::render("user/email.verification.tpl", $response);
     }
     
-    public function invite_admins (Request $request, Response $response, $args ){
+    public function invite_admins(Request $request, Response $response, $args)
+    {
+        return null;
 
-        
     }
 
     public function passwordReset(Request $request, Response $response, $args)
