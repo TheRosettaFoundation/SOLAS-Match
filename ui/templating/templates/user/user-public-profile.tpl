@@ -893,6 +893,28 @@ If a language is to be removed from this list, the community will be informed be
 {/foreach}
 </table>
 <hr />
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<hr />
+
 {/if}
 
 <p style="margin-bottom:50px;"/>

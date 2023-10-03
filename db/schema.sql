@@ -11990,9 +11990,10 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `user_task_limitations` (
   user_id               INT UNSIGNED NOT NULL,
   admin_id              INT UNSIGNED NOT NULL,
-  max_not_comlete_tasks INT UNSIGNED NOT NULL,
+  max_not_comlete_tasks INT NOT NULL,
   allowed_types         VARBINARY(255),
   excluded_orgs         VARBINARY(1000),
+  limit_profile_changes INT NOT NULL,
   PRIMARY KEY (user_id),
   CONSTRAINT FK_user_task_limitations_user_id  FOREIGN KEY (user_id)  REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT FK_user_task_limitations_admin_id FOREIGN KEY (admin_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
@@ -12035,11 +12036,11 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_update_user_task_limitation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT UNSIGNED, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000), IN limit_pcs INT)
 BEGIN
     DELETE FROM user_task_limitations WHERE user_id=uID;
-    INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs)
-    VALUES                            (    uID,        aID,                mac_nct,     allowed_ts,    excluded_os);
+    INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs, limit_profile_changes)
+    VALUES                            (    uID,        aID,                max_nct,     allowed_ts,    excluded_os,             limit_pcs);
 END//
 DELIMITER ;
 

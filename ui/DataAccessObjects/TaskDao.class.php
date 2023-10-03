@@ -1026,9 +1026,9 @@ error_log("createTaskDirectly: $args");
         return $result[0]['result'];
     }
 
-    public function insert_update_user_task_limitation($user_id, $admin_id, $max_not_complete_tasks, $allowed_types, $excluded_orgs)
+    public function insert_update_user_task_limitation($user_id, $admin_id, $max_not_complete_tasks, $allowed_types, $excluded_orgs, $limit_profile_changes)
     {
-        LibAPI\PDOWrapper::call('insert_update_user_task_limitation', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($max_not_complete_tasks) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($allowed_types) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($excluded_orgs));
+        LibAPI\PDOWrapper::call('insert_update_user_task_limitation', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($max_not_complete_tasks) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($allowed_types) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($excluded_orgs) . ',' . LibAPI\PDOWrapper::cleanse($limit_profile_changes));
     }
 
     public function get_user_task_limitation($user_id)
