@@ -669,9 +669,9 @@ class UserRouteHandler
         $user = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         
-        return $response -> getBody()-> write ('Hello World')
         
-        // return UserRouteHandler::render("user/invite-admin.tpl",$response);
+        
+        return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
 
