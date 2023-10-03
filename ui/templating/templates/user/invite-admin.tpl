@@ -25,7 +25,7 @@
         </div>
     {/if}
 <div class="row-fluid">
-        <form method="post" action="541/invite_admins" accept-charset="utf-8">
+        <form method="post" action="/invite_admins" accept-charset="utf-8">
             <label for="role"> <strong> Select Role </strong> </>
             <select name ="role ">
                 <option value= "NGO ADMIN"> NGO ADMIN</option>
