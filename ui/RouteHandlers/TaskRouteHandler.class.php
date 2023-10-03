@@ -726,14 +726,16 @@ class TaskRouteHandler
         }
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+        $task = $taskDao->getTask($taskId);
+        $project = $projectDao->getProject($task->getProjectId());
+        $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
+        if (!($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | LINGUIST | NGO_LINGUIST)) || $taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
             UserRouteHandler::flash('error', "You are not authorized to view this page");
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $memsource_task = $projectDao->get_memsource_task($taskId);
 
-        $task = $taskDao->getTask($taskId);
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             UserRouteHandler::flash('error', 'This type of task cannot be claimed');
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
