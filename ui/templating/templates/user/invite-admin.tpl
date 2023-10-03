@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>{Localisation::getTranslation('assign_role_header')} {Settings::get('site.name')}</h1>
+            <h1> Assign Role {Settings::get('site.name')}</h1>
     </div>
 
     {if isset($flash['error'])}
@@ -26,12 +26,12 @@
     {/if}
 <div class="row-fluid">
         <form method="post" action="/invite_admins" accept-charset="utf-8">
-            <label for="role"> <strong>{Localisation::getTranslation('assign_role_select')}</strong> </>
+            <label for="role"> <strong> Select Role </strong> </>
             <select name ="role ">
-                <option value= "NGO ADMIN"> {Localisation::getTranslation('role_ngo_admin')} </option>
-                <option value= "NGO PO"> {Localisation::getTranslation('role_ngo_po')} </option>
-                <option value= "NGO Linguist">{Localisation::getTranslation('role_ngo_linguistic')} </option>
-                <option value= "TWB Linguist"> {Localisation::getTranslation('role_twb_linguistic')}</option>
+                <option value= "NGO ADMIN"> NGO ADMIN</option>
+                <option value= "NGO PO"> NGO PO</option>
+                <option value= "NGO Linguist">NGO Linguist </option>
+                <option value= "TWB Linguist"> TWB Linguist</option>
             
              <select />
 
@@ -40,7 +40,7 @@
             
             <div>
                 <button type="submit" name="login" class="btn btn-primary">
-  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('assign_role_header')}
+  				    <i class="icon-share icon-white"></i> Submit
 				</button>
 				
 				
