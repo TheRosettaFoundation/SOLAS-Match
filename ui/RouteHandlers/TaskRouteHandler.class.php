@@ -1381,7 +1381,7 @@ class TaskRouteHandler
                     );
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id);
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER));
         }
 
         if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);

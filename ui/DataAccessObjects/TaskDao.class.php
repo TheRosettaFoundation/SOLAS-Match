@@ -658,9 +658,9 @@ error_log("createTaskDirectly: $args");
         return $result[0]['required_qualification_level'];
     }
 
-    public function list_qualified_translators($task_id)
+    public function list_qualified_translators($task_id, $org_id, $include_site)
     {
-        $result = LibAPI\PDOWrapper::call('list_qualified_translators', LibAPI\PDOWrapper::cleanse($task_id));
+        $result = LibAPI\PDOWrapper::call('list_qualified_translators', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($include_site));
         return $result;
     }
 
