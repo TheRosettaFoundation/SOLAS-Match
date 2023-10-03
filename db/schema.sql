@@ -7190,6 +7190,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `special_registration`;
+    DELIMITER //
+    CREATE DEFINER=`root`@`localhost` PROCEDURE `special_registration`( IN roles VARCHAR(10), IN email VARCHAR(10), IN used VARCHAR(10), IN orgID INT, IN adminID INT, IN userID INT )
+    BEGIN
+        INSERT INTO  special_registrations ( roles , email , used , org_id , admin_id , user_id )
+        VALUES                             ( roles , email , used ,orgID , adminID , userID  );
+    END//
+    DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
@@ -7253,6 +7263,8 @@ BEGIN
     ORDER BY scores.project_id DESC;
 END//
 DELIMITER ;
+
+
 
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //

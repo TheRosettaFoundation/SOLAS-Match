@@ -666,10 +666,12 @@ class UserRouteHandler
     public function invite_admins(Request $request, Response $response, $args)
     {
         $adminDao = new DAO\AdminDao();
+        $user = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         
-        echo $args ;
-        return UserRouteHandler::render("user/invite-admin.tpl",$response) ;
+        return $response -> getBody()-> write ('Hello World')
+        
+        // return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
 

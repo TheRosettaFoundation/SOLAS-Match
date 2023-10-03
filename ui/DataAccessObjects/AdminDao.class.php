@@ -27,6 +27,21 @@ class AdminDao extends BaseDao
         }
         return $ret;
     }
+
+    public function setUserRole($roles, $email, $used, $orgId, $adminId, $userId) 
+    {
+        $ret = null ;
+        $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($used) . ',' .
+                LibAPI\PDOWrapper::cleanse($orgId) . ',' .
+                LibAPI\PDOWrapper::cleanse($adminId) . ',' .
+        $result = LibAPI\PDOWrapper::call('special_registration' , $args)
+        
+        return $ret ;
+     
+
+    }
     
     public function getOrgMembers($orgId)
     {
