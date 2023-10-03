@@ -11979,6 +11979,71 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `user_task_limitations` (
+  user_id               INT UNSIGNED NOT NULL,
+  admin_id              INT UNSIGNED NOT NULL,
+  max_not_comlete_tasks INT UNSIGNED NOT NULL,
+  allowed_types         VARBINARY(255),
+  excluded_orgs         VARBINARY(1000),
+  PRIMARY KEY (user_id),
+  CONSTRAINT FK_user_task_limitations_user_id  FOREIGN KEY (user_id)  REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_task_limitations_admin_id FOREIGN KEY (admin_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP PROCEDURE IF EXISTS `user_within_limitations`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_within_limitations`(IN uID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    SET @limited=0;
+    SELECT
+        IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        excluded_orgs,
+        1
+        INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
+    FROM user_task_limitations
+    WHERE user_id=uID;
+
+    IF @limited THEN
+        IF NOT EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND FIND_IN_SET(`task-type_id`, @allowed_types)>0) THEN
+            SELECT 0 AS result;
+        ELSE
+            IF EXISTS (SELECT 1 FROM Tasks JOIN Projects ON Tasks.project_id=Projects.id WHERE Tasks.id=tID AND FIND_IN_SET(Projects.organisation_id, @excluded_orgs)>0) THEN
+                SELECT 0 AS result;
+            ELSE
+                IF EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.id=tID AND Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
+                    SELECT 0 AS result;
+                ELSE
+                    SELECT 1 AS result;
+                END IF;
+            END IF;
+        END IF;
+    ELSE
+         SELECT 1 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_update_user_task_limitation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT UNSIGNED, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000))
+BEGIN
+    DELETE FROM user_task_limitations WHERE user_id=uID;
+    INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs)
+    VALUES                            (    uID,        aID,                mac_nct,     allowed_ts,    excluded_os);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_task_limitation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_task_limitation`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT * FROM user_task_limitations WHERE user_id=uID;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

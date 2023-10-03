@@ -1025,4 +1025,16 @@ error_log("createTaskDirectly: $args");
         $result = LibAPI\PDOWrapper::call('user_within_limitations', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
         return $result[0]['result'];
     }
+
+    public function insert_update_user_task_limitation($user_id, $admin_id, $max_not_complete_tasks, $allowed_types, $excluded_orgs)
+    {
+        LibAPI\PDOWrapper::call('insert_update_user_task_limitation', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($max_not_complete_tasks) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($allowed_types) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($excluded_orgs));
+    }
+
+    public function get_user_task_limitation($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_task_limitation', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return 0;
+        return $result[0];
+    }
 }
