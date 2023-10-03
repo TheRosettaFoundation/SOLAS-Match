@@ -729,7 +729,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
         $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
-        if (!($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | LINGUIST | NGO_LINGUIST)) || $taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+        if (!($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | LINGUIST | NGO_LINGUIST)) || $taskDao->isUserRestrictedFromTask($taskId, $user_id) || !$adminDao->user_within_limitations($user_id, $taskId)) {
             UserRouteHandler::flash('error', "You are not authorized to view this page");
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
@@ -1422,6 +1422,7 @@ class TaskRouteHandler
                 'org_id' => $org_id,
                 'memsource_task' => $memsource_task,
                 'is_denied_for_task' => $userDao->is_denied_for_task($user_id, $task_id),
+                'user_within_limitations' => $adminDao->user_within_limitations($user_id, $task_id),
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);

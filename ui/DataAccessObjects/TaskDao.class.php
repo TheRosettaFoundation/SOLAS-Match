@@ -1019,4 +1019,10 @@ error_log("createTaskDirectly: $args");
         if (empty($result)) return '';
         return $result[0]['url'];
     }
+
+    public function user_within_limitations($user_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('user_within_limitations', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        return $result[0]['result'];
+    }
 }
