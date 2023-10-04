@@ -674,7 +674,7 @@ class UserRouteHandler
 
      
         echo '<script>console.log(' . json_encode($args) . ');</script>';
-        echo '<script>console.log(' . json_encode($request) . ');</script>';
+        echo '<script>console.log(' . json_encode($roles) . ');</script>';
 
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
