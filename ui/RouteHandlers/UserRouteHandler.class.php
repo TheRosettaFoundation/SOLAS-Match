@@ -677,11 +677,11 @@ class UserRouteHandler
         {
             $post = $request->getParsedBody();
             $newRole = $post['role_'] ;
-            $email = $psot['email'];
+            $email = $post['email'];
            
            
             echo '<script>console.log(' . json_encode($post) . ');</script>';
-            echo '<script>console.log(' . json_encode($post) . ');</script>';
+            echo '<script>console.log(' . json_encode($email) . ');</script>';
             echo '<script>console.log(' . json_encode($newRole) . ');</script>';
             echo '<script>console.log(' . json_encode("roles below") . ');</script>';
             echo '<script>console.log(' . json_encode($roles) . ');</script>';
