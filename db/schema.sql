@@ -7190,12 +7190,12 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `special_registration`;
+DROP PROCEDURE IF EXISTS `special_registrations`;
     DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `special_registration`( IN roles VARCHAR(10), IN email VARCHAR(10), IN used VARCHAR(10), IN orgID INT, IN adminID INT, IN userID INT )
+    CREATE DEFINER=`root`@`localhost` PROCEDURE `special_registrations`( IN roles VARCHAR(10), IN email VARCHAR(10), IN used VARCHAR(10), IN oID INT, IN uID INT, IN uID INT )
     BEGIN
         INSERT INTO  special_registrations ( roles , email , used , org_id , admin_id , user_id )
-        VALUES                             ( roles , email , used ,orgID , adminID , userID  );
+        VALUES                             ( roles , email , used ,oID , uID , uID  );
     END//
     DELIMITER ;
 

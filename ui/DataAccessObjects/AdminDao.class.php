@@ -36,7 +36,7 @@ class AdminDao extends BaseDao
                 LibAPI\PDOWrapper::cleanseWrapStr($used) . ',' .
                 LibAPI\PDOWrapper::cleanse($orgId) . ',' .
                 LibAPI\PDOWrapper::cleanse($adminId) . ',' .
-        $result = LibAPI\PDOWrapper::call('special_registration' , $args)
+        $result = LibAPI\PDOWrapper::call('special_registrations' , $args)
         
         return $ret ;
      
