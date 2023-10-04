@@ -39,7 +39,7 @@
             <input type="text" name="email" id="email"/>
             
             <div>
-                <button type="submit" name="login" class="btn btn-primary">
+                <button type="submit" name="change-role" class="btn btn-primary">
   				    <i class="icon-share icon-white"></i> Submit
 				</button>
 				
