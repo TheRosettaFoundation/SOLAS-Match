@@ -673,7 +673,7 @@ class UserRouteHandler
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
         
-        
+        echo var_dump($newRole);
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
