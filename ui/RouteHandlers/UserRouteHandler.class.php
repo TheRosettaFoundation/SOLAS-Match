@@ -677,9 +677,10 @@ class UserRouteHandler
         {
             $post = $request->getParsedBody();
             $newRole = $post['role_'] ;
-            $userByE = $userDao->getUserByEmail($post['email']);
+            $email = $psot['email'];
            
            
+            echo '<script>console.log(' . json_encode($post) . ');</script>';
             echo '<script>console.log(' . json_encode($post) . ');</script>';
             echo '<script>console.log(' . json_encode($newRole) . ');</script>';
             echo '<script>console.log(' . json_encode("roles below") . ');</script>';
