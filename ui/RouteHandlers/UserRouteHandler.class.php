@@ -666,11 +666,11 @@ class UserRouteHandler
     public function invite_admins(Request $request, Response $response, $args)
     {
         $adminDao = new DAO\AdminDao();
-        $user = new DAO\UserDao();
+        $userDao = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        // $check = $user->getUserByEmail($email);
+        $check = $userDao->getUserByEmail($email);
 
         
         
@@ -688,8 +688,8 @@ class UserRouteHandler
             echo '<script>console.log(' . json_encode("roles below") . ');</script>';
             echo '<script>console.log(' . json_encode($roles) . ');</script>';
             echo '<script>console.log(' . json_encode($userByE) . ');</script>';
-
-        }else 
+        }
+        else 
         {
 
             echo '<script>console.log(' . json_encode("no posted data") . ');</script>';
@@ -697,12 +697,7 @@ class UserRouteHandler
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
-     
-        echo '<script>console.log(' . json_encode($args) . ');</script>';
-        echo '<script>console.log(' . json_encode($roles) . ');</script>';
-        echo '<script>console.log(' . json_encode($user_id) . ');</script>';
-        echo '<script>console.log(' . json_encode($request) . ');</script>';
-        echo '<script>console.log(' . json_encode($_POST['role']) . ');</script>';
+   
 
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
