@@ -697,7 +697,7 @@ class UserRouteHandler
             else
             {
                 $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
-                echo '<script>console.log(' . json_encode($updated) . ');</script>';
+                echo '<script>console.log(' . json_encode("set the role") . ');</script>';
             }
             
                   
