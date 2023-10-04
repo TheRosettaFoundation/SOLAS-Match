@@ -681,17 +681,16 @@ class UserRouteHandler
             $used = 0;
             if($userDao->getUserByEmail($email, null))
             {
-                if ($userDao->isUserVerified($user_id)) {
-                    $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
-                    $used = 1
-
-                    
-                }
-                else {
-
-                    UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email ..");
-
-                }
+                if ($userDao->isUserVerified($user_id)) 
+                    {
+                        // Not sure how roles datatype works  
+                        $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+                        $used = 1;                      
+                    }
+                else 
+                    {
+                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email ..");
+                    }
             }
             else
             {
@@ -699,11 +698,7 @@ class UserRouteHandler
                 echo '<script>console.log(' . json_encode($updated) . ');</script>';
             }
             
-            $check = $userDao->getUserByEmail($email);
-    
-           
-           
-           
+                  
            
         }
         else 
