@@ -670,7 +670,10 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $check = $userDao->getUserByEmail($email);
+        if( $user = $userDao->getUserByEmail($email))
+        {
+            echo '<script>console.log(' . json_encode("Testing ..") . ');</script>';
+        }
 
         
         
