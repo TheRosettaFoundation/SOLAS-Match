@@ -679,7 +679,7 @@ class UserRouteHandler
         }else 
         {
 
-            echo '<script>console.log(' . json_encode($args) . ');</script>';
+            echo '<script>console.log(' . json_encode("no posted data") . ');</script>';
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
