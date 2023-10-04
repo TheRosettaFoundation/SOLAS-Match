@@ -41,6 +41,7 @@ class AdminDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('special_registrations' , $args);
         
         $ret = $result;
+        echo '<script>console.log(' . json_encode($ret) . ');</script>';
         return $ret;
      
 

@@ -686,18 +686,15 @@ class UserRouteHandler
                     {
                         // Not sure how roles datatype works  
                         $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
-                        $used = 1;  
-                        echo '<script>console.log(' . json_encode("user is verified ") . ');</script>';                    
+                        $used = 1; 
+                        $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
+                     
+                                          
                     }
                 else 
                     {
                         UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email ..");
                     }
-            }
-            else
-            {
-                $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
-                echo '<script>console.log(' . json_encode("set the role") . ');</script>';
             }
             
                   
