@@ -685,7 +685,7 @@ class UserRouteHandler
                 if ($userDao->isUserVerified($user_id)) 
                     {
                         // Not sure how roles datatype works  
-                        // $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+                        $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
                         $used = 1;  
                         echo '<script>console.log(' . json_encode("user is verified ") . ');</script>';                    
                     }
