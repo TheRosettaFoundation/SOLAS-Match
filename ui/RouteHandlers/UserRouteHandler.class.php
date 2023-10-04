@@ -685,7 +685,8 @@ class UserRouteHandler
                     {
                         // Not sure how roles datatype works  
                         $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
-                        $used = 1;                      
+                        $used = 1;  
+                        echo '<script>console.log(' . json_encode("user is verified ") . ');</script>';                    
                     }
                 else 
                     {
@@ -694,7 +695,7 @@ class UserRouteHandler
             }
             else
             {
-                $updated = $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
+                $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
                 echo '<script>console.log(' . json_encode($updated) . ');</script>';
             }
             
