@@ -678,14 +678,15 @@ class UserRouteHandler
             $newRole = $post['role_'] ;
             $email = $post['email'];
             $used = 0;
-            $userExist = $userDao->getUserByEmail($email, null);
+            
+            $userExist = $userDao->getUserByEmail(trim($email), null);
             if($userExist)
             {
                 if ($userDao->isUserVerified($user_id)) 
                     {
                         // Not sure how roles datatype works  
-                        
-                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+
+                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
                         $used = 1; 
                                                                                       
                     }
@@ -696,8 +697,8 @@ class UserRouteHandler
             }
             else
             {
-                
-                $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
+                //sendInviteEmail
+                $adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
 
             }
             

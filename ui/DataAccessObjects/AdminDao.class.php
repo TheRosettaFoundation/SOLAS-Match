@@ -28,23 +28,14 @@ class AdminDao extends BaseDao
         return $ret;
     }
 
-    public function setUserRole($roles, $email, $used, $orgId, $adminId, $userId) 
-    {
-        $ret=null;
+    public function setUserRole($role, $email, $org_id, $admin_id) 
+    {       
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
-                LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .
-                LibAPI\PDOWrapper::cleanseWrapStr($used) . ',' .
-                LibAPI\PDOWrapper::cleanse($orgId) . ',' .
-                LibAPI\PDOWrapper::cleanse($adminId) . ',' .
-        
-        $email = LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($id) . ",0,0,0,0,''");
-        $result = LibAPI\PDOWrapper::call('special_registrations' , $args);
-        
-        $ret = $result;
-        echo '<script>console.log(' . json_encode($ret) . ');</script>';
-        return $ret;
-     
-
+                LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
+                LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+                LibAPI\PDOWrapper::cleanse($admin_id) . ',' 
+        $result = LibAPI\PDOWrapper::call('insert_special_registration' , $args);
+        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");              
     }
     
     public function getOrgMembers($orgId)
