@@ -11907,8 +11907,9 @@ BEGIN
                 user_id=uID AND
                 organisation_id=oID;
         ELSE
+            SELECT roles INTO @roles FROM Admins WHERE user_id=uID AND organisation_id=0;
             INSERT INTO Admins (user_id, organisation_id, roles)
-            VALUES             (    uID,             oID,   add_roles | (SELECT roles FROM Admins WHERE user_id=uID AND organisation_id=0));
+            VALUES             (    uID,             oID,   add_roles | @roles);
         END IF;
     END IF;
 END//
