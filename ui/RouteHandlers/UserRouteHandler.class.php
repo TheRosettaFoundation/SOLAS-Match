@@ -672,10 +672,9 @@ class UserRouteHandler
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
+     
         echo '<script>console.log(' . json_encode($args) . ');</script>';
-        echo '<script>console.log(' . json_encode($user) . ');</script>';
-        echo '<script>console.log(' . json_encode($roles) . ');</script>';
-        echo '<script>console.log(' . json_encode($args) . ');</script>';
+        echo '<script>console.log(' . json_encode($request) . ');</script>';
 
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
