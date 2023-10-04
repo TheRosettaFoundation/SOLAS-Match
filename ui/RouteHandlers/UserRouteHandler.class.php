@@ -670,7 +670,12 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        if ($request->getMethod() === 'POST') 
+        {
+            $post = $request->getParsedBody();
+            echo '<script>console.log(' . json_encode($post . ');</script>';
 
+        }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
