@@ -668,13 +668,16 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
         $user = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
-        $newRole = $args['role'];
+        $org_id = $args['org_id'];
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
      
         echo '<script>console.log(' . json_encode($args) . ');</script>';
         echo '<script>console.log(' . json_encode($roles) . ');</script>';
+        echo '<script>console.log(' . json_encode($user_id) . ');</script>';
 
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
