@@ -684,13 +684,10 @@ class UserRouteHandler
                 if ($userDao->isUserVerified($user_id)) 
                     {
                         // Not sure how roles datatype works  
+                        
                         $assign=$adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
                         $used = 1; 
-                        $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
-                        echo '<script>console.log(' . json_encode($assign) . ');</script>';
-                        
-                     
-                                                               
+                                                                                      
                     }
                 else 
                     {
