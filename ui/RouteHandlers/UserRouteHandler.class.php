@@ -674,7 +674,9 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
+            $newRole = $post['role'] ;
             echo '<script>console.log(' . json_encode($post) . ');</script>';
+            echo '<script>console.log(' . json_encode($newRole) . ');</script>';
 
         }else 
         {
