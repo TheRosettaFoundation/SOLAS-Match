@@ -674,8 +674,12 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
-            echo '<script>console.log(' . json_encode($post . ');</script>';
+            echo '<script>console.log(' . json_encode($post) . ');</script>';
 
+        }else 
+        {
+
+            echo '<script>console.log(' . json_encode($args) . ');</script>';
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
