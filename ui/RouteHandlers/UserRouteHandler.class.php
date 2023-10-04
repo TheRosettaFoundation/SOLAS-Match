@@ -684,12 +684,11 @@ class UserRouteHandler
                 if ($userDao->isUserVerified($user_id)) 
                     {
                         // Not sure how roles datatype works  
-                        $role =$adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+                        $assign =$adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
                         $used = 1; 
                         $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
-                        echo '<script>console.log(' . json_encode($role) . ');</script>';
                      
-                                          
+                                                               
                     }
                 else 
                     {
@@ -708,13 +707,10 @@ class UserRouteHandler
         }
         else 
         {
-
             echo '<script>console.log(' . json_encode("no posted data") . ');</script>';
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
-
-   
 
         
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
