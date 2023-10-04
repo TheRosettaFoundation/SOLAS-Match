@@ -139,7 +139,7 @@ class AdminDao extends BaseDao
 
     public function adjust_org_admin($user_id, $org_id, $remove, $add)
     {
-        LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id), LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
+        LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
     }
 
     public function current_user_is_NGO_admin_or_PO_for_special_registration_email($user_id, $email)
