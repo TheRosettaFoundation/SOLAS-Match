@@ -33,7 +33,7 @@ class AdminDao extends BaseDao
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
                 LibAPI\PDOWrapper::cleanse($org_id) . ',' .
-                LibAPI\PDOWrapper::cleanse($admin_id) . ',' 
+                LibAPI\PDOWrapper::cleanse($admin_id);
         $result = LibAPI\PDOWrapper::call('insert_special_registration' , $args);
         LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");              
     }
