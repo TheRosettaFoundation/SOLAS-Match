@@ -685,7 +685,7 @@ class UserRouteHandler
                 if ($userDao->isUserVerified($user_id)) 
                     {
                         // Not sure how roles datatype works  
-                        $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+                        $role =$adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
                         $used = 1; 
                         $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
                      
@@ -693,7 +693,7 @@ class UserRouteHandler
                     }
                 else 
                     {
-                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email ..");
+                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
                     }
             }
             
