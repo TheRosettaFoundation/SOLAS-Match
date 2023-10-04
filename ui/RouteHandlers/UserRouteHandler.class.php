@@ -670,6 +670,7 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $check = $user->getUserByEmail($email)
 
         
         
@@ -682,6 +683,7 @@ class UserRouteHandler
            
             echo '<script>console.log(' . json_encode($post) . ');</script>';
             echo '<script>console.log(' . json_encode($email) . ');</script>';
+            echo '<script>console.log(' . json_encode($check) . ');</script>';
             echo '<script>console.log(' . json_encode($newRole) . ');</script>';
             echo '<script>console.log(' . json_encode("roles below") . ');</script>';
             echo '<script>console.log(' . json_encode($roles) . ');</script>';
