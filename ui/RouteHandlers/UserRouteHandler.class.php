@@ -678,22 +678,33 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             $newRole = $post['role_'] ;
             $email = $post['email'];
-            // if($userDao->getUserByEmail($email,null))
-            // {
-            //     echo '<script>console.log(' . json_encode("Testing ..") . ');</script>';
-            // }
+            $used = 0;
+            if($userDao->getUserByEmail($email, null))
+            {
+                if ($userDao->isUserVerified($user_id)) {
+                    $adminDao->adjust_org_admin($user_id, $org_id, 64 , 32);
+                    $used = 1
+
+                    
+                }
+                else {
+
+                    UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email ..");
+
+                }
+            }
+            else
+            {
+                $updated = $adminDao->setUserRole($roles, $email, $used, $org_id, $user_id, $user_id);
+                echo '<script>console.log(' . json_encode($updated) . ');</script>';
+            }
             
             $check = $userDao->getUserByEmail($email);
     
            
            
-            echo '<script>console.log(' . json_encode($post) . ');</script>';
-            echo '<script>console.log(' . json_encode($email) . ');</script>';
-            echo '<script>console.log(' . json_encode($check) . ');</script>';
-            echo '<script>console.log(' . json_encode($newRole) . ');</script>';
-            echo '<script>console.log(' . json_encode("roles below") . ');</script>';
-            echo '<script>console.log(' . json_encode($roles) . ');</script>';
-            echo '<script>console.log(' . json_encode($userByE) . ');</script>';
+           
+           
         }
         else 
         {

@@ -30,13 +30,14 @@ class AdminDao extends BaseDao
 
     public function setUserRole($roles, $email, $used, $orgId, $adminId, $userId) 
     {
-        $ret=[];
+        $ret=null;
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($used) . ',' .
                 LibAPI\PDOWrapper::cleanse($orgId) . ',' .
                 LibAPI\PDOWrapper::cleanse($adminId) . ',' .
         $result = LibAPI\PDOWrapper::call('special_registrations' , $args);
+        $ret = $result;
         return $ret;
      
 
