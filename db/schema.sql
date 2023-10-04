@@ -11828,7 +11828,7 @@ CREATE TABLE IF NOT EXISTS `special_registrations` (
   used         INT UNSIGNED NOT NULL,  # 0 => no, 1 => yes, 2 => yes but email mismatch so became LINGUIST
   org_id       INT UNSIGNED NOT NULL,
   admin_id     INT UNSIGNED NOT NULL,
-  user_id      INT UNSIGNED NOT NULL,
+  user_id      INT UNSIGNED DEFAULT NULL,
   date_created DATETIME DEFAULT NULL,
   date_expires DATETIME DEFAULT NULL,
   date_used    DATETIME DEFAULT NULL,
