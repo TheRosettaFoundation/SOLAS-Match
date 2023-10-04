@@ -36,7 +36,10 @@ class AdminDao extends BaseDao
                 LibAPI\PDOWrapper::cleanseWrapStr($used) . ',' .
                 LibAPI\PDOWrapper::cleanse($orgId) . ',' .
                 LibAPI\PDOWrapper::cleanse($adminId) . ',' .
+        
+        $email = LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($id) . ",0,0,0,0,''");
         $result = LibAPI\PDOWrapper::call('special_registrations' , $args);
+        
         $ret = $result;
         return $ret;
      
