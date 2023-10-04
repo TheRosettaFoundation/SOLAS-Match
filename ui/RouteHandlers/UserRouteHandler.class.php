@@ -679,7 +679,8 @@ class UserRouteHandler
             $newRole = $post['role_'] ;
             $email = $post['email'];
             $used = 0;
-            if($userDao->getUserByEmail($email, null))
+            $userExist = $userDao->getUserByEmail($email, null);
+            if($userExist)
             {
                 if ($userDao->isUserVerified($user_id)) 
                     {
