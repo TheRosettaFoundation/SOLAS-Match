@@ -2555,6 +2555,18 @@ error_log("result: $result");//(**)
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_certification_delete'])) {
                 $userDao->deleteCertification($post['certification_id']);
             }
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_user_task_limitation'])) {
+                if (!preg_match('/^[0-9]*$/', $post['max_not_comlete_tasks']) ||
+                    !preg_match('/^[,0-9]*$/', $post['allowed_types']) ||
+                    !preg_match('/^[,0-9]*$/', $post['excluded_orgs']) ||
+                    !preg_match('/^[,0-9]*$/', $post['limit_profile_changes'])
+                ) UserRouteHandler::flashNow('error', 'You must enter the correct format for values');
+                else {
+                    $taskDao->insert_update_user_task_limitation($user_id, $loggedInUserId, $post['max_not_comlete_tasks'], $post['allowed_types'], $post['excluded_orgs'], $post['limit_profile_changes']);
+                    UserRouteHandler::flashNow('success', '');
+                }
+            }
         }
 
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -2753,6 +2765,7 @@ error_log("result: $result");//(**)
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
+            'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
