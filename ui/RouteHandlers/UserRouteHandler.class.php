@@ -2766,6 +2766,7 @@ error_log("result: $result");//(**)
             'valid_key_reference_letter' => $valid_key_reference_letter,
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
             'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
+            'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
