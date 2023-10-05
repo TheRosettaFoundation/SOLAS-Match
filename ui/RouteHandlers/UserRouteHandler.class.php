@@ -3135,6 +3135,8 @@ EOF;
         $userId = $args['user_id'];
 
         $userDao = new DAO\UserDao();
+        $taskDao = new DAO\TaskDao();
+        if ($taskDao->get_user_task_limitation(Common\Lib\UserSession::getCurrentUserID())['limit_profile_changes']) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)));
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 

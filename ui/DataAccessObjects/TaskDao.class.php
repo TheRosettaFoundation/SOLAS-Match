@@ -1034,7 +1034,7 @@ error_log("createTaskDirectly: $args");
     public function get_user_task_limitation($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_user_task_limitation', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($result)) return 0;
+        if (empty($result)) return ['max_not_comlete_tasks' => 0, 'allowed_types' => '', 'excluded_orgs' => '', 'limit_profile_changes' => 0];
         return $result[0];
     }
 }
