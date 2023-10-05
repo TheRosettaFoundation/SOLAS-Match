@@ -12053,8 +12053,11 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000), IN limit_pcs INT)
 BEGIN
     DELETE FROM user_task_limitations WHERE user_id=uID;
-    INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs, limit_profile_changes)
-    VALUES                            (    uID,        aID,                max_nct,     allowed_ts,    excluded_os,             limit_pcs);
+
+    IF max_nct!=0 OR allowed_ts!='' OR excluded_os!='' OR limit_pcs!=0 THEN
+        INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs, limit_profile_changes)
+        VALUES                            (    uID,        aID,                max_nct,     allowed_ts,    excluded_os,             limit_pcs);
+    END IF;
 END//
 DELIMITER ;
 
