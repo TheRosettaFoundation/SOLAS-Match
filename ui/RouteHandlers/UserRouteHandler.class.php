@@ -1082,6 +1082,7 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
+        $taskDao = new DAO\TaskDao();
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($loggedInUserId);
@@ -1884,6 +1885,7 @@ class UserRouteHandler
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'communications_consent' => $userDao->get_communications_consent($user_id),
+            'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));

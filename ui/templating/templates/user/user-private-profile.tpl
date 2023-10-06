@@ -139,6 +139,11 @@
             </div>
             <div class="tab-pane fade profile" id="profile">
                 <br />
+
+                {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
+                    <input type="hidden" name="nativeLanguageSelect" id="nativeLanguageSelect" value="{$nativeLanguageSelectCode}" />
+                    <input type="hidden" name="nativeCountrySelect"  id="nativeCountrySelect"  value="{$nativeCountrySelectCode}" />
+                {else}
                 <div class="row-fluid" >
                     <div class="span5">
                         <label class="clear_brand required label_space"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
@@ -161,6 +166,8 @@
                     </div>
                 </div>
                 <br/>
+                {/if}
+
                 <div id="buildyourform">
                     <div class="row-fluid" >
                         <div class="span5">
