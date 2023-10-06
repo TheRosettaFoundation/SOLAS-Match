@@ -2751,7 +2751,6 @@ error_log("result: $result");//(**)
         $request_type = $args['request_type'];
         $userDao = new DAO\UserDao();
         $print_data = $userDao->get_print_request_by_user($user_id, $request_type);
-error_log($print_data, 1);
         $print_data_val = [];
         foreach ($print_data as $key => $value) {
             $user_personal_info = $userDao->getUserPersonalInformation($print_data[$key]['request_by']);
@@ -2764,9 +2763,7 @@ error_log($print_data, 1);
                 'valid_key' =>  $print_data[$key]['valid_key']
             ]);
         }
-error_log($print_data_val, 1);
         echo json_encode($print_data_val);
-error_log(json_encode($print_data_val), 1);
         die();
     }
 

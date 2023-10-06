@@ -228,7 +228,7 @@ class Middleware
         global $app;
 
         $adminDao = new DAO\AdminDao();
-        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id'] & (SITE_ADMIN | $roles)))) return $handler->handle($request);
+        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id']) & (SITE_ADMIN | $roles))) return $handler->handle($request);
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Site Admin login required to access page.');
 
@@ -367,7 +367,7 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
 
-        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id'] & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))) return $handler->handle($request);
+        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) return $handler->handle($request);
         
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
