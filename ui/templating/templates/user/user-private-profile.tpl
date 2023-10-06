@@ -140,7 +140,7 @@
             <div class="tab-pane fade profile" id="profile">
                 <br />
 
-                {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
+                {if $user_task_limitation_current_user['limit_profile_changes'] != 0}
                     <input type="hidden" name="nativeLanguageSelect" id="nativeLanguageSelect" value="{$nativeLanguageSelectCode}" />
                     <input type="hidden" name="nativeCountrySelect"  id="nativeCountrySelect"  value="{$nativeCountrySelectCode}" />
                 {else}
@@ -168,6 +168,7 @@
                 <br/>
                 {/if}
 
+                {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
                 <div id="buildyourform">
                     <div class="row-fluid" >
                         <div class="span5">
@@ -184,6 +185,7 @@
                         <span id="btnclick" class="countclick"></span>
                     </div>
                 </div>
+                {/if}
 
                 {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
                 <div class="row-fluid">

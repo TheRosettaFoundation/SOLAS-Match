@@ -1115,6 +1115,8 @@ class UserRouteHandler
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
 
+        $user_task_limitation_current_user = $taskDao->get_user_task_limitation($loggedInUserId);
+
         $languages = $langDao->getLanguages();
         $languages_array = [];
         foreach ($languages as $language) {
@@ -1365,6 +1367,7 @@ class UserRouteHandler
 
             //Admin
             var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
+            var user_task_limitation_current_user = "' . $user_task_limitation_current_user['limit_profile_changes'] . '";
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
                 return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
             }, "Please enter a different value, values must not be the same." );
@@ -1400,15 +1403,11 @@ class UserRouteHandler
            
 
             $(".nexttab").click(function() {
-                //var selected = $("#tabs").tabs("option", "selected");
-                //$("#tabs").tabs("option", "selected", selected + 1);
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
 
-                
-                
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
                         valid = false;
@@ -1422,14 +1421,9 @@ class UserRouteHandler
                 });
 
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
-                    // jQuery("#myTab li:eq(1) a").tab("show");
-                    // console.log($(this).attr("href"));
-
                     if ($(this).attr("href") == "#profile1") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
-                        //Hide/Show delete a/c btn
 
                         localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
                     } else if ($(this).attr("href") == "#verifications") {
@@ -1437,8 +1431,6 @@ class UserRouteHandler
                         jQuery("#myTab li:eq(2) a").tab("show");
                     }
                 } else {
-                    //alert("Form has errors");
-                    // console.log($(this).attr("href"));
                     if ($(this).attr("href") == "#profile") {
                         $(".tabcounter").text("1/3");
                         jQuery("#myTab li:eq(0) a").tab("show");
@@ -1451,9 +1443,6 @@ class UserRouteHandler
             });
 
             $(".nexttab1").click(function() {
-                //console.log($("#userprofile").validate().settings.rules);
-                //var selected = $("#tabs").tabs("option", "selected");
-                //$("#tabs").tabs("option", "selected", selected + 1);
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
@@ -1475,17 +1464,12 @@ class UserRouteHandler
                 }
 
                 $select.each(function() {
-                    // console.log(validator.element(this));
                     if (!validator.element(this) && valid) {
                         valid = false;
                     }
                 });
 
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
-                    // jQuery("#myTab li:eq(1) a").tab("show");
-                    // console.log("valid " + $(this).attr("href"));
-
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
@@ -1495,11 +1479,8 @@ class UserRouteHandler
                         } else {
                             $("#deleteBtn").hide();
                         }
-                        // console.log(localStorage.getItem("selected_native_lang"));
                     }
                 } else {
-                    //alert("Form has errors");
-                    //console.log("Invalid "+ $(this).attr("href"));
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
@@ -1569,6 +1550,7 @@ class UserRouteHandler
                 }
             });
 
+            if (!user_task_limitation_current_user) {
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
@@ -1621,6 +1603,7 @@ class UserRouteHandler
             }
             $("#language_code_source_0").rules("add", { required: true, notEqualTo:"#language_code_target_0"});
             $("#language_code_target_0").rules("add", { required: true, notEqualTo:"#language_code_source_0" });
+            }
         });
 
         $(document).on("click", "#btnTrigger", function(e) {
@@ -1630,9 +1613,6 @@ class UserRouteHandler
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile") {
-               // $(".tabcounter").text("2/3");
-               // jQuery("#myTab li:eq(1) a").tab("show");
-         
             }  else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
@@ -1646,8 +1626,6 @@ class UserRouteHandler
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile1") {
-               // $(".tabcounter").text("2/3");
-                //jQuery("#myTab li:eq(1) a").tab("show");
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
@@ -1664,7 +1642,6 @@ class UserRouteHandler
                 } else {
                   $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
-                  // console.log("Err 2");
                 }
             } else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
@@ -1708,7 +1685,7 @@ class UserRouteHandler
         }
 
         // Build language input fields
-        $(document).on("click", "#add", function(e) {
+        if (!user_task_limitation_current_user) $(document).on("click", "#add", function(e) {
             var select_count = $("#btnclick").text();
             Count();
 
@@ -1762,9 +1739,8 @@ class UserRouteHandler
                 placeholder: "--Select--",
                 width: "resolve"
             });
-           
         });
-        //Remove error messages
+
         $(document).ready(function() {
         $(".capabilities").change(function() {
             if($(this).is(":checked")) {
@@ -1782,10 +1758,8 @@ class UserRouteHandler
             }else{
                 $("#ch1").hide();
             }
-            
         });
 
-       
         $(".expertise").on("change", function() {
             var expertise_no = $("input.expertise:checked").length;
             if(expertise_no == 0){
@@ -1793,9 +1767,7 @@ class UserRouteHandler
             }else{
                 $("#ch").hide();
             }
-            
         });
-
 
         $("#nativeLanguageSelect").change(function(){
             $(this).valid();
@@ -1806,6 +1778,8 @@ class UserRouteHandler
         $("#nativeCountrySelect").change(function(){
             $(this).valid();
         });
+
+        if (!user_task_limitation_current_user) {
         $("#language_code_source_0").change(function(){
             $(this).valid();
         });
@@ -1855,10 +1829,8 @@ class UserRouteHandler
             $("#language_code_target_5").rules("add", { notEqualTo: "#language_code_source_5" });
             $(this).valid();
         });
-            
-        
+        }
     });        
-    
         </script>';
 
         $template_data = array_merge($template_data, array(
@@ -1885,7 +1857,7 @@ class UserRouteHandler
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'communications_consent' => $userDao->get_communications_consent($user_id),
-            'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
+            'user_task_limitation_current_user' => $user_task_limitation_current_user,
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
