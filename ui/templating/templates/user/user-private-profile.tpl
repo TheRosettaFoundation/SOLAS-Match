@@ -184,6 +184,8 @@
                         <span id="btnclick" class="countclick"></span>
                     </div>
                 </div>
+
+                {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
                 <div class="row-fluid">
                     <div class="span6 clear_brand">
                         {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
@@ -230,6 +232,8 @@
                         {if $in_kind}&nbsp;In-kind Sponsor{/if}
                     </div>
                 </div>
+                {/if}
+
                 <div class="row-fluid">
                     <div class="span4 clear_brand">
                         <label class="clear_brand required"><strong>Services I can provide</strong></label>
