@@ -453,6 +453,7 @@ class AdminRouteHandler
                     "orgBannerAdminNames" => $orgBannerAdminNames,
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
+                    'roles'         => $roles,
                     "extra_scripts" => $extra_scripts
         ));
 
