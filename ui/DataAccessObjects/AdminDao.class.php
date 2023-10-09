@@ -177,17 +177,10 @@ class AdminDao extends BaseDao
 
     public function get_special_registration_record($id)
     {
-      
+        
         $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanseWrapStr($id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
-      
-        if (empty($result)) {
-            error_log("Bad reg_data: {$id}");
-     
-            return "Bad reg_data: {$_id}.";
-        }
-
+        echo '<script>console.log(' . json_encode($result) . ');</script>';  
         return $result ;
-
         
     }
 
