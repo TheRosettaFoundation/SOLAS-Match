@@ -678,7 +678,7 @@ class UserRouteHandler
             $newRole = $post['role_'] ;
             $email = $post['email'];
             $used = 0;
-            $test = '';
+            $test = 'Finding soemething';
             
             $userExist = $userDao->getUserByEmail(trim($email), null);
             if($userExist)
@@ -715,7 +715,7 @@ class UserRouteHandler
 
         echo '<script>console.log(' . json_encode($response) . ');</script>';
 
-        return UserRouteHandler::render("user/invite-admin.tpl",$response);
+        return UserRouteHandler::render("user/invite-admin.tpl",$test);
 
     }
 
