@@ -714,7 +714,7 @@ class UserRouteHandler
 
             $regData = array();
             $regData['payload'] = $payload;
-            $template_data = array_merge($template_data, $regData);
+            // $template_data = array_merge($template_data, $regData);
            
             return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
