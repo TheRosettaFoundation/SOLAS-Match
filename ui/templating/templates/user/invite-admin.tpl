@@ -49,7 +49,7 @@
         </form>
           
         <h2> History of invite </h2>
-         <h3>{$test }</h3>
+       
 
         
 
