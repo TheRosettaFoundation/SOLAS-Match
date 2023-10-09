@@ -176,8 +176,8 @@ class AdminDao extends BaseDao
 
     public function get_special_registration_record($reg_id)
     {
-        
-        $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanse($reg_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . );
+        // $result = LibAPI\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', LibAPI\PDOWrapper::cleanse($user_id));
+        $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanse($reg_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
         return $result ;
         
     }
