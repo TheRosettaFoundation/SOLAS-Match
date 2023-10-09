@@ -49,7 +49,9 @@
         </form>
           
         <h2> History of invite </h2>
-         <h2> {$payload['id']} </h2>
+        
+        {if isset($payload)}
+            <p>{payload}</p>
 
        
 
