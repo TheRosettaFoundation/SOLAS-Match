@@ -57,7 +57,7 @@
 
              <h2> History of invite </h2>
 
-            {if ($user_id)}
+            {if ($regData)}
                 <p> testing </p>
             {/if}
 

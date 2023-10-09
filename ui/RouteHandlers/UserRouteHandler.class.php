@@ -701,7 +701,7 @@ class UserRouteHandler
             {
                 //sendInviteEmail
                 $adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
-                $adminDao->get_special_registration();
+                // $adminDao->get_special_registration();
 
             }
             
