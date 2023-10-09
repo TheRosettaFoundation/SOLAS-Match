@@ -712,9 +712,12 @@ class UserRouteHandler
             $data = array('test' => 'test1' , 'testt' => 'test2'); 
             $payload = json_encode($data);
             $response->getBody->write($payload);
-            
             echo '<script>console.log(' . json_encode($response) . ');</script>';
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response
+                        ->withHeader('Content-Type', 'application/json')
+                        ->withStatus(201);
+
+
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
