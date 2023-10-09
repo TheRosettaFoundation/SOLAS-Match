@@ -714,7 +714,7 @@ class UserRouteHandler
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
         $body = $response->getBody();
-        $body->write($test);
+        $body->write('Testing here something');
 
         echo '<script>console.log(' . json_encode($response) . ');</script>';
 
