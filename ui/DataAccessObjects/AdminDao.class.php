@@ -178,7 +178,6 @@ class AdminDao extends BaseDao
     {
         
         $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanse($reg_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
-        echo '<script>console.log(' . json_encode($result) . ');</script>';  
         return $result ;
         
     }
