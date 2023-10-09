@@ -665,7 +665,7 @@ class UserRouteHandler
     
     public function invite_admins(Request $request, Response $response, $args)
     {
-        global $app , $template_data ;
+        // global $app , $template_data ;
 
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
