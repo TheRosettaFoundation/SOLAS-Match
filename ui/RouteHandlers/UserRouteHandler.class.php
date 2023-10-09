@@ -666,6 +666,7 @@ class UserRouteHandler
     public function invite_admins(Request $request, Response $response, $args)
     {
         global $app , $template_data ;
+
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
@@ -686,8 +687,7 @@ class UserRouteHandler
             {
                 if ($userDao->isUserVerified($user_id)) 
                     {
-                        // Not sure how roles datatype works  
-
+                       
                         $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
                         $used = 1; 
                                                                                       
