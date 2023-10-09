@@ -671,6 +671,7 @@ class UserRouteHandler
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $data = array('test' => 'test1' , 'testt' => 'test2'); 
+        $payload = json_encode($data);
        
               
         if ($request->getMethod() === 'POST') 
@@ -708,14 +709,9 @@ class UserRouteHandler
            
         }
         else 
-        {
-            
-           
-            $payload ='Testing....';
-           
-            return UserRouteHandler::render("user/invite-admin.tpl",$response);
-            
-
+        {                       
+            echo '<script>console.log(' . json_encode($payload) . ');</script>';
+            return UserRouteHandler::render("user/invite-admin.tpl",$response);           
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
