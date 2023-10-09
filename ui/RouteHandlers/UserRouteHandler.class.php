@@ -678,6 +678,7 @@ class UserRouteHandler
             $newRole = $post['role_'] ;
             $email = $post['email'];
             $used = 0;
+            $test = ''
             
             $userExist = $userDao->getUserByEmail(trim($email), null);
             if($userExist)
@@ -712,7 +713,8 @@ class UserRouteHandler
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
-        
+        echo '<script>console.log(' . json_encode($response) . ');</script>';
+
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
