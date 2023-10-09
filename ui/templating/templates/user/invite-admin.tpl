@@ -50,14 +50,11 @@
           
         <h2> History of invite </h2>
 
-        {if isset($payload)}
-
-            <p> testing </p>
+            {if isset($payload)}
+                <p> testing </p>
+            {/if}
 
        
-
-        
-
 
 
    
