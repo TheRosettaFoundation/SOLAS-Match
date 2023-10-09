@@ -672,17 +672,16 @@ class UserRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $data = array('test' => 'test1' , 'testt' => 'test2'); 
         $payload = json_encode($data);
-       
-              
+                     
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
             $newRole = $post['role_'] ;
             $email = $post['email'];
             $used = 0;
-            $test = 'Finding soemething';
-            
+            $test = 'Finding soemething';            
             $userExist = $userDao->getUserByEmail(trim($email), null);
+
             if($userExist)
             {
                 if ($userDao->isUserVerified($user_id)) 
@@ -711,6 +710,9 @@ class UserRouteHandler
         else 
         {                       
             echo '<script>console.log(' . json_encode($payload) . ');</script>';
+            $response->withJson($payload);
+            return UserRouteHandler::render("user/invite-admin.tpl",$response);
+
                 
         }
 
