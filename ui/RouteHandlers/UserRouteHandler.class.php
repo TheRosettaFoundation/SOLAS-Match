@@ -713,11 +713,10 @@ class UserRouteHandler
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
-        $body = $response->getBody();
-        $body->write('Testing here something');
-
+        $data = array('test' => 'test1' , 'testt' => 'test2'); 
+        $payload = json_encode($data);
+        $response->getBody->write($payload);
         echo '<script>console.log(' . json_encode($response) . ');</script>';
-
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
