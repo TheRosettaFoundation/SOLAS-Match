@@ -150,12 +150,13 @@ class AdminDao extends BaseDao
 
     public function get_special_registration()
     {
-        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+        $data = 'test';
+        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($test) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
       
         if (empty($result)) {
-            error_log("Bad reg_data: {$_SESSION['reg_data']}");
-            unset($_SESSION['reg_data']);
-            return "Bad reg_data: {$_SESSION['reg_data']}.";
+            error_log("Bad reg_data: { $result }");
+          
+            return "Bad reg_data: {$result}.";
         }
 
         if (empty($result)) $error = 'This link is invalid.';
