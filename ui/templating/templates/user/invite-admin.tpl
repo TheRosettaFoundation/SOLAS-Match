@@ -48,15 +48,21 @@
             </div>
         </form>
           
-        <h2> History of invite </h2>
-
-            {if isset($payload)}
-                <p> testing </p>
-            {/if}
-
+       
        
 
 
    
 </div>
+
+        <div id ="registrations-id">
+        
+             <h2> History of invite </h2>
+
+            {if isset($payload)}
+                <p> testing </p>
+            {/if}
+
+        
+        </div>
 {include file="footer.tpl"}
