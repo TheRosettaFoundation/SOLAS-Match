@@ -713,6 +713,8 @@ class UserRouteHandler
             return UserRouteHandler::render("user/invite-admin.tpl",$response);              
         }
 
+        echo '<script>console.log(' . $_SESSION . ');</script>';  
+
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
