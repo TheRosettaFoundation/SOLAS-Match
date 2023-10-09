@@ -150,7 +150,6 @@ class AdminDao extends BaseDao
 
     public function get_special_registration()
     {
-        $data = 'test';
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
       
         if (empty($result)) {
@@ -178,7 +177,7 @@ class AdminDao extends BaseDao
     public function get_special_registration_record($id)
     {
         
-        $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanseWrapStr($id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+        $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanse($id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
         echo '<script>console.log(' . json_encode($result) . ');</script>';  
         return $result ;
         
