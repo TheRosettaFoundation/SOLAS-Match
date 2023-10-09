@@ -7214,7 +7214,7 @@ DROP PROCEDURE IF EXISTS `insert_special_registration`;
 
 
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
-DELIMITER //e
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
 BEGIN
     SELECT
