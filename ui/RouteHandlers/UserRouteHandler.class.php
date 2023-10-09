@@ -670,6 +670,7 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $data = array('test' => 'test1' , 'testt' => 'test2'); 
        
               
         if ($request->getMethod() === 'POST') 
@@ -709,7 +710,7 @@ class UserRouteHandler
         else 
         {
             
-            $data = array('test' => 'test1' , 'testt' => 'test2'); 
+           
             $payload = json_encode($data);
             $response->getBody->write($payload);
             echo '<script>console.log(' . json_encode($response) . ');</script>';
