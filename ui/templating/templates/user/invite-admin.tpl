@@ -50,11 +50,7 @@
           
         <h2> History of invite </h2>
 
-        {if isset($test)}
-            
-                {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($test)})}
-            {else}
-                <p> this is just for testing , the value did not work</p>
+        
 
 
 
