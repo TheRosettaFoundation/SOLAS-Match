@@ -319,6 +319,12 @@
                         <option value="{$PROJECT_OFFICER}">Project Officer</option>
                         <option value="{$SITE_ADMIN}">Site Admin</option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
                     <button class="btn btn-success" type="submit" name="addAdmin" value="1">
                         <i class="icon-star icon-white"></i>
                         Add this Role to this User
