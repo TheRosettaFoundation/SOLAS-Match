@@ -305,7 +305,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation('site_admin_dashboard_add_new_admin'), $siteName)}</p>
+                    <p>Add new site role to existing TWB Platform user specified by email.</p>
                     <p><strong>{Localisation::getTranslation('site_admin_dashboard_only_add_trusted')}</strong></p>
                 </td>
             </tr>
