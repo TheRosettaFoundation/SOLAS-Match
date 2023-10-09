@@ -702,7 +702,7 @@ class UserRouteHandler
                 //sendInviteEmail
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
                 echo '<script>console.log(' . json_encode($id) . ');</script>';  
-                $result = $adminDao->get_special_registration($id);
+                $result = $adminDao->get_special_registration_record($id);
                 echo '<script>console.log(' . json_encode($result) . ');</script>';  
 
             }                 

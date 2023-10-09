@@ -148,15 +148,15 @@ class AdminDao extends BaseDao
         return LibAPI\PDOWrapper::call('current_user_is_NGO_admin_or_PO_for_special_registration_email', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
     }
 
-    public function get_special_registration($reg_id)
+    public function get_special_registration()
     {
         $data = 'test';
-        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($reg_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
       
         if (empty($result)) {
-            error_log("Bad reg_data: { $result }");
-          
-            return "Bad reg_data: {$result}.";
+            error_log("Bad reg_data: {$_SESSION['reg_data']}");
+            unset($_SESSION['reg_data']);
+            return "Bad reg_data: {$_SESSION['reg_data']}.";
         }
 
         if (empty($result)) $error = 'This link is invalid.';
@@ -172,6 +172,23 @@ class AdminDao extends BaseDao
             return ['', $error];
         }
         return [$special_registration['email'], null];
+    }
+
+
+    public function get_special_registration_record($id)
+    {
+      
+        $result = LibAPI\PDOWrapper::call('get_special_registration_record', LibAPI\PDOWrapper::cleanseWrapStr($id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+      
+        if (empty($result)) {
+            error_log("Bad reg_data: {$id}");
+     
+            return "Bad reg_data: {$_id}.";
+        }
+
+        return $result ;
+
+        
     }
 
     public function copy_roles_from_special_registration($user_id, $email)
