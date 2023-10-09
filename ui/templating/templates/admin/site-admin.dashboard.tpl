@@ -315,9 +315,9 @@
                 </td>
                 <td valign="top">
                     <select name="admin_type">
-                        <option value="{$COMMUNITY_OFFICER}">Community Officer</option>
-                        <option value="{$PROJECT_OFFICER}">Project Officer</option>
-                        <option value="{$SITE_ADMIN}">Site Admin</option>
+                        <option value="{$COMMUNITY_OFFICER}">COMMUNITY OFFICER</option>
+                        <option value="{$PROJECT_OFFICER}">PROJECT OFFICER</option>
+                        <option value="{$SITE_ADMIN}">TWB ADMIN</option>
                     </select>
                 </td>
             </tr>
