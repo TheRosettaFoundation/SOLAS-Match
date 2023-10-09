@@ -703,25 +703,14 @@ class UserRouteHandler
                 $adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
                 // $adminDao->get_special_registration();
 
-            }
-            
-                  
+            }                 
            
         }
         else 
         {                       
-            echo '<script>console.log(' . json_encode($payload) . ');</script>';
-
-            $regData = array();
-            $regData['payload'] = $payload;
-            // $template_data = array_merge($template_data, $regData);
-           
-            return UserRouteHandler::render("user/invite-admin.tpl",$response);
-
-                
+            echo '<script>console.log(' . json_encode($payload) . ');</script>';          
+            return UserRouteHandler::render("user/invite-admin.tpl",$response);              
         }
-
-        //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
