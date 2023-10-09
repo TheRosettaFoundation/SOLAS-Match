@@ -712,7 +712,7 @@ class UserRouteHandler
             
            
             $payload = json_encode($data);
-            $response->getBody->write($payload);
+            $response->getBody()->write($payload);
             echo '<script>console.log(' . json_encode($response) . ');</script>';
             
 
