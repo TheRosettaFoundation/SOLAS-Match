@@ -57,7 +57,7 @@
 
              <h2> History of invite </h2>
 
-            {if ($payload)}
+            {if ($user_id)}
                 <p> testing </p>
             {/if}
 
