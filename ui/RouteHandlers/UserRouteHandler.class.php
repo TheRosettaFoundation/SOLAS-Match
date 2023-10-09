@@ -1367,7 +1367,7 @@ class UserRouteHandler
 
             //Admin
             var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
-            var user_task_limitation_current_user = "' . $user_task_limitation_current_user['limit_profile_changes'] . '";
+            var user_task_limitation_current_user = ' . $user_task_limitation_current_user['limit_profile_changes'] . ';
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
                 return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
             }, "Please enter a different value, values must not be the same." );
