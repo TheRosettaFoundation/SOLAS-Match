@@ -35,7 +35,8 @@ class AdminDao extends BaseDao
                 LibAPI\PDOWrapper::cleanse($org_id) . ',' .
                 LibAPI\PDOWrapper::cleanse($admin_id);
         $result = LibAPI\PDOWrapper::call('insert_special_registration' , $args);
-        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");              
+        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");
+        return results;              
     }
     
     public function getOrgMembers($orgId)
