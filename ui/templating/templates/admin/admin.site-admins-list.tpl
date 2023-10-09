@@ -14,7 +14,7 @@
                     <a href="{urlFor name="user-public-profile" options="user_id.{$admin['id']}"}">{TemplateHelper::uiCleanseHTML($admin['display_name'])}</a>
                 </td>
                 <td>
-                    {if $admin['roles']&$SITE_ADMIN}TWB ADMIN{if $admin['roles']&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if} {if $admin['roles']&$PROJECT_OFFICER}PROJECT OFFICER{if $admin['roles']&$COMMUNITY_OFFICER},{/if} {if $admin['roles']&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
+                    {if $admin['roles']&$SITE_ADMIN}TWB ADMIN{if $admin['roles']&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin['roles']&$PROJECT_OFFICER}PROJECT OFFICER{if $admin['roles']&$COMMUNITY_OFFICER},{/if}{/if} {if $admin['roles']&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
                 </td>
                 <td>
                     <form method="post" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">
