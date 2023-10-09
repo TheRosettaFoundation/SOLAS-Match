@@ -716,6 +716,7 @@ class UserRouteHandler
         $data = array('test' => 'test1' , 'testt' => 'test2'); 
         $payload = json_encode($data);
         $response->getBody->write($payload);
+        $response->withHeader('Content-Type', 'application/json');
         echo '<script>console.log(' . json_encode($response) . ');</script>';
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
