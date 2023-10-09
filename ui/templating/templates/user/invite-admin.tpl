@@ -25,6 +25,7 @@
         </div>
     {/if}
 <div class="row-fluid">
+        
         <form method="post" action="invite_admins" accept-charset="utf-8">
             <label for="role"> <strong> Select Role </strong> </>
             <select name ="role ">
@@ -46,9 +47,17 @@
 				
             </div>
         </form>
+          
+        <h2> History of invite </h2>
 
-        
+        {if isset($test)}
+            
+                {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($test)})}
+            {else}
+                <p> this is just for testing , the value did not work</p>
+
+
 
    
-        </div>
+</div>
 {include file="footer.tpl"}
