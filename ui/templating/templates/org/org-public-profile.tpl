@@ -636,47 +636,47 @@
                     {foreach $orgMembers as $member}
                         <tr>
                             <td>
-                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-                                    <span class="marker org-admin-marker">{Localisation::getTranslation('org_public_profile_administrator')}</span>
-                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <span class="marker org-member-marker">Project Officer</span>
+                                {if $member['roles'] & NGO_ADMIN}
+                                    <span class="marker org-admin-marker">ADMIN</span>
+                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                    <span class="marker org-member-marker">PROJECT OFFICER</span>
                                 {else}
-                                    <span class="marker org-member-marker">Linguist</span>
+                                    <span class="marker org-member-marker">LINGUIST</span>
                                 {/if}
                             </td>
                             <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{TemplateHelper::uiCleanseHTML($member->getDisplayName())}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member['id']}"}">{TemplateHelper::uiCleanseHTML($member['display_name'])}</a>
                             </td>
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                             <td>
-                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-                                    <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse"
-                                            onclick="return confirm('Are you sure you want to revoke admin role from this user?')">
-                                        <i class="icon-fire icon-white"></i> Remove Admin Role and Make Project Officer
+                                {if $member['roles'] & NGO_ADMIN}
+                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                            onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
+                                        <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
                                     </button>
-                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="revokeOrgPO" value="{$member->getId()}" class="btn btn-inverse"
-                                            onclick="return confirm('Are you sure you want to revoke project officer role from this user?')">
-                                        <i class="icon-fire icon-white"></i> Remove Project Officer Role and Make Linguist
+                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                            onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
+                                        <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
                                     </button>
                                 {else}
-                                    <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse"
+                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
                                             onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
-                                        <i class="icon-fire icon-white"></i> Remove Linguist Permanently from this Organization
+                                        <i class="icon-fire icon-white"></i> Remove LINGUIST Permanently from this Organization
                                     </button>
                                 {/if}
                             </td>
                             <td>
-                                {if $memberIsAdmin[{$member->getId()}] & NGO_ADMIN}
-                                {elseif $memberIsAdmin[{$member->getId()}] & NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
-                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_make_admin')}')"> 
-                                            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_administrator')}
+                                {if $member['roles'] & NGO_ADMIN}
+                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success" 
+                                            onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')"> 
+                                            <i class="icon-star icon-white"></i> Create ADMIN
                                     </button>
                                 {else}
-                                    <button type="submit" name="makeOrgPO" value="{$member->getId()}" class="btn btn-success"
-                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_make_admin')}')">Are you sure you want to make this user a project officer of this organization?
-                                            <i class="icon-star icon-white"></i> Create Project Officer
+                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
+                                            onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
+                                            <i class="icon-star icon-white"></i> Create PROJECT OFFICER
                                     </button>
                                 {/if}
                             </td>

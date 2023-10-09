@@ -18,14 +18,9 @@ class AdminDao extends BaseDao
 
     public function getSiteAdmins()
     {
-        $ret = [];
         $result = LibAPI\PDOWrapper::call('getAdmins', '0,' . LINGUIST);
-        if ($result) {
-            foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
-            }
-        }
-        return $ret;
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function setUserRole($role, $email, $org_id, $admin_id) 
@@ -40,14 +35,9 @@ class AdminDao extends BaseDao
     
     public function getOrgMembers($orgId)
     {
-        $ret = [];
         $result = LibAPI\PDOWrapper::call('getAdmins', LibAPI\PDOWrapper::cleanse($orgId) . ',0');
-        if ($result) {
-            foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
-            }
-        }
-        return $ret;
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function getBannedUsers()

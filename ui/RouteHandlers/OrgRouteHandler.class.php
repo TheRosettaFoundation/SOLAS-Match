@@ -1644,8 +1644,6 @@ class OrgRouteHandler
             $org2->setOftens('');
         }
 
-        $memberIsAdmin = [];
-
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
@@ -1743,12 +1741,6 @@ class OrgRouteHandler
 
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $org_badges = $orgDao->getOrgBadges($org_id);
-
-            if ($orgMemberList) {
-                foreach ($orgMemberList as $orgMember) {
-                    $memberIsAdmin[$orgMember->getId()] = $adminDao->get_roles($org_id, $orgMember->getId());
-                }
-            }
         }
 
         $no_subscription = true;
@@ -1786,7 +1778,6 @@ class OrgRouteHandler
                 'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
                 'roles'      => $roles,
                 'orgMembers' => $orgMemberList,
-                'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
                 'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,

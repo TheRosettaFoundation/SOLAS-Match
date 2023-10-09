@@ -2444,7 +2444,8 @@ BEGIN
             (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
             (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
             u.nonce,
-            u.`created-time` AS created_time
+            u.`created-time` AS created_time,
+            roles
         FROM Admins a
         JOIN Users  u ON a.user_id=u.id
         WHERE
@@ -2463,7 +2464,8 @@ BEGIN
             (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
             (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
             u.nonce,
-            u.`created-time` AS created_time
+            u.`created-time` AS created_time,
+            roles
         FROM Admins a
         JOIN Users  u ON a.user_id=u.id
         WHERE
