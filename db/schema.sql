@@ -2451,7 +2451,8 @@ BEGIN
         WHERE
             a.roles!=exclude AND
             a.roles!=0 AND
-            a.organisation_id=0;
+            a.organisation_id=0
+        ORDER BY u.`display-name`;
     ELSE
         SELECT
             u.id,
@@ -2471,7 +2472,8 @@ BEGIN
         WHERE
             a.organisation_id=oID AND
             (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=exclude AND
-            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=0;
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=0
+        ORDER BY u.`display-name`;
     END IF;
 END//
 DELIMITER ;
