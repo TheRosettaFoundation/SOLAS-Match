@@ -678,8 +678,7 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             $newRole = $post['role_'] ;
             $email = $post['email'];
-            $used = 0;
-            $test = 'Finding soemething';            
+            $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
 
             if($userExist)
@@ -701,6 +700,7 @@ class UserRouteHandler
             {
                 //sendInviteEmail
                 $adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);
+                $adminDao->get_special_registration();
 
             }
             
@@ -710,7 +710,11 @@ class UserRouteHandler
         else 
         {                       
             echo '<script>console.log(' . json_encode($payload) . ');</script>';
-            $response->withJson($payload);
+
+            $regData = array();
+            $regData['payload'] = $payload;
+            $template_data = array_merge($template_data, $regData);
+           
             return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
                 
