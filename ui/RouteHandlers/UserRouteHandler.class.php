@@ -708,16 +708,17 @@ class UserRouteHandler
         }
         else 
         {
-            echo '<script>console.log(' . json_encode("no posted data") . ');</script>';
+            
+            $data = array('test' => 'test1' , 'testt' => 'test2'); 
+            $payload = json_encode($data);
+            $response->getBody->write($payload);
+            
+            echo '<script>console.log(' . json_encode($response) . ');</script>';
+            return $response->withHeader('Content-Type', 'application/json');
         }
 
         //$adminDao->adjust_org_admin($user_id, $org_id,$roles,$newRole );
 
-        $data = array('test' => 'test1' , 'testt' => 'test2'); 
-        $payload = json_encode($data);
-        $response->getBody->write($payload);
-        $response->withHeader('Content-Type', 'application/json');
-        echo '<script>console.log(' . json_encode($response) . ');</script>';
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
