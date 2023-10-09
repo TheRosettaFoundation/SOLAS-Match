@@ -636,9 +636,9 @@
                     {foreach $orgMembers as $member}
                         <tr>
                             <td>
-                                {if $member['roles'] & NGO_ADMIN}
+                                {if $member['roles'] & $NGO_ADMIN}
                                     <span class="marker org-admin-marker">ADMIN</span>
-                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                     <span class="marker org-member-marker">PROJECT OFFICER</span>
                                 {else}
                                     <span class="marker org-member-marker">LINGUIST</span>
@@ -649,12 +649,12 @@
                             </td>
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                             <td>
-                                {if $member['roles'] & NGO_ADMIN}
+                                {if $member['roles'] & $NGO_ADMIN}
                                     <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
                                             onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
                                         <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
                                     </button>
-                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                     <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
                                             onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
                                         <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
@@ -667,8 +667,8 @@
                                 {/if}
                             </td>
                             <td>
-                                {if $member['roles'] & NGO_ADMIN}
-                                {elseif $member['roles'] & NGO_PROJECT_OFFICER}
+                                {if $member['roles'] & $NGO_ADMIN}
+                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                     <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success" 
                                             onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')"> 
                                             <i class="icon-star icon-white"></i> Create ADMIN

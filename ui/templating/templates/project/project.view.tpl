@@ -473,7 +473,7 @@
                                                     </form>
                                                 {/if}
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
-                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + COMMUNITY_OFFICER + NGO_ADMIN + NGO_PROJECT_OFFICER)}
+                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 Claimed
                                             </a><br />
