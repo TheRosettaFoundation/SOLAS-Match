@@ -699,7 +699,7 @@ class UserRouteHandler
                 //sendInviteEmail
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);                              
                 $result = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
-                echo '<script>console.log(' . $result . ');</script>';  
+                echo '<script>console.log(' . $result['0'] . ');</script>';  
                 // echo '<script>console.log(' . json_encode($url) . ');</script>';  
 
                 foreach ($result as $user_row) 
