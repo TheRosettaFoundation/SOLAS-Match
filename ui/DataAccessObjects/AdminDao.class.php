@@ -178,6 +178,11 @@ class AdminDao extends BaseDao
     {
         // $result = LibAPI\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', LibAPI\PDOWrapper::cleanse($user_id));
         $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($reg_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ','. LibAPI\PDOWrapper::cleanse($org_id) );
+        if (empty($result)) {
+            error_log("Bad reg_data");           
+            return "Bad reg_data";
+        }
+        
         return $result ;
         
     }

@@ -11970,6 +11970,9 @@ BEGIN
 END//
 DELIMITER ;
 
+
+
+
 DROP PROCEDURE IF EXISTS `current_user_is_NGO_admin_or_PO_for_special_registration_email`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `current_user_is_NGO_admin_or_PO_for_special_registration_email`(IN uID INT UNSIGNED, IN mail VARCHAR(128))
