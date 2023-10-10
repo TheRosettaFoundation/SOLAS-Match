@@ -702,6 +702,11 @@ class UserRouteHandler
                 echo '<script>console.log(' . $result . ');</script>';  
                 // echo '<script>console.log(' . json_encode($url) . ');</script>';  
 
+                foreach ($result as $user_row) 
+                {
+                    echo '<script>console.log(' . $user_row . ');</script>';     
+                }
+
             }                 
            
         }
