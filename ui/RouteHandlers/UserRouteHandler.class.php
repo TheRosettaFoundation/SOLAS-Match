@@ -700,7 +700,7 @@ class UserRouteHandler
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);                              
                 $results = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
     
-                echo '<script>console.log(' . gettype($results) . ');</script>';  
+                echo '<script>console.log(' . gettype($results['0']) . ');</script>';  
 
                 foreach ($results as $user_row) 
                 {
