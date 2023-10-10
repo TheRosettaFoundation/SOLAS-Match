@@ -60,8 +60,8 @@
             {if ($records)}
                 <h2>Test</h2>
 
-                {foreach $record  as $rec}
-                    <p> {$rec['url']} </p>
+                {foreach $records  as $rec}
+                    <p> This is previous history </p>
                 {/foreach}
             {/if}
 
