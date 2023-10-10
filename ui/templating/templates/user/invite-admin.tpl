@@ -60,8 +60,8 @@
                     {foreach $records  as $rec}
                      
                        <p>     
-                       {if ($rec.roles) } 
-                            <span> the role is here</span>
+                       {if ($rec.role) } 
+                            <span> {$rec.role}</span>
                        {/if}                    
                        
                                                        
