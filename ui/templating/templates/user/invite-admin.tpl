@@ -63,7 +63,7 @@
 
                     {foreach $records  as $rec}
 
-                        <p>  {$rec} </p>
+                        <p>  {$rec.url} </p>
 
                     {/foreach}
             {/if}
