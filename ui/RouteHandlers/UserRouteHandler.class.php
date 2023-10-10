@@ -708,13 +708,9 @@ class UserRouteHandler
            
         }
         else 
-        {                       
-            echo '<script>console.log(' . json_encode($payload) . ');</script>';          
+        {                                       
             return UserRouteHandler::render("user/invite-admin.tpl",$response);              
         }
-
-        
-        echo '<script>console.log(' . $_SESSION . ');</script>';  
 
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
