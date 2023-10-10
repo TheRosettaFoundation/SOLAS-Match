@@ -61,7 +61,7 @@
                 <h2>Test</h2>
 
                 {foreach $records  as $rec}
-                    <p> { $rec['10']} </p>
+                    <p> { $rec } </p>
                 {/foreach}
             {/if}
 
