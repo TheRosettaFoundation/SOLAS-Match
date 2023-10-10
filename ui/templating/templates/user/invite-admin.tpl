@@ -55,7 +55,7 @@
        
             {if ($records)}
              
-                <h2> History</h2>
+                <h3> History</h3>
 
                     {foreach $records  as $rec}
                      
