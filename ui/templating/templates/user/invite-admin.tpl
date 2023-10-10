@@ -57,8 +57,10 @@
 
              <h2> History of invite </h2>
 
-            {if ($regData)}
-                <p> testing </p>
+            {if (!$results)}
+                {foreach $results as $result}
+
+                    <p> {$result} </p>
             {/if}
 
         
