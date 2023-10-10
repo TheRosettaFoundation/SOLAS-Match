@@ -698,14 +698,8 @@ class UserRouteHandler
             {
                 //sendInviteEmail
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);                              
-                $results = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
-    
-                echo '<script>console.log(' . gettype($results) . ');</script>';  
-
-                // foreach ($results as $user_row) 
-                // {
-                //     echo '<script>console.log(' . $user_row . ');</script>';     
-                // }
+                $records = $adminDao->get_special_registration_record($id['0']['0'], $org_id);    
+                echo '<script>console.log(' . gettype($records) . ');</script>';    
                 $template_data = array_merge($template_data, array(
                     'results' => $results,
                    
