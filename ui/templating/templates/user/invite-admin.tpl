@@ -61,7 +61,7 @@
                 <h2>Test</h2>
 
                 {foreach $records  as $rec}
-                    <p> This is previous history </p>
+                    <p> { rec ['10']} </p>
                 {/foreach}
             {/if}
 
