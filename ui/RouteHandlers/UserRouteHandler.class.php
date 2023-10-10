@@ -702,10 +702,10 @@ class UserRouteHandler
     
                 echo '<script>console.log(' . gettype($results['0']) . ');</script>';  
 
-                foreach ($results as $user_row) 
-                {
-                    echo '<script>console.log(' . $user_row . ');</script>';     
-                }
+                // foreach ($results as $user_row) 
+                // {
+                //     echo '<script>console.log(' . $user_row . ');</script>';     
+                // }
                 $template_data = array_merge($template_data, array(
                     'results' => $results,
                    
