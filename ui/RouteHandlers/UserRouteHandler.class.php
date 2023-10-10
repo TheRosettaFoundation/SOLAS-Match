@@ -702,6 +702,7 @@ class UserRouteHandler
                 $template_data = array_merge($template_data, array(
                     'records' => $records,                   
                 ));
+                var_dump($records);
 
             }                 
            
