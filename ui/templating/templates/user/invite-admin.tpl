@@ -55,14 +55,17 @@
 
         <div id ="registrations-id">
 
-             <h2> History of invite </h2>
+          
 
             {if ($records)}
-                <h2>Test</h2>
+             
+                <h2> History of invitations </h2>
 
-                {foreach $records  as $rec}
-                    <p>  { echo "$rec" } </p>
-                {/foreach}
+                    {foreach $records  as $rec}
+
+                        <p>  {$rec} </p>
+
+                    {/foreach}
             {/if}
 
         
