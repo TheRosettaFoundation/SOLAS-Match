@@ -64,13 +64,7 @@
                        {if ($rec.roles === 8 ) } 
                             <span> <b> Role</b> : NGO ADMIN | </span>
                        {/if} 
-                        {if ($rec.roles === 4 ) } 
-                            <span> <b> Role</b> : NGO PROJECT OFFICER | </span>
-                       {/if} 
-
-                         {if ($rec.roles === 8 ) } 
-                            <span> <b> Role</b> : NGO Linguist | </span>
-                       {/if} 
+                                        
                          {if ($rec.used === 0 ) } 
                             <span> <b> Not Used </b> </span>
                        {/if} 
