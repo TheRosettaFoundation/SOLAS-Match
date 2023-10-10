@@ -57,11 +57,11 @@
 
              <h2> History of invite </h2>
 
-            {if (!$results)}
+            {if ($records)}
                 <h2>Test</h2>
 
-                {foreach $results as $result}
-                    <p> {$result} </p>
+                {foreach $record  as $rec}
+                    <p> {$rec['url']} </p>
                 {/foreach}
             {/if}
 
