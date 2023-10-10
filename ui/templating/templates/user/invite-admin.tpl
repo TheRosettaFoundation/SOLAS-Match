@@ -64,7 +64,7 @@
                        {if ($rec.roles === 8 ) } 
                             <span> <b> Role</b> : NGO ADMIN | </span>
                        {/if} 
-                       <span><b>Link</b>: {$rec.url }  </span> 
+                       <span><b>Link</b>: <a href = "/{$rec.url}"> {$rec.url }</a>   </span> 
 
                        
                                                        
