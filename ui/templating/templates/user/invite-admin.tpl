@@ -58,6 +58,7 @@
              <h2> History of invite </h2>
 
             {if (!$results)}
+                <h2>Test</h2>
 
                 {foreach $results as $result}
                     <p> {$result} </p>
