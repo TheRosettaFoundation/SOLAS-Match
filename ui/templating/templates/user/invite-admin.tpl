@@ -61,7 +61,7 @@
                      
                        <p>     
                        {if ($rec.roles) } 
-                            <span> {$rec.roles}</span>
+                            <span> test</span>
                        {/if}                    
                        
                                                        
