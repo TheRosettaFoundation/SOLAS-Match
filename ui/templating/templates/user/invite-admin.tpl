@@ -55,7 +55,7 @@
        
             {if ($records)}
              
-                <h3> Sent Inviations </h3>
+                <h3> Sent Invitations </h3> </br>
 
                     {foreach $records  as $rec}
                      
@@ -80,6 +80,7 @@
                        
                                                        
                         </p>
+                        </hr>
                     {/foreach}
             {/if}
 
