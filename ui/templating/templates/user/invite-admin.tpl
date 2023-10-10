@@ -61,7 +61,7 @@
                      
                        <p>   
                        <span> <b> Email </b> : {$rec.email} | </span> 
-                       <span> <b> Role </b> :  { if $rec.roles = 8 } <span> NGO ADMIN</span> {/if} | </span>
+                       <span> <b> Role </b> :  { if $rec.roles == 8 } <span> NGO ADMIN</span> {/if} | </span>
                         <b> Link </b>: <a href={{$rec.url}}>  {$rec.url} </a>  
                        </p>
                         </hr>
