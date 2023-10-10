@@ -59,10 +59,13 @@
 
                     {foreach $records  as $rec}
                      
-                       <p>     
+                       <p>   
+                       <span> Email : {$rec.email } | </span>  
                        {if ($rec.roles === 8 ) } 
-                            <span> Roles : NGO ADMIN</span>
-                       {/if}                    
+                            <span> Role : NGO ADMIN | </span>
+                       {/if} 
+                       <span> Link : {$rec.url }  </span> 
+
                        
                                                        
                         </p>
