@@ -665,16 +665,13 @@ class UserRouteHandler
     
     public function invite_admins(Request $request, Response $response, $args)
     {
-        // global $app , $template_data ;
+        global $app , $template_data;
 
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $data = array('test' => 'test1' , 'testt' => 'test2'); 
-        $payload = json_encode($data);
-                     
+        $user_id = Common\Lib\UserSession::getCurrentUserID();                     
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
@@ -701,8 +698,10 @@ class UserRouteHandler
             {
                 //sendInviteEmail
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);                              
-                $result = $adminDao->get_special_registration_record($id['0']['0']);
-                echo '<script>console.log(' . json_encode($result['0']['url']) . ');</script>';  
+                $result = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
+                $url = $result['0']['url'];
+                echo '<script>console.log(' . $result . ');</script>';  
+                echo '<script>console.log(' . json_encode($url) . ');</script>';  
 
             }                 
            

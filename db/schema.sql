@@ -11958,15 +11958,15 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_special_registration_record`;
+DROP PROCEDURE IF EXISTS `get_special_registration_records`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32),IN special_reg_org_id INT UNSIGNED )
 BEGIN
     SELECT
         *,
         CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
-    WHERE id=special_registration_id;
+    WHERE id=special_reg_org_id;
 END//
 DELIMITER ;
 
