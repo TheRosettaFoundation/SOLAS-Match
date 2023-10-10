@@ -675,7 +675,7 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
-            $newRole = $post['role_'] ;
+            $newRole = $post['role'] ;
             $email = $post['email'];
             $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
@@ -683,11 +683,10 @@ class UserRouteHandler
             if($userExist)
             {
                 if ($userDao->isUserVerified($user_id)) 
-                    {
-                       
-                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
-                        $used = 1; 
-                                                                                      
+                    {                       
+                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
+                        UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
+
                     }
                 else 
                     {
@@ -696,8 +695,9 @@ class UserRouteHandler
             }
             else
             {
-            
-                $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);                              
+                // insert_special_register 
+                $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id); 
+                //get_special_registrations                             
                 $records = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
                 $template_data = array_merge($template_data, array(
                     'records' => $records,                   

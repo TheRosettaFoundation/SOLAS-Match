@@ -28,12 +28,10 @@
         
         <form method="post" action="invite_admins" accept-charset="utf-8">
             <label for="role"> <strong> Select Role </strong> </>
-            <select name ="role ">
-                <option value= "NGO ADMIN"> NGO ADMIN</option>
-                <option value= "NGO PO"> NGO PO</option>
-                <option value= "NGO Linguist">NGO Linguist </option>
-                <option value= "TWB Linguist"> TWB Linguist</option>
-            
+            <select name ="role">
+                <option value= "{$NGO_ADMIN}"> NGO ADMIN</option>
+                <option value= "{$NGO_PROJECT_OFFICER}"> NGO PO</option>
+                <option value= "{$NGO_LINGUIST}">NGO Linguist </option>            
              <select />
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
@@ -54,16 +52,14 @@
 </div>
 
         <div id ="registrations-id">
-
-          
-
+       
             {if ($records)}
              
                 <h2> History of invitations </h2>
 
                     {foreach $records  as $rec}
-
-                       <p> <a href={{$rec.url}}>  {$rec.url} </a> </p>
+                      
+                       <p> <span> Email : { rec.email} </span>  | <span> Role : { rec.role} </span> | span<> Link: <a href={{$rec.url}}>  {$rec.url} </a> </span>  </p>
 
                     {/foreach}
             {/if}
