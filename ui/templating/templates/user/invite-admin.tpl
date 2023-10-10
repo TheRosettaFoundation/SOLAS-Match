@@ -59,7 +59,7 @@
 
                     {foreach $records  as $rec}
                       
-                       <p> <span> Email : { rec.email} </span>  | <span> Role : { rec.role} </span> | span<> Link: <a href={{$rec.url}}>  {$rec.url} </a> </span>  </p>
+                       <p> <span> Email : { $rec.email} </span>  | <span> Role : { $rec.role} </span> | span<> Link: <a href={{$rec.url}}>  {$rec.url} </a> </span>  </p>
 
                     {/foreach}
             {/if}
