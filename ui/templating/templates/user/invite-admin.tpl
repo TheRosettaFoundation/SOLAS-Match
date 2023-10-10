@@ -66,7 +66,7 @@
                        {/if} 
 
                         {if ($rec.roles === 2 ) } 
-                            <span> <b> Role</b> : TEST | </span>
+                            <span> <b> Role</b> : NGO PROJECT OFFICER| </span>
                        {/if} 
                                         
                          {if ($rec.used === 0 ) } 
