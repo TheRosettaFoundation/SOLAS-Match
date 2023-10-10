@@ -617,9 +617,11 @@
         {Localisation::getTranslation('org_public_profile_organisation_members')}
         <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
 
-        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+      {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+        <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='pull-right btn btn-success'>
             <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
         </a>
+      {/if}
     </h1>
     {if !empty($orgMembers)}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
