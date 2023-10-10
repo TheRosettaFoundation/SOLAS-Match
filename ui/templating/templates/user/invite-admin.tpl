@@ -63,7 +63,7 @@
 
                     {foreach $records  as $rec}
 
-                        <p>  {$rec.url} </p>
+                       <p> <a href={{$rec.url}}>  {$rec.url} </a> </p>
 
                     {/foreach}
             {/if}
