@@ -11966,7 +11966,7 @@ BEGIN
         *,
         CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
-    WHERE id=special_reg_org_id;
+    WHERE org_id=special_reg_org_id;
 END//
 DELIMITER ;
 
