@@ -59,12 +59,12 @@
 
                     {foreach $records  as $rec}
                      
-                       <p>                         
+                       <p>     
+                       {if ($rec.roles) } 
+                            <span> the role is here</span>
+                       {/if}                    
                        
-                                               
-                            <span> Role : NGO ADMIN </span>
-                                                   
-                           
+                                                       
                         </p>
                     {/foreach}
             {/if}
