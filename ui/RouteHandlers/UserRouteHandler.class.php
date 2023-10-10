@@ -703,7 +703,7 @@ class UserRouteHandler
                 $id=$adminDao->setUserRole(NGO_ADMIN, $email, $org_id, $user_id);               
                 $record = $id['0'];
                 echo '<script>console.log(' . json_encode($record['0']) . ');</script>';  
-                $result = $adminDao->get_special_registration_record($id);
+                $result = $adminDao->get_special_registration_record($record['0']);
                 echo '<script>console.log(' . json_encode($result) . ');</script>';  
 
             }                 
