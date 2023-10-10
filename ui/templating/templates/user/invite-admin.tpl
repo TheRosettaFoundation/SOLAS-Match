@@ -55,17 +55,18 @@
        
             {if ($records)}
              
-                <h2> History of invitations </h2>
+                <h2> History</h2>
 
                     {foreach $records  as $rec}
                      
                        <p>                         
                           { if $rec.roles=8 } 
-                          <span> 
+                     
                           
                             Role : NGO ADMIN
                           
-                          </span> {/if} 
+                         
+                        {/if} 
                         </p>
                     {/foreach}
             {/if}
