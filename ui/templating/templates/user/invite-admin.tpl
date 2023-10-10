@@ -60,7 +60,7 @@
                     {foreach $records  as $rec}
                      
                        <p>                         
-                          { if $rec.roles == 8 } 
+                          { if $rec.roles=8 } 
                           <span> 
                           
                             Role : NGO ADMIN
