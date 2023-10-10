@@ -58,8 +58,8 @@
                 <h2> History of invitations </h2>
 
                     {foreach $records  as $rec}
-                       <p>{$rec.email}</p>
-                       <p> Link: <a href={{$rec.url}}>  {$rec.url} </a>   </p>
+                     
+                       <p>   <span> Email : {$rec.email} | </span> Link: <a href={{$rec.url}}>  {$rec.url} </a>   </p>
 
                     {/foreach}
             {/if}
