@@ -708,8 +708,13 @@ class UserRouteHandler
            
         }
         else 
+
         {                                       
-            return UserRouteHandler::render("user/invite-admin.tpl",$response);              
+            $template_data = array_merge($template_data, array(
+                'records' => $records,                   
+            ));
+            return UserRouteHandler::render("user/invite-admin.tpl",$response);   
+
         }
 
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
