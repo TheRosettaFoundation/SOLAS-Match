@@ -37,7 +37,9 @@ class UserDao
         $user->setEmail($email);
         $user->setNonce($nonce);
         $user->setPassword($password);
-        return self::save($user);
+        $user = self::save($user);
+        if ($user) Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($user->getId()));
+        return $user;
     }
 
     public static function save($user)
@@ -69,7 +71,6 @@ class UserDao
         $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
 
         if (!is_null($result)) {
-            Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($result[0]['id']));
             return Common\Lib\ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
