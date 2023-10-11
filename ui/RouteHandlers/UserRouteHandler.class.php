@@ -708,7 +708,7 @@ class UserRouteHandler
         else 
 
         {                                       
-          
+            var_dump($sent); 
             return UserRouteHandler::render("user/invite-admin.tpl",$response);   
 
         }
