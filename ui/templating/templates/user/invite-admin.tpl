@@ -89,7 +89,7 @@
                                                 
                         </td>
 
-                        <td> <a href={$rec.url} target="_blank" ></a>{$rec.url}</td>
+                        <td> <a href={$rec.url} target="_blank" > {$rec.url}</a></td>
                         </tr>
 
                      {/foreach}
