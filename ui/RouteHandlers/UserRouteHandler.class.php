@@ -673,54 +673,50 @@ class UserRouteHandler
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $sent = $adminDao-> get_special_registration_record($user_id);
-        echo "<script>console.log('Debug Objects: " . $sent . "' );</script>";
+        // echo "<script>console.log('Debug Objects: " . $sent . "' );</script>";
 
         var_dump($sent) ;
              
-        // if ($request->getMethod() === 'POST') 
-        // {
-        //     $post = $request->getParsedBody();
-        //     $newRole = $post['role'] ;
-        //     $email = $post['email'];
-        //     $used = 0;       
-        //     $userExist = $userDao->getUserByEmail(trim($email), null);
+        if ($request->getMethod() === 'POST') 
+        {
+            $post = $request->getParsedBody();
+            $newRole = $post['role'] ;
+            $email = $post['email'];
+            $used = 0;       
+            $userExist = $userDao->getUserByEmail(trim($email), null);
 
-        //     if($userExist)
-        //     {
-        //         if ($userDao->isUserVerified($user_id)) 
-        //             {                       
-        //                 $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
-        //                 UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
+            if($userExist)
+            {
+                if ($userDao->isUserVerified($user_id)) 
+                    {                       
+                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
+                        UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
 
-        //             }
-        //         else 
-        //             {
-        //                 UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
-        //             }
-        //     }
-        //     else
-        //     {
-        //         // insert_special_register 
-        //         $id=$adminDao->setUserRole($newRole, $email, $org_id, $user_id); 
-        //         //get_special_registrations                             
-        //         $records = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
-               
+                    }
+                else 
+                    {
+                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
+                    }
+            }
+            else
+            {
+                // insert_special_register 
+                $id=$adminDao->setUserRole($newRole, $email, $org_id, $user_id); 
+                
 
-        //     }                 
+            }                 
            
-        // }
-        // else 
+        }
+        else 
 
-        // {                                       
-          
-        //     return UserRouteHandler::render("user/invite-admin.tpl",$response);   
+        {                                                 
+            return UserRouteHandler::render("user/invite-admin.tpl",$response);   
+        }
 
-        // }
+        $template_data = array_merge($template_data, array(
 
-        // $template_data = array_merge($template_data, array(
-        //     'records' => $records, 
-        //     'sent' => $sent,                  
-        // ));
+            'sent' => $sent,                  
+        ));
      
 
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
