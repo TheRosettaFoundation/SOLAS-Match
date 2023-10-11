@@ -69,12 +69,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                     {assign var=count value=0}
+                  
                      {foreach $sent  as $rec}
-                        {assign var=number value=$count+1}
+                     
                         <tr>
-                        <th scope="row">{$number}</th>
-
+                     
                         <td>{$rec.email }</td>
                         <td> 
                             {if ($rec.roles === 2 )} 
@@ -87,10 +86,8 @@
 
                             {if ($rec.roles === 4 )} 
                                 PROJECT OFFICER  
-                            {/if} 
-                                                
+                            {/if}                                                 
                         </td>
-
                         <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
 
