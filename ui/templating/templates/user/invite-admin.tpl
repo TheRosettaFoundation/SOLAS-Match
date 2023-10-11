@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1> Assign Role for {$orgName} {Settings::get('site.name')}</h1>
+            <h1> Assign Role for {$orgName} </h1>
     </div>
 
     {if isset($flash['error'])}
@@ -62,7 +62,9 @@
                         <tr>
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
+                        <th scope="col">Used</th>
                         <th scope="col">Link</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -83,6 +85,7 @@
                                     PROJECT OFFICER  
                                 {/if}                                                 
                             </td>
+                            <td></td>
                             <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
 
