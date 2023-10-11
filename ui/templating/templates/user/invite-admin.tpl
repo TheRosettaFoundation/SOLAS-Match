@@ -53,7 +53,7 @@
 
         <div id ="registrations-id">
        
-               {if $sent}
+               {if($sent)}
              
                 <h3> Sent Invitations </h3> </br>
 
