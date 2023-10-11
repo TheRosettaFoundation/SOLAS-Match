@@ -53,13 +53,11 @@
         
         <div id ="registrations-id">
        
-               {if ($sent) } 
-
-           
+               {if($sent)} 
              
                 <h3 class="pt-4"> Sent Invitations </h3> </br>
 
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                         <th scope="col">Email</th>
@@ -68,39 +66,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                  
                      {foreach $sent  as $rec}
                      
-                        <tr>
-                     
-                        <td>{$rec.email }</td>
-                        <td> 
-                            {if ($rec.roles === 2 )} 
-                                 LINGUISTIC 
-                            {/if} 
+                        <tr>                     
+                            <td>{$rec.email }</td>
+                            <td> 
+                                {if ($rec.roles === 2 )} 
+                                    LINGUISTIC 
+                                {/if} 
 
-                            {if ($rec.roles === 8 )} 
-                                ADMIN 
-                            {/if} 
+                                {if ($rec.roles === 8 )} 
+                                    ADMIN 
+                                {/if} 
 
-                            {if ($rec.roles === 4 )} 
-                                PROJECT OFFICER  
-                            {/if}                                                 
-                        </td>
-                        <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
+                                {if ($rec.roles === 4 )} 
+                                    PROJECT OFFICER  
+                                {/if}                                                 
+                            </td>
+                            <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
 
                      {/foreach}
-            
-
                     </tbody>
                     </table>    
                      
-                      
-
                 {/if}
-         
-
-        
+                 
         </div>
 {include file="footer.tpl"}
