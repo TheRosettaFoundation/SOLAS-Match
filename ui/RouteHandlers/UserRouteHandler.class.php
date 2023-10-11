@@ -672,7 +672,7 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent = $adminDao-> get_special_registration_records($user_id);
+        $sent_invite = $adminDao-> get_special_registration_records($user_id);
                         
         if ($request->getMethod() === 'POST') 
         {
@@ -710,7 +710,7 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array(
 
-            'sent' => $sent,                  
+            'sent' => $sent_invite,                  
         ));
      
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
