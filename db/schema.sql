@@ -11988,7 +11988,7 @@ BEGIN
 
     SELECT *
     FROM special_registrations sr
-    JOIN Admins                 a ON a.user_id=uID AND sr.org_id=a.organisatons_id AND sr.org_id!=0
+    JOIN Admins                 a ON a.user_id=uID AND sr.org_id=a.organisation_id AND sr.org_id!=0
     WHERE
         sr.email=mail AND
         (a.roles & (@NGO_ADMIN | @NGO_PROJECT_OFFICER))!=0;
