@@ -674,7 +674,7 @@ class UserRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $sent = $adminDao-> select_sent_special_registrations($user_id);
         echo "<script>console.log($sent);</script>";
-        var_dump($sent);            
+                
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
@@ -684,7 +684,8 @@ class UserRouteHandler
             $userExist = $userDao->getUserByEmail(trim($email), null);
 
             if($userExist)
-            {
+            {    var_dump($sent);   
+                
                 if ($userDao->isUserVerified($user_id)) 
                     {                       
                         $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
