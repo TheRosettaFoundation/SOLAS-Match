@@ -6,6 +6,7 @@ use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
 
 class BadgeDao extends BaseDao
 {
