@@ -255,10 +255,5 @@ class OrganisationDao
     }
 
 
-    public function findOrganisationName($org_id)
-    {
-        $args = Lib\PDOWrapper::cleanse($org_id) ;               
-        $result = Lib\PDOWrapper::call('findOrganisationName', $args);
-        return $result;
-    }
+   
 }
