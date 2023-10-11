@@ -89,7 +89,7 @@
                                                 
                         </td>
 
-                        <td> <a href=mailto:{$rec.url}?subject={rawurlencode('TWB Registration')}" target="_blank" ></a>{$rec.url}</td>
+                        <td> <a href={$rec.url} target="_blank" ></a>{$rec.url}</td>
                         </tr>
 
                      {/foreach}
