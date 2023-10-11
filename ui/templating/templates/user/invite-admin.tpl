@@ -87,14 +87,14 @@
                             </td>
                             <td>
                                  {if ($rec.used === 0 )} 
-
+                                 
                                  {/if}    
 
                                   {if ($rec.used > 0 )} 
                                      Yes
                                  {/if}                               
                             </td>
-                            <td> <a href="mailto:{$user_row['email']}?subject={rawurlencode('TWB Registration')}" target="_blank" > {$rec.url}</a></td>
+                            <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
 
                      {/foreach}
