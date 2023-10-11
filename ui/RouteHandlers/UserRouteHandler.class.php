@@ -675,8 +675,7 @@ class UserRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         $org_name = $org->name;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent_invite = $adminDao-> get_special_registration_records($user_id);
-        // $sent_reg = $adminDao-> sent_special_registration_records($email);
+        $sent_invite = $adminDao-> get_special_registration_records($user_id);      
                         
         if ($request->getMethod() === 'POST') 
         {
@@ -686,15 +685,12 @@ class UserRouteHandler
             $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
            
-         
-
             if($userExist)
             {
                 if ($userDao->isUserVerified($user_id)) 
                     {                       
                         $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
                         UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
-
                     }
                 else 
                     {
