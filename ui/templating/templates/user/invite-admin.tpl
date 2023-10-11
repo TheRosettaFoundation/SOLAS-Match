@@ -69,10 +69,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                     {assign var=count value=0}
                      {foreach $sent  as $rec}
-
+                        {assign var=number value=$count+1}
                         <tr>
-                        <th scope="row">1</th>
+                        <th scope="row">$number</th>
+
                         <td>{$rec.email }</td>
                         <td> 
                             {if ($rec.roles === 2 )} 
