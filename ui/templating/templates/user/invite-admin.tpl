@@ -59,12 +59,7 @@
              
                 <h3> Sent Invitations </h3> </br>
 
-                    {foreach $sent  as $rec}
-
-
-
-
-                            <table class="table">
+                <table class="table">
                     <thead>
                         <tr>
                         <th scope="col">#</th>
