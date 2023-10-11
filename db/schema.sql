@@ -7208,13 +7208,11 @@ DROP PROCEDURE IF EXISTS `insert_special_registration`;
     END//
     DELIMITER ;
 
-DROP PROCEDURE IF EXIST `select_sent_special_registrations`;
-    DELIMITER//
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`( IN aID INT UNSIGNED)
+DROP PROCEDURE IF EXISTS `select_sent_special_registrations`;
+    DELIMITER //
+    CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`(IN aID INT UNSIGNED)
     BEGIN
-        SELECT * FROM special_registrations
-        WHERE 
-            admin_id = aID ;
+       SELECT * FROM special_registrations WHERE admin_id=aID;
     END//
     DELIMITER ;
 
@@ -11970,13 +11968,13 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_special_registration_records`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32),IN special_reg_org_id INT UNSIGNED )
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN uID INT UNSIGNED, IN reg_key BINARY(32))
 BEGIN
     SELECT
         *,
-        CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(uID, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
-    WHERE org_id=special_reg_org_id;
+    WHERE admin_id=uID;
 END//
 DELIMITER ;
 

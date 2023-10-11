@@ -672,7 +672,7 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent = $adminDao-> select_sent_special_registrations($user_id);
+        $sent = $adminDao-> get_special_registration_record($user_id);
         echo "<script>console.log('Debug Objects: " . $sent . "' );</script>";
 
         var_dump($sent) ;
