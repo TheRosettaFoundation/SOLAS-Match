@@ -51,6 +51,6 @@
    
 </div>
         
-{include file="invite-site-admin.tpl"}
+{include file="invitations.tpl"}
 
 {include file="footer.tpl"}
