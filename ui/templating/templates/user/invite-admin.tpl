@@ -53,7 +53,7 @@
 
         <div id ="registrations-id">
        
-        
+               {if $sent}
              
                 <h3> Sent Invitations </h3> </br>
 
@@ -82,6 +82,8 @@
                         </p>
                         </hr>
                     {/foreach}
+
+                {/if}
          
 
         
