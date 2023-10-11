@@ -701,8 +701,7 @@ class UserRouteHandler
                 $id=$adminDao->setUserRole($newRole, $email, $org_id, $user_id); 
                 //get_special_registrations                             
                 $records = $adminDao->get_special_registration_record($id['0']['0'], $org_id);
-               
-
+            
             }                 
            
         }
@@ -713,12 +712,7 @@ class UserRouteHandler
             return UserRouteHandler::render("user/invite-admin.tpl",$response);   
 
         }
-
-        $template_data = array_merge($template_data, array(
-            'records' => $records,                   
-        ));
-     
-
+ 
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }

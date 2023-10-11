@@ -173,9 +173,10 @@ class AdminDao extends BaseDao
         return [$special_registration['email'], null];
     }
 
-    public function select_sent_special_registrations($admin_id)
+    public function select_sent_special_registrations($user_id)
     {
-        $result = LibAPI\PDOWrapper::call('select_sent_special_registrations', LibAPI\PDOWrapper::cleanse($admin));
+        $result = LibAPI\PDOWrapper::call('select_sent_special_registrations', LibAPI\PDOWrapper::cleanse($user_id));
+        
         if (empty($result)) 
         {
             error_log("Bad reg_data");
