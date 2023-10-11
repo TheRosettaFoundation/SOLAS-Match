@@ -85,7 +85,15 @@
                                     PROJECT OFFICER  
                                 {/if}                                                 
                             </td>
-                            <td></td>
+                            <td>
+                                 {if ($rec.used === 0 )} 
+                                     No
+                                 {/if}    
+
+                                  {if ($rec.used > 0 )} 
+                                     Yes
+                                 {/if}                               
+                            </td>
                             <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
 
