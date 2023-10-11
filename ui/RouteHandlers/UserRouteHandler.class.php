@@ -681,7 +681,7 @@ class UserRouteHandler
             $email = $post['email'];
             $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
-            var_dump($newRole);
+            echo "<script>console.log('Debug Objects: " . $newRole . "' );</script>";
 
             if($userExist)
             {
