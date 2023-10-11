@@ -2305,6 +2305,17 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `findOrganisationName`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationName`(IN `oid` INT)
+    COMMENT 'finds an organisation name  by the data passed in.'
+BEGIN
+  SELECT  name 
+  FROM Organisations 
+  WHERE id=oid;
+END//
+DELIMITER;
+
 
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
