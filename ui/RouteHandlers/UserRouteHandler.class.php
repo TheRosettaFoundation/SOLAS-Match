@@ -681,7 +681,7 @@ class UserRouteHandler
             $email = $post['email'];
             $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
-            echo "<script>console.log('Debug Objects: " . $newRole . "' );</script>";
+           
 
             if($userExist)
             {
@@ -699,7 +699,7 @@ class UserRouteHandler
             else
             {
                 $id=$adminDao->insert_special_register($newRole, $email, $org_id, $user_id); 
-                $sent = $adminDao-> get_special_registration_records($user_id);
+                $sent_invite = $adminDao-> get_special_registration_records($user_id);
 
                 
             }                 
