@@ -673,6 +673,7 @@ class UserRouteHandler
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $sent_invite = $adminDao-> get_special_registration_records($user_id);
+        $sent_reg = $adminDao-> sent_special_registration_records($email);
                         
         if ($request->getMethod() === 'POST') 
         {
@@ -682,6 +683,7 @@ class UserRouteHandler
             $used = 0;       
             $userExist = $userDao->getUserByEmail(trim($email), null);
            
+         
 
             if($userExist)
             {

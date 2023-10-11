@@ -185,6 +185,13 @@ class AdminDao extends BaseDao
         return $result ;       
     }
 
+    public function sent_special_registration_records ($email)
+    {
+
+        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanseWrap($us));
+
+    }
+
     public function copy_roles_from_special_registration($user_id, $email)
     {
         if (empty($_SESSION['reg_data'])) {
