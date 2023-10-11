@@ -28,7 +28,7 @@ class AdminDao extends BaseDao
         return $ret;
     }
 
-    public function setUserRole($role, $email, $org_id, $admin_id) 
+    public function insert_special_register($role, $email, $org_id, $admin_id) 
     {       
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
@@ -173,22 +173,8 @@ class AdminDao extends BaseDao
         return [$special_registration['email'], null];
     }
 
-    public function select_sent_special_registrations($user_id)
-    {
-        $result = LibAPI\PDOWrapper::call('select_sent_special_registrations', LibAPI\PDOWrapper::cleanse($user_id));
-        
-        if (empty($result)) 
-        {
-            error_log("Bad reg_data");
-          
-            return "Bad reg_data";
-        }
-        return $result;
 
-    }
-
-
-    public function get_special_registration_record($user_id)
+    public function get_special_registration_records($user_id)
     {       
         $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
         if (empty($result)) 

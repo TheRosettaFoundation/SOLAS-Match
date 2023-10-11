@@ -672,11 +672,8 @@ class UserRouteHandler
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent = $adminDao-> get_special_registration_record($user_id);
-       
-
-        var_dump($sent) ;
-             
+        $sent = $adminDao-> get_special_registration_records($user_id);
+                        
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
@@ -700,10 +697,8 @@ class UserRouteHandler
             }
             else
             {
-                // insert_special_register 
-                $id=$adminDao->setUserRole($newRole, $email, $org_id, $user_id); 
+                $id=$adminDao->insert_special_register($newRole, $email, $org_id, $user_id); 
                 
-
             }                 
            
         }
