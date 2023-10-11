@@ -73,7 +73,7 @@
                      {foreach $sent  as $rec}
                         {assign var=number value=$count+1}
                         <tr>
-                        <th scope="row">$number</th>
+                        <th scope="row">{$number}</th>
 
                         <td>{$rec.email }</td>
                         <td> 
