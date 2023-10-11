@@ -52,5 +52,6 @@
 </div>
         
 
+{include file="invitations.tpl"}
 
 {include file="footer.tpl"}
