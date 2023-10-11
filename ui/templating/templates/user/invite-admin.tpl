@@ -55,9 +55,9 @@
        
                {if ($sent) } 
              
-                <h3 class="pt-4"> Sent Invitations </h3> </br>
+                <h3 class="mt-5"> Sent Invitations </h3> </br>
 
-                <table class="table table-bordered">
+                <table class="table">
                     <thead>
                         <tr>
                         <th scope="col">Email</th>
