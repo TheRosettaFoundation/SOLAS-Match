@@ -29,9 +29,9 @@
         <form method="post" action="invite_admins" accept-charset="utf-8">
             <label for="role"> <strong> Select Role </strong> </>
             <select name ="role">
-                <option value= "{$NGO_ADMIN}"> NGO ADMIN</option>
-                <option value= "{$NGO_PROJECT_OFFICER}"> NGO PO</option>
-                <option value= "{$NGO_LINGUIST}">NGO Linguist </option>            
+                <option value= "{$NGO_ADMIN}"> ADMIN</option>
+                <option value= "{$NGO_PROJECT_OFFICER}"> PROJECT OFFICER</option>
+                <option value= "{$NGO_LINGUIST}"> LINGUISTIC </option>            
              <select />
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
@@ -55,7 +55,16 @@
        
                {if ($sent) } 
 
-                <table class="table">
+           
+             
+                <h3> Sent Invitations </h3> </br>
+
+                    {foreach $sent  as $rec}
+
+
+
+
+                            <table class="table">
                     <thead>
                         <tr>
                         <th scope="col">#</th>
@@ -65,54 +74,36 @@
                         </tr>
                     </thead>
                     <tbody>
+                     {foreach $sent  as $rec}
+
                         <tr>
                         <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <td>{$rec.email }</td>
+                        <td> 
+                            {if ($rec.roles === 2 )} 
+                                 LINGUISTIC 
+                            {/if} 
+
+                            {if ($rec.roles === 8 )} 
+                                ADMIN 
+                            {/if} 
+
+                            {if ($rec.roles === 4 )} 
+                                PROJECT OFFICER  
+                            {/if} 
+                                                
+                        </td>
+
+                        <td>{$rec.url}</td>
                         </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
-                        <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        </tr>
+
+                     {/foreach}
+            
+
                     </tbody>
                     </table>    
-             
-                <h3> Sent Invitations </h3> </br>
-
-                    {foreach $sent  as $rec}
                      
-                       <p>   
-                       <span> <b> Email</b> : {$rec.email } | </span>  
-                       {if ($rec.roles === 8 ) } 
-                            <span> <b> Role</b> : NGO ADMIN | </span>
-                       {/if} 
-
-                        {if ($rec.roles === 2 ) } 
-                            <span> <b> Role</b> : NGO LINGUISTIC | </span>
-                       {/if} 
-                        {if ($rec.roles === 4 ) } 
-                            <span> <b> Role</b> : NGO PROJECT OFFICER| </span>
-                       {/if} 
-                                        
-                         {if ($rec.used === 0 ) } 
-                            <span> <b> Not Used </b> </span>
-                       {/if} 
-                       <span><b>Link</b>: <a href = "/{$rec.url}"> {$rec.url }</a>   </span> 
-
-                       
-                                                       
-                        </p>
-                        </hr>
-                    {/foreach}
+                      
 
                 {/if}
          
