@@ -57,7 +57,7 @@
 
            
              
-                <h3> Sent Invitations </h3> </br>
+                <h3 class="pt-4"> Sent Invitations </h3> </br>
 
                 <table class="table">
                     <thead>
