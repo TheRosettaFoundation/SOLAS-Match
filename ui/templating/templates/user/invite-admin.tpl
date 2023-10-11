@@ -57,7 +57,7 @@
              
                 <h3> Sent Invitations </h3> </br>
 
-                    {foreach $records  as $rec}
+                    {foreach $sent  as $rec}
                      
                        <p>   
                        <span> <b> Email</b> : {$rec.email } | </span>  
