@@ -672,7 +672,8 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();      
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
-        $orgName = $orgDao->findOrganisationName(s$org_id);
+        $org = $orgDao->getOrganisation($org_id);
+        var_dump($org);
         echo "<script>console.log('Debug Objects: " . $orgName . "' );</script>";
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $sent_invite = $adminDao-> get_special_registration_records($user_id);
