@@ -71,7 +71,7 @@
                      {foreach $sent  as $rec}
                      
                         <tr>                     
-                            <td>{$rec.email }</td>
+                            <td> <a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
                             <td> 
                                 {if ($rec.roles === 2 )} 
                                     LINGUISTIC 
