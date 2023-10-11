@@ -7208,6 +7208,16 @@ DROP PROCEDURE IF EXISTS `insert_special_registration`;
     END//
     DELIMITER ;
 
+DROP PROCEDURE IF EXIST `select_sent_special_registrations`;
+    DELIMITER//
+    CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`( IN aID INT UNSIGNED)
+    BEGIN
+        SELECT * FROM special_registrations
+        WHERE 
+            admin_id = aID ;
+    END//
+    DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
 DELIMITER //e

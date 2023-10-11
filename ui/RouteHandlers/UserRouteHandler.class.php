@@ -671,8 +671,9 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
-        $user_id = Common\Lib\UserSession::getCurrentUserID();      
-        $record ;               
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $sent = $adminDao-> select_sent_special_registrations($user_id);
+        var_dump($sent);            
         if ($request->getMethod() === 'POST') 
         {
             $post = $request->getParsedBody();
