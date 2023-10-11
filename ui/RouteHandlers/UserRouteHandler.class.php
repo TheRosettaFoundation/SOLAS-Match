@@ -215,6 +215,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_admins')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('invite_admins');
+
+            $app->map(['GET', 'POST'],
+            '/{org_id}/invite_site_admins[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('invite_site_admins');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -716,6 +722,63 @@ class UserRouteHandler
         ));
      
         return UserRouteHandler::render("user/invite-admin.tpl",$response);
+
+    }
+
+
+    public function invite_site_admins(Request $request, Response $response, $args)
+    {
+        global $app , $template_data;
+
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();      
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
+        $org_id = $args['org_id'];
+        $org = $orgDao->getOrganisation($org_id);
+        $org_name = $org->name;
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $sent_invite = $adminDao-> get_special_registration_records($user_id);      
+                        
+        if ($request->getMethod() === 'POST') 
+        {
+            $post = $request->getParsedBody();
+            $newRole = $post['role'] ;
+            $email = $post['email'];
+            $used = 0;       
+            $userExist = $userDao->getUserByEmail(trim($email), null);
+           
+            if($userExist)
+            {
+                if ($userDao->isUserVerified($user_id)) 
+                    {                       
+                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
+                        UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
+                    }
+                else 
+                    {
+                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
+                    }
+            }
+            else
+            {
+                $id=$adminDao->insert_special_register($newRole, $email, $org_id, $user_id); 
+                $sent_invite = $adminDao-> get_special_registration_records($user_id);
+
+                
+            }                 
+           
+        }
+       
+
+
+        $template_data = array_merge($template_data, array(
+
+            'sent' => $sent_invite,
+            'orgName'=> $org_name,                  
+        ));
+     
+        return UserRouteHandler::render("user/invite-site-admin.tpl",$response);
 
     }
 
