@@ -65,10 +65,10 @@
                             <span> <b> Role</b> : NGO ADMIN | </span>
                        {/if} 
 
-                        {if ($rec.roles === 4 ) } 
+                        {if ($rec.roles === 2 ) } 
                             <span> <b> Role</b> : NGO LINGUISTIC | </span>
                        {/if} 
-                        {if ($rec.roles === 2 ) } 
+                        {if ($rec.roles === 4 ) } 
                             <span> <b> Role</b> : NGO PROJECT OFFICER| </span>
                        {/if} 
                                         
