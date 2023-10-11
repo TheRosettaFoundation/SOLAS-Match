@@ -63,9 +63,9 @@
                     <thead>
                         <tr>
                         <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Link</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +89,7 @@
                                                 
                         </td>
 
-                        <td>{$rec.url}</td>
+                        <td> <a href=mailto:{$rec.url}?subject={rawurlencode('TWB Registration')}" target="_blank" ></a>{$rec.url}</td>
                         </tr>
 
                      {/foreach}
