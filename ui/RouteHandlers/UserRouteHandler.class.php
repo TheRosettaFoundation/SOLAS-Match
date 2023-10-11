@@ -722,7 +722,7 @@ class UserRouteHandler
         // ));
      
 
-        // return UserRouteHandler::render("user/invite-admin.tpl",$response);
+        return UserRouteHandler::render("user/invite-admin.tpl",$response);
 
     }
 
