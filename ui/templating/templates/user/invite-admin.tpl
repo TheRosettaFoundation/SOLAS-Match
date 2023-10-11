@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1> Assign Role {Settings::get('site.name')}</h1>
+            <h1> Assign Role  {$orgName} {Settings::get('site.name')}</h1>
     </div>
 
     {if isset($flash['error'])}
