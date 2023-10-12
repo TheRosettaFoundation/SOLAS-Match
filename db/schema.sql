@@ -7198,25 +7198,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `insert_special_registration`;
-    DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_special_registration`( IN rol BIGINT UNSIGNED, IN em VARCHAR(128), IN oID INT UNSIGNED, IN aID INT UNSIGNED)
-    BEGIN
-        INSERT INTO  special_registrations ( roles , email , used , org_id , admin_id    , date_created     , date_expires)
-        VALUES                             ( rol    , em    , 0   ,   oID   , aID, NOW()  , DATE_ADD(NOW()  ,INTERVAL 1 MONTH));
-        SELECT LAST_INSERT_ID() AS id;
-    END//
-    DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `select_sent_special_registrations`;
-    DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`(IN aID INT UNSIGNED)
-    BEGIN
-       SELECT * FROM special_registrations WHERE admin_id=aID;
-    END//
-    DELIMITER ;
-
-
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
 DELIMITER //e
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
@@ -11936,6 +11917,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_special_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_special_registration`( IN rol BIGINT UNSIGNED, IN em VARCHAR(128), IN oID INT UNSIGNED, IN aID INT UNSIGNED)
+    BEGIN
+        INSERT INTO  special_registrations (roles, email, used, org_id, admin_id, date_created, date_expires)
+        VALUES                             (  rol,    em,    0,    oID,      aID,        NOW(), DATE_ADD(NOW()  ,INTERVAL 1 MONTH));
+        SELECT LAST_INSERT_ID() AS id;
+    END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_special_registration`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration`(IN reg_data BINARY(32), IN reg_key BINARY(32), IN uID INT UNSIGNED, IN mail VARCHAR(128))
@@ -11966,6 +11957,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_special_registration_record`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
+BEGIN
+    SELECT
+        *,
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
+    FROM special_registrations
+    WHERE id=special_registration_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `select_sent_special_registrations`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`(IN aID INT UNSIGNED)
+BEGIN
+       SELECT * FROM special_registrations WHERE admin_id=aID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_special_registration_records`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN uID INT UNSIGNED, IN reg_key BINARY(32))
@@ -11977,9 +11988,6 @@ BEGIN
     WHERE admin_id=uID;
 END//
 DELIMITER ;
-
-
-
 
 DROP PROCEDURE IF EXISTS `current_user_is_NGO_admin_or_PO_for_special_registration_email`;
 DELIMITER //
