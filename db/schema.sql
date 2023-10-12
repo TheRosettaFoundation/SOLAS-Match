@@ -11971,13 +11971,13 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_special_registration_records`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN uID INT UNSIGNED, IN reg_key BINARY(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN oID INT UNSIGNED, IN reg_key BINARY(32))
 BEGIN
     SELECT
         *,
-        CONCAT('special_registration/', HEX(AES_ENCRYPT(uID, UNHEX(reg_key))), '/') AS url
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(id, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
-    WHERE admin_id=uID;
+    WHERE org_id=oID;
 END//
 DELIMITER ;
 
