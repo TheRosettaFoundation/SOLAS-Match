@@ -220,8 +220,6 @@ class OrganisationDao
       @param int $orgId is the id of the Organisation
       @return Returns a list of Users that are tracking the specified Organisation or null
     */
-    
-    
     public static function getUsersTrackingOrg($orgId)
     {
         $ret = null;
@@ -253,7 +251,4 @@ class OrganisationDao
         $result = Lib\PDOWrapper::call('updateSubscription', $args);
         return $result[0]['result'];
     }
-
-
-   
 }
