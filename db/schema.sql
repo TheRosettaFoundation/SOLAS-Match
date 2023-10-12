@@ -11969,14 +11969,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `select_sent_special_registrations`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`(IN aID INT UNSIGNED)
-BEGIN
-       SELECT * FROM special_registrations WHERE admin_id=aID;
-END//
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS `get_special_registration_records`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN uID INT UNSIGNED, IN reg_key BINARY(32))
