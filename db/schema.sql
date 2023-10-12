@@ -2306,8 +2306,6 @@ END//
 DELIMITER ;
 
 
-
-
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN uID INT UNSIGNED)
