@@ -173,15 +173,10 @@ class AdminDao extends BaseDao
         return [$special_registration['email'], null];
     }
 
-
-    public function get_special_registration_records($user_id)
+    public function get_special_registration_records($org_id)
     {       
-        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
-        if (empty($result)) 
-        {
-            error_log("Bad reg_data");           
-            return "Bad reg_data";
-        }
+        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
+        if (empty($result)) return [];
         return $result ;       
     }
 
