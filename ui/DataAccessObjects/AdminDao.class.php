@@ -28,7 +28,7 @@ class AdminDao extends BaseDao
         return $ret;
     }
 
-    public function insert_special_register($role, $email, $org_id, $admin_id) 
+    public function insert_special_registration($role, $email, $org_id, $admin_id)
     {       
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
