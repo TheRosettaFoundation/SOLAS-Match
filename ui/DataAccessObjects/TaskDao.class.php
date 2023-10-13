@@ -666,28 +666,28 @@ error_log("createTaskDirectly: $args");
 
     public function list_task_invites_not_sent_no_source($task_id, $site_admin)
     {
-        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($site_admin));
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($site_admin));
         if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_not_sent_no_source_strict($task_id, $site_admin)
     {
-        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source_strict', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($site_admin));
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_no_source_strict', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($site_admin));
         if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_not_sent_strict($task_id, $site_admin)
     {
-        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_strict', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($site_admin));
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_strict', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($site_admin));
         if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_not_sent($task_id, $site_admin)
     {
-        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($site_admin));
+        $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($site_admin));
         if (empty($result)) $result = array();
         return $result;
     }
