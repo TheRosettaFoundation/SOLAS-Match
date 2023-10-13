@@ -2305,7 +2305,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+gi
 
 
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
