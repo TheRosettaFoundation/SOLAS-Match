@@ -681,7 +681,7 @@ class UserRouteHandler
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($admin_id);
 
-        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && ($post['role'] == NGO_ADMIN)) {
+        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN)) {
             $post = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
