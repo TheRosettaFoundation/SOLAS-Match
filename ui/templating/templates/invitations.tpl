@@ -11,6 +11,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
                         <th scope="col">Used</th>
+                        <th scope="col">Expires at</th>
                         <th scope="col">Link</th>
 
                         </tr>
@@ -45,6 +46,11 @@
                                   {if ($rec.used > 0 )} 
                                      Yes
                                  {/if}                               
+                            </td>
+                            <td>
+                                {
+                                    $rec.date_expires
+                                }
                             </td>
                             <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
                         </tr>
