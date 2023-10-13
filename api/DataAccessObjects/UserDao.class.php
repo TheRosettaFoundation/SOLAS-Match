@@ -37,7 +37,9 @@ class UserDao
         $user->setEmail($email);
         $user->setNonce($nonce);
         $user->setPassword($password);
-        return self::save($user);
+        $user = self::save($user);
+        if ($user) Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($user->getId()));
+        return $user;
     }
 
     public static function save($user)
@@ -69,7 +71,6 @@ class UserDao
         $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
 
         if (!is_null($result)) {
-            Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($result[0]['id']));
             return Common\Lib\ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
@@ -203,9 +204,7 @@ class UserDao
     {
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
-        if (!self::isSiteAdmin_any_or_org_admin_any_for_any_org($userId)) {
         Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
-        }
         return $response[0]['result'];
     }
 
@@ -214,18 +213,9 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($email);
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
-            if (!self::isSiteAdmin_any_or_org_admin_any_for_any_org($response[0]['result'])) {
             Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
-            }
         }
         return $response[0]['result'];
-    }
-
-    public static function isSiteAdmin_any_or_org_admin_any_for_any_org($userId)
-    {
-        $result = Lib\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_for_any_org', Lib\PDOWrapper::cleanse($userId));
-        if (empty($result)) return 0;
-        return 1;
     }
 
     public static function getRegisteredUser($uuid)

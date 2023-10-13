@@ -27,8 +27,6 @@
         </table>
     </form>
 
-{else}
-
 <h1 class="page-header">
 {Localisation::getTranslation('thank_registering_organisation')}
 </h1>

@@ -216,12 +216,11 @@ class UserRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('invite_admins');
 
-
             $app->map(['GET', 'POST'],
-            '/{org_id}/invite_site_admins[/]',
+            '/invite_site_admins[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
-            ->setName('invite_site_admin');
-
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('invite_site_admins');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -672,115 +671,70 @@ class UserRouteHandler
     
     public function invite_admins(Request $request, Response $response, $args)
     {
-        global $app , $template_data;
+        global $app, $template_data;
 
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();      
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $org_id = $args['org_id'];
         $org = $orgDao->getOrganisation($org_id);
-        $org_name = $org->name;
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent_invite = $adminDao-> get_special_registration_records($user_id);      
-                        
-        if ($request->getMethod() === 'POST') 
-        {
+        $admin_id = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($admin_id);
+
+        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN)) {
             $post = $request->getParsedBody();
-            $newRole = $post['role'] ;
-            $email = $post['email'];
-            $used = 0;       
-            $userExist = $userDao->getUserByEmail(trim($email), null);
-           
-            if($userExist)
-            {
-                if ($userDao->isUserVerified($user_id)) 
-                    {                       
-                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
-                        UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
-                    }
-                else 
-                    {
-                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
-                    }
+            $email = trim($post['email']);
+            $userExist = $userDao->getUserByEmail($email, null);
+            if ($userExist) {
+                if ($userDao->isUserVerified($userExist->getId())) {
+                    $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']);
+                    UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                } else {
+                    UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                }
+            } else {
+                $adminDao->insert_special_registration($post['role'], $email, $org_id, $admin_id);
+                UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
             }
-            else
-            {
-                $id=$adminDao->insert_special_register($newRole, $email, $org_id, $user_id); 
-                $sent_invite = $adminDao-> get_special_registration_records($user_id);
-
-                
-            }                 
-           
         }
-       
 
-
-        $template_data = array_merge($template_data, array(
-
-            'sent' => $sent_invite,
-            'orgName'=> $org_name,                  
-        ));
-     
-        return UserRouteHandler::render("user/invite-admin.tpl",$response);
-
+        $template_data = array_merge($template_data, [
+            'sent' => $adminDao->get_special_registration_records($org_id),
+            'orgName' => $org->name,
+            'roles' => $roles,
+            ]);
+        return UserRouteHandler::render('user/invite-admin.tpl', $response);
     }
 
-
-    public function invite_site_admins(Request $request, Response $response, $args)
+    public function invite_site_admins(Request $request, Response $response)
     {
-        global $app , $template_data;
+        global $app, $template_data;
 
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
-        $orgDao = new DAO\OrganisationDao();      
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
-        $org_id = $args['org_id'];
-        $org = $orgDao->getOrganisation($org_id);
-        $org_name = $org->name;
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $sent_invite = $adminDao-> get_special_registration_records($user_id);      
-                        
-        if ($request->getMethod() === 'POST') 
-        {
+        $admin_id = Common\Lib\UserSession::getCurrentUserID();
+
+        if ($request->getMethod() === 'POST' && $post['role'] != SITE_ADMIN) {
             $post = $request->getParsedBody();
-            $newRole = $post['role'] ;
-            $email = $post['email'];
-            $used = 0;       
-            $userExist = $userDao->getUserByEmail(trim($email), null);
-           
-            if($userExist)
-            {
-                if ($userDao->isUserVerified($user_id)) 
-                    {                       
-                        $assign=$adminDao->adjust_org_admin($user_id, $org_id, 0,$newRole);
-                        UserRouteHandler::flashNow('success', "A user with this email already exists and they have now been given the requested role");    
-                    }
-                else 
-                    {
-                        UserRouteHandler::flashNow('error', "The user is not verified , we have sent an email in the mailbox ..");
-                    }
+            $email = trim($post['email']);
+            $userExist = $userDao->getUserByEmail($email, null);
+            if ($userExist) {
+                if ($userDao->isUserVerified($userExist->getId())) {
+                    $adminDao->adjust_org_admin($userExist->getId(), 0, 0, $post['role']);
+                    UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                } else {
+                    UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                }
+            } else {
+                $adminDao->insert_special_registration($post['role'], $email, 0, $admin_id);
+                UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
             }
-            else
-            {
-                $id=$adminDao->insert_special_register($newRole, $email, $org_id, $user_id); 
-                $sent_invite = $adminDao-> get_special_registration_records($user_id);
-
-                
-            }                 
-           
         }
-       
 
-
-        $template_data = array_merge($template_data, array(
-
-            'sent' => $sent_invite,
-            'orgName'=> $org_name,                  
-        ));
-     
-        return UserRouteHandler::render("user/invite-site-admin.tpl",$response);
-
+        $template_data = array_merge($template_data, [
+            'sent' => $adminDao->get_special_registration_records(0),
+            ]);
+        return UserRouteHandler::render('user/invite-site-admin.tpl', $response);
     }
 
     public function passwordReset(Request $request, Response $response, $args)
@@ -1148,6 +1102,7 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
+        $taskDao = new DAO\TaskDao();
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($loggedInUserId);
@@ -1179,6 +1134,8 @@ class UserRouteHandler
             $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
+
+        $user_task_limitation_current_user = $taskDao->get_user_task_limitation($loggedInUserId);
 
         $languages = $langDao->getLanguages();
         $languages_array = [];
@@ -1430,6 +1387,7 @@ class UserRouteHandler
 
             //Admin
             var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
+            var user_task_limitation_current_user = ' . $user_task_limitation_current_user['limit_profile_changes'] . ';
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
                 return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
             }, "Please enter a different value, values must not be the same." );
@@ -1465,15 +1423,11 @@ class UserRouteHandler
            
 
             $(".nexttab").click(function() {
-                //var selected = $("#tabs").tabs("option", "selected");
-                //$("#tabs").tabs("option", "selected", selected + 1);
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
 
-                
-                
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
                         valid = false;
@@ -1487,14 +1441,9 @@ class UserRouteHandler
                 });
 
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
-                    // jQuery("#myTab li:eq(1) a").tab("show");
-                    // console.log($(this).attr("href"));
-
                     if ($(this).attr("href") == "#profile1") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
-                        //Hide/Show delete a/c btn
 
                         localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
                     } else if ($(this).attr("href") == "#verifications") {
@@ -1502,8 +1451,6 @@ class UserRouteHandler
                         jQuery("#myTab li:eq(2) a").tab("show");
                     }
                 } else {
-                    //alert("Form has errors");
-                    // console.log($(this).attr("href"));
                     if ($(this).attr("href") == "#profile") {
                         $(".tabcounter").text("1/3");
                         jQuery("#myTab li:eq(0) a").tab("show");
@@ -1516,9 +1463,6 @@ class UserRouteHandler
             });
 
             $(".nexttab1").click(function() {
-                //console.log($("#userprofile").validate().settings.rules);
-                //var selected = $("#tabs").tabs("option", "selected");
-                //$("#tabs").tabs("option", "selected", selected + 1);
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
@@ -1540,17 +1484,12 @@ class UserRouteHandler
                 }
 
                 $select.each(function() {
-                    // console.log(validator.element(this));
                     if (!validator.element(this) && valid) {
                         valid = false;
                     }
                 });
 
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
-                    // jQuery("#myTab li:eq(1) a").tab("show");
-                    // console.log("valid " + $(this).attr("href"));
-
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
@@ -1560,11 +1499,8 @@ class UserRouteHandler
                         } else {
                             $("#deleteBtn").hide();
                         }
-                        // console.log(localStorage.getItem("selected_native_lang"));
                     }
                 } else {
-                    //alert("Form has errors");
-                    //console.log("Invalid "+ $(this).attr("href"));
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
@@ -1634,6 +1570,7 @@ class UserRouteHandler
                 }
             });
 
+            if (!user_task_limitation_current_user) {
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
@@ -1686,6 +1623,7 @@ class UserRouteHandler
             }
             $("#language_code_source_0").rules("add", { required: true, notEqualTo:"#language_code_target_0"});
             $("#language_code_target_0").rules("add", { required: true, notEqualTo:"#language_code_source_0" });
+            }
         });
 
         $(document).on("click", "#btnTrigger", function(e) {
@@ -1695,9 +1633,6 @@ class UserRouteHandler
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile") {
-               // $(".tabcounter").text("2/3");
-               // jQuery("#myTab li:eq(1) a").tab("show");
-         
             }  else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
@@ -1711,8 +1646,6 @@ class UserRouteHandler
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile1") {
-               // $(".tabcounter").text("2/3");
-                //jQuery("#myTab li:eq(1) a").tab("show");
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
@@ -1729,7 +1662,6 @@ class UserRouteHandler
                 } else {
                   $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
-                  // console.log("Err 2");
                 }
             } else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
@@ -1773,7 +1705,7 @@ class UserRouteHandler
         }
 
         // Build language input fields
-        $(document).on("click", "#add", function(e) {
+        if (!user_task_limitation_current_user) $(document).on("click", "#add", function(e) {
             var select_count = $("#btnclick").text();
             Count();
 
@@ -1827,9 +1759,8 @@ class UserRouteHandler
                 placeholder: "--Select--",
                 width: "resolve"
             });
-           
         });
-        //Remove error messages
+
         $(document).ready(function() {
         $(".capabilities").change(function() {
             if($(this).is(":checked")) {
@@ -1847,10 +1778,8 @@ class UserRouteHandler
             }else{
                 $("#ch1").hide();
             }
-            
         });
 
-       
         $(".expertise").on("change", function() {
             var expertise_no = $("input.expertise:checked").length;
             if(expertise_no == 0){
@@ -1858,9 +1787,7 @@ class UserRouteHandler
             }else{
                 $("#ch").hide();
             }
-            
         });
-
 
         $("#nativeLanguageSelect").change(function(){
             $(this).valid();
@@ -1871,6 +1798,8 @@ class UserRouteHandler
         $("#nativeCountrySelect").change(function(){
             $(this).valid();
         });
+
+        if (!user_task_limitation_current_user) {
         $("#language_code_source_0").change(function(){
             $(this).valid();
         });
@@ -1920,10 +1849,8 @@ class UserRouteHandler
             $("#language_code_target_5").rules("add", { notEqualTo: "#language_code_source_5" });
             $(this).valid();
         });
-            
-        
+        }
     });        
-    
         </script>';
 
         $template_data = array_merge($template_data, array(
@@ -1950,6 +1877,7 @@ class UserRouteHandler
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'communications_consent' => $userDao->get_communications_consent($user_id),
+            'user_task_limitation_current_user' => $user_task_limitation_current_user,
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
@@ -2621,6 +2549,18 @@ error_log("result: $result");//(**)
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_certification_delete'])) {
                 $userDao->deleteCertification($post['certification_id']);
             }
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_user_task_limitation'])) {
+                if (!preg_match('/^[0-9]*$/', $post['max_not_comlete_tasks']) ||
+                    !preg_match('/^[,0-9]*$/', $post['allowed_types']) ||
+                    !preg_match('/^[,0-9]*$/', $post['excluded_orgs']) ||
+                    !preg_match('/^[,0-9]*$/', $post['limit_profile_changes'])
+                ) UserRouteHandler::flashNow('error', 'You must enter the correct format for values');
+                else {
+                    $taskDao->insert_update_user_task_limitation($user_id, $loggedInUserId, $post['max_not_comlete_tasks'], $post['allowed_types'], $post['excluded_orgs'], $post['limit_profile_changes']);
+                    UserRouteHandler::flashNow('success', '');
+                }
+            }
         }
 
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -2819,6 +2759,8 @@ error_log("result: $result");//(**)
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
+            'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
+            'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -3188,6 +3130,8 @@ EOF;
         $userId = $args['user_id'];
 
         $userDao = new DAO\UserDao();
+        $taskDao = new DAO\TaskDao();
+        if ($taskDao->get_user_task_limitation(Common\Lib\UserSession::getCurrentUserID())['limit_profile_changes']) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)));
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 

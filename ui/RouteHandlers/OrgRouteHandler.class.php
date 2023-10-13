@@ -35,12 +35,6 @@ class OrgRouteHandler
             ->setName('org-projects');
 
         $app->map(['GET', 'POST'],
-            '/org/{org_id}/request/queue[/]',
-            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgRequestQueue')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
-            ->setName('org-request-queue');
-
-        $app->map(['GET', 'POST'],
             '/org/{org_id}/private[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPrivateProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -583,38 +577,6 @@ class OrgRouteHandler
             'current_page'    => 'org-dashboard'
         ));
         return UserRouteHandler::render('org/org.dashboard.tpl', $response);
-    }
-
-    public function orgRequestQueue(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $org_id = $args['org_id'];
-
-        $orgDao = new DAO\OrganisationDao();
-        $userDao = new DAO\UserDao();
-        $adminDao = new DAO\AdminDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $org = $orgDao->getOrganisation($org_id);
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-            
-            if (isset($post['email'])) {
-                if (Lib\Validator::validateEmail($post['email'])) {
-                    $email = $post['email'];
-                    $new_org_member = $userDao->getUserByEmail($email);
-                    if (!is_null($new_org_member)) {
-                        $adminDao->adjust_org_admin($new_org_member->getId(), $org_id, 0, NGO_LINGUIST);
-                        UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('common_successfully_added_member'), $email, $org->getName()));
-                    } else UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email));
-                } else UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('common_no_valid_email'));
-            }
-        }
-        $template_data = array_merge($template_data, array('org' => $org, 'sesskey' => $sesskey));
-        
-        return UserRouteHandler::render("org/org.request_queue.tpl", $response);
     }
 
     public function orgPrivateProfile(Request $request, Response $response, $args)
@@ -1644,8 +1606,6 @@ class OrgRouteHandler
             $org2->setOftens('');
         }
 
-        $memberIsAdmin = [];
-
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
@@ -1743,12 +1703,6 @@ class OrgRouteHandler
 
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $org_badges = $orgDao->getOrgBadges($org_id);
-
-            if ($orgMemberList) {
-                foreach ($orgMemberList as $orgMember) {
-                    $memberIsAdmin[$orgMember->getId()] = $adminDao->get_roles($org_id, $orgMember->getId());
-                }
-            }
         }
 
         $no_subscription = true;
@@ -1786,7 +1740,6 @@ class OrgRouteHandler
                 'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
                 'roles'      => $roles,
                 'orgMembers' => $orgMemberList,
-                'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
                 'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,

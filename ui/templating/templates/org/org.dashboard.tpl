@@ -58,7 +58,9 @@
             <th>{Localisation::getTranslation('common_word_count')}</th>
             <th>{Localisation::getTranslation('common_created')}</th>
             <th>{Localisation::getTranslation('common_edit')}</th>
+            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <th>{Localisation::getTranslation('common_archive')}</th>  
+            {/if}
         </thead>
         <tbody>
             
@@ -106,15 +108,15 @@
                             <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('common_edit_project')}
                         </a>
                     </td>
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <td>
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                             {if !isset($sesskey)}{assign var="sesskey" value="0"}{/if}
                             <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="btn btn-inverse" 
                             onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                             </a>
-                        {/if}
                     </td>
+                    {/if}
                 </tr>
             {/foreach}
         {else}

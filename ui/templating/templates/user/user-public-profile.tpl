@@ -897,18 +897,28 @@ If a language is to be removed from this list, the community will be informed be
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
-        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
+        <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 30%"></td>
-        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
+        <td style="width: 25%"><strong>Maximumum number of claimed/in progress tasks volunteer can have at any one time (0 => no limit)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, blank => any)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of partner IDs for which the volunteer cannot claim tasks</strong></td>
+        <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 25%"><input type="submit" class="btn btn-primary" name="mark_user_task_limitation" value="Submit" /></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
     </tr>
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -972,7 +982,7 @@ If a language is to be removed from this list, the community will be informed be
         <p style="margin-bottom:50px;"/>
     {/if}
 
-{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">

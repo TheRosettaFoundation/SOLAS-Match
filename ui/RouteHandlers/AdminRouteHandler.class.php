@@ -263,7 +263,7 @@ class AdminRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $roles = $adminDao->get_roles($userId);
+        $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($userId);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
@@ -453,6 +453,7 @@ class AdminRouteHandler
                     "orgBannerAdminNames" => $orgBannerAdminNames,
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
+                    'roles'         => $roles,
                     "extra_scripts" => $extra_scripts
         ));
 

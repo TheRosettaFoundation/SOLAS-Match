@@ -305,7 +305,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation('site_admin_dashboard_add_new_admin'), $siteName)}</p>
+                    <p>Add new site role to existing TWB Platform user specified by email.</p>
                     <p><strong>{Localisation::getTranslation('site_admin_dashboard_only_add_trusted')}</strong></p>
                 </td>
             </tr>
@@ -315,14 +315,29 @@
                 </td>
                 <td valign="top">
                     <select name="admin_type">
-                        <option value="{$COMMUNITY_OFFICER}">Community Officer</option>
-                        <option value="{$PROJECT_OFFICER}">Project Officer</option>
-                        <option value="{$SITE_ADMIN}">Site Admin</option>
+                        <option value="{$COMMUNITY_OFFICER}">COMMUNITY OFFICER</option>
+                        <option value="{$PROJECT_OFFICER}">PROJECT OFFICER</option>
+                        <option value="{$SITE_ADMIN}">TWB ADMIN</option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
                     <button class="btn btn-success" type="submit" name="addAdmin" value="1">
                         <i class="icon-star icon-white"></i>
                         Add this Role to this User
                     </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <a href="{urlFor name="invite_site_admins"}" class='btn btn-success'>
+                        <i class="icon-star icon-white"></i> Invite New Admin User
+                    </a>
                 </td>
             </tr>
         </table> 

@@ -3,7 +3,7 @@
        
                {if ($sent) } 
              
-                <h3 class="mt-5"> Sent Invitations </h3> </br>
+                <h3 class="mt-5"> Sent Invitations </h3> <br />
 
                 <table class="table">
                     <thead>

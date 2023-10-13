@@ -18,17 +18,12 @@ class AdminDao extends BaseDao
 
     public function getSiteAdmins()
     {
-        $ret = [];
         $result = LibAPI\PDOWrapper::call('getAdmins', '0,' . LINGUIST);
-        if ($result) {
-            foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
-            }
-        }
-        return $ret;
+        if (empty($result)) return [];
+        return $result;
     }
 
-    public function insert_special_register($role, $email, $org_id, $admin_id) 
+    public function insert_special_registration($role, $email, $org_id, $admin_id)
     {       
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
@@ -41,14 +36,9 @@ class AdminDao extends BaseDao
     
     public function getOrgMembers($orgId)
     {
-        $ret = [];
         $result = LibAPI\PDOWrapper::call('getAdmins', LibAPI\PDOWrapper::cleanse($orgId) . ',0');
-        if ($result) {
-            foreach ($result as $user) {
-                $ret[] = Common\Lib\ModelFactory::buildModel('User', $user);
-            }
-        }
-        return $ret;
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function getBannedUsers()
@@ -173,23 +163,11 @@ class AdminDao extends BaseDao
         return [$special_registration['email'], null];
     }
 
-
-    public function get_special_registration_records($user_id)
+    public function get_special_registration_records($org_id)
     {       
-        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
-        if (empty($result)) 
-        {
-            error_log("Bad reg_data");           
-            return "Bad reg_data";
-        }
-        return $result ;       
-    }
-
-    public function sent_special_registration_records ($email)
-    {
-
-        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanseWrap($us));
-
+        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function copy_roles_from_special_registration($user_id, $email)

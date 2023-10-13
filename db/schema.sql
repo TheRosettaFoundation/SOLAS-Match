@@ -2305,8 +2305,6 @@ BEGIN
 END//
 DELIMITER ;
 
-gi
-
 
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
@@ -2446,13 +2444,15 @@ BEGIN
             (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
             (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
             u.nonce,
-            u.`created-time` AS created_time
+            u.`created-time` AS created_time,
+            roles
         FROM Admins a
         JOIN Users  u ON a.user_id=u.id
         WHERE
             a.roles!=exclude AND
             a.roles!=0 AND
-            a.organisation_id=0;
+            a.organisation_id=0
+        ORDER BY u.`display-name`;
     ELSE
         SELECT
             u.id,
@@ -2465,13 +2465,15 @@ BEGIN
             (SELECT `en-name` FROM Countries c WHERE c.id = u.country_id)  AS countryName,
             (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
             u.nonce,
-            u.`created-time` AS created_time
+            u.`created-time` AS created_time,
+            roles
         FROM Admins a
         JOIN Users  u ON a.user_id=u.id
         WHERE
             a.organisation_id=oID AND
             (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=exclude AND
-            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=0;
+            (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=0
+        ORDER BY u.`display-name`;
     END IF;
 END//
 DELIMITER ;
@@ -7200,27 +7202,8 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `insert_special_registration`;
-    DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_special_registration`( IN rol BIGINT UNSIGNED, IN em VARCHAR(128), IN oID INT UNSIGNED, IN aID INT UNSIGNED)
-    BEGIN
-        INSERT INTO  special_registrations ( roles , email , used , org_id , admin_id    , date_created     , date_expires)
-        VALUES                             ( rol    , em    , 0   ,   oID   , aID, NOW()  , DATE_ADD(NOW()  ,INTERVAL 1 MONTH));
-        SELECT LAST_INSERT_ID() AS id;
-    END//
-    DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `select_sent_special_registrations`;
-    DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `select_sent_special_registrations`(IN aID INT UNSIGNED)
-    BEGIN
-       SELECT * FROM special_registrations WHERE admin_id=aID;
-    END//
-    DELIMITER ;
-
-
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
-DELIMITER //e
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
 BEGIN
     SELECT
@@ -11938,6 +11921,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_special_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_special_registration`( IN rol BIGINT UNSIGNED, IN em VARCHAR(128), IN oID INT UNSIGNED, IN aID INT UNSIGNED)
+    BEGIN
+        INSERT INTO  special_registrations (roles, email, used, org_id, admin_id, date_created, date_expires)
+        VALUES                             (  rol,    em,    0,    oID,      aID,        NOW(), DATE_ADD(NOW()  ,INTERVAL 1 MONTH));
+        SELECT LAST_INSERT_ID() AS id;
+    END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_special_registration`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration`(IN reg_data BINARY(32), IN reg_key BINARY(32), IN uID INT UNSIGNED, IN mail VARCHAR(128))
@@ -11968,20 +11961,30 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_special_registration_records`;
+DROP PROCEDURE IF EXISTS `get_special_registration_record`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN uID INT UNSIGNED, IN reg_key BINARY(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_record`(IN special_registration_id INT UNSIGNED, IN reg_key BINARY(32))
 BEGIN
     SELECT
         *,
-        CONCAT('special_registration/', HEX(AES_ENCRYPT(uID, UNHEX(reg_key))), '/') AS url
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(special_registration_id, UNHEX(reg_key))), '/') AS url
     FROM special_registrations
-    WHERE admin_id=uID;
+    WHERE id=special_registration_id;
 END//
 DELIMITER ;
 
-
-
+DROP PROCEDURE IF EXISTS `get_special_registration_records`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_registration_records`(IN oID INT UNSIGNED, IN reg_key BINARY(32))
+BEGIN
+    SELECT
+        *,
+        CONCAT('special_registration/', HEX(AES_ENCRYPT(id, UNHEX(reg_key))), '/') AS url
+    FROM special_registrations
+    WHERE org_id=oID
+    ORDER BY id DESC;
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `current_user_is_NGO_admin_or_PO_for_special_registration_email`;
 DELIMITER //
@@ -11997,7 +12000,7 @@ BEGIN
 
     SELECT *
     FROM special_registrations sr
-    JOIN Admins                 a ON a.user_id=uID AND sr.org_id=a.organisatons_id AND sr.org_id!=0
+    JOIN Admins                 a ON a.user_id=uID AND sr.org_id=a.organisation_id AND sr.org_id!=0
     WHERE
         sr.email=mail AND
         (a.roles & (@NGO_ADMIN | @NGO_PROJECT_OFFICER))!=0;
@@ -12066,8 +12069,11 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000), IN limit_pcs INT)
 BEGIN
     DELETE FROM user_task_limitations WHERE user_id=uID;
-    INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs, limit_profile_changes)
-    VALUES                            (    uID,        aID,                max_nct,     allowed_ts,    excluded_os,             limit_pcs);
+
+    IF max_nct!=0 OR allowed_ts!='' OR excluded_os!='' OR limit_pcs!=0 THEN
+        INSERT INTO user_task_limitations (user_id,   admin_id,  max_not_comlete_tasks,  allowed_types,  excluded_orgs, limit_profile_changes)
+        VALUES                            (    uID,        aID,                max_nct,     allowed_ts,    excluded_os,             limit_pcs);
+    END IF;
 END//
 DELIMITER ;
 
