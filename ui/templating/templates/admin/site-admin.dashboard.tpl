@@ -301,9 +301,6 @@
             <tr>
                 <td colspan="2"> 
                     <label for="addAdmin"><h2>{Localisation::getTranslation('common_create_administrator')}</h2></label>
-                    <a href="{urlFor name="invite_site_admins"}" class='pull-right btn btn-success'>
-                        <i class="icon-star icon-white"></i> Invite New Admin
-                    </a>
                 </td>
             </tr>
             <tr>
@@ -332,6 +329,15 @@
                         <i class="icon-star icon-white"></i>
                         Add this Role to this User
                     </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <a href="{urlFor name="invite_site_admins"}" class='btn btn-success'>
+                        <i class="icon-star icon-white"></i> Invite New Admin
+                    </a>
                 </td>
             </tr>
         </table> 
