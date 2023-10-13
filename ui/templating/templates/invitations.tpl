@@ -22,19 +22,19 @@
                         <tr>                     
                             <td> <a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
                             <td> 
-                                {if ($rec.roles === 2 )} 
+                                {if ($rec.roles === $NGO_LINGUIST )} 
                                     LINGUISTIC 
                                 {/if} 
 
-                                {if ($rec.roles === 8 )} 
+                                {if ($rec.roles === $NGO_ADMIN )} 
                                     ADMIN 
                                 {/if} 
 
-                                {if ($rec.roles === 4 )} 
+                                {if ($rec.roles === $NGO_PROJECT_OFFICER or $rec.roles === $PROJECT_OFFICER )} 
                                     PROJECT OFFICER  
                                 {/if}   
 
-                                {if ($rec.roles === 16 )} 
+                                {if ($rec.roles === $COMMUNITY_OFFICER )} 
                                     COMMUNITY OFFICER  
                                 {/if}                                                   
                             </td>
