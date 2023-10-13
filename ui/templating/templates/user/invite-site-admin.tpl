@@ -27,12 +27,12 @@
 <div class="row-fluid">
         
         <form method="post" action="invite_site_admins" accept-charset="utf-8">
-            <label for="role"> <strong> Select Role </strong> </>
+            <label for="role"> <strong> Select Role </strong> </label>
             <select name ="role">             
                 <option value= "{$COMMUNITY_OFFICER}">COMMUNITY OFFICER</option>               
                 <option value= "{$NGO_PROJECT_OFFICER}"> PROJECT OFFICER</option> 
                 
-             <select />
+             </select>
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email"/>
