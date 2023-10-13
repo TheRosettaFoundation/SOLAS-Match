@@ -23,14 +23,15 @@ class AdminDao extends BaseDao
         return $result;
     }
 
-    public function setUserRole($role, $email, $org_id, $admin_id) 
+    public function insert_special_registration($role, $email, $org_id, $admin_id)
     {       
         $args = LibAPI\PDOWrapper::cleanse($role) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' .          
                 LibAPI\PDOWrapper::cleanse($org_id) . ',' .
                 LibAPI\PDOWrapper::cleanse($admin_id);
         $result = LibAPI\PDOWrapper::call('insert_special_registration' , $args);
-        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");              
+        LibAPI\PDOWrapper::call('insert_queue_request', '3,37,0,' . LibAPI\PDOWrapper::cleanse($result[0]['id']) . ",0,0,0,0,''");
+        return $result;         
     }
     
     public function getOrgMembers($orgId)
@@ -140,6 +141,12 @@ class AdminDao extends BaseDao
     public function get_special_registration()
     {
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ",0,''");
+      
+        if (empty($result)) {
+            error_log("Bad reg_data: {$_SESSION['reg_data']}");
+            unset($_SESSION['reg_data']);
+            return "Bad reg_data: {$_SESSION['reg_data']}.";
+        }
 
         if (empty($result)) $error = 'This link is invalid.';
         else {
@@ -154,6 +161,13 @@ class AdminDao extends BaseDao
             return ['', $error];
         }
         return [$special_registration['email'], null];
+    }
+
+    public function get_special_registration_records($org_id)
+    {       
+        $result = LibAPI\PDOWrapper::call('get_special_registration_records', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function copy_roles_from_special_registration($user_id, $email)
