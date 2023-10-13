@@ -216,13 +216,11 @@ class UserRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('invite_admins');
 
-
             $app->map(['GET', 'POST'],
             '/invite_site_admins[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
-            ->setName('invite_site_admin');
-
+            ->setName('invite_site_admins');
     }
 
     public function home(Request $request, Response $response, $args)
