@@ -336,7 +336,7 @@
                 </td>
                 <td valign="top">
                     <a href="{urlFor name="invite_site_admins"}" class='btn btn-success'>
-                        <i class="icon-star icon-white"></i> Invite New Admin
+                        <i class="icon-star icon-white"></i> Invite New Admin User
                     </a>
                 </td>
             </tr>
