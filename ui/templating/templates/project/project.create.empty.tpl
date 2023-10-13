@@ -10,7 +10,7 @@
         <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
         <div id="deadline_timestamp">{$deadline_timestamp}</div>
-        <div id="userIsAdmin">{$roles & ($SITE_ADMIN + $PROJECT_OFFICER) ? 1 : 0}</div>
+        <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">
