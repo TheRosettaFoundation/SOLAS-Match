@@ -50,7 +50,9 @@
                             <td>
                                 {$rec.date_expires}
                             </td>
-                            <td> <a href="{Settings::get('site.location')}{$rec.url}" target="_blank" >{Settings::get('site.location')}{$rec.url}</a></td>
+                            <td>
+                                {Settings::get('site.location')}{$rec.url}
+                            </td>
                         </tr>
 
                      {/foreach}
