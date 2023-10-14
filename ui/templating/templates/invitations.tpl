@@ -11,6 +11,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
                         <th scope="col">Used</th>
+                        <th scope="col">Expires at</th>
                         <th scope="col">Link</th>
 
                         </tr>
@@ -21,19 +22,19 @@
                         <tr>                     
                             <td> <a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
                             <td> 
-                                {if ($rec.roles === 2 )} 
-                                    LINGUISTIC 
+                                {if ($rec.roles === $NGO_LINGUIST )} 
+                                    LINGUIST
                                 {/if} 
 
-                                {if ($rec.roles === 8 )} 
+                                {if ($rec.roles === $NGO_ADMIN )} 
                                     ADMIN 
                                 {/if} 
 
-                                {if ($rec.roles === 4 )} 
+                                {if ($rec.roles === $NGO_PROJECT_OFFICER or $rec.roles === $PROJECT_OFFICER )} 
                                     PROJECT OFFICER  
                                 {/if}   
 
-                                {if ($rec.roles === 16 )} 
+                                {if ($rec.roles === $COMMUNITY_OFFICER )} 
                                     COMMUNITY OFFICER  
                                 {/if}                                                   
                             </td>
@@ -46,7 +47,12 @@
                                      Yes
                                  {/if}                               
                             </td>
-                            <td> <a href="/{$rec.url}" target="_blank" > {$rec.url}</a></td>
+                            <td>
+                                {$rec.date_expires}
+                            </td>
+                            <td>
+                                {Settings::get('site.location')}{$rec.url}
+                            </td>
                         </tr>
 
                      {/foreach}
