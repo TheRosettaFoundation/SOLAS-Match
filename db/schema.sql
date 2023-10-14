@@ -6875,7 +6875,7 @@ BEGIN
             t.id=taskID AND
             (
                 (include_site>0 AND (a.roles&@LINGUIST)!=0) OR
-                (a.org_id=oID AND (a.roles&@NGO_LINGUIST)!=0)
+                (a.organisation_id=oID AND (a.roles&@NGO_LINGUIST)!=0)
             )
         ORDER BY u.email;
 END//
