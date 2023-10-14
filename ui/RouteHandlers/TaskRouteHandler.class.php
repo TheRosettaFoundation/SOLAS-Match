@@ -1189,8 +1189,8 @@ class TaskRouteHandler
             }
 
             if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
-                $emailOrUserId = trim($post['userIdOrEmail']);
                 if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
+                else                                   $emailOrUserId = trim($post['userIdOrEmail']);
                 $userToBeAssigned = null;
                 $errorOccured = False;
                 if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
