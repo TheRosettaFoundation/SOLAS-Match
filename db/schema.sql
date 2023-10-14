@@ -6861,6 +6861,7 @@ BEGIN
 
         SELECT DISTINCT
             uqp.user_id,
+            u.email,
             CONCAT(u.email, ' (', IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, ''), ')') as name
         FROM Tasks t
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
