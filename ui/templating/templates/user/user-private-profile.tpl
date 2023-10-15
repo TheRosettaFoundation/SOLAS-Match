@@ -188,6 +188,7 @@
                 {/if}
 
                 {if $user_task_limitation_current_user['limit_profile_changes'] == 0}
+DEBUG roles:{$roles}, SITE_ADMIN:{$SITE_ADMIN}, PROJECT_OFFICER:{$PROJECT_OFFICER}, COMMUNITY_OFFICER:{$COMMUNITY_OFFICER}, mask:{$SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER}, calc:{$roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                 <div class="row-fluid">
                     <div class="span6 clear_brand">
                         {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
