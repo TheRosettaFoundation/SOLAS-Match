@@ -12034,8 +12034,8 @@ CREATE TABLE IF NOT EXISTS `user_task_limitations` (
   user_id               INT UNSIGNED NOT NULL,
   admin_id              INT UNSIGNED NOT NULL,
   max_not_comlete_tasks INT NOT NULL,
-  allowed_types         VARBINARY(255),
-  excluded_orgs         VARBINARY(1000),
+  allowed_types         VARCHAR(255),
+  excluded_orgs         VARCHAR(1000),
   limit_profile_changes INT NOT NULL,
   PRIMARY KEY (user_id),
   CONSTRAINT FK_user_task_limitations_user_id  FOREIGN KEY (user_id)  REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -12079,7 +12079,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_update_user_task_limitation`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT, IN allowed_ts VARBINARY(255), IN excluded_os VARBINARY(1000), IN limit_pcs INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_user_task_limitation`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN max_nct INT, IN allowed_ts VARCHAR(255), IN excluded_os VARCHAR(1000), IN limit_pcs INT)
 BEGIN
     DELETE FROM user_task_limitations WHERE user_id=uID;
 
