@@ -12064,7 +12064,7 @@ BEGIN
             IF EXISTS (SELECT 1 FROM Tasks JOIN Projects ON Tasks.project_id=Projects.id WHERE Tasks.id=tID AND FIND_IN_SET(Projects.organisation_id, @excluded_orgs)>0) THEN
                 SELECT 0 AS result;
             ELSE
-                IF EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.id=tID AND Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
+                IF EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
                     SELECT 0 AS result;
                 ELSE
                     SELECT 1 AS result;
