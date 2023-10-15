@@ -1274,7 +1274,7 @@ class UserRouteHandler
                             }
                           }
                         }
-                        if (!$found) {
+                        if (!$found && !$user_task_limitation_current_user['limit_profile_changes']) {
                             $userDao->removeUserQualifiedPair(
                                 $user_id,
                                 $userQualifiedPair['language_code_source'],
