@@ -2558,7 +2558,7 @@ error_log("result: $result");//(**)
                 ) UserRouteHandler::flashNow('error', 'You must enter the correct format for values');
                 else {
                     $taskDao->insert_update_user_task_limitation($user_id, $loggedInUserId, $post['max_not_comlete_tasks'], $post['allowed_types'], $post['excluded_orgs'], $post['limit_profile_changes']);
-                    UserRouteHandler::flashNow('success', '');
+                    UserRouteHandler::flashNow('success', 'Success');
                 }
             }
         }
