@@ -1386,8 +1386,7 @@ class UserRouteHandler
             $(".countclick").hide();
 
             //Admin
-            var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
-            var user_task_limitation_current_user = ' . $user_task_limitation_current_user['limit_profile_changes'] . ';
+            var admin = "' . (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? 1 : 0) . '";
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
                 return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
             }, "Please enter a different value, values must not be the same." );
@@ -1570,7 +1569,7 @@ class UserRouteHandler
                 }
             });
 
-            if (!user_task_limitation_current_user) {
+            if (!' . $user_task_limitation_current_user['limit_profile_changes'] . ') {
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
@@ -1705,7 +1704,7 @@ class UserRouteHandler
         }
 
         // Build language input fields
-        if (!user_task_limitation_current_user) $(document).on("click", "#add", function(e) {
+        if (!' . $user_task_limitation_current_user['limit_profile_changes'] . ') $(document).on("click", "#add", function(e) {
             var select_count = $("#btnclick").text();
             Count();
 
@@ -1740,7 +1739,7 @@ class UserRouteHandler
 
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
-            var admin = "' . ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) . '";
+            var admin = "' . (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? 1 : 0) . '";
 
             if (admin == "1") {
                 fieldWrapper.append(fTypee);
@@ -1799,7 +1798,7 @@ class UserRouteHandler
             $(this).valid();
         });
 
-        if (!user_task_limitation_current_user) {
+        if (!' . $user_task_limitation_current_user['limit_profile_changes'] . ') {
         $("#language_code_source_0").change(function(){
             $(this).valid();
         });
