@@ -717,7 +717,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
-        if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN !empty($post['email']) ) {
+        if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN && !empty($post['email']) ) {
             $posted = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
