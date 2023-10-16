@@ -20,7 +20,7 @@
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <a class="close" data-dismiss="alert" href="{urlFor name="org-public-profile"}">×</a>
+            <a class="close" data-dismiss="alert" href="{urlFor name="org-public-profile" options="org_id.$org_id" }">×</a>
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}

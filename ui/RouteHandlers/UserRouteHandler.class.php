@@ -703,7 +703,7 @@ class UserRouteHandler
             'sent' => $adminDao->get_special_registration_records($org_id),
             'orgName' => $org->name,
             'roles' => $roles,
-            "orgId" => $org_id
+            "org_id" => $org_id
             ]);
         return UserRouteHandler::render('user/invite-admin.tpl', $response);
     }
