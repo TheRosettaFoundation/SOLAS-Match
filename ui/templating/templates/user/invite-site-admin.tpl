@@ -30,7 +30,7 @@
             <label for="role"><strong>Select Role</strong></label>
             <select name ="role">
                 <option value= "{$COMMUNITY_OFFICER}">COMMUNITY OFFICER</option>
-                <option value= "{$NGO_PROJECT_OFFICER}">PROJECT OFFICER</option>
+                <option value= "{$PROJECT_OFFICER}">PROJECT OFFICER</option>
              </select>
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
