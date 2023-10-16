@@ -26,7 +26,7 @@
     {/if}
 <div class="row-fluid">
         
-        <form method="post" action="invite_site_admins" accept-charset="utf-8">
+        <form method="post" action="{urlFor name='invite_site_admins'}" accept-charset="utf-8">
             <label for="role"><strong>Select Role</strong></label>
             <select name ="role">
                 <option value= "{$COMMUNITY_OFFICER}">COMMUNITY OFFICER</option>
