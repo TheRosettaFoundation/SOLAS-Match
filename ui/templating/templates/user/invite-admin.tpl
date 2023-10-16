@@ -31,7 +31,7 @@
             <select name ="role">             
                 <option value= "{$NGO_LINGUIST}">LINGUIST</option>               
                 <option value= "{$NGO_PROJECT_OFFICER}"> PROJECT OFFICER</option> 
-               {if ($roles === $NGO_ADMIN )}           
+               {if!($role&$NGO_PROJECT_OFFICER)}           
                  <option value= "{$NGO_ADMIN}"> ADMIN </option> 
                {/if}
              </select>
