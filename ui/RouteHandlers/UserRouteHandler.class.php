@@ -718,7 +718,7 @@ class UserRouteHandler
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
         if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN && !empty($post['email'])) {
-            $post = $request->getParsedBody();
+            $posted = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
             if ($userExist) {
