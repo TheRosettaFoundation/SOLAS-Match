@@ -679,7 +679,7 @@ class UserRouteHandler
         $org_id = $args['org_id'];
         $org = $orgDao->getOrganisation($org_id);
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
-        $roles = $adminDao->get_roles($admin_id);
+        $roles = $adminDao->get_roles($admin_id, $org_id);
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
