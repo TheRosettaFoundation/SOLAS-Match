@@ -680,10 +680,9 @@ class UserRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($admin_id);
-        var_dump($roles&NGO_PROJECT_OFFICER);
-        var_dump($org->name);
 
-        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN && !empty($post['email']) )) {
+        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN) && !empty($post['email'])) {
+&& Lib\Validator::validateEmail($post['email']) OR ERROR
             $post = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
@@ -703,8 +702,8 @@ class UserRouteHandler
         $template_data = array_merge($template_data, [
             'sent' => $adminDao->get_special_registration_records($org_id),
             'orgName' => $org->name,
+            'org_id' => $org_id,
             'roles' => $roles,
-            "org_id" => $org_id
             ]);
         return UserRouteHandler::render('user/invite-admin.tpl', $response);
     }
@@ -718,7 +717,8 @@ class UserRouteHandler
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
         if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN && !empty($post['email']) ) {
-            $posted = $request->getParsedBody();
+&& Lib\Validator::validateEmail($post['email']) OR ERROR
+            $post = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
             if ($userExist) {

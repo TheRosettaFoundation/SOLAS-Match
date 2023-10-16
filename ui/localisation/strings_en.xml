@@ -1,15 +1,6 @@
 <resources>
     <!-- ¿áéíóú Smarty Template Strings -->
 
-	<string name="assign_role_header">Assign Role </string>
-	<string name="assign_role_select"> Select Role </string>
-	<string name="role_ngo_admin"> NGO ADMIN </string>
-	<string name="role_ngo_po"> NGO P0 </string>
-	<string name="role_ngo_linguistic"> NGO Linguist </string>
-	<string name="role_twb_linguistic"> TWB Linguist </string>
-
-	
-   
     <string name="common_faq">FAQ</string>
     <string name="common_forum">TWB Community</string>
     <string name="common_discuss_on_community">Discuss this task on TWB Community</string>
