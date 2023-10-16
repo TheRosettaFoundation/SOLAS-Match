@@ -683,7 +683,7 @@ class UserRouteHandler
         var_dump($roles&NGO_PROJECT_OFFICER);
         var_dump($org->name);
 
-        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN && !empty($post['email'] ) ) {
+        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN && !empty($post['email'] ) )) {
             $post = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
