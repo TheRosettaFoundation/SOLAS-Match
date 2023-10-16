@@ -684,7 +684,7 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             $email = $post['email'];
-            if (!(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
+            if ((($roles&(SITE_ADMIN + PROJECT_OFFICER + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
