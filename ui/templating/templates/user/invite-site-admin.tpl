@@ -6,21 +6,21 @@
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
-            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">×</a>
+            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">Close ×</a>
             <p>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info">
-            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">×</a>
+            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">Close ×</a>
             <p><strong>{Localisation::getTranslation('common_note')}: </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">×</a>
+            <a class="close" data-dismiss="alert" href="{urlFor name='adminDashboard'}">Close ×</a>
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
