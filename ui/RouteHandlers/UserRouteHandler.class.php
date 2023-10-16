@@ -681,22 +681,23 @@ class UserRouteHandler
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($admin_id);
 
-        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN) && !empty($post['email'])) {
-&& Lib\Validator::validateEmail($post['email']) OR ERROR
+        if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            $email = trim($post['email']);
-            $userExist = $userDao->getUserByEmail($email, null);
-            if ($userExist) {
-                if ($userDao->isUserVerified($userExist->getId())) {
-                    $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']);
-                    UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+            $email = $post['email'];
+            if (!(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
+                $userExist = $userDao->getUserByEmail($email, null);
+                if ($userExist) {
+                    if ($userDao->isUserVerified($userExist->getId())) {
+                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']);
+                        UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                    } else {
+                        UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                    }
                 } else {
-                    UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                    $adminDao->insert_special_registration($post['role'], $email, $org_id, $admin_id);
+                    UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
                 }
-            } else {
-                $adminDao->insert_special_registration($post['role'], $email, $org_id, $admin_id);
-                UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
-            }
+            } else UserRouteHandler::flashNow('error', 'That is not a valid email.');
         }
 
         $template_data = array_merge($template_data, [
@@ -716,22 +717,23 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
-        if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN && !empty($post['email']) ) {
-&& Lib\Validator::validateEmail($post['email']) OR ERROR
+        if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            $email = trim($post['email']);
-            $userExist = $userDao->getUserByEmail($email, null);
-            if ($userExist) {
-                if ($userDao->isUserVerified($userExist->getId())) {
-                    $adminDao->adjust_org_admin($userExist->getId(), 0, 0, $post['role']);
-                    UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+            $email = $post['email'];
+            if ($post['role'] !== SITE_ADMIN && Lib\Validator::validateEmail($email)) {
+                $userExist = $userDao->getUserByEmail($email, null);
+                if ($userExist) {
+                    if ($userDao->isUserVerified($userExist->getId())) {
+                        $adminDao->adjust_org_admin($userExist->getId(), 0, 0, $post['role']);
+                        UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                    } else {
+                        UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                    }
                 } else {
-                    UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
+                    $adminDao->insert_special_registration($post['role'], $email, 0, $admin_id);
+                    UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
                 }
-            } else {
-                $adminDao->insert_special_registration($post['role'], $email, 0, $admin_id);
-                UserRouteHandler::flashNow('success', 'This user has been sent an email to invite them to register.');
-            }
+            } else UserRouteHandler::flashNow('error', 'That is not a valid email.');
         }
 
         $template_data = array_merge($template_data, [
