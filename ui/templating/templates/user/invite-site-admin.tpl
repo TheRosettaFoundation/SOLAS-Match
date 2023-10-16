@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1> Assign Role for {$orgName} </h1>
+            <h1> Assign Role </h1>
     </div>
 
     {if isset($flash['error'])}
