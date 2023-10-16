@@ -683,7 +683,7 @@ class UserRouteHandler
         var_dump($roles&NGO_PROJECT_OFFICER);
         var_dump($org->name);
 
-        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN) && !empty($post['email'])) {
+        if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN)  {
             $post = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
@@ -717,7 +717,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
-        if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN && !empty($post['email'])) {
+        if ($request->getMethod() === 'POST' && $post['role'] !== SITE_ADMIN &&) {
             $posted = $request->getParsedBody();
             $email = trim($post['email']);
             $userExist = $userDao->getUserByEmail($email, null);
