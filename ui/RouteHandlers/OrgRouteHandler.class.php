@@ -482,17 +482,8 @@ class OrgRouteHandler
                 $templateData[$org->getId()] = $taskData;
             }
 
-            $adminForOrg = array();
-            foreach ($orgs as $orgAdminTest) {
-                $adminForOrg[$orgAdminTest->getId()] = false;
-                if ($adminDao->get_roles($current_user_id, $orgAdminTest->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                    $adminForOrg[$orgAdminTest->getId()] = true;
-                }
-            }
-
             $template_data = array_merge($template_data, array(
                 "orgs" => $orgs,
-                'adminForOrg' => $adminForOrg,
                 "templateData" => $templateData
             ));
         }
@@ -551,17 +542,8 @@ class OrgRouteHandler
                 $templateData[$org->getId()] = $taskData;
             }
 
-            $adminForOrg = array();
-            foreach ($orgs as $orgAdminTest) {
-                $adminForOrg[$orgAdminTest->getId()] = false;
-                if ($adminDao->get_roles($current_user_id, $orgAdminTest->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                    $adminForOrg[$orgAdminTest->getId()] = true;
-                }
-            }
-
             $template_data = array_merge($template_data, array(
                 'orgs'         => $orgs,
-                'adminForOrg'  => $adminForOrg,
                 'templateData' => $templateData
             ));
         }
