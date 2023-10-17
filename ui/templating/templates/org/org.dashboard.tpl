@@ -44,9 +44,12 @@
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                 <i class="icon-upload icon-white"></i> New Phrase Project
             </a>
+
+            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
                 <i class="icon-upload icon-white"></i> New non-Phrase Project
             </a>
+            {/if}
         </div>
                 
         <hr />           
