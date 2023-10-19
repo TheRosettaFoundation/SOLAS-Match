@@ -1194,7 +1194,8 @@ error_log("claimTask_shell($userId, $taskId)");
         $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
         $MoodleRest->setToken($token);
         $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
-        //$MoodleRest->setDebug();
+
+        try {
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
         error_log('core_user_get_users_by_field: ' . print_r($results, 1));
         if (empty($results) || !empty($results['warnings'])) $error .= "<br />Can't find $old_email in Moodle.";
@@ -1205,6 +1206,10 @@ error_log("claimTask_shell($userId, $taskId)");
                 error_log('core_user_update_users: ' . print_r($results, 1));
                 if (empty($results) || !empty($results['warnings'])) $error .= "<br />Did not change email in Moodle.";
             }
+        }
+        } catch (\Exception $e) {
+            $error = '<br />Access to Moodle failed: ' . $e->getMessage();
+            error_log($error);
         }
         if ($error) return "Changed email in TWB Platform but...$error";
         return '';

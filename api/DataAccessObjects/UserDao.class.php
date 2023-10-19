@@ -687,12 +687,16 @@ class UserDao
         $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
         $MoodleRest->setToken($token);
         $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
-        //$MoodleRest->setDebug();
+
+        try {
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
         error_log("deleteUser($user_id) core_user_get_users_by_field: " . print_r($results, 1));
         if (!empty($results) && empty($results['warnings']) && count($results) == 1) {
             $results = $MoodleRest->request('core_user_delete_users', ['userids' => [$results[0]['id']]]);
             error_log('core_user_delete_users: ' . print_r($results, 1));
+        }
+        } catch (\Exception $e) {
+            error_log("deleteUser($user_id) access to Moodle failed: " . $e->getMessage());
         }
 
         $ch = curl_init(Common\Lib\Settings::get('discourse.url') . "/admin/users/list/all.json?email=$old_email");
