@@ -292,7 +292,7 @@ If you have any questions or can't upload the certificate, please email <a href=
         </div>
                 <div class="tab-pane fade" id="payments">
                 <br />
-                <h1> This tab is for payments details </h1>
+                <h1> This tab is for payments  </h1>
  
                 
             </div>
