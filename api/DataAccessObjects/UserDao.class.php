@@ -761,57 +761,6 @@ class UserDao
         return $ret;
     }
 
-    public static function trackOrganisation($userId, $organisationId)
-    {
-        $args = Lib\PDOWrapper::cleanse($userId).",".
-            Lib\PDOWrapper::cleanse($organisationId);
-        $result = Lib\PDOWrapper::call("userTrackOrganisation", $args);
-        if ($result) {
-            return $result[0]["result"];
-        }
-        return null;
-    }
-
-    public static function unTrackOrganisation($userId, $organisationId)
-    {
-        $args = Lib\PDOWrapper::cleanse($userId).",".
-            Lib\PDOWrapper::cleanse($organisationId);
-        $result = Lib\PDOWrapper::call("userUnTrackOrganisation", $args);
-        if ($result) {
-            return $result[0]["result"];
-        }
-        return null;
-    }
-
-    public static function getTrackedOrganisations($userId)
-    {
-        $args = Lib\PDOWrapper::cleanse($userId);
-        $result = Lib\PDOWrapper::call("getTrackedOrganisations", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
-            }
-            return $ret;
-        }
-        return null;
-    }
-
-    /*
-        returns true if the user has subscribed to the specified organisation
-    */
-    public static function isSubscribedToOrganisation($userId, $organisationId)
-    {
-        $args = Lib\PDOWrapper::cleanse($userId).",".
-            Lib\PDOWrapper::cleanse($organisationId);
-        $result = Lib\PDOWrapper::call('userSubscribedToOrganisation', $args);
-        if ($result) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
-    }
-
     public static function get_google_user_details($email)
     {
         $result = Lib\PDOWrapper::call('get_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email));

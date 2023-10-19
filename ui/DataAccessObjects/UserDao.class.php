@@ -1418,38 +1418,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $ret;
     }
 
-    public function trackOrganisation($userId, $organisationId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/organisations/$organisationId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        return $ret;
-    }
-
-    public function untrackOrganisation($userId, $organisationId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/organisations/$organisationId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $ret;
-    }
-
-    public function getUserTrackedOrganisations($userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/organisations";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Organisation"), $request);
-        return $ret;
-    }
-
-    public function isSubscribedToOrganisation($userId, $organisationId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/subscribedToOrganisation/$userId/$organisationId";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function getUserURLs($user_id)
     {
         $result = LibAPI\PDOWrapper::call('getUserURLs', LibAPI\PDOWrapper::cleanse($user_id));

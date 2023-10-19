@@ -798,36 +798,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
             }
 
-            if (isset($post['trackOrganisation'])) {
-                if ($post['trackOrganisation']) {
-                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $project->getOrganisationId());
-                    if ($userTrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_track_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            Lib\Localisation::getTranslation('org_public_profile_org_track_error')
-                        );
-                    }
-                } else {
-                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $project->getOrganisationId());
-                    if ($userUntrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
-                        );
-                    }
-                }
-            }
-
             if (isset($post['imageApprove'])) {
                 if (!$post['imageApprove']) {
                     $project->setImageApproved(1);

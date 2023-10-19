@@ -1636,32 +1636,6 @@ class OrgRouteHandler
                     error_log("makeOrgPO($user_id, $org_id) by $current_user_id");
                 }
             }
-            if (isset($post['trackOrganisation'])) {
-                if ($post['trackOrganisation']) {
-                    $userTrackOrganisation = $userDao->trackOrganisation($current_user_id, $org_id);
-                    if ($userTrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_track_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
-                    }
-                } else {
-                    $userUntrackOrganisation = $userDao->unTrackOrganisation($current_user_id, $org_id);
-                    if ($userUntrackOrganisation) {
-                        UserRouteHandler::flashNow(
-                            "success",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
-                        );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            "error",
-                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
-                        );
-                    }
-                }
-            }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
                 if (isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
                     if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
@@ -1680,7 +1654,6 @@ class OrgRouteHandler
             }
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($current_user_id, $org_id);
         $org_badges = [];
 
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
@@ -1729,7 +1702,6 @@ class OrgRouteHandler
                 'subscription' => $subscription,
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
-                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);

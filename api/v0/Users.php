@@ -80,16 +80,6 @@ class Users
             '\SolasMatch\API\V0\Users:userTrackProject')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
-        $app->put(
-            '/api/v0/users/{userId}/organisations/{organisationId}/',
-            '\SolasMatch\API\V0\Users:userTrackOrganisation')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
-
-        $app->delete(
-            '/api/v0/users/{userId}/organisations/{organisationId}/',
-            '\SolasMatch\API\V0\Users:userUnTrackOrganisation')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
-
         $app->get(
             '/api/v0/users/{userId}/filteredClaimedTasks/{orderBy}/{limit}/{offset}/{taskType}/{taskStatus}/',
             '\SolasMatch\API\V0\Users:getFilteredUserClaimedTasks')
@@ -200,11 +190,6 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
-            '/api/v0/users/{userId}/organisations/',
-            '\SolasMatch\API\V0\Users:getUserTrackedOrganisations')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
-
-        $app->get(
             '/api/v0/users/{uuid}/registered/',
             '\SolasMatch\API\V0\Users:getRegisteredUser');
 
@@ -224,11 +209,6 @@ class Users
         $app->post(
             '/api/v0/users/email/{user_id}/send_password_reset_verification/',
             '\SolasMatch\API\V0\Users:send_password_reset_verification');
-
-        $app->get(
-            '/api/v0/users/subscribedToOrganisation/{userId}/{organisationId}/',
-            '\SolasMatch\API\V0\Users:userSubscribedToOrganisation')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
             '/api/v0/users/{email}/auth/code/',
@@ -425,22 +405,6 @@ class Users
         $userId = $args['userId'];
         $projectId = $args['projectId'];
         $data = DAO\UserDao::unTrackProject($projectId, $userId);
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function userTrackOrganisation(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $organisationId = $args['organisationId'];
-        $data = DAO\UserDao::trackOrganisation($userId, $organisationId);
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function userUnTrackOrganisation(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $organisationId = $args['organisationId'];
-        $data = DAO\UserDao::unTrackOrganisation($userId, $organisationId);
         return API\Dispatcher::sendResponse($response, $data, null);
     }
 
@@ -699,13 +663,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getUserTrackedOrganisations(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $data = DAO\UserDao::getTrackedOrganisations($userId);
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
     public static function getRegisteredUser(Request $request, Response $response, $args)
     {
         $uuid = $args['uuid'];
@@ -738,16 +695,6 @@ error_log("userClaimTask($userId, $taskId)");
     {
         Lib\Notify::sendPasswordResetEmail($args['user_id']);
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function userSubscribedToOrganisation(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $organisationId = $args['organisationId'];
-        return API\Dispatcher::sendResponse($response,
-            DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId),
-            null
-        );
     }
 
     public static function getAuthCode(Request $request, Response $response, $args)
