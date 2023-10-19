@@ -53,6 +53,7 @@
             <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>1. Personal Information</strong></span></a></li>
             <li class="not-active" id="prof"><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>2. Language and Professional Information</strong></span></a></li>
             <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>3. Optional certificates</strong></span></a></li>
+             <li class="not-active"><a href="#payments" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>4. Payments Data</strong></span></a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="home">
@@ -286,6 +287,13 @@ If you have any questions or can't upload the certificate, please email <a href=
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
                 <br />
                 <br />
+                
+            </div>
+        </div>
+                <div class="tab-pane fade" id="payments">
+                <br />
+                <h1> This tab is for payments details </h1>
+ 
                 
             </div>
         </div>
