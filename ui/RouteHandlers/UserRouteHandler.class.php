@@ -1445,24 +1445,21 @@ class UserRouteHandler
 
                 if (valid) {
                     if ($(this).attr("href") == "#profile1") {
-                        $(".tabcounter").text("2/4");
+                        $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
 
                         localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
                     } else if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("3/4");
-                        jQuery("#myTab li:eq(2) a").tab("show");
-                    } esle if ($(this).attr("href") == "#payments") {
-                        $(".tabcounter").text("4/4");
+                        $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
                     }
                 } else {
                     if ($(this).attr("href") == "#profile") {
-                        $(".tabcounter").text("1/4");
+                        $(".tabcounter").text("1/3");
                         jQuery("#myTab li:eq(0) a").tab("show");
                         //$("#myTab li#prof").addClass("not-active");
                     } else if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("2/4");
+                        $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
                     }
                 }
@@ -1497,7 +1494,7 @@ class UserRouteHandler
 
                 if (valid) {
                     if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("3/4");
+                        $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
 
                         if (localStorage.getItem("selected_native_lang") != null) {
@@ -1506,20 +1503,12 @@ class UserRouteHandler
                             $("#deleteBtn").hide();
                         }
                     }
-
                 } else {
                     if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("2/4");
+                        $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
                     }
-                } else {
-
-                    if ($(this).attr("href") == "#payments") {
-                        $(".tabcounter").text("4/4");
-                        jQuery("#myTab li:eq(1) a").tab("show");
-                    }
-                    
-                    }
+                }
             });
 
             $("#tool").tooltip();
@@ -1558,36 +1547,28 @@ class UserRouteHandler
             });
 
             if (jQuery("#myTab li:eq(0) a").tab("show")) {
-                $(".tabcounter").text("1/4");
+                $(".tabcounter").text("1/3");
             }
             else if (jQuery("#myTab li:eq(1) a").tab("show")) {
-                $(".tabcounter").text("2/4");
-            } else  if (jQuery("#myTab li:eq(2) a").tab("show")) {
-                $(".tabcounter").text("3/4");
+                $(".tabcounter").text("2/3");
             } else {
-
-                $(".tabcounter").text("4/4");
-
+                $(".tabcounter").text("3/3");
             }
 
             $(document).on("click", ".next11", function(e) {
                 e.preventDefault();
-                $(".tabcounter").text("2/4");
+                $(".tabcounter").text("2/3");
                 jQuery("#myTab li:eq(1) a").tab("show");
             });
 
             $(document).on("click", ".next111a", function(e) {
                 e.preventDefault();
                 if ($(this).attr("href") == "#home"){
-                    $(".tabcounter").text("2/4");
+                    $(".tabcounter").text("2/3");
                     jQuery("#myTab li:eq(1) a").tab("show");
                 }
                 else if ($(this).attr("href") == "#profile") {
-                    $(".tabcounter").text("3/4");
-                    jQuery("#myTab li:eq(2) a").tab("show");
-                }
-                else if ($(this).attr("href") == "#payments") {
-                    $(".tabcounter").text("5/4");
+                    $(".tabcounter").text("3/3");
                     jQuery("#myTab li:eq(2) a").tab("show");
                 }
             });
@@ -1651,24 +1632,20 @@ class UserRouteHandler
         $(document).on("click", "#btnTrigger", function(e) {
             e.preventDefault();
             if ($(this).attr("href") == "#home") {
-                $(".tabcounter").text("1/4");
+                $(".tabcounter").text("1/3");
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile") {
             }  else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter").text("3/4");
+                $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
-            }
-            else if ($(this).attr("href") == "#s") {
-                $(".tabcounter").text("5/3");
-                jQuery("#myTab li:eq(3) a").tab("show");
             }
         });
 
         $(document).on("click", "#btnTrigger1999", function(e) {
             e.preventDefault();
             if ($(this).attr("href") == "#home") {
-                $(".tabcounter").text("1/4");
+                $(".tabcounter").text("1/3");
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile1") {
@@ -1683,36 +1660,30 @@ class UserRouteHandler
                 });
 
                 if (valid) {
-                  $(".tabcounter").text("2/4");
+                  $(".tabcounter").text("2/3");
                   jQuery("#myTab li:eq(1) a").tab("show");
                 } else {
-                  $(".tabcounter").text("1/4");
+                  $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
                 }
             } else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter").text("3/4");
+                $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
-            } else if ($(this).attr("href") == "#payments") {
-                $(".tabcounter").text("4/4");
-                jQuery("#myTab li:eq(3) a").tab("show");
             }
         });
 
         $(document).on("click", "#btnTrigger11", function(e) {
             e.preventDefault();
             if ($(this).attr("href") == "#home") {
-                $(".tabcounter1").text("1/4");
+                $(".tabcounter1").text("1/3");
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile1") {
-                $(".tabcounter1").text("2/4");
+                $(".tabcounter1").text("2/3");
                 jQuery("#myTab li:eq(1) a").tab("show");
             } else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter1").text("3/4");
+                $(".tabcounter1").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
-            } else if ($(this).attr("href") == "#payments") {
-                $(".tabcounter1").text("4/4");
-                jQuery("#myTab li:eq(3) a").tab("show");
             }
         });
 
