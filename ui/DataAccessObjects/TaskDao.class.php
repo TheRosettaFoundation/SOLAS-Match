@@ -486,6 +486,7 @@ error_log("createTaskDirectly: $args");
         }
 
         $result = LibAPI\PDOWrapper::call('get_creator', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return ['id' => 99269, 'email' => 'projects@translatorswithoutborders.org'];
         return $result[0];
     }
 
