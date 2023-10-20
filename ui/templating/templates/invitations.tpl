@@ -22,7 +22,7 @@
                         <tr>                     
                             <td> <a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
                             <td> 
-                                {if ($rec.roles === $NGO_LINGUIST )} 
+                                {if $rec.roles === $NGO_LINGUIST || $rec.roles === ($NGO_LINGUIST + $LINGUIST)}
                                     LINGUIST
                                 {/if} 
 

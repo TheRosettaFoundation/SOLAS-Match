@@ -190,7 +190,12 @@ class AdminDao extends BaseDao
             error_log("special_registration[mismatch] on: $email (not {$special_registration['email']}), making $user_id LINGUIST");
             return "Expected special registration email: {$special_registration['email']}, got $email from Google, can't give special role, gave TWB linguist.";
         }
-        $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, $special_registration['roles']);
+
+        if ($special_registration['roles'] != (NGO_LINGUIST + LINGUIST)) $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, $special_registration['roles']);
+        else {
+            $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, NGO_LINGUIST);
+            $this->adjust_org_admin($user_id,                               0, 0, LINGUIST);
+        }
         return 0;
     }
 }

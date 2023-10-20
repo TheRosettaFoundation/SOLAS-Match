@@ -685,10 +685,11 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             $email = $post['email'];
             if ((($roles&(SITE_ADMIN + PROJECT_OFFICER + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
+error_log("Masked role: " . $post['role']&~LINGUIST);
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
-                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']);
+                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST);
                         UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
                     } else {
                         UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
