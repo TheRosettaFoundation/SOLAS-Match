@@ -2454,6 +2454,7 @@ error_log("Masked role: " . $post['role']&~LINGUIST);
                 $org_id = $post['org_id'];
                 $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
                 $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                error_log("$user_id Leave Organisation $org_id (by $loggedInUserId)");
             }
 
             if (isset($post['referenceRequest'])) {
