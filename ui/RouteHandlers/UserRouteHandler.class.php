@@ -685,7 +685,6 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             $email = $post['email'];
             if ((($roles&(SITE_ADMIN + PROJECT_OFFICER + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
-error_log("Masked role: " . (string)($post['role']&~LINGUIST));
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
