@@ -1,9 +1,7 @@
- 
-        <div id ="registrations-id">
-       
-               {if ($sent) } 
+        <div id="registrations-id">
+            {if $sent}
              
-                <h3 class="mt-5"> Sent Invitations </h3> <br />
+                <h3 class="mt-5">Sent Invitations</h3><br />
 
                 <table class="table">
                     <thead>
@@ -13,39 +11,41 @@
                         <th scope="col">Used</th>
                         <th scope="col">Expires at</th>
                         <th scope="col">Link</th>
-
                         </tr>
                     </thead>
                     <tbody>
                      {foreach $sent  as $rec}
-                     
                         <tr>                     
-                            <td> <a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
-                            <td> 
-                                {if $rec.roles === $NGO_LINGUIST || $rec.roles === ($NGO_LINGUIST + $LINGUIST)}
+                            <td><a href="mailto:{$rec.email}?subject={rawurlencode('TWB Registration')}" target="_blank">{$rec.email}</a></td>
+                            <td>
+                                {if $rec.roles === $NGO_LINGUIST}
                                     LINGUIST
-                                {/if} 
+                                {/if}
 
-                                {if ($rec.roles === $NGO_ADMIN )} 
-                                    ADMIN 
-                                {/if} 
+                                {if $rec.roles === ($NGO_LINGUIST + $LINGUIST)}
+                                    LINGUIST+
+                                {/if}
 
-                                {if ($rec.roles === $NGO_PROJECT_OFFICER or $rec.roles === $PROJECT_OFFICER )} 
-                                    PROJECT OFFICER  
-                                {/if}   
+                                {if ($rec.roles === $NGO_ADMIN )}
+                                    ADMIN
+                                {/if}
 
-                                {if ($rec.roles === $COMMUNITY_OFFICER )} 
-                                    COMMUNITY OFFICER  
-                                {/if}                                                   
+                                {if ($rec.roles === $NGO_PROJECT_OFFICER || $rec.roles === $PROJECT_OFFICER)}
+                                    PROJECT OFFICER
+                                {/if}
+
+                                {if ($rec.roles === $COMMUNITY_OFFICER )}
+                                    COMMUNITY OFFICER
+                                {/if}
                             </td>
                             <td>
-                                 {if ($rec.used === 0 )} 
-                                 
-                                 {/if}    
+                                 {if ($rec.used === 0 )}
 
-                                  {if ($rec.used > 0 )} 
+                                 {/if}
+
+                                  {if ($rec.used > 0 )}
                                      Yes
-                                 {/if}                               
+                                 {/if}
                             </td>
                             <td>
                                 {$rec.date_expires}
@@ -54,11 +54,8 @@
                                 {Settings::get('site.location')}{$rec.url}
                             </td>
                         </tr>
-
                      {/foreach}
                     </tbody>
-                    </table>    
-                     
-                {/if}
-                 
+                </table>
+            {/if}
         </div>
