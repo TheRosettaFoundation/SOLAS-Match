@@ -28,7 +28,7 @@
         
         <form method="post" action="{urlFor name="invite_admins" options="org_id.$org_id"}" accept-charset="utf-8">
             <label for="role"><strong>Select Role</strong></label>
-            <select name ="role" style="width: 400px">
+            <select name ="role" style="width: 300px">
                 <option value= "{$NGO_LINGUIST + $LINGUIST}">LINGUIST (for this organization and all others)</option>
                 <option value= "{$NGO_LINGUIST}">LINGUIST (for this organization only)</option>
                 <option value= "{$NGO_PROJECT_OFFICER}">PROJECT OFFICER</option>
@@ -38,7 +38,7 @@
              </select>
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email"/>
+            <input type="text" name="email" id="email" style="width: 300px" />
             
             <div>
                 <button type="submit" name="change-role" class="btn btn-primary">
