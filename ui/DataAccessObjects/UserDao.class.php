@@ -109,6 +109,18 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function find_all_orgs_for_user($user_id)
+    {
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('find_all_orgs_for_user', LibAPI\PDOWrapper::cleanse($user_id));
+        if ($result) {
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('Organisation', $row);
+            }
+        }
+        return $ret;
+    }
+
     public function getUserBadges($user_id)
     {
         $ret = null;

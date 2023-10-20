@@ -2341,9 +2341,9 @@ END//
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `find_all_org_members`;
+DROP PROCEDURE IF EXISTS `find_all_orgs_for_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `find_all_org_members`(IN uID INT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `find_all_orgs_for_user`(IN uID INT UNSIGNED)
 BEGIN
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
