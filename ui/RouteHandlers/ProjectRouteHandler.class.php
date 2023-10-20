@@ -45,7 +45,7 @@ class ProjectRouteHandler
         $app->map(['GET', 'POST'],
             '/project/{project_id}/add_shell_tasks[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_add_shell_tasks')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
             ->setName('project-add-shell-tasks');
 
         $app->get(

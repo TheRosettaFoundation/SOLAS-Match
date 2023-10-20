@@ -301,11 +301,8 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $org_id = $route->getArgument('org_id');
-error_log("org_id: $org_id, user_id: " . $_SESSION['user_id']);
         if (!empty($_SESSION['user_id']) && !empty($org_id)) {
             $adminDao = new DAO\AdminDao();
-error_log("mask: " . (string)(SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER));
-error_log("roles: " . $adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER));
             if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
