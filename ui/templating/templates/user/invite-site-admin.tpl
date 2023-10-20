@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>Assign TWB Platform Role</h1>
+            <h1>Invite a new User to TWB Platform to be Assigned an Admin Role</h1>
     </div>
 
     {if isset($flash['error'])}

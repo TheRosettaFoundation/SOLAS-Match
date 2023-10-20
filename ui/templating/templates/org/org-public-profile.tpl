@@ -619,7 +619,7 @@
 
       {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
         <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
+            <i class="icon-star icon-white"></i> Invite New User to be Assigned Role
         </a>
       {/if}
     </h1>
