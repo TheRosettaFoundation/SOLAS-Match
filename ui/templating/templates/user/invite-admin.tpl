@@ -28,7 +28,7 @@
         
         <form method="post" action="{urlFor name="invite_admins" options="org_id.$org_id"}" accept-charset="utf-8">
             <label for="role"><strong>Select Role</strong></label>
-            <select name ="role" style="width: 300px">
+            <select name ="role" style="width: 280px">
                 <option value= "{$NGO_LINGUIST + $LINGUIST}">LINGUIST (for this organization and all others)</option>
                 <option value= "{$NGO_LINGUIST}">LINGUIST (for this organization only)</option>
                 <option value= "{$NGO_PROJECT_OFFICER}">PROJECT OFFICER</option>
