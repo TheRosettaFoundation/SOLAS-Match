@@ -38,7 +38,7 @@
              </select>
 
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email" style="width: 280px" />
+            <input type="text" name="email" id="email" style="width: 294px" />
             
             <div>
                 <button type="submit" name="change-role" class="btn btn-primary">
