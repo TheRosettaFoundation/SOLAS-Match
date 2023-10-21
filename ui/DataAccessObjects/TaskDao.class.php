@@ -219,8 +219,7 @@ error_log("createTaskDirectly: $args");
 
     public function deleteTask($taskId)
     {
-        $request = "{$this->siteApi}v0/tasks/$taskId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        LibAPI\PDOWrapper::call('deleteTask', LibAPI\PDOWrapper::cleanseNull($taskId));
     }
 
     public function archiveTask($taskId, $userId)
