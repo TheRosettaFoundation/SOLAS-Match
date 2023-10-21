@@ -21,16 +21,6 @@ class Orgs
         global $app;
 
         $app->get(
-            '/api/v0/orgs/{orgId}/archivedProjects/{projectId}/tasks/',
-            '\SolasMatch\API\V0\Orgs:getOrgArchivedProjectTasks')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/orgs/{orgId}/archivedProjects/{projectId}/',
-            '\SolasMatch\API\V0\Orgs:getOrgArchivedProject')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/orgs/{orgId}/projects/',
             '\SolasMatch\API\V0\Orgs:getOrgProjects')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -92,21 +82,6 @@ class Orgs
             '/api/v0/orgs/',
             '\SolasMatch\API\V0\Orgs:createOrg')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-    }
-
-    public static function getOrgArchivedProjectTasks(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $projectId = $args['projectId'];
-        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedTask($projectId), null);
-    }
-
-    public static function getOrgArchivedProject(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $projectId = $args['projectId'];
-        $data=DAO\ProjectDao::getArchivedProject($projectId, $orgId);
-        return API\Dispatcher::sendResponse($response, $data[0], null);
     }
 
     public static function getOrgProjects(Request $request, Response $response, $args)

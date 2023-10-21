@@ -10,7 +10,6 @@ require_once __DIR__."/TagsDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Project.php";
-require_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 //! Project Data Access Object for setting getting data about Projects in the API
@@ -232,80 +231,6 @@ class ProjectDao
         }
     }
 
-    //! Get a list of ArchivedProject objects from the database
-    /*!
-      Retrieves a list of ArchivedProject objects from the database. All arguments for this function default to null.
-      if null is passed for any argument then it is ignored. If all arguments are null then every ArchivedProject on
-      the system will be returned.
-      @param int $id is the id of the requested ArchivedProject
-      @param int $orgId is the id of the Organisation the requested ArchivedProject belongs to
-      @param string $title is the title of the requested ArchivedProject
-      @param string $description is the description of the requested ArchivedProject provided by the creator
-      @param string $impact is the impact of the requested ArchivedProject
-      @param deadline $id is the deadline of the requested ArchivedProject in the format "YYYY-MM-DD HH:MM:SS"
-      @param string $id is the reference page of the requested ArchivedProject
-      @param int $wordCount is the word count of the requested ArchivedProject
-      @param string $created is the date and time requested ArchivedProject was created on in the format
-      "YYYY-MM-DD HH:MM:SS"
-      @param string $archivedDate is the date and time the requested ArchivedProject was archived on in the format
-      "YYYY-MM-DD HH:MM:SS"
-      @param int $userIdArchived is the id of the User that archived the requested ArchivedProject
-      @param string $lCode is the language code of the source Locale for the requested ArchivedProject (<b>NOTE</b>:
-      This will get converted to a language id on the database).
-      @param string $cCode is the country code of the source Locale for the requested ArchivedProject (<b>NOTE</b>:
-      This will get converted to a country id on the database).
-      @param bit $imageUploaded represents whether a project image has been uploaded or not for the requested ArchivedProject
-      @param bit $imageApproved represents whether an uploaded project image has been approved by admins or not for the requested ArchivedProject
-      @return Returns a list of ArchivedProject objects filtered by the input parameters or null
-    */
-    public static function getArchivedProject(
-        $id = null,
-        $orgId = null,
-        $title = null,
-        $description = null,
-        $impact = null,
-        $deadline = null,
-        $reference = null,
-        $wordCount = null,
-        $created = null,
-        $archivedDate = null,
-        $userIdArchived = null,
-        $lCode = null,
-        $cCode = null,
-        $imageUploaded = null,
-        $imageApproved = null
-    ) {
-        $projects = array();
-        $args = Lib\PDOWrapper::cleanseNull($id).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($title).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($description).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($impact).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($deadline).",".
-            Lib\PDOWrapper::cleanseNull($orgId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($reference).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
-            Lib\PDOWrapper::cleanseWrapStr($created).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($archivedDate).",".
-            Lib\PDOWrapper::cleanseNull($userIdArchived).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($lCode).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($cCode).",".
-            Lib\PDOWrapper::cleanseNull($imageUploaded).",".
-            Lib\PDOWrapper::cleanseNull($imageApproved);
-        $result = Lib\PDOWrapper::call("getArchivedProject", $args);
-        if ($result) {
-            foreach ($result as $row) {
-                $projects[] = Common\Lib\ModelFactory::buildModel(
-                    "ArchivedProject",
-                    $row
-                );
-            }
-        }
-        if (count($projects) == 0) {
-            $projects = null;
-        }
-        return $projects;
-    }
-
     //! Get the Task objects associated with a specific Project
     /*!
       Retrieves a list Task objects from the database. The returned list only contains Tasks that are associated with
@@ -477,28 +402,6 @@ class ProjectDao
         } else {
             return null;
         }
-    }
-
-    //! Get an ArchivedTask from the database
-    /*!
-      Get a list of ArchivedTask objects from the database. It will only return ArchivedTasks that are a part of the
-      specified Project/ArchivedProject.
-      @param int $projectId is the id of a Project or ArchivedProject
-      @return Returns a list of ArchivedTask objects or null
-    */
-    public static function getArchivedTask($projectId)
-    {
-        $args = "null, ".Lib\PDOWrapper::cleanseNull($projectId).",".
-            "null, null, null, null, null, null, null, null, null, null, null, null";
-        $ret = null;
-        $result = Lib\PDOWrapper::call("getArchivedTask", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("ArchivedTask", $row);
-            }
-        }
-        return $ret;
     }
 
     //! Remove all Project Tags

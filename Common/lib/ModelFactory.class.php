@@ -18,7 +18,6 @@ require_once __DIR__."/../protobufs/models/TaskMetadata.php";
 require_once __DIR__."/../protobufs/models/User.php";
 require_once __DIR__."/../protobufs/models/Task.php";
 require_once __DIR__."/../protobufs/models/Project.php";
-require_once __DIR__."/../protobufs/models/ArchivedProject.php";
 require_once __DIR__."/../protobufs/models/Statistic.php";
 require_once __DIR__."/../protobufs/models/ProjectFile.php";
 require_once __DIR__."/../protobufs/models/TaskReview.php";
@@ -86,9 +85,6 @@ class ModelFactory
                 break;
             case "Project":
                 $ret = self::generateProject($modelData);
-                break;
-            case "ArchivedProject":
-                $ret = self::generateArchivedProject($modelData);
                 break;
             case "Statistic":
                 $ret = self::generateStatistic($modelData);
@@ -751,88 +747,6 @@ class ModelFactory
         return $ret;
     }
 
-    private static function generateArchivedProject($modelData)
-    {
-        $ret = new Models\ArchivedProject();
-        $sourceLocale = new Models\Locale();
-
-        if (isset($modelData['id'])) {
-            $ret->setId($modelData['id']);
-        }
-        if (isset($modelData['title'])) {
-            $ret->setTitle($modelData['title']);
-        }
-        if (isset($modelData['description'])) {
-            $ret->setDescription($modelData['description']);
-        }
-        if (isset($modelData['impact'])) {
-            $ret->setImpact($modelData['impact']);
-        }
-        if (isset($modelData['deadline'])) {
-            $ret->setDeadline($modelData['deadline']);
-        }
-        if (isset($modelData['organisationId'])) {
-            $ret->setOrganisationId($modelData['organisationId']);
-        }
-        if (isset($modelData['reference'])) {
-            $ret->setReference($modelData['reference']);
-        }
-        if (isset($modelData['wordCount'])) {
-            $ret->setWordCount($modelData['wordCount']);
-        }
-        if (isset($modelData['created'])) {
-            $ret->setCreatedTime($modelData['created']);
-        }
-        
-        if (isset($modelData['sourceLanguageName'])) {
-            $sourceLocale->setLanguageName($modelData['sourceLanguageName']);
-        }
-        if (isset($modelData['sourceLanguageCode'])) {
-            $sourceLocale->setLanguageCode($modelData['sourceLanguageCode']);
-        }
-        if (isset($modelData['sourceCountryName'])) {
-            $sourceLocale->setCountryName($modelData['sourceCountryName']);
-        }
-        if (isset($modelData['sourceCountryCode'])) {
-            $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
-        }
-        
-        $ret->setSourceLocale($sourceLocale);
-       
-        if (isset($modelData['userIdArchived'])) {
-            $ret->setUserIdArchived($modelData['userIdArchived']);
-        }
-        if (isset($modelData['userIdProjectCreator'])) {
-            $ret->setUserIdProjectCreator($modelData['userIdProjectCreator']);
-        }
-        if (isset($modelData['filename'])) {
-            $ret->setFileName($modelData['filename']);
-        }
-        if (isset($modelData['fileToken'])) {
-            $ret->setFileToken($modelData['fileToken']);
-        }
-        if (isset($modelData['mimeType'])) {
-            $ret->setMimeType($modelData['mimeType']);
-        }
-        if (isset($modelData['archivedDate'])) {
-            $ret->setArchivedDate($modelData['archivedDate']);
-        }
-        if (isset($modelData['tags'])) {
-            $ret->setTags($modelData['tags']);
-        }
-
-        if (isset($modelData['imageUploaded'])) {
-            $ret->setImageUploaded($modelData['imageUploaded'] ? 1 : 0);
-        }
-        
-        if (isset($modelData['imageApproved'])) {
-            $ret->setImageApproved($modelData['imageApproved'] ? 1 : 0);
-        }
-
-        return $ret;
-    }
-    
-    
     private static function generateStatistic($modelData)
     {
         $ret = new Models\Statistic();
