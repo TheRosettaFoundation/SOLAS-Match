@@ -156,12 +156,4 @@ class OrganisationDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
-
-    public function getUsersTrackingOrg($orgisationId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgisationId/trackingUsers";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
-        return $ret;
-    }
 }

@@ -213,27 +213,6 @@ class OrganisationDao
         return $result[0]['result'];
     }
 
-    //! Get a list of Users that are tracking an Organisation
-    /*!
-      Get a list of Users that are tracking an Organisation. If a User is tracking an Organisation they should receive
-      email updates on Organisation activity
-      @param int $orgId is the id of the Organisation
-      @return Returns a list of Users that are tracking the specified Organisation or null
-    */
-    public static function getUsersTrackingOrg($orgId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanse($orgId);
-        $result = Lib\PDOWrapper::call("getUsersTrackingOrg", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
-            }
-        }
-        return $ret;
-    }
-
     public static function getSubscription($org_id)
     {
         $result = Lib\PDOWrapper::call('getSubscription', Lib\PDOWrapper::cleanse($org_id));
