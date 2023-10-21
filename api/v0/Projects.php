@@ -49,11 +49,6 @@ class Projects
             '/api/v0/projects/{projectId}/file/',
             '\SolasMatch\API\V0\Projects:getProjectFile');
 
-        $app->get(
-            '/api/v0/projects/{projectId}/archivedTasks/',
-            '\SolasMatch\API\V0\Projects:getArchivedProjectTasks')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
-
         $app->delete(
             '/api/v0/projects/{projectId}/deleteTags/',
             '\SolasMatch\API\V0\Projects:deleteProjectTags')
@@ -136,12 +131,6 @@ class Projects
     {
         $projectId = $args['projectId'];
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getProjectFile($projectId), null);
-    }
-
-    public static function getArchivedProjectTasks(Request $request, Response $response, $args)
-    {
-        $projectId = $args['projectId'];
-        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedTask($projectId), null);
     }
 
     public static function deleteProjectTags(Request $request, Response $response, $args)
