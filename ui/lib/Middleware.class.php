@@ -233,6 +233,7 @@ class Middleware
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Site Admin login required to access page.');
 
+error_log("request->getUri(): " . $request->getUri());
         Common\Lib\UserSession::setReferer($request->getUri());
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
     }
