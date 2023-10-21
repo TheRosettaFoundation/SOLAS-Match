@@ -36,11 +36,6 @@ class Orgs
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/orgs/{orgId}/archivedProjects/',
-            '\SolasMatch\API\V0\Orgs:getOrgArchivedProjects')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/orgs/{orgId}/badges/',
             '\SolasMatch\API\V0\Orgs:getOrgBadges')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -121,12 +116,6 @@ class Orgs
             DAO\ProjectDao::getProjects(null, null, null, null, null, $orgId),
             null
         );
-    }
-
-    public static function getOrgArchivedProjects(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedProject(null, $orgId), null);
     }
 
     public static function getOrgByName(Request $request, Response $response, $args)

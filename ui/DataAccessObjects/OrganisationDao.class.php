@@ -80,14 +80,6 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    public function getOrgArchivedProjects($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/archivedProjects";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
-        return $ret;
-    }
-
     public function getOrgBadges($orgId)
     {
         $ret = null;

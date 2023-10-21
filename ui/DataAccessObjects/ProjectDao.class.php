@@ -198,26 +198,6 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $ret;
     }
 
-    public function getArchivedProject($id)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/archivedProjects/$id";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
-
-        if (!is_null($id) && is_array($ret)) {
-            $ret = $ret[0];
-        }
-        return $ret;
-    }
-
-    public function getArchivedProjects()
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/archivedProjects";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
-        return $ret;
-    }
-
     public function getProjectFile($project_id)
     {
         $ret = null;

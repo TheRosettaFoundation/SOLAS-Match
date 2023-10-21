@@ -87,19 +87,9 @@ class Projects
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
 
         $app->get(
-            '/api/v0/archivedProjects/{projectId}/',
-            '\SolasMatch\API\V0\Projects:getArchivedProject')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgProject');
-
-        $app->get(
             '/api/v0/projects/',
             '\SolasMatch\API\V0\Projects:getProjects')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/archivedProjects/',
-            '\SolasMatch\API\V0\Projects:getArchivedProjects')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
     }
 
     public static function updateProjectWordCount(Request $request, Response $response, $args)
@@ -203,24 +193,9 @@ class Projects
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::delete($projectId), null);
     }
 
-    public static function getArchivedProject(Request $request, Response $response, $args)
-    {
-        $projectId = $args['projectId'];
-        $data = DAO\ProjectDao::getArchivedProject($projectId);
-        if ($data && is_array($data)) {
-            $data = $data[0];
-        }
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
     public static function getProjects(Request $request, Response $response)
     {
         return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getProjects(), null);
-    }
-
-    public static function getArchivedProjects(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\ProjectDao::getArchivedProject(), null);
     }
 }
 
