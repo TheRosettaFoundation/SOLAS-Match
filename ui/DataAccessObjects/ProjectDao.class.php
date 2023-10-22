@@ -93,16 +93,16 @@ class ProjectDao extends BaseDao
         if ($result) {
 error_log("call projectInsertAndUpdate($args): Success");//(**)
             $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
-[[[[[[[[[[[[[
-            foreach ($tags as $newTag) {
-                if ($tagExists = TagsDao::getTags(null, $newTag->getLabel())) {
-                    ProjectDao::addProjectTag($project->getId(), $tagExists[0]->getId());
-                } else {
-                    $tag = TagsDao::create($newTag->getLabel());
-                    ProjectDao::addProjectTag($project->getId(), $tag->getId());
+            foreach ($tags as $tag) {
+                $label = $tag->getLabel();
+                if (!empty($label) && strlen($label) <= 50) {
+                    $result = LibAPI\PDOWrapper::call('getTag', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($label) . ',1');
+                    if (empty($result[0]['id'])) {
+                        $result = LibAPI\PDOWrapper::call('tagInsert', LibAPI\PDOWrapper::cleanseWrapStr($label));
+                    }
+                    LibAPI\PDOWrapper::call('addProjectTag', LibAPI\PDOWrapper::cleanseNull($project->getId()) . ',' . LibAPI\PDOWrapper::cleanse($result[0]['id']));
                 }
             }
-]]]]]]]]]]]]]
         }
 else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $project;
