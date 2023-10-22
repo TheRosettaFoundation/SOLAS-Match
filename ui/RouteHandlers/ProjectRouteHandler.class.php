@@ -788,6 +788,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     "success",
                     sprintf(Lib\Localisation::getTranslation('project_view_15'), $task->getTitle())
                 );
+                error_log('deleteTask(): ' . $post['task_id'] . " by $user_id");
             }
             if (isset($post['archiveTask'])) {
                 $taskDao->archiveTask($post['task_id'], $user_id);
@@ -795,6 +796,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     "success",
                     sprintf(Lib\Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
+                error_log('archiveTask(): ' . $post['task_id'] . " by $user_id");
             }
             }
 
