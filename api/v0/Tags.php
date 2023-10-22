@@ -46,11 +46,6 @@ class Tags
         $app->get(
             '/api/v0/tags/',
             '\SolasMatch\API\V0\Tags:getTags');
-
-        $app->post(
-            '/api/v0/tags/',
-            '\SolasMatch\API\V0\Tags:createTag')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateUserForOrgTask');
     }
 
     public static function getTagByLabel(Request $request, Response $response, $args)
@@ -104,15 +99,6 @@ class Tags
         } else {
             return API\Dispatcher::sendResponse($response, DAO\TagsDao::getTags(null, null, $limit), null);
         }
-    }
-
-    public static function createTag(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data=$client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
-        $data->setId("");
-        return API\Dispatcher::sendResponse($response, DAO\TagsDao::save($data), null);
     }
 }
 

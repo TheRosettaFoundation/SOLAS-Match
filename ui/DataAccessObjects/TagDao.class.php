@@ -101,18 +101,6 @@ class TagDao extends BaseDao
         return $response;
     }
 
-    public function createTag($tag)
-    {
-        $request = "{$this->siteApi}v0/tags";
-        $response = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Tag",
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $tag
-        );
-        return $response;
-    }
-
     public function updateTag($tag)
     {
         $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
