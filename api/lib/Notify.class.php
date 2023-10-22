@@ -8,7 +8,6 @@ use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 
-require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 
 class Notify
@@ -206,20 +205,6 @@ class Notify
             $task_id,
             $claimant_id,
             '');
-    }
-
-    public static function sendUserFeedback($feedback)
-    {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-            UserFeedback,
-            0,
-            0,
-            0,
-            0,
-            $feedback->getTaskId(),
-            $feedback->getClaimantId(),
-            $feedback->getFeedback());
     }
 
     public static function notifyUserTaskCancelled($user_id, $task_id)

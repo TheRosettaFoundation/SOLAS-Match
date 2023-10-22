@@ -27,7 +27,6 @@ require_once __DIR__."/../protobufs/models/UserPersonalInformation.php";
 require_once __DIR__."/../protobufs/models/BannedUser.php";
 require_once __DIR__."/../protobufs/models/BannedOrganisation.php";
 
-require_once __DIR__."/../protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../protobufs/emails/OrgFeedback.php";
 
 class ModelFactory
@@ -106,9 +105,6 @@ class ModelFactory
                 break;
             case "OAuthResponse":
                 $ret = self::generateOAuthResponse($modelData);
-                break;
-            case "UserFeedback" :
-                $ret = self::generateUserFeedback($modelData);
                 break;
             case "OrgFeedback" :
                 $ret = self::generateOrgFeedback($modelData);
@@ -916,24 +912,6 @@ class ModelFactory
             $ret->setExpiresIn($modelData['expires_in']);
         }
         
-        return $ret;
-    }
-    
-    private static function generateUserFeedback($modelData)
-    {
-        $ret = new Emails\UserFeedback();
-        if (isset($modelData['email_type'])) {
-            $ret->setEmailType($modelData['email_type']);
-        }
-        if (isset($modelData['task_id'])) {
-            $ret->setTaskId($modelData['task_id']);
-        }
-        if (isset($modelData['claimant_id'])) {
-            $ret->setClaimantId($modelData['claimant_id']);
-        }
-        if (isset($modelData['feedback'])) {
-            $ret->setFeedback($modelData['feedback']);
-        }
         return $ret;
     }
     

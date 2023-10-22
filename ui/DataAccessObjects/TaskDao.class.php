@@ -286,14 +286,11 @@ error_log("createTaskDirectly: $args");
         return  bin2hex(openssl_encrypt($data, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv) . "::$iv");
     }
 
+    // User Feedback, feedback sent from the user who claimed the task to the organisation
     public function sendUserFeedback($taskId, $userId, $feedback)
     {
-        $feedbackData = new Common\Protobufs\Emails\UserFeedback();
-        $feedbackData->setTaskId($taskId);
-        $feedbackData->setClaimantId($userId);
-        $feedbackData->setFeedback($feedback);
-        $request = "{$this->siteApi}v0/tasks/{$feedbackData->getTaskId()}/userFeedback";
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
+        if (empty($feedback)) $feedback = '';
+        LibAPI\PDOWrapper::call('insert_queue_request', '3,11,0,0,0,0,' . LibAPI\PDOWrapper::cleanse($taskId) . ',' . LibAPI\PDOWrapper::cleanse($userId) . ',' .LibAPI\PDOWrapper::cleanseWrapStr($feedback));
     }
 
     public function submitReview($review)

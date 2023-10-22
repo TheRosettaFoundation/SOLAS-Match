@@ -80,7 +80,6 @@ require_once 'Common/protobufs/models/TaskMetadata.php';
 require_once 'Common/protobufs/models/UserTaskStreamNotification.php';
 require_once 'Common/protobufs/models/TaskReview.php';
 
-require_once 'Common/protobufs/emails/UserFeedback.php';
 require_once 'Common/protobufs/emails/OrgFeedback.php';
 
 require_once 'ui/DataAccessObjects/AdminDao.class.php';

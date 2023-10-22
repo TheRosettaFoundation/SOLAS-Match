@@ -11,7 +11,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../../Common/protobufs/models/TaskMetadata.php";
-require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../lib/IO.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
@@ -31,11 +30,6 @@ class Tasks
         $app->put(
             '/api/v0/tasks/{taskId}/sendOrgFeedbackDeclined/',
             '\SolasMatch\API\V0\Tasks:sendOrgFeedbackDeclined');
-
-        $app->put(
-            '/api/v0/tasks/{taskId}/userFeedback/',
-            '\SolasMatch\API\V0\Tasks:sendUserFeedback')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserForClaimedTask');
 
         $app->get(
             '/api/v0/tasks/{taskId}/alsoViewedTasks/{limit}/{offset}/',
@@ -135,17 +129,6 @@ class Tasks
         return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    // User Feedback, feedback sent from the user who claimed the task to the organisation
-    public static function sendUserFeedback(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\UserFeedback");
-        Lib\Notify::sendUserFeedback($feedbackData);
-        return API\Dispatcher::sendResponse($response, null, null);
-    }
-    
     public static function getAlsoViewedTasks(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];
