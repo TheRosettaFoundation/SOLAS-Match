@@ -162,20 +162,6 @@ class TaskDao
         return $ret;
     }
 
-    public static function getTaskPreReqs($taskId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($taskId);
-        $result = Lib\PDOWrapper::call("getTaskPreReqs", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
-            }
-        }
-        return $ret;
-    }
-    
     //! Get a list of the most recently created Tasks
     /*!
       Get a list of the most recently created Task objects. This will only return Task objects that are in the

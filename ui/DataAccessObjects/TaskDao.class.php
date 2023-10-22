@@ -41,9 +41,15 @@ class TaskDao extends BaseDao
 
     public function getTaskPreReqs($taskId)
     {
-        $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites";
-        $response =$this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
-        return $response;
+        $ret = null;
+        $result = LibAPI\PDOWrapper::call('getTaskPreReqs', LibAPI\PDOWrapper::cleanseNull($taskId));
+        if ($result) {
+            $ret = [];
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('Task', $row);
+            }
+        }
+        return $ret;
     }
 
     public function getProofreadTask($id)

@@ -43,11 +43,6 @@ class Tasks
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/tasks/{taskId}/prerequisites/',
-            '\SolasMatch\API\V0\Tasks:getTaskPreReqs')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForClaimedTask');
-
-        $app->get(
             '/api/v0/tasks/{taskId}/tags/',
             '\SolasMatch\API\V0\Tasks:getTasksTags');
 
@@ -164,12 +159,6 @@ class Tasks
             ),
             null
         );
-    }
-
-    public static function getTaskPreReqs(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getTaskPreReqs($taskId), null);
     }
 
     public static function getTasksTags(Request $request, Response $response, $args)
