@@ -2024,7 +2024,6 @@ class OrgRouteHandler
         $task = $taskDao->getTask($taskId);
         $preReqTasks = array();
         $preReqs = $taskDao->getTaskPreReqs($taskId);
-error_log(print_r($preReqs, true));
         $reviews = array();
 
         if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !empty($matecat_tasks = $taskDao->getTaskChunk($taskId))) {
