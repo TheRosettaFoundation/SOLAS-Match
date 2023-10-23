@@ -147,7 +147,7 @@ class ProjectRouteHandler
         }
 
         $project->setTitle(mb_substr($hook['name'], 0, 128));
-        if (!empty($hook['note'])) $project->setDescription($hook['note']);
+        if (!empty($hook['note'])) $project->setDescription($this->truncate_note($hook['note']));
         else                       $project->setDescription('-');
         $project->setImpact('-');
         if (!empty($hook['dateDue'])) $project->setDeadline(substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
@@ -239,6 +239,12 @@ class ProjectRouteHandler
         }
     }
 
+    private function truncate_note($note)
+    {
+        if (mb_strlen($note) <= 4096) return $note;
+        return mb_substr($note, 0, 4096 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
+    }
+
     private function update_project_due_date($hook)
     {
         $hook = $hook['project'];
@@ -264,7 +270,7 @@ class ProjectRouteHandler
             return;
         }
 
-        if (!empty($hook['note'])) $projectDao->update_project_description($memsource_project['project_id'], $hook['note']);
+        if (!empty($hook['note'])) $projectDao->update_project_description($memsource_project['project_id'], $this->truncate_note($hook['note']));
 
         if (!empty($hook['workflowSteps'])) {
             $workflowLevels = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
