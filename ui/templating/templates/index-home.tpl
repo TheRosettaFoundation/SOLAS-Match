@@ -495,6 +495,8 @@ a:hover{
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
             <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
             </h3>
+            <div class="grid">
+            <div class="grid-col-4">
             <form method="post" action="{urlFor name="home"}">
 	            <table>
 	                <thead>
@@ -545,9 +547,10 @@ a:hover{
 	            </a>
             </form>
             <hr />
+            </div>
         {/if}
         {if isset($topTasks) && count($topTasks) > 0}
-            <div class="ts">
+            <div class="ts grid-col-8">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="ts-task">
@@ -604,6 +607,7 @@ a:hover{
                     </div>
                 {/for}
             </div>
+        </div>
 
             {* pagination begins here *}
             {assign var="url_name" value="home-paged"}
