@@ -253,6 +253,12 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_translators_for_language_pairs')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('download_translators_for_language_pairs');
+
+        $app->map(['GET'],
+            '/analytics[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:analytics')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('analytics');
     }
     
     public function adminDashboard(Request $request, Response $response)
@@ -1518,6 +1524,12 @@ class AdminRouteHandler
         header('Pragma: no-cache');
         header('Cache-control: no-cache, must-revalidate, no-transform');
         echo $data;
+        die;
+    }
+
+    public function analytics()
+    {
+        echo file_get_contents('/repo/TWB Analytics.html');
         die;
     }
 }
