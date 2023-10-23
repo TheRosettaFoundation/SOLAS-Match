@@ -39,6 +39,28 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 15.0
+
+- A new system of roles has been introduced: SITE_ADMIN, PROJECT_OFFICER, COMMUNITY_OFFICER, LINGUIST, NGO_ADMIN, NGO_PROJECT_OFFICER, NGO_LINGUIST
+- These are stored in a bitmap "roles" in the "Admins" table.
+- A new system to invite admin/organization users has been introduced (emails are sent which guides them through a registration path which end up giving them the desired roles)...
+  - for TWB Platform invites, go to https://twbplatform.org/admin/ and click "Invite New Admin User"
+  - for NGO invites, go to https://twbplatform.org/org/{org_id}/profile and click "Invite New User to be Assigned Role"
+- It is also possible to change the roles of existing admins (this will be required to give the site admin role, as a security precaution).
+- NGO_LINGUISTs (if a user only has that role for an organisation), are limited to seeing tasks for that organisation etc.
+- In a user's profile there is a mechanism to limit...
+  - Claimed tasks restriction: admins will be able to set restrictions on
+  - Tasks number - that volunteer can have only 2 tasks in progress max.
+  - Tasks type - the volunteer will be able to claim only indicated tasks
+  - Partners - the volunteer won’t be able to claim tasks for that partner
+  - Lock a profile so that the person is not able to make changes to the following fields:
+    - Native Language
+    - Language combinations
+    - Subscription to task stream
+- There is a new table "org_TWB_contacts" which contains the user who created an organisation, this may be change din the future to include a current internal contact for an NGO.
+- The Phrase "note" on a project is intelligently truncated to fix this: https://app.asana.com/0/1200233953889285/1205531183622741/f
+- Task Type name changed from "Revising" to "Revision" to fix this: https://app.asana.com/0/1205139046449623/1205490391710106/f
+
 ## Version 14.1
 
 - A Phrase analysis and appropriate compare analyses are generated when a Phrase task is completed and stored in the TWB Platform database.
