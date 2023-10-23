@@ -241,10 +241,6 @@ class ProjectRouteHandler
 
     private function truncate_note($note)
     {
-        if (mb_strlen($note) <= 100) return $note;
-        return mb_substr($note, 0, 100 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
-
-
         if (mb_strlen($note) <= 4096) return $note;
         return mb_substr($note, 0, 4096 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
     }
