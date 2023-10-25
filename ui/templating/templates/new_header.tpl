@@ -171,7 +171,7 @@
                             <li  class="nav-item" ><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
                             <li  class="nav-item"><a  href="https://linkedin.com/company/translators-without-borders" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
                             <li  class="nav-item"><a   href="https://twitter.com/TranslatorsWB" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
-                            <br/>
+               
 
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link">{Localisation::getTranslation('common_log_in')}</a></li>
