@@ -81,13 +81,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {if !isset($admin)}
-                    <li class="nav-item">
+                    <li class="nav-item"  {if isset($current_page) && $current_page == 'home'}class="active"{/if}>
                     <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
                 {if !isset($dashboard)}
-                    <li class="nav-item">
+                    <li class="nav-item"  {if isset($current_page) && $current_page == 'home'}class="active"{/if}>
                         <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
                     </li>
                 {/if} 
@@ -95,24 +95,56 @@
             
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
-                    <li class="nav-item">
+                    <li class="nav-item" {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if} >
                         <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
 
                 {if isset($user)}
                 {assign var="user_id" value=$user->getId()}
-                    <li class="nav-item">
+                    <li class="nav-item" {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if} >
                         <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation('header_profile')}</a>
                     </li>
                 {/if} 
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
-                    <li class="nav-item">
+                    <li class="nav-item" {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
                         <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                     </li>
                 {/if} 
+
+                 {if !isset($site_admin)}
+                             <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if} class="nav-item">
+                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank">{Localisation::getTranslation('common_faq')}</a>
+                            </li>
+                        {/if}
+                           	{if Settings::get('site.forum_enabled') == 'y'}
+	                            <li>
+	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
+	                            </li>
+                            {/if}
+                {if isset($site_admin)}
+                            <li class="nav-item">
+                                <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
+                            </li>
+                        {/if}
+                 {if !isset($site_admin)}
+                            <li class="nav-item">
+                                {if isset($user)}
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">TWB Learning Center</a>
+                                {else}
+                                <a href="https://elearn.translatorswb.org/" target="_blank">TWB Learning Center</a>
+                                {/if}
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
+                            </li>
+                        {else}
+                            <li class="nav-item">
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">Learn. Center</a>
+                            </li>
+                        {/if}
             
 
             </ul>
