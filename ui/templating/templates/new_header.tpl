@@ -67,251 +67,61 @@
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
-    <style>
-    .navbar .nav li a{
-        color:#143878 !important;
-    }
-     
-    .social_media_icons{
-        width:50%;
-    }
-    
-    .header-link{
-        margin-bottom:1%;
-        margin-right:1%;
-       }
-       .navbar-inner{
-           margin-top:0.2%;
-       }
-        .not-active {
-        pointer-events: none;
-        cursor: default;
-    }
-    .containerBox {
-    position: relative;
-    display: inline-block;
-}
-.text-box {
-    position: absolute;    
-    height: 100%;
-    text-align: center;    
-    width: 100%;
-
-}
-.text-box:before {
-   content: '';
-   display: inline-block;
-   height: 100%;
-   vertical-align: middle;
-}
-
-.first_badge_name {
-    display: inline-block;
-    font-size: 20px;
-    color: #000000;
-    position: relative;
-    top: -35px;
-    left: -100px;
-}
-
-.first_badge {
-    display: inline-block;
-    font-weight: bold;
-    font-size: 18px;
-    position: relative;
-    top: -135px;
-    left: -102px;
-}
-/* 2 following contained in above */
-.first_badge_number {
-    color: #E8991C;
-    font-size:25px;
-    position: relative;
-    top: -10px;
-}
-.first_badge_desc {
-    display: inline-block;
-    color: #576E82;
-    position: relative;
-    top: 0px;
-    text-transform: uppercase;
-}
-
-.recognition_name {
-    display: inline-block;
-    font-size: 20px;
-    color: #000000;
-    position: relative;
-    top: -35px;
-    left: -95px;
-}
-
-.recognition {
-    display: inline-block;
-    font-size: 17px;
-    color: #e8991c;
-    position: relative;
-    top: -135px;
-    left: -90px;  
-}
-/* 2 following contained in above */
-.recognition_number {
-    color: #E8991C;
-    font-size: 25px;
-    position: relative;
-    top: -10px;
-}
-.recognition_desc {
-    color: #576E82;
-    text-transform: uppercase;
-}
-
-.strategic_name {
-    display: inline-block;
-    font-size: 20px;
-    color: #000000;
-    position: relative;
-    top: -65px;
-    left: -85px;
-}
-
-.strategic {
-    display: inline-block;
-    font-weight: bold;
-    font-size: 17px;
-    color: #e8991c;
-    position: relative;
-    top: -200px;
-    left: -55px;
-}
-/* 4 following contained in above */
-.strategic_number {
-    color: #E8991C;
-    font-size:25px;
-    position: relative;
-    top: 15px;
-    left: -37px;
-}
-.strategic_desc {
-    color: #576E82;
-    text-transform: uppercase;
-    position: relative;
-    top: 20px;
-    left: -35px;
-}
-.strategic_desc2 {
-    color: #576E82;
-    text-transform: uppercase;
-    position: relative;
-    top: 10px;
-    left: -40px;
-}
-.strategic_number2 {
-    color: #E8991C;
-    font-size: 25px;
-    position: relative;
-    top: 1px;
-}
-    </style>
+   
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
-        <div class="navbar navbar-fixed-top">
-           <div class="navbar-inner">
-                <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
-                    <ul class="nav main_nav">
-                        {if !isset($site_admin)}
-                        <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
-                            <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
-                        </li> 
-                        {/if}
-                        {if isset($dashboard)}
-                             <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
-                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
-                             </li>
-                         {/if}
-                        {if isset($user_has_active_tasks)}
-                            {assign var="tmp_id" value=$user->getId()}
-                            <li {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if}>
-                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation('header_claimed_tasks')}</a>
-                            </li>
-                        {/if}
-                        {if isset($user)}
-                            {assign var="user_id" value=$user->getId()}
-                            <li {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if}>
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation('header_profile')}</a>
-                            </li>
-                        {/if}
-                        {if isset($show_admin_dashboard)}
-                            {assign var="user_id" value=$user->getId()}
-                            <li {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
-                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
-                            </li>
-                        {/if}
-                        {if !isset($site_admin)}
-                             <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
-                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank">{Localisation::getTranslation('common_faq')}</a>
-                            </li>
-                        {/if}
-                           	{if Settings::get('site.forum_enabled') == 'y'}
-	                            <li>
-	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
-	                            </li>
-                            {/if}
-                        {if isset($site_admin)}
-                            <li>
-                                <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
-                            </li>
-                        {/if}
-                        {if !isset($site_admin)}
-                            <li>
-                                {if isset($user)}
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">TWB Learning Center</a>
-                                {else}
-                                <a href="https://elearn.translatorswb.org/" target="_blank">TWB Learning Center</a>
-                                {/if}
-                            </li>
-                            <li>
-                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
-                            </li>
-                        {else}
-                            <li>
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank">Learn. Center</a>
-                            </li>
-                        {/if}
-                    </ul>
-                    <ul class="nav pull-right main_nav_right" style="max-height: 38px">
-                        {if isset($userNotifications)}   
-                            <li>
-                                <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
-                            </li>
-                        {/if}
-                        {if isset($user)}
-                            <li class="profile">
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                    <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
-                                </a>
-                            </li>
-                            <li class="logout">
-                                <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
-                            </li>
-                        {else}
-            
-                            <li class="social_link"><a href="https://facebook.com/translatorswithoutborders" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
-                            <li><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
-                            <li><a  href="https://linkedin.com/company/translators-without-borders" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
-                            <li><a   href="https://twitter.com/TranslatorsWB" target="_blank"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
-                            <br/>
+        
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href={urlFor name='home'}"> img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"> </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {if !isset($admin)}
+                    <li class="nav-item">
+                    <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
+                    </li>
+                {/if} 
 
-                            <li><a href="{urlFor name="register"}">Join</a></li>
-                            <li><a href="{urlFor name="login"}">{Localisation::getTranslation('common_log_in')}</a></li>
-                        {/if}
-                    </ul>
-                </div>
+                {if !isset($dashboard)}
+                    <li class="nav-item">
+                        <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
+                    </li>
+                {/if} 
+
+            
+                {if isset($user_has_active_tasks)}
+                    {assign var="tmp_id" value=$user->getId()}
+                    <li class="nav-item">
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation('header_claimed_tasks')}</a>
+                    </li>
+                {/if} 
+
+                {if isset($user)}
+                {assign var="user_id" value=$user->getId()}
+                    <li class="nav-item">
+                        <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation('header_profile')}</a>
+                    </li>
+                {/if} 
+
+                {if isset($show_admin_dashboard)}
+                {assign var="user_id" value=$user->getId()}
+                    <li class="nav-item">
+                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
+                    </li>
+                {/if} 
+            
+
+            </ul>
+            
             </div>
         </div>
+        </nav>
+
+        
         <div class="container">
         
         {assign var="home_page" value="{urlFor name="home"}"}
