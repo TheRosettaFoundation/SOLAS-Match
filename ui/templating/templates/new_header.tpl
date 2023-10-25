@@ -81,14 +81,14 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {if !isset($admin)}
-                    <li class="nav-item"  {if isset($current_page) && $current_page == 'home'}class="active"{/if}>
-                    <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
+                    <li class="nav-item">
+                    <a href="{urlFor name="home"}" class="nav-link" {if isset($current_page) && $current_page == 'home'}class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
                 {if !isset($dashboard)}
-                    <li class="nav-item"  {if isset($current_page) && $current_page == 'home'}class="active"{/if}>
-                        <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
+                    <li class="nav-item">
+                        <a href="{urlFor name="org-dashboard"}" class="nav-link" {if isset($current_page) && $current_page == 'home'}class="active"{/if} >{Localisation::getTranslation('header_dashboard')}</a>
                     </li>
                 {/if} 
 
