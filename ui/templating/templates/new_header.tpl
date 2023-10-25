@@ -148,6 +148,35 @@
             
 
             </ul>
+
+             <ul class="nav pull-right main_nav_right" style="max-height: 38px">
+                        {if isset($userNotifications)}   
+                            <li class="nav-item">
+                                <a  class="nav-link">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                            </li>
+                        {/if}
+                        {if isset($user)}
+                            <li class="profile nav-item">
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="nav-link">
+                                    <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
+                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
+                                </a>
+                            </li>
+                            <li class="logout nav-item" >
+                                <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
+                            </li>
+                        {else}
+            
+                            <li class="social_link" ><a href="https://facebook.com/translatorswithoutborders" target="_blank"  class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
+                            <li  class="nav-item" ><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
+                            <li  class="nav-item"><a  href="https://linkedin.com/company/translators-without-borders" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
+                            <li  class="nav-item"><a   href="https://twitter.com/TranslatorsWB" target="_blank" class="nav-link"><img class="social_media_icons" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
+                            <br/>
+
+                            <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link">Join</a></li>
+                            <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link">{Localisation::getTranslation('common_log_in')}</a></li>
+                        {/if}
+                    </ul>
             
             </div>
         </div>
