@@ -95,8 +95,8 @@
             
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
-                    <li class="nav-item" {if isset($current_page) && $current_page == 'claimed-tasks'}class="active" {/if} >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}">{Localisation::getTranslation('header_claimed_tasks')}</a>
+                    <li class="nav-item" >
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="nav-link"  {if isset($current_page) && $current_page == 'claimed-tasks'}class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
 
