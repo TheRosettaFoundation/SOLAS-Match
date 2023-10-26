@@ -164,29 +164,7 @@ a:hover{
                 
                 <br/> 
                 <br/>  
-                 <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
-                    </div>
-                    <div class="carousel-caption">
-                        <div class="row-fluid">
-                        <div class="span4"></div>
-                        <div class="span4"></div>
-                        <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
-                    </div>
-                      
-                      <p></p>
-                    </div>
-                  </div>
-                  <div class="item">
-                   
-                    <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img">
-                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
-                    <br/>
-                   
-                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
-                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
                
-                <br/>
-                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                    
