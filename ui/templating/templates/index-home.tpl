@@ -150,92 +150,247 @@ a:hover{
 {/if}
 
         <div id="carouselExample" class="carousel slide">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
+            <div class="carousel-inner">
 
-                            <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img">
-                            <div class="top-left"><h2>We provide growth opportunities for<br/> our community members</h2><br/><h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
-                            <br/>
-                        
-                                <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
-                                <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
-                
-                        
-                                <br/> 
-                                <br/>  
-                                <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
-                            </div>
-                            <div class="carousel-caption">
-                                <div class="row-fluid">
-                                <div class="span4"></div>
-                                <div class="span4"></div>
-                                <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
-                            </div>
-                            
-                            <p></p>
-                            </div>
-                            
-                    
-                    </div>
-                    
-                    
-                    <div class="carousel-item">
-                    
-                   
-                        <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img">
-                        <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
-                        <br/>                       
+                <div class="carousel-item active">
+
+                    <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
+                    <div class="top-left">
+                        <h2>We provide growth opportunities for<br/> our community members</h2>
+                        <br/>
+                        <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
-                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
+                        <br/> 
+                        <br/>  
                         <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
-                            </div>                        
-                        <div class="carousel-caption">
-                                <div class="row-fluid">
-                                <div class="span4"></div>
-                                <div class="span4"></div>
-                                <div  class="span4 pull-right"><h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4></div>
-                        </div>
-                                                 
-                      
-                     </div>
+                    </div>
+                    <div class="carousel-caption">
+                        <div class="row-fluid">
+                        <div class="span4"></div>
+                        <div class="span4"></div>
+                        <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
+                    </div>
+                      <p></p>
+                    </div>
 
-                    <div class="carousel-item">
+                </div>
 
-                            
-                    <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img">
-                     <div class="top-left"><h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/><h3>Join to have a real-world impact.</h3>
-                     <br/>                    
+                
+                <div class="carousel-item">
+
+                    <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
+                    
+                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
+                        <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
+                        <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
-                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>
-                                
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>               
                         <br/>
                         <br/> 
                         <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
-                            </div>
-                            <div class="carousel-caption">
-                                <div class="row-fluid">
-                                <div class="span4"></div>
-                                <div class="span4"></div>
-                                <div  class="span4 pull-right"><h4 >“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h4></div>
-                            </div>
-
-
                     </div>
-                                       
+                   
+                        <div class="carousel-caption">
+                           <div class="row-fluid">
+                                <div class="span4"></div>
+                                <div class="span4"></div>
+                                    <div  class="span4 pull-right">
+                                        <h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
+                                    </div>
+                            </div>                      
+                                <p></p>                           
+                        </div>                  
+
+                </div>
+
+                            
+                <div class="carousel-item">
+                    <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img" class="w-100 d-block">
+                    <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/>
+                        <h3>Join to grow your professional profile and <br/>advance your career.</h3>
+                        <br/>                   
+                        <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>               
+                        <br/>
+                        <br/> 
+                        <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
+                    </div>
+
+                     <div class="carousel-caption">
+                        <div class="row-fluid">
+                            <div class="span4"></div>
+                            <div class="span4"></div>
+                            <div  class="span4 pull-right"><h4 >“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h4></div>
+                        </div>
+                      
+                        <p></p>
+                    </div>                    
+
+                </div>
+
+
+                <div class="carousel-item">
+
+                          <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img" class="d-block w-100">
+
+                        <div class="top-left">
+                            <h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/>
+                            <h3>Join to have a real-world impact.</h3>
+                            <br/>
+                            <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                            <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
+                            <br/>
+                            <br/> 
+                            <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>                                                    
+                        </div>
+
+                      <div class="carousel-caption">
+                        <div class="row-fluid">
+                            <div class="span4"></div>
+                            <div class="span4"></div>
+                            <div  class="span4 pull-right">
+                            <h4 >“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h4>
+                            </div>
+                        </div>                  
+                        <p></p>
+                    </div>
+
+                </div>
+
+        </div>
+           
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
     </div>
+
+
+
+      
+        <div id="myCarousel" class="carousel slide">
+
+            <div class="carousel-inner">              
+                
+                <div class="item active">                
+                    <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img">
+                    <div class="top-left">
+                        <h2>We provide growth opportunities for<br/> our community members</h2>
+                        <br/>
+                        <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <br/>                   
+                        <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
+                        <br/> 
+                        <br/>  
+                        <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
+                    </div>
+                    <div class="carousel-caption">
+                        <div class="row-fluid">
+                        <div class="span4"></div>
+                        <div class="span4"></div>
+                        <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
+                    </div>
+                      <p></p>
+                    </div>
+                </div>
+
+
+                <div class="item">
+                   
+                    <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img">
                     
+                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
+                        <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
+                        <br/>                   
+                        <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>               
+                        <br/>
+                        <br/> 
+                        <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
+                    </div>
+                   
+                        <div class="carousel-caption">
+                           <div class="row-fluid">
+                                <div class="span4"></div>
+                                <div class="span4"></div>
+                                    <div  class="span4 pull-right">
+                                        <h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
+                                    </div>
+                            </div>                      
+                                <p></p>                           
+                        </div>
+                  
+                </div> 
 
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-</div>
+
+                <div class="item">
+                    <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img">
+                    <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/>
+                        <h3>Join to grow your professional profile and <br/>advance your career.</h3>
+                        <br/>                   
+                        <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                        <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>               
+                        <br/>
+                        <br/> 
+                        <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
+                    </div>
+
+                     <div class="carousel-caption">
+                        <div class="row-fluid">
+                            <div class="span4"></div>
+                            <div class="span4"></div>
+                            <div  class="span4 pull-right"><h4 >“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h4></div>
+                        </div>
+                      
+                        <p></p>
+                    </div>
+
+                </div>
+
+                <div class="item">
+                       
+                        <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img">
+
+                        <div class="top-left">
+                            <h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/>
+                            <h3>Join to have a real-world impact.</h3>
+                            <br/>
+                            <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
+                            <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
+                            <br/>
+                            <br/> 
+                            <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>                                                    
+                        </div>
+
+                      <div class="carousel-caption">
+                        <div class="row-fluid">
+                            <div class="span4"></div>
+                            <div class="span4"></div>
+                            <div  class="span4 pull-right">
+                            <h4 >“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h4>
+                            </div>
+                        </div>                  
+                        <p></p>
+                    </div>
 
 
+                </div>
+
+                
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+
+                
+       </div> 
               
    <!-- <div class="row-fluid">
 
@@ -483,6 +638,8 @@ a:hover{
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
             <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
             </h3>
+            <div class="grid">
+            <div class="grid-col-4">
             <form method="post" action="{urlFor name="home"}">
 	            <table>
 	                <thead>
@@ -533,9 +690,10 @@ a:hover{
 	            </a>
             </form>
             <hr />
+            </div>
         {/if}
         {if isset($topTasks) && count($topTasks) > 0}
-            <div class="ts">
+            <div class="ts grid-col-8">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="ts-task">
@@ -592,6 +750,7 @@ a:hover{
                     </div>
                 {/for}
             </div>
+        </div>
 
             {* pagination begins here *}
             {assign var="url_name" value="home-paged"}
