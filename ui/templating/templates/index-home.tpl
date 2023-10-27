@@ -5,108 +5,7 @@
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
-<style>
-a:hover{
-    text-decoration:none !important;
-}
-.carousel {
-    position: relative;
-    margin-bottom: 20px;
-    line-height: 1;
-}
 
-.clearheader{
-    color:#143878 !important;
-}
-
-.twbheader{
-    color:#e8991c !important;
-}
-.top-left {
-  position: absolute;
-  top: 8px;
-  left: 16px;
-  color:white;
-}
-.btn-block {
-    width: 120px !important;
-    
-}
-
-.btn-home-slider{
-    display: inline-block;
-    height: 30px;
-}
-
-
-
-
-#globe{
-    color:white;
-}
-.login{
-    color:white !important;
-    font-weight:bold;
-    text-decoration:underline;
-}
-.button {
-  background-color: #143878; /* Green */
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-.button a{
-    color:#FFFFFF;
-    font-weight:bold;
-}
-
-.button_join {
-  background-color: #f89406; 
-  border: none;
-  color: white;
-  padding: 5px 35px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-
-.button_join a{
-    color:#FFFFFF;
-    font-weight:bold;
-}
-
-.button1 {
-  background-color: #f89406; 
-  color: #FFF; 
-  border: 2px solid #f89406;
-}
-
-.button1:hover {
-  background-color: #cb7500;
-  color: white;
-}
-.button2 {
-  background-color: #143878; 
-  color: #FFFFFF; 
-  border: 2px solid #143878;
-}
-
-.button2:hover {
-  background-color: #0e2754;
-  color: white;
-}
-</style>
 
 {if !isset($user)}
     <div class="hero-unit">
@@ -324,13 +223,34 @@ a:hover{
 <br/>
 
 
-<div class="row-fluid d-flex flex-row justify-content-betwwengi" id="learnmore">
+<div class="row-fluid d-flex flex-row justify-content-between" id="learnmore">
     <div >
-    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></p>
+    <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
+   
+        <div>
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
+                <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
+                Learn about the nonprofits that work with TWB and why they come to us.<br/>
+                Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
+                </div>   
+        </div>
+    
     </div>
 
     <div>
-    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></p>
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
+        <div>
+            <h2  class="clearheader" style="text-align: center">Learn</h2>
+                <div>
+                        Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
+                        Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
+                        Receive feedback on your translations from more senior linguists and grow in the process.
+                </div>
+
+
+        
+        </div>
+
     </div>
 
     <div >
@@ -342,6 +262,8 @@ a:hover{
     </div>
 </div>
 
+
+
 <div class="row-fluid">
 <div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
 <div class="span3"><h2 class="clearheader" style="text-align: center">Learn</h2></div>
@@ -352,15 +274,12 @@ a:hover{
 
 <div class="row-fluid">
 <div class="span3">
-<span>Meet other linguists from around the world in the TWB Community Forum. Ask and answer questions, exchange and chat with other volunteer linguists and TWB staff.<br/>
-           Learn about the nonprofits that work with TWB and why they come to us.<br/>
-           Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees. </span>
-</div>
+
 <div class="span3">
-  <span>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
+  <div>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
    Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
    Receive feedback on your translations from more senior linguists and grow in the process.
-    </span>
+    </div>
 </div>
 <div class="span3">
   <span>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
