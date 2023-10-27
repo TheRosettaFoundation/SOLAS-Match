@@ -324,19 +324,22 @@ a:hover{
 <br/>
 
 
-<div class="row-fluid" id="learnmore">
-<div class="span3">
- <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></p>
-</div>
-<div class="span3">
- <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></p>
-</div>
-<div class="span3">
- <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></p>
-</div>
-<div class="span3">
- <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
-</div>
+<div class="row-fluid d-flex flex-row justify-content-betwwengi" id="learnmore">
+    <div >
+    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></p>
+    </div>
+
+    <div>
+    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></p>
+    </div>
+
+    <div >
+    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></p>
+    </div>
+
+    <div>
+    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
+    </div>
 </div>
 
 <div class="row-fluid">
