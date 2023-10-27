@@ -254,83 +254,33 @@
     </div>
 
     <div >
-    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></p>
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+        <div>
+
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Grow</h2></div>
+             <div>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
+            The most active linguists also get featured on TWB's blog and in the TWB Community Forum. </div>
+        
+        </div>
     </div>
 
     <div>
-    <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
-    </div>
-</div>
+        <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
+        <div>
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
+              <div>
+                Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
+                Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
+                Bridge the world's language gap and help respond more sensitively to the existing need.  
+             </div>
 
-
-
-<div class="row-fluid">
-<div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
-<div class="span3"><h2 class="clearheader" style="text-align: center">Learn</h2></div>
-<div class="span3"><h2 class="clearheader" style="text-align: center">Grow</h2></div>
-<div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
-</div>
-
-
-<div class="row-fluid">
-<div class="span3">
-
-<div class="span3">
-  <div>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
-   Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
-   Receive feedback on your translations from more senior linguists and grow in the process.
-    </div>
-</div>
-<div class="span3">
-  <span>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
-            The most active linguists also get featured on TWB's blog and in the TWB Community Forum.  </span>
-</div>
-<div class="span3">
-  <span>Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
-           Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
-             Bridge the world's language gap and help respond more sensitively to the existing need.  </span>
-</div>
-</div>
-
-    <!-- <div class="row-fluid">
-    
         
-         <div class="span3">
-           <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></p>
-           <h2 class="clearheader" style="text-align: center">Connect</h2>
-           <br/>
-           <span>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
-           Learn about the nonprofits that work with TWB and why they come to us.<br/>
-           Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees </span>
-         </div>
-         <div class="span3">
-          <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Learn"></p>
-   <h2  class="clearheader" style="text-align: center">Learn</h2>
-   <br/>
-   <span>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion<br/>
-   Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
-   Receive feedback on your translations from more senior linguists and grow in the process
-    </span>
-         </div>
-         <div class="span3">
-          <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Grow"></p>
-           <h2 class="clearheader" style="text-align: center">Grow</h2>
-           <br/>
-           <span>Receive public acknowledgements of your contributions on the TWB platform.Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
-            The most active linguists also gets featured on TWB's blog and in the TWB Community Forum  </span>
-         </div>
-         <div class="span3">
-          <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></p>
-          <h2 class="clearheader" style="text-align: center">Impact</h2>
-          <br/>
-          <span>Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
-           Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos.Make humanitarian responses more effective by making localised information available in different formats.<br/>
-             Bridge the worlds's language gap and help respond more sensitively to the existing need.  </span>
-         </div>
-  
-   </div> -->
-              
+        </div>
+
     </div>
+</div>
+
+
 
  	{if ((Settings::get('banner.enabled') == 'y'))}
 	    <div id="banner-container">
