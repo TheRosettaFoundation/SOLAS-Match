@@ -1,0 +1,27 @@
+{
+    "name": "solas-match",
+    "version": "1.0.0",
+    "description": "## What is this?",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "css:watch": "sass --watch ./scss/custom.scss ./css/custom.css"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TheRosettaFoundation/SOLAS-Match.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/TheRosettaFoundation/SOLAS-Match/issues"
+    },
+    "homepage": "https://github.com/TheRosettaFoundation/SOLAS-Match#readme",
+    "dependencies": {
+        "bootstrap": "^5.3.2",
+        "sass": "^1.69.5"
+    }
+}
