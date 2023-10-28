@@ -449,6 +449,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 error_log("delete_task_directly($task_id) because of set_memsource_task fail");
                 continue;
             }
+            $projectDao->set_task_resource_info_trigger($task_id);
 
             $forward_order = [];
             $reverse_order = [];
@@ -546,6 +547,8 @@ error_log(print_r($result, true));//(**)
                 continue;
             }
             $task_id = $memsource_task['task_id'];
+            $projectDao->set_task_resource_info_trigger($task_id);
+
             $taskDao->set_memsource_status($task_id, $part['uid'], $part['status']);
 error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");//(**)
 
@@ -615,6 +618,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     continue;
                 }
                 $task_id = $memsource_task['task_id'];
+                $projectDao->set_task_resource_info_trigger($task_id);
 
                 $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['uid']);
                 if (!$user_id) {
@@ -2396,6 +2400,69 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                         }
                     }
                 }
+            }
+
+            if ($task_id = $projectDao->get_task_resource_info_trigger()) {
+                $task = $taskDao->getTask($task_id);
+                $task_id = $task->getId()
+                $memsource_task = $projectDao->get_memsource_task($task_id);
+                $memsource_project = $projectDao->get_memsource_project$task->getProjectId());
+                $memsource_task_uid = $memsource_task['memsource_task_uid'];
+                $memsource_project_uid = $memsource_project['memsource_project_uid'];
+
+                $url = "https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$memsource_task_uid/translationResources";
+                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$memsource_task_uid/translationResources");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $memsourceApiToken"]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                $result = curl_exec($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($responseCode == 200) {
+                    $resultset = json_decode($result, true);
+                    if (!empty($resultset['machineTranslateSettings'])) {
+                        $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
+
+                        $task_resource_TBs = [];
+                        foreach ($resultset['termBases'] as $item) {
+                            list($language_code, $country_code) = $projectDao->convert_memsource_to_language_country($item['targetLang']);
+                            $task_resource_TBs[] = [
+                                'name'       => !empty($item['name']) ? mb_substr($item['name'], 0, 128) : '',
+                                'readMode'   => !empty($item['readMode']) ? $item['readMode'] : 0,
+                                'writeMode'  => !empty($item['writeMode']) ? $item['writeMode'] : 0,
+                                'targetLang' => "{$language_code}-{$country_code}"
+                            ];
+                        }
+                        $task_resource_TMs = [];
+                        foreach ($resultset['translationMemories'] as $item) {
+                            list($language_code, $country_code) = $projectDao->convert_memsource_to_language_country($item['targetLang']);
+                            $task_resource_TMs[] = [
+                                'name'       => !empty($item['name']) ? mb_substr($item['name'], 0, 128) : '',
+                                'readMode'   => !empty($item['readMode']) ? $item['readMode'] : 0,
+                                'writeMode'  => !empty($item['writeMode']) ? $item['writeMode'] : 0,
+                                'penalty'    => $item['penalty'],
+                                'targetLang' => "{$language_code}-{$country_code}"
+                            ];
+                        }
+                        $hash = $MT_name;
+                        $TB_number = 0;
+                        $TM_number = 0;
+                        foreach ($task_resource_TBs as $TB) {foreach ($TB as $v) $hash .= $v; $TB_number++;}
+                        foreach ($task_resource_TMs as $TM) {foreach ($TM as $v) $hash .= $v; $TM_number++;}
+
+                        $result = LibAPI\PDOWrapper::call('get_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id));
+                        if (!$result || $result[0]['md5_hash'] != md5($hash)) {
+                            LibAPI\PDOWrapper::call('delete_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id));
+                            LibAPI\PDOWrapper::call('insert_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($MT_name) . ",$TB_number,$TM_number," . LibAPI\PDOWrapper::cleanseWrapStr(md5($hash)));
+
+                            foreach ($task_resource_TBs as $TB)
+                                LibAPI\PDOWrapper::call('insert_task_resource_TB', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TB['name']) . ',' . LibAPI\PDOWrapper::cleanse($TB['readMode']) . ',' . LibAPI\PDOWrapper::cleanse($TB['writeMode']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TB['targetLang']));
+                            foreach ($task_resource_TMs as $TM)
+                                LibAPI\PDOWrapper::call('insert_task_resource_TM', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['name']) . ',' . LibAPI\PDOWrapper::cleanse($TM['readMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['writeMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['penalty']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['targetLang']));
+                            error_log("insert_task_resource_info: $task_id $url");
+                        }
+                    } else error_log("$task_id $url no machineTranslateSettings $result");
+                } else error_log("$task_id $url responseCode: $responseCode $result");
             }
 
             $queue_asana_projects = $projectDao->get_queue_asana_projects();

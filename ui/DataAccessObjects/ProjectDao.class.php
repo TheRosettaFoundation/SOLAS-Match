@@ -1031,6 +1031,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
             error_log("Sync delete_task_directly($task_id) because of set_memsource_task fail");
             return '-';
         }
+        $this->set_task_resource_info_trigger($task_id);
 
         $forward_order = [];
         $reverse_order = [];
@@ -1121,6 +1122,8 @@ error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(
     {
         $taskDao = new TaskDao();
         $task_id = $memsource_task['task_id'];
+
+        $this->set_task_resource_info_trigger($task_id);
 
         $status = $job['status'];
 error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: " . print_r($job, true));//(**)
@@ -1560,5 +1563,16 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .
             LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .
             $args);
+    }
+
+    public function set_task_resource_info_trigger($task_id)
+    {
+        LibAPI\PDOWrapper::call('set_task_resource_info_trigger', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function get_task_resource_info_trigger()
+    {
+        $result = LibAPI\PDOWrapper::call('get_task_resource_info_trigger', '');
+        return $result[0]['task_id'];
     }
 }
