@@ -2406,7 +2406,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $task = $taskDao->getTask($task_id);
                 $task_id = $task->getId();
                 $memsource_task = $projectDao->get_memsource_task($task_id);
-                $memsource_project = $projectDao->get_memsource_project$task->getProjectId());
+                $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $memsource_task_uid = $memsource_task['memsource_task_uid'];
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
