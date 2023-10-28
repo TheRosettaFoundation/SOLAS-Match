@@ -445,7 +445,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                     'active' => true,
                     'editAllTermsInTB' => false,
                     'editTranslationsInTM' => false,
-                    'enableMT' => false,
+                    'enableMT' => true,
                     'mayRejectJobs' => false,
                 );
                 $payload = json_encode($data);
@@ -1270,7 +1270,7 @@ error_log("claimTask_shell($userId, $taskId)");
                 'active' => true,
                 'editAllTermsInTB' => false,
                 'editTranslationsInTM' => false,
-                'enableMT' => false,
+                'enableMT' => true,
                 'mayRejectJobs' => false,
             );
             if (!empty($record['note'])) $data['note'] = $record['note'];
