@@ -12130,6 +12130,186 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `task_resource_info_triggers` (
+  task_id        BIGINT UNSIGNED NOT NULL,
+  time_requested DATETIME NOT NULL,
+  time_to_run    DATETIME NOT NULL,
+  PRIMARY KEY (task_id),
+  KEY (time_to_run),
+  CONSTRAINT `FK_task_resource_info_triggers_task_id` FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_task_resource_info_trigger`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_resource_info_trigger`(IN tID BIGINT UNSIGNED)
+BEGIN
+    REPLACE INTO task_resource_info_triggers VALUES (tID, NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE));
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_task_resource_info_trigger`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_info_trigger`()
+BEGIN
+    SET @tID=NULL;
+    SELECT task_id INTO @tID FROM task_resource_info_triggers WHERE time_to_run<NOW() ORDER BY time_to_run LIMIT 1;
+    IF @tID IS NOT NULL THEN
+        SELECT @tID AS task_id;
+
+        IF     NOW()>DATE_ADD(time_requested, INTERVAL 3 DAY) THEN
+            DELETE FROM task_resource_info_triggers WHERE task_id=@tID;
+        ELSEIF NOW()>DATE_ADD(time_requested, INTERVAL 3 HOUR) THEN
+            UPDATE task_resource_info_triggers SET time_to_run=DATE_ADD(NOW(), INTERVAL 60 MINUTE) WHERE task_id=@tID;
+        ELSE
+            UPDATE task_resource_info_triggers SET time_to_run=DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE task_id=@tID;
+        END IF;
+    ELSE
+        SELECT 0 AS task_id;
+    END IF;
+END//
+DELIMITER ;
+
+CREATE TABLE task_resource_infos (
+  task_id   BIGINT UNSIGNED NOT NULL,
+  MT_name   VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  TB_number INT NOT NULL,
+  TM_number INT NOT NULL,
+  md5_hash  BINARY(32) DEFAULT '00000000000000000000000000000000',
+  PRIMARY KEY (task_id),
+  CONSTRAINT FK_task_resource_info_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_task_resource_info`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_info`(IN p_task_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM task_resource_infos WHERE task_id=p_task_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_task_resource_info`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_resource_info`(
+    IN p_task_id   BIGINT UNSIGNED,
+    IN p_MT_name   VARCHAR(128),
+    IN p_TB_number INT,
+    IN p_TM_number INT,
+    IN p_md5_hash  BINARY(32))
+BEGIN
+    INSERT INTO task_resource_infos (
+        task_id,
+        MT_name,
+        TB_number,
+        TM_number,
+        md5_hash)
+    VALUES (
+        p_task_id,
+        p_MT_name,
+        p_TB_number,
+        p_TM_number,
+        p_md5_hash);
+END//
+DELIMITER ;
+
+CREATE TABLE task_resource_TBs (
+  task_id    BIGINT UNSIGNED NOT NULL,
+  name       VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  readMode   INT NOT NULL,
+  writeMode  INT NOT NULL,
+  targetLang VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  KEY (task_id),
+  CONSTRAINT FK_task_resource_TB_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_task_resource_TBs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_TBs`(IN p_task_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM task_resource_TBs WHERE task_id=p_task_idm ORDER BY name, targetLang;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_task_resource_TB`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_resource_TB`(
+    IN p_task_id    BIGINT UNSIGNED,
+    IN p_name       VARCHAR(128),
+    IN p_readMode   INT,
+    IN p_writeMode  INT,
+    IN p_targetLang VARCHAR(10))
+BEGIN
+    INSERT INTO task_resource_TBs (
+        task_id,
+        name,
+        readMode,
+        writeMode,
+        targetLang)
+    VALUES (
+        p_task_id,
+        p_name,
+        p_readMode,
+        p_writeMode,
+        p_targetLang);
+END//
+DELIMITER ;
+
+CREATE TABLE task_resource_TMs (
+  task_id    BIGINT UNSIGNED NOT NULL,
+  name       VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  readMode   INT NOT NULL,
+  writeMode  INT NOT NULL,
+  penalty    INT NOT NULL,
+  targetLang VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  KEY (task_id),
+  CONSTRAINT FK_task_resource_TM_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_task_resource_TMs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_TMs`(IN p_task_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM task_resource_TMs WHERE task_id=p_task_idm ORDER BY name, targetLang;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_task_resource_TM`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_resource_TM`(
+    IN p_task_id    BIGINT UNSIGNED,
+    IN p_name       VARCHAR(128),
+    IN p_readMode   INT,
+    IN p_writeMode  INT,
+    IN p_penalty    IN,
+    IN p_targetLang VARCHAR(10))
+BEGIN
+    INSERT INTO task_resource_TMs (
+        task_id,
+        name,
+        readMode,
+        writeMode,
+        penalty,
+        targetLang)
+    VALUES (
+        p_task_id,
+        p_name,
+        p_readMode,
+        p_writeMode,
+        p_penalty,
+        p_targetLang);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_task_resource_info`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_task_resource_info`(IN p_task_id BIGINT UNSIGNED)
+BEGIN
+    DELETE FROM task_resource_infos WHERE task_id=p_task_id;
+    DELETE FROM task_resource_TBs WHERE task_id=p_task_id;
+    DELETE FROM task_resource_TMs WHERE task_id=p_task_id;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
