@@ -2420,6 +2420,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
                 if ($responseCode == 200) {
                     $resultset = json_decode($result, true);
+error_log(print_r($resultset, true));
                     if (!empty($resultset['machineTranslateSettings'])) {
                         $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
 
