@@ -12225,7 +12225,7 @@ DROP PROCEDURE IF EXISTS `get_task_resource_TBs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_TBs`(IN p_task_id BIGINT UNSIGNED)
 BEGIN
-    SELECT * FROM task_resource_TBs WHERE task_id=p_task_idm ORDER BY name, targetLang;
+    SELECT * FROM task_resource_TBs WHERE task_id=p_task_id ORDER BY name, targetLang;
 END//
 DELIMITER ;
 
@@ -12268,7 +12268,7 @@ DROP PROCEDURE IF EXISTS `get_task_resource_TMs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_TMs`(IN p_task_id BIGINT UNSIGNED)
 BEGIN
-    SELECT * FROM task_resource_TMs WHERE task_id=p_task_idm ORDER BY name, targetLang;
+    SELECT * FROM task_resource_TMs WHERE task_id=p_task_id ORDER BY name, targetLang;
 END//
 DELIMITER ;
 
