@@ -12279,7 +12279,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_resource_TM`(
     IN p_name       VARCHAR(128),
     IN p_readMode   INT,
     IN p_writeMode  INT,
-    IN p_penalty    IN,
+    IN p_penalty    INT,
     IN p_targetLang VARCHAR(10))
 BEGIN
     INSERT INTO task_resource_TMs (
