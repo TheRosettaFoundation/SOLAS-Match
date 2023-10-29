@@ -12152,13 +12152,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_resource_info_trigger`()
 BEGIN
     SET @tID=NULL;
-    SELECT task_id INTO @tID FROM task_resource_info_triggers WHERE time_to_run<NOW() ORDER BY time_to_run LIMIT 1;
+    SELECT task_id, time_requested INTO @tID, @requested FROM task_resource_info_triggers WHERE time_to_run<NOW() ORDER BY time_to_run LIMIT 1;
     IF @tID IS NOT NULL THEN
         SELECT @tID AS task_id;
 
-        IF     NOW()>DATE_ADD(time_requested, INTERVAL 3 DAY) THEN
+        IF     NOW()>DATE_ADD(@requested, INTERVAL 3 DAY) THEN
             DELETE FROM task_resource_info_triggers WHERE task_id=@tID;
-        ELSEIF NOW()>DATE_ADD(time_requested, INTERVAL 3 HOUR) THEN
+        ELSEIF NOW()>DATE_ADD(@requested, INTERVAL 3 HOUR) THEN
             UPDATE task_resource_info_triggers SET time_to_run=DATE_ADD(NOW(), INTERVAL 60 MINUTE) WHERE task_id=@tID;
         ELSE
             UPDATE task_resource_info_triggers SET time_to_run=DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE task_id=@tID;
