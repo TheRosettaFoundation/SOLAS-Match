@@ -533,13 +533,7 @@
 </div>
 
  
-
-
-            
-
-    
-
-    <h1>###### END OF COL ########</h1>
+<h1 class="end of container "></h1>
 
     </div>
 
