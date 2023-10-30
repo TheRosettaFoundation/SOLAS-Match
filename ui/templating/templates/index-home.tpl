@@ -329,9 +329,10 @@
         <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
     </div>
 {/if}
-<div class="d-flex ">
+<div class ="container">
+<div class="d-flex  row ">
 
-    <div class="g-col-4">
+    <div class="col-4">
      {if isset($user)}
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
             <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
@@ -390,7 +391,7 @@
     <h1> #################END OF COL -1< ##################################/h1>
     </div>
 
-    <div class="g-col-8">
+    <div class="col-8">
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
@@ -761,6 +762,8 @@
             </div>
         {/if}
     </div>
+</div>
+<h1>#############End of container ############<h1>
 </div>
                         {/if}
 
