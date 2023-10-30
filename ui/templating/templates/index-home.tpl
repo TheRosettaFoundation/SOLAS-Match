@@ -399,6 +399,9 @@
                 </div>
             </form>
         {/if}
+
+          {include file="tag/tags.top-list.flex.inc.tpl"}
+          {include file="tag/tags.user-flex.inc.tpl"}
     
     <h1> #################END OF COL -1< ##################################/h1>
     </div>
@@ -534,6 +537,7 @@
     
 
     <h1>###### END OF COL ########</h1>
+
     </div>
 
 </div>
@@ -571,7 +575,7 @@
 
  {else}
         {include file="tag/tags.user-flex.inc.tpl"}
-        {include file="tag/tags.top-list.inc.tpl"}
+        {include file="tag/tags.top-list.flex.inc.tpl"}
         {if isset($statsArray) && is_array($statsArray)}
             {include file="statistics.tpl"}
         {/if} 
