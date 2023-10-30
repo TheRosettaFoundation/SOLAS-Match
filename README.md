@@ -60,6 +60,11 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - There is a new table "org_TWB_contacts" which contains the user who created an organisation, this may be change din the future to include a current internal contact for an NGO.
 - The Phrase "note" on a project is intelligently truncated to fix this: https://app.asana.com/0/1200233953889285/1205531183622741/f
 - Task Type name changed from "Revising" to "Revision" to fix this: https://app.asana.com/0/1205139046449623/1205490391710106/f
+- A new feature which stores task resource info into 3 tables is included. Data is stored in these tables...
+  - task_resource_infos
+  - task_resource_TBs
+  - task_resource_TMs
+  - They are updated on any job status change and for up to 3 days after the last status change.
 
 ## Version 14.1
 
