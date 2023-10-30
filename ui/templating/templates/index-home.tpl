@@ -1,10 +1,116 @@
 {include file="new_header.tpl" body_id="home"}
 <!-- Editor Hint: ¿áéíóú -->
 
+
+<style>
+a:hover{
+    text-decoration:none !important;
+}
+.carousel {
+    position: relative;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.clearheader{
+    color:#143878 !important;
+}
+
+.twbheader{
+    color:#e8991c !important;
+}
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  color:white;
+}
+.btn-block {
+    width: 120px !important;
+    
+}
+
+.btn-home-slider{
+    display: inline-block;
+    height: 30px;
+}
+
+
+
+
+#globe{
+    color:white;
+}
+.login{
+    color:white !important;
+    font-weight:bold;
+    text-decoration:underline;
+}
+.button {
+  background-color: #143878; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button a{
+    color:#FFFFFF;
+    font-weight:bold;
+}
+
+.button_join {
+  background-color: #f89406; 
+  border: none;
+  color: white;
+  padding: 5px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button_join a{
+    color:#FFFFFF;
+    font-weight:bold;
+}
+
+.button1 {
+  background-color: #f89406; 
+  color: #FFF; 
+  border: 2px solid #f89406;
+}
+
+.button1:hover {
+  background-color: #cb7500;
+  color: white;
+}
+.button2 {
+  background-color: #143878; 
+  color: #FFFFFF; 
+  border: 2px solid #143878;
+}
+
+.button2:hover {
+  background-color: #0e2754;
+  color: white;
+}
+</style>
+
 <span class="none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
+
+
 
 
 {if !isset($user)}
@@ -54,7 +160,7 @@
                 <div class="carousel-item active">
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
-                    <div class="top-left">
+                    <div class="top-left carousel-caption">
                         <h2>We provide growth opportunities for<br/> our community members</h2>
                         <br/>
                         <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
