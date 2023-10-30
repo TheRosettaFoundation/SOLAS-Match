@@ -402,6 +402,9 @@
 
           {include file="tag/tags.top-list.flex.inc.tpl"}
           {include file="tag/tags.user-flex.inc.tpl"}
+          {if isset($statsArray) && is_array($statsArray)}
+            {include file="statistics.tpl"}
+          {/if} 
     
     <h1> #################END OF COL -1< ##################################/h1>
     </div>

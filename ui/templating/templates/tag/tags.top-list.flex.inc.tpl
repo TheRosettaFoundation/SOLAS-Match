@@ -14,7 +14,7 @@
         
     </div>
      <div class="tag">
-                <a class="btn btn-primary btn-small" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
+                <a class="btn btn-primary d-block" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
     </div>
 </div>    
    
