@@ -1,8 +1,8 @@
 
     <!-- <h3><i class="icon-info-sign"></i> {Settings::get('site.name')} {Localisation::getTranslation('statistics_statistics')}</h3> -->
-    <h3><i class="icon-info-sign"></i> {sprintf(Localisation::getTranslation('statistics_statistics'), {Settings::get("site.name")})}</h3>
+    <h3 class="mt-3"><i class="icon-info-sign"></i> {sprintf(Localisation::getTranslation('statistics_statistics'), {Settings::get("site.name")})}</h3>
     
-    <table width="100%">
+    <table class="table">
         <tr>
             <td>{Localisation::getTranslation('statistics_users')}</td>
             <td></td>
