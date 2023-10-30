@@ -391,6 +391,70 @@
     </div>
 
     <div class="g-col-8">
+
+
+                    {if isset($topTasks) && count($topTasks) > 0}
+            <div class="ts grid-col-8">
+                {for $count=0 to $itemsPerScrollPage-1}
+                    {assign var="task" value=$topTasks[$count]}
+                    <div class="ts-task">
+                        {assign var="task_id" value=$task->getId()}
+                        {assign var="type_id" value=$task->getTaskType()}
+                        {assign var="task_title" value=$task->getTitle()}
+                        {if $taskImages[$task_id]}
+                        <div style="background-color:#eee;padding:10px;margin:5px;width:61%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
+                        {else}
+                        <div style="background-color:#eee;padding:10px;margin:5px;width:100%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
+                        {/if}
+                            <h2>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                            </h2>
+                            <p>
+                                {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
+                            </p>
+                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                            <p>
+                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
+                            </p>
+                            {/if}
+                            <p>
+                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                            </p>
+                            <p>
+                                {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
+                                    {foreach $taskTags[$task_id] as $tag}
+                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
+                                    {/foreach}
+                                {/if}
+                            </p>
+                            <p>
+                                {if $task->getWordCount()}
+                                    {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong>
+                                {/if}
+                            </p>
+
+                            <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
+                            <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
+                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a></p>
+                            {/if}
+                            <br />
+                        </div>
+                        {if $taskImages[$task_id]}
+                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right; width:31%; padding:10px;margin:5px;background-color:#eee">
+                                <img src="{$taskImages[$task_id]}">
+                            </div>
+                        {else}
+                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right"></div>
+                        {/if}
+                    </div>
+                {/for}
+            </div>
+        </div>
+
+            
+
     
     
     </div>
