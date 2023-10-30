@@ -452,11 +452,75 @@
                 {/for}
             </div>
         </div>
+             {* pagination begins here *}
+            {assign var="url_name" value="home-paged"}
+            <ul class="pager pull-left">
+                <div class="pagination-centered" id="ias-pagination">
+                    {if $currentScrollPage > 1}
+                        <li>
+                            <a href="{urlFor name="$url_name" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="First">&lt;&lt;</a>
+                        </li>
+                        <li class="ts-previous">
+                            {assign var="previous" value=($currentScrollPage - 1)}
+                            <a href="{urlFor name="$url_name" options="page_no.$previous|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Previous">&lt;</a>
+                        </li>
+                    {/if}
+                    <li>
+                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </li>
+                    {if $currentScrollPage < $lastScrollPage}
+                        <li class="ts-next">
+                            {assign var="next" value=($currentScrollPage + 1)}
+                            <a href="{urlFor name="$url_name" options="page_no.$next|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Next" >&gt;</a>
+                        </li>
+                        <li>
+                            <a href="{urlFor name="$url_name" options="page_no.$lastScrollPage|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Last">&gt;&gt;</a>
+                        </li>
+                    {/if}
+                </div>
+            </ul>
+        {else}
+            <p>
+                {if !$org_admin}
+                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> <br/> to be notified of new available tasks. Meanwhile, you can:
+                <ol>
+                <li>
+                    <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
+                </li>
+                <li>
+                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
+                </li>
+                <li>
+                    New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank">Translator's Toolkit</a> to find out how to get started with us.
+                </li>
+                </ol>
+                    <p>
+                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
+                    </p>
+                {else}
+                    Since you are not a translator, there are no tasks here. Click on <a href="https://twbplatform.org/org/dashboard/">your organization's Dashboard</a>
+                {/if}
+            </p>
+        {/if}
+        <br />
+
+        {if !isset($user)}
+            <div class="alert pull-left" style="width: 100%; margin-top: 10px;">
+                <p>{Localisation::getTranslation('index_6')}</p>
+                <p>{sprintf(Localisation::getTranslation('index_register_now'), {urlFor name='register'})}</p>
+            </div>
+        {/if}
+    </div>
+</div>
+
+ 
+
 
             
 
     
-    
+
+    <h1>###### END OF COL ########</h1>
     </div>
 
 </div>
