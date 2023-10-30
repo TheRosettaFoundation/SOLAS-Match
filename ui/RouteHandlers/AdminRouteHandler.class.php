@@ -257,7 +257,7 @@ class AdminRouteHandler
         $app->map(['GET'],
             '/analytics[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:analytics')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('analytics');
     }
     
