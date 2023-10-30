@@ -7,7 +7,7 @@
                 <div class="tag col-6 p-2">
                     {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                     {assign var="tagId" value=$tag->getId()}
-                     <div class="border border-secondary  text-center "><a href="{urlFor name="tag-details" options="id.$tagId"}" class="link-underline-light">{$tag_label}</a></div>
+                     <div ><a href="{urlFor name="tag-details" options="id.$tagId"}" class="link-underline-light border border-secondary  text-center">{$tag_label}</a></div>
                 </div>            
             {/foreach}
            
