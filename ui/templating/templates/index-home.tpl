@@ -329,7 +329,7 @@
         <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
     </div>
 {/if}
-<div class="grid ">
+<div class="d-flex ">
 
     <div class="g-col-4">
      {if isset($user)}
@@ -387,7 +387,7 @@
             </form>
         {/if}
     
-    
+    <h1> #################END OF COL -1< ##################################/h1>
     </div>
 
     <div class="g-col-8">
