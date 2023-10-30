@@ -342,7 +342,7 @@
 	                    <div>
                             <div class="mb-3">
                                    <label for="taskTypes" class="form-lable">{Localisation::getTranslation('common_task_type')}</label>
-                                    <select name="taskTypes" id="taskTypes" class="form-control">
+                                    <select name="taskTypes" id="taskTypes" class="form-select">
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                                       <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
 	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
@@ -355,7 +355,7 @@
 
                             <div class="mb-3">
                                        <label for="sourceLanguage" class="form-label">{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></label>
-                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-control">
+                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-select">
                                                 <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
                                                 {foreach $activeSourceLanguages as $lang}
                                                     <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
@@ -367,7 +367,7 @@
                             <div class"mb-3">
                                       <label for="targetLanguage" class="form-label">{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></label>
 
-                                        <select name="targetLanguage" ID="targetLanguage" class="form-control">
+                                        <select name="targetLanguage" ID="targetLanguage" class="form-select">
 	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
 	                                    {foreach $activeTargetLanguages as $lang}
 	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
