@@ -570,7 +570,7 @@
 {if is_null($user_id)}
 
  {else}
-        {include file="tag/tags.user-tags.inc.tpl"}
+        {include file="tag/tags.user-flex.inc.tpl"}
         {include file="tag/tags.top-list.inc.tpl"}
         {if isset($statsArray) && is_array($statsArray)}
             {include file="statistics.tpl"}
