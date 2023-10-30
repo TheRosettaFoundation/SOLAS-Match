@@ -385,14 +385,14 @@
 	                      
 	                    </div>
 	          
-                <div>
+                <div class="mt-3">
                     <button class="btn btn-primary" type="submit">
                         <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
                     </button>                
                  </div>
 	            
 	           
-	           <div>                     
+	           <div class="mt-3">                     
 	            <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary" role="button">
 	                <i class="icon-time icon-white"></i> {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
 	            </a>
