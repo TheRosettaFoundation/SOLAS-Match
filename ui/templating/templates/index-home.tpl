@@ -329,6 +329,74 @@
         <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
     </div>
 {/if}
+<div class="grid ">
+
+    <div class="g-col-4">
+     {if isset($user)}
+            <h3>{Localisation::getTranslation('index_filter_available_tasks')}
+            <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
+            </h3>
+                        <form method="post" action="{urlFor name="home"}">
+	            <table>
+	                <thead>
+	                    <tr>
+	                        <th>{Localisation::getTranslation('common_task_type')}</th>
+	                        <th>{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></th>
+	                        <th>{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                 
+	                        <tr>
+	                            <td>
+	                                <select name="taskTypes" id="taskTypes">
+	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
+                                      <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
+	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
+	                                    <option value="3" {if ($selectedTaskType === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
+                                      <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
+                                      <option value="6" {if ($selectedTaskType === 6)}selected="selected"{/if}>Proofreading and Approval</option>
+	                                 </select>
+	                            </td>
+	                            <td>
+	                                <select name="sourceLanguage" ID="sourceLanguage">
+	                                    <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
+	                                    {foreach $activeSourceLanguages as $lang}
+	                                        <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+	                                    {/foreach}
+	                                </select>
+	                            </td>
+	                            <td>
+	                                <select name="targetLanguage" ID="targetLanguage">
+	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
+	                                    {foreach $activeTargetLanguages as $lang}
+	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+	                                    {/foreach}
+	                                </select>
+	                            </td>
+	                        </tr>
+	                </tbody>
+	            </table>
+	            <button class="btn btn-primary" type="submit">
+	                <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
+	            </button>
+	                                
+	            <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary" role="button">
+	                <i class="icon-time icon-white"></i> {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
+	            </a>
+            </form>
+        {/if}
+    
+    
+    </div>
+
+    <div class="g-col-8">
+    
+    
+    </div>
+
+</div>
+<h1>########################################################## END OF GRID #########################################################</h1>
 
 <div class="page-header">
      <h1>
