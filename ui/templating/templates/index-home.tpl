@@ -160,7 +160,7 @@ a:hover{
                 <div class="carousel-item active">
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
-                    <div class="top-left carousel-caption">
+                    <div class="top-left">
                         <h2>We provide growth opportunities for<br/> our community members</h2>
                         <br/>
                         <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
