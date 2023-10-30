@@ -364,7 +364,7 @@
 
                             </div>
 
-                            <div >
+                            <div class"mb-3">
                                       <label for="targetLanguage" class="form-label">{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></label>
 
                                         <select name="targetLanguage" ID="targetLanguage" class="form-control">
@@ -384,15 +384,19 @@
 	                     
 	                      
 	                    </div>
-	         
 	          
-	            <button class="btn btn-primary" type="submit">
-	                <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
-	            </button>
-	                                
+                <div>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
+                    </button>                
+                 </div>
+	            
+	           
+	           <div>                     
 	            <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary" role="button">
 	                <i class="icon-time icon-white"></i> {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
 	            </a>
+                </div>
             </form>
         {/if}
     
