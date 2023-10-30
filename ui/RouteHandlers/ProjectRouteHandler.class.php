@@ -2478,23 +2478,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                 'targetLang' => "{$language_code}-{$country_code}"
                             ];
                         }
-                        $hash = $MT_name;
-                        $TB_number = 0;
-                        $TM_number = 0;
-                        foreach ($task_resource_TBs as $TB) {foreach ($TB as $v) $hash .= $v; $TB_number++;}
-                        foreach ($task_resource_TMs as $TM) {foreach ($TM as $v) $hash .= $v; $TM_number++;}
-
-                        $result = LibAPI\PDOWrapper::call('get_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id));
-                        if (!$result || $result[0]['md5_hash'] != md5($hash)) {
-                            LibAPI\PDOWrapper::call('delete_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id));
-                            LibAPI\PDOWrapper::call('insert_task_resource_info', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($MT_name) . ",$TB_number,$TM_number," . LibAPI\PDOWrapper::cleanseWrapStr(md5($hash)));
-
-                            foreach ($task_resource_TBs as $TB)
-                                LibAPI\PDOWrapper::call('insert_task_resource_TB', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TB['name']) . ',' . LibAPI\PDOWrapper::cleanse($TB['readMode']) . ',' . LibAPI\PDOWrapper::cleanse($TB['writeMode']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TB['targetLang']));
-                            foreach ($task_resource_TMs as $TM)
-                                LibAPI\PDOWrapper::call('insert_task_resource_TM', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['name']) . ',' . LibAPI\PDOWrapper::cleanse($TM['readMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['writeMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['penalty']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['targetLang']));
-                            error_log("insert_task_resource_info: $task_id $url");
-                        }
+                        $projectDao->update_task_resource_info($task_id, $MT_name, $task_resource_TBs, $task_resource_TMs, $url);
                     } else error_log("$task_id $url no machineTranslateSettings $result");
                 } else error_log("$task_id $url responseCode: $responseCode $result");
             }
