@@ -337,20 +337,12 @@
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
             <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
             </h3>
-                        <form method="post" action="{urlFor name="home"}">
-	            <table>
-	                <thead>
-	                    <tr>
-	                        <th>{Localisation::getTranslation('common_task_type')}</th>
-	                        <th>{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></th>
-	                        <th>{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                 
-	                        <tr>
-	                            <td>
-	                                <select name="taskTypes" id="taskTypes">
+            <form method="post" action="{urlFor name="home"}">
+	           
+	                    <div>
+                            <div class="mb-3">
+                                   <label for="taskTypes" class="form-lable">{Localisation::getTranslation('common_task_type')}</label>
+                                    <select name="taskTypes" id="taskTypes" class="form-control">
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                                       <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
 	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
@@ -358,26 +350,42 @@
                                       <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
                                       <option value="6" {if ($selectedTaskType === 6)}selected="selected"{/if}>Proofreading and Approval</option>
 	                                 </select>
-	                            </td>
-	                            <td>
-	                                <select name="sourceLanguage" ID="sourceLanguage">
-	                                    <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
-	                                    {foreach $activeSourceLanguages as $lang}
-	                                        <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
-	                                    {/foreach}
-	                                </select>
-	                            </td>
-	                            <td>
-	                                <select name="targetLanguage" ID="targetLanguage">
+
+                            </div>
+
+                            <div class="mb-3">
+                                       <label for="sourceLanguage" class="form-label">{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></label>
+                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-control">
+                                                <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
+                                                {foreach $activeSourceLanguages as $lang}
+                                                    <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+                                                {/foreach}
+                                            </select>	                            
+
+                            </div>
+
+                            <div >
+                                      <label for="targetLanguage" class="form-label">{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></label>
+
+                                        <select name="targetLanguage" ID="targetLanguage" class="form-control">
 	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
 	                                    {foreach $activeTargetLanguages as $lang}
 	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
 	                                    {/foreach}
 	                                </select>
-	                            </td>
-	                        </tr>
-	                </tbody>
-	            </table>
+
+                            </div>
+
+
+
+
+	                     
+
+	                     
+	                      
+	                    </div>
+	         
+	          
 	            <button class="btn btn-primary" type="submit">
 	                <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
 	            </button>
