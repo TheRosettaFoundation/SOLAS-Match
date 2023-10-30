@@ -105,7 +105,7 @@ a:hover{
 }
 </style>
 
-<span class="none">
+<span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
