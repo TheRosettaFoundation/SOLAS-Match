@@ -1,7 +1,7 @@
 {include file="new_header.tpl" body_id="home"}
 <!-- Editor Hint: ¿áéíóú -->
 
-<span class="hidden">
+<span class="none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
