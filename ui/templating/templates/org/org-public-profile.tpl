@@ -628,7 +628,7 @@
             <table class="table table-striped">
                 <thead>
                     <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
-                    <th>{Localisation::getTranslation('org_public_profile_username')}</th>
+                    <th>email</th>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                         <th>Remove Role</th>
                         <th>Add Role</th>
@@ -647,7 +647,7 @@
                                 {/if}
                             </td>
                             <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member['id']}"}">{TemplateHelper::uiCleanseHTML($member['display_name'])}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member['id']}"}">{$member['email']}</a>
                             </td>
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                             <td>
