@@ -300,12 +300,11 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2"> 
-                    <label for="addAdmin"><h2>{Localisation::getTranslation('common_create_administrator')}</h2></label>
+                    <h2>Add new site role to existing TWB Platform user specified by email</h2>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>Add new site role to existing TWB Platform user specified by email.</p>
                     <p><strong>{Localisation::getTranslation('site_admin_dashboard_only_add_trusted')}</strong></p>
                 </td>
             </tr>
@@ -331,18 +330,25 @@
                     </button>
                 </td>
             </tr>
-            <tr>
-                <td>
-                </td>
-                <td valign="top">
-                    <a href="{urlFor name="invite_site_admins"}" class='btn btn-success'>
-                        <i class="icon-star icon-white"></i> Invite New Admin User
-                    </a>
-                </td>
-            </tr>
         </table> 
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
+
+    <hr />
+    <table style="width: 40%">
+        <tr>
+            <td>
+                <h2>Invite New User from outside TWB Platform to be Assigned Role</h2>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="{urlFor name="invite_site_admins"}" class='btn btn-success'>
+                    <i class="icon-star icon-white"></i> Invite New Admin User
+                </a>
+            </td>
+        </tr>
+    </table>
 
     {if !empty($adminList)}
         <hr/>
