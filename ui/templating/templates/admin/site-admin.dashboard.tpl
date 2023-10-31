@@ -297,7 +297,7 @@
 
 {if $roles & ($SITE_ADMIN)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
-        <table style="width: 40%">
+        <table>
             <tr>
                 <td colspan="2"> 
                     <h2>Add new site role to existing TWB Platform user specified by email</h2>
@@ -335,7 +335,7 @@
     </form>
 
     <hr />
-    <table style="width: 40%">
+    <table>
         <tr>
             <td>
                 <h2>Invite New User from outside TWB Platform to be Assigned Role</h2>
