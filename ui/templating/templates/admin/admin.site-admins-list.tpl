@@ -4,14 +4,14 @@
     <div name="adminList">
         <table class="table table-striped">
             <thead>
-                <th>{Localisation::getTranslation('admin_site_admins_list_display_name')}</th>
+                <th>email</th>
                 <th>Roles</th>
                 <th>{Localisation::getTranslation('admin_site_admins_list_revoke_administrator_rights')}</th>
             </thead>
             {foreach $adminList as $admin}
             <tr>
                 <td>                
-                    <a href="{urlFor name="user-public-profile" options="user_id.{$admin['id']}"}">{TemplateHelper::uiCleanseHTML($admin['display_name'])}</a>
+                    <a href="{urlFor name="user-public-profile" options="user_id.{$admin['id']}"}">{TemplateHelper::uiCleanseHTML($admin['email'])}</a>
                 </td>
                 <td>
                     {if $admin['roles']&$SITE_ADMIN}TWB ADMIN{if $admin['roles']&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin['roles']&$PROJECT_OFFICER}PROJECT OFFICER{if $admin['roles']&$COMMUNITY_OFFICER},{/if}{/if} {if $admin['roles']&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
