@@ -1,8 +1,18 @@
-// Custom.scss
-// Option A: Include all of Bootstrap
+// Required
+@import "../node_modules/bootstrap/scss/functions";
 
-// Include any default variable overrides here (though functions won't be available)
+// Default variable overrides
+$body-bg: #000;
+$body-color: #111;
 
-@import "../node_modules/bootstrap/scss/bootstrap";
+// Required
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
 
-// Then add additional custom code here
+// Optional Bootstrap components here
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+// etc
