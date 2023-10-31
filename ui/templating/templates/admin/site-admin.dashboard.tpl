@@ -338,7 +338,7 @@
     <table>
         <tr>
             <td>
-                <h2>Invite New User from outside TWB Platform to be Assigned Role</h2>
+                <h2>Invite New User from Outside TWB Platform to be Assigned Role</h2>
             </td>
         </tr>
         <tr>
