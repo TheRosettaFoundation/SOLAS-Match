@@ -300,7 +300,7 @@
         <table>
             <tr>
                 <td colspan="2"> 
-                    <h2>Add new site role to existing TWB Platform user specified by email</h2>
+                    <h2>Add New Site Role to Existing TWB Platform User specified by email</h2>
                 </td>
             </tr>
             <tr>
