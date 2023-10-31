@@ -96,7 +96,12 @@
                         {if isset($userPersonalInfo)}
                             <tr>
                                  <td>
-                                     <h3>{if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                     <h3>{if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}
+                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                     {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
+                                     {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
+                                     {/if}
+                                     </h3>
                                  </td>
                              </tr>
                         {/if}
