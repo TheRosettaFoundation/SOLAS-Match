@@ -9,6 +9,10 @@
      </h1>
 </div>
 
+{if isset($flash['revoke_admin_success'])}
+    <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['revoke_admin_success'])}</p>
+{/if}
+
 <div class="well">
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>
@@ -320,6 +324,20 @@
                     </select>
                 </td>
             </tr>
+            {if isset($flash['add_admin_error'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['add_admin_error'])}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['add_admin_success'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['add_admin_success'])}</p>
+                    </td>
+                </tr>
+            {/if}
             <tr>
                 <td>
                 </td>

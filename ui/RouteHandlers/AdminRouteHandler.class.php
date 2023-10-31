@@ -337,10 +337,12 @@ class AdminRouteHandler
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
                     $adminDao->adjust_org_admin($user->getId(), 0, 0, $post['admin_type']);
-                }
+                    UserRouteHandler::flashNow('add_admin_success', 'Role Added Successfully');
+                } else UserRouteHandler::flashNow('add_admin_error', 'User NOT Found');
             }
             if (($roles & SITE_ADMIN) && isset($post['revokeAdmin'])) {
                 $adminDao->adjust_org_admin($post['userId'], 0, SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER, 0);
+                UserRouteHandler::flashNow('revoke_admin_success', 'Site Admin Roles Revoked Successfully');
             }
             
             if (($roles & SITE_ADMIN) && isset($post['banOrg']) && $post['orgName'] != '') {
