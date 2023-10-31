@@ -6,7 +6,7 @@
             <thead>
                 <th>email</th>
                 <th>Roles</th>
-                <th>{Localisation::getTranslation('admin_site_admins_list_revoke_administrator_rights')}</th>
+                <th>Revoke All Administrator Rights</th>
             </thead>
             {foreach $adminList as $admin}
             <tr>
