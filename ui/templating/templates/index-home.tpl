@@ -545,21 +545,16 @@ a:hover{
                             </div>
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-
-                            <span class="ms-1 mb-1">
+                            <div class="mb-1">
+                            <span class="ms-1 ">
                                 Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                             </span>
                             {/if}
                             <span>
                               <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </span>
-                            <p>
-                                {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
-                                    {foreach $taskTags[$task_id] as $tag}
-                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
-                                    {/foreach}
-                                {/if}
-                            </p>
+                            </div>
+                        
                        
 
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
@@ -568,16 +563,16 @@ a:hover{
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a></p>
                             {/if}
-                            <br />
+                           
                         </div>
 
                         </div>
                         {if $taskImages[$task_id]}
-                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right; width:31%; padding:10px;margin:5px;background-color:#eee">
+                            <div id="img_{$task_id}"  >
                                 <img src="{$taskImages[$task_id]}">
                             </div>
                         {else}
-                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right"></div>
+                            <div id="img_{$task_id}" class="" ></div>
                         {/if}
                     </div>
                 {/for}
