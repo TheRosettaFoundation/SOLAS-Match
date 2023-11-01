@@ -7712,8 +7712,8 @@ BEGIN
     SELECT
         mp.*,
         p.*,
-        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, pf.user_id) AS creator_id,
-        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, u2.email) AS creator_email,
+        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
+        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
         o.name
     FROM      MemsourceProjects mp
     JOIN      Projects           p ON mp.project_id=p.id
@@ -7722,6 +7722,7 @@ BEGIN
     LEFT JOIN Users              u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles      pf ON mp.project_id=pf.project_id
     LEFT JOIN Users             u2 ON pf.user_id=u2.id
+    LEFT JOIN Users             u3 ON mp.owner_uid=u3.id
     ORDER BY mp.project_id DESC
     LIMIT 250;
 END//
