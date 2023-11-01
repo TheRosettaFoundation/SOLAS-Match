@@ -519,17 +519,17 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="ts grid-col-8">
+            <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
-                    <div class="ts-task">
+                    <div >
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
                         {if $taskImages[$task_id]}
-                        <div style="background-color:#eee;padding:10px;margin:5px;width:61%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
+                        <div  id="task_{$task_id}">
                         {else}
-                        <div style="background-color:#eee;padding:10px;margin:5px;width:100%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
+                        <div  id="task_{$task_id}">
                         {/if}
                             <h2>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
