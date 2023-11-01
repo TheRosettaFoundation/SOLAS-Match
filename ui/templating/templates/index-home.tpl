@@ -534,15 +534,12 @@ a:hover{
                             <h2>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h2>
-                            <div class="d-flex">
-                                 <div class="bg-warning-subtle" {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</div>
-                                  {if $task->getWordCount()}
-                                  <div class="bg-success-subtle">{$task->getWordCount()}</div>
-                                {/if}
-                            </div>
+                            <p>
+                                {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
+                            </p>
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <p>
-                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} -   {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                             </p>
                             {/if}
                             <p>
@@ -555,7 +552,11 @@ a:hover{
                                     {/foreach}
                                 {/if}
                             </p>
-                         
+                            <p>
+                                {if $task->getWordCount()}
+                                    {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong>
+                                {/if}
+                            </p>
 
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
