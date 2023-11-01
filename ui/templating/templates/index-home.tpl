@@ -535,7 +535,7 @@ a:hover{
                             <h3>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h3>
-                            <div class="d-flex ">
+                            <div class="d-flex mt-4">
                               <div class="p-1   ms-1  rounded-3  bg-success-subtle"> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </div>
                                 {if $task->getWordCount()}
                                    <div class="p-1 ms-1  rounded-3 bg-warning-subtle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div>
@@ -544,13 +544,14 @@ a:hover{
                             </div>
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                            <p>
-                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
-                            </p>
+
+                            <span class="ms-1">
+                                <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
+                            </span>
                             {/if}
-                            <p>
-                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
-                            </p>
+                            <span>
+                              <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                            </span>
                             <p>
                                 {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
