@@ -522,7 +522,7 @@ a:hover{
             <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
-                    <div >
+                    <div class="bg-info" >
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
@@ -535,7 +535,7 @@ a:hover{
                             <h3>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h3>
-                            <div class="d-flex mt-4">
+                            <div class="d-flex mt-4 mb-1">
                               <div class="p-1   ms-1  rounded-3  bg-success-subtle"> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </div>
                                 {if $task->getWordCount()}
                                    <div class="p-1 ms-1  rounded-3 bg-warning-subtle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div>
@@ -545,8 +545,8 @@ a:hover{
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
 
-                            <span class="ms-1">
-                                <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
+                            <span class="ms-1 mb-1">
+                                Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                             </span>
                             {/if}
                             <span>
@@ -559,11 +559,7 @@ a:hover{
                                     {/foreach}
                                 {/if}
                             </p>
-                            <p>
-                                {if $task->getWordCount()}
-                                    {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong>
-                                {/if}
-                            </p>
+                       
 
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
