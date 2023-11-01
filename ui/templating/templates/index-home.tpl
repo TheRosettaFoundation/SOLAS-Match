@@ -522,7 +522,7 @@ a:hover{
             <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
-                    <div class="d-flex  justify-content-between" >
+                    <div class="d-flex justify-content-between" >
                        <div>
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
@@ -566,7 +566,7 @@ a:hover{
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                            <div><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a></p>
+                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a></p>
                             {/if}
                             <br />
                         </div>
