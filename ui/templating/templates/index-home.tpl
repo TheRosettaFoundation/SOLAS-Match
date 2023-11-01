@@ -531,9 +531,17 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <h2>
+                            
+                            <h3>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
-                            </h2>
+                            </h3>
+                            <div class="d-flex ">
+                              <div class="p-1 bg-success-subtle"> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </div>
+                                {if $task->getWordCount()}
+                                   <div> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div>
+                                {/if}
+
+                            </div>
                             <p>
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                             </p>
