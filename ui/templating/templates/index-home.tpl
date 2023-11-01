@@ -436,7 +436,7 @@ a:hover{
     </div>
 {/if}
 <div class ="container-fluid">
-<div class="d-flex  row ">
+<div class="d-flex row justify-content-between ">
 
     <div class="col-4">
      {if isset($user)}
