@@ -523,7 +523,7 @@ a:hover{
                         <div  id="task_{$task_id}">
                         {/if}
                             
-                            <div>
+                            <div class="fs-5 bold">
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </div>
                             <div class="d-flex mt-4 mb-1 opacity-75">
