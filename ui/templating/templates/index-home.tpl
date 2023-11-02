@@ -521,7 +521,7 @@ a:hover{
                             <div class="fs-4 fw-bold">
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </div>
-                            <div class="d-flex mt-4 mb-1 opacity-75">
+                            <div class="d-flex mt-4 mb-1">
                               <button class="p-1 rounded-3 btn btn-tag-green "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </button>
                                 {if $task->getWordCount()}
                                    <button type="button" class="p-1 ms-1 rounded-3 btn btn-tag-purple text-lig"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </button>
@@ -530,7 +530,7 @@ a:hover{
                             </div>
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                            <div class="mb-1 mt-3 opacity-50">
+                            <div class="mb-1 mt-3 opacity-75">
                             <span class=" ">
                                 Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                             </span>
