@@ -6,9 +6,19 @@ $blue: #133978;
 $secondary: #133978;
 
 $theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+);
+
+// Create your own map
+$custom-colors: (
     "tagGreen": #1b8912,
     "tagPurple": #7b61ff,
     "tagBlue": #36a6e7,
 );
+
+// Merge the maps
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/bootstrap";
