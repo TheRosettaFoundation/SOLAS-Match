@@ -169,6 +169,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/topTasks";
+        echo "<script> console.log (`this is the request ${$request}`)</script>"
 
         $args = array();
         if ($limit) {
