@@ -59,12 +59,17 @@
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
+<script> 
+ let test = "something";
+ let var = document.querySelector('#test').innerHtml = "";
+
+</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', 'G-3Z3VNH71D6');
-  console.log('checking if i can access the header ');
+
 </script>
 
         <!-- extra Scripts -->
