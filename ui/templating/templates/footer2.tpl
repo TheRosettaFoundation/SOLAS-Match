@@ -99,9 +99,9 @@
                     console.log(vali);
                     img.addEventListener("click" , function(e) {
                         
-                        if(img.src == "{urlFor name='home'}ui/img/light.svg") [
+                        if(img.src == "{urlFor name='home'}ui/img/light.svg"){
                             img.src = "{urlFor name='home'}ui/img/night.svg"
-                        ]else{
+                        }else{
                             img.src =  "{urlFor name='home'}ui/img/light.svg"
                         }
                     })
