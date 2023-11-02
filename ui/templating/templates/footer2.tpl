@@ -94,7 +94,12 @@
                     <br/>
                     <br/>
                     <script>
+                    let isLight = true ;
                     let val = document.getElementById("theme");
+                    val.addEventListener("click" , function(e) {
+                        isLight = !isLight ;
+                        console.log(isLight);
+                    })
                     console.log(val);
                     
                     </script>
