@@ -486,7 +486,7 @@ a:hover{
 	          
                 <div class="mt-3">
                     <button class="btn btn-primary d-block" type="submit">
-                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
+                        Apply filters
                     </button>                
                  </div>
 	            
