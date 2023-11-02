@@ -508,10 +508,7 @@ a:hover{
 
           {include file="tag/tags.top-list.flex.inc.tpl"}
           {include file="tag/tags.user-flex.inc.tpl"}
-          {if isset($statsArray) && is_array($statsArray)}
-            {include file="statistics.tpl"}
-          {/if} 
-    
+            
    
     </div>
 
@@ -539,7 +536,7 @@ a:hover{
                             <div class="d-flex mt-4 mb-1">
                               <button class="p-1 rounded-3 btn btn-tag-green "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </button>
                                 {if $task->getWordCount()}
-                                   <button type="button" class="p-1 ms-1 rounded-3 btn btn-tag-purple"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </button>
+                                   <button type="button" class="p-1 ms-1 rounded-3 btn btn-tag-purple text-lig"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </button>
                                 {/if}
 
                             </div>
