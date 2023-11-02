@@ -507,8 +507,8 @@ a:hover{
             <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
-                    <div class="d-flex justify-content-between mb-4"  >
-                       <div class="bg-twb-gray p-3 rounded-3 w-100">
+                    <div class="d-flex justify-content-between mb-4 bg-twb-gray p-3 rounded-3"  >
+                       <div class=" w-100">
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
@@ -521,8 +521,8 @@ a:hover{
                             <div class="fs-4 fw-bold">
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </div>
-                            <div class="d-flex mt-4 mb-1">
-                              <button class="p-1 rounded-3 btn btn-tag-green "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </button>
+                            <div class="d-flex mt-4 mb-1 fs-6 text-twb-gray">
+                              <button class="p-1 rounded-3 btn btn-tag-green  "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </button>
                                 {if $task->getWordCount()}
                                    <button type="button" class="p-1 ms-1 rounded-3 btn btn-tag-purple text-lig"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </button>
                                 {/if}
@@ -547,9 +547,10 @@ a:hover{
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             <div class ="d-flex justify-content-between align-items-center">
                             <div> Translation Project for Translations without Borders</div>
-                            <a class="btn btn-primary" href="" target="_blank">view Task</a>
+                            
                             </div>
                             {/if}
+                            <a class="btn btn-primary fs-6 text-twb-gray" href="" target="_blank">view Task</a>
                            
                         </div>
 
