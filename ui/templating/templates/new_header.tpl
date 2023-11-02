@@ -62,6 +62,7 @@
 
 <script> 
  let isLight = document.getElementById('theme');
+ console.log(isLight);
  
 
 </script>
