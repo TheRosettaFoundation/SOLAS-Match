@@ -61,11 +61,9 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
 
 <script> 
- let isLight = document.querySelector('#theme');
- isLight.addEventLister("click" , function(e){
-    console.log(isLight);
- })
- console.log(isLight);
+ let isLight = document.getElementById('theme');
+ 
+
 </script>
 
 
