@@ -546,7 +546,7 @@ a:hover{
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <div class="mb-1">
-                            <span class="ms-1 ">
+                            <span class=" ">
                                 Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                             </span>
                             {/if}
@@ -554,7 +554,7 @@ a:hover{
                               <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </span>
                             <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
-                            <div id ="test"> </div >
+                           
                             
                             </div>
                         
