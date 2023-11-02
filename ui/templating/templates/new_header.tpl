@@ -62,6 +62,9 @@
 
 <script> 
  let isLight = document.querySelector('#theme');
+ isLight.addEventLister("click" , function(e){
+    console.log(isLight);
+ })
  console.log(isLight);
 </script>
 
@@ -179,7 +182,7 @@
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                             <li>
-                               <img src="{urlFor name='home'}ui/img/light.svg" alt="theme button">
+                               <img src="{urlFor name='home'}ui/img/light.svg" alt="theme button" id="theme">
                             </li>
                         {else}
                           
