@@ -571,7 +571,7 @@ a:hover{
                         </div>
                         {if $taskImages[$task_id]}
                             <div id="img_{$task_id}"  >
-                                <img src="{$taskImages[$task_id]}" class="w-25">
+                                <img src="{$taskImages[$task_id]}" class="w-50">
                             </div>
                         {else}
                             <div id="img_{$task_id}" class="" ></div>
