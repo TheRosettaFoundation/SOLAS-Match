@@ -31,14 +31,14 @@
   --bs-gray-900: #212529;
   --bs-primary: #f89406;
   --bs-secondary: #133978;
-  --bs-tagGreen: #1b8912;
-  --bs-tagPurple: #7b61ff;
-  --bs-tagBlue: #36a6e7;
+  --bs-tag-green: #1b8912;
+  --bs-tag-purple: #7b61ff;
+  --bs-tag-blue: #36a6e7;
   --bs-primary-rgb: 248, 148, 6;
   --bs-secondary-rgb: 19, 57, 120;
-  --bs-tagGreen-rgb: 27, 137, 18;
-  --bs-tagPurple-rgb: 123, 97, 255;
-  --bs-tagBlue-rgb: 54, 166, 231;
+  --bs-tag-green-rgb: 27, 137, 18;
+  --bs-tag-purple-rgb: 123, 97, 255;
+  --bs-tag-blue-rgb: 54, 166, 231;
   --bs-primary-text-emphasis: #633b02;
   --bs-secondary-text-emphasis: #081730;
   --bs-success-text-emphasis: #0a3622;
@@ -2991,7 +2991,7 @@ textarea.form-control-lg {
   --bs-btn-disabled-border-color: #133978;
 }
 
-.btn-tagGreen {
+.btn-tag-green {
   --bs-btn-color: #fff;
   --bs-btn-bg: #1b8912;
   --bs-btn-border-color: #1b8912;
@@ -3008,7 +3008,7 @@ textarea.form-control-lg {
   --bs-btn-disabled-border-color: #1b8912;
 }
 
-.btn-tagPurple {
+.btn-tag-purple {
   --bs-btn-color: #000;
   --bs-btn-bg: #7b61ff;
   --bs-btn-border-color: #7b61ff;
@@ -3025,7 +3025,7 @@ textarea.form-control-lg {
   --bs-btn-disabled-border-color: #7b61ff;
 }
 
-.btn-tagBlue {
+.btn-tag-blue {
   --bs-btn-color: #000;
   --bs-btn-bg: #36a6e7;
   --bs-btn-border-color: #36a6e7;
@@ -3076,7 +3076,7 @@ textarea.form-control-lg {
   --bs-gradient: none;
 }
 
-.btn-outline-tagGreen {
+.btn-outline-tag-green {
   --bs-btn-color: #1b8912;
   --bs-btn-border-color: #1b8912;
   --bs-btn-hover-color: #fff;
@@ -3093,7 +3093,7 @@ textarea.form-control-lg {
   --bs-gradient: none;
 }
 
-.btn-outline-tagPurple {
+.btn-outline-tag-purple {
   --bs-btn-color: #7b61ff;
   --bs-btn-border-color: #7b61ff;
   --bs-btn-hover-color: #000;
@@ -3110,7 +3110,7 @@ textarea.form-control-lg {
   --bs-gradient: none;
 }
 
-.btn-outline-tagBlue {
+.btn-outline-tag-blue {
   --bs-btn-color: #36a6e7;
   --bs-btn-border-color: #36a6e7;
   --bs-btn-hover-color: #000;
@@ -4712,25 +4712,25 @@ textarea.form-control-lg {
   --bs-alert-link-color: var(--bs-secondary-text-emphasis);
 }
 
-.alert-tagGreen {
-  --bs-alert-color: var(--bs-tagGreen-text-emphasis);
-  --bs-alert-bg: var(--bs-tagGreen-bg-subtle);
-  --bs-alert-border-color: var(--bs-tagGreen-border-subtle);
-  --bs-alert-link-color: var(--bs-tagGreen-text-emphasis);
+.alert-tag-green {
+  --bs-alert-color: var(--bs-tag-green-text-emphasis);
+  --bs-alert-bg: var(--bs-tag-green-bg-subtle);
+  --bs-alert-border-color: var(--bs-tag-green-border-subtle);
+  --bs-alert-link-color: var(--bs-tag-green-text-emphasis);
 }
 
-.alert-tagPurple {
-  --bs-alert-color: var(--bs-tagPurple-text-emphasis);
-  --bs-alert-bg: var(--bs-tagPurple-bg-subtle);
-  --bs-alert-border-color: var(--bs-tagPurple-border-subtle);
-  --bs-alert-link-color: var(--bs-tagPurple-text-emphasis);
+.alert-tag-purple {
+  --bs-alert-color: var(--bs-tag-purple-text-emphasis);
+  --bs-alert-bg: var(--bs-tag-purple-bg-subtle);
+  --bs-alert-border-color: var(--bs-tag-purple-border-subtle);
+  --bs-alert-link-color: var(--bs-tag-purple-text-emphasis);
 }
 
-.alert-tagBlue {
-  --bs-alert-color: var(--bs-tagBlue-text-emphasis);
-  --bs-alert-bg: var(--bs-tagBlue-bg-subtle);
-  --bs-alert-border-color: var(--bs-tagBlue-border-subtle);
-  --bs-alert-link-color: var(--bs-tagBlue-text-emphasis);
+.alert-tag-blue {
+  --bs-alert-color: var(--bs-tag-blue-text-emphasis);
+  --bs-alert-bg: var(--bs-tag-blue-bg-subtle);
+  --bs-alert-border-color: var(--bs-tag-blue-border-subtle);
+  --bs-alert-link-color: var(--bs-tag-blue-text-emphasis);
 }
 
 @keyframes progress-bar-stripes {
@@ -5060,43 +5060,43 @@ textarea.form-control-lg {
   --bs-list-group-active-border-color: var(--bs-secondary-text-emphasis);
 }
 
-.list-group-item-tagGreen {
-  --bs-list-group-color: var(--bs-tagGreen-text-emphasis);
-  --bs-list-group-bg: var(--bs-tagGreen-bg-subtle);
-  --bs-list-group-border-color: var(--bs-tagGreen-border-subtle);
+.list-group-item-tag-green {
+  --bs-list-group-color: var(--bs-tag-green-text-emphasis);
+  --bs-list-group-bg: var(--bs-tag-green-bg-subtle);
+  --bs-list-group-border-color: var(--bs-tag-green-border-subtle);
   --bs-list-group-action-hover-color: var(--bs-emphasis-color);
-  --bs-list-group-action-hover-bg: var(--bs-tagGreen-border-subtle);
+  --bs-list-group-action-hover-bg: var(--bs-tag-green-border-subtle);
   --bs-list-group-action-active-color: var(--bs-emphasis-color);
-  --bs-list-group-action-active-bg: var(--bs-tagGreen-border-subtle);
-  --bs-list-group-active-color: var(--bs-tagGreen-bg-subtle);
-  --bs-list-group-active-bg: var(--bs-tagGreen-text-emphasis);
-  --bs-list-group-active-border-color: var(--bs-tagGreen-text-emphasis);
+  --bs-list-group-action-active-bg: var(--bs-tag-green-border-subtle);
+  --bs-list-group-active-color: var(--bs-tag-green-bg-subtle);
+  --bs-list-group-active-bg: var(--bs-tag-green-text-emphasis);
+  --bs-list-group-active-border-color: var(--bs-tag-green-text-emphasis);
 }
 
-.list-group-item-tagPurple {
-  --bs-list-group-color: var(--bs-tagPurple-text-emphasis);
-  --bs-list-group-bg: var(--bs-tagPurple-bg-subtle);
-  --bs-list-group-border-color: var(--bs-tagPurple-border-subtle);
+.list-group-item-tag-purple {
+  --bs-list-group-color: var(--bs-tag-purple-text-emphasis);
+  --bs-list-group-bg: var(--bs-tag-purple-bg-subtle);
+  --bs-list-group-border-color: var(--bs-tag-purple-border-subtle);
   --bs-list-group-action-hover-color: var(--bs-emphasis-color);
-  --bs-list-group-action-hover-bg: var(--bs-tagPurple-border-subtle);
+  --bs-list-group-action-hover-bg: var(--bs-tag-purple-border-subtle);
   --bs-list-group-action-active-color: var(--bs-emphasis-color);
-  --bs-list-group-action-active-bg: var(--bs-tagPurple-border-subtle);
-  --bs-list-group-active-color: var(--bs-tagPurple-bg-subtle);
-  --bs-list-group-active-bg: var(--bs-tagPurple-text-emphasis);
-  --bs-list-group-active-border-color: var(--bs-tagPurple-text-emphasis);
+  --bs-list-group-action-active-bg: var(--bs-tag-purple-border-subtle);
+  --bs-list-group-active-color: var(--bs-tag-purple-bg-subtle);
+  --bs-list-group-active-bg: var(--bs-tag-purple-text-emphasis);
+  --bs-list-group-active-border-color: var(--bs-tag-purple-text-emphasis);
 }
 
-.list-group-item-tagBlue {
-  --bs-list-group-color: var(--bs-tagBlue-text-emphasis);
-  --bs-list-group-bg: var(--bs-tagBlue-bg-subtle);
-  --bs-list-group-border-color: var(--bs-tagBlue-border-subtle);
+.list-group-item-tag-blue {
+  --bs-list-group-color: var(--bs-tag-blue-text-emphasis);
+  --bs-list-group-bg: var(--bs-tag-blue-bg-subtle);
+  --bs-list-group-border-color: var(--bs-tag-blue-border-subtle);
   --bs-list-group-action-hover-color: var(--bs-emphasis-color);
-  --bs-list-group-action-hover-bg: var(--bs-tagBlue-border-subtle);
+  --bs-list-group-action-hover-bg: var(--bs-tag-blue-border-subtle);
   --bs-list-group-action-active-color: var(--bs-emphasis-color);
-  --bs-list-group-action-active-bg: var(--bs-tagBlue-border-subtle);
-  --bs-list-group-active-color: var(--bs-tagBlue-bg-subtle);
-  --bs-list-group-active-bg: var(--bs-tagBlue-text-emphasis);
-  --bs-list-group-active-border-color: var(--bs-tagBlue-text-emphasis);
+  --bs-list-group-action-active-bg: var(--bs-tag-blue-border-subtle);
+  --bs-list-group-active-color: var(--bs-tag-blue-bg-subtle);
+  --bs-list-group-active-bg: var(--bs-tag-blue-text-emphasis);
+  --bs-list-group-active-border-color: var(--bs-tag-blue-text-emphasis);
 }
 
 .btn-close {
@@ -6599,19 +6599,19 @@ textarea.form-control-lg {
   background-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1)) !important;
 }
 
-.text-bg-tagGreen {
+.text-bg-tag-green {
   color: #fff !important;
-  background-color: RGBA(var(--bs-tagGreen-rgb), var(--bs-bg-opacity, 1)) !important;
+  background-color: RGBA(var(--bs-tag-green-rgb), var(--bs-bg-opacity, 1)) !important;
 }
 
-.text-bg-tagPurple {
+.text-bg-tag-purple {
   color: #000 !important;
-  background-color: RGBA(var(--bs-tagPurple-rgb), var(--bs-bg-opacity, 1)) !important;
+  background-color: RGBA(var(--bs-tag-purple-rgb), var(--bs-bg-opacity, 1)) !important;
 }
 
-.text-bg-tagBlue {
+.text-bg-tag-blue {
   color: #000 !important;
-  background-color: RGBA(var(--bs-tagBlue-rgb), var(--bs-bg-opacity, 1)) !important;
+  background-color: RGBA(var(--bs-tag-blue-rgb), var(--bs-bg-opacity, 1)) !important;
 }
 
 .link-primary {
@@ -6632,29 +6632,29 @@ textarea.form-control-lg {
   text-decoration-color: RGBA(15, 46, 96, var(--bs-link-underline-opacity, 1)) !important;
 }
 
-.link-tagGreen {
-  color: RGBA(var(--bs-tagGreen-rgb), var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--bs-tagGreen-rgb), var(--bs-link-underline-opacity, 1)) !important;
+.link-tag-green {
+  color: RGBA(var(--bs-tag-green-rgb), var(--bs-link-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--bs-tag-green-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
-.link-tagGreen:hover, .link-tagGreen:focus {
+.link-tag-green:hover, .link-tag-green:focus {
   color: RGBA(22, 110, 14, var(--bs-link-opacity, 1)) !important;
   text-decoration-color: RGBA(22, 110, 14, var(--bs-link-underline-opacity, 1)) !important;
 }
 
-.link-tagPurple {
-  color: RGBA(var(--bs-tagPurple-rgb), var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--bs-tagPurple-rgb), var(--bs-link-underline-opacity, 1)) !important;
+.link-tag-purple {
+  color: RGBA(var(--bs-tag-purple-rgb), var(--bs-link-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--bs-tag-purple-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
-.link-tagPurple:hover, .link-tagPurple:focus {
+.link-tag-purple:hover, .link-tag-purple:focus {
   color: RGBA(149, 129, 255, var(--bs-link-opacity, 1)) !important;
   text-decoration-color: RGBA(149, 129, 255, var(--bs-link-underline-opacity, 1)) !important;
 }
 
-.link-tagBlue {
-  color: RGBA(var(--bs-tagBlue-rgb), var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--bs-tagBlue-rgb), var(--bs-link-underline-opacity, 1)) !important;
+.link-tag-blue {
+  color: RGBA(var(--bs-tag-blue-rgb), var(--bs-link-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--bs-tag-blue-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
-.link-tagBlue:hover, .link-tagBlue:focus {
+.link-tag-blue:hover, .link-tag-blue:focus {
   color: RGBA(94, 184, 236, var(--bs-link-opacity, 1)) !important;
   text-decoration-color: RGBA(94, 184, 236, var(--bs-link-underline-opacity, 1)) !important;
 }
@@ -7066,16 +7066,16 @@ textarea.form-control-lg {
   --bs-focus-ring-color: rgba(var(--bs-secondary-rgb), var(--bs-focus-ring-opacity));
 }
 
-.focus-ring-tagGreen {
-  --bs-focus-ring-color: rgba(var(--bs-tagGreen-rgb), var(--bs-focus-ring-opacity));
+.focus-ring-tag-green {
+  --bs-focus-ring-color: rgba(var(--bs-tag-green-rgb), var(--bs-focus-ring-opacity));
 }
 
-.focus-ring-tagPurple {
-  --bs-focus-ring-color: rgba(var(--bs-tagPurple-rgb), var(--bs-focus-ring-opacity));
+.focus-ring-tag-purple {
+  --bs-focus-ring-color: rgba(var(--bs-tag-purple-rgb), var(--bs-focus-ring-opacity));
 }
 
-.focus-ring-tagBlue {
-  --bs-focus-ring-color: rgba(var(--bs-tagBlue-rgb), var(--bs-focus-ring-opacity));
+.focus-ring-tag-blue {
+  --bs-focus-ring-color: rgba(var(--bs-tag-blue-rgb), var(--bs-focus-ring-opacity));
 }
 
 .position-static {
@@ -7208,19 +7208,19 @@ textarea.form-control-lg {
   border-color: rgba(var(--bs-secondary-rgb), var(--bs-border-opacity)) !important;
 }
 
-.border-tagGreen {
+.border-tag-green {
   --bs-border-opacity: 1;
-  border-color: rgba(var(--bs-tagGreen-rgb), var(--bs-border-opacity)) !important;
+  border-color: rgba(var(--bs-tag-green-rgb), var(--bs-border-opacity)) !important;
 }
 
-.border-tagPurple {
+.border-tag-purple {
   --bs-border-opacity: 1;
-  border-color: rgba(var(--bs-tagPurple-rgb), var(--bs-border-opacity)) !important;
+  border-color: rgba(var(--bs-tag-purple-rgb), var(--bs-border-opacity)) !important;
 }
 
-.border-tagBlue {
+.border-tag-blue {
   --bs-border-opacity: 1;
-  border-color: rgba(var(--bs-tagBlue-rgb), var(--bs-border-opacity)) !important;
+  border-color: rgba(var(--bs-tag-blue-rgb), var(--bs-border-opacity)) !important;
 }
 
 .border-black {
@@ -8144,19 +8144,19 @@ textarea.form-control-lg {
   color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important;
 }
 
-.text-tagGreen {
+.text-tag-green {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-tagGreen-rgb), var(--bs-text-opacity)) !important;
+  color: rgba(var(--bs-tag-green-rgb), var(--bs-text-opacity)) !important;
 }
 
-.text-tagPurple {
+.text-tag-purple {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-tagPurple-rgb), var(--bs-text-opacity)) !important;
+  color: rgba(var(--bs-tag-purple-rgb), var(--bs-text-opacity)) !important;
 }
 
-.text-tagBlue {
+.text-tag-blue {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-tagBlue-rgb), var(--bs-text-opacity)) !important;
+  color: rgba(var(--bs-tag-blue-rgb), var(--bs-text-opacity)) !important;
 }
 
 .text-black {
@@ -8331,19 +8331,19 @@ textarea.form-control-lg {
   text-decoration-color: rgba(var(--bs-secondary-rgb), var(--bs-link-underline-opacity)) !important;
 }
 
-.link-underline-tagGreen {
+.link-underline-tag-green {
   --bs-link-underline-opacity: 1;
-  text-decoration-color: rgba(var(--bs-tagGreen-rgb), var(--bs-link-underline-opacity)) !important;
+  text-decoration-color: rgba(var(--bs-tag-green-rgb), var(--bs-link-underline-opacity)) !important;
 }
 
-.link-underline-tagPurple {
+.link-underline-tag-purple {
   --bs-link-underline-opacity: 1;
-  text-decoration-color: rgba(var(--bs-tagPurple-rgb), var(--bs-link-underline-opacity)) !important;
+  text-decoration-color: rgba(var(--bs-tag-purple-rgb), var(--bs-link-underline-opacity)) !important;
 }
 
-.link-underline-tagBlue {
+.link-underline-tag-blue {
   --bs-link-underline-opacity: 1;
-  text-decoration-color: rgba(var(--bs-tagBlue-rgb), var(--bs-link-underline-opacity)) !important;
+  text-decoration-color: rgba(var(--bs-tag-blue-rgb), var(--bs-link-underline-opacity)) !important;
 }
 
 .link-underline {
@@ -8409,19 +8409,19 @@ textarea.form-control-lg {
   background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-tagGreen {
+.bg-tag-green {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-tagGreen-rgb), var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-tag-green-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-tagPurple {
+.bg-tag-purple {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-tagPurple-rgb), var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-tag-purple-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-tagBlue {
+.bg-tag-blue {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-tagBlue-rgb), var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-tag-blue-rgb), var(--bs-bg-opacity)) !important;
 }
 
 .bg-black {
