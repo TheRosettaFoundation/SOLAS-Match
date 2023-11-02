@@ -95,11 +95,15 @@
                     <br/>
                     <script>
                     
-                    let vali = document.getElementById("theme");
+                    let img = document.getElementById("theme");
                     console.log(vali);
-                    vali.addEventListener("click" , function(e) {
+                    img.addEventListener("click" , function(e) {
                         
-                        console.log(vali);
+                        if(img.src == "{urlFor name='home'}ui/img/light.svg") [
+                            img.src = "{urlFor name='home'}ui/img/night.svg"
+                        ]else{
+                            img.src =  "{urlFor name='home'}ui/img/light.svg"
+                        }
                     })
                    
                     
