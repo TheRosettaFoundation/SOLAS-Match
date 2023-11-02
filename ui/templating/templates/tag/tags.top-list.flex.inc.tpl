@@ -1,13 +1,13 @@
 {if isset($top_tags) AND is_array($top_tags) AND count($top_tags) > 0}
 <div class="">
-    <h3><i class="icon-tags"></i> {Localisation::getTranslation('tags_top_list_inc_popular_tags')}</h3>
-    <div class="d-flex row wrap justify-content-between ">
+    <h3>{Localisation::getTranslation('tags_top_list_inc_popular_tags')}</h3>
+    <div class="d-flexrow justify-content-between ">
         
             {foreach $top_tags as $tag}
                 <div class="tag col-6 p-2">
                     {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                     {assign var="tagId" value=$tag->getId()}
-                     <div ><a href="{urlFor name="tag-details" options="id.$tagId"}" class="link-underline-light border border-secondary  text-center p-1 rounded-2 ">{$tag_label}</a></div>
+                     <div ><a href="{urlFor name="tag-details" options="id.$tagId"}" class=" text-twb-gray border border-twb-gray text-center p-1 rounded-2 ">{$tag_label}</a></div>
                 </div>            
             {/foreach}
            
