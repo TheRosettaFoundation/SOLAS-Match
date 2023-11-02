@@ -537,9 +537,9 @@ a:hover{
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h3>
                             <div class="d-flex mt-4 mb-1">
-                              <div class="p-1 rounded-3   btn btn-tag-green "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </div>
+                              <button class="p-1 rounded-3 btn btn-tag-green "> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}  </button>
                                 {if $task->getWordCount()}
-                                   <div class="p-1 ms-1  rounded-3  btn btn-tag-purple"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div>
+                                   <button type="button" class="p-1 ms-1 rounded-3 btn btn-tag-purple"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </button>
                                 {/if}
 
                             </div>
