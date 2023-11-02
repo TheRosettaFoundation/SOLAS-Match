@@ -1,7 +1,7 @@
 {if isset($top_tags) AND is_array($top_tags) AND count($top_tags) > 0}
 <div class="">
     <h3>{Localisation::getTranslation('tags_top_list_inc_popular_tags')}</h3>
-    <div class="d-flexrow justify-content-between ">
+    <div class="d-flex row justify-content-between ">
         
             {foreach $top_tags as $tag}
                 <div class="tag col-6 p-2">
