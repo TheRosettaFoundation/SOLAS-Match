@@ -441,13 +441,15 @@ a:hover{
     <div class="col-4">
      {if isset($user)}
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
-            <span style="font-size: 12px; font-weight: bold;">You can only filter for languages that you have chosen as your language pairs in your user profile.</span>
+            
             </h3>
+            <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
+            <div> Industry </div>
             <form method="post" action="{urlFor name="home"}">
 	           
 	                    <div>
                             <div class="mb-3">
-                                   <label for="taskTypes" class="form-lable">{Localisation::getTranslation('common_task_type')}</label>
+                                 
                                     <select name="taskTypes" id="taskTypes" class="form-select">
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                                       <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
@@ -460,7 +462,7 @@ a:hover{
                             </div>
 
                             <div class="mb-3">
-                                       <label for="sourceLanguage" class="form-label">{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></label>
+                                   
                                             <select name="sourceLanguage" ID="sourceLanguage" class="form-select">
                                                 <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
                                                 {foreach $activeSourceLanguages as $lang}
@@ -471,24 +473,15 @@ a:hover{
                             </div>
 
                             <div class"mb-3">
-                                      <label for="targetLanguage" class="form-label">{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></label>
-
+                                    
                                         <select name="targetLanguage" ID="targetLanguage" class="form-select">
 	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
 	                                    {foreach $activeTargetLanguages as $lang}
 	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
 	                                    {/foreach}
 	                                </select>
-
                             </div>
-
-
-
-
-	                     
-
-	                     
-	                      
+	                        
 	                    </div>
 	          
                 <div class="mt-3">
