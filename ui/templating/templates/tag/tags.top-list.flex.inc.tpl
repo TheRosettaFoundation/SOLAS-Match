@@ -13,8 +13,8 @@
            
         
     </div>
-     <div class="tag mt-3 text-twb-gray">
-                <a class="btn btn-primary d-block" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
+     <div class="mt-3 ">
+                <a class="btn btn-primary d-block" href="{urlFor name="tags-list"}"> <span class="text-twb-gray"> {Localisation::getTranslation('tags_top_list_inc_more_tags')} </span></a>
     </div>
 </div>    
    
