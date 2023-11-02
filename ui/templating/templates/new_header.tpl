@@ -59,11 +59,13 @@
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
-<script> 
- let test = "something";
- let var = document.querySelector('#test').innerHtml = "";
 
+<script> 
+ let isLight = document.querySelector('#theme');
+ console.log(isLight);
 </script>
+
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
@@ -176,7 +178,7 @@
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
-            
+                            <li class="nav-item" id="theme"> <img  src="{urlFor name="home"}ui/light.svg></li>
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
