@@ -146,6 +146,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks";
+        var_dump($request);
        
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $ret;
