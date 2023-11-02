@@ -96,12 +96,12 @@
                     <script>
                     
                     let vali = document.getElementById("theme");
-                    console.log(val);
-                    val.addEventListener("click" , function(e) {
+                    console.log(vali);
+                    vali.addEventListener("click" , function(e) {
                         
                         console.log(vali);
                     })
-                    console.log(val);
+                   
                     
                     </script>
 
