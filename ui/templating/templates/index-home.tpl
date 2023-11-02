@@ -484,7 +484,7 @@ a:hover{
 	                        
 	                    </div>
 	          
-                <div class="mt-3">
+                <div class="mt-3 text-twb-gray d-block">
                     <button class="btn btn-primary d-block" type="submit">
                         <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con">
                         Apply filters
