@@ -553,7 +553,7 @@ a:hover{
                             <span>
                               <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </span>
-                            <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
+                            <div id="time">{$deadline_timestamps[$task_id]}</div>
                             
                             </div>
                         

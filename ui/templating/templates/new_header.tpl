@@ -64,12 +64,14 @@
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', 'G-3Z3VNH71D6');
+  console.log('checking if i can access the header ');
 </script>
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
+    
    
     </head>
 
