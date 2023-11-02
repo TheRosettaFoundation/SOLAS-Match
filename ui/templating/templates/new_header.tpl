@@ -169,16 +169,18 @@
                         {/if}
                         {if isset($user)}
                             <li class="profile nav-item">
+
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="nav-link">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
+                              <li class="nav-item" id="theme"> <img  src="{urlFor name="home"}ui/light.svg></li>
                             <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
-                            <li class="nav-item" id="theme"> <img  src="{urlFor name="home"}ui/light.svg></li>
+                          
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
