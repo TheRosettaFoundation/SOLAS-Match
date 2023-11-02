@@ -438,7 +438,7 @@ a:hover{
 <div class ="container-fluid">
 <div class="d-flex row justify-content-between ">
 
-    <div class="col-4 p-2">
+    <div class="col-3 p-2">
      {if isset($user)}
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}
             
@@ -500,7 +500,7 @@ a:hover{
    
     </div>
 
-    <div class="col-8">
+    <div class="col-9">
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
