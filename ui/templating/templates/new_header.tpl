@@ -175,7 +175,6 @@
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
-                              <li class="nav-item" id="theme"> <img src="{urlFor name="home"}ui/img/light.svg /></li>
                             <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
