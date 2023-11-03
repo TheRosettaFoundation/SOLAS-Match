@@ -96,6 +96,7 @@
                     <script>
                     
                     let img = document.getElementById("theme");
+                    console.log(img);
                     img.addEventListener("click" , function(e) {
                         
                         if(img.src == "{urlFor name='home'}ui/img/light.svg"){
