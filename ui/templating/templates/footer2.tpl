@@ -94,18 +94,29 @@
                     <br/>
                     <br/>
                     <script>
-                    
-                    let imgL = document.getElementById("light");
+                    let light = true ;
+                    let theme = document.getElementById("theme");
+                    let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
                     console.log(imgL);
                     console.log(imgN);
 
 
-                    imgL.addEventListener("click" , function(e) {
-                        console.log("test");
-                         console.log(imgL);
+                    theme.addEventListener("click" , function(e) {
+                       
+                       light = !light ;
+                       console.log(light);
 
-                       imgL.classList.remove("d-none");
+                       if(light){
+                        imgL.classList.remove("d-none");
+                        imgN.classList.add("d-none");
+                       }
+                       else{
+                          imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                       }
+
+                       
                     })
                    
                     
