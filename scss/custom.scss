@@ -22,5 +22,22 @@ $custom-colors: (
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
+//Dark
+$custom-colors-twb-gray-dark: (
+    "custom color": #0f0f0e,
+);
+$theme-colors-twb-gray-dark: map-merge(
+    $theme-colors-twb-gray-dark,
+    custom-colors-twb-gray-dark
+);
+
+$custom-colors-tag-gray-dark: (
+    "custom color": #a9a98b,
+);
+$theme-colors-tag-gray-dark: map-merge(
+    $theme-colors-tag-gray-dark,
+    custom-colors-tag-gray-dark
+);
+
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/bootstrap";
