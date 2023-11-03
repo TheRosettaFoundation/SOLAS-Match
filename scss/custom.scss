@@ -5,6 +5,11 @@ $primary: #f89406;
 $blue: #133978;
 $secondary: #133978;
 
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+);
+
 // Create your own map
 $custom-colors: (
     "tag-green": #1b8912,
@@ -16,39 +21,6 @@ $custom-colors: (
 
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);
-
-//Light mode
-
-$custom-colors-text: (
-    "custom-color": #1c1d36,
-);
-$custom-colors-bg-subtle: (
-    "custom-color": #ffffff,
-);
-
-$theme-colors-text: map-merge($theme-colors-text, $custom-colors-text);
-$theme-colors-bg-subtle: map-merge(
-    $theme-colors-bg-subtle,
-    $custom-colors-bg-subtle
-);
-
-//Dark mode
-
-$custom-colors-text-dark: (
-    "custom-color": #ffffff,
-);
-$custom-colors-bg-subtle-dark: (
-    "custom-color": #1c1d35,
-);
-
-$theme-colors-text-dark: map-merge(
-    $theme-colors-text-dark,
-    $custom-colors-text-dark
-);
-$theme-colors-bg-subtle-dark: map-merge(
-    $theme-colors-bg-subtle-dark,
-    $custom-colors-bg-subtle-dark
-);
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/bootstrap";
