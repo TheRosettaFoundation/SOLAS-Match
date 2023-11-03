@@ -98,6 +98,7 @@
                     let img = document.getElementById("theme");
                     console.log(img);
                     img.addEventListener("click" , function(e) {
+                        console.log("test")
                         
                         if(img.src == "{urlFor name='home'}ui/img/light.svg"){
                             img.src = "{urlFor name='home'}ui/img/night.svg"
