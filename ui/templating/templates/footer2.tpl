@@ -101,9 +101,6 @@
                     console.log(imgL);
                     console.log(imgN);
 
-                    themeOn=document.documentElement.getAttribute("data-bs-theme");
-                    console.log(themeOn);
-
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;
@@ -112,12 +109,13 @@
                        if(light){
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
+                        document.documentElement.setAttribute('data-bs-theme', 'light')
                         
                        }
                        else{
                           imgL.classList.add("d-none");
                           imgN.classList.remove("d-none");
-                          document.documentElement.setAttribute('data-bs')
+                           document.documentElement.setAttribute('data-bs-theme', 'dark')
                        }
 
                        
