@@ -95,16 +95,17 @@
                     <br/>
                     <script>
                     
-                    let img = document.getElementById("theme");
-                    console.log(img);
-                    img.addEventListener("click" , function(e) {
-                        console.log("test")
-                        
-                        if(img.src == "{urlFor name='home'}ui/img/light.svg"){
-                            img.src = "{urlFor name='home'}ui/img/night.svg"
-                        }else{
-                            img.src =  "{urlFor name='home'}ui/img/light.svg"
-                        }
+                    let imgL = document.getElementById("light");
+                    let imgN = document.getElementById('night');
+                    console.log(imgL);
+                    console.log(imgN);
+
+
+                    imgL.addEventListener("click" , function(e) {
+                        console.log("test");
+                         console.log(imgL);
+
+                       imgL.classList.remove("d-none");
                     })
                    
                     

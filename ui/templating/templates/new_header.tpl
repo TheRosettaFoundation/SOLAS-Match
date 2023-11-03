@@ -181,7 +181,10 @@
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                             <li>
-                               <img src="{urlFor name='home'}ui/img/light.svg" alt="theme button" id="theme">
+                               <img src="{urlFor name='home'}ui/img/light.svg"  class="d-none" alt="theme button" id="light">
+                            </li>
+                              <li>
+                               <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
                             </li>
                         {else}
                           
