@@ -60,12 +60,6 @@
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
 
-<script> 
- let isLight = document.getElementById('theme');
- console.log(isLight);
- 
-
-</script>
 
 
 <script>
@@ -180,7 +174,7 @@
                             <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}" class="nav-link">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
-                            <li class="theme">
+                            <li class="nav_item" id="theme">
                                <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
                            
                                <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">

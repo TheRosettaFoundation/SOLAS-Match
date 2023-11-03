@@ -101,7 +101,6 @@
                     console.log(imgL);
                     console.log(imgN);
 
-
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;
