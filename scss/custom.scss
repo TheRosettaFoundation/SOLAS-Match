@@ -1,9 +1,5 @@
 // 2. Include any default variable overrides here
 
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/variables-dark";
-
 $body-color: #1c1d36;
 $primary: #f89406;
 $blue: #133978;
@@ -20,10 +16,6 @@ $custom-colors: (
 
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);
-
-@import "../node_modules/bootstrap/scss/maps";
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/utilities";
 
 //Dark
 // $custom-colors-twb-gray-dark: (
