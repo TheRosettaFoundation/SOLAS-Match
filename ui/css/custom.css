@@ -1,7 +1,7 @@
 /* Error: Can't find stylesheet to import.
  *   ,
- * 1 | @import "functions";
- *   |         ^^^^^^^^^^^
+ * 1 | @import "variables-dark";
+ *   |         ^^^^^^^^^^^^^^^^
  *   '
  *   scss/custom.scss 1:9  root stylesheet */
 
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import \"functions\";\a   \2502          ^^^^^^^^^^^\a   \2575 \a   scss/custom.scss 1:9  root stylesheet";
+  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import \"variables-dark\";\a   \2502          ^^^^^^^^^^^^^^^^\a   \2575 \a   scss/custom.scss 1:9  root stylesheet";
 }

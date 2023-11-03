@@ -109,10 +109,12 @@
                        if(light){
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
+                        
                        }
                        else{
                           imgL.classList.add("d-none");
                           imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs')
                        }
 
                        
