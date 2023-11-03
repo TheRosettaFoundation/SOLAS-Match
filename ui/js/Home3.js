@@ -161,11 +161,6 @@ function renderTaskDetails() {
 
 //Clickable actions on the homepage btns
 $(document).ready(function () {
-
-    let isLight = document.getElementById('theme');
-    console.log(isLight);
-  
-
     $(".button_join").on("click", function (event) {
         event.preventDefault();
         //window.location.href = "/register";
