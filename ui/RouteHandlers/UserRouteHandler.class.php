@@ -448,6 +448,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
+            'page_count' => int($topTasksCount),
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
