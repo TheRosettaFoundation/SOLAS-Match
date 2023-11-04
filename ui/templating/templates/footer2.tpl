@@ -127,7 +127,7 @@
                     <script>
                     var pageItems = document.querySelectorAll("#page-item") ;
                     pageItems.forEach(
-                        addEventListener("click" , function(e){
+                        addEventListener("click",function(e){
                             console.log("Added event listener")
 
                         } )
