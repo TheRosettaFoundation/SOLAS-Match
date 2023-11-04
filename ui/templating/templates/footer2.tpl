@@ -125,7 +125,7 @@
                     </script>
 
                     <script>
-                    var pageItems = document.getElementById("page-item") ;
+                    var pageItems = document.querySelectorAll("#page-item") ;
 
                      console.log(pageItems)
 
