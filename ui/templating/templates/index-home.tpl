@@ -568,11 +568,11 @@ a:hover{
             </div>
         </div>
 
-            <ul>
+            <ul class="pagination">
             {for $foo=1 to $page_count}
-                <li>{$foo}</li>
+                <li class="page-item"> <a class="page-link" href="#">{$foo}</a></li>
             {/for}
-            </ul>$page_count
+            </ul>
 
   
 
