@@ -145,11 +145,8 @@ class UserDao extends BaseDao
     public function getUserTasks($userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks";
-      
-       
+        $request = "{$this->siteApi}v0/users/$userId/tasks";   
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
-        print_r($ret);
         return $ret;
     }
 
