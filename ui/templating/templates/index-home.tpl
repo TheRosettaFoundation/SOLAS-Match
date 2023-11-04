@@ -567,6 +567,16 @@ a:hover{
                 {/for}
             </div>
         </div>
+
+            <ul>
+            {for $foo=1 to $page_count}
+                <li>{$foo}</li>
+            {/for}
+            </ul>$page_count
+
+  
+
+
              {* pagination begins here *}
             {assign var="url_name" value="home-paged"}
             <ul class="pager pull-left">
