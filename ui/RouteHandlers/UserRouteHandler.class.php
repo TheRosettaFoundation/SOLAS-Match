@@ -322,9 +322,8 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-                $userTasks = $userDao->getUserTasks($user_id);
-                var_dump($userTasks);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
+                var_dump($topTasksCount);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
