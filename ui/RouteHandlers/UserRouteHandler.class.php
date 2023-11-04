@@ -343,6 +343,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        $pages = floor($topTasksC /5);
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
@@ -450,7 +451,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
-            'page_count' => $topTasksC,
+            'page_count' => $pages,
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
