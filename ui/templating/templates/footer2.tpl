@@ -95,7 +95,7 @@
                     <br/>
                     <script>
              
-                    console.log (JSON.stringify{$all_tasks});
+                    console.log ({$all_tasks});
                 
                     
 
