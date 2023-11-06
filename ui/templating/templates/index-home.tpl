@@ -569,8 +569,8 @@ a:hover{
         </div>
 
             <ul class="pagination d-flex justify-content-center">
-            {for $page-no=1 to $page_count}
-                          <li class="page-item" id="page-item"> <a class="page-link"  >{$page}</a></li>
+            {for $page=1 to $page_count}
+                    <li class="page-item" id="page-item"> <a class="page-link">{$page}</a></li>
             {/for}
             </ul>
 
