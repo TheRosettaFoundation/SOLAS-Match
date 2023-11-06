@@ -20,7 +20,7 @@ class UserRouteHandler
         global $app;
 
         $app->map(['GET', 'POST'],
-            '[/]',
+            '[/{$page}]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
                                
