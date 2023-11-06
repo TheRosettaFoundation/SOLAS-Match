@@ -295,7 +295,7 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
-        $topTaskss = new stdClass() ;
+      
       
 
 
@@ -328,7 +328,7 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-                $topTaskss ->tasks = $topTasks ;
+              +
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 var_dump(gettype($topTasks));
