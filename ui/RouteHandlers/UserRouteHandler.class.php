@@ -24,10 +24,10 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
         
-        $app->map(['GET', 'POST'],
-             '[/page/{page_no}]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
-            ->setName('home-pagination');
+        $ $app->map(['GET', 'POST'],
+        '/page/{page_no}',
+        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
+        ->setName('home-index');
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
