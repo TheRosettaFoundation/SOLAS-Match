@@ -95,7 +95,7 @@
                     <br/>
                     <script>
              
-                    console.log({$all_tasks});
+                    console.log ( typeof {$all_tasks});
                     
                     </script>
                     <script>
