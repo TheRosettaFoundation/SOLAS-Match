@@ -94,8 +94,10 @@
                     <br/>
                     <br/>
                     <script>
+
+                    
              
-                    console.log (new Array ({$all_tasks}));
+                    console.log ({$all_tasks}.lenght);
                 
                     
 
