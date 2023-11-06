@@ -96,7 +96,10 @@
                     <script>
              
                     console.log ( typeof {$all_tasks});
-                    localStorage.setItem("tasks" , {$all_tasks})
+                    let t = return {$all_tasks} ;
+                    console.log(t)
+
+                
                     
                     </script>
                     <script>
