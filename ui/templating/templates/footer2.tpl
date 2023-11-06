@@ -95,7 +95,7 @@
                     <br/>
                     <script>
              
-                    console.log ({$all_tasks});
+                    console.log (new Array ({$all_tasks}));
                 
                     
 
