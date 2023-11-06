@@ -327,10 +327,12 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-              +
+              
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                print_r($topTasks);
+                $userTasks = $userDao ->getUserTasks($user_id);
+                print_r($userTasks);
+                print_r($topTasksC);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
@@ -456,7 +458,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
-            'all_tasks' => json_encode($topTasks),
+            'all_tasks' => json_encode($userTasks),
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
