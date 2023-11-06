@@ -96,7 +96,7 @@
                     <script>
 
                     
-                   let t = new Array ({$all_tasks});
+                    let t = new Array ({$all_tasks});
                     console.log(t);
                 
                     
