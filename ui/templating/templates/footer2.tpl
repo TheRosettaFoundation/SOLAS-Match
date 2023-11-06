@@ -94,8 +94,8 @@
                     <br/>
                     <br/>
                     <script>
-
-                    console.log($all_tasks);
+             
+                    console.log({$all_tasks});
                     
                     </script>
                     <script>
