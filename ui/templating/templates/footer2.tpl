@@ -95,9 +95,9 @@
                     <br/>
                     <script>
              
-                    console.log ( typeof {$all_tasks});
-                    let t = return {$all_tasks} ;
-                    console.log(t)
+                    console.log (JSON.stringify{$all_tasks});
+                
+                    
 
                 
                     
