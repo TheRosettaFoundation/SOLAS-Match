@@ -570,7 +570,7 @@ a:hover{
 
             <ul class="pagination d-flex justify-content-center">
             {for $page-no=1 to $page_count}
-                          <li class="page-item" id="page-item"> <a class="page-link" href="{urlFor name="home" options="page.$page-no"}" >{$page-no}</a></li>
+                          <li class="page-item" id="page-item"> <a class="page-link" href="{urlFor name="home" options="$page-no"}" >{$page}</a></li>
             {/for}
             </ul>
 
