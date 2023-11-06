@@ -94,6 +94,13 @@
                     <br/>
                     <br/>
                     <script>
+
+                    console.log($all_tasks);
+                    
+                    </script>
+                    <script>
+
+
                     let light = true ;
                     let theme = document.getElementById("theme");
                     let imgL = document.getElementById('light');
