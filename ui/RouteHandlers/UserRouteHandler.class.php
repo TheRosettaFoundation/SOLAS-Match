@@ -24,10 +24,7 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
         
-        $ $app->map(['GET', 'POST'],
-        '/page/{page_no}',
-        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
-        ->setName('home-index');
+   
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
@@ -298,7 +295,10 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
-        $topTasksC = 0 ;
+        $topTasks = [] ;
+      
+
+
 
         $filter = array();
         if ($request->getMethod() === 'POST') {
@@ -330,7 +330,7 @@ class UserRouteHandler
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                var_dump($topTasksC);
+                var_dump($topTasks);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
@@ -456,7 +456,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
-            'page_count' => $pages,
+            'all_tasks' => $topTasks,
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
