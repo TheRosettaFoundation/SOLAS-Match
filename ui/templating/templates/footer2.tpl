@@ -97,7 +97,7 @@
 
                     
              
-                    console.log ({$all_tasks}.length);
+                    console.log ({$all_tasks}[0]);
                 
                     
 
