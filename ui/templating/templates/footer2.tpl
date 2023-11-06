@@ -97,7 +97,7 @@
 
                     
              
-                    console.log (typeof{$all_tasks});
+                    console.log (typeof {$all_tasks});
                 
                     
 
