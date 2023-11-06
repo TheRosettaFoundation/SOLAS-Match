@@ -96,8 +96,8 @@
                     <script>
 
                     
-             
-                    console.log (typeof {$all_tasks});
+                    localStorage.setItem("tasks" , {$all_tasks});
+                    console.log ({$all_tasks});
                 
                     
 
