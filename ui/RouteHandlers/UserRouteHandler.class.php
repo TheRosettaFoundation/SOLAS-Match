@@ -23,8 +23,7 @@ class UserRouteHandler
             '[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
-        
-   
+           
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
@@ -331,7 +330,7 @@ class UserRouteHandler
               +
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                var_dump(gettype($topTasks));
+                print_r($topTasks);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
