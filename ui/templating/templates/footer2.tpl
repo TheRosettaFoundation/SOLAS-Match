@@ -96,8 +96,8 @@
                     <script>
 
                     
-             
-                    console.log(typeOf{$all_tasks});
+                   let t = new Array ({$all_tasks});
+                    console.log(t);
                 
                     
 
