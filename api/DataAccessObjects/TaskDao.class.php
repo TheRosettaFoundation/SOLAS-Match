@@ -257,6 +257,8 @@ class TaskDao
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = Lib\PDOWrapper::call("getUserTopTasks", $args);
+        var_dump($result);
+
         if ($result) {
             $ret = array();
             foreach ($result as $row) {

@@ -42,7 +42,6 @@ class APIHelper
         }
         //error_log("url: $url");
         $re = curl_init($url);
-        print_r($url);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
         if (!is_null($data) && "null" != $data) {
