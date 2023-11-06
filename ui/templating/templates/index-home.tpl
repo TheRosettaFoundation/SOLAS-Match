@@ -570,7 +570,7 @@ a:hover{
 
             <ul class="pagination d-flex justify-content-center">
             {for $paged=1 to $page_count}
-                    <li class="page-item" id="page-item"> <a class="page-link" href="/paged/{$paged}">{$paged}</a></li>
+                    <li class="page-item" id="page-item"> <a class="page-link" href="{urlFor name="home-paged" options="paged.$paged"}">{$paged}</a></li>
             {/for}
             </ul>
 
