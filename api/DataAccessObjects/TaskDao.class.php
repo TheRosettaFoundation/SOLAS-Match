@@ -249,7 +249,7 @@ class TaskDao
         } else {
             $args .= "0, ";
         }
-       
+        
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
         
@@ -264,6 +264,8 @@ class TaskDao
                  $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
+
+        print_r("test");
         return $ret;
     }
     
