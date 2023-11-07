@@ -207,7 +207,7 @@ class UserDao extends BaseDao
             $args
         );
 
-        print_r($ret);
+       
         return $ret;
     }
 
