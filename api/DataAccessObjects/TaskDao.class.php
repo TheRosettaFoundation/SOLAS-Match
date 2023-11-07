@@ -265,7 +265,7 @@ class TaskDao
             }
         }
 
-        print_r("test");
+
         return $ret;
     }
     

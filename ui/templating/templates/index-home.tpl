@@ -504,7 +504,7 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-                    <div> <span> Page Count: </span>{$page_count}</div>
+                    
             <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
