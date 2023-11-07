@@ -94,7 +94,7 @@ class APIHelper
 
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
-            var_dump($response);
+            
         } else {
             throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
