@@ -29,7 +29,7 @@ class APIHelper
         $headers = array()
     ) {
         $url = "$url/?";
-        print_r($destination);
+      
         var_dump($url);
         if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
