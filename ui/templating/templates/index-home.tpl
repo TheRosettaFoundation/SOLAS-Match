@@ -551,7 +551,9 @@ a:hover{
                             
                             </div>
                             {/if}
+                            <div class="d-flex justify-content-end">
                             <a class="btn btn-primary fs-6 text-twb-gray " href="" target="_blank">view Task</a>
+                            </div>
                            
                         </div>
 
