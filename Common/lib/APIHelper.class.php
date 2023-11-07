@@ -30,7 +30,7 @@ class APIHelper
     ) {
         $url = "$url/?";
       
-        var_dump($url);
+        var_dump($destination);
         if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
