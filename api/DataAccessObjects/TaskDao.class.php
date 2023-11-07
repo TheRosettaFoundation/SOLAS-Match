@@ -250,6 +250,8 @@ class TaskDao
             $args .= "0, ";
         }
         
+        print_r("this is running");
+        var_dump($limit);
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
         
