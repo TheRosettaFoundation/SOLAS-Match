@@ -206,6 +206,8 @@ class UserDao extends BaseDao
             null,
             $args
         );
+
+        print_r($ret);
         return $ret;
     }
 
