@@ -569,14 +569,21 @@ a:hover{
         </div>
 
             <ul class="pagination d-flex justify-content-center">
+
             {assign var="url_nam" value="home-paged"}
-            {for $paged=1 to 6}
+            {if $page_count> 6}
+                {assign var="count" value= 6}
+            {elseif}
+                {assign var="count" value= $page_count}
+            {/if}    
+
+            {for $page=1 to $count}
                      <li class="ts-previous">
                             {assign var="previous" value=($page - 1)}
                             <a href="{urlFor name="$url_nam" options="page_no.$previous|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Previous">&lt;</a>
                         </li>
                     <li class="page-item" id="page-item">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$paged}</a></li>
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
             {/for}
             </ul>
 
@@ -584,6 +591,8 @@ a:hover{
 
 
              {* pagination begins here *}
+            
+
             {assign var="url_name" value="home-paged"}
             <ul class="pager pull-left">
                 <div class="pagination-centered" id="ias-pagination">
