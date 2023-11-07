@@ -82,7 +82,7 @@ class APIHelper
         curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false); // Calls will be local so no need to verify hostname (& test server may not have proper certificate)
         curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false); // Calls will be local so no need to verify certificate (& test server may not have proper certificate)
         $res = curl_exec($re);
-        var_dump($res);
+
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
         $header = substr($res, 0, $header_size);
         $this->outputHeaders = http_parse_headers($header);
@@ -94,6 +94,7 @@ class APIHelper
 
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
+            var_dump($response);
         } else {
             throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
