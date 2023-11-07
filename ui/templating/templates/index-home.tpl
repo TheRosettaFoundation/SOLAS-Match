@@ -576,15 +576,16 @@ a:hover{
             {else}
                 {assign var="count" value= $page_count}
             {/if}    
-
+               <li class="page-item" id="page-item">
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
+ 
             {for $page=1 to $count}
-                     <li class="ts-previous">
-                            {assign var="previous" value=($page - 1)}
-                            <a href="{urlFor name="$url_nam" options="page_no.$previous|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Previous">&lt;</a>
-                        </li>
+
                     <li class="page-item" id="page-item">
                      <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
             {/for}
+               <li class="page-item" id="page-item">
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
             </ul>
 
   
