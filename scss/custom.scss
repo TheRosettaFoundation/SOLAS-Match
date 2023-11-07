@@ -1,7 +1,7 @@
 // 2. Include any default variable overrides here
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/variables-dark";
+// @import "../node_modules/bootstrap/scss/functions";
+// @import "../node_modules/bootstrap/scss/variables";
+// @import "../node_modules/bootstrap/scss/variables-dark";
 
 $body-color: #1c1d36;
 $primary: #f89406;
@@ -9,7 +9,7 @@ $blue: #133978;
 $secondary: #133978;
 $info: #eaecf0;
 
-$font-size-base: 8px;
+$h6-font-size: 8px;
 
 $theme-colors: (
     "primary": $primary,
