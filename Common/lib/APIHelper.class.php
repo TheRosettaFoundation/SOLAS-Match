@@ -29,6 +29,8 @@ class APIHelper
         $headers = array()
     ) {
         $url = "$url/?";
+
+        var_dump($url);
       
 
         if (!empty($query_args) && count($query_args) > 0) {
