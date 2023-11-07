@@ -520,7 +520,7 @@ a:hover{
                         {/if}
                             
                             <div class="fs-4 fw-bold">
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </div>
                             <div class="d-flex mt-4 mb-1 fs-6 text-twb-gray">
                               <button class="rounded-2 btn btn-tag-green">  <span class=""fs-6>{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
@@ -551,7 +551,7 @@ a:hover{
                             
                             </div>
                             {/if}
-                            <a class="btn btn-primary fs-6 text-twb-gray" href="" target="_blank">view Task</a>
+                            <a class="btn btn-primary fs-6 text-twb-gray text-end" href="" target="_blank">view Task</a>
                            
                         </div>
 
