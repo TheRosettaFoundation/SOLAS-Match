@@ -187,7 +187,7 @@ class UserDao extends BaseDao
             }
         }
      
-        $args = Lib\API\PDOWrapper::cleanse($userId).", ";
+        $args = LibAPI\PDOWrapper::cleanse($userId).", ";
 
         if ($strict) {
             $args .= "1, ";
@@ -195,13 +195,13 @@ class UserDao extends BaseDao
             $args .= "0, ";
         }
         
-        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                Lib\API\PDOWrapper::cleanseNull($offset).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
-        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
-        $result = Lib\API\PDOWrapper::call("getUserPageTasks", $args);       
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
        
 
