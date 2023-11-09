@@ -130,7 +130,7 @@ a:hover{
 {if isset($flash['error'])}
     <br>
     <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='new-home'}">×</a>
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
         <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
 {/if}
@@ -143,7 +143,7 @@ a:hover{
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
-        <a class="close" data-dismiss="alert" href="{urlFor name=new-home'}">×</a>
+        <a class="close" data-dismiss="alert" href="{urlFor name=home'}">×</a>
         <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
     </div>
 {/if}
@@ -159,7 +159,7 @@ a:hover{
 
                 <div class="carousel-item active">
 
-                    <img src="{urlFor name='new-home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
+                    <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left">
                         <h2>We provide growth opportunities for<br/> our community members</h2>
                         <br/>
@@ -445,7 +445,7 @@ a:hover{
             </h3>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
             <h3 class="mt-5 mb-2"> Industry </h3>
-            <form method="post" action="{urlFor name="new-home"}">
+            <form method="post" action="{urlFor name="home"}">
 	           
 	                    <div>
                             <div class="mb-3">
@@ -486,7 +486,7 @@ a:hover{
 	          
                 <div class=" d-grid mt-3 mb-5  ">
                     <button class="btn btn-primary " type="submit">
-                        <img src="{urlFor name='new-home'}ui/img/setting-5.svg" alt="Con" class="me-1">
+                        <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">
                         <span class="text-twb-gray"> Apply filters</span>
                     </button>                
                 </div>
@@ -572,7 +572,7 @@ a:hover{
 
             <ul class="pagination d-flex justify-content-center">
 
-            {assign var="url_nam" value="new-paged"}
+            {assign var="url_nam" value="home-paged"}
             {if $page_count> 6}
                 {assign var="count" value= 6}
             {else}
@@ -596,7 +596,7 @@ a:hover{
              {* pagination begins here *}
             
 
-            {assign var="url_name" value="new-paged"}
+            {assign var="url_name" value="home-paged"}
             <ul class="pager pull-left">
                 <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}

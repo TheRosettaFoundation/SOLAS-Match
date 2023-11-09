@@ -24,21 +24,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
 
-        $app->map(['GET', 'POST'],
-            '[/new-home]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:newHome')
-            ->setName('new-home');
-                      
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home-paged');
-
-        $app->map(['GET', 'POST'],
-            '/new-home/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:newHome')
-            ->setName('new-paged');
+\
 
         $app->map(['GET', 'POST'],
             '/register[/]',
