@@ -165,7 +165,7 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserPageTasks($userId, $strict = false, $limit, $filter = array(), $offset)
+    public function getUserPageTasks($userId, $strict = true, $limit, $filter = array(), $offset)
 
     {
         $ret = false;
