@@ -201,8 +201,8 @@ class UserDao extends BaseDao
                 LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguage).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguage);
         $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
         var_dump ($args);
