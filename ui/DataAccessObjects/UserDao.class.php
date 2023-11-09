@@ -205,7 +205,7 @@ class UserDao extends BaseDao
 
        
         var_dump('this is running');
-        print_r()
+        var_dump($result);
         return $result;
         
         
