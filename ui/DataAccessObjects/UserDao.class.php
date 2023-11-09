@@ -164,6 +164,60 @@ class UserDao extends BaseDao
         $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification", $request);
         return $ret;
     }
+    
+    public function getUserPageTasks($userId, $strict = false, $limit, $filter = array(), $offset)
+
+    {
+        $ret = false;
+        $sourceLanguage = null;
+        $targetLanguage = null;
+        $taskType = null;
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+                $task_type = $filter['taskType'] ;
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+                $sourceLanguage = $filter['sourceLanguage'];
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+                $targetLanguage = $filter['targetLanguge'];
+            }
+        }
+     
+        $args = Lib\PDOWrapper::cleanse($userId).", ";
+
+        if ($strict) {
+            $args .= "1, ";
+        } else {
+            $args .= "0, ";
+        }
+        
+        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                Lib\PDOWrapper::cleanseNull($offset).', ';
+        
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = Lib\PDOWrapper::call("getUserPageTasks", $args);       
+
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+
+
+        return $ret;
+        
+        
+
+
+    }
+
 
     public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
     {

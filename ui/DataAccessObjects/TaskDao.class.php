@@ -70,7 +70,6 @@ class TaskDao extends BaseDao
             null,
             $args
         );
-        var_dump("this is running");
        
         return $response;
     }
