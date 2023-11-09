@@ -242,6 +242,8 @@ class TaskDao
         $targetLanguageCode
     ) {
         $ret = false;
+        var_dump("source language");
+        var_dump($sourceLanguageCode);
         $args = Lib\PDOWrapper::cleanse($userId).", ";
 
         if ($strict) {
