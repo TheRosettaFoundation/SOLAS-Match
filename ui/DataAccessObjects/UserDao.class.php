@@ -187,7 +187,7 @@ class UserDao extends BaseDao
             }
         }
      
-        $args = Lib\PDOWrapper::cleanse($userId).", ";
+        $args = Lib\API\PDOWrapper::cleanse($userId).", ";
 
         if ($strict) {
             $args .= "1, ";
@@ -195,23 +195,17 @@ class UserDao extends BaseDao
             $args .= "0, ";
         }
         
-        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                Lib\PDOWrapper::cleanseNull($offset).', ';
+        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                Lib\API\PDOWrapper::cleanseNull($offset).', ';
         
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
-        $result = Lib\PDOWrapper::call("getUserPageTasks", $args);       
+        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  Lib\API\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = Lib\API\PDOWrapper::call("getUserPageTasks", $args);       
 
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
-            }
-        }
+       
 
-
-        return $ret;
+        return $result;
         
         
 
