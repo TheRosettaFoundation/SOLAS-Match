@@ -1,6 +1,6 @@
 // 2. Include any default variable overrides here
-// @import "../node_modules/bootstrap/scss/functions";
-// @import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
 // @import "../node_modules/bootstrap/scss/variables-dark";
 
 $body-color: #1c1d36;
@@ -10,24 +10,6 @@ $secondary: #133978;
 $info: #eaecf0;
 
 $h6-font-size: 8px;
-
-$theme-colors: (
-    "primary": $primary,
-    "secondary": $secondary,
-    "info": $info,
-);
-
-// Create your own map
-$custom-colors: (
-    "tag-green": #1b8912,
-    "tag-purple": #7b61ff,
-    "tag-blue": #36a6e7,
-    "twb-gray": #f4f4f3,
-    "tag-gray": #1c1d36,
-);
-
-// Merge the maps
-$theme-colors: map-merge($theme-colors, $custom-colors);
 
 //Dark
 $custom-colors-twb-gray-dark: (

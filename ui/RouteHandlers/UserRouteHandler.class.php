@@ -23,12 +23,22 @@ class UserRouteHandler
             '[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
+
+        $app->map(['GET', 'POST'],
+            '[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:newHome')
+            ->setName('new-home');
                       
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home-paged');
+
+        $app->map(['GET', 'POST'],
+            '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:newHome')
+            ->setName('new-paged');
 
         $app->map(['GET', 'POST'],
             '/register[/]',
@@ -222,6 +232,244 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('invite_site_admins');
+    }
+
+
+    public function newHome(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
+        var_dump($args);
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+        $adminDao = new DAO\AdminDao();
+
+        $languageDao = new DAO\LanguageDao();
+        $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
+        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
+
+        $viewData = array();
+        $viewData['current_page'] = 'home';
+
+        $tagDao = new DAO\TagDao();
+        $top_tags = $tagDao->getTopTags(10);
+        $viewData['top_tags'] = $top_tags;
+
+        $use_statistics = Common\Lib\Settings::get('site.stats');
+        if ($use_statistics == 'y') {
+            $statsDao = new DAO\StatisticsDao();
+            $statistics = $statsDao->getStats();
+            $statsArray = null;
+            if ($statistics) {
+                $statsArray = array();
+                foreach ($statistics as $stat) {
+                    $statsArray[$stat->getName()] = $stat;
+                }
+            }
+            $viewData['statsArray'] = $statsArray;
+        }
+
+        if ($user_id != null) {
+            $user_tags = $userDao->getUserTags($user_id);
+            $viewData['user_tags'] = $user_tags;
+        }
+
+        $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
+        if ($maintenance_msg == 'y') {
+            $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
+            if ($maintenanceCustomMsg == 'n') {
+                $maintenanceDate     = Common\Lib\Settings::get('maintenance.maintenance_date');
+                $maintenanceTime     = Common\Lib\Settings::get('maintenance.maintenance_time');
+                $maintenanceDuration = Common\Lib\Settings::get('maintenance.maintenance_duration');
+                $msg = sprintf(
+                    Lib\Localisation::getTranslation('common_maintenance_message'),
+                    $maintenanceDate,
+                    $maintenanceTime,
+                    $maintenanceDuration
+                );
+            } elseif ($maintenanceCustomMsg == 'y') {
+                $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
+            }
+            UserRouteHandler::flashNow('warning', $msg);
+        }
+
+        $template_data = array_merge($template_data, $viewData);
+
+        $siteLocation = Common\Lib\Settings::get('site.location');
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $topTasksCount = 0;
+      
+
+
+        $filter = array();
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+
+            if (isset($post['taskTypes'])) {
+                $selectedTaskType = $post['taskTypes'];
+            }
+            if (isset($post['sourceLanguage'])) {
+                $selectedSourceLanguageCode = $post['sourceLanguage'];
+            }
+            if (isset($post['targetLanguage'])) {
+                $selectedTargetLanguageCode = $post['targetLanguage'];
+            }
+        }
+        // Post or route handler may return '0', need an explicit zero
+        $selectedTaskType = (int)$selectedTaskType;
+        if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
+        if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
+
+        // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
+        if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
+        if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
+        if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
+
+        try {
+            if ($user_id) {
+                $strict = false;
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);            
+                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
+                $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
+                $userTasks = $userDao ->getUserTasks($user_id);
+
+            } else {
+                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
+                $topTasksCount = $taskDao->getTopTasksCount();
+            }
+        } catch (\Exception $e) {
+            $topTasks = array();
+            $topTasksCount = 0;
+        }
+
+        $taskTags = array();
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
+        $discourse_slug = array();
+        $taskImages = array();
+
+        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        $pages = ceil($topTasksC /5);
+        if ($currentScrollPage <= $lastScrollPage) {
+            foreach ($topTasks as $topTask) {
+                $taskId = $topTask->getId();
+                $project = $projectDao->getProject($topTask->getProjectId());
+                $org_id = $project->getOrganisationId();
+                $org = $orgDao->getOrganisation($org_id);
+
+                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
+
+                $created = $topTask->getCreatedTime();
+                $selected_year   = (int)substr($created,  0, 4);
+                $selected_month  = (int)substr($created,  5, 2);
+                $selected_day    = (int)substr($created,  8, 2);
+                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($created, 14, 2);
+                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $deadline = $topTask->getDeadline();
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $projectName = $project->getTitle();
+                $orgUri = "{$siteLocation}org/{$org_id}/profile";
+                $orgName = $org->getName();
+                $projectAndOrgs[$taskId] = sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $projectUri,
+                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
+                    $orgUri,
+                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
+                );
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
+
+                $taskImages[$taskId] = '';
+                if ($project->getImageApproved() && $project->getImageUploaded()) {
+                    $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
+                }
+            }
+        }
+
+        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        }
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" >
+        $(document).ready(function() {
+            $('.carousel').carousel({
+                interval: 5000,
+                pause:'hover'
+              });
+            /*
+          var user_count = $('#value').text();
+            $('.carousel').carousel({
+              interval: 2000,
+            })
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                  if (!startTimestamp) startTimestamp = timestamp;
+                  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                  obj.innerHTML = Math.floor(progress * (end - start) + start);
+                  if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                  }
+                };
+                window.requestAnimationFrame(step);
+              }
+              const obj = document.getElementById('value');
+              animateValue(obj, 0, user_count, 3000);
+              */
+          });
+        </script>";
+
+        $org_admin = false;
+        if (empty($topTasks) && !empty($user_id)) {
+            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
+        }
+
+        $template_data = array_merge($template_data, array(
+            'siteLocation' => $siteLocation,
+            'activeSourceLanguages' => $activeSourceLanguages,
+            'activeTargetLanguages' => $activeTargetLanguages,
+            'selectedTaskType' => $selectedTaskType,
+            'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
+            'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
+            'topTasks' => $topTasks,
+            'taskTags' => $taskTags,
+            'created_timestamps' => $created_timestamps,
+            'deadline_timestamps' => $deadline_timestamps,
+            'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $discourse_slug,
+            'taskImages' => $taskImages,
+            'currentScrollPage' => $currentScrollPage,
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
+            'extra_scripts' => $extra_scripts,
+            'user_id' => $user_id,
+            'org_admin' => $org_admin,
+            'user_monthly_count' => $userDao->get_users_by_month(),
+            'page_count' => $pages,
+       
+        ));
+        return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function home(Request $request, Response $response, $args)
