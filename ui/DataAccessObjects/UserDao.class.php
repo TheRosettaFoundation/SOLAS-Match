@@ -171,6 +171,8 @@ class UserDao extends BaseDao
         $ret = false;
         $sourceLanguage = null;
         $targetLanguage = null;
+        var_dump($filter);
+
         $taskType = null;
         if ($filter) {
             if (isset($filter['taskType']) && $filter['taskType'] != '') {
