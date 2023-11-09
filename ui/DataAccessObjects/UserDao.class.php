@@ -171,8 +171,6 @@ class UserDao extends BaseDao
         $ret = false;
         $sourceLanguage = null;
         $targetLanguage = null;
-        var_dump($filter);
-
         $taskType = null;
         if ($filter) {
             if (isset($filter['taskType']) && $filter['taskType'] != '') {
@@ -201,13 +199,12 @@ class UserDao extends BaseDao
                 LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguage).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguage);
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
-        var_dump ($args);
-        var_dump('this is running');
-     
+       
+
         return $result;
         
         
