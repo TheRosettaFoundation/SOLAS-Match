@@ -231,7 +231,7 @@ class UserRouteHandler
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
-      
+        var_dump($args);
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -295,6 +295,7 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
+        $topTasks = null;
       
 
 
@@ -325,8 +326,7 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);    
-                $pagetTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);         
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);            
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
@@ -691,7 +691,8 @@ class UserRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($admin_id);
-       
+        var_dump($roles&NGO_PROJECT_OFFICER);
+        var_dump($org->name);
 
         if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN && !empty($post['email']) )) {
             $post = $request->getParsedBody();
