@@ -165,13 +165,13 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserPageTasks($userId, $strict = true, $limit, $filter , $offset)
+    public function getUserPageTasks($userId, $strict = true, $limit, $filter = array(), $offset)
 
     {
         $ret = false;
         $sourceLanguage = null;
         $targetLanguage = null;
-      
+        var_dump($filter);
 
         $taskType = null;
         if ($filter) {
@@ -205,7 +205,9 @@ class UserDao extends BaseDao
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
-        
+        var_dump ($args);
+        var_dump('this is running');
+     
         return $result;
         
         
