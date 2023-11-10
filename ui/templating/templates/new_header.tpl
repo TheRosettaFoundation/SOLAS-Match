@@ -80,7 +80,7 @@
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         
-        <nav class="navbar navbar-expand-lg bg-body-tertiary text-secondary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fw-bold">
         <div class="container-fluid">
             <a class="navbar-brand" href={urlFor name='home'}"> <img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"> </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
