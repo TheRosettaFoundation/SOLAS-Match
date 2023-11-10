@@ -29,7 +29,6 @@ function getSetting(text) {
 function documentReady() {
     siteLocation = getSetting("siteLocation");
     parameters = new Parameters(loadingComplete);
-    console.log(parameters.getTranslation("common_due_by"));
 }
 
 function loadingComplete() {
