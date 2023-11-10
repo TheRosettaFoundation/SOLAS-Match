@@ -80,14 +80,14 @@
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         
-        <nav class="navbar navbar-expand-lg bg-body-tertiary fw-bold">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary ">
         <div class="container-fluid">
             <a class="navbar-brand" href={urlFor name='home'}"> <img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"> </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                 {if !isset($admin)}
                     <li class="nav-item">
                     <a href="{urlFor name="home"}" class="nav-link" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
@@ -157,7 +157,7 @@
 
             </ul>
 
-             <ul class="navbar-nav flex-row flex-wrap ms:md-auto d-flex align-center">
+             <ul class="navbar-nav flex-row flex-wrap ms:md-auto d-flex d-flex align-items-center">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
                                 <a  class="nav-link">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
