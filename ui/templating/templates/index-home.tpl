@@ -573,7 +573,7 @@ a:hover{
 
                             
                             <div class ="d-flex justify-content-between align-items-center ">
-                                    <div> Translation Project for Translations without Borders</div>
+                                    <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
                                      <div class="d-flex justify-content-end">
                                         <a class="btn btn-secondary fs-5  href="" target="_blank">view Task</a>
                                      </div>
