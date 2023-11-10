@@ -71,6 +71,7 @@ function renderTaskDetails() {
             text = parameters
                 .getTranslation("common_added_seconds")
                 .replace("%s", seconds);
+            console.log(text);
         }
         $(this).html(text);
         $(this).css("visibility", "visible");
