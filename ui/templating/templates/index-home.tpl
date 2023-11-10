@@ -552,7 +552,7 @@ a:hover{
                             </div>
                             {/if}
                             <div class="d-flex justify-content-end">
-                            <a class="btn btn-primary fs-6  href="" target="_blank">view Task</a>
+                            <a class="btn btn-secondary fs-6  href="" target="_blank">view Task</a>
                             </div>
                            
                         </div>
