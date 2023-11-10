@@ -525,7 +525,7 @@ a:hover{
                             <div class="d-flex mt-4 mb-1 ">
                               <button class="rounded-5 btn btn-greenish">  <span class="fs-6">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                 {if $task->getWordCount()}
-                                   <button type="button" class=" ms-1 rounded-5 btn bg-quartenary "><h6> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </h6> </button>
+                                   <button type="button" class=" ms-1 rounded-5 btn bg-quartenary "><div class="fs-6"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                 {/if}
 
                             </div>
