@@ -49,11 +49,11 @@ $font-sizes: (
 $spacer: 8px;
 $spacers: (
     0: 0,
-    1: $spacer * 2,
-    2: $spacer * 3,
-    3: $spacer * 4,
-    4: $spacer * 5,
-    5: $spacer * 6,
+    1: $spacer * 0.5,
+    2: $spacer * 2,
+    3: $spacer * 3,
+    4: $spacer * 4,
+    5: $spacer * 5,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
