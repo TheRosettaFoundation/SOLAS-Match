@@ -487,7 +487,7 @@ a:hover{
                 <div class=" d-grid mt-3 mb-5  ">
                     <button class="btn btn-primary " type="submit">
                         <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">
-                        <span class="text-twb-gray"> Apply filters</span>
+                        <span class=""> Apply filters</span>
                     </button>                
                 </div>
 
@@ -525,13 +525,13 @@ a:hover{
                             <div class="d-flex mt-4 mb-1 fs-6">
                               <button class="rounded-5 btn btn-tag-green">  <span class="">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                 {if $task->getWordCount()}
-                                   <button type="button" class=" ms-1 rounded-5 btn btn-tag-purple "><span class="fs-6,"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </span> </button>
+                                   <button type="button" class=" ms-1 rounded-5 btn  "><span class="fs-6,"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </span> </button>
                                 {/if}
 
                             </div>
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                            <div class="mb-1 mt-3 opacity-75">
+                            <div class="mb-1 mt-3 text-muted">
                             <span class=" ">
                                 Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                             </span>
@@ -552,7 +552,7 @@ a:hover{
                             </div>
                             {/if}
                             <div class="d-flex justify-content-end">
-                            <a class="btn btn-primary fs-6 text-twb-gray " href="" target="_blank">view Task</a>
+                            <a class="btn btn-primary fs-6  href="" target="_blank">view Task</a>
                             </div>
                            
                         </div>
