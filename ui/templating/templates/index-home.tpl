@@ -530,7 +530,23 @@ a:hover{
                                                 <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
+                                        </div>
+
+                                         {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                                            <div class="mb-1  text-muted">
+                                                <span class=" ">
+                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
+                                                </span>
+                                            {/if}
+                                            <span>
+                                            <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                            </span>
+                                            <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
+                                        
+                                            
                                             </div>
+                                       
+
                                 
 
                                 </div>
@@ -552,20 +568,7 @@ a:hover{
                             </div>
                            
                          
-                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                            <div class="mb-1  text-muted">
-                            <span class=" ">
-                                Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
-                            </span>
-                            {/if}
-                            <span>
-                              <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
-                            </span>
-                            <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
                            
-                            
-                            </div>
-                                       
 
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             <div class ="d-flex justify-content-between align-items-center">
