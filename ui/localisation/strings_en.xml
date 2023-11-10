@@ -173,7 +173,7 @@
 	<string name="common_back_to_home_page">Back to Home Page</string>
 	<string name="common_create_new_task">Create new Task</string>
 	<string name="common_project_description">Project Description</string>
-	<string name="common_due_by">Due by  test< img src =""/> <strong>%s</strong></string>
+	<string name="common_due_by">Due by test< img src =""/> <strong>%s</strong></string>
 	<string name="common_source">Source</string>
 	<string name="common_target">Target</string>
 	<string name="common_reset">Reset</string>
