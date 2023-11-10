@@ -571,7 +571,7 @@ a:hover{
                            
 
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                            <div class ="d-flex justify-content-between align-items-center">
+                            <div class ="d-flex justify-content-between align-items-center mt-3">
                             <div> Translation Project for Translations without Borders</div>
                             
                             </div>
