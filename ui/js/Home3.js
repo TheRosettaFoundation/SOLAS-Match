@@ -29,6 +29,7 @@ function getSetting(text) {
 function documentReady() {
     siteLocation = getSetting("siteLocation");
     parameters = new Parameters(loadingComplete);
+    console.log(parameters);
 }
 
 function loadingComplete() {
@@ -118,7 +119,7 @@ function renderTaskDetails() {
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
 
-        // $(this).css("visibility", "visible");
+        $(this).css("visibility", "visible");
     });
 
     $(".process_completed_utc").each(function () {
