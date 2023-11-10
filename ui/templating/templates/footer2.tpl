@@ -129,12 +129,14 @@
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
                         document.documentElement.setAttribute('data-bs-theme', 'light')
+                        navi.setAttribute('data-bs-theme', 'light')
                         
                        }
                        else{
                           imgL.classList.add("d-none");
                           imgN.classList.remove("d-none");
                            document.documentElement.setAttribute('data-bs-theme', 'dark')
+                            navi.setAttribute('data-bs-theme', 'dark')
                        }
 
                        
