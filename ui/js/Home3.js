@@ -72,8 +72,7 @@ function renderTaskDetails() {
                 .getTranslation("common_added_seconds")
                 .replace("%s", seconds);
         }
-        console.log(text);
-        console.log("hello");
+
         $(this).html(text);
         $(this).css("visibility", "visible");
     });
@@ -118,6 +117,8 @@ function renderTaskDetails() {
                 " " +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
+        console.log($(this));
+        console.log("hello");
         $(this).css("visibility", "visible");
     });
 
