@@ -546,8 +546,7 @@ a:hover{
                                         {/if}
 
                                 </div>
-                                second row
-
+                          
 
                             
                             </div>
