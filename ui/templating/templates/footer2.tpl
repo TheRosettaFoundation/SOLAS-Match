@@ -111,6 +111,10 @@
                     let theme = document.getElementById("theme");
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
+                    let navi = document.querySelector('nav) ;
+
+                
+
                     console.log(imgL);
                     console.log(imgN);
 
@@ -123,12 +127,14 @@
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
                         document.documentElement.setAttribute('data-bs-theme', 'light')
+                        navi.setAttribute('data-bs-theme', 'light')
                         
                        }
                        else{
                           imgL.classList.add("d-none");
                           imgN.classList.remove("d-none");
                            document.documentElement.setAttribute('data-bs-theme', 'dark')
+                           navi.setAttribute('data-bs-theme', 'dark')
                        }
 
                        
