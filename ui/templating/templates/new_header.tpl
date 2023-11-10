@@ -90,13 +90,13 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {if !isset($admin)}
                     <li class="nav-item">
-                    <a href="{urlFor name="home"}" class="nav-link" {if isset($current_page) && $current_page == 'home'}class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
+                    <a href="{urlFor name="home"}" class="nav-link" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
                 {if !isset($dashboard)}
                     <li class="nav-item">
-                        <a href="{urlFor name="org-dashboard"}" class="nav-link" {if isset($current_page) && $current_page == 'home'}class="active"{/if} >{Localisation::getTranslation('header_dashboard')}</a>
+                        <a href="{urlFor name="org-dashboard"}" class="nav-link" {if isset($current_page) && $current_page == 'home'} class="active"{/if} >{Localisation::getTranslation('header_dashboard')}</a>
                     </li>
                 {/if} 
 
@@ -104,7 +104,7 @@
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item" >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="nav-link"  {if isset($current_page) && $current_page == 'claimed-tasks'}class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="nav-link"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
 
