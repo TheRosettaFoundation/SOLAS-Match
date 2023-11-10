@@ -7,8 +7,7 @@
 
 $body-color: #1c1d36;
 $primary: #f89406;
-$blue: #133978;
-$secondary: $blue;
+$secondary: #133978;
 $green: #1b8912;
 $blue-400: #36a6e7;
 $indigo: #7b61ff;
@@ -19,6 +18,7 @@ $custom-colors: (
     "quartenary": $blue-400,
     "quinary": $indigo,
     "tertiary": $secondary,
+    "greenish": $green,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
