@@ -519,7 +519,7 @@ a:hover{
                         <div  id="task_{$task_id}">
                         {/if}
                             
-                            <div class="fs-4 fw-bold">
+                            <div class="fs-3 fw-bold">
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </div>
                             <div class="d-flex mt-4 mb-1 fs-6">
@@ -552,7 +552,7 @@ a:hover{
                             </div>
                             {/if}
                             <div class="d-flex justify-content-end">
-                            <a class="btn btn-secondary fs-6  href="" target="_blank">view Task</a>
+                            <a class="btn btn-secondary fs-4  href="" target="_blank">view Task</a>
                             </div>
                            
                         </div>
