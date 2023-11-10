@@ -440,11 +440,11 @@ a:hover{
 
     <div class="col-3 p-2">
      {if isset($user)}
-            <h3>{Localisation::getTranslation('index_filter_available_tasks')}
+            <h2>{Localisation::getTranslation('index_filter_available_tasks')}
             
-            </h3>
+            </h2>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
-            <h3 class="mt-5 mb-2"> Industry </h3>
+            <h2 class="mt-5 mb-2"> Industry </h2>
             <form method="post" action="{urlFor name="home"}">
 	           
 	                    <div>
