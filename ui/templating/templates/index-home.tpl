@@ -487,7 +487,7 @@ a:hover{
                 <div class=" d-grid mt-3 mb-5  ">
                     <button class="btn btn-primary " type="submit">
                         <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">
-                        <span class=""> Apply filters</span>
+                        <span class="text-white"> Apply filters</span>
                     </button>                
                 </div>
 
@@ -525,9 +525,9 @@ a:hover{
                                         </div>
 
                                         <div class="d-flex mt-2 mb-2 ">
-                                            <button class="rounded-5 bg-greenish border border-0 ">  <span class="fs-6 p-1">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
+                                            <button class="rounded-5 bg-greenish border border-0 ">  <span class="fs-6 p-1 text-white-50 fw-bold">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
-                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
+                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white-50 fw-bold"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
                                         </div>
