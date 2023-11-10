@@ -534,7 +534,7 @@ a:hover{
                                 
 
                                 </div>
-                                first row
+                           
 
                                 <div>
                                         {if $taskImages[$task_id]}
@@ -551,7 +551,7 @@ a:hover{
 
                             
                             </div>
-                             end of flexbox
+                           
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <div class="mb-1  text-muted">
