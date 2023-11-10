@@ -72,6 +72,7 @@ function renderTaskDetails() {
                 .getTranslation("common_added_seconds")
                 .replace("%s", seconds);
             console.log(text);
+            console.log("hello");
         }
         $(this).html(text);
         $(this).css("visibility", "visible");
