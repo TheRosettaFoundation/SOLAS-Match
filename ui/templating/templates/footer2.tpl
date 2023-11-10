@@ -111,7 +111,7 @@
                     let theme = document.getElementById("theme");
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
-                    let navi = documet.getElementByTagName("nav");
+                    let navi = document.getElementById("nav") ;
 
                     console.log(navi);
 
