@@ -51,9 +51,10 @@ $spacers: (
     0: 0,
     1: $spacer * 0.5,
     2: $spacer,
-    5: $spacer * 2,
-    6: $spacer * 3,
-    7: $spacer * 4,
+    3: $spacer * 2,
+    4: $spacer * 3,
+    5: $spacer * 4,
+    6: $spacer * 5,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
