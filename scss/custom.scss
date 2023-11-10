@@ -17,6 +17,7 @@ $custom-colors: (
     "primary": $primary,
     "quartenary": $blue-400,
     "quinary": $indigo,
+    "tertiary": $secondary,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
