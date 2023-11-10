@@ -518,17 +518,40 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            
-                            <div class="fs-3 fw-bold">
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
-                            </div>
-                            <div class="d-flex mt-2 mb-2 ">
-                              <button class="rounded-5 bg-greenish border border-0 ">  <span class="fs-6 p-1">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
-                                {if $task->getWordCount()}
-                                   <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
-                                {/if}
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                        <div class="fs-3 fw-bold">
+                                        <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                        </div>
 
+                                        <div class="d-flex mt-2 mb-2 ">
+                                            <button class="rounded-5 bg-greenish border border-0 ">  <span class="fs-6 p-1">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
+                                                {if $task->getWordCount()}
+                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
+                                                {/if}
+
+                                            </div>
+                                
+
+                                </div>
+                                first row
+
+                                <div>
+                                        {if $taskImages[$task_id]}
+                                        <div id="img_{$task_id}"  >
+                                            <img src="{$taskImages[$task_id]}">
+                                        </div>
+                                        {else}
+                                            <div id="img_{$task_id}" class="" ></div>
+                                        {/if}
+
+                                </div>
+                                second row
+
+
+                            
                             </div>
+                             end of flexbox
                          
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                             <div class="mb-1  text-muted">
@@ -558,13 +581,7 @@ a:hover{
                         </div>
 
                         </div>
-                        {if $taskImages[$task_id]}
-                            <div id="img_{$task_id}"  >
-                                <img src="{$taskImages[$task_id]}">
-                            </div>
-                        {else}
-                            <div id="img_{$task_id}" class="" ></div>
-                        {/if}
+                        
                     </div>
                 {/for}
             </div>
