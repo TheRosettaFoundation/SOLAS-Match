@@ -27,11 +27,11 @@ $custom-colors: (
 // $h2-font-size: $font-size-base * 5;
 // $h3-font-size: $font-size-base * 4;
 // $h4-font-size: $font-size-base * 3;
-// $h5-font-size: $font-size-base * 1.5;
+
 // $h6-font-size: $font-size-base;
 
-// $spacer: 8px;
-// $spacers: (
+$spacer: 8px;
+$spacers: (
     0: 0,
     1: $spacer * 2,
     2: $spacer * 3,
