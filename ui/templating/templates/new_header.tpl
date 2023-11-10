@@ -157,7 +157,7 @@
 
             </ul>
 
-             <ul class="navbar-nav flex-row flex-wrap ms:md-auto">
+             <ul class="navbar-nav flex-row flex-wrap ms:md-auto d-flex align-center">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
                                 <a  class="nav-link">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
