@@ -117,8 +117,7 @@ function renderTaskDetails() {
                 " " +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
-        $(this).innerHTML = "test";
-        console.log("hello");
+
         $(this).css("visibility", "visible");
     });
 

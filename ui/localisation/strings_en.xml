@@ -173,7 +173,7 @@
 	<string name="common_back_to_home_page">Back to Home Page</string>
 	<string name="common_create_new_task">Create new Task</string>
 	<string name="common_project_description">Project Description</string>
-	<string name="common_due_by">Due by <strong>%s</strong></string>
+	<string name="common_due_by">Due by  <img src="{urlFor name='home'}ui/img/clock.svg"> <strong>%s</strong></string>
 	<string name="common_source">Source</string>
 	<string name="common_target">Target</string>
 	<string name="common_reset">Reset</string>
