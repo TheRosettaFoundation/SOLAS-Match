@@ -3,7 +3,11 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Merriweather:wght@300&family=Montserrat:wght@500;600&family=Mukta:wght@200;300&display=swap");
+
 // @import "../node_modules/bootstrap/scss/variables-dark";
+
+$font-family-base: "Inter", sans-serif;
 
 $body-color: #1c1d36;
 $primary: #f89406;
