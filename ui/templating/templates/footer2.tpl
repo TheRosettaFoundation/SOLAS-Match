@@ -111,6 +111,9 @@
                     let theme = document.getElementById("theme");
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
+                    let navi = documet.querySelector("nav");
+
+                    console.log(navi);
 
                     
 
