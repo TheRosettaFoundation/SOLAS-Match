@@ -232,7 +232,7 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        var_dump($request);
+        var_dump($currentScrollPage);
 
        
 
