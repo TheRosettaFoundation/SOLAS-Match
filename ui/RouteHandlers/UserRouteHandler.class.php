@@ -231,6 +231,8 @@ class UserRouteHandler
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
+
+        var_dump($currentScrollPage);
      
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
