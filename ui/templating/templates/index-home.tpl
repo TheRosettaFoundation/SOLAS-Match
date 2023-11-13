@@ -600,19 +600,19 @@ a:hover{
                         {assign var="count" value= $page_count}
                     {/if}    
 
-                     <li class="m-3 border border-dark-subtle rounded-4 p-1" >
+                     <li class="m-3 border border-dark-subtle rounded-4 px-2" >
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">First</a></li>
-                    <li class="m-3 border border-dark-subtle rounded-4 p-1" >
+                    <li class="m-3 border border-dark-subtle rounded-4 px-1" >
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
         
                     {for $page=1 to $count}
 
-                            <li class="m-3 border border-dark-subtle rounded-4 p-1">
+                            <li class="m-3 border border-dark-subtle rounded-4 px-2">
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
                     {/for}
-                    <li class="m-3 border border-dark-subtle rounded-4 p-1">
+                    <li class="m-3 border border-dark-subtle rounded-4 px-2">
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
-                     <li class="m-3 border border-dark-subtle rounded-4 p-1" >
+                     <li class="m-3 border border-dark-subtle rounded-4 px-2" >
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">last</a></li>
             </ul>
 
