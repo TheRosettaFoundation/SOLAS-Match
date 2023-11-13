@@ -340,7 +340,7 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                if($start 1>){
+                if(intval($start)> 1){
                     $payoad = json_encode($pageTasks);
                     $response->getBody()->write($payload);
                     return $response
