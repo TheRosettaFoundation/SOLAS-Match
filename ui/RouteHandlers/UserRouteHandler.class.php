@@ -491,7 +491,7 @@ class UserRouteHandler
         $response->withStatus(201);
         // var_dump($response);
 
-        return ($payload);
+        // return ($payload);
         
         return UserRouteHandler::render('index-home.tpl', $response);
     }
