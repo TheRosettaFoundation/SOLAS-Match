@@ -490,8 +490,10 @@ class UserRouteHandler
         // $response->withHeader('Content-Type' , 'application/json');
         // $response->withStatus(201);
         // var_dump($response);
+
+        return ($payload);
         
-        return UserRouteHandler::render('index-home.tpl', $response);
+        // return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)
