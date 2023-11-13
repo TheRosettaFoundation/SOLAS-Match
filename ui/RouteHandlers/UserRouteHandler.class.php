@@ -301,9 +301,9 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = null;
 
-        $start = (($currentScrollPage - 1) * $itemsPerScrollPage) + 1;
+        $start = 2 ;
 
-        $end = $start + 6 ;
+        $end = 13;
 
         var_dump($start);
         var_dump($end);
