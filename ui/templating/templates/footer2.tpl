@@ -120,7 +120,7 @@
                         console.log(url);
 
                         const req = new XMLHttpRequest();
-                         
+                         console.log(req);
                          req.onreadystatechange = receivedTasks ;
                          req.open("GET" , url , true ) ;
                          req.send();
