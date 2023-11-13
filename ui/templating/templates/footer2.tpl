@@ -116,14 +116,25 @@
 
                     console.log(pages);
 
-                    pages.forEach( page  =>{
-                        addEventListener('click' , function (e){
-                            e.preventDefault() ;
-                            console.log("clicked");
-                            e.stopPropagation;
-                        })
-                    })
+                    const requestPage = () =>{
+
+                        
+                         const req = new XMLHttpRequest();
+                         req.open("GET" , "/" ) ;
+                         req.addEventListener("load" , ()=>{ console.log("call loading ")})
+                         req.addEventListener("error" , ()=>{ console.log("error ")})
+                      
+
+                    }
+
                     
+                    pages.forEach( page  =>{
+                        addEventListener('click' , requestPage) ;
+                    })
+
+
+                    
+
                    
                   
 
