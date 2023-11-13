@@ -496,9 +496,9 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         // var_dump($payload);
 
-        $response->getBody()->write($payload);
-        $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(201);
+        // $response->getBody()->write($payload);
+        // $response->withHeader('Content-Type' , 'application/json');
+        // $response->withStatus(201);
         // var_dump($response);
 
         // return ($payload);
