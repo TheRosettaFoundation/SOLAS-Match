@@ -3907,20 +3907,95 @@ END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getUserPageTasks`;
-DELIMITER ;
+DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPageTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
-BEGIN    
-        SELECT
-            t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount, t.`comment`, t.`task-type_id` AS taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline, t.`created-time` AS createdTime 
-            FROM
-                Users u,
-                Tasks t
-      
-            WHERE
-                u.id=uID AND
-                t.id NOT IN (SELECT t.task_id FROM TaskClaims t)                         
+BEGIN
+    IF lim=''    OR lim    IS NULL THEN SET lim    = ~0; END IF;
+    IF offset='' OR offset IS NULL THEN SET offset =  0; END IF;
+    IF taskType=''       THEN SET taskType       = NULL; END IF;
+    IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
+    IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
+
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+    SET @isSiteAdmin = 0;
+    SET @NGO_list = '';
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
+
+    SET @site_linguist = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
+        SET @site_linguist = 1;
+    ELSE
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+    END IF;
+
+    SELECT
+        t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.`comment`, t.`task-type_id` AS taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline, t.`created-time` AS createdTime 
+    FROM
+        Users u,
+        Tasks t
+    JOIN      Projects p ON t.project_id=p.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+    LEFT JOIN UserQualifiedPairs uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target
+    WHERE
+        u.id=uID AND
+        t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
+        t.published=1 AND
+        t.`task-status_id`=2 AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        (taskType IS NULL OR t.`task-type_id`=taskType) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
+        (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
+        (strict=0 OR uqp.user_id IS NOT NULL) AND
+        (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
+        (
+            @isSiteAdmin=1 OR
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    GROUP BY t.id
+    ORDER BY
+        IF(t.`language_id-target`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-target`, 50, 0), 0) +
+        IF(t.`language_id-source`=MAX(u.language_id), 250 + IF(MAX(u.country_id)=t.`country_id-source`, 25, 0), 0) +
+        IF(COUNT(uqp.user_id), 1000,
+            IF(t.`language_id-target`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-target`, 50, 0), 0) +
+            IF(t.`language_id-source`=MAX(u.language_id), 500 + IF(MAX(u.country_id)=t.`country_id-source`, 50, 0), 0)
+        ) +
+        IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
+        IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
+        (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
+        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700) +
+        IF(DATEDIFF(CURDATE(), t.deadline) > 91, -5000, 0)
+        DESC
+    LIMIT offset, lim;
 END//
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
