@@ -131,7 +131,7 @@
                     const receivedTasks = ()=>{
                         console.log("Testing rceiv..");
                         if(this.readyState == 4){
-                            if(this.status === 200) {
+                            if(this.status == 200) {
                                 console.log("response succeed")
                             }
                             else{
