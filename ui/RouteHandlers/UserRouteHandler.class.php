@@ -487,11 +487,11 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         var_dump($payload);
 
-        $response->getBody()->write($payload);
-        $response->withHeader('Content-Type' , 'application/json');
+        // $response->getBody()->write($payload);
+        // $response->withHeader('Content-Type' , 'application/json');
                  
     
-        return UserRouteHandler::render('index-home.tpl', $response);
+        return UserRouteHandler::render('index-home.tpl', $response->getBody()->write($payload);
     }
 
     public function register(Request $request, Response $response, $args)
