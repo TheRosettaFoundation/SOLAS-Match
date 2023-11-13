@@ -314,8 +314,8 @@ class UserRouteHandler
 
         $end = $start + $itemsPerScrollPage;
 
-        // var_dump($start);
-        // var_dump($end);
+        var_dump($start);
+        var_dump($end);
 
         $pageTasks = null ; 
       
