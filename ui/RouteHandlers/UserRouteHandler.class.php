@@ -234,14 +234,14 @@ class UserRouteHandler
 
         // var_dump($currentScrollPage);
 
-        if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-            // Do something
-            return UserRouteHandler::render('index-home.tpl', $response);
+        // if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+        //     // Do something
+        //     return UserRouteHandler::render('index-home.tpl', $response);
 
-        }else {
+        // }else {
 
-            echo("this is false");
-        }
+        //     echo("this is false");
+        // }
 
        
      
