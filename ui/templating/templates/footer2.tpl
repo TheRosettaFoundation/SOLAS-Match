@@ -129,8 +129,8 @@
                     }
 
                     const receivedTasks = ()=>{
-                        if(httpRequest.readyState === XMLHttpRequest.DONE){
-                            if(httpRequest.status === 200) {
+                        if(this.readyState == 4){
+                            if(this.status === 200) {
                                 console.log("response succeed")
                             }
                             else{
