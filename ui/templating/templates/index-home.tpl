@@ -438,8 +438,9 @@ a:hover{
 <div class ="container-fluid">
 
 <div class="d-flex row justify-content-between ">
-    <div class="col-lg-3"> Search BOX</div>
+   
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
+         <div class=""> Search BOX</div>
      {if isset($user)}
             <h5 class="fw-bold">{Localisation::getTranslation('index_filter_available_tasks')}
             
