@@ -142,7 +142,7 @@
 
                     pages.forEach(page =>{
                         page.addEventListener("click" , (e)=>{
-                            e.preventDefault();
+                         
                             let url  = page.href;
                            requestPage(url);
                             

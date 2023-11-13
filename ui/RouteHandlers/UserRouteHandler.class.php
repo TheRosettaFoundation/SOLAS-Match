@@ -234,7 +234,14 @@ class UserRouteHandler
 
         var_dump($currentScrollPage);
 
-       
+        if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+            // Do something
+            var_dump("this is true");
+
+        }else {
+
+            var_dump("this is false");
+        }
 
        
      
