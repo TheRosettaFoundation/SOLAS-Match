@@ -118,7 +118,7 @@
 
                     const requestPage = (e,url) =>{
 
-                         e.preventDefault();
+                        
                          const req = new XMLHttpRequest();
                          req.open("GET" , url ) ;
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
@@ -131,6 +131,7 @@
                     pages.forEach( page  =>{
                         let url = page.href ;
                         page.addEventListener('click' , requestPage(e,url));
+                        e.preventDefault();
 
                        
                     })
