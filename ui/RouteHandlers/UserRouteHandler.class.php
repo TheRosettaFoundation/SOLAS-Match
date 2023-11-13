@@ -359,7 +359,6 @@ class UserRouteHandler
             $topTasksCount = 0;
         }
 
-        var_dump($pageTasks);
 
         $taskTags = array();
         $created_timestamps = array();
@@ -482,8 +481,9 @@ class UserRouteHandler
        
         ));
 
-        $payoad = json_encode($pageTasks);
-        var_dump($payload);
+      
+       
+        var_dump($pageTasks);
 
 
         // $response->getBody()->write($payload);
