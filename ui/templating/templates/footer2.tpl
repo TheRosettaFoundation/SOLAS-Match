@@ -112,9 +112,9 @@
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
-                    let pages = document.querySelectorAll(".page-link");
+                    let pages = document.querySelectorAll(".page");
 
-                    pages.forEach(page=>{
+                    pages.forEach( page  =>{
                         addEventListener('click' , function (e){
                             e.preventDefault() ;
                             console.log("clicked");
