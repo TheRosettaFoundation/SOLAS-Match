@@ -489,6 +489,7 @@ class UserRouteHandler
 
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
+        $response->withStatus(201);
         var_dump($response);
                  
     
