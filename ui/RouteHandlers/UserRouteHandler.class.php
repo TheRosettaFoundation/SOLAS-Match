@@ -3330,7 +3330,7 @@ EOF;
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
-        return response ;
+        return $response ;
 
         // $response->getBody()->write($smarty->fetch($template));
         // return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
