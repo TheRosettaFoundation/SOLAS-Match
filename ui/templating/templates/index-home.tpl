@@ -440,11 +440,11 @@ a:hover{
 
     <div class="col-3 p-2">
      {if isset($user)}
-            <h2>{Localisation::getTranslation('index_filter_available_tasks')}
+            <h5 class="fw-bold">{Localisation::getTranslation('index_filter_available_tasks')}
             
-            </h2>
+            </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
-            <h2 class="mt-5 mb-2"> Industry </h2>
+            <h5 class="mt-5 mb-2 fw-bold"> Industry </h5>
             <form method="post" action="{urlFor name="home"}">
 	           
 	                    <div>
@@ -520,7 +520,7 @@ a:hover{
                         {/if}
                             <div class="d-flex justify-content-between">
                                 <div>
-                                        <div class="fs-3 fw-bold">
+                                        <div class="fs-5 fw-bold">
                                         <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                         </div>
 
