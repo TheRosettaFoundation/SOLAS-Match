@@ -591,24 +591,24 @@ a:hover{
             </div>
         </div>
 
-            <ul class=" d-flex justify-content-center">
+            <ul class=" flex-row d-flex justify-content-center">
 
-            {assign var="url_nam" value="home-paged"}
-            {if $page_count> 6}
-                {assign var="count" value= 6}
-            {else}
-                {assign var="count" value= $page_count}
-            {/if}    
-               <li class="ms-1" >
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
- 
-            {for $page=1 to $count}
+                    {assign var="url_nam" value="home-paged"}
+                    {if $page_count> 6}
+                        {assign var="count" value= 6}
+                    {else}
+                        {assign var="count" value= $page_count}
+                    {/if}    
+                    <li class="m-2" >
+                            <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
+        
+                    {for $page=1 to $count}
 
-                    <li class="" id="page-item">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
-            {/for}
-               <li class="ms-1">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
+                            <li class="m-2">
+                            <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
+                    {/for}
+                    <li class="m-2">
+                            <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
             </ul>
 
   
