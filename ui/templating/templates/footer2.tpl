@@ -116,7 +116,7 @@
 
                     pages.forEach(page=>{
                         addEventListener('click' , function (e){
-                            e.preventDefault ;
+                            e.preventDefault() ;
                             console.log(clicked);
                         })
                     })
