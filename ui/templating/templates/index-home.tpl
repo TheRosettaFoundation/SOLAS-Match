@@ -436,8 +436,9 @@ a:hover{
     </div>
 {/if}
 <div class ="container-fluid">
-<div class="d-flex row justify-content-between ">
 
+<div class="d-flex row justify-content-between ">
+    <div class="col-lg-3"> Search BOX</div>
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
      {if isset($user)}
             <h5 class="fw-bold">{Localisation::getTranslation('index_filter_available_tasks')}
@@ -504,7 +505,18 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-                    
+            <div class="d-flex justify-content-end">  <span >Sort By : </span>
+                
+                     <div class"mb-3">
+                                    
+                                        <select name="sorttype" ID="sorttype" class="form-select">
+	                                    <option value="" > Recently viewed </option>
+	                                   
+	                                </select>
+                            </div>
+                
+            
+             </div>        
             <div>
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
