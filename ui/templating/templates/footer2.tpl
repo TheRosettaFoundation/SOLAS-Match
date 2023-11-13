@@ -117,6 +117,7 @@
                     console.log(pages);
 
                     const requestPage = (url) =>{
+                        console.log(url);
 
                         const req = new XMLHttpRequest();
                          
