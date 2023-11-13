@@ -483,7 +483,7 @@ class UserRouteHandler
         var_dump($payload);
 
 
-        $response->getBody()->write($payload);
+        // $response->getBody()->write($payload);
                  
     
         return UserRouteHandler::render('index-home.tpl', $response);
