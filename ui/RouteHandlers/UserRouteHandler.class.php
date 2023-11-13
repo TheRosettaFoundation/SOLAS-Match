@@ -489,7 +489,7 @@ class UserRouteHandler
         // $response->withStatus(201);
         // var_dump($response);
         
-        return response;
+        return $response;
     
         // return UserRouteHandler::render('index-home.tpl', $response);
     }
