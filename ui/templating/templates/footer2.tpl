@@ -129,7 +129,9 @@
 
                     
                     pages.forEach( page  =>{
-                        addEventListener('click' , requestPage) ;
+                        let url = page.href ;
+                        console.log(url)
+                       
                     })
 
 
