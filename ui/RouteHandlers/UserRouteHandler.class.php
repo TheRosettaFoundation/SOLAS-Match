@@ -232,16 +232,16 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        var_dump($currentScrollPage);
+        // var_dump($currentScrollPage);
 
-        if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-            // Do something
-            echo("this is true");
+        // if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+        //     // Do something
+        //     echo("this is true");
 
-        }else {
+        // }else {
 
-            echo("this is false");
-        }
+        //     echo("this is false");
+        // }
 
        
      
@@ -348,7 +348,8 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
+                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $end, $filter, $start);     
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
 
