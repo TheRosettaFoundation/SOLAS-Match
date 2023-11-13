@@ -591,7 +591,7 @@ a:hover{
             </div>
         </div>
 
-            <ul class=" d-flex justify-content-center">
+            <div class=" d-flex justify-content-between bg-primary ">
 
             {assign var="url_nam" value="home-paged"}
             {if $page_count> 6}
@@ -599,17 +599,17 @@ a:hover{
             {else}
                 {assign var="count" value= $page_count}
             {/if}    
-               <li class="" id="page-item">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
+               <div class="" id="page-item">
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></div>
  
             {for $page=1 to $count}
 
                     <li class="" id="page-item">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></div>
             {/for}
-               <li class="" id="page-item">
-                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
-            </ul>
+               <div class="" id="page-item">
+                     <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></div> 
+            </div>
 
   
 
