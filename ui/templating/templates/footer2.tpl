@@ -122,12 +122,21 @@
                          req.open("GET" , url , true ) ;
                          req.send();
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
-                         req.onreadystatechange = () =>{
-                            console.log("Data received")
-                         }
+                         req.onreadystatechange = receivedTasks ;
 
                       
 
+                    }
+
+                    const receivedTasks = ()=>{
+                        if(httpRequest.readyState === XMLHttpRequest.DONE){
+                            if(httpRequest.status === 200) {
+                                console.log("response succeed")
+                            }
+                            else{
+                                console.log("Response failed");
+                            }
+                        }
                     }
 
                     pages.forEach(page =>{
