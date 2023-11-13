@@ -487,7 +487,8 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         var_dump($payload);
 
-        // $response->getBody()->write($payload);
+        $response->getBody()->write($payload);
+        $response->withHeader('Content-Type' , 'application/json');
                  
     
         return UserRouteHandler::render('index-home.tpl', $response);
