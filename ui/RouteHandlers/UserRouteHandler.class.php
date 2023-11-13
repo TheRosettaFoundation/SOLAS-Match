@@ -359,6 +359,8 @@ class UserRouteHandler
             $topTasksCount = 0;
         }
 
+        var_dump($pageTasks);
+
         $taskTags = array();
         $created_timestamps = array();
         $deadline_timestamps = array();
@@ -368,6 +370,7 @@ class UserRouteHandler
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksC /5);
+
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
