@@ -160,7 +160,7 @@
              <ul class="navbar-nav flex-row flex-wrap ms:md-auto d-flex d-flex align-items-center">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
-                                <a  class="nav-link">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                                <a  class="nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
                         {if isset($user)}
