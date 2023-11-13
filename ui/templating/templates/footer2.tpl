@@ -122,7 +122,10 @@
                          req.open("GET" , url , true ) ;
                          req.send();
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
-                         req.addEventListener("error" , ()=>{ console.log("error ")})
+                         req.onreadystatechange = () =>{
+                            console.log("Data received")
+                         }
+
                       
 
                     }
