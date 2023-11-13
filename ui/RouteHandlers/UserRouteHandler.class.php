@@ -236,11 +236,11 @@ class UserRouteHandler
 
         if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
             // Do something
-            var_dump("this is true");
+            echo("this is true");
 
         }else {
 
-            var_dump("this is false");
+            echo("this is false");
         }
 
        
