@@ -307,6 +307,8 @@ class UserRouteHandler
 
         var_dump($start);
         var_dump($end);
+
+        $payload = null ; 
       
 
 
@@ -340,13 +342,10 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                if(intval($start)> 1){
-                    $payoad = json_encode($pageTasks);
-                    $response->getBody()->write($payload);
-                    return $response
-                            ->withHeader('Content-Type' , 'application/json')
-                            ->withStatus(201);
-                }                
+                $payoad = json_encode($pageTasks);
+                var_dump($payload);
+                    
+                               
                 // $pageTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
@@ -480,7 +479,11 @@ class UserRouteHandler
             'page_count' => $pages,
        
         ));
-        return UserRouteHandler::render('index-home.tpl', $response);
+
+        $response->getBody()->write($payload);
+                 
+    
+        return UserRouteHandler::render('index-home.tpl', $response ->withHeader('Content-Type' , 'application/json'));
     }
 
     public function register(Request $request, Response $response, $args)
