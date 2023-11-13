@@ -140,7 +140,9 @@
                         }
                     }
 
-                    pages['1'].addEventListener("click", ()=>{
+                    pages['1'].addEventListener("click", (e)=>{
+
+                        e.preventDefault();
 
                         console.log("clicked")
                     })
