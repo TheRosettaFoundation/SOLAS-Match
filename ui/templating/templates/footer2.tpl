@@ -140,11 +140,16 @@
                         }
                     }
 
+                    let hr = pages['1'].href ;
+
                     pages['1'].addEventListener("click", (e)=>{
 
                         e.preventDefault();
+                        requestPage(hr);
 
-                        console.log("clicked")
+                        
+
+                        
                     })
 
                     
