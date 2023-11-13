@@ -501,10 +501,10 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         // var_dump($payload);
 
-        // $response->getBody()->write($payload);
-        // $response->withHeader('Content-Type' , 'application/json');
-        // $response->withStatus(201);
-        // var_dump($response);
+        $response->getBody()->write($payload);
+        $response->withHeader('Content-Type' , 'application/json');
+        $response->withStatus(200);
+        
 
         // return ($payload);
         
