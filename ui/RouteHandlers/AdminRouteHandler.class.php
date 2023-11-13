@@ -1543,7 +1543,7 @@ class AdminRouteHandler
 
     public function metabase(Request $request, Response $response, $args)
     {
-        require_once '/repo/SOLAS-Match/metabase_reports/' . $args['report'];
+        require_once '/repo/metabase_reports/' . $args['report'];
         die;
     }
 }
