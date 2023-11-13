@@ -232,7 +232,7 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        var_dump($currentScrollPage);
+       
 
        
      
@@ -305,8 +305,8 @@ class UserRouteHandler
 
         $end = $start + $itemsPerScrollPage = 6;
 
-        var_dump($start);
-        var_dump($end);
+        // var_dump($start);
+        // var_dump($end);
 
         $pageTasks = null ; 
       
@@ -342,10 +342,7 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                
-                    
-                               
-                // $pageTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
@@ -487,9 +484,9 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         // var_dump($payload);
 
-        $response->getBody()->write($payload);
-        $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(201);
+        // $response->getBody()->write($payload);
+        // $response->withHeader('Content-Type' , 'application/json');
+        // $response->withStatus(201);
         // var_dump($response);
                  
     
