@@ -460,7 +460,8 @@ class UserRouteHandler
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
-            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
+            var_dump("empty"):
+            // $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
         $template_data = array_merge($template_data, array(
