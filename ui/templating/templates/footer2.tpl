@@ -113,7 +113,10 @@
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page-link");
-                    console.log(pages);
+                    pages.forEach(page => addEventListener ("click" , function(e){
+                        console.log("clicked");
+
+                    }))
 
                     console.log(navi);
 
