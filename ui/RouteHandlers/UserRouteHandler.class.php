@@ -490,7 +490,7 @@ class UserRouteHandler
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
         $response->withStatus(201);
-        var_dump($response);
+        // var_dump($response);
                  
     
         return UserRouteHandler::render('index-home.tpl', $response);
@@ -3330,10 +3330,10 @@ EOF;
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
-        return $response ;
+      
 
-        // $response->getBody()->write($smarty->fetch($template));
-        // return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
+        $response->getBody()->write($smarty->fetch($template));
+        return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
 
