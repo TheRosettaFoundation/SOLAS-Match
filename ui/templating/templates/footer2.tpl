@@ -143,7 +143,7 @@
                     pages.forEach(el =>{
                         el.addEventListener("click" , (e)=>{
                             e.preventDefault();
-                            let url  = page.href;
+                            let url  = el.href;
                             console.log(url);
                            requestPage(url);
                             
