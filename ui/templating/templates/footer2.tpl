@@ -140,14 +140,9 @@
                         }
                     }
 
-                    pages.forEach(el =>{
-                        el.addEventListener("click" , (e)=>{
-                            e.preventDefault();
-                            let url  = el.href;
-                            console.log(url);
-                           requestPage(url);
-                            
-                        })
+                    pages['1'].addEventListener("click", ()=>{
+
+                        console.log("clicked")
                     })
 
                     
