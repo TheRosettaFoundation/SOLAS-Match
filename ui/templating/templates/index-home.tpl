@@ -623,7 +623,7 @@ a:hover{
                     {/if}    
 
                      <li class="m-3 border border-dark-subtle rounded-3 px-2" >
-                            <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">First</a></li>
+                            <a class="page-link" href="{urlFor name="$url_nam" options="page_no."1"|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">First</a></li>
                     <li class="m-3 border border-dark-subtle rounded-3 px-3" >
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
         

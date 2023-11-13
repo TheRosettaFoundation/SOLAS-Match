@@ -233,6 +233,8 @@ class UserRouteHandler
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         var_dump($currentScrollPage);
+
+        $currentPage = $currentScrollPage;
      
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -298,6 +300,13 @@ class UserRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
         $topTasks = null;
+
+        $start = (($currentScrollPage - 1) * $itemsPerScrollPage) + 1;
+
+        $end = $start + 6 ;
+
+        var_dump($start);
+        var_dump($end)
       
 
 
