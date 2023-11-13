@@ -308,7 +308,7 @@ class UserRouteHandler
         var_dump($start);
         var_dump($end);
 
-        $payload = null ; 
+        $pageTasks = null ; 
       
 
 
@@ -342,8 +342,7 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                $payoad = json_encode($pageTasks);
-                var_dump($payload);
+                
                     
                                
                 // $pageTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
@@ -480,6 +479,10 @@ class UserRouteHandler
        
         ));
 
+        $payoad = json_encode($pageTasks);
+        var_dump($payload);
+
+        
         $response->getBody()->write($payload);
                  
     
