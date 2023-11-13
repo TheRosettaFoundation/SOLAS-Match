@@ -116,11 +116,12 @@
 
                     console.log(pages);
 
-                    const requestPage = (e,url) =>{
+                    const requestPage = (url) =>{
 
                         
                          const req = new XMLHttpRequest();
-                         req.open("GET" , url ) ;
+                         req.open("GET" , url , true ) ;
+                         req.send();
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
                          req.addEventListener("error" , ()=>{ console.log("error ")})
                       
@@ -128,9 +129,9 @@
                     }
 
                     
-                    pages.forEach( page  =>{
+                    pages.forEach( page  => (e) {
                         let url = page.href ;
-                        page.addEventListener('click' , requestPage(e,url));
+                        page.addEventListener('click' , requestPage(url));
                         e.preventDefault();
 
                        
