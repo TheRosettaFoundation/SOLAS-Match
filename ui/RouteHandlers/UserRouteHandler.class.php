@@ -484,14 +484,12 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         // var_dump($payload);
 
-        $response->getBody()->write($payload);
+        // $response->getBody()->write($payload);
         // $response->withHeader('Content-Type' , 'application/json');
         // $response->withStatus(201);
         // var_dump($response);
         
-        return $response;
-    
-        // return UserRouteHandler::render('index-home.tpl', $response);
+        return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)
@@ -3329,8 +3327,9 @@ EOF;
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
       
-
+        var_dump($response);
         $response->getBody()->write($smarty->fetch($template));
+    
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
