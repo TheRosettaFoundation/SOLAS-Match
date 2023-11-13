@@ -339,9 +339,15 @@ class UserRouteHandler
                 $strict = false;
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);      
                 // var_dump($topTasks); 
-                $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);
-                var_dump($pageTasks);       
-                $pageTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
+                if($start 1>){
+                    $payoad = json_encode($pageTasks);
+                    $response->getBody()->write($payload);
+                    return $response
+                            ->withHeader('Content-Type' , 'application/json')
+                            ->withStatus(201);
+                }                
+                // $pageTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
