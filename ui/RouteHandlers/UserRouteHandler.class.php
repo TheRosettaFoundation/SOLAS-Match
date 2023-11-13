@@ -234,7 +234,7 @@ class UserRouteHandler
 
         var_dump($currentScrollPage);
 
-        $currentPage = $currentScrollPage;
+       
      
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -306,7 +306,7 @@ class UserRouteHandler
         $end = $start + 6 ;
 
         var_dump($start);
-        var_dump($end)
+        var_dump($end);
       
 
 
