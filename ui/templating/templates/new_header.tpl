@@ -140,7 +140,7 @@
                  {if !isset($site_admin)}
                             <li class="nav-item">
                                 {if isset($user)}
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="nav-link">TWB Learning Center</a>
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="nav-link fw-bold">TWB Learning Center</a>
                                 {else}
                                 <a href="https://elearn.translatorswb.org/" target="_blank" class="nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
