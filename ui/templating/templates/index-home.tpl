@@ -520,7 +520,7 @@ a:hover{
                         {/if}
                             <div class="d-flex justify-content-between">
                                 <div>
-                                        <div class="fs-5 fw-bold">
+                                        <div class="fw-bold fs-4">
                                         <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                         </div>
 
