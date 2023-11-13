@@ -114,6 +114,7 @@
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page-link");
                     pages.forEach(page => addEventListener ("click" , function(e){
+                        e.preventDefault();
                         console.log("clicked");
 
                     }))
