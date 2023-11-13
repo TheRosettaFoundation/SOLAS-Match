@@ -541,8 +541,8 @@ a:hover{
                         {/if}
                             <div class="d-flex justify-content-between">
                                 <div>
-                                        <div class="fw-bold fs-4">
-                                        <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                        <div class="fw-bold fs-4 w-75">
+                                        <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} <span class="fs-3 text-bg-primary border border-primary opacity-50 rounded-circle d-inline-block"> ? </span> </a>
                                         </div>
 
                                         <div class="d-flex mt-2 mb-2 ">
@@ -596,7 +596,7 @@ a:hover{
                             <div class ="d-flex justify-content-between align-items-center ">
                                     <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
                                      <div class="d-flex justify-content-end">
-                                        <a class="btn btn-secondary fs-5  href="" target="_blank">view Task</a>
+                                        <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
                                      </div>
                             
                             </div>
