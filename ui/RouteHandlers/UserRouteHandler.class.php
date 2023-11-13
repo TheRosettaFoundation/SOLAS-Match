@@ -484,7 +484,8 @@ class UserRouteHandler
       
        
         var_dump($pageTasks);
-
+        $payload = json_encode($pageTasks);
+        var_dump($payload);
 
         // $response->getBody()->write($payload);
                  
