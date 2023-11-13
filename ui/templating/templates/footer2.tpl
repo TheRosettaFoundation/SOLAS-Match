@@ -118,8 +118,7 @@
 
                     const requestPage = (url) =>{
 
-                        
-                         const req = new XMLHttpRequest();
+                        const req = new XMLHttpRequest();
                          req.open("GET" , url , true ) ;
                          req.send();
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
