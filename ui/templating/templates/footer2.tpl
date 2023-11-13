@@ -116,11 +116,11 @@
 
                     console.log(pages);
 
-                    const requestPage = () =>{
+                    const requestPage = (e,url) =>{
 
-                        
+                         e.preventDefault();
                          const req = new XMLHttpRequest();
-                         req.open("GET" , "/" ) ;
+                         req.open("GET" , url ) ;
                          req.addEventListener("load" , ()=>{ console.log("call loading ")})
                          req.addEventListener("error" , ()=>{ console.log("error ")})
                       
@@ -130,7 +130,8 @@
                     
                     pages.forEach( page  =>{
                         let url = page.href ;
-                        console.log(url)
+                        page.addEventListener('click' , requestPage(e,url));
+
                        
                     })
 
