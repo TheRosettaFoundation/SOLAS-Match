@@ -89,13 +89,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
                 {if !isset($admin)}
-                    <li class="nav-item">
+                    <li class="nav-item fw-bold">
                     <a href="{urlFor name="home"}" class="nav-link" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
                 {if !isset($dashboard)}
-                    <li class="nav-item">
+                    <li class="nav-item fw-bold">
                         <a href="{urlFor name="org-dashboard"}" class="nav-link" {if isset($current_page) && $current_page == 'home'} class="active"{/if} >{Localisation::getTranslation('header_dashboard')}</a>
                     </li>
                 {/if} 
@@ -103,7 +103,7 @@
             
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
-                    <li class="nav-item" >
+                    <li class="nav-item fw-bold" >
                         <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="nav-link"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
@@ -123,7 +123,7 @@
                 {/if} 
 
                  {if !isset($site_admin)}
-                             <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if} class="nav-item">
+                             <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if} class="nav-item ">
                                 <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class="nav-link">{Localisation::getTranslation('common_faq')}</a>
                             </li>
                         {/if}
