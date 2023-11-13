@@ -440,7 +440,15 @@ a:hover{
 <div class="d-flex row justify-content-between ">
    
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
-         <div class=""> Search BOX</div>
+         <div class="mb-3 input-group">
+            <input type="text" class="form-control"> 
+            <span class="input-group-text bg-primary">
+
+                <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
+            
+            </span>
+         
+         </div>
      {if isset($user)}
             <h5 class="fw-bold">{Localisation::getTranslation('index_filter_available_tasks')}
             
@@ -506,9 +514,9 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="d-flex justify-content-end">  <span >Sort By : </span>
+            <div class="d-flex justify-content-end align-items-center mb-3">  <span >Sort By : </span>
                 
-                     <div class"mb-3">
+                     <div class="">
                                     
                                         <select name="sorttype" ID="sorttype" class="form-select">
 	                                    <option value="" > Recently viewed </option>
