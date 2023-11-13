@@ -4,10 +4,10 @@
     <div class="d-flex row justify-content-between ">
         
             {foreach $top_tags as $tag}
-                <div class="tag col-6 p-2 text-wrap">
+                <div class="tag col-12 p-2 text-wrap">
                     {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                     {assign var="tagId" value=$tag->getId()}
-                     <div ><a href="{urlFor name="tag-details" options="id.$tagId"}" class="text-center p-1 rounded-5 text-wrap ">{$tag_label}</a></div>
+                     <div  class="border border-dark-subtle"><a href="{urlFor name="tag-details" options="id.$tagId"}" class="text-center p-1 rounded-5 text-muted text-decoration-none ">{$tag_label}</a></div>
                 </div>            
             {/foreach}
            
