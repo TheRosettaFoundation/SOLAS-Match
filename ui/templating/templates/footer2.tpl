@@ -112,6 +112,8 @@
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
+                    let pages = document.querySelectorAll(".page-link");
+                    console.log(pages);
 
                     console.log(navi);
 
