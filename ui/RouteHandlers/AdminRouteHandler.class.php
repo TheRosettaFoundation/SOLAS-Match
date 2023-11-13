@@ -259,8 +259,14 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:analytics')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('analytics');
+
+        $app->map(['GET'],
+            '/metabase/{report}',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:metabase')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('metabase');
     }
-    
+
     public function adminDashboard(Request $request, Response $response)
     {
         global $template_data;
@@ -1532,6 +1538,13 @@ class AdminRouteHandler
     public function analytics()
     {
         echo file_get_contents('/repo/TWB Analytics.html');
+        die;
+    }
+
+    public function metabase(Request $request, Response $response, $args)
+    {
+error_log("pwd: " . getcwd());
+        require_once '../../metabase_reports/' . $args['report'];
         die;
     }
 }
