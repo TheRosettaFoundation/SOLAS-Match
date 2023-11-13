@@ -316,7 +316,7 @@ class UserRouteHandler
 
         $start = 3;
 
-        $end = 12;
+        $end = 7;
 
         var_dump($start);
         var_dump($end);
