@@ -514,7 +514,7 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="d-flex justify-content-end align-items-center mb-3">  <span class"m-2 inline-block" >Sort By : </span>
+            <div class="d-flex justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
                 
                      <div class="">
                                     
@@ -546,9 +546,9 @@ a:hover{
                                         </div>
 
                                         <div class="d-flex mt-2 mb-2 ">
-                                            <span class=" text-bg-greenish  badge">  <span class="fs-6 p-1 text-white fw-bold">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </span>
+                                            <button class="rounded-5 bg-greenish border border-0 ">  <span class="fs-6 p-1 text-white fw-bold">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
-                                                <span  class="badge text-bg-quartenary"><div class="fs-6 p-1 text-white fw-bold"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
+                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white fw-bold"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
                                         </div>
