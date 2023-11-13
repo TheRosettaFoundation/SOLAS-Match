@@ -140,8 +140,8 @@
                         }
                     }
 
-                    pages.forEach(page =>{
-                        page.addEventListener("click" , (e)=>{
+                    pages.forEach(el =>{
+                        el.addEventListener("click" , (e)=>{
                             e.preventDefault();
                             let url  = page.href;
                             console.log(url);
