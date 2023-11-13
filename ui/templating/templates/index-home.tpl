@@ -591,7 +591,7 @@ a:hover{
             </div>
         </div>
 
-            <ul class=" d-flex justify-content-between">
+            <ul class=" d-flex justify-content-center">
 
             {assign var="url_nam" value="home-paged"}
             {if $page_count> 6}
@@ -599,7 +599,7 @@ a:hover{
             {else}
                 {assign var="count" value= $page_count}
             {/if}    
-               <li class="" id="page-item">
+               <li class="ms-1" >
                      <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
  
             {for $page=1 to $count}
@@ -607,7 +607,7 @@ a:hover{
                     <li class="" id="page-item">
                      <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
             {/for}
-               <li class="" id="page-item">
+               <li class="ms-1">
                      <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">next</a></li> 
             </ul>
 
