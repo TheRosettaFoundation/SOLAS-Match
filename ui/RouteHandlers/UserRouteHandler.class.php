@@ -228,14 +228,15 @@ class UserRouteHandler
     {
         global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
-        
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        error_log("page no" . $args['page_no']  . $args['tt']  . $args['sl'] . $args['tl'] );
+        // var_dump($currentScrollPage);
+
+
        
-          
+     
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -347,9 +348,9 @@ class UserRouteHandler
                 // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $end, $filter, $start);     
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                // var_dump($pageTasks); 
+                var_dump($pageTasks); 
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-                // var_dump($topTasksCount);
+                var_dump($topTasksCount);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
 
@@ -358,7 +359,7 @@ class UserRouteHandler
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-         
+            var_dump($e);
             $topTasks = array();
             $topTasksCount = 0;
         }
@@ -489,13 +490,28 @@ class UserRouteHandler
       
        
         // var_dump($pageTasks);
-        $payload = json_encode($pageTasks);
+        $payload = json_encode($topTasks);
+
+
+        if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+            // Do something
+
+            header('Content-Type:application/json');
+            echo($payload);
+            die;
+         
+
+        }else {
+
+            return UserRouteHandler::render('index-home.tpl', $response);
+        }
+
         // var_dump($payload);
 
         // $response->getBody()->write($payload);
         // $response->withHeader('Content-Type' , 'application/json');
-        // $response->withStatus(200);
-        
+        // $response->withStatus(201);
+        // var_dump($response);
 
         // return ($payload);
         
