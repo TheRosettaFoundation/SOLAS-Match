@@ -1,7 +1,39 @@
             <br/><br/>
             
-            <div class="well pull-left" style="display:none;">
+            <div>
                 <footer>
+
+                    <div class="flex-row d-flex">
+
+                            <div>
+                                     <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">
+                                    <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/88x31.png" />
+                                    </a>
+                               qqq <br />
+                                {sprintf(Localisation::getTranslation('footer_0'), "http://creativecommons.org/licenses/by/3.0/ie/", {urlFor name='terms'})}
+                            
+                            
+                             </div>
+
+
+                             <div>
+                                    {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
+
+                             </div>
+
+                             <div>
+
+                                    <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
+                                    <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
+                                    </a>
+                                    <br />
+                                    {sprintf(Localisation::getTranslation('footer_powered_by'), "https://github.com/TheRosettaFoundation/SOLAS-Match", "Solas")}
+
+                             </div>
+
+
+                    </div>
+
                     <table>
                         <tr>
                             <td width="31%" style="text-align: center">
