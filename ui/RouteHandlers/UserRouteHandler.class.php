@@ -232,19 +232,8 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        // var_dump($currentScrollPage);
-
-        // if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-        //     // Do something
-        //     return UserRouteHandler::render('index-home.tpl', $response);
-
-        // }else {
-
-        //     echo("this is false");
-        // }
-
        
-     
+          
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -501,9 +490,9 @@ class UserRouteHandler
         $payload = json_encode($pageTasks);
         // var_dump($payload);
 
-        $response->getBody()->write($payload);
-        $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(200);
+        // $response->getBody()->write($payload);
+        // $response->withHeader('Content-Type' , 'application/json');
+        // $response->withStatus(200);
         
 
         // return ($payload);
