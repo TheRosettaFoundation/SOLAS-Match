@@ -1,7 +1,7 @@
             <br/><br/>
             
             <div>
-            
+
                 <footer>
 
                     <div class="flex-row d-flex justify-content-end">
@@ -34,7 +34,7 @@
 
                     <div class="bg-text-primary d-flex justify-content-between">
 
-                        <div> 
+                        <div class="d-flex"> 
                            <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
                             <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a>
                             <a href="https://linkedin.com/company/translators-without-borders" target="_blank" class="fa fa-linkedin"></a>
