@@ -503,7 +503,7 @@ class UserRouteHandler
 
         }else {
 
-            return $payload ;
+             echo $payload ;
         }
 
         // var_dump($payload);
