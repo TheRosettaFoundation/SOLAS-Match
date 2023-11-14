@@ -345,9 +345,9 @@ class UserRouteHandler
                 // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $end, $filter, $start);     
                 // var_dump($topTasks); 
                 $pageTasks =  $userDao->getUserPageTasks($user_id, $strict, $end, $filter, $start);     
-                var_dump($pageTasks); 
+                // var_dump($pageTasks); 
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-                var_dump($topTasksCount);
+                // var_dump($topTasksCount);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
 
