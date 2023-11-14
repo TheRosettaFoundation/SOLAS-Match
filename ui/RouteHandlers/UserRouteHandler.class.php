@@ -232,9 +232,7 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        // var_dump($currentScrollPage);
-
-
+        error_log("page no " . $args['page_no']);
        
      
 
@@ -491,21 +489,6 @@ class UserRouteHandler
        
         // var_dump($pageTasks);
         $payload = json_encode($pageTasks);
-
-
-        // if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-            
-
-        //     header('Content-Type:application/json');
-        //     echo($payload);
-        //     die;
-         
-
-        // }else {
-
-        //      echo $payload ;
-        // }
-
         // var_dump($payload);
 
         // $response->getBody()->write($payload);
