@@ -4,7 +4,7 @@
 
                 <footer>
 
-                    <div class="flex-row d-flex justify-content-end">
+                    <div class="d-flex ">
 
                             <div>
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
@@ -32,7 +32,8 @@
 
                     </div>
 
-                    <div class="bg-text-primary d-flex justify-content-between">
+
+                      <div class="bg-primary d-flex justify-content-between">
 
                         <div class="d-flex"> 
                            <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
@@ -58,6 +59,8 @@
 
 
                     <div>
+
+                  
 
                  
                    
