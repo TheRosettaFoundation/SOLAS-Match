@@ -490,11 +490,11 @@ class UserRouteHandler
       
        
         // var_dump($pageTasks);
-        $payload = json_encode($topTasks);
+        $payload = json_encode($pageTasks);
 
 
         if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-            // Do something
+            
 
             header('Content-Type:application/json');
             echo($payload);
@@ -503,7 +503,7 @@ class UserRouteHandler
 
         }else {
 
-            return UserRouteHandler::render('index-home.tpl', $response);
+            return $payload ;
         }
 
         // var_dump($payload);
@@ -515,7 +515,7 @@ class UserRouteHandler
 
         // return ($payload);
         
-        return UserRouteHandler::render('index-home.tpl', $response);
+        // return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)

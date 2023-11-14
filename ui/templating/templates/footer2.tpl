@@ -66,17 +66,7 @@
                     
                 </footer>    
       
-                    <script>
 
-                    
-                    localStorage.setItem("tasks" , {$all_tasks});
-                    console.log ({$all_tasks});
-                
-                    
-
-                
-                    
-                    </script>
                     <script>
 
 
