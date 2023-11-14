@@ -83,16 +83,15 @@
                         console.log(url);
 
                         const req = new XMLHttpRequest();
-                         console.log(req);
-                         req.onreadystatechange = receivedTasks ;
+                        req.onreadystatechange = receivedTasks() ;
                          req.open("GET" , url , true ) ;
                          req.send();
                                              
 
                     }
 
-                    const receivedTasks = (rec)=>{
-                        console.log(rec);
+                    const receivedTasks = ()=>{
+                  
                         if(this.readyState == 4){
                             if(this.status == 200) {
                                 console.log("response succeed")
