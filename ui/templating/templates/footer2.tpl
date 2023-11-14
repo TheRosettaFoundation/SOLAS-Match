@@ -4,7 +4,6 @@
 
                 <footer>
 
-                    <div class="d-flex ">
 
                             <div>
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
