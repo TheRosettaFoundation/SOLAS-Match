@@ -234,7 +234,7 @@ class UserRouteHandler
     public function homeIndex(Request $request, Response $response, $args)
     {
 
-        lobal $app, $template_data;
+        global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
