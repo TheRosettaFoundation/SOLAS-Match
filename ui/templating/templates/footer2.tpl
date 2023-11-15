@@ -81,10 +81,10 @@
 
 
                     pages.forEach(page => {
-
+                        let hr = page.href;
                         page.addEventListener("click", (e)=>{
                         e.preventDefault();
-                        requestPage(page.hr);                      
+                        requestPage(hr);                      
 
                         
                     })

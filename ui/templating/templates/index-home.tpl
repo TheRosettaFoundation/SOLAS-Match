@@ -530,7 +530,7 @@ a:hover{
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
-                       <div class=" w-100">
+                       <div class="tasks w-100">
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
@@ -540,7 +540,7 @@ a:hover{
                         <div  id="task_{$task_id}">
                         {/if}
                             <div class="d-flex justify-content-between">
-                                <div>
+                                <div class="">
                                         <div class="fw-bold fs-4 align-middle ">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary d-inline-block">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                         <span class="fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start"> ? </span> </div>
