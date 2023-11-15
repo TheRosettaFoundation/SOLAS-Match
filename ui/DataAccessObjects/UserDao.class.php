@@ -165,7 +165,8 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserPageTasks($user_id,$strict, $limit, $offset, $taskType,  $sourceLanguageCode, $targetLanguageCode)
+
+    public function getUserPageTasks($user_id, $strict, $limit, $offset, $taskType,  $sourceLanguageCode, $targetLanguageCode)
 
     {
         $ret = false;
@@ -194,6 +195,52 @@ class UserDao extends BaseDao
         }
 
 
+        return $ret;
+    }
+
+    public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/topTasks";
+ 
+
+        $args = array();
+        if ($limit) {
+            $args["limit"] = $limit;
+        }
+
+        if ($offset) {
+            $args["offset"] = $offset;
+        }
+
+        $filterString = "";
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+            }
+        }
+
+        if ($filterString != '') {
+            $args['filter'] = $filterString;
+        }
+
+        $args['strict'] = $strict;
+
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
+
+       
         return $ret;
     }
 
