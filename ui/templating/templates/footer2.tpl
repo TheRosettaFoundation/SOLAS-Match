@@ -77,21 +77,22 @@
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
 
-                    console.log(pages);
+                    console.log(pages);                  
 
-                  
 
-                   
+                    pages.forEach(page => {
 
-                    let hr = pages['1'].href ;
-
-                    pages['1'].addEventListener("click", (e)=>{
-
+                        page.addEventListener("click", (e)=>{
                         e.preventDefault();
-                        requestPage(hr);                      
+                        requestPage(page.hr);                      
 
                         
                     })
+
+
+                    } )
+
+                    
 
                       const requestPage = (url) =>{
                        
