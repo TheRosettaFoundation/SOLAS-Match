@@ -485,9 +485,9 @@ class UserRouteHandler
         $payload = json_encode($topTasks);
        
 
-        // $response->getBody()->write($payload);
-        // $response->withHeader('Content-Type' , 'application/json');
-        // $response->withStatus(201);
+        $response->getBody()->write($payload);
+        $response->withHeader('Content-Type' , 'application/json');
+        $response->withStatus(201);
         //  var_dump($response);
 
         return ($response);
@@ -754,9 +754,9 @@ class UserRouteHandler
 
       
        
-        // var_dump($pageTasks);
+      
         $payload = json_encode($topTasks);
-        var_dump($payload);
+        // var_dump($payload);
 
         // $response->getBody()->write($payload);
         // $response->withHeader('Content-Type' , 'application/json');
