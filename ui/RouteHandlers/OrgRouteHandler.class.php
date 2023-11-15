@@ -839,7 +839,7 @@ class OrgRouteHandler
 
             if (isset($post['deleteId']) && ($adminDao->get_roles($userId) & SITE_ADMIN)) {
                 $deleteId = $post['deleteId'];
-                if ($deleteId) {
+                if (false && $deleteId) {
                     if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
                         UserRouteHandler::flash(
                             "success",

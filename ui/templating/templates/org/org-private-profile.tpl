@@ -27,7 +27,7 @@
                     <button type='submit' class='btn btn-primary' name='updateOrgDetails'>
                         <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('org_private_profile_update_organisation_details')}
                     </button>
-                    {if isset($orgAdmin)}
+                    {if false && isset($orgAdmin)}
                         <button type="submit" class="btn btn-inverse" value="{$org_id}" name="deleteId"
                                 onclick="return confirm('{Localisation::getTranslation('org_private_profile_confirm_delete')}');">
                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_private_profile_delete_organisation')}
