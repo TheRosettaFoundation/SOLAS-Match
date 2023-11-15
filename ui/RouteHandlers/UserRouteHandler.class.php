@@ -624,7 +624,7 @@ class UserRouteHandler
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+        
             $topTasks = array();
             $topTasksCount = 0;
         }
@@ -756,7 +756,7 @@ class UserRouteHandler
        
         // var_dump($pageTasks);
         $payload = json_encode($topTasks);
-        // var_dump($payload);
+        var_dump($payload);
 
         // $response->getBody()->write($payload);
         // $response->withHeader('Content-Type' , 'application/json');
