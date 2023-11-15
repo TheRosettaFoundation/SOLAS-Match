@@ -253,7 +253,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        var_dump($activeSourceLanguages);
+        // var_dump($activeSourceLanguages);
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $viewData = array();
