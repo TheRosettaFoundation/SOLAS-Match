@@ -765,12 +765,12 @@ class UserRouteHandler
       
        
         // var_dump($pageTasks);
-        $payload = json_encode($pageTasks);
+        $payload = json_encode($topTasks);
         // var_dump($payload);
 
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(201);
+        $response->withStatus(200);
      
 
         // return ($payload);
