@@ -253,6 +253,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
+        var_dump($activeSourceLanguages);
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $viewData = array();
@@ -340,8 +341,8 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 // $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                // $topTasks = $userDao->getUserPageTasks($user_id,$strict, $limit, $offset, $taskType, $activeSourceLanguages, $activeTargetLanguages); 
+                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,  $selectedSourceLanguageCode, $selectedTargetLanguageCode); 
                 // error_log("page task" . $topTasks);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));

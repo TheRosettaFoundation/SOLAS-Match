@@ -213,47 +213,32 @@ class UserDao extends BaseDao
 
     public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/topTasks";
- 
+        $ret = false;
+    
+        $args = Lib\PDOWrapper::cleanse($userId).", ";
 
-        $args = array();
-        if ($limit) {
-            $args["limit"] = $limit;
+        if ($strict) {
+            $args .= "1, ";
+        } else {
+            $args .= "0, ";
         }
+        
+        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                Lib\PDOWrapper::cleanseNull($offset).', ';
+        
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);       
 
-        if ($offset) {
-            $args["offset"] = $offset;
-        }
-
-        $filterString = "";
-        if ($filter) {
-            if (isset($filter['taskType']) && $filter['taskType'] != '') {
-                $filterString .= "taskType:".$filter['taskType'].';';
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
-            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
-                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
-            }
-            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
-                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
-            }
         }
 
-        if ($filterString != '') {
-            $args['filter'] = $filterString;
-        }
 
-        $args['strict'] = $strict;
-
-        $ret = $this->client->call(
-            array("\SolasMatch\Common\Protobufs\Models\Task"),
-            $request,
-            Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
-        );
-
-       
         return $ret;
     }
 
