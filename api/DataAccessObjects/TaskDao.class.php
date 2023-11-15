@@ -250,7 +250,9 @@ class TaskDao
         } else {
             $args .= "0, ";
         }
-        
+        var_dump($sourceLanguageCode);
+        var_dump($targetLanguageCode);
+
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
         
