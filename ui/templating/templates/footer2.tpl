@@ -82,6 +82,7 @@
 
                     pages.forEach(page => {
                         let hr = page.href;
+                        console.log(hr)
                         page.addEventListener("click", (e)=>{
                         e.preventDefault();
                         requestPage(hr);                      
