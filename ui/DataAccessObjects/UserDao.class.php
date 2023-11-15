@@ -165,11 +165,29 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserPageTasks($userId,$strict, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
-  
+    public function getUserPageTasks($userId, $strict = true, $limit, $filter = array(), $offset)
+
     {
-        $ret = false;    
-        $args = Lib\PDOWrapper::cleanse($userId).", ";
+        $ret = false;
+        $sourceLanguage = null;
+        $targetLanguage = null;
+        $taskType = null;
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+                $task_type = $filter['taskType'] ;
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+                $sourceLanguage = $filter['sourceLanguage'];
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+                $targetLanguage = $filter['targetLanguge'];
+            }
+        }
+     
+        $args = LibAPI\PDOWrapper::cleanse($userId).", ";
 
         if ($strict) {
             $args .= "1, ";
@@ -177,23 +195,15 @@ class UserDao extends BaseDao
             $args .= "0, ";
         }
         
-        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                Lib\PDOWrapper::cleanseNull($offset).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
-        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);       
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguage).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguage);
+        $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
-            }
-        }
-
-
-        return $ret;
+        return $result;
         
         
 
