@@ -308,18 +308,7 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = null;
 
-        // $start = (($currentScrollPage - 1) * $itemsPerScrollPage ) + 1;
-
-        // $end = $start + $itemsPerScrollPage;
-
-        // $start = 3;
-
-        // $end = 7;
-
-        // var_dump($start);
-        // var_dump($end);
-
-        // $pageTasks = null ; 
+    
       
 
 
@@ -490,10 +479,9 @@ class UserRouteHandler
         ));
 
       
-       
-        // var_dump($pageTasks);
+     
         $payload = json_encode($topTasks);
-        // var_dump($payload);
+       
 
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
