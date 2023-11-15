@@ -79,41 +79,33 @@
 
                     console.log(pages);
 
-                    const requestPage = (url) =>{
-                        console.log(url);
-
-                        const req = new XMLHttpRequest();
-                        req.onreadystatechange = receivedTasks() ;
-                         req.open("GET" , url , true ) ;
-                         req.send();
-                                             
-
-                    }
-
-                    const receivedTasks = ()=>{
                   
-                        if(this.readyState == 4){
-                            if(this.status == 200) {
-                                console.log("response succeed")
-                            }
-                            else{
-                                console.log("Response failed");
-                            }
-                        }
-                    }
+
+                   
 
                     let hr = pages['1'].href ;
 
                     pages['1'].addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        requestPage(hr);
-
-                        
+                        requestPage(hr);                      
 
                         
                     })
 
+                      const requestPage = (url) =>{
+                       
+                        const req = new XMLHttpRequest();
+                        req.addEventListener("load", reqListner);
+                         req.open("GET" , url , true ) ;
+                         req.send();
+                                             
+
+                    }
+
+                    function reqListner(){
+                        console.log(this.responseText);
+                    }
                     
                     
 
