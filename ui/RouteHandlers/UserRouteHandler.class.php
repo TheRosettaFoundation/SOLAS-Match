@@ -341,8 +341,8 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 // $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,  $selectedSourceLanguageCode, $selectedTargetLanguageCode); 
+                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                // $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
                 // error_log("page task" . $topTasks);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
@@ -573,20 +573,7 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = null;
 
-        // $start = (($currentScrollPage - 1) * $itemsPerScrollPage ) + 1;
-
-        // $end = $start + $itemsPerScrollPage;
-
-        // $start = 3;
-
-        // $end = 7;
-
-        // var_dump($start);
-        // var_dump($end);
-
-        // $pageTasks = null ; 
-      
-
+   
 
         $filter = array();
         if ($request->getMethod() === 'POST') {
