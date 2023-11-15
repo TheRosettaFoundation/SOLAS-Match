@@ -170,6 +170,8 @@ class UserDao extends BaseDao
 
     {
         $ret = false;
+        var_dump($sourceLanguageCode);
+        var_dump($targetLanguageCode);
     
         $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
 
