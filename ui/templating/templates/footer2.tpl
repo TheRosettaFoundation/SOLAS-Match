@@ -106,10 +106,10 @@
                     function reqListner(){
 
                         let pages = this.responseText;
-                        console.log(this.responseText);
+                       
                         let tasks = document.querySelectorAll('.tasks');
                     
-                        console.log(pages);
+                        console.log(pages[0]);
 
 
                     }
