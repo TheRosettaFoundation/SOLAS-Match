@@ -530,7 +530,7 @@ a:hover{
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
-                       <div class="tasks w-100">
+                       <div class="avTasks  w-100">
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
