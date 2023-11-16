@@ -252,8 +252,9 @@ class TaskDao
         } else {
             $args .= "0, ";
         }
-        
 
+        error_log($limit);
+        error_log($sourceLanguageCode);
 
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
