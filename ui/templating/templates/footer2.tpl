@@ -108,11 +108,8 @@
                         let pages = this.responseText;
                         console.log(this.responseText);
                         let tasks = document.querySelectorAll('.tasks');
-                        let newItems=pages.map(pg=>{
-                            <div> test<div>
-                        }) ;
-
-                        console.log(newItems);
+                    
+                        console.log(pages);
 
 
                     }
