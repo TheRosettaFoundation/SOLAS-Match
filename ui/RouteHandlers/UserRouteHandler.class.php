@@ -491,6 +491,7 @@ class UserRouteHandler
        
 
         $data = array('result' => $topTasks);
+        var_dump($data);
          
         $payload = json_encode($data);
 
