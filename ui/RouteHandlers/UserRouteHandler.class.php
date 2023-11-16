@@ -367,7 +367,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksC /5);
+        // $pages = ceil($topTasksC /5);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
