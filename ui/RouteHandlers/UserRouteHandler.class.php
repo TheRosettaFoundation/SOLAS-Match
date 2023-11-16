@@ -524,8 +524,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
-        var_dump($activeSourceLanguages);
+        
 
 
         $viewData = array();
@@ -611,11 +610,8 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-                var_dump($user_id);
-                var_dump($offset);
-                var_dump($selectedSourceLanguageCode);
-                var_dump($selectedTargetLanguageCode);       
-                var_dump($filter);               
+                var_dump($topTasks);
+         
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
