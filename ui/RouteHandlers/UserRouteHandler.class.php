@@ -491,9 +491,9 @@ class UserRouteHandler
         $payload = json_encode($topTasks);
         // var_dump($payload);
 
-        header('Content-Type: application/json');
-        echo json_encode(['results' => $payload]);
-        die;
+        // header('Content-Type: application/json');
+        // echo json_encode(['results' => $payload]);
+        // die;
      
 
         return ($payload);
