@@ -240,9 +240,10 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        
-        var_dump($args['page_no']);
-        
+        error_log("page no " . $args['page_no']);
+      
+       
+     
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -253,8 +254,8 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        // var_dump($activeSourceLanguages);
-        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
+        
+
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -306,13 +307,10 @@ class UserRouteHandler
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
-        // var_dump("offeset" . $offset);     
         $topTasksCount = 0;
         $topTasks = null;
 
-    
-      
-
+   
 
         $filter = array();
         if ($request->getMethod() === 'POST') {
@@ -341,28 +339,19 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                // $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                // var_dump($offset);
-                // var_dump($selectedSourceLanguageCode);
-                $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
-                var_dump($topTasks);
-
-                // $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
-                // $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                // $userTasks = $userDao ->getUserTasks($user_id);
-                // error_log("page task" . $topTasks);
-                // $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-                // $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
+                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
+                // var_dump($topTasks);
+         
+                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
+                $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
 
             } else {
-                // print_r("issue with user id");
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+        
             $topTasks = array();
             $topTasksCount = 0;
         }
@@ -375,8 +364,8 @@ class UserRouteHandler
         $discourse_slug = array();
         $taskImages = array();
 
-        $lastScrollPage = ceil(14 / $itemsPerScrollPage);
-        $pages = ceil(74 /5);
+        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        $pages = ceil($topTasksC /5);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
@@ -491,16 +480,19 @@ class UserRouteHandler
         ));
 
       
-     
-        $payload = json_encode($topTasks);
        
+      
+        $payload = json_encode($topTasks);
+        // var_dump($payload);
 
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(201);
-        //  var_dump($response);
+        $response->withStatus(200);
+     
 
         return ($response);
+        
+       
    
 
 
