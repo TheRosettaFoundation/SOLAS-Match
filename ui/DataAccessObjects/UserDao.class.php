@@ -189,7 +189,7 @@ class UserDao extends BaseDao
         $limit = "6";
        
 
-        $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
+        $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 LibAPI\PDOWrapper::cleanse($offset).', ';
         
         $args .=  LibAPI\PDOWrapper::cleanse($taskType).', ';
