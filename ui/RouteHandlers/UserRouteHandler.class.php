@@ -306,7 +306,7 @@ class UserRouteHandler
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
-        var_dump("offeset" . $offset);     
+        // var_dump("offeset" . $offset);     
         $topTasksCount = 0;
         $topTasks = null;
 
@@ -342,9 +342,9 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 // $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                var_dump($topTasks);
-                // $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
+                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                // var_dump($topTasks);
+                $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
                 
                 // error_log("page task" . $topTasks);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
@@ -352,12 +352,12 @@ class UserRouteHandler
                 $userTasks = $userDao ->getUserTasks($user_id);
 
             } else {
-                print_r("issue with user id");
+                // print_r("issue with user id");
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+            // var_dump($e);
             $topTasks = array();
             $topTasksCount = 0;
         }
