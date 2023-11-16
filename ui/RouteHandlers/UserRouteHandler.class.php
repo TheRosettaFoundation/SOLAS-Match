@@ -345,7 +345,7 @@ class UserRouteHandler
                
                 
                  $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType,  $selectedSourceLanguageCode, $selectedTargetLanguageCode);
-                // var_dump($topTasks);
+                var_dump($topTasks);
 
          
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
@@ -357,7 +357,7 @@ class UserRouteHandler
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            var_dump($e);
+            // var_dump($e);
             $topTasks = array();
             $topTasksCount = 0;
         }
@@ -489,7 +489,7 @@ class UserRouteHandler
        
       
         $payload = json_encode($topTasks);
-        var_dump($payload);
+        // var_dump($payload);
 
         $response->getBody()->write($payload);
         $response->withHeader('Content-Type' , 'application/json');
