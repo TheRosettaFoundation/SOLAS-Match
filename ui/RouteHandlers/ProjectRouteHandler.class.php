@@ -2438,7 +2438,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
             $count = 0;
             while ($task_id = $projectDao->get_task_resource_info_trigger()) {
-                error_log("get_task_resource_info_trigger: $task_id, $count"); ++$count;
+                error_log("get_task_resource_info_trigger: $task_id, $count");
                 $task = $taskDao->getTask($task_id);
                 $task_id = $task->getId();
                 $memsource_task = $projectDao->get_memsource_task($task_id);
@@ -2484,6 +2484,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                         }
                         $projectDao->update_task_resource_info($task_id, $MT_name, $task_resource_TBs, $task_resource_TMs, $url);
                 } else error_log("$task_id $url responseCode: $responseCode $result");
+                if (++$count >= 20) break;
             }
 
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
