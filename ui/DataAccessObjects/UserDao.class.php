@@ -170,35 +170,32 @@ class UserDao extends BaseDao
 
     {
         $ret = false;
-     
     
-        $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
-        $args .= LibAPI\PDOWrapper::cleanse($strict).", ";
+        $args = LibAPI\PDOWrapper::cleanse($userId).", ";
 
       
 
-        // if ($strict) {
-        //     $args .= 1;
-        // } else {
-        //     $args .= 0;
-        // }
+        if ($strict) {
+            $args .= "1, ";
+        } else {
+            $args .= "0, ";
+        }
+
+        $limit = "6" ;
+        $sourceLanguageCode = NULL;
+        $targetLanguageCode = NULL;
+
+        $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
-        // var_dump($offset);
-        // var_dump($sourceLanguageCode);
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
 
-       
-       
+        error_log($args);
+        var_dump($args);
 
-   
-
-        $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
-                LibAPI\PDOWrapper::cleanse($offset).', ';
-        
-        $args .=  LibAPI\PDOWrapper::cleanse($taskType).', ';
-        $args .=  LibAPI\PDOWrapper::cleanse($sourceLanguageCode).', ';
-        $args .=  LibAPI\PDOWrapper::cleanse($targetLanguageCode); 
-     
-        $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
+        $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);       
 
        
 
