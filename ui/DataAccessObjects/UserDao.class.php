@@ -236,7 +236,7 @@ class UserDao extends BaseDao
         }
 
         $args['strict'] = $strict;
-        var_dump($args);
+       
 
         $ret = $this->client->call(
             array("\SolasMatch\Common\Protobufs\Models\Task"),
@@ -246,7 +246,7 @@ class UserDao extends BaseDao
             $args
         );
 
-       
+        var_dump($ret);
         return $ret;
     }
 
