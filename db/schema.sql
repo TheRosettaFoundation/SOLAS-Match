@@ -3910,7 +3910,7 @@ DROP PROCEDURE IF EXISTS `getUserPageTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPageTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
 BEGIN
-    IF lim=''    OR lim    IS NULL THEN SET lim    = 0; END IF;
+    IF lim=''    OR lim    IS NULL THEN SET lim    = 6; END IF;
     IF offset='' OR offset IS NULL THEN SET offset =  0; END IF;
     IF taskType=''       THEN SET taskType       = NULL; END IF;
     IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
