@@ -358,7 +358,7 @@ class UserRouteHandler
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            // var_dump($e);
+            var_dump($e);
             $topTasks = array();
             $topTasksCount = 0;
         }
