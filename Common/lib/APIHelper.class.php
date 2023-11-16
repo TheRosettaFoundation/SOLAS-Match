@@ -44,7 +44,7 @@ class APIHelper
                 $url .= "$key=$val";
             }
         }
-        error_log("url:" . $url);
+     
         $re = curl_init($url);
         
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
@@ -89,7 +89,7 @@ class APIHelper
         $header = substr($res, 0, $header_size);
         $this->outputHeaders = http_parse_headers($header);
         $res = substr($res, $header_size);
-        error_log($res);
+      
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
