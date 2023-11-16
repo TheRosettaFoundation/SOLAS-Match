@@ -346,7 +346,7 @@ class UserRouteHandler
                 // var_dump($offset);
                 // var_dump($selectedSourceLanguageCode);
                 $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
-               
+                var_dump($topTasks);
                 // error_log("page task" . $topTasks);
                 // $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 // $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
