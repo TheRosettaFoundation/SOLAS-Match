@@ -241,8 +241,9 @@ class UserRouteHandler
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         error_log("page no " . $args['page_no']);
+        error_log(intval(args['page_no']));
        
-     
+        
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
