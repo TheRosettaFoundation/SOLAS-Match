@@ -177,11 +177,11 @@ class UserDao extends BaseDao
 
       
 
-        if ($strict) {
-            $args .= 1;
-        } else {
-            $args .= 0;
-        }
+        // if ($strict) {
+        //     $args .= 1;
+        // } else {
+        //     $args .= 0;
+        // }
         
         // var_dump($offset);
         // var_dump($sourceLanguageCode);
