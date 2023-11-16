@@ -347,7 +347,7 @@ class UserRouteHandler
                 var_dump($selectedTaskType);
                 var_dump($selectedSourceLanguageCode);
                 
-                 $topTasks = $userDao->getUserPageTasks($user_id, $strict, $limit, $offset,  $selectedTaskType,  $selectedSourceLanguageCode, $selectedTargetLanguageCode);
+                 $topTasks = $userDao->getUserPageTasks($user_id, $strict, $limit, $offset,  $selectedTaskType,  0, 0);
                 var_dump($topTasks);
 
          
