@@ -107,7 +107,7 @@
 
                         let pages = this.responseText;
                         console.log(this.responseText);
-                        let tasks = document.querySelectorAll('.avTasks');
+                        let tasks = document.querySelectorAll('.tasks');
                         console.log(tasks);
 
                     }
