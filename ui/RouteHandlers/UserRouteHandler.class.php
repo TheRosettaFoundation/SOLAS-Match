@@ -493,6 +493,7 @@ class UserRouteHandler
 
         header('Content-Type: application/json');
         echo json_encode(['results' => $payload]);
+        return json_encode(['results' => $payload]);
         die;
      
 
