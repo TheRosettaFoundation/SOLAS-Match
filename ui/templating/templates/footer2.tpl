@@ -109,9 +109,8 @@
                        
                         let tasks = document.querySelectorAll('.tasks');
 
-                        let tasksR = JSON.parse(tasks);
-                    
-                        console.log(typeof tasksR);
+                      
+                        console.log(typeof tasks);
 
 
                     }
