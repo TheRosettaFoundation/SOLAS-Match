@@ -196,7 +196,10 @@ class UserDao extends BaseDao
         // error_log($args);
         // var_dump($args);
 
-        $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);       
+        $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);     
+        var_dump($result);  
+        var_dump(gettype($result));
+        
 
        
 
