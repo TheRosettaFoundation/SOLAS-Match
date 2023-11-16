@@ -35,11 +35,7 @@
                       <div class="bg-primary d-flex justify-content-between">
 
                         <div class="d-flex"> 
-                           <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
-                            <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a>
-                            <a href="https://linkedin.com/company/translators-without-borders" target="_blank" class="fa fa-linkedin"></a>
-                            <a href="https://twitter.com/TranslatorsWB" target="_blank" class="fa fa-twitter" style="background: #55ACEE;color: white;"></a>
-                            <a href="https://www.youtube.com/user/TranslatorsWB" target="_blank" class="fa fa-youtube"></a>
+                           
                         
                         
                         </div>
