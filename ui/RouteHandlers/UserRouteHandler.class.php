@@ -348,7 +348,7 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
                
                 // error_log("page task" . $topTasks);
-                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
+                // $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 // $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
 
@@ -371,8 +371,8 @@ class UserRouteHandler
         $discourse_slug = array();
         $taskImages = array();
 
-        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksC /5);
+        $lastScrollPage = ceil(14 / $itemsPerScrollPage);
+        $pages = ceil(74 /5);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
