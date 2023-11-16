@@ -171,7 +171,7 @@ class UserDao extends BaseDao
     {
         $ret = false;
     
-        $args = Lib\PDOWrapper::cleanse($userId).", ";
+        $args = LibAPI\PDOWrapper::cleanse($userId).", ";
 
       
 
@@ -183,13 +183,13 @@ class UserDao extends BaseDao
         
 
 
-        $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                Lib\PDOWrapper::cleanseNull($offset).', ';
+        $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
-        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);       
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
+        $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);       
 
        
 
