@@ -2436,7 +2436,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 }
             }
 
+            $count = 0;
             while ($task_id = $projectDao->get_task_resource_info_trigger()) {
+                error_log("get_task_resource_info_trigger: $task_id, $count"); ++$count;
                 $task = $taskDao->getTask($task_id);
                 $task_id = $task->getId();
                 $memsource_task = $projectDao->get_memsource_task($task_id);
@@ -2454,10 +2456,11 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
                 if ($responseCode == 200) {
                     $resultset = json_decode($result, true);
-                    if (!empty($resultset['machineTranslateSettings'])) {
-                        $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
+                    $MT_name = '';
+                    if (!empty($resultset['machineTranslateSettings'])) $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
 
                         $task_resource_TBs = [];
+                        if (empty($resultset['termBases'])) $resultset['termBases'] = [];
                         foreach ($resultset['termBases'] as $item) {
                             list($language_code, $country_code) = $projectDao->convert_memsource_to_language_country($item['targetLang']);
                             $task_resource_TBs[] = [
@@ -2468,6 +2471,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                             ];
                         }
                         $task_resource_TMs = [];
+                        if (empty($resultset['translationMemories'])) $resultset['translationMemories'] = [];
                         foreach ($resultset['translationMemories'] as $item) {
                             list($language_code, $country_code) = $projectDao->convert_memsource_to_language_country($item['targetLang']);
                             $task_resource_TMs[] = [
@@ -2479,7 +2483,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                             ];
                         }
                         $projectDao->update_task_resource_info($task_id, $MT_name, $task_resource_TBs, $task_resource_TMs, $url);
-                    } else error_log("$task_id $url no machineTranslateSettings $result");
                 } else error_log("$task_id $url responseCode: $responseCode $result");
             }
 
