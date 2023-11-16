@@ -496,7 +496,7 @@ class UserRouteHandler
         die;
      
 
-        return ($response);
+        return ($payload);
         
        
    
