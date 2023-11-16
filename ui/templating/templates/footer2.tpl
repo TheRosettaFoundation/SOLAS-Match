@@ -105,12 +105,12 @@
 
                     function reqListner(){
 
-                        let pages = this;
+                        let pages = this.response;
                        
                         let tasks = document.querySelectorAll('.tasks');
 
                         console.log( typeof pages);
-                        console.log(pages);
+                        console.log(JSON.parse(pages));
                       
 
                       
