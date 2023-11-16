@@ -199,7 +199,7 @@ class UserDao extends BaseDao
         $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);     
         var_dump($result);  
         var_dump(gettype($result));
-        
+
 
        
 
@@ -210,8 +210,8 @@ class UserDao extends BaseDao
             }
         }
 
-
-        return $ret;
+        return $result;
+        // return $ret;
     }
 
     public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
