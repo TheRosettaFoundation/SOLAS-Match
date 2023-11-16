@@ -245,13 +245,15 @@ class TaskDao
     
         $args = Lib\PDOWrapper::cleanse($userId).", ";
 
+      
+
         if ($strict) {
             $args .= "1, ";
         } else {
             $args .= "0, ";
         }
-        print_r($sourceLanguageCode);
-        print_r($targetLanguageCode);
+        
+        var_dump($sourceLanguageCode);
 
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
