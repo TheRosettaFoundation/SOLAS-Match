@@ -170,9 +170,10 @@ class UserDao extends BaseDao
 
     {
         $ret = false;
+        $strict = 0;
     
         $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
-        $args = LibAPI\PDOWrapper::cleanse($strict).", ";
+        $args .= LibAPI\PDOWrapper::cleanse($strict).", ";
 
       
 
