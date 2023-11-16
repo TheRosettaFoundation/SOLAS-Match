@@ -110,7 +110,7 @@
                         let tasks = document.querySelectorAll('.tasks');
 
                         console.log( typeof pages);
-                        console.log(pages);
+                        console.log(pages['0']);
                       
 
                       
