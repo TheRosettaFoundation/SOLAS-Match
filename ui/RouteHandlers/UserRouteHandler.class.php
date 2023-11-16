@@ -342,8 +342,8 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 // $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-                $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
+                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
+                // $topTasks = $userDao->getUserPageTasks($user_id,$strict, $itemsPerScrollPage, $offset, $selectedTaskType ,$selectedSourceLanguageCode, $selectedTargetLanguageCode); 
                 var_dump($user_id);
                 var_dump($offset);
                 var_dump($selectedSourceLanguageCode);
@@ -607,7 +607,12 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);                 
+                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
+                var_dump($user_id);
+                var_dump($offset);
+                var_dump($selectedSourceLanguageCode);
+                var_dump($selectedTargetLanguageCode);       
+                var_dump($filter);               
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
