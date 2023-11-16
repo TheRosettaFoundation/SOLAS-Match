@@ -511,6 +511,7 @@ class UserRouteHandler
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         error_log("page no " . $args['page_no']);
+        var_dump()
        
      
 
@@ -524,6 +525,8 @@ class UserRouteHandler
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
+        var_dump($activeSourceLanguages);
+             
 
         $viewData = array();
         $viewData['current_page'] = 'home';
