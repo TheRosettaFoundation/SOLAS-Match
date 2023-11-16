@@ -240,8 +240,7 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        error_log("page no " . $args['page_no']);
-        error_log(intval(args['page_no']));
+        
         var_dump($args['page_no']);
         
 
