@@ -104,7 +104,10 @@
                     }
 
                     function reqListner(){
+                        
                         console.log(this.responseText);
+                        let tasks = document.querySelectorAll('.tasks');
+                        console.log(tasks);
                     }
                     
                     
