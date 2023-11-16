@@ -111,7 +111,7 @@
 
                         console.log( typeof pages);
                         console.log(pages);
-                        test = json.parse(pages);
+                        test = JSON.parse(pages);
                         consol.log(test);
 
                       
