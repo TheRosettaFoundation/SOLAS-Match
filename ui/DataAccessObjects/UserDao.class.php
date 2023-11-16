@@ -171,7 +171,7 @@ class UserDao extends BaseDao
     {
         $ret = false;
     
-        $args = LibAPI\PDOWrapper::cleanse($userId).", ";
+        $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
 
       
 
@@ -182,6 +182,7 @@ class UserDao extends BaseDao
         }
 
         $limit = "6" ;
+        $taskType = NULL;
         $sourceLanguageCode = NULL;
         $targetLanguageCode = NULL;
 
