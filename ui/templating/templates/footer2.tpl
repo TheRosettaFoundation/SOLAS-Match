@@ -108,8 +108,10 @@
                         let pages = this.responseText;
                        
                         let tasks = document.querySelectorAll('.tasks');
+
+                        let tasksR = JSON.parse(tasks);
                     
-                        console.log(typeof pages);
+                        console.log(typeof tasksR);
 
 
                     }
