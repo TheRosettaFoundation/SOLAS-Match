@@ -170,8 +170,7 @@ class UserDao extends BaseDao
 
     {
         $ret = false;
-        $strict = 0;
-        $limit = 6;
+     
     
         $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
         $args .= LibAPI\PDOWrapper::cleanse($strict).", ";
@@ -197,7 +196,7 @@ class UserDao extends BaseDao
         $args .=  LibAPI\PDOWrapper::cleanse($sourceLanguageCode).', ';
         $args .=  LibAPI\PDOWrapper::cleanse($targetLanguageCode); 
         var_dump($args);
-        $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);       
+        $result = LibAPI\PDOWrapper::call("getUserPageTasks", $args);       
 
        
 
