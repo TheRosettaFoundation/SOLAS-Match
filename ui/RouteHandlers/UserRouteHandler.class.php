@@ -488,12 +488,12 @@ class UserRouteHandler
       
        
       
-        $payload = json_encode($topTasks);
+        // $payload = json_encode($topTasks);
         // var_dump($payload);
 
-        $response->getBody()->write($payload);
-        $response->withHeader('Content-Type' , 'application/json');
-        $response->withStatus(200);
+        header('Content-Type: application/json');
+        echo json_encode(['results' => $payload]);
+        die;
      
 
         return ($response);
