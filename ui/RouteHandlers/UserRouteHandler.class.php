@@ -345,7 +345,7 @@ class UserRouteHandler
                
                 
                  $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType,  $selectedSourceLanguageCode, $selectedTargetLanguageCode);
-                var_dump($topTasks);
+                // var_dump($topTasks);
 
          
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
@@ -491,12 +491,12 @@ class UserRouteHandler
         $payload = json_encode($topTasks);
         // var_dump($payload);
 
-        header('Content-Type: application/json');
-        echo json_encode(['results' => $payload]);
-        return json_encode(['results' => $payload]);
-        die;
+        $response->getBody()->write($payload);
+        $response->withHeader('Content-Type' , 'application/json');
+        $response->withStatus(200);
      
 
+        return ($response);
         
        
    
