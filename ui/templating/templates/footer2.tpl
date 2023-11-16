@@ -109,24 +109,7 @@
                         console.log(this.responseText);
                         let tasks = document.querySelectorAll('.tasks');
                         console.log(tasks);
-                        let newItems = tasks.map( task =>{
 
-                            <div class="d-flex justify-content-between">
-
-                                <div>
-
-
-
-                                </div>
-
-
-                    
-
-                            </div>
-
-                        })
-                        
-                       console.log(newItems) ;
                     }
                     
                     
