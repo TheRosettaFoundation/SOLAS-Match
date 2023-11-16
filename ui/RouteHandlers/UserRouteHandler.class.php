@@ -254,6 +254,8 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
+        $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
+        
         
 
 
@@ -520,6 +522,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
+        $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
         
 
 
