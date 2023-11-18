@@ -122,9 +122,7 @@
                                     itemNameElement.textContent = "test";
                                     itemElement.appendChild(itemNameElement);
 
-                            
-
-                                    tasksContainer.appendChild(itemElement);
+                        
                                     }
                               
 
