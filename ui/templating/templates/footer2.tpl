@@ -109,6 +109,10 @@
                        
                         let tasks = document.querySelectorAll('.tasks');
 
+                        let parsed = JSON.parse(pages);
+
+                        console.log(parsed);
+
                         
                         
                       
