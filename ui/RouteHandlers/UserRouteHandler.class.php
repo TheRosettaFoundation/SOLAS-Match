@@ -496,6 +496,7 @@ class UserRouteHandler
         
          
         $payload = json_encode($data);
+        
 
         $response->getBody()->write($payload);
 
@@ -761,7 +762,12 @@ class UserRouteHandler
         ));
 
 
-       
+        $data = array('result' => $topTasks);
+
+        var_dump($data);
+        
+         
+        $payload = json_encode($data);
 
         // $response->getBody()->write($payload);
         // $response->withHeader('Content-Type' , 'application/json');
