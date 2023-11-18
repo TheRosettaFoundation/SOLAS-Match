@@ -105,7 +105,7 @@
 
                     function reqListner(){
 
-                        let pages = this.response;
+                        let pages = this.responseText;
                        
                         let tasks = document.querySelectorAll('.tasks');
 
