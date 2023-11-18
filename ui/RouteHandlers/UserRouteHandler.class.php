@@ -490,7 +490,7 @@ class UserRouteHandler
       
        
 
-        $data = array('result' => "test");
+        $data = array('result' => $topTasks);
 
      
         
