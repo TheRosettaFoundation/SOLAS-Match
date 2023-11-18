@@ -501,8 +501,7 @@ class UserRouteHandler
         
         $response->getBody()->write($payload);
 
-        return $response
-          ->withHeader('Content-Type', 'application/json');
+        return $response->withHeader('Content-Type', 'application/json');
 
         
         
