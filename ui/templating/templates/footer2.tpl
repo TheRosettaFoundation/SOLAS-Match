@@ -109,10 +109,15 @@
                        
                         let tasks = document.querySelectorAll('.tasks');
 
-                        let parsed = JSON.parse(pages);
+                        
+                        try {
+                                JSON.parse(pages);
+                                return true;
+                            } catch (error) {
+                                return false;
+                            }
 
-                        console.log(pages);
-
+                       
                         
                     
                       
