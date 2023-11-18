@@ -111,9 +111,10 @@
 
                         
                         try {
-                                JSON.parse(pages);
+                                let parsed = JSON.parse(pages);
                                 console.log("working");
-                                return true;
+                                  console.log(parsed);
+                               
                             } catch (error) {
                                 console.log(error);
                                 return false;
