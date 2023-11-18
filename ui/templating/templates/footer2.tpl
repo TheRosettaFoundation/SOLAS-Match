@@ -108,7 +108,7 @@
                         let pages = this.responseText;
                        
                         let tasksContainer = document.querySelectorAll('.tasks');
-                        console.log(tasks);
+                        console.log(tasksContainer);
 
                         
                         try {
@@ -128,7 +128,7 @@
                                     }
                               
 
-                                console.log(newtasks)
+                                
                                
                                   
                             } catch (error) {
