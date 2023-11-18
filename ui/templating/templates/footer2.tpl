@@ -112,7 +112,7 @@
                         try {
                                  parsed = JSON.parse(pages);
                                  for (const item of parsed) {
-                                    console.log(item)
+                                  
                                     const itemElement = document.createElement('div');
                                     itemElement.classList.add('item');
 
@@ -120,7 +120,10 @@
                                     itemNameElement.textContent = "test";
                                     itemElement.appendChild(itemNameElement);
 
-                                    console.log(itemElement);
+                                    let tasksContainer = document.querySelectorAll('.tasks');
+                                    console.log(tasksContainer)
+
+                                    tasksContainer.appendChild(itemElement);
 
 
                         
