@@ -108,15 +108,18 @@
                         let pages = this.responseText;
                        
                         let tasks = document.querySelectorAll('.tasks');
+                        console.log(tasks);
 
                         
                         try {
                                 let parsed = JSON.parse(pages);
+                                let newtasks = parsed.map(task =>{
+                                    <h1>Tasks<h2>
+                                })
+
+                                console.log(newtasks)
                                
-                                  parsed.forEach(pg =>{
-                                    tasks.innerHtml = pg;
-                                  })
-                               
+                                  
                             } catch (error) {
                                 console.log(error);
                                 return false;
