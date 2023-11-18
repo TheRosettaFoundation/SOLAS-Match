@@ -107,15 +107,26 @@
 
                         let pages = this.responseText;
                        
-                        let tasks = document.querySelectorAll('.tasks');
+                        let tasksContainer = document.querySelectorAll('.tasks');
                         console.log(tasks);
 
                         
                         try {
                                 let parsed = JSON.parse(pages);
-                                let newtasks = parsed.map(task =>{
-                                    <h1>Tasks<h2>
-                                })
+
+                                for (const item of parsed) {
+                                    const itemElement = document.createElement('div');
+                                    itemElement.classList.add('item');
+
+                                    const itemNameElement = document.createElement('h3');
+                                    itemNameElement.textContent = "test";
+                                    itemElement.appendChild(itemNameElement);
+
+                            
+
+                                    tasksContainer.appendChild(itemElement);
+                                    }
+                              
 
                                 console.log(newtasks)
                                
