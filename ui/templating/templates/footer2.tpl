@@ -111,12 +111,10 @@
 
                         let parsed = JSON.parse(pages);
 
-                        console.log(parsed);
+                        console.log(pages);
 
                         
-                        
-                      
-
+                    
                       
                      
 

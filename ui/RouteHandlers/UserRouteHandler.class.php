@@ -490,7 +490,7 @@ class UserRouteHandler
       
        
 
-        $data = array('result' => $topTasks);
+        $data = array('result' => json_encode ($topTasks));
 
      
         
