@@ -112,8 +112,10 @@
                         
                         try {
                                 let parsed = JSON.parse(pages);
-                                console.log("working");
-                                  console.log(parsed);
+                               
+                                  parsed.forEach(pg =>{
+                                    tasks.innerHtml = pg;
+                                  })
                                
                             } catch (error) {
                                 console.log(error);
