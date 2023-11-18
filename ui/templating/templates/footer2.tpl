@@ -72,11 +72,8 @@
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
-                    let parsed ;
-
-                    let tasksContainer;
-
-                    console.log(pages);                  
+                    let tasksContainer = document.querySelectorAll('.tasks');
+               
 
 
                     pages.forEach(page => {
@@ -109,13 +106,24 @@
                     function reqListner(){
 
                         let pages = this.responseText;
-                       
-                        tasksContainer = document.querySelectorAll('.tasks');
-                        console.log(tasksContainer);
+                                        
 
                         
                         try {
                                  parsed = JSON.parse(pages);
+                                 for (const item of parsed) {
+                                    console.log(item)
+                                    const itemElement = document.createElement('div');
+                                    itemElement.classList.add('item');
+
+                                    const itemNameElement = document.createElement('h3');
+                                    itemNameElement.textContent = "test";
+                                    itemElement.appendChild(itemNameElement);
+
+                                    tasksContainer.appendChild(itemElement);
+
+                        
+                                    }
 
                                 
                               
@@ -136,19 +144,7 @@
 
                     }
 
-                    for (const item of parsed) {
-                                    console.log(item)
-                                    const itemElement = document.createElement('div');
-                                    itemElement.classList.add('item');
-
-                                    const itemNameElement = document.createElement('h3');
-                                    itemNameElement.textContent = "test";
-                                    itemElement.appendChild(itemNameElement);
-
-                                    tasksContainer.appendChild(itemElement);
-
-                        
-                                    }
+                    
 
 
 
