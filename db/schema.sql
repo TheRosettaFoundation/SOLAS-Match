@@ -551,7 +551,7 @@ CREATE TABLE IF NOT EXISTS `TaskTypes` (
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (1, "Segmentation"),
   (2, "Translation"),
-  (3, "Proofreading"),
+  (3, "Revision"),
   (4, "Desegmentation"),
   (6, "Proofreading and Approval");
   ( 7,'Terminology translation'),
