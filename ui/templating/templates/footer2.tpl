@@ -159,11 +159,15 @@
 
 
 
-                 let tasksContainer = document.querySelectorAll('.taskPagination');
+                  tasksContainer = document.querySelectorAll('.taskPagination');
 
                                     console.log(tasksContainer)
+                if(newData){
 
-                                    tasksContainer.innerHTML = newData ;
+                        tasksContainer.innerHTML = newData ;
+
+                }
+                
                     
 
 
