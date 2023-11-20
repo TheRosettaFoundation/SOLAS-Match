@@ -122,7 +122,7 @@
 
     
                                     console.log(item.title);
-                                    const cardString = `<div>${item.title}</div>`;
+                                    let cardString = `<div>item.title</div>`;
 
                                     console.log(cardString);
                                    
