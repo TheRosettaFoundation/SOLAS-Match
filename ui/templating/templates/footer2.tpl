@@ -70,8 +70,14 @@
                     console.log(tasksContainer)
 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
-                    let value = selectedLanguage.value
+
+                    selectedLanguage.addEventListener("change", function(){
+
+                    let value =this.value
                     console.log(`Value : ${ value }`)
+
+                    })
+                   
                
                     
 
