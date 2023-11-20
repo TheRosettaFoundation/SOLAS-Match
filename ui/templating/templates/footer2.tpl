@@ -159,8 +159,8 @@
                                     badgeW.appendChild(badgeDiv)
                                     badgeContainer.appendChild(badgeW)
 
-
-                                    let nested = `<div>${item.title}</div>`;
+                                    let tit = item.title;
+                                    let nested = `<div>${title}</div>`;
 
 
                                     itemSubFlex.appendChild(titleContainer);
