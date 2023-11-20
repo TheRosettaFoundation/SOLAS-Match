@@ -80,6 +80,8 @@
                         let hr = page.href;
                         console.log(hr)
                         page.addEventListener("click", (e)=>{
+
+                            tasksContainer.innerHTML = <div> TEST</div>
                          
                         e.preventDefault();
                         console.log("click");
