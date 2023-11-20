@@ -5,7 +5,7 @@
                 <footer>
 
 
-                            <div>
+                            <div class="text-center">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
                                 <br />
                                 The platform is hosted by Azure through a donation from Microsoft<br />
@@ -35,6 +35,9 @@
                       <div class="bg-primary d-flex justify-content-between">
 
                         <div class="d-flex"> 
+                           <div> Facebook</div>
+                           <div> Twitter</div>
+                           <div> Youtube</div>
                            
                         
                         
