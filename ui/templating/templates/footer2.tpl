@@ -23,7 +23,7 @@
                     </div>
 
 
-                      <div class="bg-primary d-flex justify-content-between">
+                      <div class="bg-primary d-flex justify-content-between p-2">
 
                         <div class="d-flex"> 
                            <div> Facebook</div>
