@@ -160,8 +160,7 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                     let languages = 
-                                            "<div class="mb-1  text-muted">
+                                     let languages = "<div class="mb-1  text-muted">
                                                 <span class=" ">
                                                     Languages: <strong> " + item.title + " </strong>
                                                 </span>
