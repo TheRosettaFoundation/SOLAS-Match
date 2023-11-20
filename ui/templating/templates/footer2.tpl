@@ -127,7 +127,7 @@
                         
                                     }
                                     console.log(newData)
-                                    tasksContainer.innerHTML = newData
+                                    tasksContainer.appendChild(newData);
 
                             } catch (error) {
                                 console.log(error);
