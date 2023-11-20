@@ -160,23 +160,11 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let languages = "<div class="mb-1  text-muted">
-                                                <span class=" ">
-                                                    Languages: <strong> " + item.title + " </strong>
-                                                </span>
-                                         
-                                            <span>
-                                            <strong> " + item.title + "</strong>
-                                            </span>
-                                            
-                                            <div class="process_deadline_utc" style="visibility: hidden">" + item.title +"</div>
-                                        
-                                            
-                                            </div>"
+                                    let languages = `<div>${ item.title }</div>`
 
                                     const langHtml = document.createRange().createContextualFragment(languages)
 
-                                    console.log(langHtml)
+                                  
 
 
                                     itemSubFlex.appendChild(titleContainer);
