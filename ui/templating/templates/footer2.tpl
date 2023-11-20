@@ -72,17 +72,16 @@
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
-                    let tasksContainer = document.querySelectorAll('.tasks');
+                    let tasksContainer = document.querySelector('.taskPagination');
+                    console.log(tasksContainer)
                
 
 
                     pages.forEach(page => {
                         let hr = page.href;
-                        console.log(hr)
+                    
                         page.addEventListener("click", (e)=>{
 
-                            tasksContainer.innerHTML = <div> TEST</div>
-                         
                         e.preventDefault();
                         console.log("click");
                         requestPage(hr);                      
@@ -107,15 +106,14 @@
 
                     function reqListner(){
 
-                        let pages = this.responseText;
+                        let pages = this.response;
 
                         let newData = document.createElement("div");
-
-                                        
 
                         
                         try {
                                  parsed = JSON.parse(pages);
+
                                  for (const item of parsed) {
                                   
                                     const itemElement = document.createElement('div');
@@ -124,53 +122,21 @@
                                     const itemNameElement = document.createElement('h3');
                                     itemNameElement.textContent = "test";
                                     itemElement.appendChild(itemNameElement);
-
-
                                     newData.appendChild(itemElement) ;
-                                    
-
-                                    
-
-
+                                                            
                         
                                     }
 
-                                    console.log(newData);
-                                   
-
-                                
-                              
-
-                                
-                               
-                                  
                             } catch (error) {
                                 console.log(error);
-                                return false;
+                             
                             }
-
-                       
-                        
-                                   
-                                        
-                    
-                      
-                     
 
                     }
 
 
 
-                  tasksContainer = document.querySelectorAll('.taskPagination');
-
-                                    console.log(tasksContainer)
-                if(newData){
-
-                        tasksContainer.innerHTML = newData ;
-
-                }
-                
-                    
+                 
 
 
 
