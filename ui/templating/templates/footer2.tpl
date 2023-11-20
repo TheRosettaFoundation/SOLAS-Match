@@ -176,15 +176,7 @@
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
-                                    const pic = ` <div>
-                                        
-                                        <div id="img_{$task_id}"  >
-                                            <img src="{$taskImages[$task_id]}" style ="width:100px ; height:100px">
-                                        </div>
-                                      
-
-                                     </div>`
-                          `
+                                 
 
                                 
 
