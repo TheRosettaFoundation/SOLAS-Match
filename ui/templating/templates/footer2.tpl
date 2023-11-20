@@ -150,6 +150,18 @@
                                     badge.appendChild(badgeSpan)
                                     badgeContainer.appendChild(badge)
 
+                                    const badgeW = document.createElement('button')
+                                    badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border', 'border-0' )
+                                    const badgeDiv = document.createElement('div')
+                                    badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
+                                    badgeDiv.textContent = item.wordCount
+                                    badgeW.appendChild(badgeDiv)
+                                    badgeContainer.appendChild(badgeW)
+
+
+
+
+
                                     itemSubFlex.appendChild(titleContainer);
                                     
                                     itemNameElement.appendChild(itemSubFlex)
