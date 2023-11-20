@@ -173,7 +173,9 @@
                                     
                                     </div>`;
 
-                                    const langHtml = document.createRange().createContextualFragment(languages)
+                                    const langHtml = document.createRange().createContextualFragment(languages);
+
+                                    console.log(langHtml);
 
                                   
 
