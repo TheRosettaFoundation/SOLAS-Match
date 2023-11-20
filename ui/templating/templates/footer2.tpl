@@ -149,7 +149,7 @@
                                     badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
                                     const badge = document.createElement('button')
-                                    badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0 ')
+                                    badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
                                     bagdeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
                                     bagdeSpan.textContent = "Translation"
