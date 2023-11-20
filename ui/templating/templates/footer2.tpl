@@ -150,6 +150,8 @@
                        
                         
                                     let tasksContainer = document.querySelectorAll('.tasks');
+
+                                    tasksContainer.innerHtml = newData ;
                                         
                     
                       
