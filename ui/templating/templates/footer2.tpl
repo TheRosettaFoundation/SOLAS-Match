@@ -40,7 +40,7 @@
                         </div>
 
 
-                        <div>
+                        <div class="text-end">
 
                             Subscribe To TWB Newsletter
 
