@@ -171,13 +171,17 @@ class UserDao extends BaseDao
     {
         $ret = false;
     
-        $args = LibAPI\PDOWrapper::cleanse($user_id).", ";      
+        $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
+
+      
 
         if ($strict) {
             $args .= "1, ";
         } else {
             $args .= "0, ";
+        }
 
+        $limit = "6" ;
         $taskType = NULL;
         $sourceLanguageCode = NULL;
         $targetLanguageCode = NULL;
@@ -189,10 +193,15 @@ class UserDao extends BaseDao
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
 
-
+        // error_log($args);
+        // var_dump($args);
 
         $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);     
-    
+        // var_dump($result);  
+        // var_dump(gettype($result));
+
+
+       
 
         if ($result) {
             $ret = array();
