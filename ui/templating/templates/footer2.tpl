@@ -133,6 +133,8 @@
                                     const title = document.createElement('div')
                                     title.classList.add('fw-bold','fs-4', 'align-middle')
                                     title.textContent = item.title
+
+                                    itemSubFlex.appendChild = title;
                                     itemNameElement.appendChild(itemSubFlex)
                                     
                                     itemElement.appendChild(itemNameElement);
