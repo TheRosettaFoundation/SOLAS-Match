@@ -68,6 +68,10 @@
                     let pages = document.querySelectorAll(".page");
                     let tasksContainer = document.querySelector('.taskPagination');
                     console.log(tasksContainer)
+
+                    let selectedLanguage = document.querySelector("#sourceLanguage");
+                    let value = selectedLanguage.value
+                    console.log(`Value : ${value}`)
                
                     
 
