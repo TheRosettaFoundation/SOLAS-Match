@@ -128,13 +128,13 @@
                                         <div class="">
                                         <div class="fw-bold fs-4 align-middle ">
                                         <div id="" href="" class="text-primary d-inline-block">
-                                        <span class="fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start">  {title}</span> </div>
+                                        <span class="fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start">  </span> </div>
                                         </div>
 
                                         <div class="d-flex mt-2 mb-2 ">
-                                            <button class="rounded-5 bg-greenish border border-0  ">  <span class="fs-6 p-1 text-white fw-bold align-middle">{ } </span> </button>
-                                                {if $task->getWordCount()}
-                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {}</strong> </div> </button>
+                                            <button class="rounded-5 bg-greenish border border-0  ">  <span class="fs-6 p-1 text-white fw-bold align-middle"></span> </button>
+                                               
+                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white fw-bold align-middle"> </strong> </div> </button>
                                             
 
                                         </div>
@@ -142,13 +142,13 @@
                                         
                                             <div class="mb-1  text-muted">
                                                 <span class=" ">
-                                                    Languages: <strong>{} - </strong>
+                                                    Languages: <strong> </strong>
                                                 </span>
                                
                                             <span>
                                             <strong>{}</strong>
                                             </span>
-                                            <div class="process_deadline_utc" style="visibility: hidden">{}</div>
+                                            <div class="process_deadline_utc" style="visibility: hidden"> </div>
                                         
                                             
                                             </div>
@@ -160,7 +160,7 @@
                            
 
                                 <div>
-                                        <div id="img_{$task_id}"  >
+                                        <div id=""  >
                                             <img src="" style ="width:100px ; height:100px">
                                         </div>
                                    
