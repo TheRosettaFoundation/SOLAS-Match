@@ -122,81 +122,19 @@
 
                                     const cardString  = 
                                     `
-                                        <div class=" w-100">
+                                        <div class="w-100">
                       
-                                        div class="d-flex justify-content-between">
-                                        <div class="">
-                                        <div class="fw-bold fs-4 align-middle ">
-                                        <div id="" href="" class="text-primary d-inline-block">
-                                        <span class="fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start">  </span> </div>
-                                        </div>
-
-                                        <div class="d-flex mt-2 mb-2 ">
-                                            <button class="rounded-5 bg-greenish border border-0  ">  <span class="fs-6 p-1 text-white fw-bold align-middle"></span> </button>
-                                               
-                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white fw-bold align-middle"> </strong> </div> </button>
-                                            
+                                        div class="d-flex justify-content-between"> </div>
 
                                         </div>
+                                        `;
 
-                                        
-                                            <div class="mb-1  text-muted">
-                                                <span class=" ">
-                                                    Languages: <strong> </strong>
-                                                </span>
-                               
-                                            <span>
-                                            <strong>{}</strong>
-                                            </span>
-                                            <div class="process_deadline_utc" style="visibility: hidden"> </div>
-                                        
-                                            
-                                            </div>
-                                       
-
-                                
-
-                                </div>
-                           
-
-                                <div>
-                                        <div id=""  >
-                                            <img src="" style ="width:100px ; height:100px">
-                                        </div>
-                                   
-                                            <div id="" class="" ></div>
-                                 
-
-                                </div>
-                          
-
-                            
-                            </div>
-                           
-                           
-
-
-                            
-                            <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
-                                     <div class="d-flex justify-content-end">
-                                        <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
-                                     </div>
-                            
-                            </div>
-                            
-                           
-                           
-                        </div>
-
-                        </div> `;
-
-                        console.log(cardString);
+                                    console.log(cardString);
                                                          '
 
                                     const itemNameElement = document.createElement('div');
                                     itemNameElement.textContent = "test";
-                                    it
+                                    
                                     itemElement.appendChild(itemNameElement);
                                     newData.appendChild(itemElement) ;
                                                             
