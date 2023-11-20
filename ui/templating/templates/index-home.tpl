@@ -613,7 +613,7 @@ a:hover{
             </div>
         </div>
 
-            <ul class=" flex-row d-flex justify-content-center list-unstyled">
+            <ul class=" flex-row d-flex justify-content-center list-unstyled flex-wrap">
 
                     {assign var="url_nam" value="home-paged"}
                     {if $page_count> 6}
