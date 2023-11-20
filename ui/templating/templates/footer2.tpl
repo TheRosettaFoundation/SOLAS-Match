@@ -69,6 +69,7 @@
                     let tasksContainer = document.querySelector('.taskPagination');
                     console.log(tasksContainer)
                
+                    
 
 
                     pages.forEach(page => {
@@ -159,7 +160,7 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-
+                                    let nested = `<div>${item.title}</div>`;
 
 
                                     itemSubFlex.appendChild(titleContainer);
