@@ -160,7 +160,18 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let languages = `<div>${ item.title }</div>`
+                                    let languages = `<div>
+
+                                    <span class="mb-1 text-muted">
+                                                    Languages: <strong> Languages - <strong> ${ item.sourceLocale.languageName } </strong>
+                                                </span>
+                                        
+                                                <span>
+                                                <strong> ${ item.targetLocale.languageName } </strong>
+                                                </span>
+                                                <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
+                                    
+                                    </div>`;
 
                                     const langHtml = document.createRange().createContextualFragment(languages)
 
