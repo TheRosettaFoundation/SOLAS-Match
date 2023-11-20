@@ -121,7 +121,7 @@
                                     itemElement.classList.add('d-flex', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
     
-                                   
+                                    console.log(item.title);
                                     const cardString = `<div> test</div>`
 
                                     console.log(cardString);
