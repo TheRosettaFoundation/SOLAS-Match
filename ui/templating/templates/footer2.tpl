@@ -149,11 +149,7 @@
 
                        
                         
-                                    let tasksContainer = document.querySelectorAll('.taskPagination');
-
-                                    console.log(tasksContainer)
-
-                                    tasksContainer.innerHTML = newData ;
+                                   
                                         
                     
                       
@@ -161,6 +157,13 @@
 
                     }
 
+
+
+                 let tasksContainer = document.querySelectorAll('.taskPagination');
+
+                                    console.log(tasksContainer)
+
+                                    tasksContainer.innerHTML = newData ;
                     
 
 
