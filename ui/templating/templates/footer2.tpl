@@ -151,12 +151,13 @@
                                     const badge = document.createElement('button')
                                     badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
-                                    bagdeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                                    bagdeSpan.textContent = "Translation"
+                                    badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
+                                    badgeSpan.textContent = "Translation"
                                     badge.appendChild(badgeSpan)
                                     badgeContainer.appendChild(badge)
 
-                                    itemSubFlex.appendChild(title);
+                                    itemSubFlex.appendChild(titleContainer);
+                                    itemSubFlex.appendChild(badgeContainer);
                                     itemNameElement.appendChild(itemSubFlex)
                                     
                                     itemElement.appendChild(itemNameElement);
