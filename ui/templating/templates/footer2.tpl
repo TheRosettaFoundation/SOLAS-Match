@@ -126,8 +126,16 @@
                                     console.log(cardString);
                                    
                                     const itemNameElement = document.createElement('div');
-                                    itemNameElement.classList.add('100')
-                                    itemNameElement.textContent = item.title;
+                                    itemNameElement.classList.add('100') ;
+                                    const itemSubFlex =  document.createElement('div');
+                                    
+                                    
+                                   
+                                    itemSubFlex.classList.add('d-flex','justify-content-between')
+                                    const title = document.createElement(''div)
+                                    title.classList.add('fw-bold fs-4 align-middle')
+                                    title.innerText = item.title
+                                    itemNameElement.appendChild(itemSubFlex)
                                     
                                     itemElement.appendChild(itemNameElement);
                                     newData.appendChild(itemElement) ;
