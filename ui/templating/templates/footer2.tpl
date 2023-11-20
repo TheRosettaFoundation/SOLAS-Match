@@ -151,6 +151,8 @@
                         
                                     let tasksContainer = document.querySelectorAll('.tasks');
 
+                                    console.log(tasksContainer)
+
                                     tasksContainer.innerHTML = newData ;
                                         
                     
