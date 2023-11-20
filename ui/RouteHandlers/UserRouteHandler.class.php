@@ -341,13 +341,9 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-               
-                
+                // $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);                               
                 $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType,  $selectedSourceLanguageCode, $selectedTargetLanguageCode);
-                // var_dump(gettype($topTasks));
-
-         
+                // var_dump(gettype($topTasks));       
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
@@ -363,64 +359,10 @@ class UserRouteHandler
         }
 
 
-        $taskTags = array();
-        $created_timestamps = array();
-        $deadline_timestamps = array();
-        $projectAndOrgs = array();
-        $discourse_slug = array();
-        $taskImages = array();
+        
+       
 
-        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        // $pages = ceil($topTasksC /5);
-
-        if ($currentScrollPage <= $lastScrollPage) {
-            foreach ($topTasks as $topTask) {
-                $taskId = $topTask->getId();
-                $project = $projectDao->getProject($topTask->getProjectId());
-                $org_id = $project->getOrganisationId();
-                $org = $orgDao->getOrganisation($org_id);
-
-                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
-
-                $created = $topTask->getCreatedTime();
-                $selected_year   = (int)substr($created,  0, 4);
-                $selected_month  = (int)substr($created,  5, 2);
-                $selected_day    = (int)substr($created,  8, 2);
-                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-                $selected_minute = (int)substr($created, 14, 2);
-                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-                $deadline = $topTask->getDeadline();
-                $selected_year   = (int)substr($deadline,  0, 4);
-                $selected_month  = (int)substr($deadline,  5, 2);
-                $selected_day    = (int)substr($deadline,  8, 2);
-                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-                $selected_minute = (int)substr($deadline, 14, 2);
-                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
-                $projectName = $project->getTitle();
-                $orgUri = "{$siteLocation}org/{$org_id}/profile";
-                $orgName = $org->getName();
-                $projectAndOrgs[$taskId] = sprintf(
-                    Lib\Localisation::getTranslation('common_part_of_for'),
-                    $projectUri,
-                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
-                    $orgUri,
-                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
-                );
-                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
-
-                $taskImages[$taskId] = '';
-                if ($project->getImageApproved() && $project->getImageUploaded()) {
-                    $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
-                }
-            }
-        }
-
-        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
-            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
-        }
+      
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
@@ -460,45 +402,9 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
-        $template_data = array_merge($template_data, array(
-            'siteLocation' => $siteLocation,
-            'activeSourceLanguages' => $activeSourceLanguages,
-            'activeTargetLanguages' => $activeTargetLanguages,
-            'selectedTaskType' => $selectedTaskType,
-            'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
-            'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
-            'topTasks' => $topTasks,
-            'taskTags' => $taskTags,
-            'created_timestamps' => $created_timestamps,
-            'deadline_timestamps' => $deadline_timestamps,
-            'projectAndOrgs' => $projectAndOrgs,
-            'discourse_slug' => $discourse_slug,
-            'taskImages' => $taskImages,
-            'currentScrollPage' => $currentScrollPage,
-            'itemsPerScrollPage' => $itemsPerScrollPage,
-            'lastScrollPage' => $lastScrollPage,
-            'extra_scripts' => $extra_scripts,
-            'user_id' => $user_id,
-            'org_admin' => $org_admin,
-            'user_monthly_count' => $userDao->get_users_by_month(),
-            'page_count' => $pages,
-       
-        ));
-
-      
-       
-      
-       
-
-        // $data = array('result' => $topTasks);
-
-     
-        // var_dump($topTasks);
          
         $payload = json_encode($topTasks);
-
-        // var_dump($payload);
-        
+ 
         $response->getBody()->write($payload);
 
         return $response->withHeader('Content-Type', 'application/json');
