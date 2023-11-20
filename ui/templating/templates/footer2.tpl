@@ -151,7 +151,7 @@
                         
                                     let tasksContainer = document.querySelectorAll('.tasks');
 
-                                    tasksContainer.innerHtml = newData ;
+                                    tasksContainer.innerHTML = newData ;
                                         
                     
                       
