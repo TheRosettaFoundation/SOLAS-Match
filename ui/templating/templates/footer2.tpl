@@ -127,7 +127,8 @@
                         
                                     }
                                     console.log(newData)
-                                    tasksContainer.replaceChild = newData ;
+                                    newDataString = newData.outerHTML;
+                                    tasksContainer.replaceChild = newDataString ;
 
                             } catch (error) {
                                 console.log(error);
