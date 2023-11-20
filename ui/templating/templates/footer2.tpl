@@ -17,16 +17,7 @@
                              </div>
 
 
-                             <div>
-                                    <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
-                                    <img alt="Solas Logo" style="border-width:0;" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
-                                </a>
-                                <br />
-                                {sprintf(Localisation::getTranslation('footer_powered_by'), "https://github.com/TheRosettaFoundation/SOLAS-Match", "Solas")}
-
-                             </div>
-
-                            
+                                                
 
 
                     </div>
@@ -46,7 +37,7 @@
                         <div>
                             Contact Us| Terms and Conditions | Privacy Policy | TWB Community
 
-                        <div>
+                        </div>
 
 
                         <div>
