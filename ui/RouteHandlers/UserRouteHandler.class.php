@@ -666,23 +666,6 @@ class UserRouteHandler
             'page_count' => $pages,
        
         ));
-
-
-        $data = array('result' => "test");
-
-       
-        
-         
-        $payload = json_encode($data);
-
-        var_dump($payload);
-
-        // $response->getBody()->write($payload);
-        // $response->withHeader('Content-Type' , 'application/json');
-        // $response->withStatus(200);
-     
-
-        // return ($payload);
         
         return UserRouteHandler::render('index-home.tpl', $response);
     }
