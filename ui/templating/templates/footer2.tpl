@@ -121,13 +121,12 @@
                                     itemElement.classList.add('d-flex', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
     
-                                    console.log(item.title);
-                                    let cardString = `<div>item.title</div>`;
+                                    let cardString 
 
                                     console.log(cardString);
                                    
                                     const itemNameElement = document.createElement('div');
-                                    itemNameElement.textContent = "test";
+                                    itemNameElement.textContent = item.title;
                                     
                                     itemElement.appendChild(itemNameElement);
                                     newData.appendChild(itemElement) ;
