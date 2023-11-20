@@ -126,6 +126,8 @@
                                                             
                         
                                     }
+                                    console.log(newData)
+                                    tasksContainer.innerHTML = newData
 
                             } catch (error) {
                                 console.log(error);
