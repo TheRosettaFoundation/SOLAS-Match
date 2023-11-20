@@ -175,7 +175,7 @@
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
-                                    console.log(langHtml);
+                                
 
                                   
 
@@ -184,6 +184,7 @@
                                     
                                     itemNameElement.appendChild(itemSubFlex)
                                     itemNameElement.appendChild(badgeContainer);
+                                    itemNameElement.appendChild(langHtml);
                                     
                                     itemElement.appendChild(itemNameElement);
                                     newData.appendChild(itemElement) ;
