@@ -126,6 +126,7 @@
                                     console.log(cardString);
                                    
                                     const itemNameElement = document.createElement('div');
+                                    itemNameElement.classList.add('100')
                                     itemNameElement.textContent = item.title;
                                     
                                     itemElement.appendChild(itemNameElement);
