@@ -120,16 +120,7 @@
                                     const itemElement = document.createElement('div');
                                     itemElement.classList.add('d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3');
 
-                                    const cardString  = 
-                                    `
-                                        <div class="w-100">
-                      
-                                        div class="d-flex justify-content-between"> </div>
-
-                                        </div>
-                                        `;
-
-                                    console.log(cardString);
+                                 
                                                          '
 
                                     const itemNameElement = document.createElement('div');
