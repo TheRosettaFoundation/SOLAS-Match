@@ -118,11 +118,9 @@
                                     console.log(item);
                                   
                                     const itemElement = document.createElement('div');
-                                    itemElement.classList.add('d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3');
+                                    itemElement.classList.add('ietm');
 
-                                 
-                                                         '
-
+    
                                     const itemNameElement = document.createElement('div');
                                     itemNameElement.textContent = "test";
                                     
