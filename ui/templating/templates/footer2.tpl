@@ -106,6 +106,9 @@
                     function reqListner(){
 
                         let pages = this.responseText;
+
+                        let newData = document.createElement("div");
+
                                         
 
                         
@@ -120,14 +123,17 @@
                                     itemNameElement.textContent = "test";
                                     itemElement.appendChild(itemNameElement);
 
-                                    let tasksContainer = document.querySelectorAll('.tasks');
-                                    console.log(tasksContainer)
+
+                                    newData.appendChild(itemElement) ;
+                                    
 
                                     
 
 
                         
                                     }
+
+                                    console.log(newData);
                                    
 
                                 
@@ -143,6 +149,8 @@
 
                        
                         
+                                    let tasksContainer = document.querySelectorAll('.tasks');
+                                        
                     
                       
                      
