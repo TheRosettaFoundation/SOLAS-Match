@@ -130,7 +130,7 @@
                                     
                                    
                                     itemSubFlex.classList.add('d-flex','justify-content-between')
-                                    const title = document.createElement(''div)
+                                    const title = document.createElement('div')
                                     title.classList.add('fw-bold','fs-4', 'align-middle')
                                     title.textContent = item.title
                                     itemNameElement.appendChild(itemSubFlex)
