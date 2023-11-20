@@ -151,8 +151,9 @@
                                     badgeContainer.appendChild(badge)
 
                                     itemSubFlex.appendChild(titleContainer);
-                                    itemSubFlex.appendChild(badgeContainer);
+                                    
                                     itemNameElement.appendChild(itemSubFlex)
+                                    itemNameElement.appendChild(badgeContainer);
                                     
                                     itemElement.appendChild(itemNameElement);
                                     newData.appendChild(itemElement) ;
