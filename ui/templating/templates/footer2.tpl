@@ -121,9 +121,7 @@
                                     itemElement.classList.add('d-flex', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
     
-                                    let cardString 
-
-                                    console.log(cardString);
+                                 
                                    
                                     const itemNameElement = document.createElement('div');
                                     itemNameElement.classList.add('100') ;
@@ -133,8 +131,8 @@
                                    
                                     itemSubFlex.classList.add('d-flex','justify-content-between')
                                     const title = document.createElement(''div)
-                                    title.classList.add('fw-bold fs-4 align-middle')
-                                    title.innerText = item.title
+                                    title.classList.add('fw-bold','fs-4', 'align-middle')
+                                    title.textContent = item.title
                                     itemNameElement.appendChild(itemSubFlex)
                                     
                                     itemElement.appendChild(itemNameElement);
@@ -144,7 +142,7 @@
                                     }
                                     console.log(newData)
                                     newDataString = newData.outerHTML;
-                                    console.log(newDataString);
+                               
                                     tasksContainer.innerHTML = newDataString ;
 
                             } catch (error) {
