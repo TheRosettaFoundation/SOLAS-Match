@@ -526,7 +526,7 @@ a:hover{
                 
             
              </div>        
-            <div class="tasks">
+            <div class="taskPagination">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >

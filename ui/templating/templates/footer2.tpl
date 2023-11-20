@@ -149,7 +149,7 @@
 
                        
                         
-                                    let tasksContainer = document.querySelectorAll('.tasks');
+                                    let tasksContainer = document.querySelectorAll('.taskPagination');
 
                                     console.log(tasksContainer)
 
