@@ -130,9 +130,31 @@
                                     
                                    
                                     itemSubFlex.classList.add('d-flex','justify-content-between')
-                                    const title = document.createElement('div')
-                                    title.classList.add('fw-bold','fs-4', 'align-middle')
-                                    title.textContent = item.title
+                                    const titleContainer = document.createElement('div')
+                                    const title =  document.createElement('div')
+                                    title.classList.add('text-primary' ,'d-inline-block')
+                                    title.textContent = item.title ;
+                                    const spanTitle = document.createElement('span')
+                                    spanTitle.classList.add('fs-5', 'bg-primary' , 'border-2' ,'border-primary', 'opacity-75', 'rounded-circle', 'd-inline-block', 'px-2', 'text-white', 'align-self-start')
+                                    spanTitle.textContent = "?"
+                                    title.appendChild(spanTitle)
+
+
+
+                                    titleContainer.classList.add('fw-bold','fs-4', 'align-middle')
+                                    titleContainer.appendChild(title)
+
+
+                                    const badgeContainer = document.createElement('div')
+                                    badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
+
+                                    const badge = document.createElement('button')
+                                    badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0 ')
+                                    const badgeSpan = document.createElement('span')
+                                    bagdeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
+                                    bagdeSpan.textContent = "Translation"
+                                    badge.appendChild(badgeSpan)
+                                    badgeContainer.appendChild(badge)
 
                                     itemSubFlex.appendChild(title);
                                     itemNameElement.appendChild(itemSubFlex)
