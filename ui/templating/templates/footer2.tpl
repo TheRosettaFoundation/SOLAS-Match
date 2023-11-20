@@ -74,6 +74,7 @@
 
                     pages.forEach(page => {
                         let hr = page.href;
+                        console.log(hr)
                     
                         page.addEventListener("click", (e)=>{
 
@@ -163,17 +164,27 @@
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
-                                                    Languages: <strong> Languages - <strong> ${ item.sourceLocale.languageName } </strong>
+                                                    Languages: <strong> Languages :  <strong> ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
                                                 <span>
-                                                <strong> ${ item.targetLocale.languageName } </strong>
+                                                <strong> Due By </strong>
                                                 </span>
                                                 <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
                                     
                                     </div>`;
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
+
+                                    const pic = ` <div>
+                                        
+                                        <div id="img_{$task_id}"  >
+                                            <img src="{$taskImages[$task_id]}" style ="width:100px ; height:100px">
+                                        </div>
+                                      
+
+                                     </div>`
+                          `
 
                                 
 
