@@ -85,7 +85,9 @@
                         let page = document.querySelector(".page");
                         let url = page.href ;
                         selectedL = this.value;
-                        console.log(`Value : ${ selectedL }`)                   
+                        console.log(`Value : ${ selectedL }`) 
+                        let find = url.find("sl/") ;
+                        console.log(find);   
                         let newUrl = url.replace("sl/0",`sl/${ selectedL }`) ;
                         page.href = newUrl ;
                         console.log(page);                       
