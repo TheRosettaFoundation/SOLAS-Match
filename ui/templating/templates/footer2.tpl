@@ -87,11 +87,11 @@
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
                         let find = url.indexOf("sl/") ;
+                        let firstL = url.slice(0,find) ;
+                        console.log(firstL);
                     
-                        let newUrl = url.slice(0,find+3) + selectedL + url.slice(find) ;
-                        console.log(newUrl);
-                        page.href = newUrl ;
-                        console.log(page);                       
+                        
+                                          
 
                     })
 
