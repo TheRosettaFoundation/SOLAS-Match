@@ -112,9 +112,11 @@
 
                         let find = url.indexOf("tl/") ;
 
+                          let firstL = url.slice(0,find) ;
+
                         
                         
-                        let newUrl = find+`tl\${ targetL}` ;
+                        let newUrl = firstL+`tl\${ targetL}` ;
                         console.log(newUrl);
                         
                        
