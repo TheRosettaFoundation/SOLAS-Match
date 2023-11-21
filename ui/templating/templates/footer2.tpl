@@ -117,7 +117,7 @@
                         
                         
                         let newUrl = firstL+`tl/${ targetL }` ;
-                        console.log(newUrl);
+                        page.href = newUrl;
                         
                        
 
