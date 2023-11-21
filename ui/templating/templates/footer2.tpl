@@ -86,7 +86,9 @@
 
                         selectedL =this.value
                         console.log(`Value : ${ selectedL }`)
-                        let newPage = page.replace("sl/0","sl/selectedL") ;
+                        let url = page.href ;
+                        console.log(url);
+                        let newPage = url.replace("sl/0","sl/selectedL") ;
                         console.log (newPage);
                         
 
