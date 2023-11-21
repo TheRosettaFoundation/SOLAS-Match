@@ -129,7 +129,7 @@
                                 
                                 
                                     const itemElement = document.createElement('div');
-                                    itemElement.classList.add('', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
+                                    itemElement.classList.add( 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
     
                                  
