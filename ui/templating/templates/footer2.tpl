@@ -131,7 +131,7 @@
 
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
-                        let newUrl = firstL + `sl/${ selectTask }/`+firstR;
+                        let newUrl = firstL + `tt/${ selectTask }`+firstR;
 
                         console.log(newUrl);
 
