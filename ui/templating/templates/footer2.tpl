@@ -110,11 +110,14 @@
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
 
+                        let find = url.indexOf("tl/") ;
+
                         
                         
-                        let newUrl = url.replace("tl/0",`tl/${ targetL }`) ;
-                        page.href = newUrl
-                        console.log(page)
+                        let newUrl = find+`tl\${ targetL}` ;
+                        console.log(newUrl);
+                        
+                       
 
                     })
 
@@ -131,7 +134,7 @@
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL+`tt/${ selectTask }`+firstR;
-                        console.log(newUrl);
+                       
 
                         page.href = newUrl ;
                     
