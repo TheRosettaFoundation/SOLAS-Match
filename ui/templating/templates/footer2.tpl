@@ -88,7 +88,7 @@
                         console.log(`Value : ${ selectedL }`)
                         let url = page.href ;
                         console.log(url);
-                        let newPage = url.replace("sl/0",`sl/${ selecteL }`) ;
+                        let newPage = url.replace("sl/0",`sl/${ selectedL }`) ;
                         console.log (newPage);
                         
 
