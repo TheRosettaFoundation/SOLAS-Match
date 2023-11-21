@@ -71,7 +71,7 @@
 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
                     let targetLanguage = document.querySelector("#targetLanguage");
-                    let taskType = documentquertSelector('#taskTypes') ;
+                    let taskType = document.querySelector('#taskTypes') ;
                     let selectL = '' ;
                     let selectT = '' ;
                     let selectTask = '' ;
