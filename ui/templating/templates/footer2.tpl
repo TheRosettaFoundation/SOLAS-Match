@@ -87,8 +87,9 @@
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
                         let find = url.indexOf("sl") ;
-                        console.log(find);   
-                        let newUrl = url.replace("sl/0",`sl/${ selectedL }`) ;
+                    
+                        let newUrl = url.slice(0,find) + selectedL + url.slice(find) ;
+                        console.log(newUrl);
                         page.href = newUrl ;
                         console.log(page);                       
 
