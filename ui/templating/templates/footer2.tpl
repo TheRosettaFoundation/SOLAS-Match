@@ -82,20 +82,13 @@
 
                     selectedLanguage.addEventListener("change", function(){
                     
-                        console.log("clicked selected ")
-
                         let page = document.querySelector(".page");
                         let url = page.href ;
-
-
-                        selectedL =this.value
-                        console.log(`Value : ${ selectedL }`)
-                    
+                        selectedL = this.value;
+                        console.log(`Value : ${ selectedL }`)                   
                         let newUrl = url.replace("sl/0",`sl/${ selectedL }`) ;
                         page.href = newUrl ;
-                        console.log(page);
-                    
-                       
+                        console.log(page);                       
 
                     })
 
