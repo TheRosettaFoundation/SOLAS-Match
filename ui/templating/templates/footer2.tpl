@@ -79,9 +79,7 @@
 
                     let allPages = document.querySelectorAll('.page')
                     
-                     console.log("New pages ")
-                     
-                     console.log(allPages);
+              
 
                    
 
@@ -109,6 +107,7 @@
                             let endPart = newUrl.split('/tt')
                             let finUrl = firstPart[0]+"/tt"+endPart[1]
                             console.log(finUrl)
+                            page.href = finUrl ;
                          
                              
                              })
