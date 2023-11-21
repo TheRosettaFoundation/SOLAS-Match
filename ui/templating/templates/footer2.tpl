@@ -127,7 +127,7 @@
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
                         let find = url.indexOf("tt/") ;
-                        let findN = url.indexOf("sl") ;
+                        let findN = url.indexOf("/sl") ;
 
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
