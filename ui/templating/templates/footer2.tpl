@@ -124,10 +124,12 @@
                                  for (const item of parsed) {
                                     console.log(item);
                                     const innerDiv = document.createElement("div");
-                                    innerDiv.classList.add('bg-body-tertiary');
+                                  
+                            
+                                
                                 
                                     const itemElement = document.createElement('div');
-                                    itemElement.classList.add('d-flex', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
+                                    itemElement.classList.add('', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
     
                                  
