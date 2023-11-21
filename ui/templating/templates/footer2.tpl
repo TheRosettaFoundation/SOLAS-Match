@@ -122,7 +122,8 @@
 
                                  for (const item of parsed) {
                                     console.log(item);
-                                  
+                                    const innerDiv = document.createElement("div");
+                                
                                     const itemElement = document.createElement('div');
                                     itemElement.classList.add('d-flex', 'justify-content-between', 'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
@@ -211,8 +212,10 @@
                                     itemElement.appendChild(viewHtml);
                                     
                                     itemElement.appendChild(itemNameElement);
+
+                                    innerDiv.appendChild(itemElement);
                                   
-                                    newData.appendChild(itemElement) ;
+                                    newData.appendChild(innerDiv) ;
 
                                    
                                                             
