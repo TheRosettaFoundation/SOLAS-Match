@@ -109,7 +109,7 @@
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
-                         page = url.replace("tl/0",`tl/${ selectTask }`) ;
+                         page = url.replace("tt/0",`tt/${ selectTask }`) ;
                         console.log(page)
 
                     })
