@@ -86,7 +86,7 @@
                         let url = page.href ;
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
-                        let find = url.indexOf("sl") ;
+                        let find = url.indexOf("sl/") ;
                     
                         let newUrl = url.slice(0,find) + selectedL + url.slice(find) ;
                         console.log(newUrl);
