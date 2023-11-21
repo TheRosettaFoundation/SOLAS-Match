@@ -182,9 +182,7 @@ class UserDao extends BaseDao
         }
 
         $limit = "6" ;
-        $taskType = NULL;
-        $sourceLanguageCode = NULL;
-        $targetLanguageCode = NULL;
+        
 
         $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 LibAPI\PDOWrapper::cleanseNull($offset).', ';
