@@ -116,7 +116,7 @@
 
                         
                         
-                        let newUrl = first +`tl/${ targetL }` ;
+                        let newUrl = first+`tl/${ targetL }` ;
                         console.log(newUrl);
                         
                        
