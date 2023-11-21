@@ -214,6 +214,7 @@
                                     itemElement.appendChild(itemNameElement);
 
                                     innerDiv.appendChild(itemElement);
+                                    innerDiv.appendChild(viewHtml);
                                   
                                     newData.appendChild(innerDiv) ;
 
