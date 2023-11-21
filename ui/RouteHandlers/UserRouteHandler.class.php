@@ -428,7 +428,8 @@ class UserRouteHandler
 
         
         
-        error_log("args " . $args);
+        var_dump($selectedSourceLanguageCode);
+        var_dump($selectedTargetLanguageCode);
        
       
        
