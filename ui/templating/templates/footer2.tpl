@@ -70,13 +70,36 @@
                     console.log(tasksContainer)
 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
+                    let targetLanguage = document.querySelector("#targetLanguage");
+                    let taskType = documentquertSelector('#taskTypes') ;
+                    let selectL = '' ;
+                    let selectT = '' ;
+                    let selectTask = '' ;
+
+
 
                     selectedLanguage.addEventListener("change", function(){
 
-                    let value =this.value
+                    selectedL =this.value
                     console.log(`Value : ${ value }`)
 
                     })
+
+                     targetLanguage.addEventListener("change", function(){
+
+                        targetL =this.value
+                        console.log(`Value : ${ value }`)
+
+                    })
+
+                     taskType.addEventListener("change", function(){
+
+                        selectTask =this.value
+                        console.log(`Value : ${ value }`)
+
+                    })
+                   
+                   
                    
                
                     
