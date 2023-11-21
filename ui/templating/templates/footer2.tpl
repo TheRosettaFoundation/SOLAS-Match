@@ -77,6 +77,10 @@
                     let selectT = '' ;
                     let selectTask = '' ;
 
+                    let allPages = document.querySelectorAll('.page')
+
+                    allPages.forEach(page=> { console.log(page)})
+
                     
                   
 
@@ -117,6 +121,8 @@
                         
                         
                         let newUrl = firstL+`tl/${ targetL }` ;
+
+                        
                         page.href = newUrl;
 
                         console.log(page)
