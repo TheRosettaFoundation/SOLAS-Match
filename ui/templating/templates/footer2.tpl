@@ -130,7 +130,7 @@
                                  
                                    
                                     const itemNameElement = document.createElement('div');
-                                    itemNameElement.classList.add('100') ;
+                                    itemNameElement.classList.add('100', 'bg-info') ;
                                     const itemSubFlex =  document.createElement('div');
                                     
                                     
