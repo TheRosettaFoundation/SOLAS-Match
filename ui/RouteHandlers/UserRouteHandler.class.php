@@ -314,29 +314,29 @@ class UserRouteHandler
 
    
 
-        $filter = array();
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
+        // $filter = array();
+        // if ($request->getMethod() === 'POST') {
+        //     $post = $request->getParsedBody();
 
-            if (isset($post['taskTypes'])) {
-                $selectedTaskType = $post['taskTypes'];
-            }
-            if (isset($post['sourceLanguage'])) {
-                $selectedSourceLanguageCode = $post['sourceLanguage'];
-            }
-            if (isset($post['targetLanguage'])) {
-                $selectedTargetLanguageCode = $post['targetLanguage'];
-            }
-        }
-        // Post or route handler may return '0', need an explicit zero
-        $selectedTaskType = (int)$selectedTaskType;
-        if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
-        if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
+        //     if (isset($post['taskTypes'])) {
+        //         $selectedTaskType = $post['taskTypes'];
+        //     }
+        //     if (isset($post['sourceLanguage'])) {
+        //         $selectedSourceLanguageCode = $post['sourceLanguage'];
+        //     }
+        //     if (isset($post['targetLanguage'])) {
+        //         $selectedTargetLanguageCode = $post['targetLanguage'];
+        //     }
+        // }
+        // // Post or route handler may return '0', need an explicit zero
+        // $selectedTaskType = (int)$selectedTaskType;
+        // if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
+        // if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
 
-        // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
-        if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
-        if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
-        if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
+        // // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
+        // if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
+        // if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
+        // if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
 
         try {
             if ($user_id) {
