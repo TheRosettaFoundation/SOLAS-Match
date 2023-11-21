@@ -83,9 +83,12 @@
                     
                         console.log("clicked selected ")
 
+
                         selectedL =this.value
                         console.log(`Value : ${ selectedL }`)
-                        console.log(page)
+                        let newPage = page.replace("sl/0","sl/selectedL") ;
+                        console.log (newPage);
+                        
 
                     })
 
