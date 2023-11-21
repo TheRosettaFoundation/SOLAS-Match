@@ -186,6 +186,16 @@
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
+                                    const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap ">
+                                                        <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
+                                                        <div class="d-flex justify-content-end">
+                                                            <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
+                                                        </div>
+                            
+                                                        </div>`;
+
+                                    const viewHtml = document.createRange().createContextualFragment(viewTask);
+
                                  
 
                                 
@@ -200,6 +210,7 @@
                                     itemNameElement.appendChild(langHtml);
                                     
                                     itemElement.appendChild(itemNameElement);
+                                    itemElement.appendChild(viewHtml);
                                     newData.appendChild(itemElement) ;
 
                                    
