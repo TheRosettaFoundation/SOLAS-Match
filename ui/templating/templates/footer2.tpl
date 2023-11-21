@@ -97,6 +97,7 @@
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL + `sl/${ selectedL }/`+firstR
                         
+                        console.log(allPages);
 
                          allPages.forEach(page=> {
                             let  firstPart = url.split('/tt') ;
