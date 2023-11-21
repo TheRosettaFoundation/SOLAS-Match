@@ -96,6 +96,7 @@
                         console.log(firstL);
                         console.log(firstR);
                         console.log(newUrl);
+                        page.href = newUrl ;
                     
                         
                                           
@@ -109,6 +110,8 @@
 
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
+
+                        
                         
                         let newUrl = url.replace("tl/0",`tl/${ targetL }`) ;
                         page.href = newUrl
@@ -123,9 +126,16 @@
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
-                        let newUrl = url.replace("tt/0",`tt/${ selectTask }`) ;
-                        page.href = newUrl ;
-                        console.log(page);
+                        let find = url.indexOf("tt/") ;
+                        let findN = url.indexOf("sl") ;
+
+                        let firstL = url.slice(0,find) ;
+                        let firstR = url.slice(findN) ;
+                        let newUrl = firstL + `sl/${ selectTask }/`+firstR;
+
+                        console.log(newUrl);
+
+                        
 
                     })
                    
