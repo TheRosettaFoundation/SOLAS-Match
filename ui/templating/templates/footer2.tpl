@@ -79,7 +79,7 @@
 
                     let allPages = document.querySelectorAll('.page')
 
-                    allPages.forEach(page=> { console.log(page)})
+                   
 
                     
                   
@@ -97,9 +97,8 @@
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL + `sl/${ selectedL }/`+firstR
                         
-                
-                        page.href = newUrl ;
-                        console.log(page);
+
+                         allPages.forEach(page=> { page.href = newUrl})
                     
                         
                                           
@@ -123,9 +122,7 @@
                         let newUrl = firstL+`tl/${ targetL }` ;
 
                         
-                        page.href = newUrl;
-
-                        console.log(page)
+                        allPages.forEach(page=> { page.href = newUrl})
                         
                        
 
@@ -146,9 +143,7 @@
                         let newUrl = firstL+`tt/${ selectTask }`+firstR;
                        
 
-                        page.href = newUrl ;
-
-                        console.log(page);
+                        allPages.forEach(page=> { page.href = newUrl})
                     
 
                         
