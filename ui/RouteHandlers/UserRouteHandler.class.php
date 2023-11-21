@@ -236,13 +236,15 @@ class UserRouteHandler
 
         global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
-        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
-        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
-        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : NULL;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         
       
-        
+      
+       
+     
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -424,11 +426,6 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        
-        
-        
-      
-       
      
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
