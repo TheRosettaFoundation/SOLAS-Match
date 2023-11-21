@@ -87,8 +87,13 @@
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
                         let find = url.indexOf("sl/") ;
+                        let findN = url.indexOf("tl") ;
+
                         let firstL = url.slice(0,find) ;
+                        let firstR = url.slice(findN) ;
+                        
                         console.log(firstL);
+                        console.log(firstR);
                     
                         
                                           
