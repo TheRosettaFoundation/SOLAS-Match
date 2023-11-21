@@ -78,6 +78,10 @@
                     let selectTask = '' ;
 
                     let allPages = document.querySelectorAll('.page')
+                    
+                     console.log("New pages ")
+                     
+                     console.log(allPages);
 
                    
 
@@ -97,7 +101,7 @@
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL + `sl/${ selectedL }/`+firstR
                         
-                        console.log(allPages);
+                       
 
                          allPages.forEach(page=> {
                             let  firstPart = url.split('/tt') ;
