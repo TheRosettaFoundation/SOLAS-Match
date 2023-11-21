@@ -77,14 +77,16 @@
                     let selectT = '' ;
                     let selectTask = '' ;
 
-                    let page = document.querySelector(".page");
-                    let url = page.href ;
-
+                    
                   
 
                     selectedLanguage.addEventListener("change", function(){
                     
                         console.log("clicked selected ")
+
+                        let page = document.querySelector(".page");
+                        let url = page.href ;
+
 
                         selectedL =this.value
                         console.log(`Value : ${ selectedL }`)
@@ -99,6 +101,9 @@
 
                      targetLanguage.addEventListener("change", function(){
 
+                        let page = document.querySelector(".page");
+                        let url = page.href ;
+
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
                         
@@ -109,6 +114,9 @@
                     })
 
                      taskType.addEventListener("change", function(){
+
+                        let page = document.querySelector(".page");
+                        let url = page.href ;
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
