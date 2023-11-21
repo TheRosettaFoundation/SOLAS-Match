@@ -240,11 +240,7 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-        var_dump($args);
-        error_log("page no " . $args['page_no']);
-        error_log("tasktype " . $args['tt']);
-        error_log("sourceL " . $args['sl']);
-        error_log("targetL " . $args['tl']);
+        
       
       
        
@@ -430,7 +426,12 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
+        
+        var_dump($args);
         error_log("page no " . $args['page_no']);
+        error_log("tasktype " . $args['tt']);
+        error_log("sourceL " . $args['sl']);
+        error_log("targetL " . $args['tl']);
       
        
      
