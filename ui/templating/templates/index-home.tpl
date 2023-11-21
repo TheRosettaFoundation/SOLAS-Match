@@ -628,7 +628,6 @@ a:hover{
                             <a class="page-link" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">previous</a></li>
         
                     {for $page=1 to $count}
-
                             <li class="m-3 border border-dark-subtle rounded-3 px-2">
                             <a class="page" href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode "}">{$page}</a></li>
                     {/for}
