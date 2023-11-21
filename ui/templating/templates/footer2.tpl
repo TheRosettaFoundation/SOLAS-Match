@@ -168,8 +168,7 @@
                     
                         page.addEventListener("click", (e)=>{
 
-                      
-                        console.log("click");
+                        e.preventDefault();
                         requestPage(hr);                      
 
                         
