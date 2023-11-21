@@ -89,8 +89,10 @@
                         selectedL =this.value
                         console.log(`Value : ${ selectedL }`)
                     
-                        page = url.replace("sl/0",`sl/${ selectedL }`) ;
-                        console.log(page)
+                        let newUrl = url.replace("sl/0",`sl/${ selectedL }`) ;
+                        page.href = newUrl ;
+                        console.log(page);
+                    
                        
 
                     })
@@ -100,7 +102,8 @@
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
                         
-                        page = url.replace("tl/0",`tl/${ targetL }`) ;
+                        let newUrl = url.replace("tl/0",`tl/${ targetL }`) ;
+                        page.href = newUrl
                         console.log(page)
 
                     })
@@ -109,8 +112,9 @@
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
-                         page = url.replace("tt/0",`tt/${ selectTask }`) ;
-                        console.log(page)
+                        let newUrl = url.replace("tt/0",`tt/${ selectTask }`) ;
+                        page.href = newUrl ;
+                        console.log(page);
 
                     })
                    
