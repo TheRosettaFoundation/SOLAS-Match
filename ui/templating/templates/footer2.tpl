@@ -81,21 +81,21 @@
                     selectedLanguage.addEventListener("change", function(){
 
                     selectedL =this.value
-                    console.log(`Value : ${ value }`)
+                    console.log(`Value : ${ selectedL }`)
 
                     })
 
                      targetLanguage.addEventListener("change", function(){
 
                         targetL =this.value
-                        console.log(`Value : ${ value }`)
+                        console.log(`Value : ${ targetL }`)
 
                     })
 
                      taskType.addEventListener("change", function(){
 
                         selectTask =this.value
-                        console.log(`Value : ${ value }`)
+                        console.log(`Value : ${ selectTask }`)
 
                     })
                    
