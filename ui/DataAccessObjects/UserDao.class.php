@@ -169,24 +169,42 @@ class UserDao extends BaseDao
     public function getUserPageTasks($user_id, $strict, $limit, $offset, $taskType,  $sourceLanguageCode, $targetLanguageCode)
 
     {
-        $ret = array();
+        $ret = false;
+    
         $args = LibAPI\PDOWrapper::cleanse($user_id).", ";
+
+      
+
         if ($strict) {
             $args .= "1, ";
         } else {
             $args .= "0, ";
         }
-        $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
-                LibAPI\PDOWrapper::cleanse($offset).', ';
+
+        $limit = "6" ;
+        $taskType = NULL;
+        $sourceLanguageCode = NULL;
+        $targetLanguageCode = NULL;
+
+        $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+                LibAPI\PDOWrapper::cleanseNull($offset).', ';
         
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
 
+        // error_log($args);
+        // var_dump($args);
+
         $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);     
+        // var_dump($result);  
+        // var_dump(gettype($result));
+
+
+       
 
         if ($result) {
-           
+            $ret = array();
             foreach ($result as $row) {
                  $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
@@ -194,7 +212,6 @@ class UserDao extends BaseDao
 
         return $ret;
     }
-
 
     public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
     {
