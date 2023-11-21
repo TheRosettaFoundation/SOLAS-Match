@@ -78,19 +78,20 @@
                     let selectTask = '' ;
 
                     let page = document.querySelector(".page");
+                    let url = page.href ;
+
+                  
 
                     selectedLanguage.addEventListener("change", function(){
                     
                         console.log("clicked selected ")
 
-
                         selectedL =this.value
                         console.log(`Value : ${ selectedL }`)
-                        let url = page.href ;
-                        console.log(url);
-                        let newPage = url.replace("sl/0",`sl/${ selectedL }`) ;
-                        console.log (newPage);
-                        
+                    
+                        page = url.replace("sl/0",`sl/${ selectedL }`) ;
+                        console.log(page)
+                       
 
                     })
 
@@ -98,6 +99,8 @@
 
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
+                        
+                        page = url.replace("tl/0",`tl/${ targetL }`) ;
                         console.log(page)
 
                     })
@@ -106,6 +109,7 @@
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
+                         page = url.replace("tl/0",`tl/${ selectTask }`) ;
                         console.log(page)
 
                     })
