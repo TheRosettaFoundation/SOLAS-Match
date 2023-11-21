@@ -241,7 +241,10 @@ class UserRouteHandler
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         error_log("page no " . $args['page_no']);
-        error_log("page no " . $args['tt']);
+        error_log("tasktype " . $args['tt']);
+        error_log("sourceL " . $args['sl']);
+        error_log("targetL " . $args['tl']);
+      
       
        
      
