@@ -99,9 +99,10 @@
                         
 
                          allPages.forEach(page=> {
-                            let  firstL  = url.split('/tt') ;
-                            console.log(firstL);
-                             page.href = newUrl
+                            let  firstpart = url.split('/tt') ;
+                            let fUrl = firstpart[0]+'/tt'+firstpart[1]; 
+                            console.log(fUrl)
+                             page.href = newUrl ;
                              
                              })
                     
