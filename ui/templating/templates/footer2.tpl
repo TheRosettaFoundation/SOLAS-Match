@@ -86,7 +86,7 @@
                         let url = page.href ;
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
-                        let find = url.find("sl/") ;
+                        let find = url.indexOf("sl") ;
                         console.log(find);   
                         let newUrl = url.replace("sl/0",`sl/${ selectedL }`) ;
                         page.href = newUrl ;
