@@ -101,7 +101,7 @@
                          allPages.forEach(page=> {
                             let  firstPart = url.split('/tt') ;
                             let endPart = newUrl.split('/tt')
-                            let finUrl = firstpart[0]+"/tt"+endPart[1]
+                            let finUrl = firstPart[0]+"/tt"+endPart[1]
                             console.log(finUrl)
                          
                              
