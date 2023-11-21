@@ -375,7 +375,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         <tr>
                             <td>
-                                <h3>Supported NGOs</h3>
+                                <h3>Supported Organizations</h3>
                             </td>
                         </tr>
                         <tr>

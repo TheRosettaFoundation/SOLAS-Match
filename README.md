@@ -57,7 +57,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
     - Native Language
     - Language combinations
     - Subscription to task stream
-- There is a new table "org_TWB_contacts" which contains the user who created an organisation, this may be change din the future to include a current internal contact for an NGO.
+- There is a new table "org_TWB_contacts" which contains the user who created an organisation, this may be changed in the future to include a current internal contact for an Organization.
 - The Phrase "note" on a project is intelligently truncated to fix this: https://app.asana.com/0/1200233953889285/1205531183622741/f
 - Task Type name changed from "Revising" to "Revision" to fix this: https://app.asana.com/0/1205139046449623/1205490391710106/f
 - A new feature which stores task resource info into 3 tables is included. Data is stored in these tables...

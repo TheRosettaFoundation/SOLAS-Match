@@ -38,7 +38,7 @@
     <p><a href="{urlFor name="translators_for_language_pairs"}" target="_blank">List language pairs with number of translators who have that pair.</a> <a href="{urlFor name="download_translators_for_language_pairs"}">[Download]</a></p>
 <!--
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
-    <p><a href="{urlFor name="org_stats"}">[Download NGO report]</a></p>
+    <p><a href="{urlFor name="org_stats"}">[Download Organization report]</a></p>
 -->
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
     <p><a href="{urlFor name="matecat_analyse_status"}">List projects with MateCat analyse status</a></p>
