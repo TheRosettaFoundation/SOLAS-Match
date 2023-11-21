@@ -79,9 +79,11 @@
 
 
                     selectedLanguage.addEventListener("change", function(){
+                    
+                        console.log("clicked selected ")
 
-                    selectedL =this.value
-                    console.log(`Value : ${ selectedL }`)
+                        selectedL =this.value
+                        console.log(`Value : ${ selectedL }`)
 
                     })
 
