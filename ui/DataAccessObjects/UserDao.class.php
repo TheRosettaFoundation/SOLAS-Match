@@ -183,7 +183,10 @@ class UserDao extends BaseDao
 
 
 
-            $limit = "6" ;
+        $limit = "6" ;
+
+        var_dump($sourceLanguageCode);
+        var_dump($targetLanguageCode);
         // $taskType = NULL;
         // $sourceLanguageCode = NULL;
         // $targetLanguageCode = NULL;
