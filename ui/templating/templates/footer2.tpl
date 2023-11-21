@@ -98,7 +98,12 @@
                         let newUrl = firstL + `sl/${ selectedL }/`+firstR
                         
 
-                         allPages.forEach(page=> { page.href = newUrl})
+                         allPages.forEach(page=> {
+                            let  firstL  = url.split('/tt') ;
+                            console.log(firstL);
+                             page.href = newUrl
+                             
+                             })
                     
                         
                                           
