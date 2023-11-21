@@ -195,8 +195,8 @@ class UserDao extends BaseDao
         // $sourceLanguageCode = NULL;
         // $targetLanguageCode = NULL;
 
-        $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-                LibAPI\PDOWrapper::cleanseNull($offset).', ';
+        $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
+                LibAPI\PDOWrapper::cleanse($offset).', ';
         
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
