@@ -91,7 +91,7 @@
 
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
-                        let newURL = firstL + `sl/${ selectedL }/`+firstR
+                        let newUrl = firstL + `sl/${ selectedL }/`+firstR
                         
                         console.log(firstL);
                         console.log(firstR);
