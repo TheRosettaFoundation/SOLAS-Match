@@ -181,10 +181,12 @@ class UserDao extends BaseDao
             $args .= "0, ";
         }
 
-        $limit = "6" ;
-        $taskType = NULL;
-        $sourceLanguageCode = NULL;
-        $targetLanguageCode = NULL;
+
+
+            $limit = "6" ;
+        // $taskType = NULL;
+        // $sourceLanguageCode = NULL;
+        // $targetLanguageCode = NULL;
 
         $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 LibAPI\PDOWrapper::cleanseNull($offset).', ';
@@ -192,6 +194,18 @@ class UserDao extends BaseDao
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
+
+        // $limit = "6" ;
+        // $taskType = NULL;
+        // $sourceLanguageCode = NULL;
+        // $targetLanguageCode = NULL;
+
+        // $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
+        //         LibAPI\PDOWrapper::cleanseNull($offset).', ';
+        
+        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
 
         // error_log($args);
         // var_dump($args);
