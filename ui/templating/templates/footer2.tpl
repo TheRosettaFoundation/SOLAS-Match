@@ -208,7 +208,7 @@
                                     itemNameElement.appendChild(itemSubFlex)
                                     itemNameElement.appendChild(badgeContainer);
                                     itemNameElement.appendChild(langHtml);
-                                      itemNameElement.appendChild(viewHtml);
+                                    newData.appendChild(viewHtml);
                                     
                                     itemElement.appendChild(itemNameElement);
                                   
