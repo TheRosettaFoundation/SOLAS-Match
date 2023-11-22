@@ -151,7 +151,7 @@
                         let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
                    
                         previousUrl = navPage[0]+ id + navPage[2]
-                        console.log(previousUrl);
+                        previous.href = previousUrl;
 
                 })
 
