@@ -65,6 +65,8 @@
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
                     let previousUrl = previous.href ;
+                    let next = document.querySelector("#next');
+                    let nextUrl = next.href
                     let navPage = previousUrl.split('//') ;
 
                     navPage.shift();
@@ -145,8 +147,8 @@
                         e.preventDefault();
                         navPage.length>2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0,page.id)
                         console.log(navPage)
-                        previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
-                        console.log(previousUrl);
+                        previousUrl = page.id-1> 0? navPage[0]+ `/${ page.id-1  }/` + navPage[1] :  navPage[0]+ `/${ page.id  }/` + navPage[1] ;
+                        previousUrl = previousUrl.join('')
 
                 })
 
