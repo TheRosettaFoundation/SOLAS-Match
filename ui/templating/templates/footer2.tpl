@@ -178,7 +178,7 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        console.log (this) ;
+                        console.log(hr) ;
                                          
 
                         
