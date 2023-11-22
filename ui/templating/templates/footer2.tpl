@@ -149,6 +149,8 @@
                         console.log(navPage)
                         previousUrl = page.id-1> 0? navPage[0]+ `/${ page.id-1  }/` + navPage[1] :  navPage[0]+ `/${ page.id  }/` + navPage[1] ;
                         previousUrl = previousUrl.join('')
+                        console.log("Previous URL");
+                        console.log(previousUrl);
 
                 })
 
