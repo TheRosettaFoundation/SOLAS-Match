@@ -49,13 +49,8 @@
 
                     <div>
 
-                  
-
-                 
-                   
-                    
+ 
                 </footer>    
-      
 
                     <script>
 
@@ -69,16 +64,11 @@
                     let pages = document.querySelectorAll(".page");
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
-
                     let previousUrl = previous.href ;
                     let navPage = previousUrl.split('//') ;
 
                     navPage.shift();
-
-                    console.log(navPage)
-
-                    console.log(tasksContainer)
-
+ 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
                     
                     let targetLanguage = document.querySelector("#targetLanguage");
@@ -142,21 +132,10 @@
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL+`tt/${ selectTask }`+firstR;
-                       
-
                         allPages.forEach(page=> { page.href = newUrl})
-                    
-
-                        
 
                     })
-                   
-                   
-                   
-               
-                    
-
-
+ 
                     pages.forEach(page => {
                         let hr = page.href;
                         console.log(hr)
@@ -164,7 +143,7 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        navPage = newPage.length>2 ? navPage.splice(0,1,page.id) : navPage.splice(1,0,page.id)
+                        navPage.length>2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0,page.id)
                         console.log(navPage)
                         previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
                         console.log(previousUrl);
