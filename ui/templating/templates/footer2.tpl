@@ -164,7 +164,7 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        navPage[1] = page.id ;
+                        navPage.splice(1,0,page.id)
                         console.log(navPage)
                         previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
                         console.log(previousUrl);
