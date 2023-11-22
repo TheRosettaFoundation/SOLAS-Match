@@ -70,7 +70,7 @@
                     let previous = document.querySelector('#previous');
 
                     let previousUrl = previous.href ;
-                    let firtsprev = previousUrl.split('/tt') ;
+                    let firtsPrev = previousUrl.split('/tt') ;
                     console.log(firstPrev)
 
                     console.log(tasksContainer)
