@@ -70,7 +70,7 @@
                     let previous = document.querySelector('#previous');
 
                     let previousUrl = previous.href ;
-                    let firstPrev = previousUrl.split('//').unshift() ;
+                    let firstPrev = previousUrl.split('//').shift() ;
 
                     console.log(firstPrev)
 
