@@ -153,7 +153,7 @@
                         previousUrl = navPage[0]+ id + navPage[2] ;
                         remF = previousUrl.split('org');
                         console.log(remF);
-                        previous.href = previousUrl;
+                        previous.href = remF[1];
 
                 })
 
