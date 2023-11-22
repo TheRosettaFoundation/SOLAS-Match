@@ -147,7 +147,7 @@
                       
                         navPage.length >2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
                         console.log(navPage)
-                        previousUrl = navPage[0]+ `\${ navPage[1] }\` + navPage[2]
+                        previousUrl = navPage[0]+ "test" + navPage[2]
                         console.log(previousUrl);
 
                 })
