@@ -59,9 +59,10 @@
 
                     <script>
 
-
+                    // Variables on the theme of the site
                     let light = true ;
                     let theme = document.getElementById("theme");
+
                     let imgL = document.getElementById('light');
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
@@ -101,8 +102,6 @@
                         let firstL = url.slice(0,find) ;
                         let firstR = url.slice(findN) ;
                         let newUrl = firstL + `sl/${ selectedL }/`+firstR
-                        
-                       
 
                          allPages.forEach(page=> {
                             let  firstPart = page.href.split('/tt') ;
@@ -111,32 +110,19 @@
                             let finUrl = firstPart[0]+"/tt"+endPart[1]
                             console.log(finUrl)
                             page.href = finUrl ;
-                         
-                             
-                             })
-                    
-                        
-                                          
-
+                          })
+ 
                     })
 
                      targetLanguage.addEventListener("change", function(){
 
                         let page = document.querySelector(".page");
                         let url = page.href ;
-
                         targetL =this.value
                         console.log(`Value : ${ targetL }`)
-
                         let find = url.indexOf("tl/") ;
-
-                          let firstL = url.slice(0,find) ;
-
-                        
-                        
+                        let firstL = url.slice(0,find) ;
                         let newUrl = firstL+`tl/${ targetL }` ;
-
-                        
                         allPages.forEach(page=> { page.href = newUrl})
                         
                        
@@ -179,15 +165,16 @@
 
                         e.preventDefault();
                         console.log(page.id) ;
-                                         
+                        navPage[1] = id ;
 
-                        
-                    })
+                         previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
+
+                         console.log(previousUrl);
+
+                })
 
 
                     } )
-
-                    
 
                       const requestPage = (url) =>{
                     
@@ -196,17 +183,13 @@
                          req.open("GET" , url , true ) ;
                          req.send();
                                              
-
                     }
 
                     function reqListner(){
 
                         let pages = this.response;
-
                         let newData = document.createElement("div");
-                       
 
-                        
                         try {
                                  parsed = JSON.parse(pages);
 
