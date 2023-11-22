@@ -67,7 +67,7 @@
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
                     let tasksContainer = document.querySelector('.taskPagination');
-                    let previous = documenent.querySelector('#previous');
+                    let previous = document.querySelector('#previous');
 
                     let previousUrl = previous.href ;
                     let firtsprev = previousUrl.split('/tt') ;
