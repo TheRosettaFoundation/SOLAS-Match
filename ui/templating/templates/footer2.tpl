@@ -154,7 +154,7 @@
                         remF = previousUrl.split('org');
                         console.log(remF);
                         previous.href = remF[1];
-                        requestPage(url);
+                        requestPage(hr);
 
                 })
 
