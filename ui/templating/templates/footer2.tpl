@@ -67,6 +67,12 @@
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
                     let tasksContainer = document.querySelector('.taskPagination');
+                    let previous = documenent.querySelector('#previous');
+
+                    let previousUrl = previous.href ;
+                    let firtsprev = previousUrl.split('/tt') ;
+                    console.log(firstPrev)
+
                     console.log(tasksContainer)
 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
