@@ -70,11 +70,11 @@
                     let previous = document.querySelector('#previous');
 
                     let previousUrl = previous.href ;
-                    let firstPrev = previousUrl.split('//') ;
+                    let navPage = previousUrl.split('//') ;
 
-                    firstPrev.shift();
+                    navPage.shift();
 
-                    console.log(firstPrev)
+                    console.log(navPage)
 
                     console.log(tasksContainer)
 
@@ -178,6 +178,7 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
+                        console.log (this.href) ;
                         requestPage(hr);                      
 
                         
@@ -189,7 +190,7 @@
                     
 
                       const requestPage = (url) =>{
-                       
+                    
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", reqListner);
                          req.open("GET" , url , true ) ;
@@ -289,13 +290,6 @@
 
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
 
-                                 
-
-                                
-
-                                  
-
-
                                     itemSubFlex.appendChild(titleContainer);
                                     
                                     itemNameElement.appendChild(itemSubFlex)
@@ -327,41 +321,7 @@
 
                     }
 
-
-
-                 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
-                    
-
-                
-                  
+       
 
                     theme.addEventListener("click" , function(e) {
                        
