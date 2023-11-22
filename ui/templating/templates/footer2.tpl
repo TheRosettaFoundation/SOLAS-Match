@@ -144,7 +144,7 @@
 
                         e.preventDefault();
                         let pageId = `\${ page.id }\`
-                        navPage.length>2 ? navPage.splice(1,1,pageId) : navPage.splice(1,0,pageId)
+                        navPage = navPage.length >2 ? navPage.splice(1,1,pageId) : navPage.splice(1,0,pageId)
                         console.log(navPage)
                         previousUrl = navPage.join('');
                         console.log(previousUrl);
