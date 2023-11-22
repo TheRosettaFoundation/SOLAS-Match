@@ -164,12 +164,10 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        console.log(page.id) ;
-                        navPage[1] = id ;
-
-                         previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
-
-                         console.log(previousUrl);
+                        navPage[1] = page.id ;
+                        console.log(navPage)
+                        previousUrl = navPage[0]+ `/${ page.id-1  }/` + navPage[1] ;
+                        console.log(previousUrl);
 
                 })
 
