@@ -65,8 +65,6 @@
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
                     let previousUrl = previous.href ;
-                    let next = document.querySelector("#next');
-                    let nextUrl = next.href
                     let navPage = previousUrl.split('//') ;
 
                     navPage.shift();
@@ -145,10 +143,10 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-                        navPage = navPage.length>2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0,page.id)
+                        navPage.length>2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0,page.id)
                         console.log(navPage)
-                       
-                        console.log(previousUrl);
+                        previousUrl = page.id-1> 0? navPage[0]+ `/${ page.id-1  }/` + navPage[1] :  navPage[0]+ `/${ page.id  }/` + navPage[1] ;
+                        
 
                 })
 
@@ -289,6 +287,7 @@
                        
                        light = !light ;
                        console.log(light);
+
                        if(light){
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
@@ -303,8 +302,11 @@
                             navi.setAttribute('data-bs-theme', 'dark')
                        }
 
+                       
                     })
-                   </script>
+                   
+                    
+                    </script>
 
                  
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
