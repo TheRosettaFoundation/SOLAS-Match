@@ -148,8 +148,8 @@
                         navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
                         console.log(navPage)
                         let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
-                        let id = "/"+prev+"/";
-                        console.log(id)
+                        let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
+                   
                         previousUrl = navPage[0]+ id + navPage[2]
                         console.log(previousUrl);
 
