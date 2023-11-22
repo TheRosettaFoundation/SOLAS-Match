@@ -143,8 +143,10 @@
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
+
+                        let id = "\"+page.id + "\";
                       
-                        navPage.length >2 ? navPage.splice(1,1,`\{ page.id }\`) : navPage.splice(1,0, page.id)
+                        navPage.length >2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
                         console.log(navPage)
                         previousUrl = navPage.join('');
                         console.log(previousUrl);
