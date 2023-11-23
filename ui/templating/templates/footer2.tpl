@@ -158,10 +158,11 @@
                             let oldPage = newPrev[1].charAt(0);
                             let newPage = oldPage-1 ;
                             let newUrlP = newPrev[1].replace(oldPage , newPage) ;
+                            let finalUrl = "/paged/"+newUrlP;
                             console.log("old url for prev")
                             console.log(oldPrev) ;
                             console.log("new url for prev")
-                            console.log(newUrlP) ;
+                            console.log(finalUrl) ;
 
                             
 
