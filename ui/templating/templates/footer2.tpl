@@ -156,12 +156,13 @@
                             remF = previousUrl.split('org');
                             console.log(remF);
                             previous.href = remF[1];
-                            console.log('previous href')
-                            console.log(previous.href)
-                            console.log(page.href)
-                            console.log(page.href)
+                            if(page.id=="previous"){
+                                requestPage(previous.href);
 
-                            requestPage(page.href);
+                            }else                       
+                            {
+                            requestPage(hr);
+                            }
 
                         
 
