@@ -154,7 +154,9 @@
                           
                             let oldPrev = page.href ;
 
-                            let newPrev = oldPrev.split('paged');
+                            let newPrev = oldPrev.split('paged/');
+                            let oldPage = newPrev[1].charAt(0);
+                            console.log(oldPage);
 
                             console.log(newPrev)
 
