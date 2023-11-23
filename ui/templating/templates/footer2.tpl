@@ -158,6 +158,8 @@
                             previous.href = remF[1];
                             console.log('previous href')
                             console.log(previous.href)
+                            console.log(page.href)
+                            console.log(page.href)
 
                             requestPage(page.href);
 
