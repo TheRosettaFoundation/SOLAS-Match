@@ -66,6 +66,7 @@
                     let previous = document.querySelector('.previous');
                     let previousUrl = previous.href ;
                     let navPage = previousUrl.split('//') ;
+                    
 
                     navPage.shift();
  
@@ -146,6 +147,7 @@
 
                       
                         navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
+                        console.log("navPage");
                         console.log(navPage)
                         let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
                         let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
