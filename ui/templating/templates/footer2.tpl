@@ -173,7 +173,7 @@
                             }else                       
                             {
                             navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id) 
-                            navPnext.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                  
+                            navPnext.length > 2 ? navPnext.splice(1,1,page.id) : navPnext.splice(1,0, page.id)                  
                             console.log("navPage");
                             console.log(navPage); 
                             console.log("navPnext");
