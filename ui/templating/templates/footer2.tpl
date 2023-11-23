@@ -179,10 +179,10 @@
                             console.log("navPnext");
                             console.log(navPnext);                
                             let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
-                            let next = page.id + 1;
+                            let next = page.id+1;
                             let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
                             previousUrl = navPage[0]+ id + navPage[2] ;
-                            nextUrl = navPnext[0]+next+navPnext[2];
+                            nextUrl = navPnext[0]+"/"+next+"/"+navPnext[2];
                             console.log('nextUrl');
                             console.log(nextUrl);
                             remF = previousUrl.split('org');
