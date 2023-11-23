@@ -150,6 +150,7 @@
                             if(page.id=="previous"){
                                                                 
                             console.log(page.href);
+                            requestPage(page.href);
                            
 
                             }else                       
