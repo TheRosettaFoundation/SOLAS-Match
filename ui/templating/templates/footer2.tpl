@@ -186,7 +186,10 @@
                             console.log('nextUrl');
                             console.log(nextUrl);
                             remF = previousUrl.split('org');
+                            remN = nextUrl.split('org')
                             console.log(remF);
+                            console.log("next final url")
+                            console.log(remN[1])
                             previous.href = remF[1];    
                             requestPage(hr);
                             }
