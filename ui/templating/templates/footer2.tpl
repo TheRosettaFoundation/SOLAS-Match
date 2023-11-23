@@ -151,8 +151,8 @@
                                                                 
                            
                             requestPage(page.href);
-                            let newPrev = page.split('paged');
-                            console.log(newPrev);
+                          
+                            console.log(page.href);
 
                        
                            
