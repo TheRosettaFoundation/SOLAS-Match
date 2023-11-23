@@ -64,11 +64,15 @@
                     let pages = document.querySelectorAll(".page");
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
+                    let next = document.querySelector('#next');
+                    let nextUrl = next.href ;
                     let previousUrl = previous.href ;
                     let navPage = previousUrl.split('//') ;
+                    let navPnext = nextUrl.split('//')
                     
 
                     navPage.shift();
+                    navPnext.shift();
  
                     let selectedLanguage = document.querySelector("#sourceLanguage");
                     
@@ -165,21 +169,22 @@
                             console.log(finalUrl) ;
                             page.href = finalUrl;
 
-                            
-
-                            
-
-                       
-                           
-
+ 
                             }else                       
                             {
-                            navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                
+                            navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id) 
+                            navPnext.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                  
                             console.log("navPage");
-                            console.log(navPage);                
+                            console.log(navPage); 
+                            console.log("navPnext");
+                            console.log(navPnext);                
                             let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
+                            let next = page.id + 1;
                             let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
                             previousUrl = navPage[0]+ id + navPage[2] ;
+                            nextUrl = navPnext[0]+next+navPnext[2];
+                            console.log('nextUrl');
+                            console.log(nextUrl);
                             remF = previousUrl.split('org');
                             console.log(remF);
                             previous.href = remF[1];    
