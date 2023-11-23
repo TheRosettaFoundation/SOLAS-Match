@@ -147,6 +147,7 @@
 
                         if(page.id == "previous" ){
                              console.log("Clicked on previous");
+                             console.log(hr)
                              requestPage(hr);
                         } else {
 
