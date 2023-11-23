@@ -163,10 +163,11 @@
                             console.log(oldPrev) ;
                             console.log("new url for prev")
                             console.log(finalUrl) ;
+                            page.href = finalUrl;
 
                             
 
-                            console.log(newPrev)
+                            
 
                        
                            
