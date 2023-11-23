@@ -153,14 +153,16 @@
 
                             if(page.id=="previous"){
                                                                 
-                            
+                            console.log()
                             requestPage(page.href);
                           
                             let oldPrev = page.href ;
 
                             let newPrev = oldPrev.split('paged/');
                             let oldPage = newPrev[1].charAt(0);
+
                             let newPage = oldPage>1 ?oldPage-1: oldPage ;
+
                             let newUrlP = newPrev[1].replace(oldPage , newPage) ;
                             let finalUrl = "/paged/"+newUrlP;
                             console.log("old url for prev")
@@ -170,8 +172,26 @@
                             page.href = finalUrl;
 
  
-                            }else                       
-                            {
+                            } else  if(page.id =="next"){
+
+                                
+                            let oldPrev = page.href ;
+
+                            let newPrev = oldPrev.split('paged/');
+                            let oldPage = newPrev[1].charAt(0);
+
+                            let newPage = oldPage>1 ?oldPage+1: oldPage ;
+
+                            let newUrlP = newPrev[1].replace(oldPage , newPage) ;
+                            let finalUrl = "/paged/"+newUrlP;
+                            console.log("old url for next")
+                            console.log(oldPrev) ;
+                            console.log("new url for next")
+                            console.log(finalUrl) ;
+                            page.href = finalUrl;
+
+                            } else {
+                                
                             navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id) 
                             navPnext.length > 2 ? navPnext.splice(1,1,page.id) : navPnext.splice(1,0, page.id)                  
                             console.log("navPage");
@@ -191,6 +211,7 @@
                             console.log("next final url")
                             console.log(remN[1])
                             previous.href = remF[1];    
+                            next.href = remN[1];
                             requestPage(hr);
                             }
 
