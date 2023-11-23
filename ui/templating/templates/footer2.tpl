@@ -145,23 +145,26 @@
 
                         e.preventDefault();
 
-                      
-                        navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
-                
-                        console.log("navPage");
-                        console.log(navPage);
-               
-                        let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
-                        let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
-                        previousUrl = navPage[0]+ id + navPage[2] ;
-                        remF = previousUrl.split('org');
-                        console.log(remF);
-                        previous.href = remF[1];
-                        console.log('previous href')
-                        console.log(previous.href)
-                        console.log('hr');
-                        console.log(hr);
-                        requestPage(hr);
+                        if(page.id == "previous" ){
+                             requestPage(hr);
+                        } else {
+
+                            navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                
+                            console.log("navPage");
+                            console.log(navPage);                
+                            let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
+                            let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
+                            previousUrl = navPage[0]+ id + navPage[2] ;
+                            remF = previousUrl.split('org');
+                            console.log(remF);
+                            previous.href = remF[1];
+                            console.log('previous href')
+                            console.log(previous.href)
+                            console.log('hr');
+                            console.log(hr);
+                            requestPage(hr);
+
+                        }
 
                 })
 
