@@ -151,10 +151,7 @@
                         let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
                    
                         previousUrl = navPage[0]+ id + navPage[2] ;
-                        remF = previousUrl.split('org');
-                        console.log(remF);
-                        previous.href = remF[1];
-                        requestPage(hr);
+                      
 
                 })
 
@@ -267,10 +264,7 @@
                                     
                                     itemElement.appendChild(itemNameElement);
                                     itemElement.appendChild(viewHtml);
-
                                     innerDiv.appendChild(itemElement);
-                                    
-                                  
                                     newData.appendChild(innerDiv) ;
 
                                    
