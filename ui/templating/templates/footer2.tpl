@@ -145,15 +145,12 @@
 
                         e.preventDefault();
 
-                        previous.id = page.id ;
+                        page.id = page.id ;
                         navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)
                         console.log("navPage");
-                        console.log(navPage)
-
-                        
+               
                         let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
                         let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
-                   
                         previousUrl = navPage[0]+ id + navPage[2] ;
                         remF = previousUrl.split('org');
                         console.log(remF);
