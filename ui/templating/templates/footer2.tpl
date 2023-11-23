@@ -156,7 +156,7 @@
 
                             let newPrev = oldPrev.split('paged/');
                             let oldPage = newPrev[1].charAt(0);
-                            let newPage = oldPage-1 ;
+                            let newPage = oldPage>1 ?oldPage-1: oldPage ;
                             let newUrlP = newPrev[1].replace(oldPage , newPage) ;
                             let finalUrl = "/paged/"+newUrlP;
                             console.log("old url for prev")
