@@ -149,6 +149,11 @@
 
                             if(page.id=="previous"){
                                                                 
+                            console.log("previous");
+                           
+
+                            }else                       
+                            {
                             navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                
                             console.log("navPage");
                             console.log(navPage);                
@@ -157,12 +162,7 @@
                             previousUrl = navPage[0]+ id + navPage[2] ;
                             remF = previousUrl.split('org');
                             console.log(remF);
-                            previous.href = remF[1];
-                            console.log(previous)
-                            requestPage(remF[1]);
-
-                            }else                       
-                            {
+                            previous.href = remF[1];    
                             requestPage(hr);
                             }
 
