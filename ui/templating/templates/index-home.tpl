@@ -625,14 +625,14 @@ a:hover{
                      <li class="m-3 border border-dark-subtle rounded-3 px-2" >
                             <a class="page" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">First</a></li>
                     <li class="m-3 border border-dark-subtle rounded-3 px-3" >
-                            <a class="previous" id="1" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">previous</a></li>
+                            <a class="page" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">previous</a></li>
         
                     {for $page=1 to $count}
                             <li class="m-3 border border-dark-subtle rounded-3 px-2">
                             <a class="page" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                     {/for}
                     <li class="m-3 border border-dark-subtle rounded-3 px-2">
-                            <a class="next" id="6" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">next</a></li> 
+                            <a class="page" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">next</a></li> 
                      <li class="m-3 border border-dark-subtle rounded-3 px-2" >
                             <a class="page" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">last</a></li>
             </ul>
