@@ -149,8 +149,10 @@
 
                             if(page.id=="previous"){
                                                                 
-                            console.log(page.href);
+                           
                             requestPage(page.href);
+                            let newPrev = page.split('paged');
+                            console.log(newPrev);
 
                        
                            
