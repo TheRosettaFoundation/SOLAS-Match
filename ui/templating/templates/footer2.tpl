@@ -151,6 +151,13 @@
                                                                 
                             console.log(page.href);
                             requestPage(page.href);
+
+                            let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
+                            let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
+                            previousUrl = navPage[0]+ id + navPage[2] ;
+                            remF = previousUrl.split('org');
+                            console.log("on prev");
+                            console.log(remF);
                            
 
                             }else                       
