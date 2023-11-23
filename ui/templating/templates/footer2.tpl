@@ -145,11 +145,7 @@
 
                         e.preventDefault();
 
-                        if(page.id == "previous" ){
-                             console.log("Clicked on previous");
-                             console.log(hr)
-                             requestPage(hr);
-                        } else {
+                       
 
                             navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id)                
                             console.log("navPage");
@@ -162,11 +158,10 @@
                             previous.href = remF[1];
                             console.log('previous href')
                             console.log(previous.href)
-                            console.log('hr');
-                            console.log(hr);
-                            requestPage(hr);
 
-                        }
+                            requestPage(page.href);
+
+                        
 
                 })
 
