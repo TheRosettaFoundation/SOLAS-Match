@@ -149,7 +149,7 @@
 
                             if(page.id=="previous"){
                                                                 
-                            console.log("previous");
+                            console.log(page.href);
                            
 
                             }else                       
