@@ -292,7 +292,7 @@
                                     badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border', 'border-0' )
                                     const badgeDiv = document.createElement('div')
                                     badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
-                                    badgeDiv.textContent =`{ item.wordCount } WORDS`
+                                    badgeDiv.textContent =`${ item.wordCount } WORDS`
                                     badgeW.appendChild(badgeDiv)
                                     badgeContainer.appendChild(badgeW)
 
@@ -300,13 +300,13 @@
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
-                                                    Languages: <strong> Languages :  <strong> ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
+                                                    Languages ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
                                                 <span>
                            
                                     </div>
-                                       <div class="process_deadline_utc text-muted" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
