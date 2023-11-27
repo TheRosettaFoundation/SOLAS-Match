@@ -26,11 +26,11 @@
                       <div class="bg-primary d-flex justify-content-between p-4 flex-wrap text-white">
 
                         <div class="d-flex"> 
-                           <div> Follow Us :</div>
-                           <div>  <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /></div>
-                           <div>  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
-                            <div>  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
-                            <div>  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
+                           <div class ="mx-2"> Follow Us :</div>
+                           <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /></div>
+                           <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
+                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
+                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
                              
                        
                            
