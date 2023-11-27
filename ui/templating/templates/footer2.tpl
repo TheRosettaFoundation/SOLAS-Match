@@ -193,7 +193,7 @@
 
                             pagePosition.p = page.id;
 
-                            let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
+                            let newPrevPosition = parseInt(pagePosition.p) > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
                             let newNextPosition = parseInt(pagePosition.p) > countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ; 
                           
