@@ -280,7 +280,7 @@
                                     const badgeContainer = document.createElement('div')
                                     badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
-                                    const taskType = "" ;
+                                    let taskType = "" ;
 
                                     if(item.taskType == 2){
                                         taskType = "TRANSLATION"
