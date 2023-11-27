@@ -309,7 +309,7 @@
                                                 <span>
                            
                                     </div>
-                                       <div class="process_deadline_utc" style="visibility: hidden">  Due By {$deadline_timestamps[$task_id]}</div>
+                                       <div class="process_deadline_utc" > `${item.deadline}`</div>
                                     
                                     `;
 
