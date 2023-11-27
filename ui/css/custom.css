@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Merriweather:wght@300&family=Montserrat:wght@500;600&family=Mukta:wght@200;300&display=swap");
 .btn-secondary:hover {
-  background-color: #f89406;
+  background-color: #f89406 !important;
 }
 
 /*!

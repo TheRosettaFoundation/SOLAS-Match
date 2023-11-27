@@ -57,6 +57,14 @@
                     <script>
 
                     // Variables on the theme of the site
+
+                    let pagePosition = {
+                        "p":0 ,
+                        "tt":"",
+                        "sl":"",
+                        "tl":""
+                    } ;
+
                     let light = true ;
                     let theme = document.getElementById("theme");
 
@@ -93,6 +101,8 @@
                     
                         let page = document.querySelector(".page");
                         let url = page.href ;
+
+                         pagePosition.sl = this.value ;
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
                         let find = url.indexOf("sl/") ;
@@ -118,6 +128,8 @@
                         let page = document.querySelector(".page");
                         let url = page.href ;
                         targetL =this.value
+
+                        pagePosition.tl = this.value ;
                         console.log(`Value : ${ targetL }`)
                         let find = url.indexOf("tl/") ;
                         let firstL = url.slice(0,find) ;
@@ -132,6 +144,8 @@
 
                         let page = document.querySelector(".page");
                         let url = page.href ;
+
+                        pagePosition.tt = this.value
 
                         selectTask =this.value
                         console.log(`Value : ${ selectTask }`)
@@ -196,7 +210,7 @@
 
                             } else {
 
-
+                            pagePosition.p = page.id;
                             navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id) 
                             navPnext.length > 2 ? navPnext.splice(1,1,page.id) : navPnext.splice(1,0, page.id)                  
                             console.log("navPage");
