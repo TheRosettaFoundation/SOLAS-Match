@@ -23,12 +23,16 @@
                     </div>
 
 
-                      <div class="bg-primary d-flex justify-content-between p-2 flex-wrap text-white">
+                      <div class="bg-primary d-flex justify-content-between p-4 flex-wrap text-white">
 
                         <div class="d-flex"> 
-                           <div> Facebook</div>
-                           <div> Twitter</div>
-                           <div> Youtube</div>
+                           <div> Follow Us :</div>
+                           <div>  <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /></div>
+                           <div>  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
+                            <div>  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
+                            <div>  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
+                             
+                       
                            
                         
                         
@@ -40,7 +44,7 @@
                         </div>
 
 
-                        <div class="text-end">
+                        <div class="text-end bg-info">
 
                             Subscribe To TWB Newsletter
 
