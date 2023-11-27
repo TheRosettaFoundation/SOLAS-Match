@@ -300,13 +300,13 @@
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
-                                                    Languages: <strong> Languages :  <strong> ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
+                                                    Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
                                                 <span>
                            
                                     </div>
-                                       <div class="process_deadline_utc text-muted" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
