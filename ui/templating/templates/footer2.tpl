@@ -170,24 +170,19 @@
                        
 
                             if(page.id=="previous"){
-                                                                
-                            console.log()
-                            requestPage(page.href);
+                            
+            
+                            
+                            let newPrevPosition = parseInt(pagePosition.p)-1 ;
                           
-                            let oldPrev = page.href ;
+                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
 
-                            let newPrev = oldPrev.split('paged/');
-                            let oldPage = newPrev[1].charAt(0);
+                            console.log(previous page) ;
 
-                            let newPage = oldPage>1 ?oldPage-1: oldPage ;
+                            console.log (newPrevUrl) ;
+                            
 
-                            let newUrlP = newPrev[1].replace(oldPage , newPage) ;
-                            let finalUrl = "/paged/"+newUrlP;
-                            console.log("old url for prev")
-                            console.log(oldPrev) ;
-                            console.log("new url for prev")
-                            console.log(finalUrl) ;
-                            page.href = finalUrl;
+                            
 
  
                             } else  if(page.id =="next"){
