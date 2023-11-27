@@ -41,10 +41,9 @@
                         </div>
 
 
-                        <div class="text-end bg-info">
+                        <div class="flex-grow ">
                              <div class ="mx-2">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
                             
-
                         </div>
 
 
