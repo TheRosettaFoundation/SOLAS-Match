@@ -76,6 +76,7 @@
                     let previous = document.querySelector('#previous');
                     let next = document.querySelector('#next');
                     
+                    let countPage = document.querySelector(".last").id
                  
  
                     let selectedLanguage = document.querySelector("#sourceLanguage");
@@ -179,7 +180,7 @@
                              requestPage(next.href);   
 
 
-                            let newNextPosition = parseInt(pagePosition.p)+1 ;                                         
+                            let newNextPosition = parseInt(pagePosition.p)< countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;                                         
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
@@ -194,7 +195,7 @@
 
                             let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let newNextPosition = parseInt(pagePosition.p)+1 ;
+                            let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ; 
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
