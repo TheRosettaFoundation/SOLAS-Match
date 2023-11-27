@@ -294,7 +294,7 @@
                                     badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
                                     badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                                    badgeSpan.textContent = "Translation"
+                                    badgeSpan.textContent = taskType
                                     badge.appendChild(badgeSpan)
                                     badgeContainer.appendChild(badge)
 
