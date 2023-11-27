@@ -117,6 +117,7 @@ function renderTaskDetails() {
                 " " +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
+        console.log(`utc time : ${this}`);
 
         $(this).css("visibility", "visible");
     });
