@@ -264,7 +264,7 @@
                                     itemSubFlex.classList.add('d-flex','justify-content-between')
                                     const titleContainer = document.createElement('div')
                                     const title =  document.createElement('div')
-                                    title.classList.add('text-primary' ,'d-inline-block', 'ml-2')
+                                    title.classList.add('text-primary' ,'d-inline-block', 'mx-2')
                                     title.textContent = item.title ;
                                     const spanTitle = document.createElement('span')
                                     spanTitle.classList.add('fs-5', 'bg-primary' , 'border-2' ,'border-primary', 'opacity-75', 'rounded-circle', 'd-inline-block', 'px-2', 'text-white', 'align-self-start')
