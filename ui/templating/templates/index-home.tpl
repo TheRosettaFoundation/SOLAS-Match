@@ -597,7 +597,7 @@ a:hover{
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
                                     <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
                                      <div class="d-flex justify-content-end">
-                                        <button class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</button>
+                                        <button class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</>
                                      </div>
                             
                             </div>
@@ -634,7 +634,7 @@ a:hover{
                     <li class="m-3 border border-dark-subtle rounded-3 px-2">
                             <a class="page" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">next</a></li> 
                      <li class="m-3 border border-dark-subtle rounded-3 px-2" >
-                            <a class="page" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">last</a></li>
+                            <a class="last" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$paged_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">last</a></li>
             </ul>
 
   
