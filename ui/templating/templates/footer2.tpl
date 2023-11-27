@@ -192,9 +192,9 @@
 
                             let newNextPosition = parseInt(pagePosition.p)+1 ;
                           
-                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
+                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
-                            let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
+                            let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
                             
                             previous.href = newPrevUrl ;
 
