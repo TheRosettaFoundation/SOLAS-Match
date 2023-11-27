@@ -292,7 +292,7 @@
                                     badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border', 'border-0' )
                                     const badgeDiv = document.createElement('div')
                                     badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
-                                    badgeDiv.textContent =`Word Count : ${ item.wordCount }`
+                                    badgeDiv.textContent =`{ item.wordCount } WORDS`
                                     badgeW.appendChild(badgeDiv)
                                     badgeContainer.appendChild(badgeW)
 
@@ -306,7 +306,7 @@
                                                 <span>
                            
                                     </div>
-                                       <div class="process_deadline_utc" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="process_deadline_utc text-muted" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
