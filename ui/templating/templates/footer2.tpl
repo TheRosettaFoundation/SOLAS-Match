@@ -281,19 +281,10 @@
                                     badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
                                     const badge = document.createElement('button')
-                                    const taskType = "" ;
-
-                                    if(item.taskType == 2){
-                                        taskType = "TRANSLATION"
-                                    } else if (item.taskType == 3){
-                                        taskType = "REVISION"
-                                    } esle {
-                                        taskType = "APPROVAL"
-                                    }
                                     badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
                                     badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                                    badgeSpan.textContent = taskType
+                                    badgeSpan.textContent = "Translation"
                                     badge.appendChild(badgeSpan)
                                     badgeContainer.appendChild(badge)
 
@@ -309,13 +300,13 @@
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
-                                                    Languages ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
+                                                    Languages: <strong> Languages :  <strong> ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
                                                 <span>
                            
                                     </div>
-                                       <div class="text-muted" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="process_deadline_utc text-muted" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
