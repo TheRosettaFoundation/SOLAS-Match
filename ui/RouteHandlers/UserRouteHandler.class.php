@@ -346,51 +346,7 @@ class UserRouteHandler
         }
 
 
-        foreach ($topTasks as $topTask) {
-            $taskId = $topTask->getId();
-            $project = $projectDao->getProject($topTask->getProjectId());
-            $org_id = $project->getOrganisationId();
-            $org = $orgDao->getOrganisation($org_id);
-
-            $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
-
-            $created = $topTask->getCreatedTime();
-            $selected_year   = (int)substr($created,  0, 4);
-            $selected_month  = (int)substr($created,  5, 2);
-            $selected_day    = (int)substr($created,  8, 2);
-            $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($created, 14, 2);
-            $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-            $deadline = $topTask->getDeadline();
-            $selected_year   = (int)substr($deadline,  0, 4);
-            $selected_month  = (int)substr($deadline,  5, 2);
-            $selected_day    = (int)substr($deadline,  8, 2);
-            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($deadline, 14, 2);
-            $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-            $projectUri = "{$siteLocation}project/{$project->getId()}/view";
-            $projectName = $project->getTitle();
-            $orgUri = "{$siteLocation}org/{$org_id}/profile";
-            $orgName = $org->getName();
-            $projectAndOrgs[$taskId] = sprintf(
-                Lib\Localisation::getTranslation('common_part_of_for'),
-                $projectUri,
-                htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
-                $orgUri,
-                htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
-            );
-            $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
-
-            $taskImages[$taskId] = '';
-            if ($project->getImageApproved() && $project->getImageUploaded()) {
-                $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
-            }
-        }
-
-
-        
+      
        
 
       
