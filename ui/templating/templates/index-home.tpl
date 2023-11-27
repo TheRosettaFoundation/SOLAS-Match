@@ -634,7 +634,7 @@ a:hover{
                     <li class="m-3 border border-dark-subtle rounded-3 px-2">
                             <a class="page" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">next</a></li> 
                      <li class="m-3 border border-dark-subtle rounded-3 px-2" >
-                            <a class="last" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$paged_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">last</a></li>
+                            <a class="last" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">last</a></li>
             </ul>
 
   
