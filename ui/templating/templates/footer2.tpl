@@ -153,33 +153,37 @@
  
                     pages.forEach(page => {
                         let hr = page.href;
-                        console.log(hr)
+                      
                     
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
-
                        
 
                             if(page.id=="previous"){
                             
-            
+                            requestPage(previous.href);
                             
-                            let newPrevPosition = parseInt(pagePosition.p)-1 ;
+                            let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
                           
-                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
+                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
-                          
-                            
-                            console.log("previous page") ;
-
-                            console.log (newPrevUrl) ;
-                            
+                            previous.href = newPrevUrl ;
 
                             
 
  
                             } else  if(page.id =="next"){
+
+
+                             requestPage(next.href);   
+
+
+                            let newNextPosition = parseInt(pagePosition.p)+1 ;                                         
+
+                            let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
+
+                            next.href = newNextUrl ;
 
                                 
                            
@@ -188,7 +192,7 @@
 
                             pagePosition.p = page.id;
 
-                            let newPrevPosition = parseInt(pagePosition.p)-1 ;
+                            let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
                             let newNextPosition = parseInt(pagePosition.p)+1 ;
                           
@@ -201,9 +205,6 @@
                             next.href = newNextUrl ;
 
 
-                            console.log("newPrevUrl" + newPrevUrl)
-                            
-                            console.log("newNextUrl" + newNextUrl)
 
 
                             
