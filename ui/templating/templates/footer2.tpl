@@ -1,6 +1,6 @@
             <br/><br/>
             
-            <div>
+          
 
                 <footer>
 
@@ -20,7 +20,6 @@
                                                 
 
 
-                    </div>
 
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white ">
