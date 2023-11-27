@@ -31,10 +31,7 @@
                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
                             <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
                             <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
-                             
-                       
-                           
-                        
+       
                         
                         </div>
 
@@ -45,8 +42,8 @@
 
 
                         <div class="text-end bg-info">
-
-                            Subscribe To TWB Newsletter
+                             <div class ="mx-2">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
+                            
 
                         </div>
 
