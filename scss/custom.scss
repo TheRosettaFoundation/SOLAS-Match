@@ -71,7 +71,7 @@ $spacers: (
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .btn-secondary:hover {
-    background-color: #f89406;
+    background-color: #f89406 !important;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
