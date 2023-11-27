@@ -177,7 +177,7 @@
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
 
-                            console.log(previous page) ;
+                            console.log("previous page") ;
 
                             console.log (newPrevUrl) ;
                             
