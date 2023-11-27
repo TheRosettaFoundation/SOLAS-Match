@@ -306,7 +306,7 @@
                                                 <span>
                            
                                     </div>
-                                       <div class="process_deadline_utc" > item.deadline </div>
+                                       <div class="process_deadline_utc" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
