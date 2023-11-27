@@ -286,7 +286,7 @@
                                         taskType = "TRANSLATION"
                                     } else if (item.taskType == 3){
                                         taskType = "REVISION"
-                                    } esle {
+                                    } else {
                                         taskType = "APPROVAL"
                                     }
 
