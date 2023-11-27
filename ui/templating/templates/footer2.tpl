@@ -40,9 +40,13 @@
 
                         </div>
 
+                        <div>
+                        TEST
+                        </div>
+
 
                         <div class="d-flex justify-content-end">
-                             <div class ="mx-2">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
+                             <div  class ="text-end">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
                             
                         </div>
 
