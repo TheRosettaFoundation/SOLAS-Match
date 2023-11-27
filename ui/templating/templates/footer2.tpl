@@ -75,15 +75,7 @@
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
                     let next = document.querySelector('#next');
-                    let nextUrl = next.href ;
-                    let previousUrl = previous.href ;
                     
-                    let navPage = previousUrl.split('//') ;
-                    let navPnext = nextUrl.split('//')
-                    navPage.shift();
-                    console.log("navPage before")
-                    console.log(navPage);
-                    navPnext.shift();    
                  
  
                     let selectedLanguage = document.querySelector("#sourceLanguage");
@@ -207,6 +199,12 @@
                             previous.href = newPrevUrl ;
 
                             next.href = newNextUrl ;
+
+
+                            console.log("newPrevUrl" + newPrevUrl)
+                            
+                            console.log("newNextUrl" + newNextUrl)
+
 
                             
                             requestPage(hr);
