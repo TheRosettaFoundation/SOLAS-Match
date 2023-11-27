@@ -281,10 +281,19 @@
                                     badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
                                     const badge = document.createElement('button')
+                                    const taskType = "" ;
+
+                                    if(item.taskType == 2){
+                                        taskType = "TRANSLATION"
+                                    } else if (item.taskType == 3){
+                                        taskType = "REVISION"
+                                    } esle {
+                                        taskType = "APPROVAL"
+                                    }
                                     badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
                                     badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                                    badgeSpan.textContent = "Translation"
+                                    badgeSpan.textContent = taskType
                                     badge.appendChild(badgeSpan)
                                     badgeContainer.appendChild(badge)
 
