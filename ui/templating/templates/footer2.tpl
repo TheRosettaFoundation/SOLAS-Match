@@ -280,6 +280,16 @@
                                     const badgeContainer = document.createElement('div')
                                     badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
+                                    const taskType = "" ;
+
+                                    if(item.taskType == 2){
+                                        taskType = "TRANSLATION"
+                                    } else if (item.taskType == 3){
+                                        taskType = "REVISION"
+                                    } esle {
+                                        taskType = "APPROVAL"
+                                    }
+
                                     const badge = document.createElement('button')
                                     badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
                                     const badgeSpan = document.createElement('span')
