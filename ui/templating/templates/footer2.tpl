@@ -60,9 +60,9 @@
 
                     let pagePosition = {
                         "p":0 ,
-                        "tt":"",
-                        "sl":"",
-                        "tl":""
+                        "tt":0,
+                        "sl":0,
+                        "tl":0
                     } ;
 
                     let light = true ;
@@ -177,6 +177,8 @@
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
 
+                          
+                            
                             console.log("previous page") ;
 
                             console.log (newPrevUrl) ;
@@ -188,46 +190,25 @@
                             } else  if(page.id =="next"){
 
                                 
-                            let oldPrev = page.href ;
-
-                            let newPrev = oldPrev.split('paged/');
-                            let oldPage = newPrev[1].charAt(0);
-
-                            let newPage = oldPage>1 ?oldPage+1: oldPage ;
-
-                            let newUrlP = newPrev[1].replace(oldPage , newPage) ;
-                            let finalUrl = "/paged/"+newUrlP;
-                            console.log("old url for next")
-                            console.log(oldPrev) ;
-                            console.log("new url for next")
-                            console.log(finalUrl) ;
-                            page.href = finalUrl;
+                           
 
                             } else {
 
                             pagePosition.p = page.id;
-                            console.log("Page position") ;
-                            console.log(pagePosition);
-                            navPage.length > 2 ? navPage.splice(1,1,page.id) : navPage.splice(1,0, page.id) 
-                            navPnext.length > 2 ? navPnext.splice(1,1,page.id) : navPnext.splice(1,0, page.id)                  
-                            console.log("navPage");
-                            console.log(navPage); 
-                            console.log("navPnext");
-                            console.log(navPnext);                
-                            let prev = page.id>1 ?page.id-1 : page.setAttribute("disabled",true);
-                            let next = parseInt(page.id)+1;
-                            let id = page.id>1 ? "/"+prev+"/" : "/"+page.id+ "/";
-                            previousUrl = navPage[0]+ id + navPage[2] ;
-                            nextUrl = navPnext[0]+"/"+next+"/"+navPnext[2];
-                            console.log('nextUrl');
-                            console.log(nextUrl);
-                            remF = previousUrl.split('org');
-                            remN = nextUrl.split('org')
-                            console.log(remF);
-                            console.log("next final url")
-                            console.log(remN[1])
-                            previous.href = remF[1];    
-                            next.href = remN[1];
+
+                            let newPrevPosition = parseInt(pagePosition.p)-1 ;
+
+                            let newNextPosition = parseInt(pagePosition.p)+1 ;
+                          
+                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
+
+                            let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl /${ pagePosition.sl }/tl/ ${ pagePosition.tl }`
+                            
+                            previous.href = newPrevUrl ;
+
+                            next.href = newNextUrl ;
+
+                            
                             requestPage(hr);
                             }
 
