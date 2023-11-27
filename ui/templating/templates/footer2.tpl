@@ -23,7 +23,7 @@
                     </div>
 
 
-                      <div class="bg-primary d-flex justify-content-between p-4 flex-wrap text-white border border-danger">
+                      <div class="bg-primary d-flex justify-content-between p-4 flex-wrap text-white ">
 
                         <div class="d-flex"> 
                            <div class ="mx-2"> Follow Us :</div>
@@ -41,7 +41,7 @@
                         </div>
 
 
-                        <div class="text-end">
+                        <div class="d-flex justify-content-end">
                              <div class ="mx-2">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
                             
                         </div>
