@@ -187,8 +187,8 @@ a:hover{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
                     
-                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
-                        <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
+                    <div class="top-left"><h2 class="display-3">We connect community members<br/> and humanitarian organizations</h2><br/>
+                        <h3 class="display-3">Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
                         <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>               
