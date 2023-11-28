@@ -187,7 +187,7 @@ a:hover{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
                     
-                    <div class="top-left"><h2">We connect community members<br/> and humanitarian organizations</h2><br/>
+                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
                         <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -201,7 +201,7 @@ a:hover{
                            <div class="row-fluid">
                                 <div class="span4"></div>
                                 <div class="span4"></div>
-                                    <div  class="span4 pull-right">
+                                    <div  class="">
                                         <h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
                                     </div>
                             </div>                      
