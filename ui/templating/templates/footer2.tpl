@@ -276,7 +276,7 @@
                                     const innerDiv = document.createElement("div");
                                   
                             
-                                
+                               
                                 
                                     const itemElement = document.createElement('div');
                                     itemElement.classList.add(  'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
@@ -286,6 +286,8 @@
                                    
                                     const itemNameElement = document.createElement('div');
                                     itemNameElement.classList.add('100') ;
+
+                                    const itemFlexContainer = document.createElement ('id')
                                     const itemSubFlex =  document.createElement('div');
                                     
                                     
@@ -352,12 +354,7 @@
 
 
                             
-                                    console.log(image) ;
                                     
-
-
-
-
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
@@ -372,8 +369,7 @@
                                     `;
 
                                     const imageHtml =  document.createRange().createContextualFragment(image);
-                                    
-                                    console.log(imageHtml) ;
+                          
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
@@ -386,15 +382,16 @@
                                                         </div>`;
 
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
-                                    console.log(viewHtml);
+                                   
 
                                     itemSubFlex.appendChild(titleContainer);
                                     itemSubFlex.appendChild(imageHtml);
                                   
-                                    itemNameElement.appendChild(itemSubFlex) ;
-                                    itemNameElement.appendChild(badgeContainer);
-                                    itemNameElement.appendChild(langHtml);
-                                  
+                                    itemFlexContainer.appendChild(itemSubFlex) ;
+                                    itemFlexContainer.appendChild(badgeContainer);
+                                    itemFlexContainer.appendChild(langHtml);
+                                    itemNameElement.appendChild(itemFlexContainer);
+                                    
                                     
                                     itemElement.appendChild(itemNameElement);
                                     itemElement.appendChild(viewHtml);
