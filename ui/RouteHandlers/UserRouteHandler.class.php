@@ -428,9 +428,11 @@ class UserRouteHandler
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
 
-            var_dump($topTasks);
-            var_dump($taskImages);
+           
         }
+
+      
+        var_dump($taskImages);
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
