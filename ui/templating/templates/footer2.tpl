@@ -349,6 +349,9 @@
                                     `: `<div> </div>`;
 
 
+                                    console.log(image);
+
+
 
 
                                     let languages = `<div>
