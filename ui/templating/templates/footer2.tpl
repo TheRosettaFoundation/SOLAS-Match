@@ -343,7 +343,7 @@
                                        <div>
                                        
                                         <div id=""  >
-                                            <img style="width:100px ; height:100px"  class="image" />
+                                            <img style="width:100px ; height:100px"  src= ${ imageId }  class="image" />
                                         </div>
                                         </div>
                           
