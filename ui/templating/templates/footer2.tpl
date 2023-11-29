@@ -350,6 +350,9 @@
                                     
                                     ` : `<div> </div>`;
 
+
+                            
+                                    console.log(image) ;
                                     
 
 
@@ -369,6 +372,8 @@
                                     `;
 
                                     const imageHtml =  document.createRange().createContextualFragment(image);
+                                    
+                                    console.log(imageHtml) ;
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
