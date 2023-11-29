@@ -266,6 +266,9 @@
                         try {
                                  parsed = JSON.parse(pages);
 
+                                 console.log('parsed JSON')
+                                 console.lof(parsed);
+
                                  for (const item of parsed) {
                                     console.log(item);
                                     const innerDiv = document.createElement("div");
