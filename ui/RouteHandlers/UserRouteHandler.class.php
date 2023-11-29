@@ -573,6 +573,8 @@ class UserRouteHandler
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
+
+                var_dump($taskImages);
             }
         }
 
