@@ -340,12 +340,12 @@
                                        <div>
                                        
                                         <div id=""  >
-                                            <img src=`${ images[item.id] }` style ="width:100px ; height:100px">
+                                            <img  style ="width:100px ; height:100px">
                                         </div>
                                         </div>
                           
                                     
-                                    `
+                                    `;
 
 
                                     let languages = `<div>
