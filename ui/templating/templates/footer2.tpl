@@ -355,16 +355,16 @@
 
                             
                                     
-                                    let languages = `<div class="fs-5">
+                                    let languages = `<div class="fs-6">
 
                                     <span class="mb-1  text-muted">
                                                     Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
-                                                <span>
+                                        
                            
                                     </div>
-                                       <div class="text-muted" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted fs-6" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
