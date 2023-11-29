@@ -355,10 +355,10 @@
 
                             
                                     
-                                    let languages = `<div class="fs-6">
+                                    let languages = `<div class="">
 
                                     <span class="mb-1  text-muted">
-                                                    Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
+                                                    Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
                                                 </span>
                                         
                                         
