@@ -323,42 +323,7 @@ class UserRouteHandler
         }
 
 
-      
-       
 
-      
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" >
-        $(document).ready(function() {
-            $('.carousel').carousel({
-                interval: 5000,
-                pause:'hover'
-              });
-            /*
-          var user_count = $('#value').text();
-            $('.carousel').carousel({
-              interval: 2000,
-            })
-            function animateValue(obj, start, end, duration) {
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                  if (!startTimestamp) startTimestamp = timestamp;
-                  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                  obj.innerHTML = Math.floor(progress * (end - start) + start);
-                  if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                  }
-                };
-                window.requestAnimationFrame(step);
-              }
-              const obj = document.getElementById('value');
-              animateValue(obj, 0, user_count, 3000);
-              */
-          });
-        </script>";
 
         $taskImages = array();
 
@@ -408,7 +373,7 @@ class UserRouteHandler
         }
 
       
-        error_log("targetLanguage " . $taskImages);
+        error_log("taskImages " . $taskImages);
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
