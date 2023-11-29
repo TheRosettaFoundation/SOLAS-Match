@@ -336,11 +336,11 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let images = `
+                                    let image = `
                                        <div>
                                        
                                         <div id=""  >
-                                            <img  style ="width:100px ; height:100px">
+                                            <img src=images[item.id]  style ="width:100px ; height:100px">
                                         </div>
                                         </div>
                           
