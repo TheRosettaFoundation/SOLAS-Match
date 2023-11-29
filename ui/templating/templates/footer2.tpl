@@ -369,7 +369,7 @@
                                     
                                     `;
 
-                                    const imageHtml =  document.createRange().createContextualFragment(images);
+                                    const imageHtml =  document.createRange().createContextualFragment(image);
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
@@ -384,7 +384,7 @@
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
 
                                     itemSubFlex.appendChild(titleContainer);
-                                    itemSubFlex.appendChild(image);
+                                    itemSubFlex.appendChild(imageHtml);
                                   
                                     itemNameElement.appendChild(itemSubFlex) ;
                                     itemNameElement.appendChild(badgeContainer);
