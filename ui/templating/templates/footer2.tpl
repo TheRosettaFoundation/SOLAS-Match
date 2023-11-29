@@ -78,12 +78,13 @@
 
                     let last = document.querySelector(".last");
                     let first = document.querySelector(".first");
+                      let countPage = document.querySelector(".last").id
 
                     last.addEventListener('click', function(e){
 
                         e.preventDefault();
 
-                        let url  = this.href ;
+                        let url  =`paged/${ countPage }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }` ;
 
                         console.log(` Last url is ${ url }`);
 
@@ -95,7 +96,7 @@
 
                         e.preventDefault();
 
-                        let url  = this.href ;
+                        let url  = `paged/1/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
                         console.log(` First url is ${ url }`);
 
@@ -105,7 +106,7 @@
 
 
                     
-                    let countPage = document.querySelector(".last").id
+                  
                  
  
                     let selectedLanguage = document.querySelector("#sourceLanguage");
