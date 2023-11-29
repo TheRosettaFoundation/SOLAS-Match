@@ -382,7 +382,7 @@ class UserRouteHandler
         }
        
 
-        $results = json_encode (array('tasks'=> $topTasks , 'images' => taskImages), JSON_HEX_TAG);
+        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages));
          
         $payload = json_encode($topTasks, JSON_HEX_TAG);
 
