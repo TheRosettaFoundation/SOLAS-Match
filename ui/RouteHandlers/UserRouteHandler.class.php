@@ -380,11 +380,15 @@ class UserRouteHandler
            
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
+       
 
+        $results = json_encode (array('tasks'=> $topTasks , 'images' => taskImages), JSON_HEX_TAG);
          
-        $payload = json_encode($topTasks);
+        $payload = json_encode($topTasks, JSON_HEX_TAG);
+
+       
  
-        $response->getBody()->write($payload);
+        $response->getBody()->write($results);
 
         return $response->withHeader('Content-Type', 'application/json');
 
