@@ -267,7 +267,7 @@
                                  parsed = JSON.parse(pages);
 
                                  console.log('parsed JSON')
-                                 console.lof(parsed);
+                                 console.log(parsed);
 
                                  for (const item of parsed) {
                                     console.log(item);
