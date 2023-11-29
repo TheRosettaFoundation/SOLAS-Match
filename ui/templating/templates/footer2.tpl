@@ -338,20 +338,19 @@
 
                                     let imageId  = images[item.id]!== ""?images[item.id] : ""
                                     console.log(`image ID ${ imageId }`)
-                                    let image =  
+                                    let image = imageId !== ""?  
                                     `
                                        <div>
                                        
                                         <div id=""  >
-                                            <img style="width:100px ; height:100px" src=`${ imageId }` >
+                                            <img style="width:100px ; height:100px"  class="image" >
                                         </div>
                                         </div>
                           
                                     
-                                    `;
+                                    ` : `<div> </div>`;
 
-                                    console.log("Image")
-                                    console.log(image);
+                                    
 
 
 
@@ -382,6 +381,7 @@
                                                         </div>`;
 
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
+                                    console.log(viewHtml);
 
                                     itemSubFlex.appendChild(titleContainer);
                                     itemSubFlex.appendChild(imageHtml);
