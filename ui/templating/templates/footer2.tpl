@@ -336,19 +336,21 @@
                                     badgeContainer.appendChild(badgeW)
 
 
+                                    let imageId  = images[item.id]
+                                    console.log(`image ID ${ imageId }`)
                                     let image =  
                                     `
                                        <div>
                                        
                                         <div id=""  >
-                                            <img src=`${ images[item.id] }`  style ="width:100px ; height:100px">
+                                            <img src=imageId  style ="width:100px ; height:100px">
                                         </div>
                                         </div>
                           
                                     
                                     `;
 
-
+                                    console.log("Image")
                                     console.log(image);
 
 
