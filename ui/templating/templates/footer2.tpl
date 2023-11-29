@@ -338,7 +338,7 @@
 
                                     let imageId  = images[item.id]!== ""?images[item.id] : ""
                                     console.log(`image ID ${ imageId }`)
-                                    let image = imageId !== ""?  
+                                    let image = imageId.length > 2?  
                                     `
                                        <div>
                                        
