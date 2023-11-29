@@ -75,6 +75,35 @@
                     let tasksContainer = document.querySelector('.taskPagination');
                     let previous = document.querySelector('#previous');
                     let next = document.querySelector('#next');
+
+                    let last = document.querySelector(".last");
+                    let first = document.querySelector(".first");
+
+                    last.addEventListener('click', function(e){
+
+                        e.preventDefault();
+
+                        let url  = this.href ;
+
+                        console.log(` Last url is ${ url }`);
+
+                        requestPage(url);   
+
+                    })
+                    
+                    first.addEventListener('click', function(e){
+
+                        e.preventDefault();
+
+                        let url  = this.href ;
+
+                        console.log(` First url is ${ url }`);
+
+                        requestPage(url);   
+
+                    })
+
+
                     
                     let countPage = document.querySelector(".last").id
                  
@@ -177,7 +206,7 @@
                             } else  if(page.id =="next"){
 
 
-                             requestPage(next.href);   
+                            requestPage(next.href);   
 
 
                             let newNextPosition = parseInt(pagePosition.p)< countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;                                         
