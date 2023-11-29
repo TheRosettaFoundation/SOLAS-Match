@@ -336,7 +336,7 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let imageId  = images[item.id]
+                                    let imageId  = images[item.id]!== ""?images[item.id] : ""
                                     console.log(`image ID ${ imageId }`)
                                     let image =  
                                     `
