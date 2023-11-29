@@ -336,7 +336,8 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let image = images[item.id].length !== ""? `
+                                    let image = images[item.id].length !== "" ? 
+                                    `
                                        <div>
                                        
                                         <div id=""  >
@@ -345,7 +346,9 @@
                                         </div>
                           
                                     
-                                    `: <div> </div>;
+                                    `: `<div> </div>`;
+
+
 
 
                                     let languages = `<div>
