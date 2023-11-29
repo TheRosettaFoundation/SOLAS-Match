@@ -357,7 +357,7 @@
                                     
                                     let languages = `<div>
 
-                                    <span class="mb-1 text-muted">
+                                    <span class="mb-1 fs-6 text-muted">
                                                     Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName } </strong>
                                                 </span>
                                         
