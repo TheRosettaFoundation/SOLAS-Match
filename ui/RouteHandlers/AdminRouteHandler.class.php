@@ -257,13 +257,13 @@ class AdminRouteHandler
         $app->map(['GET'],
             '/analytics[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:analytics')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('analytics');
 
         $app->map(['GET'],
             '/metabase/{report}',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:metabase')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('metabase');
     }
     
