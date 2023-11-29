@@ -336,7 +336,7 @@
                                     badgeContainer.appendChild(badgeW)
 
 
-                                    let image = images[item.id].length !== "" ? 
+                                    let image =  
                                     `
                                        <div>
                                        
@@ -346,7 +346,7 @@
                                         </div>
                           
                                     
-                                    `: `<div> </div>`;
+                                    `;
 
 
                                     console.log(image);
