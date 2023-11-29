@@ -269,7 +269,9 @@
                                  console.log('parsed JSON')
                                  console.log(parsed);
 
-                                 for (const item of parsed) {
+                                 let images = parsed.images ;
+
+                                 for (const item of parsed.tasks) {
                                     console.log(item);
                                     const innerDiv = document.createElement("div");
                                   
@@ -334,6 +336,18 @@
                                     badgeContainer.appendChild(badgeW)
 
 
+                                    let images = `
+                                       <div>
+                                       
+                                        <div id=""  >
+                                            <img src=`${images[item.id]}` style ="width:100px ; height:100px">
+                                        </div>
+                                        </div>
+                          
+                                    
+                                    `
+
+
                                     let languages = `<div>
 
                                     <span class="mb-1 text-muted">
@@ -346,6 +360,8 @@
                                        <div class="text-muted" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
+
+                                    const imageHtml =  document.createRange().createContextualFragment(images);
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
@@ -360,6 +376,7 @@
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
 
                                     itemSubFlex.appendChild(titleContainer);
+                                    itemSubFlex.appendChild(imageHtml);
                                     
                                     itemNameElement.appendChild(itemSubFlex)
                                     itemNameElement.appendChild(badgeContainer);
@@ -368,6 +385,7 @@
                                     
                                     itemElement.appendChild(itemNameElement);
                                     itemElement.appendChild(viewHtml);
+
 
                                     innerDiv.appendChild(itemElement);
                                     
