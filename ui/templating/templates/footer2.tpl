@@ -384,7 +384,7 @@
                                     const viewHtml = document.createRange().createContextualFragment(viewTask);
 
                                     itemSubFlex.appendChild(titleContainer);
-                                    itemSubFlex.appendChild(imageHtml);
+                                    itemSubFlex.appendChild(image);
                                   
                                     itemNameElement.appendChild(itemSubFlex) ;
                                     itemNameElement.appendChild(badgeContainer);
