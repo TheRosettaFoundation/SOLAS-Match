@@ -578,7 +578,7 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
 
-                var_dump($taskImages);
+                
             }
         }
 
