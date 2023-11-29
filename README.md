@@ -65,6 +65,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - task_resource_TBs
   - task_resource_TMs
   - They are updated on any job status change and for up to 3 days after the last status change.
+- Addressed this security request: https://github.com/TheRosettaFoundation/SOLAS-Match/pull/1294
 
 ## Version 14.1
 
