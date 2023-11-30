@@ -388,8 +388,8 @@
                                     itemSubFlex.appendChild(imageHtml);
                                   
                                     itemFlexContainer.appendChild(itemSubFlex) ;
-                                    titleContainer.appendChild(badgeContainer);
-                                    titleContainer.appendChild(langHtml);
+                                    itemSubFlex.appendChild(badgeContainer);
+                                    itemSubFlex.appendChild(langHtml);
                                     itemNameElement.appendChild(itemFlexContainer);
                                     
                                     
