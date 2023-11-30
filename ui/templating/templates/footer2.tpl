@@ -211,7 +211,9 @@
 
                             console.log(`page position : ${ parseInt(pagePosition.p) }`);
                             console.log(`countPage : ${ countPage}`);
-                            let newNextPosition = parseInt(pagePosition.p)< countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;                                         
+                            let newNextPosition = parseInt(pagePosition.p)<countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+
+                            console.log(`newPosition is : ${ newNextPosition }`)                                       
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 

@@ -392,8 +392,6 @@ class UserRouteHandler
            
         }
 
-      
-        error_log("taskImages " . $taskImages);
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
@@ -406,8 +404,6 @@ class UserRouteHandler
          
         $payload = json_encode($topTasks, JSON_HEX_TAG);
 
-       
- 
         $response->getBody()->write($results);
 
         return $response->withHeader('Content-Type', 'application/json');
