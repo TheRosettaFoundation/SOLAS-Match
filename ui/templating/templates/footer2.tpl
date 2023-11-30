@@ -218,6 +218,8 @@
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
                             next.href = newNextUrl ;
+
+                            pagePosition.p = newNextPosition ;
                                 
                            
 
