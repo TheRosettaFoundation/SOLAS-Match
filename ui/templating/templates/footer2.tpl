@@ -364,7 +364,7 @@
                                         
                            
                                     </div>
-                                       <div class="text-muted fs-6" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
@@ -388,9 +388,10 @@
                                     itemSubFlex.appendChild(imageHtml);
                                   
                                     itemFlexContainer.appendChild(itemSubFlex) ;
+                                   
+                                    itemNameElement.appendChild(itemFlexContainer);
                                     itemNameElement.appendChild(badgeContainer);
                                     itemNameElement.appendChild(langHtml);
-                                    itemNameElement.appendChild(itemFlexContainer);
                                     
                                     
                                     itemElement.appendChild(itemNameElement);
