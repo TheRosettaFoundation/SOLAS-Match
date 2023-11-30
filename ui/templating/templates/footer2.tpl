@@ -201,6 +201,8 @@
 
                             previous.href = newPrevUrl ;
 
+                            pagePosition.p = newPrevPosition ;
+
                             
 
  
