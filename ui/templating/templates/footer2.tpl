@@ -88,7 +88,11 @@
 
                         console.log(` Last url is ${ url }`);
 
+                        pagePosition.p = countPage ;
+
                         requestPage(url);   
+
+                        
 
                     })
                     
@@ -100,7 +104,11 @@
 
                         console.log(` First url is ${ url }`);
 
+                        pagePosition.p = 1 ;
+
                         requestPage(url);   
+
+
 
                     })
 
@@ -193,8 +201,9 @@
 
                             if(page.id=="previous"){
                             
+                          
                             requestPage(previous.href);
-                            
+
                             let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
@@ -203,6 +212,7 @@
 
                             pagePosition.p = newPrevPosition ;
 
+                            
                             
 
  
@@ -222,6 +232,8 @@
                             next.href = newNextUrl ;
 
                             pagePosition.p = newNextPosition ;
+
+                         
                                 
                            
 
