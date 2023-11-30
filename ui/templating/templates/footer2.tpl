@@ -406,11 +406,12 @@
                                    
 
                                     itemSubFlex.appendChild(titleContainer);
-                                    itemFlexContainer.appendChild(imageHtml);
+                                   
                                   
                                     itemFlexContainer.appendChild(itemSubFlex) ;
                                     itemSubFlex.appendChild(badgeContainer);
                                     itemSubFlex.appendChild(langHtml);
+                                    itemFlexContainer.appendChild(imageHtml);
                                    
                                     itemNameElement.appendChild(itemFlexContainer);
                                    
