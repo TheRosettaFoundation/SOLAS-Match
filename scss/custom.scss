@@ -72,6 +72,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .btn-secondary:hover {
     background-color: #f89406 !important;
+    border: #f89406;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
