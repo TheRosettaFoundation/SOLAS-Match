@@ -179,33 +179,14 @@ class UserDao extends BaseDao
         }
 
         $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
-                LibAPI\PDOWrapper::cleanse($offset).', ';
-        
+                LibAPI\PDOWrapper::cleanse($offset).', ';        
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
 
-        // $limit = "6" ;
-        // $taskType = NULL;
-        // $sourceLanguageCode = NULL;
-        // $targetLanguageCode = NULL;
-
-        // $args .= LibAPI\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
-        //         LibAPI\PDOWrapper::cleanseNull($offset).', ';
-        
-        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
-        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        // $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
-
-        // error_log($args);
-        // var_dump($args);
 
         $result = LibAPI\PDOWrapper::call("getUserTopTasks", $args);     
-        // var_dump($result);  
-        // var_dump(gettype($result));
 
-
-       
         if ($result) {
           
             foreach ($result as $row) {
