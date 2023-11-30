@@ -240,11 +240,6 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : NULL;
 
-        error_log("targetLanguage " . $args['tl']);
-      
-         
-     
-
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -255,9 +250,6 @@ class UserRouteHandler
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
-        
-        
-
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -341,8 +333,6 @@ class UserRouteHandler
             // $topTasks = array();
             $topTasksCount = 0;
         }
-
-
 
 
         $taskImages = array();
