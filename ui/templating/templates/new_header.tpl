@@ -94,12 +94,7 @@
                     </li>
                 {/if} 
 
-                {if !isset($dashboard)}
-                    <li class="nav-item fw-bold">
-                        <a href="{urlFor name="org-dashboard"}" class="nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if} >{Localisation::getTranslation('header_dashboard')}</a>
-                    </li>
-                {/if} 
-
+                
             
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
@@ -108,12 +103,7 @@
                     </li>
                 {/if} 
 
-                {if isset($user)}
-                {assign var="user_id" value=$user->getId()}
-                    <li class="nav-item" {if isset($current_page) && $current_page == 'user-profile'}class="active" {/if} >
-                        <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="nav-link fw-bold">{Localisation::getTranslation('header_profile')}</a>
-                    </li>
-                {/if} 
+               
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
