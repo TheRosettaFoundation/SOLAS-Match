@@ -308,11 +308,12 @@
                                     itemNameElement.classList.add('100') ;
 
                                     const itemFlexContainer = document.createElement ('id')
+                                    itemFlexContainer.classList.add('d-flex','justify-content-between')
                                     const itemSubFlex =  document.createElement('div');
                                     
                                     
                                    
-                                    itemSubFlex.classList.add('d-flex','justify-content-between')
+                                    
                                     const titleContainer = document.createElement('div')
                                     const title =  document.createElement('div')
                                     title.classList.add('text-primary' ,'d-inline-block', 'mx-2')
@@ -405,11 +406,11 @@
                                    
 
                                     itemSubFlex.appendChild(titleContainer);
-                                    itemSubFlex.appendChild(imageHtml);
+                                    itemFlexContainer.appendChild(imageHtml);
                                   
                                     itemFlexContainer.appendChild(itemSubFlex) ;
-                                     itemFlexContainer.appendChild(badgeContainer);
-                                    itemFlexContainer.appendChild(langHtml);
+                                    itemSubFlex.appendChild(badgeContainer);
+                                    itemSubFlex.appendChild(langHtml);
                                    
                                     itemNameElement.appendChild(itemFlexContainer);
                                    
