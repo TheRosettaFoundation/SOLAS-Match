@@ -246,7 +246,7 @@
 
                             let newPrevPosition = parseInt(pagePosition.p) > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let newNextPosition = parseInt(pagePosition.p) < countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ; 
+                            let newNextPosition = parseInt(pagePosition.p) <= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ; 
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
