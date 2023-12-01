@@ -225,11 +225,8 @@
 
                             requestPage(next.href);   
 
-                            console.log(`page position : ${ parseInt(pagePosition.p) }`);
-                            console.log(`countPage : ${ countPage}`);
+                            
                             let newNextPosition = parseInt(pagePosition.p)<countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
-
-                            console.log(`newPosition is : ${ newNextPosition }`)                                       
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
@@ -237,7 +234,7 @@
 
                             pagePosition.p = newNextPosition ;
 
-                              console.log(pagePosition);
+                            console.log(pagePosition);
 
                          
                                 
@@ -292,18 +289,14 @@
                         try {
                                  parsed = JSON.parse(pages);
 
-                                 console.log('parsed JSON')
-                                 console.log(parsed);
+                             
 
                                  let images = parsed.images ;
 
                                  for (const item of parsed.tasks) {
-                                    console.log(item);
-                                    const innerDiv = document.createElement("div");
-                                  
                             
-                               
-                                
+                                    const innerDiv = document.createElement("div");
+ 
                                     const itemElement = document.createElement('div');
                                     itemElement.classList.add(  'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
 
@@ -366,7 +359,7 @@
 
 
                                     let imageId  = images[item.id]!== ""?images[item.id] : ""
-                                    console.log(`image ID ${ imageId }`)
+                                   
                                     let image = imageId.length > 2?  
                                     `
                                        <div>
@@ -436,7 +429,7 @@
                                                             
                         
                                     }
-                                    console.log(newData)
+                            
                                     newDataString = newData.outerHTML;
                                
                                     tasksContainer.innerHTML = newDataString ;
@@ -453,8 +446,7 @@
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;
-                       console.log(light);
-
+   
                        if(light){
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
