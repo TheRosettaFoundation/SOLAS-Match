@@ -99,7 +99,7 @@
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item fw-bold" >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-6 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
 
@@ -132,15 +132,15 @@
                                 {if isset($user)}
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="nav-link fw-bold">TWB Learning Center</a>
                                 {else}
-                                <a href="https://elearn.translatorswb.org/" target="_blank" class="nav-link fw-bold">TWB Learning Center</a>
+                                <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-6 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
                             </li>
                             <li class="nav-item">
-                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class="nav-link fw-bold">Feedback?</a>
+                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-6 nav-link fw-bold">Feedback?</a>
                             </li>
                         {else}
                             <li class="nav-item">
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="nav-link fw-bold">Learn. Center</a>
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-6 nav-link fw-bold">Learn. Center</a>
                             </li>
                         {/if}
             
@@ -150,19 +150,19 @@
              <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center judtify-content-between">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
-                                <a  class="nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                                <a  class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
                         {if isset($user)}
                             <li class="profile nav-item">
 
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="nav-link fw-bold">
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-6 nav-link fw-bold">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
                             <li class="logout nav-item" >
-                                <a href="{urlFor name="logout"}" class="nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
+                                <a href="{urlFor name="logout"}" class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                             <li class="nav_item" id="theme">
                                <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
