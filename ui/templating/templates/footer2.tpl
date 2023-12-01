@@ -212,6 +212,8 @@
 
                             pagePosition.p = newPrevPosition ;
 
+                            console.log(pagePosition);
+
 
 
                             
@@ -235,6 +237,8 @@
 
                             pagePosition.p = newNextPosition ;
 
+                              console.log(pagePosition);
+
                          
                                 
                            
@@ -254,6 +258,8 @@
                             previous.href = newPrevUrl ;
 
                             next.href = newNextUrl ;
+
+                            console.log(pagePosition);
 
 
 
