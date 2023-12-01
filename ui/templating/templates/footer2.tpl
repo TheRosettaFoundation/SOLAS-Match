@@ -257,6 +257,8 @@
                             next.href = newNextUrl ;
 
                             console.log(pagePosition);
+                            console.log(previous.href);
+                            console.log(next.href);
 
 
 
