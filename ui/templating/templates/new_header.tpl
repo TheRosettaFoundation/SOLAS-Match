@@ -90,7 +90,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
-                    <a href="{urlFor name="home"}" class="nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
+                    <a href="{urlFor name="home"}" class="fs-6 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
