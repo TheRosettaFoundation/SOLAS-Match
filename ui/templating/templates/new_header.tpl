@@ -130,7 +130,7 @@
                  {if !isset($site_admin)}
                             <li class="nav-item">
                                 {if isset($user)}
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="nav-link fw-bold">TWB Learning Center</a>
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-6 nav-link fw-bold">TWB Learning Center</a>
                                 {else}
                                 <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-6 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
@@ -147,7 +147,7 @@
 
             </ul>
 
-             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center judtify-content-between">
+             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center justify-content-between">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
                                 <a  class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
