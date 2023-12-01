@@ -226,7 +226,7 @@
                             requestPage(next.href);   
 
                             
-                            let newNextPosition = parseInt(pagePosition.p)<countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+                            let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
