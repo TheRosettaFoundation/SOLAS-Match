@@ -985,7 +985,7 @@ error_log("createTaskDirectly: $args");
     {
         $result = LibAPI\PDOWrapper::call('get_project_complete_date', LibAPI\PDOWrapper::cleanse($project_id));
         if ($result) return $result[0];
-        return ['deal_id' => 0];
+        return ['deal_id' => 0, 'allocated_budget' => 0];
     }
 
     public function update_project_deal_id($project_id, $deal_id)

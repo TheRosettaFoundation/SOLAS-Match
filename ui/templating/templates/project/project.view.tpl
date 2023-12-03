@@ -122,7 +122,34 @@
             </tr> 
         </tbody>
     </table>            
-            
+
+    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
+    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
+        <thead>
+            <th>Deal ID</th>
+            <th>Allocated Budget</th>
+            <th>Expense (Expected)</th>
+            <th>Expense (Claimed Tasks)</th>
+            <th>Remaining Budget</th>
+            <th>Margin</th>
+            <th>Expense (Completed Tasks)</th>
+            <th>Expense (Ready for payment Tasks)</th>
+        </thead>
+        <tbody>
+            <tr style="overflow-wrap: break-word;">
+                <td>{$project_complete_date['deal_id']}</td>
+                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
+                <td>${round($total_expected_cost, 2)}</td>
+                <td>${round($total_expected_cost_claimed, 2)}</td>
+                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost_claimed, 2)}</td>
+                <td>{if $project_complete_date['allocated_budget'] > 0}{round((($project_complete_date['allocated_budget'] - $total_expected_cost_claimed)/$project_complete_date['allocated_budget'])*100)}%{else}-{/if}</td>
+                <td>${round($total_expected_cost_complete, 2)}</td>
+                <td>${round($total_expected_cost_ready, 2)}</td>
+            </tr>
+        </tbody>
+    </table>
+    {/if}
+
     <div class="well">
         <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
@@ -775,6 +802,39 @@
   </div>
   </form>
 </div>
+
+{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
+    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
+        <thead>
+            <th>Type</th>
+            <th>Target Language</th>
+            <th>Quantity</th>
+            <th>Translated</th>
+            <th>Ready for payment</th>
+            <th>Expense (Expected)</th>
+            <th>Expense (Claimed)</th>
+            <th>Expense (Completed)</th>
+            <th>Expense (Ready for payment)</th>
+        </thead>
+        <tbody>
+            {foreach $get_payment_status_for_project as $payment_status}
+            {if $payment_status['payment_status']}
+            <tr style="overflow-wrap: break-word;">
+                <td>{$payment_status['type_text']}</td>
+                <td>{TemplateHelper::getLanguageAndCountryFromCode($get_payment_status_for_project[$task_id]['target_codes'])}</td>
+                <td>{$payment_status['total_paid_words'] $payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>{$payment_status['total_paid_words_complete'] $payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>{$payment_status['total_paid_words_ready'] $payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>${round($payment_status['total_expected_cost'], 2)}</td>
+                <td>${round($payment_status['total_expected_cost_claimed'], 2)}</td>
+                <td>${round($payment_status['total_expected_cost_complete'], 2)}</td>
+                <td>${round($payment_status['total_expected_cost_ready'], 2)}</td>
+            </tr>
+            {/if}
+            {/foreach}
+        </tbody>
+    </table>
+{/if}
 
 {include file="footer_no_end.tpl"}
         <script>

@@ -10874,13 +10874,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_payment_status_for_project`(IN 
 BEGIN
     SELECT
         t.id,
+        ttd.type_text,
+        ttd.pricing_and_recognition_unit_text_hours,
         IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status,
+        IF(tp.payment_status IS NOT NULL                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost,
+        IF(tp.payment_status IS NOT NULL AND tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost_claimed,
+        IF(tp.payment_status IS NOT NULL                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0), 0) AS total_paid_words,
+        IF(tp.payment_status IS NOT NULL AND t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0), 0) AS total_paid_words_complete,
+        IF(tp.payment_status IS NOT NULL AND t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost_complete,
+        IF(tp.payment_status IS NOT NULL AND t.`task-status_id`=4 AND tp.payment_status NOT IN ('Unsettled', 'Pending documentation')
+                                                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0), 0) AS total_paid_words_ready,
+        IF(tp.payment_status IS NOT NULL AND t.`task-status_id`=4 AND tp.payment_status NOT IN ('Unsettled', 'Pending documentation')
+                                                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost_ready,
+        tc.user_id,
         tp.level,
         tp.purchase_order,
         tp.unit_rate,
         tp.status_changed
     FROM      Tasks      t
+    JOIN      task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     LEFT JOIN TaskPaids tp ON t.id=tp.task_id
+    LEFT JOIN TaskClaims tc ON t.id=tc.task_id
     WHERE t.project_id=pID;
 END//
 DELIMITER ;
