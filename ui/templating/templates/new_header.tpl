@@ -86,8 +86,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-flex" id="navbarSupportedContent">
-            <ul class="navbar-nav  d-flex align-items-center">
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav d-flex align-items-center bg-primary">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
                     <a href="{urlFor name="home"}" class="fs-6 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
@@ -147,7 +147,7 @@
 
             </ul>
 
-             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center">
+             <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex align-items-center bg-info">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
                                 <a  class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
