@@ -91,7 +91,7 @@
             <ul class="navbar-nav  ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
-                    <a href="{urlFor name="home"}" class="fs-6 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
+                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
@@ -100,7 +100,7 @@
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item fw-bold" >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-6 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-5 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link active" {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
 
@@ -109,39 +109,39 @@
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
                     <li class="nav-item" {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
-                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id" class=" fs-6 nav-link fw-bold"}">{Localisation::getTranslation('header_admin')}</a>
+                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id" class=" fs-5 nav-link fw-bold"}">{Localisation::getTranslation('header_admin')}</a>
                     </li>
                 {/if} 
 
                  {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if} class="nav-item ">
-                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('common_faq')}</a>
+                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_faq')}</a>
                             </li>
                         {/if}
                            	{if Settings::get('site.forum_enabled') == 'y'}
 	                            <li>
-	                                <a href="{Settings::get('site.forum_link')}" target="_blank" class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
+	                                <a href="{Settings::get('site.forum_link')}" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
 	                            </li>
                             {/if}
                 {if isset($site_admin)}
                             <li class="nav-item">
-                                <a href="https://analytics.translatorswb.org" target="_blank" class=" fs-6 nav-link fw-bold">Analytics</a>
+                                <a href="https://analytics.translatorswb.org" target="_blank" class=" fs-5 nav-link fw-bold">Analytics</a>
                             </li>
                         {/if}
                  {if !isset($site_admin)}
                             <li class="nav-item">
                                 {if isset($user)}
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-6 nav-link fw-bold">TWB Learning Center</a>
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {else}
-                                <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-6 nav-link fw-bold">TWB Learning Center</a>
+                                <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
                             </li>
                             <li class="nav-item">
-                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-6 nav-link fw-bold">Feedback?</a>
+                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
                         {else}
                             <li class="nav-item">
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-6 nav-link fw-bold">Learn. Center</a>
+                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-5 nav-link fw-bold">Learn. Center</a>
                             </li>
                         {/if}
             
@@ -151,19 +151,19 @@
              <ul class="navbar-nav">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
-                                <a  class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                                <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
                         {if isset($user)}
                             <li class="profile nav-item">
 
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-6 nav-link fw-bold">
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
                             <li class="logout nav-item" >
-                                <a href="{urlFor name="logout"}" class=" fs-6 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
+                                <a href="{urlFor name="logout"}" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                             <li class="nav_item" id="theme">
                                <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
