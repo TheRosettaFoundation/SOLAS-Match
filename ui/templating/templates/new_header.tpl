@@ -94,13 +94,6 @@
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
-                {if isset($show_admin_dashboard)}
-                            {assign var="user_id" value=$user->getId()}
-                            <li {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="fs-5 nav-link fw-bold" {/if}>
-                                <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
-                            </li>
-                        {/if}
-
                 
             
                 {if isset($user_has_active_tasks)}
