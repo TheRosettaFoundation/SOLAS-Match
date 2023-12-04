@@ -87,8 +87,8 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-flex  justify-content-between">
-            <ul class="navbar-nav d-flex align-items-center bg-primary me-4">
+            <div class="d-flex bg-secondary">
+            <ul class="navbar-nav d-flex align-items-center bg-primary ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
                     <a href="{urlFor name="home"}" class="fs-6 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
