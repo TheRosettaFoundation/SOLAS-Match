@@ -87,7 +87,7 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-flex bg-secondary">
+            <div class="d-flex bg-secondary border border-2 border-success">
             <ul class="navbar-nav d-flex align-items-center bg-primary ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
