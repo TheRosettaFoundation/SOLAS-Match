@@ -1089,7 +1089,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
             ksort($sort);
 error_log(print_r($sort, 1));
-error_log(print_r($get_payment_status_for_project, 1));
+error_log(print_r($get_payment_status_for_project[34007], 1));
+error_log(print_r($get_payment_status_for_project[33969], 1));
+error_log(print_r($get_payment_status_for_project[33970], 1));
             foreach ($sort as $t_id) $payment_status_for_project[$t_id] = $get_payment_status_for_project[$t_id];
         } else {
             $project_tasks = $taskDao->getVolunteerProjectTasks($project_id, $user_id);
