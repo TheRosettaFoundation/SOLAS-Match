@@ -1025,7 +1025,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
         }
 
-        $get_payment_status_for_project => $taskDao->get_payment_status_for_project($project_id);
+        $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
         $total_expected_cost = 0;
         $total_expected_cost_claimed = 0;
         $total_expected_cost_complete = 0;
