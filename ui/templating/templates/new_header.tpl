@@ -86,7 +86,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
-            <div class=" d-flex justify-content-between collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex  justify-content-between">
             <ul class="navbar-nav d-flex align-items-center bg-primary me-4">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
@@ -175,7 +176,7 @@
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
                     </ul>
-            
+            </div>
             </div>
         </div>
         </nav>
