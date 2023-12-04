@@ -88,7 +88,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-md-flex align-items-center justify-content-between w-100">
-            <ul class="navbar-nav  ">
+            <ul class="navbar-nav d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
@@ -148,7 +148,7 @@
 
             </ul>
 
-             <ul class="navbar-nav">
+             <ul class="navbar-nav d-flex align-items-center">
                         {if isset($userNotifications)}   
                             <li class="nav-item">
                                 <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
