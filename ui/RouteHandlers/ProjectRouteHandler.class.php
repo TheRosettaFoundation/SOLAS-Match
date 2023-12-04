@@ -1025,12 +1025,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
         }
 
-        $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
         $total_expected_cost = 0;
         $total_expected_cost_claimed = 0;
         $total_expected_cost_complete = 0;
         $total_expected_cost_ready = 0;
         $one_paid = 0;
+        $payment_status_for_project = [];
 
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -1039,6 +1039,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
             $taskLanguageMap = array();
             if ($project_tasks) {
+                $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
                 foreach ($project_tasks as $task) {
                     $task_id = $task->getId();
                     if (!empty($translations_not_all_complete[$task_id])) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
@@ -1077,13 +1078,17 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     "taskLanguageMap" => $taskLanguageMap
             ));
 
-            foreach ($get_payment_status_for_project as $payment_status) {
+            $sort = [];
+            foreach ($get_payment_status_for_project as $t_id => $payment_status) {
                 $total_expected_cost          += $payment_status['total_expected_cost'];
                 $total_expected_cost_claimed  += $payment_status['total_expected_cost_claimed'];
                 $total_expected_cost_complete += $payment_status['total_expected_cost_complete'];
                 $total_expected_cost_ready    += $payment_status['total_expected_cost_ready'];
                 if ($payment_status['payment_status']) $one_paid = 1;
+                $sort[$payment_status['target_codes'] . $payment_status['type_enum'] . $t_id] = $t_id;
             }
+            ksort($sort);
+            foreach ($sort as $t_id) $payment_status_for_project[$t_id] = $get_payment_status_for_project[$t_id];
         } else {
             $project_tasks = $taskDao->getVolunteerProjectTasks($project_id, $user_id);
             $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
@@ -1124,7 +1129,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'pm' => $pm,
                 'project' => $project,
                 'get_paid_for_project' => $taskDao->get_paid_for_project($project_id),
-                'get_payment_status_for_project' => $get_payment_status_for_project,
+                'get_payment_status_for_project' => $payment_status_for_project,
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
                 'project_complete_date'        => $taskDao->get_project_complete_date($project_id),
                 'total_expected_cost'          => $total_expected_cost,

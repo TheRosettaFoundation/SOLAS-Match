@@ -822,9 +822,9 @@
             <tr style="overflow-wrap: break-word;">
                 <td>{$payment_status['type_text']}</td>
                 <td>{TemplateHelper::getLanguageAndCountryFromCode($get_payment_status_for_project[$task_id]['target_codes'])}</td>
-                <td>{$payment_status['total_paid_words']} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
-                <td>{$payment_status['total_paid_words_complete']} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
-                <td>{$payment_status['total_paid_words_ready']} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>{round($payment_status['total_paid_words'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>{round($payment_status['total_paid_words_complete'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
+                <td>{round($payment_status['total_paid_words_ready'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
                 <td>${round($payment_status['total_expected_cost'], 2)}</td>
                 <td>${round($payment_status['total_expected_cost_claimed'], 2)}</td>
                 <td>${round($payment_status['total_expected_cost_complete'], 2)}</td>

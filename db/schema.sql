@@ -10874,6 +10874,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_payment_status_for_project`(IN 
 BEGIN
     SELECT
         t.id,
+        ttd.type_enum,
         ttd.type_text,
         ttd.pricing_and_recognition_unit_text_hours,
         IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status,
