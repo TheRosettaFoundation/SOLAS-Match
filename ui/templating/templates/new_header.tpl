@@ -86,8 +86,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
-            <ul class="navbar-nav d-flex align-items-center bg-primary">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav d-flex align-items-center bg-primary mx-2">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
                     <a href="{urlFor name="home"}" class="fs-6 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
