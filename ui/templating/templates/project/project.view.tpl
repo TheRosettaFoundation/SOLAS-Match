@@ -821,7 +821,7 @@
             {if $payment_status['payment_status']}
             <tr style="overflow-wrap: break-word;">
                 <td>{$payment_status['type_text']}</td>
-                <td>{TemplateHelper::getLanguageAndCountryFromCode($get_payment_status_for_project[$task_id]['target_codes'])}</td>
+                <td>{TemplateHelper::getLanguageAndCountryFromCode($payment_status['target_codes'])}</td>
                 <td>{round($payment_status['total_paid_words'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
                 <td>{round($payment_status['total_paid_words_complete'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
                 <td>{round($payment_status['total_paid_words_ready'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
