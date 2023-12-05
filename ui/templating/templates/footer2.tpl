@@ -423,7 +423,7 @@
                                         
                            
                                     </div>
-                                       <div class="text-muted mb-3" > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
@@ -432,7 +432,7 @@
 
                                     const langHtml = document.createRange().createContextualFragment(languages);
 
-                                    const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap ">
+                                    const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                                                         <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
                                                         <div class="d-flex justify-content-end">
                                                             <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
