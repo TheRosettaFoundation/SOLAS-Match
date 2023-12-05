@@ -213,7 +213,11 @@
                             console.log("ListItem")
                             console.log(listItem) 
 
-                        if(pagePosition.page !== page.id){
+                            console.log(`page id : ${page.id}`)
+                            console.log(`page position : ${pagePosition.p}`)
+                            break;
+
+                        if(pagePosition.page == page.id){
 
                             
                             listItem.classList.remove('bg-primary', 'link-primary')
