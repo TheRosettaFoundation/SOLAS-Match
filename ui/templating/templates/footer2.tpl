@@ -215,9 +215,11 @@
                             console.log(pageC) 
 
                             console.log(`page id : ${ page.id }`)
-                            console.log(`page position : ${ pagePosition.p }`)
-                            break;
+                            console.log(`page C id : ${ pageC.id }`)
+                            
                             if(pageC.id == id) {
+
+                             console.log('ok this is finaluu working')   
 
                             listPage[i].classList.add('bg-primary')
                             
