@@ -548,7 +548,7 @@
                                                 {/foreach}
                                             </small>
                                         </strong>
-                                        <br />{round($get_payment_status_for_project[$task_id]['total_paid_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}
+                                        {if $get_payment_status_for_project[$task_id]['total_paid_words']}<br />{round($get_payment_status_for_project[$task_id]['total_paid_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}{/if}
                                     </td>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                     <td>                                    
