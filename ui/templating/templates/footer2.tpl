@@ -128,6 +128,9 @@
                     let allPages = document.querySelectorAll('.page')
 
                     let listPage = document.querySelectorAll('.listPage');
+
+                    console.log("listPage")
+                    console.log(listPage)
  
 
                     selectedLanguage.addEventListener("change", function(){
@@ -206,7 +209,9 @@
 
                         for(var i = 0 ; i<listPage.length ; i++){
 
-                            let listItem =  listPage[i].closest('li')   
+                            let listItem =  listPage[i].closest('li')  
+                            console.log("ListItem")
+                            console.log(listItem) 
 
                         if(pagePosition.page !== page.id){
 
