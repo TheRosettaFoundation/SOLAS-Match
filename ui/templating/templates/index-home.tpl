@@ -539,7 +539,7 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between mb-2 border border-4 border-quartenary border-opacity-10">
+                            <div class="d-flex justify-content-between mb-2">
                                 <div class="">
                                         <div class="fw-bold fs-4 align-middle ">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary d-inline-block">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
@@ -547,9 +547,9 @@ a:hover{
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
-                                            <button class="rounded-5 bg-greenish border border-greenish  border-4 border-opacity-50  ">  <span class="fs-6 p-1 text-white fw-bold align-middle">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
+                                            <button class="rounded-5 bg-greenish border border-greenish  border-4 border-opacity-10  ">  <span class="fs-6 p-1 text-white fw-bold align-middle">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
-                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-4 border-danger border-opacity-50 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
+                                                <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-4 border-quartenary border-opacity-10 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
                                         </div>
