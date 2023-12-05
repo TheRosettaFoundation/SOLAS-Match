@@ -423,7 +423,7 @@
                                         
                            
                                     </div>
-                                       <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
+                                       <div class="text-muted mb-3" > Due by <strong>${ item.deadline } </strong> </div>
                                     
                                     `;
 
