@@ -539,14 +539,14 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mb-3">
                                 <div class="">
                                         <div class="fw-bold fs-4 align-middle ">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary d-inline-block">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                         <span class="fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start"> ? </span> </div>
                                         </div>
 
-                                        <div class="d-flex mt-2 mb-2 ">
+                                        <div class="d-flex mt-2 mb-3 ">
                                             <button class="rounded-5 bg-greenish border border-0  ">  <span class="fs-6 p-1 text-white fw-bold align-middle">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
                                                 <button type="button" class=" ms-1 rounded-5  bg-quartenary border border-0 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
@@ -555,7 +555,7 @@ a:hover{
                                         </div>
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                            <div class="mb-1  text-muted">
+                                            <div class="mb-3  text-muted">
                                                 <span class=" ">
                                                     Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
                                                 </span>
@@ -563,10 +563,11 @@ a:hover{
                                             <span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
-                                            <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
+                                         
                                         
                                             
                                             </div>
+                                            <div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
                                        
 
                                 
