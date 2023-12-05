@@ -126,6 +126,8 @@
                     let selectTask = '' ;
 
                     let allPages = document.querySelectorAll('.page')
+
+                    let listPage = document.querySelectorAll('.listPage');
  
 
                     selectedLanguage.addEventListener("change", function(){
@@ -193,13 +195,34 @@
                     pages.forEach(page => {
                         let hr = page.href;
 
+                        let id = page.id
+
                       
                     
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
+                          
 
-                    
+                        for(var i = 0 ; i<listPage.length ; i++){
+
+                            let listItem =  listPage[i].closest('li')   
+
+                        if(pagePosition.page !== page.id){
+
+                            
+                            listItem.classList.remove('bg-primary', 'link-primary')
+
+                            
+                            }
+                        else{
+
+                                listItem.classList.add('bg-primary', 'link-primary')
+
+                        }
+                        }
+
+                
                        
 
                             if(page.id=="previous"){
@@ -245,10 +268,9 @@
 
                             } else {
 
-                            let listElement = page.closest('li') ;     
+                            
 
-                            listElement.classList.add('bg-primary', 'link-primary') ;   
-
+                        
                             pagePosition.p = page.id;
 
                             let newPrevPosition = parseInt(pagePosition.p) > 1 ?parseInt(pagePosition.p)-1 : 1 ;
