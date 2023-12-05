@@ -148,12 +148,13 @@
             </ul>
 
              <ul class="navbar-nav d-flex align-items-center">
-                        {if isset($userNotifications)}   
-                            <li class="nav-item">
-                                <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
-                            </li>
-                        {/if}
+
                         {if isset($user)}
+                              <li class="nav_item me-2" id="theme">
+                               <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
+                           
+                               <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
+                            </li>
                             <li class="profile nav-item">
 
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
@@ -164,16 +165,18 @@
                             <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
-                            <li class="nav_item" id="theme">
-                               <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
-                           
-                               <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
-                            </li>
+                          
                         {else}
                           
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
+                        {if isset($userNotifications)}   
+                            <li class="nav-item">
+                                <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                            </li>
+                        {/if}
+                        
                     </ul>
             </div>
             </div>
