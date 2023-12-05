@@ -624,18 +624,18 @@ a:hover{
                     {/if}    
 
                      <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2" >
-                            <a class="first text-decoration-none link-body" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">First</a></li>
+                            <a class="first text-decoration-none link-body-emphasis" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">First</a></li>
                     <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2" >
-                            <a class="page text-decoration-none link-body" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">previous</a></li>
+                            <a class="page text-decoration-none link-body-emphasis" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">previous</a></li>
         
                     {for $page=1 to $count}
                             <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2">
-                            <a class="page text-decoration-none link-body" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
+                            <a class="page text-decoration-none link-body-emphasis" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                     {/for}
                     <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 ">
-                            <a class="page text-decoration-none link-body" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
+                            <a class="page text-decoration-none link-body-emphasis" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
                      <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 " >
-                            <a class="last text-decoration-none link-body" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
+                            <a class="last text-decoration-none link-body-emphasis" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
             </ul>
 
   
