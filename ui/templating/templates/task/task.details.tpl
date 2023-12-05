@@ -289,6 +289,7 @@
             <th></th>
             <th></th>
           {/if}
+            <th>Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </thead>
         <tr align="center">
@@ -380,6 +381,9 @@
             <td></td>
             <td></td>
           {/if}
+            <td>
+                {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}
+            </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
