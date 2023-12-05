@@ -539,7 +539,7 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between mb-2 border border-4 border-quartenary">
+                            <div class="d-flex justify-content-between mb-2 border border-4 border-quartenary border-opacity-75">
                                 <div class="">
                                         <div class="fw-bold fs-4 align-middle ">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary d-inline-block">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
