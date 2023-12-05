@@ -210,7 +210,7 @@
 
                         for(var i = 0 ; i<listPage.length ; i++){
 
-                            let pageC = listPage.firstChild;
+                            let pageC = listPage[i].firstChild;
                             console.log("page clicked")
                             console.log(pageC) 
 
