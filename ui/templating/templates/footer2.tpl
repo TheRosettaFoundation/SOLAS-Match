@@ -245,7 +245,9 @@
 
                             } else {
 
-                            page.classList.add('bg-primary', 'link-primary') ;   
+                            let listElement = page.closest('li') ;     
+
+                            listElement.classList.add('bg-primary', 'link-primary') ;   
 
                             pagePosition.p = page.id;
 
