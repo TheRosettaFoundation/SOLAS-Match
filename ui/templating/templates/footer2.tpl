@@ -217,14 +217,14 @@
                             console.log(`page id : ${ page.id }`)
                             console.log(`page C id : ${ pageC.id }`)
                             
-                            if(pageC.id == id && !pageC.classList.contains('last')) {
+                            if(pageC.id == id ) {
 
                              console.log('ok this is finaluu working')   
 
-                            listPage[i].classList.add('bg-primary' , 'opacity-50', 'text-primary')
+                            listPage[i].classList.add('bg-primary' , 'opacity-75', 'text-primary')
                             
                             }else{
-                                  listPage[i].classList.remove('bg-primary-50' , 'opacity-50', 'text-primary')
+                                  listPage[i].classList.remove('bg-primary-75' , 'opacity-50', 'text-primary')
                             }
 
                         
