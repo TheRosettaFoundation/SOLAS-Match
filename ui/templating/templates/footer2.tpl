@@ -245,7 +245,7 @@
 
                             } else {
 
-                            page.classList.add('bg-primary') ;   
+                            page.classList.add('bg-primary', 'link-primary') ;   
 
                             pagePosition.p = page.id;
 
