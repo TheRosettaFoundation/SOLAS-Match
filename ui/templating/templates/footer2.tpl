@@ -213,8 +213,8 @@
                             console.log("ListItem")
                             console.log(listItem) 
 
-                            console.log(`page id : ${page.id}`)
-                            console.log(`page position : ${pagePosition.p}`)
+                            console.log(`page id : ${ page.id }`)
+                            console.log(`page position : ${ pagePosition.p }`)
                             break;
 
                         if(pagePosition.page == page.id){
