@@ -224,7 +224,7 @@
                             listPage[i].classList.add('bg-primary' , 'opacity-75', 'text-primary')
                             
                             }else{
-                                  listPage[i].classList.remove('bg-primary-75' , 'opacity-50', 'text-primary')
+                                  listPage[i].classList.remove('bg-primary' , 'opacity-75', 'text-primary')
                             }
 
                         
