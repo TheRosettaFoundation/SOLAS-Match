@@ -505,8 +505,7 @@ a:hover{
         {/if}
 
           {include file="tag/tags.top-list.flex.inc.tpl"}
-          {include file="tag/tags.user-flex.inc.tpl"}
-            
+        
    
     </div>
 
