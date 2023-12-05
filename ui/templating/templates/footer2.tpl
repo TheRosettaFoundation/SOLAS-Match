@@ -198,8 +198,9 @@
                     pages.forEach(page => {
                         let hr = page.href;
 
-                        let id = page.id
+                        let id = page.id ;
 
+                      
                       
                     
                         page.addEventListener("click", (e)=>{
@@ -209,26 +210,22 @@
 
                         for(var i = 0 ; i<listPage.length ; i++){
 
-                            let listItem =  listPage[i].closest('li')  
-                            console.log("ListItem")
-                            console.log(listItem) 
+                            let pageC = listPage.firstChild;
+                            console.log("page clicked")
+                            console.log(pageC) 
 
                             console.log(`page id : ${ page.id }`)
                             console.log(`page position : ${ pagePosition.p }`)
                             break;
+                            if(pageC.id == id) {
 
-                        if(pagePosition.page == page.id){
-
+                            listPage[i].classList.add('bg-primary')
                             
-                            listItem.classList.remove('bg-primary', 'link-primary')
-
-                            
+                            }else{
+                                  listPage[i].classList.remove('bg-primary')
                             }
-                        else{
 
-                                listItem.classList.add('bg-primary', 'link-primary')
-
-                        }
+                        
                         }
 
                 
