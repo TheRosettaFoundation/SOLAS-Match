@@ -192,11 +192,14 @@
  
                     pages.forEach(page => {
                         let hr = page.href;
+
                       
                     
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
+
+                    
                        
 
                             if(page.id=="previous"){
@@ -241,6 +244,8 @@
                            
 
                             } else {
+
+                            page.classList.add('bg-primary') ;   
 
                             pagePosition.p = page.id;
 
