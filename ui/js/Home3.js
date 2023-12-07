@@ -120,7 +120,7 @@ function renderTaskDetails() {
         let divEl = this;
         console.log(divEl);
         console.log("this is the time");
-        console.log(`utc time : ${this}`);
+        console.log(divEl);
 
         $(this).css("visibility", "visible");
     });
@@ -156,7 +156,7 @@ function renderTaskDetails() {
                     d +
                     " " +
                     h +
-                    ":" +
+                    ": test" +
                     mi +
                     ":00"
             )
