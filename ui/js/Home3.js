@@ -113,7 +113,6 @@ function renderTaskDetails() {
                         "-" +
                         d +
                         " " +
-                        image +
                         h +
                         ":" +
                         mi +
@@ -161,7 +160,6 @@ function renderTaskDetails() {
                     "-" +
                     d +
                     " " +
-                    image +
                     h +
                     ":" +
                     mi +
