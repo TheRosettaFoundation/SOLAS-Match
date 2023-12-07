@@ -381,7 +381,7 @@
                                     }
 
                                     const badge = document.createElement('button')
-                                    badge.classList.add('rounded-5', 'bg-greenish', 'border', 'border-0')
+                                    badge.classList.add('rounded-5', 'bg-greenish', 'border' ,'bg-greenish' , 'border-2', 'border-greenishBorder', 'border-opacity-25')
                                     const badgeSpan = document.createElement('span')
                                     badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
                                     badgeSpan.textContent = taskType
@@ -389,7 +389,7 @@
                                     badgeContainer.appendChild(badge)
 
                                     const badgeW = document.createElement('button')
-                                    badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border', 'border-0' )
+                                    badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border' ,'bg-greenish' , 'border-2', 'border-quartBorder', 'border-opacity-25' )
                                     const badgeDiv = document.createElement('div')
                                     badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
                                     badgeDiv.textContent =`${ item.wordCount } WORDS`
