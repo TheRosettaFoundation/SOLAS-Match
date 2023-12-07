@@ -107,7 +107,7 @@ function renderTaskDetails() {
         $(this).html(
             parameters.getTranslation("common_due_by").replace(
                 "%s",
-                ` div class= "d-flex align-items-center "` +
+                ` <div class= "d-flex align-items-center">` +
                     "<div>" +
                     deadline.getFullYear() +
                     "-" +
