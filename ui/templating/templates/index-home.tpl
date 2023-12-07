@@ -566,7 +566,7 @@ a:hover{
                                         
                                             
                                             </div>
-                                            <div class="process_deadline_utc d-flex align-items-center" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
+                                            <div class="process_deadline_utc d-flex align-items-center p-1" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div>
                                        
 
                                 
