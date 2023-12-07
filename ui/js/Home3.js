@@ -123,7 +123,7 @@ function renderTaskDetails() {
                         
 
                   ` +
-                    "<span class=`fs-5`> " +
+                    "<span class=`fs-5 me-1`> " +
                     h +
                     ":" +
                     mi +
