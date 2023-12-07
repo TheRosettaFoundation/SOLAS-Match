@@ -127,9 +127,10 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00" +
-                    "</div>"
-            ) + Intl.DateTimeFormat().resolvedOptions().timeZone
+                    ":00"
+            ) +
+                Intl.DateTimeFormat().resolvedOptions().timeZone +
+                "</div>"
         );
         let divEl = this;
         console.log(divEl);
