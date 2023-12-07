@@ -114,10 +114,11 @@ function renderTaskDetails() {
                         mi +
                         ":00"
                 ) +
-                " " +
+                " test" +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
-
+        let divEl = this;
+        console.log(divEl);
         console.log("this is the time");
         console.log(`utc time : ${this}`);
 
