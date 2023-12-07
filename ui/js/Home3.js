@@ -134,10 +134,6 @@ function renderTaskDetails() {
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>"
         );
-        let divEl = this;
-        console.log(divEl);
-        console.log("this is the time");
-        console.log(divEl);
 
         $(this).css("visibility", "visible");
     });
