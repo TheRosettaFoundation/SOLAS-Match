@@ -123,11 +123,12 @@ function renderTaskDetails() {
                         
 
                   ` +
-                    " " +
+                    "< span class=`fs-5`> " +
                     h +
                     ":" +
                     mi +
-                    ":00"
+                    ":00" +
+                    "</span>"
             ) +
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>"
