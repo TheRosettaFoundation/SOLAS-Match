@@ -128,6 +128,7 @@ function renderTaskDetails() {
                     ":" +
                     mi +
                     ":00" +
+                    " " +
                     "</span>"
             ) +
                 "<div class=`mx-1`>" +
