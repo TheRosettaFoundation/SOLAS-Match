@@ -116,6 +116,7 @@ function renderTaskDetails() {
                         d +
                         " " +
                         image +
+                        "<img src='../img/clock.svg '>" +
                         h +
                         ":" +
                         mi +
@@ -166,6 +167,7 @@ function renderTaskDetails() {
                     d +
                     " " +
                     image +
+                    "<img src='../img/clock.svg '>" +
                     h +
                     ":" +
                     mi +
