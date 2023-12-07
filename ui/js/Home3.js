@@ -130,7 +130,7 @@ function renderTaskDetails() {
                     ":00" +
                     "</span>"
             ) +
-                "<div class=`p-1`>" +
+                "<div class=`mx-1`>" +
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>" +
                 "</div>"
