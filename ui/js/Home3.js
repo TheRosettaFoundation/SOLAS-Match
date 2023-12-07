@@ -105,23 +105,45 @@ function renderTaskDetails() {
             mi = "0" + mi;
         }
         $(this).html(
-            parameters
-                .getTranslation("common_due_by")
-                .replace(
-                    "%s",
-                    deadline.getFullYear() +
-                        "-" +
-                        m +
-                        "-" +
-                        d +
-                        " " +
-                        image +
-                        "<img src='../img/clock.svg '>" +
-                        h +
-                        ":" +
-                        mi +
-                        ":00"
-                ) +
+            parameters.getTranslation("common_due_by").replace(
+                "%s",
+                deadline.getFullYear() +
+                    "-" +
+                    m +
+                    "-" +
+                    d +
+                    " " +
+                    (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 256 256"
+                        >
+                            <rect width="256" height="256" fill="none" />
+                            <circle
+                                cx="128"
+                                cy="128"
+                                r="96"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="16"
+                            />
+                            <polyline
+                                points="128 72 128 128 184 128"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="16"
+                            />
+                        </svg>
+                    ) +
+                    h +
+                    ":" +
+                    mi +
+                    ":00"
+            ) +
                 "" +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
@@ -166,8 +188,32 @@ function renderTaskDetails() {
                     "-" +
                     d +
                     " " +
-                    image +
-                    "<img src='../img/clock.svg '>" +
+                    (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 256 256"
+                        >
+                            <rect width="256" height="256" fill="none" />
+                            <circle
+                                cx="128"
+                                cy="128"
+                                r="96"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="16"
+                            />
+                            <polyline
+                                points="128 72 128 128 184 128"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="16"
+                            />
+                        </svg>
+                    ) +
                     h +
                     ":" +
                     mi +
