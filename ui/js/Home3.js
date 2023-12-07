@@ -108,7 +108,7 @@ function renderTaskDetails() {
             parameters.getTranslation("common_due_by").replace(
                 "%s",
 
-                "<div>" +
+                "<div class='px-1'>" +
                     deadline.getFullYear() +
                     "-" +
                     m +
