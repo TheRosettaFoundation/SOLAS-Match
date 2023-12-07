@@ -109,7 +109,7 @@ function renderTaskDetails() {
                 "%s",
                 deadline.getFullYear() +
                     "-" +
-                    "<div class='d-flex align-items-center '>" +
+                    "<div class='text-center '>" +
                     m +
                     "-" +
                     d +
