@@ -80,6 +80,10 @@ function renderTaskDetails() {
     $(".process_deadline_utc").each(function () {
         $(this).removeClass("process_deadline_utc");
         var utcTime = $(this).text();
+        var image = <img src="../img/clock.svg" />;
+        console.log("image");
+        console.log(image);
+
         utcTime = parseInt(utcTime) * 1000;
         var deadline = new Date(utcTime);
         var m = deadline.getMonth() + 1;
@@ -109,12 +113,13 @@ function renderTaskDetails() {
                         "-" +
                         d +
                         " " +
+                        image +
                         h +
                         ":" +
                         mi +
                         ":00"
                 ) +
-                " test" +
+                "" +
                 Intl.DateTimeFormat().resolvedOptions().timeZone
         );
         let divEl = this;
@@ -128,6 +133,7 @@ function renderTaskDetails() {
     $(".process_completed_utc").each(function () {
         $(this).removeClass("process_completed_utc");
         var utcTime = $(this).text();
+        var image = <img src="../img/clock.svg" />;
         utcTime = parseInt(utcTime) * 1000;
         var completed = new Date(utcTime);
         var m = completed.getMonth() + 1;
@@ -155,8 +161,9 @@ function renderTaskDetails() {
                     "-" +
                     d +
                     " " +
+                    image +
                     h +
-                    ": test" +
+                    ":" +
                     mi +
                     ":00"
             )
