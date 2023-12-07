@@ -80,7 +80,9 @@ function renderTaskDetails() {
     $(".process_deadline_utc").each(function () {
         $(this).removeClass("process_deadline_utc");
         var utcTime = $(this).text();
-        var image = <img src="../img/clock.svg" />;
+        var image = document.createElement("img");
+        image.src = "../img/clock.svg";
+
         console.log("image");
         console.log(image);
 
@@ -132,7 +134,9 @@ function renderTaskDetails() {
     $(".process_completed_utc").each(function () {
         $(this).removeClass("process_completed_utc");
         var utcTime = $(this).text();
-        var image = <img src="../img/clock.svg" />;
+        var image = document.createElement("img");
+        image.src = "../img/clock.svg";
+        console.log(image);
         utcTime = parseInt(utcTime) * 1000;
         var completed = new Date(utcTime);
         var m = completed.getMonth() + 1;
