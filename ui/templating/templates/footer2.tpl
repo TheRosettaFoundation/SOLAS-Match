@@ -357,7 +357,7 @@
                                     title.classList.add('text-primary' ,'d-inline-block', 'mx-2')
                                     title.textContent = item.title ;
                                     const spanTitle = document.createElement('span')
-                                    spanTitle.classList.add('fs-5', 'bg-primary' , 'border-2' ,'border-primary', 'opacity-75', 'rounded-circle', 'd-inline-block', 'px-2', 'text-white', 'align-self-start')
+                                    spanTitle.classList.add('fs-5', 'bg-primary' , 'border-2' ,'border-primary', 'opacity-75', 'rounded-circle', 'd-inline-block', 'text-white', 'align-self-start')
                                     spanTitle.textContent = "?"
                                     title.appendChild(spanTitle)
 
