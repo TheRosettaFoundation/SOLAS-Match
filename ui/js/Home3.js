@@ -127,7 +127,7 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00" +
+                    ":00 " +
                     " " +
                     "</span>"
             ) +
