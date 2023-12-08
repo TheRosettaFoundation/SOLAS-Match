@@ -489,12 +489,14 @@
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;
+                       let logo = document.querySelector('.logo')
    
                        if(light){
                         imgL.classList.remove("d-none");
                         imgN.classList.add("d-none");
                         document.documentElement.setAttribute('data-bs-theme', 'light')
                         navi.setAttribute('data-bs-theme', 'light')
+                        logo.src = "/ui/img/TWB_Logo.svg" ;
                         
                        }
                        else{
@@ -502,6 +504,7 @@
                           imgN.classList.remove("d-none");
                            document.documentElement.setAttribute('data-bs-theme', 'dark')
                             navi.setAttribute('data-bs-theme', 'dark')
+                              logo.src = "/ui/img/TWB_Logo1.svg" ;
                        }
 
                        
