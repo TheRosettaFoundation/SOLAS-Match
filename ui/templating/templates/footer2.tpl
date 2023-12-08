@@ -359,6 +359,7 @@
                                     const spanTitle = document.createElement('div')
                                     const spanImg = document.createElement('img')
                                     spanImg.src = "/ui/img/question.svg"
+                                    spanImg.classList.add("mx-1");
                                     spanTitle.appendChild(spanImg);
 
                     
