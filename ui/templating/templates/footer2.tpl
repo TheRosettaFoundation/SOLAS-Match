@@ -36,13 +36,13 @@
                         </div>
 
                         <div>
-                            <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67">Contact Us</a>
+                            <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none" target="_blank">Contact Us</a>
                              | 
-                            <a href="/static/terms/">
+                            <a href="/static/terms/" class="text-decoration-none" target="_blank">
                             Terms and Conditions
                             </a> 
-                            | <a href="https://twbplatform.org/static/privacy/" class=""> Privacy Policy </a> 
-                            | <a href="https://community.translatorswb.org/" target="_blank">
+                            | <a href="https://twbplatform.org/static/privacy/" class="text-decoration-none" target="_blank"> Privacy Policy </a> 
+                            | <a href="https://community.translatorswb.org/" target="_blank" class="text-decoration-none">
                                 TWB Community                           
                             </a>
 
