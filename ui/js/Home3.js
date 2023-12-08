@@ -178,7 +178,7 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00"
+                    ":00 "
             )
         );
         $(this).css("visibility", "visible");
