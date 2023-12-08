@@ -540,7 +540,7 @@ a:hover{
                         {/if}
                             <div class="d-flex justify-content-between mb-2 ">
                                 <div class="">
-                                        <div class="fw-bold fs-5  d-flex align-items-center">
+                                        <div class="fw-bold fs-4  d-flex align-items-center">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                         <div class=" fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-1 text-white align-self-start"> ? </div> </div>
                                         </div>
