@@ -78,7 +78,7 @@
             <td><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
             <td>{$po['language_pair']}</td>
             <td>{$po['task_status']}</td>
-            <td>{$po[source_quantity']} {$po['source_unit_for_later_stats']}</td>
+            <td>{$po['source_quantity']} {$po['source_unit_for_later_stats']}</td>
             <td>{$po['created-time']}</td>
             <td>{$po['deadline']}</td>
             <td>{$po['complete_date']}</td>
