@@ -356,9 +356,12 @@
                                     const title =  document.createElement('div')
                                     title.classList.add('text-primary' ,'d-inline-block')
                                     title.textContent = item.title ;
-                                    const spanTitle = document.createElement('span')
-                                    spanTitle.classList.add('fs-5', 'bg-primary' , 'border-2' ,'border-primary', 'opacity-75', 'rounded-circle', 'd-inline-block', 'text-white', 'align-self-start', 'px-2' ,'align-self-start')
-                                    spanTitle.textContent = "?"
+                                    const spanTitle = document.createElement('div')
+                                    const spanImg = document.createElement('img')
+                                    spanImg.src = "/ui/img/question.svg"
+                                    spanTitle.appendChild(spanImg);
+
+                    
                                     title.appendChild(spanTitle)
 
 
