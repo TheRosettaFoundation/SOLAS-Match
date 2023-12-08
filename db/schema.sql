@@ -11007,6 +11007,79 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_hubspot_deal`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_hubspot_deal`(IN dID BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM hubspot_deals WHERE deal_id=dID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `deal_id_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deal_id_report`(IN dID BIGINT UNSIGNED)
+BEGIN
+    SELECT
+        hd.deal_id,
+        hd.company_name,
+        hd.company_id,
+        hd.deal_name,
+        hd.start_date,
+        hd.expiration_date,
+        hd.deal_total,
+        hd.deal_partnership,
+        hd.deal_supplements,
+        hd.link_to_contract,
+        pcd.project_id,
+        pcd.allocated_budget,
+        p.title,
+        ttd.type_text,
+        ttd.pricing_and_recognition_unit_text_hours,
+        ttd.source_unit_for_later_stats,
+        tp.task_id,
+        tp.purchase_order,
+        tp.payment_status,
+        tp.unit_rate,
+        tp.status_changed,
+        t.title AS task_title,
+        CASE
+            WHEN t.`task-status_id`=1 THEN 'Waiting'
+            WHEN t.`task-status_id`=2 THEN 'Pending'
+            WHEN t.`task-status_id`=3 THEN 'In Progress'
+            WHEN t.`task-status_id`=4 THEN 'Complete'
+        END AS task_status,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
+        t.source_quantity,
+        t.`created-time`,
+        t.deadline,
+        IFNULL(tcd.complete_date, '') AS complete_date,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        tc.user_id,
+        IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), '') AS linguist,
+        pos.status AS po_status,
+        pos.creation_date AS po_creation_date,
+        pos.supplier AS po_supplier,
+        pos.total AS po_total
+    FROM hubspot_deals                hd
+    JOIN project_complete_dates      pcd ON hd.deal_id=pcd.deal_id
+    JOIN Projects                      p ON pcd.project_id=p.id
+    JOIN Tasks                         t ON pcd.project_id=t.project_id
+    JOIN task_type_details           ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN TaskPaids                    tp ON t.id=tp.task_id
+    JOIN Languages                    l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                    l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                    c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                    c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
+    LEFT JOIN UserPersonalInformation upi ON tc.user_id=upi.user_id
+    LEFT JOIN TaskCompleteDates       tcd ON t.id=tcd.task_id
+    LEFT JOIN zahara_purchase_orders  pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    WHERE
+        hd.deal_id=dID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insert_update_hubspot_deal`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_hubspot_deal`(

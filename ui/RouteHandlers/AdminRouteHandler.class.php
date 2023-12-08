@@ -265,6 +265,12 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:metabase')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('metabase');
+
+        $app->get(
+            '/deal/{deal_id}/report[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:deal_id_report')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('deal_id_report');
     }
 
     public function adminDashboard(Request $request, Response $response)
@@ -1545,6 +1551,15 @@ class AdminRouteHandler
     {
         require_once '/repo/metabase_reports/' . $args['report'];
         die;
+    }
+
+    public function deal_id_report(Request $request, Response $response, $args)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['pos'] = $statsDao->deal_id_report($args['deal_id']);
+        return UserRouteHandler::render('admin/deal_id_report.tpl', $response);
     }
 }
 

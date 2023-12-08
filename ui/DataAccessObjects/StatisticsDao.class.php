@@ -353,4 +353,12 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('haiti_2021_projects', '');
         return $result;
     }
+
+    public function deal_id_report($deal_id)
+    {
+        $result = LibAPI\PDOWrapper::call('deal_id_report', LibAPI\PDOWrapper::cleanse($deal_id));
+        if (empty($result)) $result = LibAPI\PDOWrapper::call('get_hubspot_deal', LibAPI\PDOWrapper::cleanse($deal_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
 }
