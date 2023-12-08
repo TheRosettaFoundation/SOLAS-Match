@@ -30,13 +30,21 @@
                            <div class ="mx-2">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
                             <div class ="mx-2">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
                             <div class ="mx-2">  <a href=""https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
-                            <div> <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a> </div>
+                            <div> <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"> </a> </div>
        
                         
                         </div>
 
                         <div>
-                            Contact Us | Terms and Conditions | Privacy Policy | TWB Community
+                            <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67">Contact Us</a>
+                             | 
+                            <a href="/static/terms/">
+                            Terms and Conditions
+                            </a> 
+                            | <a href="https://twbplatform.org/static/privacy/" class=""> Privacy Policy </a> 
+                            | <a href="https://community.translatorswb.org/" target="_blank">
+                                TWB Community                           
+                            </a>
 
                         </div>
 
