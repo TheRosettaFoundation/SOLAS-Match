@@ -26,7 +26,7 @@
 
                         <div class="d-flex"> 
                            <div class ="mx-2"> Follow Us :</div>
-                           <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /></div>
+                           <div class ="mx-2"> <a href =""https://facebook.com/translatorswithoutborders"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
                             <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
                             <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
