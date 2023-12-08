@@ -366,7 +366,7 @@
 
 
 
-                                    titleContainer.classList.add('fw-bold','fs-4', 'align-middle')
+                                    titleContainer.classList.add('fw-bold','fs-4', 'd-flex' , 'align-items-center')
                                     titleContainer.appendChild(title)
 
 

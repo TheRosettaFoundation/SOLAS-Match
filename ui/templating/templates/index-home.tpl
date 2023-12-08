@@ -541,8 +541,8 @@ a:hover{
                             <div class="d-flex justify-content-between mb-2 ">
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center bg-secondary">
-                                        <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                        <div class=" "> <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> </div>
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} </div>
+                                            <div class=" "> <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
