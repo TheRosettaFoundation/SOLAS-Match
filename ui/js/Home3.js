@@ -127,8 +127,8 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00 " +
-                    " ---" +
+                    ":00" +
+                    " " +
                     "</span>"
             ) +
                 "<div class=`m-2`>" +
