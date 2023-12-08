@@ -26,16 +26,17 @@
 
                         <div class="d-flex"> 
                            <div class ="mx-2"> Follow Us :</div>
-                           <div class ="mx-2"> <a href=""https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
-                           <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/x.svg" /></div>
-                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /></div>
-                            <div class ="mx-2">  <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /></div>
+                           <div class ="mx-2"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
+                           <div class ="mx-2">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
+                            <div class ="mx-2">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
+                            <div class ="mx-2">  <a href=""https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
+                            <div> <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a> </div>
        
                         
                         </div>
 
                         <div>
-                            Contact Us| Terms and Conditions | Privacy Policy | TWB Community
+                            Contact Us | Terms and Conditions | Privacy Policy | TWB Community
 
                         </div>
 
