@@ -35,7 +35,7 @@
                         
                         </div>
 
-                        <div>
+                        <div class="text-white">
                             <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none" target="_blank">Contact Us</a>
                              | 
                             <a href="/static/terms/" class="text-decoration-none" target="_blank">
