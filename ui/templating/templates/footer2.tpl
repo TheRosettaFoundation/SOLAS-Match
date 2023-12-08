@@ -362,7 +362,7 @@
                                     spanTitle.appendChild(spanImg);
 
                     
-                                    title.appendChild(spanTitle)
+                                    title.appendChild(spanImg)
 
 
 
