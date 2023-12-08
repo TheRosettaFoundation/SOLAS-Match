@@ -542,7 +542,7 @@ a:hover{
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center">
                                         <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                        <div class=" fs-5 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start"> ? </div> </div>
+                                        <div class=" fs-4 bg-primary border-2 border-primary opacity-75 rounded-circle d-inline-block px-2 text-white align-self-start"> ? </div> </div>
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
