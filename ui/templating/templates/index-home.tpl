@@ -518,7 +518,7 @@ a:hover{
                      <div class="">
                                     
                                         <select name="sorttype" ID="sorttype" class="form-select">
-	                                    <option value="" class ="recent" > <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}> Recently viewed  </a> </option>
+	                                    <option value="" > Recently viewed </option>
 	                                   
 	                                </select>
                             </div>
