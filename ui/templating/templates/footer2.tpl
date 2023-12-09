@@ -74,6 +74,7 @@
                         "tl":0
                     } ;
 
+                    let tasksContainer = document.querySelector('.taskPagination');
 
                     let recents = document.querySelector('.recents') ;
                     console.log('recent')
@@ -96,8 +97,12 @@
 
                     const recListner  = () =>{
 
-                        let recent = this.response ;
-                        console.log('recent listener running')
+                        let recents = this.response ;
+                        console.log('recent listener running');
+                        console.log(recents);
+
+                    
+
 	              
 
                         console.log(this.response)
@@ -111,7 +116,7 @@
                     let imgN = document.getElementById('night');
                     let navi = document.getElementById("nav") ;
                     let pages = document.querySelectorAll(".page");
-                    let tasksContainer = document.querySelector('.taskPagination');
+                   
                     let previous = document.querySelector('#previous');
                     let next = document.querySelector('#next');
 
