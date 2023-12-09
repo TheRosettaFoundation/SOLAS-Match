@@ -546,7 +546,18 @@ class TaskRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
-        return UserRouteHandler::render('task/recent-tasks.tpl', $response);
+
+        var_dump($recent_tasks) ;
+        
+        $results = json_encode(array('recent_tasks'=> $recentTasks ));
+         
+        $payload = json_encode($recentTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+
+        $response->getBody()->write($results);
+
+        return $response->withHeader('Content-Type', 'application/json');
+
+        // return UserRouteHandler::render('task/recent-tasks.tpl', $response);
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)
