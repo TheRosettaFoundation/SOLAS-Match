@@ -122,7 +122,6 @@ function renderTaskDetails() {
                         
 
                   ` +
-                    "</div>" +
                     "<span class=`fs-5 mx-1`> " +
                     h +
                     ":" +
@@ -130,6 +129,7 @@ function renderTaskDetails() {
                     ":00 " +
                     " " +
                     "</span>" +
+                    "</div>" +
                     "</div>"
             ) +
                 "<div class=`p-2`>" +
