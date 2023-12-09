@@ -129,13 +129,13 @@ function renderTaskDetails() {
                     mi +
                     ":00 " +
                     " " +
-                    "</span>"
-            ) +
-                "<div class=`p-2`>" +
-                " " +
-                Intl.DateTimeFormat().resolvedOptions().timeZone +
-                "</div>" +
-                "</div>"
+                    "</span>" +
+                    "<div class=`p-2`>" +
+                    " " +
+                    Intl.DateTimeFormat().resolvedOptions().timeZone +
+                    "</div>" +
+                    "</div>"
+            )
         );
 
         $(this).css("visibility", "visible");
