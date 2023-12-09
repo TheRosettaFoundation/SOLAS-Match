@@ -517,8 +517,8 @@ a:hover{
                 
                      <div class="">
                                     
-                                        <select name="sorttype" ID="sorttype" class="form-select">
-	                                    <option value=""  class="recents"> Recently viewed </option>
+                                        <select name="sorttype" ID="sorttype" class="form-select recents">
+	                                    <option value=""> Recently viewed </option>
 	                                   
 	                                </select>
                             </div>
