@@ -79,7 +79,7 @@
                     console.log('recent')
                     console.log(recents);
 
-                    recents.addEventListener("change", function(e){
+                    recents.addEventListener("click", function(e){
                         e.preventDefault();
 
                         console.log('selected');
