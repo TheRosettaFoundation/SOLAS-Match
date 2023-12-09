@@ -80,6 +80,9 @@
                     recents.addEventListener("change", function(e){
                         e.preventDefault();
 
+                        console.log('selected');
+                        console.log(e.target.value);
+
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", recListner);
                         req.open("GET" ,'/user/26056/recent/tasks/' , true ) ;
