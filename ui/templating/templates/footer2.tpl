@@ -74,6 +74,29 @@
                         "tl":0
                     } ;
 
+
+                    let recents = document.querySelector('.recents') ;
+
+                    recents.addEventListener("change", function(e){
+                        e.preventDefault();
+
+                        const req = new XMLHttpRequest();
+                        req.addEventListener("load", recListner);
+                        req.open("GET" ,'/user/26056/recent/tasks/' , true ) ;
+                        req.send();
+
+                    })
+
+                    const recListenr  = () =>{
+
+                        let recent = this.response ;
+                        console.log('recent listener running')
+	              
+
+                        console.log(this.response)
+
+                    }
+
                     let light = true ;
                     let theme = document.getElementById("theme");
 
