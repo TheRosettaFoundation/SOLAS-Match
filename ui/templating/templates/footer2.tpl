@@ -76,6 +76,8 @@
 
 
                     let recents = document.querySelector('.recents') ;
+                    console.log('recent')
+                    console.log(recents);
 
                     recents.addEventListener("change", function(e){
                         e.preventDefault();
