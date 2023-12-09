@@ -78,6 +78,8 @@
                     let recents = document.querySelector('.recents') ;
                     console.log('recent')
                     console.log(recents);
+                    let userId =  recents.id ;
+                    console.log(userId);
 
                     recents.addEventListener("click", function(e){
                         e.preventDefault();
