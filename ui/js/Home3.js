@@ -127,11 +127,12 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00 test " +
+                    ":00 " +
                     " " +
                     "</span>"
             ) +
                 "<div class=`mx-2`>" +
+                " " +
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>" +
                 "</div>"
