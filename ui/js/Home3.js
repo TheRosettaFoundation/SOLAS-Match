@@ -133,6 +133,7 @@ function renderTaskDetails() {
             ) +
                 "<div class=`mx-2`>" +
                 " " +
+                Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>" +
                 "</div>"
         );
