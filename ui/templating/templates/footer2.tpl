@@ -89,7 +89,7 @@
 
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", recListner);
-                        req.open("GET" ,`/user/${userId}/recent/tasks/` , true ) ;
+                        req.open("GET" ,`/user/${ userId }/recent/tasks/` , true ) ;
                         req.send();
 
                     })
