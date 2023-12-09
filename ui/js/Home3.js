@@ -123,7 +123,7 @@ function renderTaskDetails() {
 
                   ` +
                     " " +
-                    `<span class=""> ` +
+                    `<span class="mx-2"> ` +
                     h +
                     ":" +
                     mi +
