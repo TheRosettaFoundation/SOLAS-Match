@@ -88,7 +88,7 @@
                     recents.addEventListener("click", function(e){
                         e.preventDefault();
 
-
+                        console.log(`just clicked`);
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", recListner);
                         req.open("GET" ,`/user/${ userId }/recent/tasks/` , true ) ;
