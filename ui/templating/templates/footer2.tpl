@@ -279,7 +279,9 @@
 
                             if(page.id=="previous"){
                             
-                          
+                            let pageP = document.querySelector('#pagePosition');
+                            console.log(` page id  ${ pageP }`);
+
                             requestPage(previous.href);
 
                             let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
@@ -337,12 +339,7 @@
 
                             next.href = newNextUrl ;
 
-                            
-
-
-
-
-                            
+  
                             requestPage(hr);
                             }
 
