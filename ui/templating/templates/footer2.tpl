@@ -284,7 +284,7 @@
                             console.log(`id to select ${ prevP }`);
                                                         
 
-                            let pagePrev = document.getElementById(prevP);
+                            let pagePrev = document.getElementById(prevP).parentNode;
 
                             pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
