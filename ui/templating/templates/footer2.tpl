@@ -84,6 +84,7 @@
                     
                     let userId =  recents.id ;
                     console.log(` recents ${ recents }`);
+                        console.log(` userID ${ userId }`);
 
                     recents.addEventListener("click", function(e){
                         e.preventDefault();
