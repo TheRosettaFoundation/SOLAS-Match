@@ -287,10 +287,8 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let prevPosition = pagePosition.prev
-
-                            
-
+                            let prevPosition = toString(pagePosition.prev)
+                                                        
                             pagePosition.prev = parseInt(newPrevPosition);
 
                             let pagePrev = document.getElementById(prevPosition);
