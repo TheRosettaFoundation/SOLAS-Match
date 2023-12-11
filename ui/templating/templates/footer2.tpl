@@ -98,10 +98,7 @@
 
                     const recListner  = () =>{
 
-                        let recents = this.response.recent_tasks ;
-
-                        console.log(`recents : ${ recents }`);
-
+                        let recents = this.response ;
 
                         displayTasks(recents);
 
@@ -350,9 +347,11 @@
 
                     function displayTasks(pages){
 
-                    console.log(` displaying pages ${ pages }`)    
+                   
 
-                     parsed = JSON.parse(pages);                             
+                     parsed = JSON.parse(pages);   
+
+                      console.log(` displaying pages ${ parsed }`)                              
 
                                  let images = parsed.images ;
 
