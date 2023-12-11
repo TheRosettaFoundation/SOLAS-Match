@@ -260,6 +260,7 @@
                             requestPage(previous.href);
 
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
+                            console.log(newPrevPosition)
                            
                             pagePosition.prev =newPrevPosition;
 
@@ -283,6 +284,8 @@
                             requestPage(next.href);   
 
                             let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+
+                            console.log(newNextPosition);
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
