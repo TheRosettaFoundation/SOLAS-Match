@@ -98,7 +98,12 @@
 
                     const recListner  = () =>{
 
-                        let recents = this.response ;
+                        let recents = JSON.parse(this.response) ;
+
+                        console.log(`recents response ${ recents }`)
+
+
+
 
                         displayTasks(recents);
 
