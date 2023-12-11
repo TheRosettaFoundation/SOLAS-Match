@@ -73,7 +73,7 @@
                         "sl":0,
                         "tl":0,
                         "prev":1,
-                        "next":1
+                        "next":2
                     } ;
 
                     let tasksContainer = document.querySelector('.taskPagination');
