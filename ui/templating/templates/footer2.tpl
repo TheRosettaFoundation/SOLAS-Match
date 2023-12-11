@@ -100,6 +100,8 @@
 
                         let recents = this.response ;
 
+                        displayTasks(recents);
+
                     }
 
                     let light = true ;
