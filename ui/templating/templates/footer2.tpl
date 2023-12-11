@@ -150,11 +150,6 @@
 
                     })
 
-
-                    
-                  
-                 
- 
                     let selectedLanguage = document.querySelector("#sourceLanguage");
                     
                     let targetLanguage = document.querySelector("#targetLanguage");
