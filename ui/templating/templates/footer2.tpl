@@ -281,17 +281,20 @@
 
                             if(page.id=="previous"){
                             
-                            
-
+ 
                             requestPage(previous.href);
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let prevPosition = toString(pagePosition.prev) ;
+                            
 
-                            console.log(`id to select ${ prevPosition }`);
-                                                        
+                           
                             pagePosition.prev = parseInt(newPrevPosition);
+
+                            let prevP = pagePosition.prev ;
+
+                             console.log(`id to select ${ prevP }`);
+                                                        
 
                             let pagePrev = document.getElementById(prevPosition);
 
