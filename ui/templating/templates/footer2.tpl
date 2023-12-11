@@ -287,7 +287,9 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let prevPosition = toString(pagePosition.prev)
+                            let prevPosition = toString(pagePosition.prev) ;
+
+                            console.log(`id to select ${ prevPosition }`);
                                                         
                             pagePosition.prev = parseInt(newPrevPosition);
 
