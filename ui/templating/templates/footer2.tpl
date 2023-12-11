@@ -8,10 +8,11 @@
                             <div class="text-center">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
                                 <br />
-                                The platform is hosted by Azure through a donation from Microsoft<br />
-                                <a href="https://microsoft.com" target="_blank">
-                                    <img alt="Microsoft" style="border-width:0;" src="{urlFor name='home'}ui/img/Microsoft-logo_rgb_c-gray.png" />
+                                <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
+                                    <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
                                 </a>
+                                <br />
+                                
                             
                             
                              </div>
@@ -258,16 +259,11 @@
                         
                         }
 
-                
-                       
-
-                            if(page.id=="previous"){
-                            
+                        if(page.id=="previous"){                            
  
                             requestPage(previous.href);
 
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
-
                            
                             pagePosition.prev = parseInt(newPrevPosition);
 
@@ -290,7 +286,6 @@
 
                             requestPage(next.href);   
 
-                            
                             let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
@@ -298,34 +293,21 @@
                             pagePosition.next = newNextPosition;
 
                             let nextP = pagePosition.next ;
-
-                            console.log(`id to select for the next ${ nextP }`);
-                                                        
-
+                        
                             let pageNext = document.getElementById(nextP).parentNode;
 
                             pageNext.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
 
-
-                            console.log(`selected page is ${ pageNext }`)
-                            
-                            
                             next.href = newNextUrl ;
 
                             pagePosition.p = newNextPosition ;
 
-                            console.log(pagePosition);
-
-                         
-                                
-                           
+                          
 
                             } else {
 
-                            
-
-                        
+             
                             pagePosition.p = page.id;
 
                             let newPrevPosition = parseInt(pagePosition.p) > 1 ?parseInt(pagePosition.p)-1 : 1 ;
