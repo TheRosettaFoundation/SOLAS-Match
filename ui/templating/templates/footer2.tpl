@@ -5,7 +5,7 @@
                 <footer>
 
 
-                            <div class="text-center my-2">
+                            <div class="text-center mb-4">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
                                 <br />
                                 <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
@@ -23,7 +23,7 @@
 
 
 
-                      <div class="bg-primary d-flex justify-content-between p-4  flex-wrap text-white ">
+                      <div class="bg-primary d-flex justify-content-between p-4  flex-wrap text-white  mt-4">
 
                         <div class="d-flex"> 
                            <div class ="mx-2"> Follow Us :</div>
