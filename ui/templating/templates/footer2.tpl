@@ -279,8 +279,9 @@
 
                             if(page.id=="previous"){
                             
+                            console.log(`pagePosition in previous ${ pagePosition  }`)
                             let pageP = document.querySelector('#pagePosition');
-                            console.log(` page id  ${ pageP }`);
+                            console.log(` retrieved page number  ${ pageP }`);
 
                             requestPage(previous.href);
 
