@@ -291,14 +291,14 @@
                            
                             pagePosition.prev = parseInt(newPrevPosition);
 
-                            let prevP = pagePosition.prev ;
+                            let prevP = toString(pagePosition.prev) ;
 
                              console.log(`id to select ${ prevP }`);
                                                         
 
-                            let pagePrev = document.getElementById(prevPosition);
+                            let pagePrev = document.getElementById(prevP);
 
-                            console.log(`pagePosition in prev is ${ pagePosition.prev }`)
+
 
                             console.log(`selected page is ${ pagePrev }`)
                           
