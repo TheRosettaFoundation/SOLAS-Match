@@ -293,9 +293,9 @@
 
                             pagePosition.prev = parseInt(newPrevPosition);
 
-                            let pagePrev = document.getElementById(prevPosition)
+                            let pagePrev = document.getElementById(prevPosition);
 
-                            console.log(`pagePosition in prev is ${ pagePosition }`)
+                            console.log(`pagePosition in prev is ${ pagePosition.prev }`)
 
                             console.log(`selected page is ${ pagePrev }`)
                           
