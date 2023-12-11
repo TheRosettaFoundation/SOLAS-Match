@@ -125,7 +125,7 @@
 
                         let url  =`paged/${ countPage }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }` ;
 
-                        console.log(` Last url is ${ url }`);
+                     
 
                         pagePosition.p = countPage ;
 
@@ -141,8 +141,7 @@
 
                         let url  = `paged/1/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
-                        console.log(` First url is ${ url }`);
-
+                       
                         pagePosition.p = 1 ;
 
                         requestPage(url);   
@@ -265,7 +264,7 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
                            
-                            pagePosition.prev = parseInt(newPrevPosition);
+                            pagePosition.prev =newPrevPosition;
 
                             let prevP = pagePosition.prev ;
 
