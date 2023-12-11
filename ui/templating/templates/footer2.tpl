@@ -100,6 +100,9 @@
 
                         let recents = this.response ;
 
+                        console.log(recents);
+
+
                         displayTasks(recents);
 
                     }
@@ -346,6 +349,8 @@
 
 
                     function displayTasks(pages){
+
+                    console.log(` displaying pages ${ pages }`)    
 
                      parsed = JSON.parse(pages);                             
 
