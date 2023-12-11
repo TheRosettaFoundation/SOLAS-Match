@@ -174,7 +174,7 @@
                         let page = document.querySelector(".page");
                         let url = page.href ;
 
-                         pagePosition.sl = this.value ;
+                        pagePosition.sl = this.value ;
                         selectedL = this.value;
                         console.log(`Value : ${ selectedL }`) 
                         let find = url.indexOf("sl/") ;
@@ -274,37 +274,24 @@
  
                             requestPage(previous.href);
 
-                            let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
+                            let newPrevPosition = pagePosition.p > 0 ?parseInt(pagePosition.p)-1 : 1 ;
 
                            
                             pagePosition.prev = parseInt(newPrevPosition);
 
                             let prevP = pagePosition.prev ;
 
-                            console.log(`id to select ${ prevP }`);
-                                                        
-
                             let pagePrev = document.getElementById(prevP).parentNode;
 
                             pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
-
-
-                            console.log(`selected page is ${ pagePrev }`)
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
                             previous.href = newPrevUrl ;
 
                             pagePosition.p = newPrevPosition ;
-
-                            console.log(pagePosition);
-
-
-
-                            
-                            
-
+\
  
                             } else  if(page.id =="next"){
 
