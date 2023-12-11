@@ -5,7 +5,7 @@
                 <footer>
 
 
-                            <div class="text-center py-3">
+                            <div class="text-center my-2">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
                                 <br />
                                 <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
