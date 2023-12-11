@@ -68,12 +68,12 @@
                     // Variables on the theme of the site
 
                     let pagePosition = {
-                        "p":0 ,
+                        "p":1 ,
                         "tt":0,
                         "sl":0,
                         "tl":0,
-                        "prev":0,
-                        "next":0
+                        "prev":1,
+                        "next":1
                     } ;
 
                     let tasksContainer = document.querySelector('.taskPagination');
