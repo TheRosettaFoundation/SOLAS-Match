@@ -71,7 +71,9 @@
                         "p":0 ,
                         "tt":0,
                         "sl":0,
-                        "tl":0
+                        "tl":0,
+                        "prev":0,
+                        "next":0
                     } ;
 
                     let tasksContainer = document.querySelector('.taskPagination');
@@ -279,13 +281,15 @@
 
                             if(page.id=="previous"){
                             
-                            console.log(`pagePosition in previous ${ pagePosition  }`)
-                            let pageP = document.querySelector('#pagePosition');
-                            console.log(` retrieved page number  ${ pageP }`);
+                            
 
                             requestPage(previous.href);
 
-                            let newPrevPosition = pagePosition > 1 ?parseInt(pagePosition.p)-1 : 1 ;
+                            let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
+
+                            pagePosition.prev = parseInt(newPrevPosition);
+
+                            console.log(`pagePosition in prev is ${ pagePosition }`)
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
