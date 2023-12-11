@@ -25,7 +25,7 @@
                       <div class="bg-primary d-flex justify-content-between p-4  flex-wrap text-white  mt-4">
 
                         <div class="d-flex"> 
-                           <div class ="mx-2 text-white"> Follow Us :</div>
+                           <div class ="mx-2 text-decoration-none text-white"> Follow Us :</div>
                            <div class ="mx-2"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class ="mx-2">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
                             <div class ="mx-2">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
