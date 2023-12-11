@@ -316,6 +316,22 @@
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
+                            pagePosition.next = parseInt(newNextPosition);
+
+                            let nextP = pagePosition.next ;
+
+                            console.log(`id to select for the next ${ nextP }`);
+                                                        
+
+                            let pageNext = document.getElementById(nextP).parentNode;
+
+                            pageNext.classList.add('bg-primary' , 'opacity-75', 'text-primary')
+
+
+
+                            console.log(`selected page is ${ pageNext }`)
+                            
+                            
                             next.href = newNextUrl ;
 
                             pagePosition.p = newNextPosition ;
