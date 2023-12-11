@@ -2804,10 +2804,22 @@ error_log("result: $result");//(**)
         $name = $userinfo->firstName . ' ' . $userinfo->lastName;
         $firstName = $userinfo->firstName;
         $lastName = $userinfo->lastName;
-        $word_count = $print_data_by_key[0]['word_count'];
+        $words_total = $print_data_by_key[0]['word_count'];
+        $words_donated = $print_data_by_key[0]['words_donated'];
+        $words_paid = $words_total - $words_donated;
+        $hours_donated = $print_data_by_key[0]['hours_donated'];
+        $hours_paid = $print_data_by_key[0]['hours_paid'];
+        $word_words = [];
+        if ($words_donated) $word_words[] = "$words_donated words in volunteer tasks";
+        if ($hours_donated) $word_words[] = "$hours_donated hours in volunteer tasks";
+        if ($words_paid) $word_words[] = "$words_paid words in paid tasks";
+        if ($hours_paid) $word_words[] = "$hours_paid hours in paid tasks";
+        $word_words = implode(' and ', $word_words);
+        // $word_words = "$words_donated words in volunteer tasks and $hours_donated hours in volunteer tasks and $words_paid words in paid tasks and $hours_paid hours in paid tasks";
+
         $hours_words = '';
         $hours_donated_for_cert = $print_data_by_key[0]['hours_donated_for_cert'];
-        if ($hours_donated_for_cert) $hours_words = "In total, $firstName donated $hours_donated_for_cert hours in volunteering for TWB / CLEAR Global.";
+        if ($hours_donated_for_cert) $hours_words = "In total, $firstName contributed $hours_donated_for_cert hours to TWB / CLEAR Global.";
         $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
 
         $languages = [];
@@ -2887,7 +2899,7 @@ $html = <<<EOF
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase">$name</span>
         <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since.
-        <br />$firstName has donated $word_count words providing language services in: $languages.
+        <br />$firstName has contributed $words_words providing language services for: $languages.
         <br />$hours_words
         <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
         <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
@@ -2925,10 +2937,21 @@ public static function downloadletter(Request $request, Response $response, $arg
         $firstName = $userinfo->firstName;
         $firstName = $userinfo->firstName;
         $lastName = $userinfo->lastName;
-        $word_count = $print_data_by_key[0]['word_count'];
+        $words_total = $print_data_by_key[0]['word_count'];
+        $words_donated = $print_data_by_key[0]['words_donated'];
+        $words_paid = $words_total - $words_donated;
+        $hours_donated = $print_data_by_key[0]['hours_donated'];
+        $hours_paid = $print_data_by_key[0]['hours_paid'];
+        $word_words = [];
+        if ($words_donated) $word_words[] = "$words_donated words in volunteer tasks";
+        if ($hours_donated) $word_words[] = "$hours_donated hours in volunteer tasks";
+        if ($words_paid) $word_words[] = "$words_paid words in paid tasks";
+        if ($hours_paid) $word_words[] = "$hours_paid hours in paid tasks";
+        $word_words = implode(' and ', $word_words);
+
         $hours_words = '';
         $hours_donated_for_cert = $print_data_by_key[0]['hours_donated_for_cert'];
-        if ($hours_donated_for_cert) $hours_words = "In total, $firstName donated $hours_donated_for_cert hours in volunteering for TWB / CLEAR Global. ";
+        if ($hours_donated_for_cert) $hours_words = "In total, $firstName contributed $hours_donated_for_cert hours to TWB / CLEAR Global. ";
         $user_tasks = $userDao->get_user_tasks($user_id, 1000000, 0);
 
         $languages = [];
@@ -3014,7 +3037,7 @@ div.test {
 <div class="test">
 <br/><br/><span style="text-align:left">$today</span>
 <br/><br/><span style="text-align:left">This letter is to confirm that $name is a volunteer with Translators without Borders (TWB) / CLEAR Global. </span>
-<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_count words by completing $types tasks. $hours_words$firstName has delivered work in the following language combination[s]:
+<br/><br/><span style="text-align:left">Since $firstName joined in $since, $firstName has contributed $word_words by completing $types tasks. $hours_words$firstName has delivered work in the following language combination[s]:
 <ul>$languages</ul>
 Thereby, $firstName has provided linguistic support to the following nonprofit partners:
 <ul>
