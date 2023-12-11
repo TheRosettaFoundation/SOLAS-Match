@@ -274,7 +274,7 @@
  
                             requestPage(previous.href);
 
-                            let newPrevPosition = pagePosition.p > 0 ?parseInt(pagePosition.p)-1 : 1 ;
+                            let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
                            
                             pagePosition.prev = parseInt(newPrevPosition);
