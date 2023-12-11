@@ -80,16 +80,13 @@
                     let tasksContainer = document.querySelector('.taskPagination');
 
                     let recents = document.querySelector('.recents') ;
-                    console.log('recent')
-                    console.log(recents);
+                    
                     let userId =  recents.id ;
-                    console.log(userId);
+                    console.log(` user id ${ userId }`);
 
                     recents.addEventListener("click", function(e){
                         e.preventDefault();
 
-                        console.log('selected');
-                        console.log(e.target.value);
 
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", recListner);
