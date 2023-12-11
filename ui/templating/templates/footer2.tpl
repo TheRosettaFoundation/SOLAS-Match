@@ -90,17 +90,17 @@
 
                         console.log(`just clicked`);
                         const req = new XMLHttpRequest();
-                        req.addEventListener("load", recListner);
+                        req.addEventListener("load", recListner(data));
                         req.open("GET" ,`/user/${ userId }/recent/tasks/` , true ) ;
                         req.send();
 
                     })
 
-                    const recListner  = () =>{
+                    const recListner  = (data) =>{
 
-                        let recents = JSON.parse(this.response) ;
+                        let recents = JSON.parse(data) ;
 
-                        console.log(`recents response ${ this }`)
+                        console.log(`recents response ${ data }`)
 
 
 
