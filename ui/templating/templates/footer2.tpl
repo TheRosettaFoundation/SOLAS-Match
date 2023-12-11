@@ -287,9 +287,15 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
+                            let prevPosition = pagePosition.previous
+
+                            let pagePrev = document.querySelector('#prevPosition')
+
                             pagePosition.prev = parseInt(newPrevPosition);
 
                             console.log(`pagePosition in prev is ${ pagePosition }`)
+
+                            console.log(`selected page is ${ pagePrev }`)
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
