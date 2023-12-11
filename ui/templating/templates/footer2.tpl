@@ -295,7 +295,7 @@
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
-                            pagePosition.next = parseInt(newNextPosition);
+                            pagePosition.next = newNextPosition;
 
                             let nextP = pagePosition.next ;
 
