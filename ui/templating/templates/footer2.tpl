@@ -100,14 +100,6 @@
                     const recListner  = () =>{
 
                         let recents = this.response ;
-                        console.log('recent listener running');
-                        console.log(recents);
-
-                    
-
-	              
-
-                        console.log(this.response)
 
                     }
 
@@ -124,7 +116,7 @@
 
                     let last = document.querySelector(".last");
                     let first = document.querySelector(".first");
-                      let countPage = document.querySelector(".last").id
+                    let countPage = document.querySelector(".last").id
 
                     last.addEventListener('click', function(e){
 
@@ -175,9 +167,7 @@
 
                     let listPage = document.querySelectorAll('.listPage');
 
-                    console.log("listPage")
-                    console.log(listPage)
- 
+                
 
                     selectedLanguage.addEventListener("change", function(){
                     
@@ -286,17 +276,17 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            
-
                            
                             pagePosition.prev = parseInt(newPrevPosition);
 
                             let prevP = pagePosition.prev ;
 
-                             console.log(`id to select ${ prevP }`);
+                            console.log(`id to select ${ prevP }`);
                                                         
 
                             let pagePrev = document.getElementById(prevP);
+
+                            pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
 
 
