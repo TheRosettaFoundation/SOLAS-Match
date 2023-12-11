@@ -82,7 +82,7 @@
                     let recents = document.querySelector('.recents') ;
 
                     
-                   
+                    let userId =  recents.id ;
                     console.log(` recents ${ recents }`);
 
                     recents.addEventListener("click", function(e){
@@ -277,7 +277,7 @@
                             previous.href = newPrevUrl ;
 
                             pagePosition.p = newPrevPosition ;
-\
+
  
                             } else  if(page.id =="next"){
 
