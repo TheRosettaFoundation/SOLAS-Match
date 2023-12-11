@@ -342,15 +342,10 @@
                                              
                     }
 
-                    function reqListner(){
 
-                        let pages = this.response;
-                        let newData = document.createElement("div");
+                    function displayTasks(pages){
 
-                        try {
-                                 parsed = JSON.parse(pages);
-
-                             
+                     parsed = JSON.parse(pages);                             
 
                                  let images = parsed.images ;
 
@@ -499,6 +494,20 @@
                                
                                     tasksContainer.innerHTML = newDataString ;
 
+
+
+                    }
+
+                    function reqListner(){
+
+                        let pages = this.response;
+                        let newData = document.createElement("div");
+
+                        try {
+
+                                displayTasks(pages) ;
+                           
+                                  
                             } catch (error) {
                                 console.log(error);
                              
