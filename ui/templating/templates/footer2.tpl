@@ -293,7 +293,7 @@
 
                             pagePosition.prev = parseInt(newPrevPosition);
 
-                            let pagePrev = document.querySelector(`#${ prevPosition }`)
+                            let pagePrev = document.getElementById(prevPosition)
 
                             console.log(`pagePosition in prev is ${ pagePosition }`)
 
