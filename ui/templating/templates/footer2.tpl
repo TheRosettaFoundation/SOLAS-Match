@@ -287,7 +287,7 @@
 
                             let newPrevPosition = pagePosition.p > 1 ?parseInt(pagePosition.p)-1 : 1 ;
 
-                            let prevPosition = pagePosition.previous
+                            let prevPosition = pagePosition.prev
 
                             let pagePrev = document.querySelector(`# ${ prevPosition }`)
 
