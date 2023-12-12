@@ -357,7 +357,7 @@
                      try{
                                 console.log(typeof pages);
                                 parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
-                             
+                     }
                     catch(error)
                         
                         {
