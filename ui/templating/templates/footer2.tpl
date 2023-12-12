@@ -90,13 +90,14 @@
                             const fetchRecents =  await fetch(`/user/${ userId }/recent/tasks/`) ;
 
                             const data = await fetchRecents.json();
-                            console.log(data)
-
+                            return data ;
                         }    
 
                     recents.addEventListener("click", function(e){
                         
-                      fetchRecents();
+                       let recents =fetchRecents();
+
+                       displayTasks(recents);
                         
 
                     })
