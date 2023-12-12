@@ -348,13 +348,15 @@
 
                     function displayTasks(pages){
 
-                   
+                    
 
-                     parsed = JSON.parse(pages);   
+                     parsed = JSON.parse(pages); 
+
+                       
 
 
 
-                      console.log(` displaying parsed tasks ${ parsed }`)                              
+                      console.log(` displaying parsed tasks ${ gettype(parsed) }`)                              
 
                                  
                                  if(parsed.images){
