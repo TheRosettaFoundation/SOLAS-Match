@@ -354,10 +354,7 @@
 
 
                      let parsed ;   
-
                      let images;
-                     console.log("new Data")
-                     console.log(newData);
 
                      try{
                                 console.log(typeof pages);
@@ -379,7 +376,8 @@
 
                         }
 
-                      
+                        let newData = document.createElement("div");
+
                         
 
                         for (const item of parsed.tasks) {
@@ -543,8 +541,7 @@
                     function reqListner(){
 
                         let pages = this.response;
-                        let newData = document.createElement("div");
-
+                       
                         try {
 
                                 displayTasks(pages) ;
