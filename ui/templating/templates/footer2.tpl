@@ -368,7 +368,7 @@
                       console.log( typeof parsed);                              
 
                                  
-                                 if(parsed.images){
+                                 if(parsed.hasOwnProperty(images)){
                                   let images = parsed.images ;
                                  }
                                  for (const item of parsed.tasks) {
