@@ -10,7 +10,7 @@
                                 <div class="my-4 py-4">
                                 <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
                                     <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
-                                    <h1> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary">Solas</a> </h1>
+                                    <h1> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary fs-5">Solas</a> </h1>
                                 </div>
                               
                             
@@ -23,7 +23,7 @@
 
 
 
-                      <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4">
+                      <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
                         <div class="d-flex wrap"> 
                            <div class ="mx-2  text-white"> Follow Us :</div>
