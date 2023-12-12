@@ -91,10 +91,8 @@
 
                             const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
 
-                            const res =  await fetched.json() ;
-
+                            const res =    JSON.parse(fetched) ;
                             
-                       
                             console.log(`Fetched ${ res }`)
                           
                           
