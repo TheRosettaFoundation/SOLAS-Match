@@ -93,8 +93,7 @@
 
                             const res =    await fetched.json();
 
-
-                            console.log(`res ${ res }`)
+                            console.log(` typeof ${ res }`)
                             
                              res.then((data)=>{
                                 console.log(` get data ${ data }`) ;
