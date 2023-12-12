@@ -355,7 +355,7 @@
                      try{
                                 console.log(typeof pages);
                                 let parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
-                                console.log(` valid json`)
+                                console.log(parsed)
                         }
                     catch(error)
                         
