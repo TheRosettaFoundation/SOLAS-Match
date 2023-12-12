@@ -551,9 +551,9 @@ class TaskRouteHandler
 
         $results = json_encode(array('recent_tasks'=> $recentTasks ));
          
-        $payload = json_encode($recentTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+        $payload = json_encode($results, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 
-        $response->getBody()->write($results);
+        $response->getBody()->write($payload);
 
         return $response->withHeader('Content-Type', 'application/json');
 
