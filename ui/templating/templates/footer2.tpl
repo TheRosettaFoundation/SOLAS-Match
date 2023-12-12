@@ -85,20 +85,18 @@
                     console.log(` recents ${ recents }`);
                         console.log(` userID ${ userId }`);
 
-                    recents.addEventListener("click", function(e){
 
+                     async function fetchRecents(){
+                            const fetchRecents =  await fetch(`/user/${ userId }/recent/tasks/`) ;
+
+                            const data = await fetchRecents.json();
+                            console.log(data)
+
+                        }    
+
+                    recents.addEventListener("click", function(e){
                         
-                        e.preventDefault();
-                        console.log(`just clicked`); 
-                        const fetchRecents = fetch(`/user/${ userId }/recent/tasks/`) ;
-                        
-                        fetchRecents.then((res) =>{
-                            if(!res.ok) {
-                                throw new Error (`HTTP error: ${ response.status }`);
-                            } 
-                             console.log(res)
-                        })
-                       
+                      fetchRecents();
                         
 
                     })
