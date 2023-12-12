@@ -352,169 +352,168 @@
 
                      try{
 
-                            JSON.parse(pages) ;
-                            console.log(` valid json`)
-                     }catch(error){
+                                JSON.parse(pages) ;
+                                console.log(` valid json`)
+                        }
+                    catch(error)
+                        
+                        {
 
-                         console.log(` invalid json  ${ error }`)
-                     }
+                            console.log(` invalid json  ${ error }`)
+                        }
 
-                     let parsed = JSON.parse(pages); 
+                        let parsed = JSON.parse(pages); 
 
-                     console.log(pages) ;
 
-                   
+                        
+                        if(parsed.hasOwnProperty(images)){
+                        let images = parsed.images ;
+                        }
 
-                      console.log( typeof parsed);                              
+                        for (const item of parsed.tasks) {
+                    
+                            const innerDiv = document.createElement("div");
 
-                                 
-                                 if(parsed.hasOwnProperty(images)){
-                                  let images = parsed.images ;
-                                 }
-                                 for (const item of parsed.tasks) {
+                            const itemElement = document.createElement('div');
+                            itemElement.classList.add(  'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
+
+
+                        
+                        
+                            const itemNameElement = document.createElement('div');
+                            itemNameElement.classList.add('100') ;
+
+                            const itemFlexContainer = document.createElement ('id')
+                            itemFlexContainer.classList.add('d-flex','justify-content-between')
+                            const itemSubFlex =  document.createElement('div');
                             
-                                    const innerDiv = document.createElement("div");
- 
-                                    const itemElement = document.createElement('div');
-                                    itemElement.classList.add(  'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
+                            
+                        
+                            
+                            const titleContainer = document.createElement('div')
+                            const title =  document.createElement('div')
+                            title.classList.add('text-primary' ,'d-inline-block')
+                            title.textContent = item.title ;
+                            const spanTitle = document.createElement('div')
+                            const spanImg = document.createElement('img')
+                            spanImg.src = "/ui/img/question.svg"
+                            spanImg.classList.add("mx-1");
+                            spanTitle.appendChild(spanImg);
 
-    
-                                 
-                                   
-                                    const itemNameElement = document.createElement('div');
-                                    itemNameElement.classList.add('100') ;
+            
+                            title.appendChild(spanImg)
 
-                                    const itemFlexContainer = document.createElement ('id')
-                                    itemFlexContainer.classList.add('d-flex','justify-content-between')
-                                    const itemSubFlex =  document.createElement('div');
-                                    
-                                    
-                                   
-                                    
-                                    const titleContainer = document.createElement('div')
-                                    const title =  document.createElement('div')
-                                    title.classList.add('text-primary' ,'d-inline-block')
-                                    title.textContent = item.title ;
-                                    const spanTitle = document.createElement('div')
-                                    const spanImg = document.createElement('img')
-                                    spanImg.src = "/ui/img/question.svg"
-                                    spanImg.classList.add("mx-1");
-                                    spanTitle.appendChild(spanImg);
+
+
+                            titleContainer.classList.add('fw-bold','fs-4', 'd-flex' , 'align-items-center')
+                            titleContainer.appendChild(title)
+
+
+                            const badgeContainer = document.createElement('div')
+                            badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
+
+                            let taskType = "" ;
+
+                            if(item.taskType == 2){
+                                taskType = "TRANSLATION"
+                            } else if (item.taskType == 3){
+                                taskType = "REVISION"
+                            } else {
+                                taskType = "APPROVAL"
+                            }
+
+                            const badge = document.createElement('button')
+                            badge.classList.add('rounded-5', 'bg-greenish', 'border' ,'bg-greenish' , 'border-2', 'border-greenishBorder', 'border-opacity-25')
+                            const badgeSpan = document.createElement('span')
+                            badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
+                            badgeSpan.textContent = taskType
+                            badge.appendChild(badgeSpan)
+                            badgeContainer.appendChild(badge)
+
+                            const badgeW = document.createElement('button')
+                            badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25' )
+                            const badgeDiv = document.createElement('div')
+                            badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
+                            badgeDiv.textContent =`${ item.wordCount } WORDS`
+                            badgeW.appendChild(badgeDiv)
+                            badgeContainer.appendChild(badgeW)
+
+
+                            let imageId  = images[item.id]!== ""?images[item.id] : ""
+                        
+                            let image = imageId.length > 2?  
+                            `
+                            <div>
+                            
+                                <div id=""  >
+                                    <img style="width:100px ; height:100px"  src= ${ imageId }  class="image" />
+                                </div>
+                                </div>
+                
+                            
+                            ` : `<div> </div>`;
+
 
                     
-                                    title.appendChild(spanImg)
-
-
-
-                                    titleContainer.classList.add('fw-bold','fs-4', 'd-flex' , 'align-items-center')
-                                    titleContainer.appendChild(title)
-
-
-                                    const badgeContainer = document.createElement('div')
-                                    badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
-
-                                    let taskType = "" ;
-
-                                    if(item.taskType == 2){
-                                        taskType = "TRANSLATION"
-                                    } else if (item.taskType == 3){
-                                        taskType = "REVISION"
-                                    } else {
-                                        taskType = "APPROVAL"
-                                    }
-
-                                    const badge = document.createElement('button')
-                                    badge.classList.add('rounded-5', 'bg-greenish', 'border' ,'bg-greenish' , 'border-2', 'border-greenishBorder', 'border-opacity-25')
-                                    const badgeSpan = document.createElement('span')
-                                    badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                                    badgeSpan.textContent = taskType
-                                    badge.appendChild(badgeSpan)
-                                    badgeContainer.appendChild(badge)
-
-                                    const badgeW = document.createElement('button')
-                                    badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25' )
-                                    const badgeDiv = document.createElement('div')
-                                    badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
-                                    badgeDiv.textContent =`${ item.wordCount } WORDS`
-                                    badgeW.appendChild(badgeDiv)
-                                    badgeContainer.appendChild(badgeW)
-
-
-                                    let imageId  = images[item.id]!== ""?images[item.id] : ""
-                                   
-                                    let image = imageId.length > 2?  
-                                    `
-                                       <div>
-                                       
-                                        <div id=""  >
-                                            <img style="width:100px ; height:100px"  src= ${ imageId }  class="image" />
-                                        </div>
-                                        </div>
-                          
-                                    
-                                    ` : `<div> </div>`;
-
-
                             
-                                    
-                                    let languages = `<div class="mt-3 mb-3">
+                            let languages = `<div class="mt-3 mb-3">
 
-                                    <span class="mb-1  text-muted">
-                                                    Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
-                                                </span>
-                                        
-                                        
-                           
-                                    </div>
-                                       <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
-                                    
-                                    `;
-
-                                    const imageHtml =  document.createRange().createContextualFragment(image);
-                          
-
-                                    const langHtml = document.createRange().createContextualFragment(languages);
-
-                                    const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                                                        <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
-                                                        <div class="d-flex justify-content-end">
-                                                            <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
-                                                        </div>
+                            <span class="mb-1  text-muted">
+                                            Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
+                                        </span>
+                                
+                                
+                
+                            </div>
+                            <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
                             
-                                                        </div>`;
+                            `;
 
-                                    const viewHtml = document.createRange().createContextualFragment(viewTask);
-                                   
+                            const imageHtml =  document.createRange().createContextualFragment(image);
+                
 
-                                    itemSubFlex.appendChild(titleContainer);
-                                   
-                                  
-                                    itemFlexContainer.appendChild(itemSubFlex) ;
-                                    itemSubFlex.appendChild(badgeContainer);
-                                    itemSubFlex.appendChild(langHtml);
-                                    itemFlexContainer.appendChild(imageHtml);
-                                   
-                                    itemNameElement.appendChild(itemFlexContainer);
-                                   
-                                    
-                                    
-                                    itemElement.appendChild(itemNameElement);
-                                    itemElement.appendChild(viewHtml);
+                            const langHtml = document.createRange().createContextualFragment(languages);
 
+                            const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
+                                                <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
+                                                <div class="d-flex justify-content-end">
+                                                    <a class="btn btn-secondary fs-5 px-3"  href="" target="_blank">View Task</a>
+                                                </div>
+                    
+                                                </div>`;
 
-                                    innerDiv.appendChild(itemElement);
-                                    
-                                  
-                                    newData.appendChild(innerDiv) ;
-
-                                   
-                                                            
+                            const viewHtml = document.createRange().createContextualFragment(viewTask);
                         
-                                    }
+
+                            itemSubFlex.appendChild(titleContainer);
+                        
+                        
+                            itemFlexContainer.appendChild(itemSubFlex) ;
+                            itemSubFlex.appendChild(badgeContainer);
+                            itemSubFlex.appendChild(langHtml);
+                            itemFlexContainer.appendChild(imageHtml);
+                        
+                            itemNameElement.appendChild(itemFlexContainer);
+                        
                             
-                                    newDataString = newData.outerHTML;
-                               
-                                    tasksContainer.innerHTML = newDataString ;
+                            
+                            itemElement.appendChild(itemNameElement);
+                            itemElement.appendChild(viewHtml);
+
+
+                            innerDiv.appendChild(itemElement);
+                            
+                        
+                            newData.appendChild(innerDiv) ;
+
+                        
+                                                    
+                
+                            }
+                    
+                            newDataString = newData.outerHTML;
+                    
+                            tasksContainer.innerHTML = newDataString ;
 
 
 
