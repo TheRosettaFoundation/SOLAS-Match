@@ -482,9 +482,10 @@
                             <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
                             
                             `;
+                            let imageHtml;
 
                             if(image){
-                            const imageHtml =  document.createRange().createContextualFragment(image);
+                             imageHtml =  document.createRange().createContextualFragment(image);
                             }
 
                             const langHtml = document.createRange().createContextualFragment(languages);
