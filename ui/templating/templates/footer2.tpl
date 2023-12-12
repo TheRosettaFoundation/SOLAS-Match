@@ -98,7 +98,7 @@
                             }
                             return response
                         }).then((data) => {
-                            console.log(data);
+                            console.log(gettype(data));
                         })
 
                        
@@ -112,11 +112,7 @@
                     const recListner  = () =>{
 
               
-                       let recents =  this.response ;
-
-                       console.log(` recents ${ recents }`)
-
-
+                 
 
                         displayTasks(recents);
 
