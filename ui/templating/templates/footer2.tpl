@@ -86,21 +86,20 @@
                         console.log(` userID ${ userId }`);
 
 
-                     async function fetchRecents(){
+                      
+
+                    recents.addEventListener("click", function(e){
+
+                       e.preventDefault();
+
+                       async function fetchRecents(){
+
                             const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
 
                             const data = await fetched.json();
                             
-                            return data ;
-                        }    
-
-                    recents.addEventListener("click", function(e){
-                        
-                       let recents = async fetchRecents();
-
-                       console.log(`recents ${ recents }`);
-
-                       displayTasks(recents);
+                            console.log (data) ;
+                        }  
                         
 
                     })
