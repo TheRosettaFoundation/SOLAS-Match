@@ -480,8 +480,9 @@
                             
                             `;
 
+                            if(images){
                             const imageHtml =  document.createRange().createContextualFragment(image);
-                
+                            }
 
                             const langHtml = document.createRange().createContextualFragment(languages);
 
