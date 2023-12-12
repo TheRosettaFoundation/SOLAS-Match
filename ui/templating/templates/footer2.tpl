@@ -262,15 +262,6 @@
  
                             requestPage(previous.href);
 
-                            if(pagePosition.p == 1){
-
-                                previous.setAttribute("disabled" , true)
-                            } else{
-
-                                   previous.setAttribute("disabled" , false)
-
-                            }
-
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
                            
                            
@@ -328,6 +319,17 @@
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
+                            
+                            
+                            if(pagePosition.p <= 1){
+
+                                previous.setAttribute("disabled" , true)
+                            } else{
+
+                                   previous.setAttribute("disabled" , false)
+
+                            }
+
                             
                             previous.href = newPrevUrl ;
 
