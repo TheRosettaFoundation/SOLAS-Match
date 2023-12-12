@@ -320,12 +320,8 @@
                             
                             if(pagePosition.p == 1){
 
-                                previous.setAttribute("disabled")
-                            } else{
-
-                                   previous.removeAttribute("disabled")
-
-                            }
+                                previous.href= "#"
+                            } 
 
                             
                             previous.href = newPrevUrl ;
