@@ -95,28 +95,15 @@
                         fetchRecents.then((res) =>{
                             if(!response.ok) {
                                 throw new Error (`HTTP error: ${ response.status }`);
-                            }
-                            return response
-                        }).then((data) => {
-                            console.log(gettype(data));
+                            } 
+                             console.log(response)
                         })
-
                        
-                        const req = new XMLHttpRequest();
-                        req.addEventListener("load", recListner);
-                        req.open("GET" ,`/user/${ userId }/recent/tasks/` , true ) ;
-                        req.send();
+                        
 
                     })
 
-                    const recListner  = () =>{
-
-              
-                 
-
-                        displayTasks(recents);
-
-                    }
+                  
 
                     let light = true ;
                     let theme = document.getElementById("theme");
