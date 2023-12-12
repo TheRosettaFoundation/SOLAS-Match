@@ -94,10 +94,11 @@
                             const res =    await fetched.json();
 
                             console.log(res)
+
+                            displayTasks(res);
                             
-                             res.then((data)=>{
-                                console.log(` get data ${ data }`) ;
-                             })
+                            
+
                           
                           
 
