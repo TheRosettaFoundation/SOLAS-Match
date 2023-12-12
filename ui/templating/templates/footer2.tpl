@@ -245,15 +245,9 @@
                         for(var i = 0 ; i<listPage.length ; i++){
 
                             let pageC = listPage[i].firstElementChild;
-                            console.log("page clicked")
-                            console.log(pageC) 
-
-                            console.log(`page id : ${ page.id }`)
-                            console.log(`page C id : ${ pageC.id }`)
-                            
+                           
                             if(pageC.id == id ) {
 
-                             console.log('ok this is finaluu working')   
 
                             listPage[i].classList.add('bg-primary' , 'opacity-75', 'text-primary')
                             
@@ -268,8 +262,17 @@
  
                             requestPage(previous.href);
 
+                            if(pagePosition.p == 1){
+
+                                previous.setAttribute("disabled" , true)
+                            } else{
+
+                                   previous.setAttribute("disabled" , false)
+
+                            }
+
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
-                            console.log(newPrevPosition)
+                           
                            
                             pagePosition.prev =newPrevPosition;
 
