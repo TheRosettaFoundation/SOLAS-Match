@@ -348,14 +348,16 @@
 
                     function displayTasks(pages){
 
-                    
+                     let parsed = JSON.parse(pages); 
 
-                     parsed = JSON.parse(pages); 
-
-                       
+                     let jsonP = pages.json()
 
 
+                     
+                     console.log(pages) ;
 
+                     console.log(jsonP) ;
+                     
                       console.log( typeof parsed);                              
 
                                  
