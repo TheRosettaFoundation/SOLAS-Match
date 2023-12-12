@@ -288,8 +288,6 @@
 
                             let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
 
-                            console.log(newNextPosition);
-
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
                             pagePosition.next = newNextPosition;
@@ -299,7 +297,6 @@
                             let pageNext = document.getElementById(nextP).parentNode;
 
                             pageNext.classList.add('bg-primary' , 'opacity-75', 'text-primary')
-
 
                             next.href = newNextUrl ;
 
@@ -323,10 +320,10 @@
                             
                             if(pagePosition.p == 1){
 
-                                previous.setAttribute("disabled" , true)
+                                previous.setAttribute("disabled")
                             } else{
 
-                                   previous.setAttribute("disabled" , false)
+                                   previous.removeAttribute("disabled")
 
                             }
 
