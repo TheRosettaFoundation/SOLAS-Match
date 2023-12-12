@@ -367,8 +367,13 @@
                         }
 
 
+                        if(parsed.hasOwnProperty("images")){
 
-                        let images = parsed.images ;
+                              let images = parsed.images ;
+
+                        }
+
+                      
                         
 
                         for (const item of parsed.tasks) {
