@@ -22,7 +22,7 @@
 
 
 
-                      <div class="bg-primary d-flex justify-content-between p-4  flex-wrap text-white  mt-4">
+                      <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4">
 
                         <div class="d-flex wrap"> 
                            <div class ="mx-2  text-white"> Follow Us :</div>
