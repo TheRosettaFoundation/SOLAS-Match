@@ -364,7 +364,6 @@
                             console.log(` invalid json  ${ error }`)
                         }
 
-                        let parsed = JSON.parse(pages); 
 
 
                         let images = parsed.images ;
