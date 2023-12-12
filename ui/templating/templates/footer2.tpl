@@ -93,10 +93,10 @@
                         const fetchRecents = fetch(`/user/${ userId }/recent/tasks/`) ;
                         
                         fetchRecents.then((res) =>{
-                            if(!response.ok) {
+                            if(!res.ok) {
                                 throw new Error (`HTTP error: ${ response.status }`);
                             } 
-                             console.log(response)
+                             console.log(res)
                         })
                        
                         
