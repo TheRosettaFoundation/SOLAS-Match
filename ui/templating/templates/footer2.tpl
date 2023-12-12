@@ -350,7 +350,14 @@
 
                     function displayTasks(pages){
 
-                    
+                     try{
+
+                            JSON.parse(pages) ;
+                            console.log(` valid json`)
+                     }catch(error){
+
+                         console.log(` invalid json  ${ error }`)
+                     }
 
                      let parsed = JSON.parse(pages); 
 
