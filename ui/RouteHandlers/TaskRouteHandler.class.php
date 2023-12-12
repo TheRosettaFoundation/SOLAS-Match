@@ -549,7 +549,7 @@ class TaskRouteHandler
 
 
 
-        $results = json_encode(array('recent_tasks'=> $recentTasks ));
+        $results = json_encode(array('tasks'=> $recentTasks ));
          
         $payload = json_encode($results, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 

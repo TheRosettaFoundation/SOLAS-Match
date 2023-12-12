@@ -90,12 +90,9 @@
                     async function fetchRecents(){
 
                             const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
+                            displayTasks(fetched)
 
-                            const data = await fetched.json();
                             
-                            console.log(data) ;
-
-                            displayTasks(data.recent_tasks) ;
                         }  
 
 
@@ -355,10 +352,14 @@
 
                      parsed = JSON.parse(pages);   
 
-                      console.log(` displaying pages ${ parsed }`)                              
 
-                                 let images = parsed.images ;
 
+                      console.log(` displaying parsed tasks ${ parsed }`)                              
+
+                                 
+                                 if(parsed.images){
+                                  let images = parsed.images ;
+                                 }
                                  for (const item of parsed.tasks) {
                             
                                     const innerDiv = document.createElement("div");
