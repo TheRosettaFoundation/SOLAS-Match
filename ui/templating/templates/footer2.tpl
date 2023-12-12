@@ -92,6 +92,9 @@
                             const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
 
                             const res =    await fetched.json();
+
+
+                            console.log(`res ${ res }`)
                             
                              res.then((data)=>{
                                 console.log(` get data ${ data }`) ;
