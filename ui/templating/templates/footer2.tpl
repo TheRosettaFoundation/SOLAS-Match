@@ -96,7 +96,7 @@
 
                     recents.addEventListener("click", function(e){
                         
-                       let recents =fetchRecents();
+                       let recents = async fetchRecents();
 
                        console.log(`recents ${ recents }`);
 
