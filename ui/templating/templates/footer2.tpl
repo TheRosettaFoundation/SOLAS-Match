@@ -354,6 +354,8 @@
 
                      let parsed ;   
 
+                     let images;
+
                      try{
                                 console.log(typeof pages);
                                 parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
@@ -370,7 +372,7 @@
 
                         if(parsed.hasOwnProperty("images")){
 
-                              let images = parsed.images ;
+                              images = parsed.images ;
 
                         }
 
@@ -445,7 +447,7 @@
                             badgeW.appendChild(badgeDiv)
                             badgeContainer.appendChild(badgeW)
 
-
+                            if(images){
                             let imageId  = images[item.id]!== ""?images[item.id] : ""
                         
                             let image = imageId.length > 2?  
@@ -459,6 +461,7 @@
                 
                             
                             ` : `<div> </div>`;
+                            }
 
 
                     
