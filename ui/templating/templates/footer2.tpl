@@ -447,11 +447,14 @@
                             badgeW.appendChild(badgeDiv)
                             badgeContainer.appendChild(badgeW)
 
+                            let imageId;
+                            let image ;
+
                             if(images){
 
-                            let imageId  = images[item.id]!== ""?images[item.id] : ""
+                            imageId  = images[item.id]!== ""?images[item.id] : ""
                         
-                            let image = imageId.length > 2?  
+                            image = imageId.length > 2?  
                             `
                             <div>
                             
@@ -480,7 +483,7 @@
                             
                             `;
 
-                            if(images){
+                            if(image){
                             const imageHtml =  document.createRange().createContextualFragment(image);
                             }
 
