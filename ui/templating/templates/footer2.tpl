@@ -96,13 +96,7 @@
                             console.log(res)
 
                             displayTasks(res);
-                            
-                            
-
                           
-                          
-
-                            
                         }  
 
 
@@ -359,7 +353,7 @@
                     function displayTasks(pages){
 
                      try{
-
+                                console.log(typeof pages);
                                 JSON.parse(pages) ;
                                 console.log(` valid json`)
                         }
