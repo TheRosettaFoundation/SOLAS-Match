@@ -90,6 +90,7 @@
                     async function fetchRecents(){
 
                             const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
+                            console.log(`Fetched ${ fetched }`)
                             displayTasks(fetched)
 
                             
@@ -348,12 +349,10 @@
 
                     function displayTasks(pages){
 
-                     let parsed = JSON.parse(pages); 
-
                     
 
+                     let parsed = JSON.parse(pages); 
 
-                     
                      console.log(pages) ;
 
                    
