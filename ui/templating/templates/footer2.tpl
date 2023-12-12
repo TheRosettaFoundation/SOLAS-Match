@@ -354,7 +354,7 @@
 
                      let parsed ;   
 
-                     let images;
+                     let image;
 
                      try{
                                 console.log(typeof pages);
@@ -372,7 +372,7 @@
 
                         if(parsed.hasOwnProperty("images")){
 
-                              images = parsed.images ;
+                              image = parsed.images ;
 
                         }
 
@@ -447,7 +447,8 @@
                             badgeW.appendChild(badgeDiv)
                             badgeContainer.appendChild(badgeW)
 
-                            if(images){
+                            if(image){
+                                
                             let imageId  = images[item.id]!== ""?images[item.id] : ""
                         
                             let image = imageId.length > 2?  
