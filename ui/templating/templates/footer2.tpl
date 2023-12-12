@@ -352,9 +352,11 @@
 
                     function displayTasks(pages){
 
+                     let parsed ;   
+
                      try{
                                 console.log(typeof pages);
-                                let parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
+                                parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
                                 console.log(parsed)
                         }
                     catch(error)
