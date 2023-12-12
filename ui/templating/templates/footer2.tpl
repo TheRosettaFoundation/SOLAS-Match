@@ -320,8 +320,12 @@
                             
                             if(pagePosition.p == 1){
 
-                                previous.href= "#"
-                            } 
+                                previous.classList.add("disabled") ;
+                            } else {
+
+                                previous.classList.remove("disabled");
+                        
+                            }
 
                             
                             previous.href = newPrevUrl ;
