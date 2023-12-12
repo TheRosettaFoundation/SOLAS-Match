@@ -321,7 +321,7 @@
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
                             
                             
-                            if(pagePosition.p <= 1){
+                            if(pagePosition.p == 1){
 
                                 previous.setAttribute("disabled" , true)
                             } else{
