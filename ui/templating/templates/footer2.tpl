@@ -356,7 +356,7 @@
 
 
 
-                      console.log( type of parsed);                              
+                      console.log( typeof parsed);                              
 
                                  
                                  if(parsed.images){
