@@ -357,8 +357,7 @@
                      try{
                                 console.log(typeof pages);
                                 parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
-                                console.log(parsed)
-                        }
+                             
                     catch(error)
                         
                         {
@@ -366,6 +365,8 @@
                             console.log(` invalid json  ${ error }`)
                         }
 
+                        console.log("parsed");
+                        console.log(parsed);
 
                         if(parsed.hasOwnProperty("images")){
 
