@@ -2899,7 +2899,7 @@ $html = <<<EOF
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase">$name</span>
         <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since $since.
-        <br />$firstName has contributed $words_words providing language services for: $languages.
+        <br />$firstName has contributed $word_words providing language services for: $languages.
         <br />$hours_words
         <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
         <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
