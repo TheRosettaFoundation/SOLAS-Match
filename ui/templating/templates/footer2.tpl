@@ -365,10 +365,8 @@
                         let parsed = JSON.parse(pages); 
 
 
-                        
-                        if(parsed.hasOwnProperty(images)){
                         let images = parsed.images ;
-                        }
+                        
 
                         for (const item of parsed.tasks) {
                     
