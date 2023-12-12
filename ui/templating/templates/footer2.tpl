@@ -352,9 +352,12 @@
 
                     function displayTasks(pages){
 
+
                      let parsed ;   
 
                      let images;
+                     console.log("new Data")
+                     console.log(newData);
 
                      try{
                                 console.log(typeof pages);
@@ -521,7 +524,7 @@
 
                             innerDiv.appendChild(itemElement);
                             
-                        
+
                             newData.appendChild(innerDiv) ;
 
                         
