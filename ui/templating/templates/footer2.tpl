@@ -86,9 +86,21 @@
                         console.log(` userID ${ userId }`);
 
                     recents.addEventListener("click", function(e){
-                        e.preventDefault();
 
-                        console.log(`just clicked`);
+                        console.log(`just clicked`); 
+                        
+                        e.preventDefault();
+                        const fetchRecents = fetch(`/user/${ userId }/recent/tasks/`) ;
+                        fetchRecents.then((res) =>{
+                            if(!response.ok) {
+                                throw new Error (`HTTP error: ${ response.status }`);
+                            }
+                            return response.json()
+                        }).then((data) => 
+                            console.log(data);
+                        )
+
+                       
                         const req = new XMLHttpRequest();
                         req.addEventListener("load", recListner);
                         req.open("GET" ,`/user/${ userId }/recent/tasks/` , true ) ;
