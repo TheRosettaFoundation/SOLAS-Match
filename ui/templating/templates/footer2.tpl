@@ -356,7 +356,7 @@
 
 
 
-                      console.log(` displaying parsed tasks ${ gettype(parsed) }`)                              
+                      console.log( type of parsed);                              
 
                                  
                                  if(parsed.images){
