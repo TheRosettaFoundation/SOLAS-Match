@@ -87,9 +87,9 @@
 
 
                      async function fetchRecents(){
-                            const fetchRecents =  await fetch(`/user/${ userId }/recent/tasks/`) ;
+                            const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
 
-                            const data = await fetchRecents.json();
+                            const data = await fetched.json();
                             
                             return data ;
                         }    
