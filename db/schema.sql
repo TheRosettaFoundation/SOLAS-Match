@@ -10091,6 +10091,7 @@ UNION
         0 AS words_approved,
         (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         0 AS hours_donated,
+        0 AS hours_paid,
         0 AS hours_donated_for_cert,
         0 AS words_donated_for_cert,
         ROUND(
