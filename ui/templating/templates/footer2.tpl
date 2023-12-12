@@ -100,7 +100,8 @@
                             
                             console.log (data) ;
                         }  
-                        
+
+                     fetchRecents();   
 
                     })
 
