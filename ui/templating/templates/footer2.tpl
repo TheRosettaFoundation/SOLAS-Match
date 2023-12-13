@@ -482,18 +482,13 @@
                             }
 
                             
-                            let time = item.deadline.split(" ") 
-
-                            console.log(time[0])
-                            console.log(time[1])
-
+                            let time = item.deadline.split(" ")                     
                             let languages = `<div class="mt-3 mb-3">
-
                             <span class="mb-1  text-muted">
                                             Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
                                         </span>
                             </div>
-                            <div class="text-muted " > Due by <strong> <span> ${ item [0] } </span> <img alt="" class="mx-2 fs-4" src="/ui/img/clock.svg" /> <span> ${ time[1] }</span> </strong> </div>
+                            <div class="text-muted " > Due by <strong> <span> ${ time[0] } </span> <img alt="" class="mx-2 fs-4" src="/ui/img/clock.svg" /> <span> ${ time[1] }</span> </strong> </div>
                             
                             `;
                             let imageHtml;
