@@ -289,7 +289,7 @@
 
                             console.log(`count page ${ countPage }`);
 
-                            if(pagePosition.p > 7 and pagePosition < countPage){
+                            if(pagePosition.p > 7 && pagePosition.p < countPage){
 
                                 pagePosition.p++ ;
                             }
