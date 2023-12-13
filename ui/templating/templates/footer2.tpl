@@ -279,13 +279,20 @@
                             } else  if(page.id =="next"){
 
 
-                            requestPage(next.href);   
+                            requestPage(next.href);  
 
-                            let newNextPosition = parseInt(pagePosition.p)<= 298 ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+                             
+
+                            let newNextPosition = parseInt(pagePosition.p)<= countPage ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
                             
                             console.log(`new next position ${ newNextPosition }`);
 
-                              console.log(`count page ${ countPage }`);
+                            console.log(`count page ${ countPage }`);
+
+                            if(pagePosition.p > 7 and pagePosition < countPage){
+
+                                pagePosition.p++ ;
+                            }
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
