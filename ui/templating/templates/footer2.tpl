@@ -318,7 +318,7 @@
 
                             console.log(`pagePosition`);
 
-                            console.log(pagePosition) '
+                            console.log(pagePosition) 
 
                           
 
