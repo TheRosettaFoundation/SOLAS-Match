@@ -306,7 +306,7 @@
                             } else {
 
              
-                            pagePosition.p = parseIint(page.id);
+                            pagePosition.p = parseInt(page.id);
 
                             let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
 
