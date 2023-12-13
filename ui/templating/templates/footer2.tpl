@@ -278,7 +278,7 @@
 
                             requestPage(next.href);  
 
-                            let newNextPosition = parseInt(pagePosition.p)<= countPage ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+                            let newNextPosition = pagePosition.p<= countPage ?pagePosition.p+1 : pagePosition.p;  
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
@@ -286,13 +286,21 @@
 
                             let nextP = pagePosition.next ;
                             
-                           if( parseInt(pagePosition.p) <= 6){
+                           if(pagePosition.p <= 6){
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
                             pageNext.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
                            }
+
+                            if(pagePosition.p < countPage){
+
+                                console.log(`why i man `)
+
+                                pagePosition.p = pagePosition.p + 1 ;
+                            }
+
 
                             next.href = newNextUrl ;
 
