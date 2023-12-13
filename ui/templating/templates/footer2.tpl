@@ -259,12 +259,15 @@
 
                             let prevP = pagePosition.prev ;
 
-                            let pagePrev = document.getElementById(prevP).parentNode;
+                            if(pagePosition.p<=6){
 
-                            pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
+                                 let pagePrev = document.getElementById(prevP).parentNode;
 
-                          
-                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
+                                  pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
+
+                            }
+
+                         let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
                             previous.href = newPrevUrl ;
 
