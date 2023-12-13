@@ -481,7 +481,11 @@
                             ` : `<div> </div>`;
                             }
 
-                          
+                            
+                            let time = item.deadline.split(' ') '
+
+                            console.log(`time is ${ time }`) ;
+
                             let languages = `<div class="mt-3 mb-3">
 
                             <span class="mb-1  text-muted">
