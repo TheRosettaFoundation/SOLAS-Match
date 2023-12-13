@@ -292,7 +292,7 @@
 
                             console.log(pagePosition.next);
                             
-                           if(pagePosition.next >= 6){
+                           if(pagePosition.next <= 6){
 
                             console.log(`inside the something`)
                         
