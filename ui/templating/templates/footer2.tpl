@@ -486,7 +486,7 @@
 
                             console.log(typeof item.deadline)
 
-                            console.log(` ${ time }`) ;
+                            console.log(` ${ time[0] }`) ;
 
                             console.log(typeof time )
 
