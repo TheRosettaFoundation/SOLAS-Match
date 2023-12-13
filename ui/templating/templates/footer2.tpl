@@ -482,7 +482,7 @@
                             }
 
                             
-                            let time = item.deadline.split("") 
+                            let time = item.deadline.split(" ") 
 
                             console.log(` ${ time }`) ;
 
