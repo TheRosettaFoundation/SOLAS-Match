@@ -305,7 +305,7 @@
 
                             next.href = newNextUrl ;
 
-                            if(pagePosition.p => 6 && pagePosition.p < countPage){
+                            if(pagePosition.p >= 6 && pagePosition.p < countPage){
 
                                 pagePosition.p = pagePosition.p + 1 ;
                             }
