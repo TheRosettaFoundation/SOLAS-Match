@@ -484,11 +484,11 @@
                             
                             let time = item.deadline.split(" ") 
 
-                            console.log(`typeof ${ item.deadline }`)
+                            console.log(typeof item.deadline)
 
                             console.log(` ${ time }`) ;
 
-                            console.log(`typeof ${ time }`)
+                            console.log(typeof time )
 
                             let languages = `<div class="mt-3 mb-3">
 
