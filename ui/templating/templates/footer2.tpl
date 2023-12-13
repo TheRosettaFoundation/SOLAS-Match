@@ -493,7 +493,7 @@
                                             Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
                                         </span>
                             </div>
-                            <div class="text-muted " > Due by <strong> <span> ${ item [0] } </span> <img alt="" class="mx-2 fs-4" src="/ui/img/clock.svg" /> <span> ${ time [1] }</span> </strong> </div>
+                            <div class="text-muted " > Due by <strong> <span> ${ item [0] } </span> <img alt="" class="mx-2 fs-4" src="/ui/img/clock.svg" /> <span> ${ time[1] }</span> </strong> </div>
                             
                             `;
                             let imageHtml;
