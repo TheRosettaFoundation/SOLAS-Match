@@ -295,10 +295,14 @@
                             pagePosition.next = newNextPosition;
 
                             let nextP = pagePosition.next ;
+                            
+                           if(pagePosition.p < 7){
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
                             pageNext.classList.add('bg-primary' , 'opacity-75', 'text-primary')
+
+                           }
 
                             next.href = newNextUrl ;
 
