@@ -288,16 +288,9 @@
                             pagePosition.next = newNextPosition;
 
                             let nextP = pagePosition.next ;
-
-                            console.log(`next`)
-                            
-                            console.log(`${ nextP }`)
-
-                            console.log(pagePosition.next);
-                            
+                        
                            if(pagePosition.next <= 6){
-
-                            console.log(`inside the something`)
+ 
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
@@ -307,7 +300,6 @@
 
                             if(pagePosition.p < countPage){
 
-                                console.log(`why i man `)
 
                                 pagePosition.p = pagePosition.p + 1 ;
                             }
@@ -315,13 +307,7 @@
 
                             next.href = newNextUrl ;
 
-                           
-                            console.log(`pagePosition`);
-
-                            console.log(pagePosition) 
-
-                          
-
+  
                             } else {
 
              
@@ -351,7 +337,6 @@
 
                             next.href = newNextUrl ;
 
-                            console.log(pagePosition);
 
                             requestPage(hr);
 
@@ -427,6 +412,7 @@
                             const title =  document.createElement('div')
                             title.classList.add('text-primary' ,'d-inline-block')
                             title.textContent = item.title ;
+                            title.href = `task/${ item.id }/view`
                             const spanTitle = document.createElement('div')
                             const spanImg = document.createElement('img')
                             spanImg.src = "/ui/img/question.svg"
