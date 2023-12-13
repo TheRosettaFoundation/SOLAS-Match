@@ -60,8 +60,7 @@
                     </div>
  
                 </footer>    
-                  <script src="/ui/" ></script>
-
+                
                     <script>
 
                     // Variables on the theme of the site
