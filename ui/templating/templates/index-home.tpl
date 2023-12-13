@@ -617,14 +617,14 @@ a:hover{
 
                     {assign var="url_nam" value="home-paged"}
                     {if $page_count> 6}
-                        {assign var="count" value= $page_count}
+                        {assign var="count" value= 6}
                     {else}
                         {assign var="count" value= $page_count}
                     {/if}    
 
                      <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="first text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
-                    <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
+                    <li class="btn btn-outline-dark py-1 px-2 listPage" >
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
                     {for $page=1 to $count}
