@@ -284,6 +284,8 @@
 
                             console.log(`count page ${ countPage }`);
 
+                            
+
 
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
@@ -302,7 +304,7 @@
 
                             next.href = newNextUrl ;
 
-                            if(parseInt(pagePosition.p) >= 6 && parseInt(pagePosition.p) < countPage){
+                            if(parseInt(pagePosition.p) < countPage){
 
                                 pagePosition.p = parseInt(pagePosition.p) + 1 ;
                             }
