@@ -441,12 +441,16 @@ a:hover{
    
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
          <div class="mb-3 input-group">
-            <input type="text" class="form-control"> 
-            <span class="input-group-text bg-primary">
+           <form method="post" action="{urlFor name="home"}/org/search">
+            <input type="text" class="form-control" placeholder= "search organizations"> 
+
+            <span class="input-group-text bg-primary" type="submit">
 
                 <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
             
             </span>
+
+            </form>
          
          </div>
      {if isset($user)}
