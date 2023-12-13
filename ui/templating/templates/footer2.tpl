@@ -296,13 +296,7 @@
 
                             next.href = newNextUrl ;
 
-                            if(parseInt(pagePosition.p) < countPage){
-
-                                console.log(`why i man `)
-
-                                pagePosition.p = parseInt(pagePosition.p) + 1 ;
-                            }
-
+                           
                             console.log(`pagePosition`);
 
                             console.log(pagePosition) 
@@ -312,11 +306,11 @@
                             } else {
 
              
-                            pagePosition.p = page.id;
+                            pagePosition.p = parseIint(page.id);
 
-                            let newPrevPosition = parseInt(pagePosition.p) > 1 ?parseInt(pagePosition.p)-1 : 1 ;
+                            let newPrevPosition = pagePosition.p > 1 ?pagePosition.p-1 : 1 ;
 
-                            let newNextPosition = parseInt(pagePosition.p) <= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ; 
+                            let newNextPosition = pagePosition.p <= countPage? pagePosition.p+1 : pagePosition.p ; 
                           
                             let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
