@@ -226,10 +226,7 @@
                         let hr = page.href;
 
                         let id = page.id ;
-
-                      
-                      
-                    
+                
                         page.addEventListener("click", (e)=>{
 
                         e.preventDefault();
@@ -295,7 +292,7 @@
 
                             let nextP = pagePosition.next ;
                             
-                           if(pagePosition.p < 6){
+                           if( parseInt(pagePosition.p) <= 6){
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
