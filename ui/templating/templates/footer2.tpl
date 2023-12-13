@@ -280,6 +280,8 @@
 
                             pagePosition.p = newPrevPosition ;
 
+                            console.log(pagePosition);
+
  
                             } else  if(page.id =="next"){
 
@@ -302,6 +304,8 @@
 
                             pagePosition.p = newNextPosition ;
 
+                            console.log(pagePosition);
+
                           
 
                             } else {
@@ -317,6 +321,7 @@
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
                             
+
                             
                             if(pagePosition.p == 1){
 
@@ -332,8 +337,10 @@
 
                             next.href = newNextUrl ;
 
-  
+                            console.log(pagePosition);
+
                             requestPage(hr);
+
                             }
 
                         
@@ -360,7 +367,7 @@
                      let images;
 
                      try{
-                                console.log(typeof pages);
+                               
                                 parsed = typeof pages == "string" ? JSON.parse(pages) : pages ;
                      }
                     catch(error)
@@ -399,10 +406,6 @@
                             const itemFlexContainer = document.createElement ('id')
                             itemFlexContainer.classList.add('d-flex','justify-content-between')
                             const itemSubFlex =  document.createElement('div');
-                            
-                            
-                        
-                            
                             const titleContainer = document.createElement('div')
                             const title =  document.createElement('div')
                             title.classList.add('text-primary' ,'d-inline-block')
@@ -412,11 +415,8 @@
                             spanImg.src = "/ui/img/question.svg"
                             spanImg.classList.add("mx-1");
                             spanTitle.appendChild(spanImg);
-
-            
+          
                             title.appendChild(spanImg)
-
-
 
                             titleContainer.classList.add('fw-bold','fs-4', 'd-flex' , 'align-items-center')
                             titleContainer.appendChild(title)
