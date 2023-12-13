@@ -25,7 +25,7 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
-                        <div class="d-flex wrap"> 
+                        <div class="d-md-flex wrap"> 
                            <div class ="mx-2  text-white"> Follow Us :</div>
                            <div class ="mx-2"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class ="mx-2">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
@@ -81,6 +81,8 @@
 
                     
                     let userId =  recents.id ;
+
+
 
                     
                    
@@ -527,6 +529,12 @@
                             console.log(res)
 
                             displayTasks(res);
+
+                            let page = document.querySelector(".pagination") ;
+
+                            page.remove();
+                             
+                            
                           
                         }  
 
