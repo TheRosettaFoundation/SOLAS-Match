@@ -289,10 +289,7 @@
 
                             console.log(`count page ${ countPage }`);
 
-                            if(pagePosition.p > 7 && pagePosition.p < countPage){
 
-                                pagePosition.p++ ;
-                            }
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
@@ -311,6 +308,11 @@
                             next.href = newNextUrl ;
 
                             pagePosition.p = newNextPosition ;
+
+                            if(pagePosition.p > 7 && pagePosition.p < countPage){
+
+                                pagePosition.p = pagePosition.p + 1 ;
+                            }
 
                             console.log(pagePosition);
 
