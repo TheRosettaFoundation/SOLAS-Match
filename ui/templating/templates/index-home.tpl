@@ -617,7 +617,7 @@ a:hover{
 
                     {assign var="url_nam" value="home-paged"}
                     {if $page_count> 6}
-                        {assign var="count" value= 6}
+                        {assign var="count" value= $page_count}
                     {else}
                         {assign var="count" value= $page_count}
                     {/if}    

@@ -466,8 +466,7 @@
                                     <img style="width:100px ; height:100px"  src= ${ imageId }  class="image" />
                                 </div>
                                 </div>
-                
-                            
+        
                             ` : `<div> </div>`;
                             }
 
@@ -516,12 +515,9 @@
                             itemFlexContainer.appendChild(imageHtml);
                             }
                             itemNameElement.appendChild(itemFlexContainer);
-                        
-                            
-                            
+                          
                             itemElement.appendChild(itemNameElement);
                             itemElement.appendChild(viewHtml);
-
 
                             innerDiv.appendChild(itemElement);
                             
