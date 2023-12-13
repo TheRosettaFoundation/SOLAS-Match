@@ -297,7 +297,7 @@
 
                             let nextP = pagePosition.next ;
                             
-                           if(pagePosition.p < 7){
+                           if(pagePosition.p < 6){
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
@@ -311,10 +311,14 @@
 
                             if(pagePosition.p > 7 && pagePosition.p < countPage){
 
+                                 console.log("updating the page number")
+
                                 pagePosition.p = pagePosition.p + 1 ;
                             }
 
-                            console.log(pagePosition);
+                            console.log(`pagePosition`);
+
+                            console.log(pagePosition) '
 
                           
 
