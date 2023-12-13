@@ -291,6 +291,8 @@
                             console.log(`${ nextP }`)
                             
                            if(pagePosition.next >= 6){
+
+                            console.log(`inside the something`)
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
