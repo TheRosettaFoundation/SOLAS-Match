@@ -132,9 +132,7 @@
                         e.preventDefault();
 
                         let url  =`paged/${ countPage }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }` ;
-
-                     
-
+                        
                         pagePosition.p = countPage ;
 
                         requestPage(url);   
@@ -148,13 +146,10 @@
                         e.preventDefault();
 
                         let url  = `paged/1/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
-
-                       
+                     
                         pagePosition.p = 1 ;
 
                         requestPage(url);   
-
-
 
                     })
 
@@ -167,33 +162,29 @@
                     let selectTask = '' ;
 
                     let allPages = document.querySelectorAll('.page')
-
                     let listPage = document.querySelectorAll('.listPage');
-                    selectedLanguage.addEventListener("change", function(){
-                    
-                        let page = document.querySelector(".page");
-                        let url = page.href ;
+                    selectedLanguage.addEventListener("change", function(){                    
+                    let page = document.querySelector(".page");
+                    let url = page.href ;
+                    pagePosition.sl = this.value ;
+                    selectedL = this.value;
+                    console.log(`Value : ${ selectedL }`) 
+                    let find = url.indexOf("sl/") ;
+                    let findN = url.indexOf("tl") ;
+                    let firstL = url.slice(0,find) ;
+                    let firstR = url.slice(findN) ;
+                    let newUrl = firstL + `sl/${ selectedL }/`+firstR
 
-                        pagePosition.sl = this.value ;
-                        selectedL = this.value;
-                        console.log(`Value : ${ selectedL }`) 
-                        let find = url.indexOf("sl/") ;
-                        let findN = url.indexOf("tl") ;
-
-                        let firstL = url.slice(0,find) ;
-                        let firstR = url.slice(findN) ;
-                        let newUrl = firstL + `sl/${ selectedL }/`+firstR
-
-                         allPages.forEach(page=> {
-                            let  firstPart = page.href.split('/tt') ;
-                            console.log(firstPart);
-                            let endPart = newUrl.split('/tt')
-                            let finUrl = firstPart[0]+"/tt"+endPart[1]
-                            console.log(finUrl)
-                            page.href = finUrl ;
-                          })
- 
+                    allPages.forEach(page=> {
+                    let  firstPart = page.href.split('/tt') ;
+                    console.log(firstPart);
+                    let endPart = newUrl.split('/tt')
+                    let finUrl = firstPart[0]+"/tt"+endPart[1]
+                    console.log(finUrl)
+                    page.href = finUrl ;
                     })
+
+            })
 
                      targetLanguage.addEventListener("change", function(){
 
@@ -290,7 +281,9 @@
 
                             requestPage(next.href);   
 
-                            let newNextPosition = parseInt(pagePosition.p)<= countPage?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+                            let newNextPosition = parseInt(pagePosition.p)<= countPage ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
+
+                            console.log(`new next position ${ newNextPosition }`);
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
