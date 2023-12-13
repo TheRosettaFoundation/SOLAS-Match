@@ -366,7 +366,7 @@
 
                     function displayTasks(pages){
 
-
+                    
                      let parsed ;   
                      let images;
 
@@ -392,7 +392,10 @@
 
                         let newData = document.createElement("div");
 
-                        
+
+                        console.log("displaying new tasks");
+
+                                    
 
                         for (const item of parsed.tasks) {
                     
