@@ -279,14 +279,6 @@
                             requestPage(next.href);  
 
                             let newNextPosition = parseInt(pagePosition.p)<= countPage ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
-                            
-                            console.log(`new next position ${ newNextPosition }`);
-
-                            console.log(`count page ${ countPage }`);
-
-                            
-
-
 
                             let newNextUrl =  `paged/${ newNextPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`                                                
 
@@ -305,6 +297,8 @@
                             next.href = newNextUrl ;
 
                             if(parseInt(pagePosition.p) < countPage){
+
+                                console.log(`why i man `)
 
                                 pagePosition.p = parseInt(pagePosition.p) + 1 ;
                             }
