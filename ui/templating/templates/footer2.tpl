@@ -125,6 +125,8 @@
                     let first = document.querySelector(".first");
                     let countPage = document.querySelector(".last").id
 
+                    console.log(`countPage : ${ countPage }`);
+
                     last.addEventListener('click', function(e){
 
                         e.preventDefault();
@@ -435,11 +437,11 @@
                             let taskType = "" ;
 
                             if(item.taskType == 2){
-                                taskType = "TRANSLATION"
+                                taskType = "Translation"
                             } else if (item.taskType == 3){
-                                taskType = "REVISION"
+                                taskType = "Revision"
                             } else {
-                                taskType = "APPROVAL"
+                                taskType = "Approval"
                             }
 
                             const badge = document.createElement('button')
@@ -477,17 +479,12 @@
                             ` : `<div> </div>`;
                             }
 
-
-                    
-                            
+                          
                             let languages = `<div class="mt-3 mb-3">
 
                             <span class="mb-1  text-muted">
                                             Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
                                         </span>
-                                
-                                
-                
                             </div>
                             <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
                             
