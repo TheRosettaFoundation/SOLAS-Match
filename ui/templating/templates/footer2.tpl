@@ -285,8 +285,10 @@
                             pagePosition.next = newNextPosition;
 
                             let nextP = pagePosition.next ;
+
+                            console.log(`nextP ${ nextP }`);
                             
-                           if(pagePosition.p <= 6){
+                           if(nextP){
                         
                             let pageNext = document.getElementById(nextP).parentNode;
 
