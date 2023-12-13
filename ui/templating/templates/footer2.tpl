@@ -458,7 +458,7 @@
                             badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25' )
                             const badgeDiv = document.createElement('div')
                             badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
-                            badgeDiv.textContent =`${ item.wordCount } WORDS`
+                            badgeDiv.textContent =`${ item.wordCount } Words`
                             badgeW.appendChild(badgeDiv)
                             badgeContainer.appendChild(badgeW)
 
@@ -488,7 +488,7 @@
                                             Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }
                                         </span>
                             </div>
-                            <div class="text-muted " > Due by <strong>${ item.deadline } </strong> </div>
+                            <div class="text-muted " > Due by <strong>${ item.deadline } <img alt="" class="mx-2" src="/ui/img/sub.svg" /> </strong> </div>
                             
                             `;
                             let imageHtml;
@@ -508,11 +508,7 @@
                                                 </div>`;
 
                             const viewHtml = document.createRange().createContextualFragment(viewTask);
-                        
-
                             itemSubFlex.appendChild(titleContainer);
-                        
-                        
                             itemFlexContainer.appendChild(itemSubFlex) ;
                             itemSubFlex.appendChild(badgeContainer);
                             itemSubFlex.appendChild(langHtml);
