@@ -307,9 +307,7 @@
 
                             if(parseInt(pagePosition.p) >= 6 && parseInt(pagePosition.p) < countPage){
 
-                                console.log(`clicking on pageposition 6`);
-
-                                pagePosition.p = pagePosition.p + 1 ;
+                                pagePosition.p = parseInt(pagePosition.p) + 1 ;
                             }
 
                             console.log(`pagePosition`);
