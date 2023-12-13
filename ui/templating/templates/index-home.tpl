@@ -624,7 +624,7 @@ a:hover{
 
                      <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="first text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
-                    <li class="btn btn-outline-dark py-1 px-2 listPage" >
+                    <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
                     {for $page=1 to $count}
