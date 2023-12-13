@@ -482,9 +482,9 @@
                             }
 
                             
-                            let time = item.deadline.split(" ") 
+                            let time = item.deadline.split("") 
 
-                            console.log(`time is ${ time }`) ;
+                            console.log(` ${ time }`) ;
 
                             let languages = `<div class="mt-3 mb-3">
 
