@@ -281,8 +281,6 @@
 
                             requestPage(next.href);  
 
-                             
-
                             let newNextPosition = parseInt(pagePosition.p)<= countPage ?  parseInt(pagePosition.p)+1 : parseInt(pagePosition.p) ;  
                             
                             console.log(`new next position ${ newNextPosition }`);
@@ -306,8 +304,6 @@
                            }
 
                             next.href = newNextUrl ;
-
-                            pagePosition.p = newNextPosition ;
 
                             if(pagePosition.p > 7 && pagePosition.p < countPage){
 
