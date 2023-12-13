@@ -58,11 +58,9 @@
 
 
                     </div>
-
-
-
  
                 </footer>    
+                  <script src="/ui/" ></script>
 
                     <script>
 
@@ -83,22 +81,9 @@
 
                     
                     let userId =  recents.id ;
-                    console.log(` recents ${ recents }`);
-                        console.log(` userID ${ userId }`);
-
 
                     
-                    async function fetchRecents(){
-
-                            const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
-
-                            const res =    await fetched.json();
-
-                            console.log(res)
-
-                            displayTasks(res);
-                          
-                        }  
+                   
 
 
                     recents.addEventListener("click", function(e){
@@ -376,9 +361,7 @@
                             console.log(` invalid json  ${ error }`)
                         }
 
-                        console.log("parsed");
-                        console.log(parsed);
-
+  
                         if(parsed.hasOwnProperty("images")){
 
                               images = parsed.images ;
@@ -393,15 +376,16 @@
                                     
 
                         for (const item of parsed.tasks) {
+
+                            let taskType = "" ;                            
+                            let imageId;
+                            let image ;
+                            let imageHtml;
+
                     
                             const innerDiv = document.createElement("div");
-
                             const itemElement = document.createElement('div');
                             itemElement.classList.add(  'mb-4', 'bg-body-tertiary', 'p-3', 'rounded-3');
-
-
-                        
-                        
                             const itemNameElement = document.createElement('div');
                             itemNameElement.classList.add('100') ;
 
@@ -428,7 +412,7 @@
                             const badgeContainer = document.createElement('div')
                             badgeContainer.classList.add('d-flex', 'mt-2', 'mb-2')
 
-                            let taskType = "" ;
+
 
                             if(item.taskType == 2){
                                 taskType = "Translation"
@@ -453,9 +437,6 @@
                             badgeDiv.textContent =`${ item.wordCount } Words`
                             badgeW.appendChild(badgeDiv)
                             badgeContainer.appendChild(badgeW)
-
-                            let imageId;
-                            let image ;
 
                             if(images){
 
@@ -489,7 +470,7 @@
                          </div>
                             
                             `;
-                            let imageHtml;
+                      
 
                             if(image){
                              imageHtml =  document.createRange().createContextualFragment(image);
@@ -537,6 +518,19 @@
 
                     }
 
+                     async function fetchRecents(){
+
+                            const fetched =  await fetch(`/user/${ userId }/recent/tasks/`) ;
+
+                            const res =    await fetched.json();
+
+                            console.log(res)
+
+                            displayTasks(res);
+                          
+                        }  
+
+
                     function reqListner(){
 
                         let pages = this.response;
@@ -582,7 +576,7 @@
                     
                     </script>
 
-                    <script scr='../js/pagination.js'> </script>
+                    <script scr="/ui/js/pagination.js'> </script>
 
                  
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
