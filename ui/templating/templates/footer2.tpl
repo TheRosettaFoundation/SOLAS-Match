@@ -289,6 +289,8 @@
                             console.log(`next`)
                             
                             console.log(`${ nextP }`)
+
+                            console.log(pagePosition.next);
                             
                            if(pagePosition.next >= 6){
 
