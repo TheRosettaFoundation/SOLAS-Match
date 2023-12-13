@@ -484,6 +484,9 @@
                             
                             let time = item.deadline.split(" ") 
 
+                            console.log(time[0])
+                            console.log(time[1])
+
                             let languages = `<div class="mt-3 mb-3">
 
                             <span class="mb-1  text-muted">
