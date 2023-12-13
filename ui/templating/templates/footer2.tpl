@@ -311,8 +311,6 @@
 
                             if(pagePosition.p > 7 && pagePosition.p < countPage){
 
-                                 console.log("updating the page number")
-
                                 pagePosition.p = pagePosition.p + 1 ;
                             }
 
