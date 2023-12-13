@@ -305,7 +305,7 @@
 
                             next.href = newNextUrl ;
 
-                            if(pagePosition.p >= 6 && pagePosition.p < countPage){
+                            if(parseInt(pagePosition.p) >= 6 && parseInt(pagePosition.p) < countPage){
 
                                 console.log(`clicking on pageposition 6`);
 
