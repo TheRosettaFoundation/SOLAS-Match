@@ -307,6 +307,8 @@
 
                             if(pagePosition.p >= 6 && pagePosition.p < countPage){
 
+                                console.log(`clicking on pageposition 6`);
+
                                 pagePosition.p = pagePosition.p + 1 ;
                             }
 
