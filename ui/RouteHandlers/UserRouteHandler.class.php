@@ -25,7 +25,7 @@ class UserRouteHandler
             ->setName('home');
         
         $app->map(['GET', 'POST'],
-        '[/demo]',
+        '/demo[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeDemo')
         ->setName('home-demo'); 
 
