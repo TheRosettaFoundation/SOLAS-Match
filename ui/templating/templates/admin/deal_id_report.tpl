@@ -72,7 +72,7 @@
             <td>{$po['po_status']}</td>
             <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']}</td>
             <td>${$po['unit_rate']} for {$po['pricing_and_recognition_unit_text_hours']}</td>
-            <td>${$po['total_expected_cost']}</td>
+            <td>${round($po['total_expected_cost'], 2)}</td>
             <td>{$po['po_creation_date']}</td>
             <td><a href="{urlFor name="project-view" options="project_id.{$po['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['title'])}</a></td>
             <td><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
