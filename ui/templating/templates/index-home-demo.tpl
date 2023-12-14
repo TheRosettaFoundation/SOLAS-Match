@@ -547,7 +547,7 @@ a:hover{
                             <div class="d-flex justify-content-between mb-2 ">
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
-                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} -  { if ($taskN[count])} <span> $taskN[count]</span>{else} <span> 2.3.1</span> {/id}
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} -  { if ($taskN[count])} <span> $taskN[count]</span>{else} <span> 2.3.1</span> {/if}
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class="mx-1"/></div> 
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class="mx-1"/></div> 
                                         </div>
