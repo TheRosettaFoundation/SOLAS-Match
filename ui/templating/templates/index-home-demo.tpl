@@ -598,7 +598,9 @@ a:hover{
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div> Translation Project for  <span class="text-primary">Part of</span>  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)} {/if} </div>
+                                    <div>  <span class="text-primary">Part of</span>  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)} 
+                                         <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a>
+                                     {/if} </div>
                                      <div class="d-flex justify-content-end">
                                         <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
                                      </div>
