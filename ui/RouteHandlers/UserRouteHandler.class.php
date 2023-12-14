@@ -392,7 +392,7 @@ class UserRouteHandler
         }
        
 
-        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages));
+        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages) );
          
         $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 
@@ -879,6 +879,9 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
+        
+        $taskNumber = array("1.2.4" , "2.3" , "1.5.1", "1.1.3","3.4.1", "7.1");
+
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
             'activeSourceLanguages' => $activeSourceLanguages,
@@ -901,10 +904,11 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
             'page_count' => $pages,
+            'taskN' =>$taskNumber
        
         ));
         
-        return UserRouteHandler::render('index-home.tpl', $response);
+        return UserRouteHandler::render('index-home-demo.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)
