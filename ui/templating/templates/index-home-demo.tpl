@@ -539,6 +539,7 @@ a:hover{
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
+                        {assign var="task_number" value=$taskN}
                         {if $taskImages[$task_id]}
                         <div  id="task_{$task_id}">
                         {else}
@@ -547,7 +548,7 @@ a:hover{
                             <div class="d-flex justify-content-between mb-2 ">
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
-                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}- {if ($taskN[$count])} <span>  $taskN[$count] </span> {/if}
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}- {if ($task_number[$count])} <span>  $task_number[$count] </span> {/if}
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class="mx-1"/></div> 
                                         </div>
 
