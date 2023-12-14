@@ -598,7 +598,7 @@ a:hover{
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div> Translation Project for  <span class="text-primary">Part of</span>  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)} </div>
+                                    <div> Translation Project for  <span class="text-primary">Part of</span>  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)} {/if} </div>
                                      <div class="d-flex justify-content-end">
                                         <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
                                      </div>
