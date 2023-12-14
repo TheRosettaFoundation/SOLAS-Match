@@ -10877,6 +10877,7 @@ BEGIN
         ttd.type_enum,
         ttd.type_text,
         ttd.pricing_and_recognition_unit_text_hours,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`/60, t.`word-count`), 0) AS total_words,
         IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status,
         IF(tp.payment_status IS NOT NULL                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost,
         IF(tp.payment_status IS NOT NULL AND tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost_claimed,
