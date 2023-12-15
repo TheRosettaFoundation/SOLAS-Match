@@ -596,7 +596,7 @@ a:hover{
 
                                 <span> 
                                 
-                                $task->getProjectId()
+                                {$task->getProjectId()}
                                 
                                 </span>
                             {/if}
