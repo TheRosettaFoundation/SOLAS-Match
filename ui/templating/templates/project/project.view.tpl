@@ -137,7 +137,7 @@
         </thead>
         <tbody>
             <tr style="overflow-wrap: break-word;">
-                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.$project_complete_date['deal_id']"}">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
                 <td>${round($total_expected_cost, 2)}</td>
                 <td>${round($total_expected_cost_claimed, 2)}</td>
