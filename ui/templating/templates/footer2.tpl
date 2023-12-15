@@ -131,7 +131,7 @@
 
                         e.preventDefault();
 
-                        let prevPage = document.getElementById(pagePosition.p) ;
+                        let prevPage = document.getElementById(pagePosition.p).parentNode ;
 
                         console.log('previous page');
 
@@ -141,7 +141,7 @@
 
                         let firstPage = document.getElementById("1").parentNode ;
 
-                        pagePosition.p == 1 ;
+                        pagePosition.p = 1 ;
 
                         if(pagePosition.p == 1){
 
