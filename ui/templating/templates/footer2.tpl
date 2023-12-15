@@ -131,7 +131,9 @@
 
                         e.preventDefault();
 
-                        previous.classList.remove('bg-primary' , 'opacity-75', 'text-primary') ;
+                        let prevPage = document.getElementById(pagePosition.p) ;
+
+                        prevPage.classList.remove('bg-primary' , 'opacity-75', 'text-primary');
 
                         let firstPage = document.getElementById("1").parentNode ;
 
