@@ -592,7 +592,13 @@ a:hover{
                             
                             </div>
                            
-                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            {if ($task->getProjectId())}
+
+                                <span> 
+                                
+                                $task->getProjectId()
+                                
+                                </span>
                             {/if}
 
 
