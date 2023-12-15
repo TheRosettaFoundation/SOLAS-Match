@@ -42,6 +42,19 @@
 
 {if !empty($pos[0]['project_id'])}
 
+<table id="myTable1" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+    <thead>
+        <th width="50%">Total Allocated Budget for Projects</th>
+        <th width="50%">Total Expected Cost (from TOTAL below)</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>${round($pos[0]['total_allocated_budget'], 2)}</td>
+            <td>${round($pos[0]['total_total_expected_cost'], 2)}</td>
+        </tr>
+    </tbody>
+</table>
+
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
     <thead>
         <th>Linguist</th>

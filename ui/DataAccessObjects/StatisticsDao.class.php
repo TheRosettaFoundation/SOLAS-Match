@@ -358,6 +358,15 @@ class StatisticsDao extends BaseDao
     {
         $result = LibAPI\PDOWrapper::call('deal_id_report', LibAPI\PDOWrapper::cleanse($deal_id));
         if (empty($result)) $result = LibAPI\PDOWrapper::call('get_hubspot_deal', LibAPI\PDOWrapper::cleanse($deal_id));
+        else {
+            $allocated_budget = [];
+            $result[0]['total_total_expected_cost'] = 0;
+            foreach ($result as $r) {
+                $allocated_budget[$r['project_id']] = $r['allocated_budget'];
+                $result[0]['total_total_expected_cost'] += $r['total_expected_cost'];
+            }
+            $result[0]['total_allocated_budget'] = array_sum($allocated_budget);
+        }
         if (empty($result)) $result = [];
         return $result;
     }
