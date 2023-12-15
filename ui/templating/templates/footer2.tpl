@@ -133,7 +133,7 @@
 
                         previous.classList.remove('bg-primary' , 'opacity-75', 'text-primary') ;
 
-                        let firstPage = document.getElementById("1") ;
+                        let firstPage = document.getElementById("1").parentNode ;
 
                         if(pagePosition.p == 1){
 
