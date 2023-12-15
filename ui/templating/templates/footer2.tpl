@@ -131,7 +131,18 @@
 
                         e.preventDefault();
 
-                        let url  = `paged/1/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
+                        previous.className="" ;
+
+                        let firstPage = document.getElementById("1") ;
+
+                        if(pagePosition.p == 1){
+
+                             firstPage.classList.add('bg-primary' , 'opacity-75', 'text-primary')
+                        
+                        }
+
+     
+                        let url  = `paged/1/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }` 
                      
                         pagePosition.p = 1 ;
 
