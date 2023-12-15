@@ -599,7 +599,7 @@ a:hover{
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
                                     <div>  <span class="text-primary">Part of</span> <a href="/project/{$task->getProjectId()}/view"> {$task_title}</a> for<a href="/org/{$user_id}/profile"> organisation </a> 
                                          
-                                     {/if} </div>
+                                    </div>
                                      <div class="d-flex justify-content-end">
                                         <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
                                      </div>
