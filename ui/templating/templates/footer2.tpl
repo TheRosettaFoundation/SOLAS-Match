@@ -133,9 +133,15 @@
 
                         let prevPage = document.getElementById(pagePosition.p) ;
 
+                        console.log('previous page');
+
+                        console.log(prevPage);
+
                         prevPage.classList.remove('bg-primary' , 'opacity-75', 'text-primary');
 
                         let firstPage = document.getElementById("1").parentNode ;
+
+                        pagePosition.p == 1 ;
 
                         if(pagePosition.p == 1){
 
