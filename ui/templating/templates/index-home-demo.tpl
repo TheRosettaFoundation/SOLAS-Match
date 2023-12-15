@@ -545,7 +545,7 @@ a:hover{
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between mb-2 ">
+                            <div class="d-flex justify-content-between mb-2 flex-wrap ">
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
                                             <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}- {if ($task_number[$count])} <span>{$task_number[$count]}</span> {/if}
