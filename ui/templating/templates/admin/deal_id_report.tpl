@@ -18,12 +18,12 @@
         <th width="10%">HubSpot Deal ID</th>
         <th width="10%">Company Name</th>
         <th width="10%">Deal Name</th>
-        <th width="10%">Contract Start Date</th>
-        <th width="10%">Contract Expiration Date</th>
+        <th width="12%">Contract Start Date</th>
+        <th width="12%">Contract Expiration Date</th>
         <th width="10%">Deal Amount</th>
-        <th width="10%">LS Supplements (core agreement)</th>
-        <th width="10%">Supplements (add-ons)</th>
-        <th width="20%">Link to Contract</th>
+        <th width="12%">LS Supplements (core agreement)</th>
+        <th width="12%">Supplements (add-ons)</th>
+        <th width="12%">Link to Contract</th>
     </thead>
     <tbody>
         <tr>
