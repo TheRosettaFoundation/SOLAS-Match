@@ -131,7 +131,7 @@
 
                         e.preventDefault();
 
-                        previous.className="" ;
+                        previous.classList.remove('bg-primary' , 'opacity-75', 'text-primary') ;
 
                         let firstPage = document.getElementById("1") ;
 
