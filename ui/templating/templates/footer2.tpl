@@ -117,6 +117,10 @@
 
                         e.preventDefault();
 
+                        let prevPage = document.getElementById(pagePosition.p).parentNode ;
+ 
+                        prevPage.classList.remove('bg-primary' , 'opacity-75', 'text-primary');
+
                         let url  =`paged/${ countPage }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }` ;
                         
                         pagePosition.p = countPage ;
