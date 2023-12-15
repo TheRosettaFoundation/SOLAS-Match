@@ -597,7 +597,7 @@ a:hover{
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div>  <span class="text-primary">Part of { $projectAndOrgs[$task_id] }</span> <a href="/project/{$task->getProjectId()}/view"> {$task_title}</a> for<a href="/org/{$user_id}/profile"> organisation </a> 
+                                    <div>  <span class="text-primary">Part of {$projectAndOrgs[$task_id]}</span> <a href="/project/{$task->getProjectId()}/view"> {$task_title}</a> for<a href="/org/{$user_id}/profile"> organisation </a> 
                                          
                                     </div>
                                      <div class="d-flex justify-content-end">
