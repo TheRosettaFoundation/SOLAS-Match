@@ -592,19 +592,12 @@ a:hover{
                             
                             </div>
                            
-                            {if ($task->getProjectId())}
-
-                                <span> 
-                                
-                                {$task->getProjectId()}
-                                
-                                </span>
-                            {/if}
+                         
 
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div>  <span class="text-primary">Part of</span>  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)} 
+                                    <div>  <span class="text-primary">Part of</span> <a href="/project/{$task->getProjectId()}/view"> {$task_title}</a> for<a href="/org/{$user_id}/profile"> organisation </a> 
                                          
                                      {/if} </div>
                                      <div class="d-flex justify-content-end">
