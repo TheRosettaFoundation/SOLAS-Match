@@ -370,4 +370,9 @@ class StatisticsDao extends BaseDao
         if (empty($result)) $result = [];
         return $result;
     }
+
+    public function paid_projects()
+    {
+        return LibAPI\PDOWrapper::call('get_paid_project_data', '');
+    }
 }
