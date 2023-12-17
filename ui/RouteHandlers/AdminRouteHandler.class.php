@@ -1568,8 +1568,9 @@ class AdminRouteHandler
         return UserRouteHandler::render('admin/deal_id_report.tpl', $response);
     }
 
-    public function paid_projects(Request $request, Response $response, $args)
+    public function paid_projects(Request $request, Response $response)
     {
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $template_data['paid_projects'] = $statsDao->paid_projects();
