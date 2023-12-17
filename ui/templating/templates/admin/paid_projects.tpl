@@ -24,6 +24,7 @@
 <body>
     <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
         <thead>
+            <th>ID</th>
             <th>Project</th>
             <th>Deal ID</th>
             <th>Allocated Budget</th>
@@ -45,6 +46,7 @@
         <tbody>
             {foreach $paid_projects as $paid_project}
             <tr style="overflow-wrap: break-word;">
+                <td>{$paid_project['project_id']}</td>
                 <td><a href="{urlFor name="project-view" options="project_id.{$paid_project['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['title'])}</a></td>
                 <td>{if $paid_project['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$paid_project['deal_id']}"}" target="_blank">{$paid_project['deal_id']}</a>{else}{$paid_project['deal_id']}{/if}</td>
                 <td>${round($paid_project['allocated_budget'], 2)}</td>
