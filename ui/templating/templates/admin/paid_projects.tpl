@@ -13,7 +13,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
-        var table = $('#myTable').DataTable({"paging": false});
+        var table = $('#myTable').DataTable({ "paging": false });
         table.order([0, 'desc']).draw();
       });
     </script>
