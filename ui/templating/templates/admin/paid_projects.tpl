@@ -24,7 +24,7 @@
 <body>
     <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
         <thead>
-            <th width="4%"></th>
+            <th width="4%">ID</th>
             <th width="8%">Project</th>
             <th width="6%">Deal ID</th>
             <th width="6%">Allocated Budget</th>
