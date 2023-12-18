@@ -446,12 +446,11 @@
                                 taskType = "Approval"
                             }
 
-                            const badge = document.createElement('button')
+                            const badge = document.createElement('span')
                             badge.classList.add('badge', 'rounded-pill', 'bg-greenish','border', 'border-2', 'border-greenBorder', 'border-opacity-25' , 'text-white', 'text-uppercase','fs-7','font-bold')
-                            const badgeSpan = document.createElement('span')
-                            badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
-                            badgeSpan.textContent = taskType
-                            badge.appendChild(badgeSpan)
+            
+                            badge.textContent = taskType
+                            
                             badgeContainer.appendChild(badge)
 
                             const badgeW = document.createElement('button')
