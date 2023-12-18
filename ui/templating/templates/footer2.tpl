@@ -418,7 +418,7 @@
                             const itemSubFlex =  document.createElement('div');
                             const titleContainer = document.createElement('div')
                             const title =  document.createElement('div')
-                            title.classList.add('text-primary' ,'d-inline-block')
+                            title.classList.add('text-primaryDark' ,'d-inline-block')
                             title.textContent = item.title ;
                           
                             const spanTitle = document.createElement('div')
@@ -447,18 +447,15 @@
                             }
 
                             const badge = document.createElement('span')
-                            badge.classList.add('badge', 'rounded-pill', 'bg-greenish','border', 'border-2', 'border-greenBorder', 'border-opacity-25' , 'text-white', 'text-uppercase','fs-7','font-bold')
-            
+                            badge.classList.add('badge', 'rounded-pill', 'bg-greenish','border', 'border-2', 'border-greenBorder', 'border-opacity-25' , 'text-white', 'text-uppercase','fs-7','font-bold')            
                             badge.textContent = taskType
-                            
                             badgeContainer.appendChild(badge)
 
-                            const badgeW = document.createElement('button')
-                            badgeW.classList.add('ms-1', 'badge', 'rounded-pill','bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25','text-white', 'text-uppercase','fs-7','font-bold' )
-                            const badgeDiv = document.createElement('div')
-                            badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
-                            badgeDiv.textContent =`${ item.wordCount } Words`
-                            badgeW.appendChild(badgeDiv)
+                            const badgeW = document.createElement('span')
+                            badgeW.classList.add('ms-1', 'badge', 'rounded-pill','bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25','text-white','fs-7','font-bold' )
+                            
+                            badgeW.textContent =`${ item.wordCount } Words`
+        
                             badgeContainer.appendChild(badgeW)
 
                             if(images){
