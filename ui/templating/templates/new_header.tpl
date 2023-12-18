@@ -80,14 +80,19 @@
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         
-        <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow ">
+        <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow  d-flex justify-content-around">
         <div class="container py-2">
-            <a class="navbar-brand" href={urlFor name='home'}"> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
+            <div>
+
+                 <a class="navbar-brand" href={urlFor name='home'}"> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            
+            </div>
+           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-md-flex align-items-center justify-content-around ">
+            <div class="d-md-flex align-items-center justify-content-around w-100">
             <ul class="navbar-nav  d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item fw-bold">
