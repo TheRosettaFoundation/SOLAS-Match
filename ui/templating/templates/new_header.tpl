@@ -80,22 +80,21 @@
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         
-        <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow  d-flex justify-content-around">
+        <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow  d-flex ">
         <div class="container py-2">
-            <div>
+       
 
                  <a class="navbar-brand" href={urlFor name='home'}"> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
-            
-            </div>
+        
            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-md-flex align-items-center justify-content-around w-100">
             <ul class="navbar-nav  d-flex align-items-center ">
                 {if !isset($admin)}
-                    <li class="nav-item fw-bold">
+                    <li class="nav-item ms-6 fw-bold">
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
