@@ -13,18 +13,19 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
-        $('#myTable').DataTable(
+        var table = $('#myTable').DataTable(
           {
             "paging": false
           }
         );
+        table.order([1, 'desc']).draw();
       });
     </script>
 </head>
 <body>
     <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
         <thead>
-            <th width="4%">ID</th>
+            <th width="4%"></th>
             <th width="8%">Project</th>
             <th width="6%">Deal ID</th>
             <th width="6%">Allocated Budget</th>
