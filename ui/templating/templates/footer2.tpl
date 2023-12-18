@@ -51,7 +51,7 @@
 
                        
 
-                        <div class="d-flex justify-content-end mt-4  mt-md-0">
+                        <div class="d-flex justify-content-end mt-4 mx-5 mx-md-2  mt-md-0">
                              <div  class ="text-end">   <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter </div>
                             
                         </div>
