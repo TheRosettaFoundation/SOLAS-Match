@@ -447,7 +447,7 @@
                             }
 
                             const badge = document.createElement('button')
-                            badge.classList.add('rounded-5', 'bg-greenish', 'border' ,'bg-greenish' , 'border-2', 'border-greenishBorder', 'border-opacity-25')
+                            badge.classList.add('badge', 'rounded-pill', 'bg-greenish','border', 'border-2', 'border-greenBorder', 'border-opacity-25' , 'text-white', 'text-uppercase','fs-7','font-bold')
                             const badgeSpan = document.createElement('span')
                             badgeSpan.classList.add('fs-6', 'p-1', 'text-white', 'fw-bold', 'align-middle')
                             badgeSpan.textContent = taskType
@@ -455,7 +455,7 @@
                             badgeContainer.appendChild(badge)
 
                             const badgeW = document.createElement('button')
-                            badgeW.classList.add('ms-1', 'rounded-5', 'bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25' )
+                            badgeW.classList.add('ms-1', 'badge', 'rounded-pill','bg-quartenary', 'border'  , 'border-2', 'border-quartBorder', 'border-opacity-25','text-white', 'text-uppercase','fs-7','font-bold' )
                             const badgeDiv = document.createElement('div')
                             badgeDiv.classList.add('fs-6', 'p-1', 'text-white','fw-bold','align-middle')
                             badgeDiv.textContent =`${ item.wordCount } Words`
@@ -503,7 +503,7 @@
                             const langHtml = document.createRange().createContextualFragment(languages);
 
                             const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                                                <div> Translation Project for  <span class="text-primary">Translations without Borders </span></div>
+                                                <div> <span class="text-primaryDark"> {$projectAndOrgs[$task_id]}</span> </div>
                                                 <div class="d-flex justify-content-end">
                                                     <a class="btn btn-secondary fs-5 px-3"  href= "task/${ item.id }/view" target="_blank">View Task</a>
                                                 </div>
