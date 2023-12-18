@@ -24,24 +24,24 @@
 <body>
     <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
         <thead>
-            <th>ID</th>
-            <th>Project</th>
-            <th>Deal ID</th>
-            <th>Allocated Budget</th>
-            <th>Expense (Expected)</th>
-            <th>Expense (Claimed Tasks)</th>
-            <th>Remaining Budget</th>
-            <th>Margin</th>
-            <th>Expense (Completed Tasks)</th>
-            <th>Expense (Ready for payment Tasks)</th>
-            <th>Company Name</th>
-            <th>Deal Name</th>
-            <th>Contract Start Date</th>
-            <th>Contract Expiration Date</th>
-            <th>Deal Amount</th>
-            <th>LS Supplements (core agreement)</th>
-            <th>Supplements (add-ons)</th>
-            <th>Link to Contract</th>
+            <th width="4%"></th>
+            <th width="8%">Project</th>
+            <th width="6%">Deal ID</th>
+            <th width="6%">Allocated Budget</th>
+            <th width="6%">Expense (Expected)</th>
+            <th width="6%">Expense (Claimed Tasks)</th>
+            <th width="6%">Remaining Budget</th>
+            <th width="4%">Margin</th>
+            <th width="5%">Expense (Completed Tasks)</th>
+            <th width="5%">Expense (Ready for payment Tasks)</th>
+            <th width="8%">Company Name</th>
+            <th width="5%">Deal Name</th>
+            <th width="5%">Contract Start Date</th>
+            <th width="5%">Contract Expiration Date</th>
+            <th width="6%">Deal Amount</th>
+            <th width="5%">LS Supplements (core agreement)</th>
+            <th width="5%">Supplements (add-ons)</th>
+            <th width="5%">Link to Contract</th>
         </thead>
         <tbody>
             {foreach $paid_projects as $paid_project}

@@ -10901,6 +10901,41 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_paid_project_data`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_project_data`()
+BEGIN
+    SELECT
+        pcd.project_id,
+        p.title,
+        pcd.deal_id,
+        pcd.allocated_budget,
+        SUM(                           IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)    ) AS total_expected_cost,
+        SUM(IF(tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_claimed,
+        SUM(IF(t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_complete,
+        SUM(IF(t.`task-status_id`=4 AND tp.payment_status NOT IN ('Unsettled', 'Pending documentation')
+                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_ready,
+        hd.company_name,
+        hd.company_id,
+        hd.deal_name,
+        hd.start_date,
+        hd.expiration_date,
+        hd.deal_total,
+        hd.deal_partnership,
+        hd.deal_supplements,
+        hd.link_to_contract
+    FROM      Projects p
+    JOIN      project_complete_dates pcd ON p.id=pcd.project_id
+    JOIN      Tasks                    t ON p.id=t.project_id
+    JOIN      TaskPaids               tp ON t.id=tp.task_id
+    JOIN      task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
+    LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
+    GROUP BY p.id
+    ORDER BY pcd.project_id DESC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_zahara_purchase_orders`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_zahara_purchase_orders`()
