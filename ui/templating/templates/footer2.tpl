@@ -26,11 +26,11 @@
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
                         <div class="d-md-flex wrap"> 
-                           <div class ="mx-md-2 mx-xs-5 text-white"> Follow Us :</div>
-                           <div class ="mx-md-2  mx-xs-5 mt-xs-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
-                           <div class ="mx-md-2 mx-xs-5 mt-xs-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
-                            <div class ="mx-md-2 mx-xs-5 mt-xs-4 mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
-                            <div class ="mx-md-2 mx-xs-5 mt-xs-4 mt-md-0">  <a href=""https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
+                           <div class ="mx-md-2 mx-sm-5 text-white"> Follow Us :</div>
+                           <div class ="mx-md-2  ml-sm-5 mt-sm-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
+                           <div class ="mx-md-2 ml-sm-5 mt-sm-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
+                            <div class ="mx-md-2 ml-sm-5 mt-sm-4 mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
+                            <div class ="mx-md-2 ml-sm-5 mt-sm-4 mt-md-0">  <a href=""https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
                            
        
                         
