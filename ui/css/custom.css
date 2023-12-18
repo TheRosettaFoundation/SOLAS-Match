@@ -8983,6 +8983,10 @@ textarea.form-control-lg {
   font-size: 0.75rem !important;
 }
 
+.fs-7 {
+  font-size: 0.5rem !important;
+}
+
 .fst-italic {
   font-style: italic !important;
 }
