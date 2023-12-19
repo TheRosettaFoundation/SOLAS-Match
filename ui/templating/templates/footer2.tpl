@@ -385,7 +385,7 @@
 
                         }
 
-                      
+                        let projects = parsed.projects ;
 
                         console.log(`parsed projects`) ;
 
