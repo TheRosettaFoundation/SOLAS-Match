@@ -82,7 +82,7 @@
                     console.log(`search`);
                     console.log(search) ;
 
-                    search.addEventListener("change" , function (e)=>{
+                    search.addEventListener("input" , function (e) {
                         console.log(e)
                     })
 
