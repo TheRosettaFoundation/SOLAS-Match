@@ -342,7 +342,7 @@ h3{
 <br/>
 
 
-<div class="row-fluid d-flex flex-row justify-content-between flex-wrap" id="learnmore">
+<div class="row-fluid d-flex flex-row justify-content-between" id="learnmore">
     <div >
     <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
    
