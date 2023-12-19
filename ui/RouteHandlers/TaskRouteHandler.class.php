@@ -557,7 +557,6 @@ class TaskRouteHandler
 
         return $response->withHeader('Content-Type', 'application/json');
 
-        // return UserRouteHandler::render('task/recent-tasks.tpl', $response);
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)

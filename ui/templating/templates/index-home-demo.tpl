@@ -547,15 +547,15 @@ a:hover{
                         {/if}
                             <div class="d-flex justify-content-between mb-2 flex-wrap ">
                                 <div class="">
-                                         <div class="fw-bold fs-4  d-flex align-items-center ">
-                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
+                                        <div class="fw-bold fs-4  d-flex align-items-center ">
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} {if ($task_number[$count])} <span> - {$task_number[$count]}</span> {/if}
+                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class=" me-1"/></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
-                                            <span class=" badge rounded-pill bg-greenish border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
+                                            <button class="badge rounded-pill bg-greenish border border-2  border-greenBorder border-opacity-25">  <span class="fs-6 p-1 text-white fw-bold align-middle">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
-                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} Words </span>
+                                                <button type="button" class="  ms-1 badge rounded-pill bg-quartenary border border-2 border-quartBorder border-opacity-25 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
                                         </div>
