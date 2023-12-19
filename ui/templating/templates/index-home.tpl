@@ -621,7 +621,7 @@ a:hover{
             </div>
         </div>
 
-            <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination">
+            <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination mt-1 mt-md-0">
 
                     {assign var="url_nam" value="home-paged"}
                     {if $page_count> 6}
