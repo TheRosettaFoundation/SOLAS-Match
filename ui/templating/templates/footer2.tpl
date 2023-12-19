@@ -506,9 +506,10 @@
                             }
 
                             const langHtml = document.createRange().createContextualFragment(languages);
+                            let projectItem  = projects? projects[item.id] : ""
 
                             const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                                                <div> <span class="text-primaryDark"> ${ projects[item.id]} </span> </div>
+                                                <div> <span class="text-primaryDark"> ${ projectItem } </span> </div>
                                                 <div class="d-flex justify-content-end">
                                                     <a class="btn btn-secondary fs-5 px-3"  href= "task/${ item.id }/view" target="_blank">View Task</a>
                                                 </div>
