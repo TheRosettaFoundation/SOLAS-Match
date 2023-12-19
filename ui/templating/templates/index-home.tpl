@@ -552,7 +552,7 @@ a:hover{
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
                                             <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class="mx-1"/></div> 
+                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class=""/></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
