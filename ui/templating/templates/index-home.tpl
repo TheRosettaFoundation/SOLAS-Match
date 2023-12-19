@@ -442,7 +442,7 @@ a:hover{
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 class="d-flex""> 
+        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 "> 
          
             <div class="col-auto">
 
