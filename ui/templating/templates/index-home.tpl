@@ -444,7 +444,7 @@ a:hover{
 
         <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 class="d-flex""> 
          
-         <div class="mb-3 input-group">
+         <div class="input-group">
          
             <input type="text" class="form-control" name="search_name" id="search_name" placeholder= "search organizations"> 
 
