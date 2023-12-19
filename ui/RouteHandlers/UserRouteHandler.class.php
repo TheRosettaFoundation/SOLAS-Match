@@ -434,7 +434,7 @@ class UserRouteHandler
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
         
-
+       
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -541,6 +541,7 @@ class UserRouteHandler
         $projectAndOrgs = array();
         $discourse_slug = array();
         $taskImages = array();
+        $memsource_user ;
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksC /5);
@@ -582,6 +583,7 @@ class UserRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
+                $memsource_user = $projectDao->get_memsource_task($taskId);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -634,7 +636,7 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
-
+        var_dump($memsource_user) ;
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
             'activeSourceLanguages' => $activeSourceLanguages,
