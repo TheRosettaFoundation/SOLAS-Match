@@ -76,37 +76,9 @@
 
                     let tasksContainer = document.querySelector('.taskPagination');
 
-
-                    let search = document.getElementById("search_org") ;
-
-               
-
-                    
- ;
-                    console.log(`search`);
-                    console.log(search) ;
-
-                    let orgName ;
-
-
-
-                    search.addEventListener("input" , function (e) {
-
-                        orgName = e.target.value ;
-                        
-                     
-                    })
-
                     let recents = document.querySelector('.recents') ;
-
-                    
-                    let userId =  recents.id ;
-
-
-
-                    
                    
-
+                    let userId =  recents.id ;
 
                     recents.addEventListener("click", function(e){
 
