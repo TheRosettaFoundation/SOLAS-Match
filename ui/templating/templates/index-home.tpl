@@ -442,13 +442,13 @@ a:hover{
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-        <form method='post' action="{urlFor name="create-org"}" class='well' accept-charset="utf-8"> 
+        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8"> 
          
          <div class="mb-3 input-group">
          
             <input type="text" class="form-control" id="search_org" placeholder= "search organizations"> 
 
-            <span class="input-group-text bg-primary" type="submit" name="submit" value="createOrg">
+            <span class="input-group-text bg-primary" type="submit" name="submit">
                 
                       <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 
