@@ -475,7 +475,9 @@
                             }
 
                             
-                            let time = item.deadline.split(" ")                     
+                            let time = item.deadline.split(" ")  ;
+
+                                         
                             let languages = `<div class="mt-3 mb-3">
                             <span class="mb-1  text-muted">
                                             Languages:  ${ item.sourceLocale.languageName } -  ${ item.targetLocale.languageName }

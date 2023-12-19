@@ -202,7 +202,7 @@ a:hover{
                                 <div class="span4"></div>
                                 <div class="span4"></div>
                                     <div  class="">
-                                        <h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
+                                        <h4  >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
                                     </div>
                             </div>                      
                                 <p></p>                           
@@ -329,7 +329,7 @@ a:hover{
 <br/>
 
 
-<div class="row-fluid d-flex flex-row justify-content-between" id="learnmore">
+<div class="row-fluid d-flex flex-row justify-content-between flex-wrap" id="learnmore">
     <div >
     <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
    
