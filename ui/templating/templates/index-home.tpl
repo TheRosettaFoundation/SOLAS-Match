@@ -630,18 +630,18 @@ a:hover{
                         {assign var="count" value= $page_count}
                     {/if}    
 
-                     <li class="mx-1 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
+                     <li class="mx-1 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0 listPage" >
                             <a class="first text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
-                    <li class="mx-1  border border-dark-subtle rounded-3 py-1 px-2 listPage" >
+                    <li class="mx-1  border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2 listPage" >
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
                     {for $page=1 to $count}
-                            <li class="mx-1  border border-dark-subtle rounded-3 py-1 px-2 listPage">
+                            <li class="mx-1  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                     {/for}
-                    <li class="mx-1  border border-dark-subtle rounded-3 py-1 px-2 listPage ">
+                    <li class="mx-1  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage ">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
-                     <li class="mx-1  border border-dark-subtle rounded-3 py-1 px-2 listPage" >
+                     <li class="mx-1  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" >
                             <a class="last text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
             </ul>
 
