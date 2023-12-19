@@ -369,6 +369,7 @@ class UserRouteHandler
             $projectName = $project->getTitle();
             $orgUri = "{$siteLocation}org/{$org_id}/profile";
             $orgName = $org->getName();
+
             $projectAndOrgs[$taskId] = sprintf(
                 Lib\Localisation::getTranslation('common_part_of_for'),
                 $projectUri,
@@ -376,6 +377,8 @@ class UserRouteHandler
                 $orgUri,
                 htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
             );
+
+            
             $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
             $taskImages[$taskId] = '';
@@ -385,7 +388,9 @@ class UserRouteHandler
 
            
         }
+        
 
+        var_dump($projectAndOrgs);
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
