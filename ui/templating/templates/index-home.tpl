@@ -444,9 +444,9 @@ a:hover{
 
         <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 "> 
          
-            <div class="d-flex mb-3 border border-1 border-dark-subtle">
+            <div class="d-flex mb-3 ">
 
-             <input type="text" class="rounded-start-2 border-0 p-2" name="search_name" id="search_name" placeholder= "search organizations"> 
+             <input type="text" class="rounded-start-2 border border-1 border-dark-subtle p-2" name="search_name" id="search_name" placeholder= "search organizations"> 
                 <button class="border-0 bg-primary" type="submit" name="submit">
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
