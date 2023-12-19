@@ -445,7 +445,7 @@ a:hover{
             <input type="text" class="form-control" placeholder= "search organizations"> 
 
             <span class="input-group-text bg-primary">
-                <a href="{urlFor name='home'}org/search">
+                <a href="{urlFor name='home' options="org_name."test"}org/search">
                       <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 
                 </a>

@@ -17,7 +17,7 @@ class OrgRouteHandler
         global $app;
 
         $app->map(['GET', 'POST'],
-            '/org/create[/]',
+            '/org//{org_name}/create[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:createOrg')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
             ->setName('create-org');
