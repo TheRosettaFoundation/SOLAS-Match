@@ -21,11 +21,21 @@ h3{
     font-size:16px ;
 }
 
+h3{
+
+    font-size:12px ;
+}
+
 @media (min-width: 900px ){
 
     h3{
         font-size: 24px
-    }
+    } ,
+
+    h4{
+
+    font-size:16px ;
+}
 }
 
 .twbheader{
