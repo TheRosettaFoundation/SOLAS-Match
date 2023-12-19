@@ -161,9 +161,9 @@ a:hover{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left">
-                        <h2 class="fs-7 fs-md-5" >We provide growth opportunities for<br/> our community members</h2>
+                        <h5 >We provide growth opportunities for<br/> our community members</h2>
                         <br/>
-                        <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <h5>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
                         <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
@@ -172,10 +172,9 @@ a:hover{
                         <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                     <div class="carousel-caption">
-                        <div class="row-fluid">
-                        <div class="span4"></div>
-                        <div class="span4"></div>
-                        <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
+                        <div class="row-fluid d-flex justify-content-center flex-wrap">
+                 
+                        <div  class=""><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
                     </div>
                       <p></p>
                     </div>
