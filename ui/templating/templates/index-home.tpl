@@ -525,7 +525,7 @@ a:hover{
                     {if isset($topTasks) && count($topTasks) > 0}
             <div class="d-flex justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
                 
-                     <div class="">
+                     <div class="mt-2 mt-md-0">
                                     
                                         <select name="sorttype"  class="form-select recents" id="{$user_id}">
 	                                    <option value=""> Recently viewed </option>
