@@ -21,21 +21,13 @@ h3{
     font-size:16px ;
 }
 
-h3{
 
-    font-size:12px ;
-}
 
 @media (min-width: 900px ){
 
     h3{
         font-size: 24px
-    } ,
-
-    h4{
-
-    font-size:16px ;
-}
+    } 
 }
 
 .twbheader{
@@ -196,7 +188,7 @@ h3{
                     <div class="carousel-caption">
                         <div class="row-fluid d-flex justify-content-center flex-wrap">
                  
-                        <div  class=""><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
+                        <div  class=""><h3 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h3></div>
                     </div>
                       <p></p>
                     </div>
@@ -223,7 +215,7 @@ h3{
                                 <div class="span4"></div>
                                 <div class="span4"></div>
                                     <div  class="">
-                                        <h4  >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
+                                        <h3>“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h3>
                                     </div>
                             </div>                      
                                 <p></p>                           
@@ -248,7 +240,7 @@ h3{
                         <div class="row-fluid">
                             <div class="span4"></div>
                             <div class="span4"></div>
-                            <div  class="span4 pull-right"><h4 >“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h4></div>
+                            <div  class="span4 pull-right"><h3>“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h3></div>
                         </div>
                       
                         <p></p>
@@ -277,7 +269,7 @@ h3{
                             <div class="span4"></div>
                             <div class="span4"></div>
                             <div  class="span4 pull-right">
-                            <h4 >“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h4>
+                            <h3>“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h3>
                             </div>
                         </div>                  
                         <p></p>
