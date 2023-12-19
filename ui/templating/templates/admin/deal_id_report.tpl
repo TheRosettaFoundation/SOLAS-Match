@@ -18,9 +18,8 @@
 
 <table id="myTable0" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
     <thead>
-        <th width="10%">HubSpot Deal ID</th>
-        <th width="10%">Company Name</th>
-        <th width="10%">Deal Name</th>
+        <th width="15%">Company Name</th>
+        <th width="15%">Deal Name</th>
         <th width="12%">Contract Start Date</th>
         <th width="12%">Contract Expiration Date</th>
         <th width="10%">Deal Amount</th>
@@ -30,7 +29,6 @@
     </thead>
     <tbody>
         <tr>
-            <td>{$pos[0]['deal_id']}</td>
             <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($pos[0]['company_name'])}</td>
             <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($pos[0]['deal_name'])}</td>
             <td>{$pos[0]['start_date']}</td>
