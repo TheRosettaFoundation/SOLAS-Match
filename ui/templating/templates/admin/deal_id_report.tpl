@@ -14,6 +14,7 @@
 {if !empty($pos)}
 
 <h2 style="text-align:center;">All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
+<br />
 
 <table id="myTable0" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
     <thead>
