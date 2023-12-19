@@ -98,8 +98,6 @@ class OrgRouteHandler
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        var_dump($request) ;
-
         $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
         $org2->setFacebook('');
         $org2->setLinkedin('');
@@ -1867,8 +1865,12 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
+
+
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
+
+            var_dump($post);
             
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
