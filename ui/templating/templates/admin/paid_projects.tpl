@@ -19,6 +19,8 @@
     </script>
 </head>
 <body>
+    <h2>All Paid Projects (with at least one paid task)</h2>
+
     <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
         <thead>
             <th width="4%"></th>
