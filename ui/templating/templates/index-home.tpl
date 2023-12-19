@@ -446,7 +446,7 @@ a:hover{
          
          <div class="mb-3 input-group">
          
-            <input type="text" class="form-control" id="search_org" placeholder= "search organizations"> 
+            <input type="text" class="form-control" name="search_name" id="search_name" placeholder= "search organizations"> 
 
             <button class="input-group-text bg-primary" type="submit" name="submit">
                 
