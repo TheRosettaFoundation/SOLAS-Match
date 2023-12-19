@@ -16,6 +16,18 @@ a:hover{
     color:#143878 !important;
 }
 
+h3{
+
+    font-size:16px ;
+}
+
+@media (min-width: 900px ){
+
+    h3{
+        font-size: 8px
+    }
+}
+
 .twbheader{
     color:#e8991c !important;
 }
@@ -161,9 +173,9 @@ a:hover{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left">
-                        <div class=" fs-5 fs-md-3" >We provide growth opportunities for<br/> our community members</div>
+                        <h3 >We provide growth opportunities for<br/> our community members</h3>
                         <br/>
-                        <div  class=" fs-5 fs-md-3">Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <h3  class=" fs-5 fs-md-3">Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
                         <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
