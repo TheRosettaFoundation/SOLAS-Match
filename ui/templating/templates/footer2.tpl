@@ -87,7 +87,7 @@
                     search.addEventListener("input" , function (e) {
 
                         orgName = e.target.value ;
-                        console.log(`orgName`) ;
+                        console.log(orgName) ;
                     })
 
                     let recents = document.querySelector('.recents') ;
