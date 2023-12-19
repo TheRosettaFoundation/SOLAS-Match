@@ -24,7 +24,7 @@ h3{
 @media (min-width: 900px ){
 
     h3{
-        font-size: 8px
+        font-size: 14px
     }
 }
 
