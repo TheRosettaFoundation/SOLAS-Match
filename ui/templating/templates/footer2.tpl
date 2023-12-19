@@ -366,6 +366,7 @@
                     
                      let parsed ;   
                      let images;
+                     let projects;
 
                      try{
                                
@@ -385,7 +386,13 @@
 
                         }
 
-                        let projects = parsed.projects ;
+                        if(parsed.hasOwnProperty("projects")){
+
+                              projects = parsed.projects ; ;
+
+                        }
+
+                     
 
                         console.log(`parsed projects`) ;
 
