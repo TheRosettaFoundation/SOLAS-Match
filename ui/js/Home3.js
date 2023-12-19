@@ -123,7 +123,7 @@ function renderTaskDetails() {
 
                   ` +
                     " " +
-                    `<span class=" "> ` +
+                    `<span class=""> ` +
                     h +
                     ":" +
                     mi +
@@ -133,8 +133,7 @@ function renderTaskDetails() {
                     "</div>" +
                     "</div>"
             ) +
-                "<div class=`p-2`>" +
-                " " +
+                "<div class=``>" +
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
                 "</div>"
         );
