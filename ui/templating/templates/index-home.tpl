@@ -177,7 +177,7 @@ h3{
                     <div class="top-left">
                         <h3 >We provide growth opportunities for<br/> our community members</h3>
                         <br/>
-                        <h3  class=" fs-5 fs-md-3">Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
                         <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
