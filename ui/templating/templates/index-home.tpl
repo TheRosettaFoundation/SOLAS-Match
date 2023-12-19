@@ -21,10 +21,10 @@ h3{
     font-size:16px ;
 }
 
-@media (min-width: 100px ){
+@media (min-width: 900px ){
 
     h3{
-        font-size: 48px
+        font-size: 24px
     }
 }
 
