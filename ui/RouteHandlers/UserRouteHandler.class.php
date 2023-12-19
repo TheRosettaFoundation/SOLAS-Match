@@ -392,7 +392,7 @@ class UserRouteHandler
         }
        
 
-        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages) , 'projectAndOrgs'=> $projectAndOrgs );
+        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages) );
          
         $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 
