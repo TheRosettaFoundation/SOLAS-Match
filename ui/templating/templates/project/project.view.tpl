@@ -805,39 +805,6 @@
   </form>
 </div>
 
-{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
-    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>
-            <th>Target Language</th>
-            <th>Type</th>
-            <th>Quantity</th>
-            <th>Translated</th>
-            <th>Ready for payment</th>
-            <th>Expense (Expected)</th>
-            <th>Expense (Claimed)</th>
-            <th>Expense (Completed)</th>
-            <th>Expense (Ready for payment)</th>
-        </thead>
-        <tbody>
-            {foreach $get_payment_status_for_project as $payment_status}
-            {if $payment_status['payment_status']}
-            <tr style="overflow-wrap: break-word;">
-                <td>{TemplateHelper::getLanguageAndCountryFromCode($payment_status['target_codes'])}</td>
-                <td>{$payment_status['type_text']}</td>
-                <td>{round($payment_status['total_paid_words'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
-                <td>{round($payment_status['total_paid_words_complete'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
-                <td>{round($payment_status['total_paid_words_ready'], 2)} {$payment_status['pricing_and_recognition_unit_text_hours']}</td>
-                <td>${round($payment_status['total_expected_cost'], 2)}</td>
-                <td>${round($payment_status['total_expected_cost_claimed'], 2)}</td>
-                <td>${round($payment_status['total_expected_cost_complete'], 2)}</td>
-                <td>${round($payment_status['total_expected_cost_ready'], 2)}</td>
-            </tr>
-            {/if}
-            {/foreach}
-        </tbody>
-    </table>
-{/if}
-
 {include file="footer_no_end.tpl"}
         <script>
             $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip

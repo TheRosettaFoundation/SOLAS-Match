@@ -35,7 +35,7 @@
             <td>${$pos[0]['deal_total']}</td>
             <td>${$pos[0]['deal_partnership']}</td>
             <td>${$pos[0]['deal_supplements']}</td>
-            <td><a href="{$pos[0]['link_to_contract']}" target="_blank">{$pos[0]['link_to_contract']}</a></td>
+            <td><a href="{$pos[0]['link_to_contract']}" target="_blank">contract</a></td>
         </tr>
     </tbody>
 </table>

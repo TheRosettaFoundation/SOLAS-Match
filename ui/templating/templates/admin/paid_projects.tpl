@@ -60,7 +60,7 @@
                 <td>{if isset($paid_project['deal_total'])}${$paid_project['deal_total']}{/if}</td>
                 <td>{if isset($paid_project['deal_partnership'])}${$paid_project['deal_partnership']}{/if}</td>
                 <td>{if isset($paid_project['deal_supplements'])}${$paid_project['deal_supplements']}{/if}</td>
-                <td><a href="{$paid_project['link_to_contract']}" target="_blank">{$paid_project['link_to_contract']}</a></td>
+                <td><a href="{$paid_project['link_to_contract']}" target="_blank">contract</a></td>
             </tr>
             {/foreach}
         </tbody>
