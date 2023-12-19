@@ -390,7 +390,6 @@ class UserRouteHandler
         }
         
 
-        var_dump($projectAndOrgs);
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
@@ -399,7 +398,7 @@ class UserRouteHandler
         }
        
 
-        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages) );
+        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs  ) );
          
         $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 
