@@ -447,17 +447,17 @@ a:hover{
             <div class="col-auto">
 
              <input type="text" class="form-control" name="search_name" id="search_name" placeholder= "search organizations"> 
-
+                <button class="input-group-text bg-primary" type="submit" name="submit">
+                    
+                        <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
+                </button>
 
             </div>
          
            
            <div class = "col-auto">
 
-                        <button class="input-group-text bg-primary" type="submit" name="submit">
-                
-                      <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
-            </button>
+                        
            
            </div>
 
