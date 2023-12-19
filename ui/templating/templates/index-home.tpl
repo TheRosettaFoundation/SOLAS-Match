@@ -448,15 +448,15 @@ a:hover{
          
             <input type="text" class="form-control" name="search_name" id="search_name" placeholder= "search organizations"> 
 
+
+         </div>
+
+         
             <button class="input-group-text bg-primary" type="submit" name="submit">
                 
                       <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
-                
             
-          
             </button>
-
-         </div>
          </form>
 
 
