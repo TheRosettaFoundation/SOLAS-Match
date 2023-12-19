@@ -76,6 +76,16 @@
 
                     let tasksContainer = document.querySelector('.taskPagination');
 
+
+                    let search = document.getElementById("search_org") ;
+
+                    console.log(`search`);
+                    console.log(search) ;
+
+                    search.addEventListener("change" , function (e)=>{
+                        console.log(e)
+                    })
+
                     let recents = document.querySelector('.recents') ;
 
                     
