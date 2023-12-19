@@ -161,9 +161,9 @@ a:hover{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left">
-                        <h5 >We provide growth opportunities for<br/> our community members</h2>
+                        <div class=" fs-5 fs-md-3" >We provide growth opportunities for<br/> our community members</h2>
                         <br/>
-                        <h5>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
+                        <div  class=" fs-5 fs-md-3">Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
                         <button class="button button2"><a style="color:white;" href="#learnmore"> LEARN MORE</a></button>                
