@@ -79,15 +79,23 @@
 
                     let search = document.getElementById("search_org") ;
 
+                    let fetchOrg = document.querySelector(".search_org")
+
+                    
+ ;
                     console.log(`search`);
                     console.log(search) ;
 
                     let orgName ;
 
+
+
                     search.addEventListener("input" , function (e) {
 
                         orgName = e.target.value ;
                         console.log(orgName) ;
+                        fetchOrg.href = `/org/${ orgName }/search` ;
+                        
                     })
 
                     let recents = document.querySelector('.recents') ;
