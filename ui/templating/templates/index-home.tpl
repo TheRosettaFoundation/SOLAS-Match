@@ -447,7 +447,7 @@ a:hover{
             <div class="d-flex mb-3">
 
              <input type="text" class="form-control rounded-start-2" name="search_name" id="search_name" placeholder= "search organizations"> 
-                <button class=" bg-primary" type="submit" name="submit">
+                <button class="border-0 bg-primary" type="submit" name="submit">
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 </button>
