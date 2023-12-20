@@ -187,16 +187,11 @@
         </div>
         </nav>
 
-        {if isset($user)}
+  
 
-            <div class="container">
+        <div class="container">
 
-        {else}
-
-              <div class="container-fluid">
-
-        {/if}
-        
+       
         {assign var="home_page" value="{urlFor name="home"}"}
         
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
