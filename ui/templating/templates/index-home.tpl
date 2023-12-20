@@ -344,9 +344,9 @@ h3{
          </div>
          <div class="span4">
          <div id="globe" style="text-align: center">
-                <button class="btn btn-primary btn-home-slider" type="submit">
-	                <a class="login" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
-	            </button>
+               
+	                <a class="btn btn-primary" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
+	           
                 </div>
          </div>
          <div class="span4">
