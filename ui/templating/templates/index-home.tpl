@@ -36,7 +36,7 @@ h3{
 
     .car{
         position:absolute ;
-        bottom:20px;
+        
     } 
 }
 
