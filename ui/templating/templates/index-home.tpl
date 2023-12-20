@@ -29,9 +29,6 @@ h3{
         font-size: 24px;
     } 
 
-    .car{
-        position:relative
-    }
 }
 
 
@@ -39,6 +36,7 @@ h3{
 
     .car{
         position:absolute ;
+        bottom:20px;
     } 
 }
 
