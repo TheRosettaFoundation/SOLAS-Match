@@ -499,6 +499,9 @@
                          </div>
                             
                             `;
+
+                        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone ;
+                        console.log(timezone) ;
                       
 
                             if(image){
