@@ -590,12 +590,7 @@
                     let savedTheme = localStorage.getItem('theme');
 
                     if (savedTheme == 'dark') {
-                            imgL.classList.add("d-none");
-                            imgN.classList.remove("d-none");
-                           document.documentElement.setAttribute('data-bs-theme', 'dark')
-                            navi.setAttribute('data-bs-theme', 'dark')
-                              logo.src = "/ui/img/TWB_Logo1.svg" ;
-                           localStorage.setItem('theme', 'dark');
+                          console.log("dark")
                         
                     } else {
 
@@ -622,9 +617,9 @@
                        else{
                           imgL.classList.add("d-none");
                           imgN.classList.remove("d-none");
-                           document.documentElement.setAttribute('data-bs-theme', 'dark')
-                            navi.setAttribute('data-bs-theme', 'dark')
-                              logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
                            localStorage.setItem('theme', 'dark');
                        }
 
