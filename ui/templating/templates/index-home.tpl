@@ -545,8 +545,9 @@ h3{
 	           
 	                    <div>
                             <div class="mb-3">
+                                   
                                  
-                                    <select name="taskTypes" id="taskTypes" class="form-select">
+                                    <select name="taskTypes" id="taskTypes" class="form-select" required >
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                                       <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
 	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
@@ -554,6 +555,7 @@ h3{
                                       <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
                                       <option value="6" {if ($selectedTaskType === 6)}selected="selected"{/if}>Proofreading and Approval</option>
 	                                 </select>
+                                     <div class="invalid-feedback"> Please select task type </div>
 
                             </div>
 
