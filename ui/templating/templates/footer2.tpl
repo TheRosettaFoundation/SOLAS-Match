@@ -74,6 +74,20 @@
                         "next":0
                     } ;
 
+                      let validation = {
+                        "tt":false,
+                        "sl":false,
+                        "tl":false
+                    }
+
+
+                    let taskType = document.getElementById("taskTypes")
+                    taskType.addEventListener("select" , (e) =>{
+                        validation.tt = !validation.tt ;
+                        console.log(validation)
+                    })
+
+                  
                     let tasksContainer = document.querySelector('.taskPagination');
 
                     let recents = document.querySelector('.recents') ;
