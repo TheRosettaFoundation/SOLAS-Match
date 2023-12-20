@@ -226,7 +226,13 @@
                         pagePosition.tt = this.value
 
                         selectTask =this.value
-                        console.log(`Value : ${ selectTask }`)
+
+                        if(selectTask == 0){
+                            validation.tt = false
+                        }else{
+                            validation.tt = true;
+                        }
+                        console.log(validation)
                         let find = url.indexOf("tt/") ;
                         let findN = url.indexOf("/sl") ;
 
