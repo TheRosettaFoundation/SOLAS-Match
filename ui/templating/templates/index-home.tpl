@@ -682,7 +682,7 @@ h3{
                                     <div class="w-50 d-flex text-decoration-none text-secondary flex-wrap">  <span class="text-primaryDark"> {$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
-                                     <div class="d-flex justify-content-end">
+                                     <div class="d-flex justify-content-end flex-wrap">
                                         <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
                                      </div>
                             

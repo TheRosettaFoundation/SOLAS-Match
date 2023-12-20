@@ -554,8 +554,6 @@
 
                             const res =    await fetched.json();
 
-                            console.log(res)
-
                             displayTasks(res);
 
                             let page = document.querySelector(".pagination") ;
