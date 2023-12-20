@@ -518,7 +518,7 @@ h3{
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 novalidate> 
+        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 "> 
          
             <div class="d-flex mb-3 ">
 
@@ -527,7 +527,6 @@ h3{
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 </button>
-                <div class="invalid-feedback"> Please enter an organization name </div>
 
             </div>
          
@@ -542,7 +541,7 @@ h3{
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
             <h5 class="mt-5 mb-2 fw-bold"> Industry </h5>
-            <form method="post" action="{urlFor name="home"}" novalidate>
+            <form method="post" action="{urlFor name="home"}" class="needs-validation" novalidate>
 	           
 	                    <div>
                             <div class="mb-3">
