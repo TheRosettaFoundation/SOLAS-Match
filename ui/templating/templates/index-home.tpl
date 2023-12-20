@@ -18,8 +18,17 @@ a:hover{
 
 h3{
 
-    font-size:16px ;
 }
+
+
+@media (min-width: 400px ){
+
+    h3{
+        font-size: 16px;
+    } 
+
+}
+
 
 
 
