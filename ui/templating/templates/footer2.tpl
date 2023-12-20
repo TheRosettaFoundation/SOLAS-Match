@@ -586,24 +586,27 @@
 
                     }
 
-                    
+                    let logo = document.querySelector('.logo')
+
                     let savedTheme = localStorage.getItem('theme');
 
                     if (savedTheme == 'dark') {
-                          console.log("dark")
-                        
-                    } else {
 
-                        console.log('light')
+                        imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          localStorage.setItem('theme', 'dark');
+
                         
-                        
-                        }
+                    } 
        
 
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;
-                       let logo = document.querySelector('.logo')
+                       
    
                        if(light){
                         imgL.classList.remove("d-none");
