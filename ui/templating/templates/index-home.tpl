@@ -403,11 +403,17 @@ h3{
 
 
         <div  class="col-12  col-md-6 col-lg-3" >
+           
+           <div class="text-center">
+                  <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
+                    <h2>Grow</h2>          
+           </div>
 
-            <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
-               <div>
+          
+            
+            <div>
 
-            <div class="span3"><h2 class="clearheader" style="text-align: center">Grow</h2></div>
+         
              <div>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
             The most active linguists also get featured on TWB's blog and in the TWB Community Forum. </div>
         
@@ -420,11 +426,17 @@ h3{
 
 
          <div class="col-12   col-md-6 col-lg-3">
+           
+           <div class="text-center">
+
+                   <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
+                   <h2 class="clearheader" style="text-align: center">Impact</h2>
+           
+           </div>
          
-            <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
              
              <div>
-            <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
+            
               <div>
                 Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
                 Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
