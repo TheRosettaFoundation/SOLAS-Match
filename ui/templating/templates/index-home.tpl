@@ -365,7 +365,7 @@ h3{
         <div class="col-12   col-md-4 col-lg-3" ><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
         <div class="col-12 col-md-4 col-lg-3"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
         <div  class="col-12   col-md-4 col-lg-3" ><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
-         <div><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></div>
+         <div class="col-12   col-md-4 col-lg-3"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></div>
 
     </div>
         
