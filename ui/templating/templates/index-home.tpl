@@ -362,9 +362,11 @@ h3{
   <div class="container">  
     <div class="row">
 
-        <div class="col-12   col-md-6 col-lg-3" >
+        <div class="col-12 col-md-6 col-lg-3 align-middle" >
+  
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
-                   <div>
+       
+            <div>
             <h2 >Connect</h2>
                 <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
@@ -412,6 +414,7 @@ h3{
          <div class="col-12   col-md-6 col-lg-3">
          
             <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
+             
              <div>
             <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
               <div>
