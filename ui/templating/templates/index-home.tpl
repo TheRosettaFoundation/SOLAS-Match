@@ -26,9 +26,22 @@ h3{
 @media (min-width: 900px ){
 
     h3{
-        font-size: 24px
+        font-size: 24px;
+    } 
+
+    .car{
+        position:relative
+    }
+}
+
+
+@media (min-width: 500px ){
+
+    .car{
+        position:absolute ;
     } 
 }
+
 
 .twbheader{
     color:#e8991c !important;
@@ -188,7 +201,7 @@ h3{
                     <div class="carousel-caption">
                         <div class="row-fluid d-flex justify-content-center flex-wrap">
                  
-                        <div  class=""><h3 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h3></div>
+                        <div  class="car"><h3 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h3></div>
                     </div>
                       <p></p>
                     </div>
@@ -214,7 +227,7 @@ h3{
                            <div class="row-fluid">
                                 <div class="span4"></div>
                                 <div class="span4"></div>
-                                    <div  class="">
+                                    <div  class="car">
                                         <h3>“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h3>
                                     </div>
                             </div>                      
@@ -240,7 +253,7 @@ h3{
                         <div class="row-fluid">
                             <div class="span4"></div>
                             <div class="span4"></div>
-                            <div  class="span4 pull-right"><h3>“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h3></div>
+                            <div  class="car"><h3>“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h3></div>
                         </div>
                       
                         <p></p>
@@ -268,7 +281,7 @@ h3{
                         <div class="row-fluid">
                             <div class="span4"></div>
                             <div class="span4"></div>
-                            <div  class="span4 pull-right">
+                            <div  class="car">
                             <h3>“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h3>
                             </div>
                         </div>                  
@@ -346,9 +359,9 @@ h3{
     
     <div class="d-flex justify-content-between">
         <div ><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
-        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
-        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
-        <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div> 
+        <div ><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
+        <div><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+         <p><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></p>
 
     </div>
     
@@ -356,7 +369,7 @@ h3{
 
 
         <div>
-            <div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
+            <h2 cl>Connect</h2>
                 <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
