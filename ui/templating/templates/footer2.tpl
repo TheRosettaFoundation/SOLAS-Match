@@ -181,6 +181,16 @@
                     let url = page.href ;
                     pagePosition.sl = this.value ;
                     selectedL = this.value;
+
+                    if(selectL == 0 ){
+
+                        validation.sl = false
+                        console.log(validation)
+                    }else{
+                        validation.sl = true
+                        console.log(validation)
+                        
+                    }
                     console.log(`Value : ${ selectedL }`) 
                     let find = url.indexOf("sl/") ;
                     let findN = url.indexOf("tl") ;
@@ -190,10 +200,9 @@
 
                     allPages.forEach(page=> {
                     let  firstPart = page.href.split('/tt') ;
-                    console.log(firstPart);
                     let endPart = newUrl.split('/tt')
                     let finUrl = firstPart[0]+"/tt"+endPart[1]
-                    console.log(finUrl)
+      
                     page.href = finUrl ;
                     })
 
