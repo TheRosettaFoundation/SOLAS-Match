@@ -549,7 +549,9 @@ a:hover{
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
                                             <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} {if ($task_number[$count])} <span> - {$task_number[$count]}</span> {/if}
-                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" class=" me-1"/></div> 
+                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img"  data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-custom-class="custom-tooltip"
+                                            data-bs-title=` this task ${ $task_number[$count] of project .... }` class=" me-1"/></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
