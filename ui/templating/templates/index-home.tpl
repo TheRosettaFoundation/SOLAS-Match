@@ -36,7 +36,7 @@ h3{
 
     .car{
         
-        position:absolute ;
+        position:sticky ;
         bottom:5px ;
         font-size:8px;        
     } 
