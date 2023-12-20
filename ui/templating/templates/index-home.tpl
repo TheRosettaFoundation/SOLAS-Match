@@ -31,14 +31,16 @@ h3{
 
 }
 
+.car{
+    display:none ;
+}
 
-@media (min-width: 500px ){
+@media (min-width: 700px ){
 
     .car{
         
-        position:sticky ;
-        bottom:5px ;
-        font-size:8px;        
+      display:block;
+            
     } 
 }
 
@@ -213,7 +215,7 @@ h3{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
                     
-                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
+                    <div class="top-left"><h3>We connect community members<br/> and humanitarian organizations</h3><br/>
                         <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -239,7 +241,7 @@ h3{
                             
                 <div class="carousel-item">
                     <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img" class="w-100 d-block">
-                    <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/>
+                    <div class="top-left"><h3>We offer references, certificates, <br/>and courses</h3><br/>
                         <h3>Join to grow your professional profile and <br/>advance your career.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -267,7 +269,7 @@ h3{
                           <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img" class="d-block w-100">
 
                         <div class="top-left">
-                            <h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/>
+                            <h3>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h3><br/>
                             <h3>Join to have a real-world impact.</h3>
                             <br/>
                             <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
