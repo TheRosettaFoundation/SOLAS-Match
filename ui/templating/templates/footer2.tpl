@@ -216,6 +216,16 @@
                         let url = page.href ;
                         targetL =this.value
 
+                            
+                        if(targetL == 0 ){
+
+                            validation.tl = false
+                            console.log(validation)
+                        }else{
+                            validation.tl = true
+                            console.log(validation)
+                        }
+
                         pagePosition.tl = this.value ;
                         console.log(`Value : ${ targetL }`)
                         let find = url.indexOf("tl/") ;
