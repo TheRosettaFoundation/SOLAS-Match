@@ -363,7 +363,7 @@ h3{
     <div class="row">
 
         <div class="col-12 col-md-6 col-lg-3" >
-                <div class="align-middle">
+                <div class="text-center">
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
                  <h2 >Connect</h2>
                 </div>
@@ -382,9 +382,15 @@ h3{
 
 
         <div class="col-12 col-md-6 col-lg-3">
-            <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
+              <div class="text-center">
+                    <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
+                    <h2 ">Learn</h2>
+              
+              </div>
+            
+              
               <div>
-                <h2 ">Learn</h2>
+             
                 <div>
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
