@@ -371,22 +371,13 @@ h3{
 
 
         <div>
-            <h2 cl>Connect</h2>
+            <h2 >Connect</h2>
                 <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
                 </div>   
         </div>
 
-          <div>
-            <h2>Learn</h2>
-                <div>
-                        Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
-                        Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
-                        Receive feedback on your translations from more senior linguists and grow in the process.
-                </div>
-        
-        </div>
 
 
          <div>
