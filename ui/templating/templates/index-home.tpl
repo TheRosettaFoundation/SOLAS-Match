@@ -35,8 +35,10 @@ h3{
 @media (min-width: 500px ){
 
     .car{
-        position:absolute ;
         
+        position:absolute ;
+        bottom:5px ;
+        font-size:8px;        
     } 
 }
 
