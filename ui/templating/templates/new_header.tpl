@@ -27,7 +27,11 @@
         
         
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
-  
+        
+        
+		
+        
+        
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
         <!-- 
         <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
@@ -183,11 +187,9 @@
         </div>
         </nav>
 
-  
-
+        
         <div class="container">
-
-       
+        
         {assign var="home_page" value="{urlFor name="home"}"}
         
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
