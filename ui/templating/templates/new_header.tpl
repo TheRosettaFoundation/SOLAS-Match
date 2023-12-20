@@ -187,8 +187,15 @@
         </div>
         </nav>
 
-        
-        <div class="container">
+        {if isset($user)}
+
+            <div class="container">
+
+        {else}
+
+              <div class="container-fluid">
+
+        {/if}
         
         {assign var="home_page" value="{urlFor name="home"}"}
         
