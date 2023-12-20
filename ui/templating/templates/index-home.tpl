@@ -518,7 +518,7 @@ h3{
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 "> 
+        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8 novalidate> 
          
             <div class="d-flex mb-3 ">
 
@@ -527,6 +527,7 @@ h3{
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 </button>
+                <div class="invalid-feedback"> Please enter an organization name </div>
 
             </div>
          
