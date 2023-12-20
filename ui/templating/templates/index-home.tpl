@@ -532,7 +532,7 @@ h3{
          
             <div class="d-flex mb-3 ">
 
-             <input type="text" class=" flex-grow-1 flex-shrink-1  flex-wrap rounded-start-2 border border-1 border-light-subtle px-2 py-1 "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
+             <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
                 <button class="border-0 bg-primary rounded-end-2" type="submit" name="submit">
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
