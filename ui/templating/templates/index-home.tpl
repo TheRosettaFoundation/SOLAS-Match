@@ -362,17 +362,19 @@ h3{
   <div class="container">  
     <div class="row">
 
-        <div class="col-12 col-md-6 col-lg-3 align-middle" >
-  
+        <div class="col-12 col-md-6 col-lg-3" >
+                <div class="align-middle">
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
+                 <h2 >Connect</h2>
+                </div>
        
             <div>
-            <h2 >Connect</h2>
+           
                 <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
                 </div>   
-        </div>
+            </div>
 
         
         </div>
