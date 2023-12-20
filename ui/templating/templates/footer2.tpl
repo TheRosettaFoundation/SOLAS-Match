@@ -84,8 +84,12 @@
                     let taskTypeVal = document.getElementById("taskTypes")
                     taskTypeVal.addEventListener("select" , (e) =>{
                         
-                        console.log(e.target.value);
-                        console.log(validation);
+                        
+
+                        if(e.target.value == "Value : 0" ){
+                            console.log(`not selected `)
+                        }
+                        
                     })
 
                   
