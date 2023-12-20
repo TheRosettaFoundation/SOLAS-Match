@@ -80,6 +80,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border: #f89406 !important;
 }
 
+.custom-tooltip {
+    --bs-tooltip-b: $indigo;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
