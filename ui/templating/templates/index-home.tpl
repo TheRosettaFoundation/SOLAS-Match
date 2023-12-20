@@ -401,11 +401,11 @@ h3{
               
               <div>
              
-                <div>
+                
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
                         Receive feedback on your translations from more senior linguists and grow in the process.
-                </div>
+                
         
             </div>
         
