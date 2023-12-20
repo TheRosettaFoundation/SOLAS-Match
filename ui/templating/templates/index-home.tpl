@@ -561,7 +561,7 @@ h3{
 
                             <div class="mb-3">
                                    
-                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-select">
+                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-select" required>
                                                 <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
                                                 {foreach $activeSourceLanguages as $lang}
                                                     <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
@@ -572,7 +572,7 @@ h3{
 
                             <div class"mb-3">
                                     
-                                        <select name="targetLanguage" ID="targetLanguage" class="form-select">
+                                        <select name="targetLanguage" ID="targetLanguage" class="form-select" required>
 	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
 	                                    {foreach $activeTargetLanguages as $lang}
 	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
