@@ -541,7 +541,7 @@ h3{
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
             <h5 class="mt-5 mb-2 fw-bold"> Industry </h5>
-            <form method="post" action="{urlFor name="home"}" class="needs-validation" novalidate>
+            <form method="post" action="{urlFor name="home"}" novalidate>
 	           
 	                    <div>
                             <div class="mb-3">
