@@ -83,7 +83,7 @@
 
                     let taskTypeVal = document.getElementById("taskTypes")
                     taskTypeVal.addEventListener("select" , (e) =>{
-                        validation.tt = !validation.tt ;
+                        
                         console.log(e.target.value);
                         console.log(validation);
                     })
