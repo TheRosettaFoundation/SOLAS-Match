@@ -182,7 +182,9 @@
                     pagePosition.sl = this.value ;
                     selectedL = this.value;
 
-                    if(selectL == 0 ){
+                    
+
+                    if(selectedL == 0 ){
 
                         validation.sl = false
                         console.log(validation)
