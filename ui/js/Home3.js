@@ -35,8 +35,6 @@ function loadingComplete() {
     parametersLoaded = true;
 
     renderTaskDetails();
-
-    document.getElementById("loading_warning").innerHTML = "";
 }
 
 /**
