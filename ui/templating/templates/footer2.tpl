@@ -587,7 +587,23 @@
                     }
 
                     
-            
+                    let savedTheme = localStorage.getItem('theme');
+
+                    if (savedTheme == 'dark') {
+                            imgL.classList.add("d-none");
+                            imgN.classList.remove("d-none");
+                           document.documentElement.setAttribute('data-bs-theme', 'dark')
+                            navi.setAttribute('data-bs-theme', 'dark')
+                              logo.src = "/ui/img/TWB_Logo1.svg" ;
+                           localStorage.setItem('theme', 'dark');
+                        
+                    } else {
+
+                        console.log('light')
+                        
+                        
+                        }
+       
 
                     theme.addEventListener("click" , function(e) {
                        
