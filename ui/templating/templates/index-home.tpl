@@ -358,14 +358,18 @@ h3{
 
 
 
-    
-    <div class="d-flex justify-content-between">
-        <div ><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
-        <div ><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
-        <div><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
-         <p><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></p>
+
+  <div class="container">  
+    <div class="row">
+
+        <div class="col-12   col-md-4 col-lg-3" ><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
+        <div class="col-12 col-md-4 col-lg-3"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
+        <div  class="col-12   col-md-4 col-lg-3" ><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+         <div><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact"></div>
 
     </div>
+        
+  </div>
     
     <div class="d-flex justify-content-between" >
 
