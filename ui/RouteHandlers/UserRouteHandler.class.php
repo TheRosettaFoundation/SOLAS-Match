@@ -583,7 +583,7 @@ class UserRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
-                $memsource_user = $projectDao->get_memsource_task($taskId);
+     
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {

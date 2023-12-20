@@ -342,10 +342,19 @@ h3{
 <br/>
 
 
-<div class="row-fluid d-flex flex-row justify-content-between" id="learnmore">
-    <div >
-    <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
-   
+
+    
+    <div class="d-flex justify-content-between">
+        <div ><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+        <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div> 
+
+    </div>
+    
+    <div class="d-flex justify-content-between" >
+
+
         <div>
             <div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
                 <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
@@ -353,27 +362,29 @@ h3{
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
                 </div>   
         </div>
-    
-    </div>
 
-    <div>
-        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
-        <div>
-            <h2  class="clearheader" style="text-align: center">Learn</h2>
+          <div>
+            <h2>Learn</h2>
                 <div>
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
                         Receive feedback on your translations from more senior linguists and grow in the process.
                 </div>
-
-
         
         </div>
 
-    </div>
 
-    <div >
-        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+         <div>
+            <h2 ">Learn</h2>
+                <div>
+                        Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
+                        Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
+                        Receive feedback on your translations from more senior linguists and grow in the process.
+                </div>
+        
+        </div>
+
+
         <div>
 
             <div class="span3"><h2 class="clearheader" style="text-align: center">Grow</h2></div>
@@ -381,11 +392,8 @@ h3{
             The most active linguists also get featured on TWB's blog and in the TWB Community Forum. </div>
         
         </div>
-    </div>
 
-    <div>
-        <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
-        <div>
+           <div>
             <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
               <div>
                 Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
@@ -396,7 +404,14 @@ h3{
         
         </div>
 
+
+    
     </div>
+
+
+
+
+
 </div>
 
 
