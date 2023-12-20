@@ -82,15 +82,7 @@
 
 
                     let taskTypeVal = document.getElementById("taskTypes")
-                    taskTypeVal.addEventListener("select" , (e) =>{
-                        
-                        
-
-                        if(e.target.value == "Value : 0" ){
-                            console.log(`not selected `)
-                        }
-                        
-                    })
+                    
 
                   
                     let tasksContainer = document.querySelector('.taskPagination');
@@ -224,7 +216,9 @@
 
                     })
 
-                     taskType.addEventListener("change", function(){
+                     taskType.addEventListener("change", function(e){
+
+                        console.log(e.type) ;
 
                         let page = document.querySelector(".page");
                         let url = page.href ;
