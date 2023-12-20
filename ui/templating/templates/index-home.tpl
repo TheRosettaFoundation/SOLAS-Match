@@ -17,6 +17,7 @@ a:hover{
 }
 
 h3{
+    font-size:8px;
 
 }
 
