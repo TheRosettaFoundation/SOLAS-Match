@@ -354,7 +354,7 @@ h3{
          <div class="span4">
          <div id="globe" style="text-align: center">
                
-	                <a class="btn btn-primary" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
+	                <a class="btn btn-primary text-white font-bold" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
 	           
                 </div>
          </div>
