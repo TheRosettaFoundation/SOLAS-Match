@@ -1646,6 +1646,9 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
   date_of_request DATETIME NOT NULL,
   word_count      INT NOT NULL,
   hours_donated_for_cert INT NOT NULL DEFAULT 0,
+  words_donated   INT NOT NULL DEFAULT 0,
+  hours_donated   INT NOT NULL DEFAULT 0,
+  hours_paid      INT NOT NULL DEFAULT 0,
   type_of_request INT NOT NULL COMMENT '0 - Certificate, 1 - Reference Letter',
   request_by      INT NOT NULL,
   valid_key       VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -10053,6 +10056,7 @@ BEGIN
         IFNULL(SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_approved,
               IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated,
         ROUND(IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),          0))                                                                                            AS hours_donated,
+        ROUND(IFNULL(SUM(IF(tp.task_id IS NOT NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),      0))                                                                                            AS hours_paid,
         ROUND(IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours_for_cert), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)*0.005) AS hours_donated_for_cert,
               IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated_for_cert,
         ROUND(
@@ -10096,6 +10100,7 @@ UNION
         0 AS words_approved,
         (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) AS words_donated,
         0 AS hours_donated,
+        0 AS hours_paid,
         0 AS hours_donated_for_cert,
         0 AS words_donated_for_cert,
         ROUND(
@@ -10767,11 +10772,11 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_print_request`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN hc INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_print_request`(IN uID INT, IN wc INT, IN hc INT, IN w INT, IN h INT, IN hp INT, IN tor INT, IN rb INT, IN vk VARCHAR(30))
 BEGIN
     INSERT INTO UserRequest
-               (user_id, date_of_request, word_count, hours_donated_for_cert, type_of_request, request_by, valid_key)
-        VALUES (    uID,           NOW(),         wc,                     hc,             tor,         rb,        vk);
+               (user_id, date_of_request, word_count, hours_donated_for_cert, words_donated, hours_donated, hours_paid, type_of_request, request_by, valid_key)
+        VALUES (    uID,           NOW(),         wc,                     hc,             w,             h,         hp,             tor,         rb,        vk);
 END//
 DELIMITER ;
 

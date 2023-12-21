@@ -1804,6 +1804,9 @@ error_log("claimTask_shell($userId, $taskId)");
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanse($user_badges['words_donated_for_cert']) . ',' .
             LibAPI\PDOWrapper::cleanse($user_badges['hours_donated_for_cert']) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_badges['words_donated']) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_badges['hours_donated']) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_badges['hours_paid']) . ',' .
             LibAPI\PDOWrapper::cleanse($cert_type) . ',' .
             LibAPI\PDOWrapper::cleanse($loggedInUserId) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr(uniqid()));
@@ -2364,7 +2367,7 @@ error_log(print_r($result, true));//(**)
     public function get_points_for_badges($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_points_for_badges', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0, 'words_donated_for_cert' => 0, 'hours_donated_for_cert' => 0];
+        if (empty($result)) return ['first_name' => '', 'last_name' => '', 'words_donated' => 0, 'recognition_points' => 0, 'strategic_points' => 0, 'words_donated_for_cert' => 0, 'hours_donated_for_cert' => 0, 'words_donated' => 0, 'hours_donated' => 0, 'hours_paid' => 0];
 
         return $result[0];
     }
