@@ -1038,6 +1038,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $project_tasks = $projectDao->getProjectTasks($project_id);
             $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
             $taskLanguageMap = array();
+            $get_payment_status_for_project = [];
             if ($project_tasks) {
                 $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
                 foreach ($project_tasks as $task) {

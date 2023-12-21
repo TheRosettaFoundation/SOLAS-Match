@@ -574,6 +574,12 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
   (24,'Plain Language training'),
   (25,'Terminology revision');
 
+INSERT INTO TaskTypes (id, name) VALUES
+  (26,'Translation Outside Phrase'),
+  (27,'Revision Outside Phrase'),
+  (28,'Audiovisual Sign Off');
+
+
 # Be very carefull of deleteing any of these they will cascade DELETEs
 CREATE TABLE IF NOT EXISTS `task_type_categorys` (
   type_category      INT UNSIGNED NOT NULL,
@@ -1426,6 +1432,9 @@ INSERT INTO task_type_details VALUES
 (22,6,1,0,1,1,0,1,1,'Plain Language assessment',  'Plain Language assessment',  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.333, 4.17,0,0.0166667,0),
 (23,6,1,0,1,1,0,1,1,'Plain Language editing',     'Plain Language editing',     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0),
 (24,6,1,0,1,1,0,1,1,'Plain Language training',    'Plain Language training',    '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Words',  0.667, 4.17,0,0.0166667,0)
+(26,1,1,0,1,1,1,0,0,'Translation Outside Phrase', 'Translation Outside Phrase', '#1D8A11','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',      'Words',  0.065,       1,1,        0,0.005),
+(27,1,1,0,1,1,1,0,0,'Revision Outside Phrase',    'Revision Outside Phrase',    '#1064C4','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',      'Words',  0.025,     0.5,1,        0,0.002),
+(28,4,1,0,1,1,0,1,1,'Audiovisual Sign Off',       'Audiovisual Sign Off',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',   20, 8.33333,0,0.0166667,0.0166667)
 ;
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
