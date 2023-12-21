@@ -763,8 +763,10 @@ h3{
                         <li>
                             <a class="page-link" href="{urlFor name="$url_name" options="page_no.$lastScrollPage|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Last">&gt;&gt;</a>
                         </li>
+
                     {/if}
                 </div>
+                
             </ul>
         {else}
             <p>
