@@ -62,19 +62,75 @@
        </div>
 
 
-        <div class="container bg-secondary">
+        <div class="container">
 
         
             <div class="row d-flex justify-content-between">
 
                 <div class="col-6 "> 
 
+                         {include file="task/task.details.tpl"} 
+
                 
                 </div>
 
                 <div class="col-4"> 
 
-                        testing here..
+                                                        
+                            {if ($alsoViewedTasksCount>0)}
+                            <div class="row"></div>
+                                <div class="row">
+                                    <div class="span4 pull-right">
+                                        <h3>{Localisation::getTranslation('users_also_viewed')}</h3>
+                                        
+                                        {if isset($alsoViewedTasks)}
+                                        <div id="also-viewed-tasks">
+                                            <div class="ts">
+                                                {for $count=0 to $alsoViewedTasksCount-1}
+                                                    {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
+                                                    <div class="ts-task">
+                                                        {assign var="also_viewed_task_id" value=$alsoViewedTask->getId()}
+                                                        {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
+                                                        {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
+                                                        {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
+                                                        <div class="task">
+                                                            <h2>
+                                                            <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
+                                                            </h2>
+                                                        {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
+                                                            <p>
+                                                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
+                                                            </p>
+                                                        {/if}
+                                                            <p>
+                                                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
+                                                            </p>
+                                                            <div>
+                                                                <p>
+                                                                    <span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
+                                                                    &nbsp;|&nbsp;
+                                                            <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
+                                                                    &nbsp;|&nbsp;
+                                                                    {if $alsoViewedTask->getWordCount()}
+                                                                <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
+                                                                    {/if}
+                                                                </p>
+                                                            </div>
+                                                            <p>
+                                                            Due by <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
+                                                            </p>
+                                                        <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
+                                                        </div>
+                                                    </div>
+                                                {/for}
+                                            </div>
+                                        </div>
+                                        {/if}
+                                        
+                                    </div>
+                                    <div class="pull-left" style="max-width: 70%;">
+                            {/if}
+           
         
                 </div>
             
