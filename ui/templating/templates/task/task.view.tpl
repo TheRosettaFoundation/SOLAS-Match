@@ -1,4 +1,4 @@
-{include file="new_header.tpl"}
+{include file="header.tpl"}
 
     {assign var="task_id" value=$task->getId()}
     <div>
@@ -235,4 +235,4 @@
     {/if}
     
    
-{include file="footer2.tpl"}
+{include file="footer.tpl"}
