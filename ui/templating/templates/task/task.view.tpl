@@ -65,19 +65,18 @@
         <div class="container bg-secondary">
 
         
-            <div class="row">
+            <div class="row d-flex justify-content-between">
 
-                <div class="col-md-6 "> 
+                <div class="col-6 "> 
 
-                      test
                 
-                <div>
+                </div>
 
-                <div class="col-md-4"> 
+                <div class="col-4"> 
 
                         testing here..
         
-                <div>
+                </div>
             
             </div>
 
