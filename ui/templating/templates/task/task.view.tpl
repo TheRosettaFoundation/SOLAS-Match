@@ -68,7 +68,7 @@
         
             <div class="row">
 
-                <div class="col-md-8"> 
+                <div class="col-md-6"> 
 
                        {include file="task/task.details.tpl"} 
                 
