@@ -269,13 +269,13 @@ class AdminRouteHandler
         $app->get(
             '/deal/{deal_id}/report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:deal_id_report')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
             ->setName('deal_id_report');
 
         $app->get(
             '/paid_projects[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:paid_projects')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
             ->setName('paid_projects');
     }
 
