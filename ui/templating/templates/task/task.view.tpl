@@ -26,13 +26,17 @@
 
           <div class="d-flex py-4 justify-content-between">
 
+               <div>
+
                 {if $task->getTitle() != ''}
-                <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}</div>
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                 {else}
-                <div>{Localisation::getTranslation('common_task')} {$task->getId()}</div>
+                {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}
 
+                </div>
 
+             <div>
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
               {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
                 <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
@@ -40,11 +44,16 @@
               {/if}
             {/if}
 
+            </div>
+
+            <div>
              {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                 <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class= btn btn-primary">
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
             {/if}
+
+            </div>
 
               
 
@@ -70,9 +79,9 @@
 
                                                 
                         {if ($alsoViewedTasksCount>0)}
-                        <div class="row"></div>
-                            <div class="row">
-                                <div class="span4 pull-right">
+                      
+                            <div >
+                                <div class="">
                                     <h3>{Localisation::getTranslation('users_also_viewed')}</h3>
                                                     
                                                     {if isset($alsoViewedTasks)}
@@ -120,7 +129,7 @@
                                                     {/if}
                                                     
                                                 </div>
-                                                <div class="pull-left" style="max-width: 70%;">
+                                                
                                         {/if}   
 
 
