@@ -58,17 +58,8 @@
 
           </div>
 
-    
 
-
-        
-        
-        
-        
-
-</section>
-
-<div class="container bg-secondary">
+        <div class="container bg-secondary">
 
         
             <div class="row">
@@ -82,15 +73,25 @@
                 <div class="col-md-4"> 
 
                         testing here..
-                                                    
-  
-
-                
+        
                 <div>
             
-           </div>
-</div>
+            </div>
 
+        </div>
+
+
+
+
+    
+
+
+        
+        
+        
+        
+
+</section>
 
   
 
