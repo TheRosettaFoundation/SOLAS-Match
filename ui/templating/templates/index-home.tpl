@@ -533,7 +533,7 @@ h3{
             <div class="d-flex mb-3 ">
 
              <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
-                <button class="border-0 bg-primary rounded-end-2" type="submit" name="submit">
+                <button class=" position-relative translate-middle border-0 bg-primary rounded-end-2" type="submit" name="submit">
                     
                         <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
                 </button>
