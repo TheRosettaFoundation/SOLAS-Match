@@ -1,4 +1,4 @@
-{include file="new_header.tpl"}
+
 
 <div class="container-fluid">
 
