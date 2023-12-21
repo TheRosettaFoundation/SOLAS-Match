@@ -4,7 +4,7 @@
 <main>
     <header class="container-fluid bg-white">
 
-     <div class="container p-4"> 
+     <div class="container py-4"> 
      
             <a href="#">Home </a> > 
             <a href="#" class="text-primary"> Task </a> > 
@@ -19,12 +19,12 @@
 
     <div class="container">
 
-        <div class="d-flex justify-content-between p-4">
+        <div class="d-flex justify-content-between py-4">
 
             {if $task->getTitle() != ''}
-               <h5> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h5>
+               <h5 class="font-bold"> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h5>
             {else}
-               <h5> {Localisation::getTranslation('common_task')} {$task->getId()} </h5>
+               <h5 class="font-bold"> {Localisation::getTranslation('common_task')} {$task->getId()} </h5>
 
             {/if}
 
@@ -37,6 +37,47 @@
     <div class="container">
         <div class="row">
             <div class="col-8">
+
+
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+        
+            <table class="table" >
+                <tr>
+              <td>
+                <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                    {Localisation::getTranslation('task_view_assign_label')}<br />
+                    <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                    {if !empty($list_qualified_translators)}
+                        <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
+                            <option value="">...</option>
+                            {foreach $list_qualified_translators as $list_qualified_translator}
+                                <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
+                            {/foreach}
+                        </select><br />
+                    {/if}
+		                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
+		                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
+		                </a>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+		            </form> 
+              </td>
+              <td>
+                <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                    Remove a user from deny list for this task:<br />
+                    <input type="text" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                    <a class="btn btn-primary" onclick="$('#removeUserFromDenyListForm').submit();">
+                        <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
+                    </a>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+              </td>
+            </tr></table>
+
+                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
+                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
+                </a>
+            </div>
+        {/if}
 
             
             
