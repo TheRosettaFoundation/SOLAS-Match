@@ -20,7 +20,24 @@
 
 </header>
 
-<section> 
+<section class="bg-light"> 
+
+        <div class="container ">
+
+          <div class="d-flex py-2">
+
+                {if $task->getTitle() != ''}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                {else}
+                {Localisation::getTranslation('common_task')} {$task->getId()}
+                {/if}
+
+                <button class="btn btn-primary"> Claim Task ...</button>
+
+
+          </div>
+
+        </div>
 
 </section>
 
