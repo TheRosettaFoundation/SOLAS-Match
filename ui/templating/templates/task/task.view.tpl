@@ -17,7 +17,6 @@
     </div>
 
   
-  
    </header>
 
    <section class="bg-light">
