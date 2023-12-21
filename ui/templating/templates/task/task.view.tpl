@@ -61,10 +61,17 @@
     
 
 
-        <div class="container">
+        
+        
+        
+        
+
+</section>
+
+<div class="container">
 
         
-            <div class="row d-flex">
+            <div class="row">
 
                 <div class="col-6 "> 
 
@@ -81,12 +88,9 @@
                 
                 <div>
             
-        </div>
-        
-        
-        
+           </div>
+</div>
 
-</section>
 
        
    
