@@ -1,3 +1,5 @@
+
+
 <div class="container-fluid">
 
 <header>
@@ -22,7 +24,7 @@
 
     <div class="container py-2">
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between py-2">
              {if $task->getTitle() != ''}
                <div> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </div>
             {else}
@@ -38,7 +40,7 @@
     </div>
 
 
-    
+
 
 <section >
         
