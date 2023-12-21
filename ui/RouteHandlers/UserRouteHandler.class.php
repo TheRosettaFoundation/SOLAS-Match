@@ -488,6 +488,7 @@ class UserRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
         $topTasks = null;
+        $topTasksC = null;
 
    
 
