@@ -1040,4 +1040,11 @@ error_log("createTaskDirectly: $args");
         if (empty($result)) return ['max_not_comlete_tasks' => 0, 'allowed_types' => '', 'excluded_orgs' => '', 'limit_profile_changes' => 0];
         return $result[0];
     }
+
+    public function get_active_languages($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_active_languages', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
 }
