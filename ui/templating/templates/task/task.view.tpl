@@ -1,4 +1,4 @@
-{include file="newheader.tpl"}
+{include file="new_header.tpl"}
 
 <main>
     <header>
