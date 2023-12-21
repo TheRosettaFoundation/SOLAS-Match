@@ -1,4 +1,4 @@
-
+{include file="new_header.tpl"}
 
 <div class="container-fluid">
 
@@ -17,6 +17,7 @@
     </div>
 
   
+  
    </header>
 
    <section class="bg-light">
@@ -30,7 +31,7 @@
                <div> {Localisation::getTranslation('common_task')} {$task->getId()} </div>
             {/if}
 
-            <button class="btn btn-primary"> Claim Task ..<button>
+            <button class="btn btn-primary"> Claim Task<button>
         
         
         
