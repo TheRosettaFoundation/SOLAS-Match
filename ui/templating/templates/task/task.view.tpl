@@ -1,9 +1,64 @@
 {include file="new_header.tpl"}
 
 <main>
-    <header>
+    <header class="container bg-white">
+
+     <div> 
+     
+            <a href="#">Home </a> > 
+            <a href="#" class="text-primary"> Task </a> > 
+            <a href="#">Clain </a> > 
+     
+     </div>
     
     <header>
+    <section>
+
+    <div class="container-fuild bg-light">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between">
+
+            {if $task->getTitle() != ''}
+               <h1> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h1>
+            {else}
+               <h1> {Localisation::getTranslation('common_task')} {$task->getId()} </h1>
+
+            {/if}
+
+            <button class="btn btn-primary text-white"> Claim Task ..</button>
+            
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+
+            
+            
+            
+            <div>
+
+
+            <div class="col-4">
+
+            <div>
+        
+        
+        
+        </div>
+    
+    
+    </div>
+
+
+
+    </div>
+
+    <section>
 
 </main>
 
