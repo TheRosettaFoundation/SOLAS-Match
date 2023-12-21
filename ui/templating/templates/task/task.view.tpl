@@ -24,7 +24,7 @@
 
         <div class="container ">
 
-          <div class="d-flex py-2">
+          <div class="d-flex py-4 justify-content-between">
 
                 {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
