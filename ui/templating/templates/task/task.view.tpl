@@ -1,7 +1,28 @@
 {include file="new_header.tpl"}
 
 
+
 <div class="container-fluid">
+
+<header class="py-2">
+
+<div class="container py-2">
+
+         <div>
+            <a href="#"> Home </a> >
+            <a href="#" class="text-primary"> Task </a> >
+            <a href="#"> Clain </a> >
+        </div>
+
+
+</div>
+   
+
+</header>
+
+<section> 
+
+</section>
 
     {assign var="task_id" value=$task->getId()}
     <div>
