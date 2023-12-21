@@ -535,7 +535,7 @@ h3{
              <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
                 <button class="position-relative border-0 bg-primary rounded-end-2" style="left:-3px ;" type="submit" name="submit">
                     
-                        <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
+                        <img src="{urlFor name='home'}ui/img/search.svg" alt="search" >
                 </button>
 
             </div>
@@ -689,8 +689,7 @@ h3{
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div class="d-flex text-decoration-none text-secondary flex-wrap"> 
-                                     <span class="text-primaryDark w-1/2"> {$projectAndOrgs[$task_id]}</span> 
+                                    <div class=" d-flex text-decoration-none text-secondary flex-wrap">  <span class="text-primaryDark w-75"> {$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
                                      <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
@@ -766,7 +765,7 @@ h3{
 
                     {/if}
                 </div>
-                
+
             </ul>
         {else}
             <p>
