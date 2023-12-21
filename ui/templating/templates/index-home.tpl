@@ -150,7 +150,7 @@ h3{
 </span>
 
 
-
+<div class="container-fluid">
 
 {if !isset($user)}
     <div class="hero-unit">

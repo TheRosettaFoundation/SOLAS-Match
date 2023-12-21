@@ -1,4 +1,5 @@
 {include file="new_header.tpl"}
+<div class="container-fluid">
 
 <main>
     <header class="container bg-white">
@@ -7,7 +8,7 @@
      
             <a href="#">Home </a> > 
             <a href="#" class="text-primary"> Task </a> > 
-            <a href="#">Clain </a> > 
+            <a href="#">Claim </a> > 
      
      </div>
     
@@ -21,9 +22,9 @@
         <div class="d-flex justify-content-between">
 
             {if $task->getTitle() != ''}
-               <h1> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h1>
+               <h5> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h5>
             {else}
-               <h1> {Localisation::getTranslation('common_task')} {$task->getId()} </h1>
+               <h5> {Localisation::getTranslation('common_task')} {$task->getId()} </h5>
 
             {/if}
 
