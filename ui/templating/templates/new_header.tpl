@@ -188,7 +188,7 @@
         </nav>
 
         
-        <div class="container">
+        
         
         {assign var="home_page" value="{urlFor name="home"}"}
         

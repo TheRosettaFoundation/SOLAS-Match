@@ -144,6 +144,8 @@ h3{
 }
 </style>
 
+<div class="container">
+
 <span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
