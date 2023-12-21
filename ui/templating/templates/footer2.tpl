@@ -145,14 +145,9 @@
 
                         let prevPage = document.getElementById(pagePosition.p).parentNode ;
 
-                        console.log('previous page');
-
-                        console.log(prevPage);
 
                         prevPage.classList.remove('bg-primary' , 'opacity-75', 'text-primary');
-
-                        previous.classList.remove('bg-primary' , 'opacity-75', 'text-primary');
-
+                   
 
 
                         let firstPage = document.getElementById("1").parentNode ;
@@ -313,17 +308,21 @@
 
                                  let pagePrev = document.getElementById(prevP).parentNode;
 
+                                 console.log(`pagePrev`)
+
+                                 console.log(pagePrev) ;
+
                                   pagePrev.classList.add('bg-primary' , 'opacity-75', 'text-primary')
 
                             }
 
-                         let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
+                            let newPrevUrl = `paged/${ newPrevPosition }/tt/${ pagePosition.tt }/sl/${ pagePosition.sl }/tl/${ pagePosition.tl }`
 
                             previous.href = newPrevUrl ;
 
                             pagePosition.p = newPrevPosition ;
 
-                            console.log(pagePosition);
+                           
 
  
                             } else  if(page.id =="next"){
