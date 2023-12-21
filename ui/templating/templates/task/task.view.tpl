@@ -2,7 +2,47 @@
 
 <div class="container-fluid">
 
-  <h1> Test </h1>
+  <header class="py-2"> 
+
+    <div class="container">
+
+        <div class="py-2">
+            <a> Home</a> >
+            <a class="text-primary"> Task</a> >
+            <a> Claim</a> 
+
+        </div>
+    
+    
+    </div>
+
+  
+  
+   </header>
+
+   <section class="bg-light">
+   <div class="container">
+
+        <div class="py-2 d-flex justify-content-between"> 
+
+            {if $task->getTitle() != ''}
+                <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} <div>
+            {else}
+               <div> {Localisation::getTranslation('common_task')} {$task->getId()} </div>
+            {/if}
+
+            <button class="btn btn-primary"> Claim Task ..<button>
+        
+        
+        
+        </div>
+
+
+   
+   <div>
+   
+   
+   </section>
 
     {assign var="task_id" value=$task->getId()}
     <div>
