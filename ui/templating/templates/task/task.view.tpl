@@ -45,7 +45,7 @@
                 {/if}
 
             </div>
-        </div>
+       
 
             <div>
              {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
@@ -56,12 +56,9 @@
 
             </div>
 
-              
-
-
           </div>
 
-        </div>
+    
 
 
         <div class="container">
