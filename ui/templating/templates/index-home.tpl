@@ -149,7 +149,8 @@ h3{
     <div id="siteLocation">{$siteLocation}</div>
 </span>
 
-
+<div class="container">
+        
 
 
 {if !isset($user)}
