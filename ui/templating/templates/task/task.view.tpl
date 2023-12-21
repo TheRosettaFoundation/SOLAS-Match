@@ -66,7 +66,7 @@
         <div class="container">
 
         
-            <div class="row">
+            <div class="row d-flex">
 
                 <div class="col-6 "> 
 
