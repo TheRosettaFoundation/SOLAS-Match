@@ -36,8 +36,22 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Aaron Mason
 - Alan Barrett
 - Ian Magero
+- Reine Alice Iramurikiye
 
 # Release Notes
+
+## Version 15.1
+
+- Reports added...
+  - All Paid Projects (with at least one paid task)
+  - All Paid Projects (with at least one paid task) for Hubspot Deal ID: ...
+  - In Project View (new info on paid projects)
+- new Shell Tasks added...
+  - "Translation Outside Phrase"
+  - "Revision Outside Phrase"
+  - "Audiovisual Sign Off"
+- Updates to Linguist Certificates and Letter
+- Filter on home page only shows language pairs for which the linguist has claimable tasks
 
 ## Version 15.0
 
