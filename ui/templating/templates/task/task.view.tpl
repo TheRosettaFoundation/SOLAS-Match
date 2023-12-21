@@ -27,9 +27,9 @@
           <div class="d-flex py-4 justify-content-between">
 
                 {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}</div>
                 {else}
-                {Localisation::getTranslation('common_task')} {$task->getId()}
+                <div>{Localisation::getTranslation('common_task')} {$task->getId()}</div>
                 {/if}
 
 
