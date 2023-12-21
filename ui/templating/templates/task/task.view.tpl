@@ -2,9 +2,9 @@
 <div class="container-fluid">
 
 <main>
-    <header class="container bg-white">
+    <header class="container-fluid bg-white">
 
-     <div> 
+     <div class="container p-4"> 
      
             <a href="#">Home </a> > 
             <a href="#" class="text-primary"> Task </a> > 
@@ -19,7 +19,7 @@
 
     <div class="container">
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between p-4">
 
             {if $task->getTitle() != ''}
                <h5> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </h5>
