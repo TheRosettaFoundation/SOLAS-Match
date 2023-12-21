@@ -1,6 +1,27 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 
     {assign var="task_id" value=$task->getId()}
+    <div>
+
+    <section class="bg-white">
+
+    <div> <a> Home </a> - Task -Claim  </div>
+
+    </section>
+
+
+    <section class="bg-light">
+
+    <div>
+
+    
+    
+    </div>
+    
+    
+    </section>
+
+    </div>
 
     <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
@@ -232,4 +253,4 @@
     {/if}
     
    
-{include file="footer.tpl"}
+{include file="footer2.tpl"}
