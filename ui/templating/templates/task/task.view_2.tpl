@@ -1,57 +1,7 @@
-
-
-<div class="container-fluid">
-
-<header>
-
-    <div class="container py-2">
-
-        <div >
- 
-            <a href="#"> Home </a> >
-            <a href="#" class="text-primary"> Task </a> >
-            <a href="#"> Claim </a> 
-        
-        </div>
-
-    </div>
-
-    
-
-</header>
-
-<section class="bg-light" >
-
-    <div class="container py-2">
-
-        <div class="d-flex justify-content-between py-2">
-             {if $task->getTitle() != ''}
-               <div> {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} </div>
-            {else}
-               <div> {Localisation::getTranslation('common_task')} {$task->getId()} </div>
-            {/if}
-
-            <button class="btn btn-primary"> Claim Task ..</button>
-
-         
-
-        </div>
-
-    </div>
-
-
-
-
-<section >
-        
-
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 
     {assign var="task_id" value=$task->getId()}
-    <div>
-
-
-
+    
     <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
