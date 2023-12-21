@@ -52,7 +52,7 @@
                        
 
                         <div class="d-flex justify-content-end mt-4 mx-5 mx-md-2  mt-md-0">
-                             <div  class ="text-end"> <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&amp;__hssc=84675846.1.1634309162966&amp;__hsfp=2187346942" target="_blank"> <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter  </a>  </div>
+                             <div  class ="text-end"> <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&amp;__hssc=84675846.1.1634309162966&amp;__hsfp=2187346942" target="_blank" class="text-decoration-none text-white"> <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter  </a>  </div>
                             
                         </div>
 
