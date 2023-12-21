@@ -39,6 +39,27 @@
 
         </div>
 
+
+        <div class="container">
+
+        
+            <class="row">
+
+                <div class="col-8"> 
+
+                       {include file="task/task.details.tpl"} 
+                
+                <div>
+
+                <div class="col-4"> 
+                
+                <div>
+            
+            <>
+        
+        
+        </div>
+
 </section>
 
     {assign var="task_id" value=$task->getId()}
