@@ -1,5 +1,8 @@
 {include file="new_header.tpl"}
 
+
+<div class="container-fluid">
+
     {assign var="task_id" value=$task->getId()}
     <div>
 
