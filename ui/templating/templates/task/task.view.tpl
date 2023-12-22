@@ -28,7 +28,7 @@
 
           <div class="d-flex py-4  flex-wrap justify-content-between">
 
-               <div>
+               <div class="fw-bold">
 
                 {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
