@@ -149,6 +149,15 @@
 
          {if !empty($file_preview_path)}
 
+
+
+         <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
+            <iframe width="100%" height="100%"
+                src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
+                frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
+            </iframe>
+            </div>
+
           <class="table-responsive">
 		    <table>
 		        <thead>
