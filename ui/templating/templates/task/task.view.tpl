@@ -97,14 +97,12 @@
                                                             <span>
                                                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
                                                             </span>
-                                                            <div>
-                                                                <p class="d-flex ">
-                                                                    <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{$taskStatusTexts[$also_viewed_status_id]}</span>
-                                                                    &nbsp;|&nbsp;
+                                                            <div class="mt-2">
+                                                                <p class="d-flex align-items-center">
+                        
+                                                                    <span type="button" class=" ms-1 rounded-pill badge bg-greenish border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
-                                                                    <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
-
-                                                                    &nbsp;|&nbsp;
+                                                             
                                                                     {if $alsoViewedTask->getWordCount()}
                                                                         <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
