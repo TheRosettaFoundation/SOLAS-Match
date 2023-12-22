@@ -8,10 +8,12 @@
 
 <div class="container py-2">
 
-         <div class="text-decoration-none">
-            <a href="#"> Home </a> >
-            <a href="#" class="text-primary"> Task </a> >
-            <a href="#"> Claim </a> >
+         <div >
+            <a  class="text-decoration-none"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+ 
+            <a  class="text-decoration-none" href="#" class="text-primary"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+
+            <a class="text-decoration-none" href="#"> Claim </a> >
         </div>
 
 
@@ -151,7 +153,26 @@
          {if !empty($file_preview_path)}
 
 
-          <div class="py-2 fw-bold">{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}</div>
+          <div class="py-2 d-flex  justify-content-between align-items-center flex-wrap"> 
+          
+          <div class="fw-bold">
+
+                {Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}
+          
+          </div>
+
+          <div class="d-flex ">
+
+                    <img src="{urlFor name='home'}ui/img/print.svg" alt="print" class="mx-1" >
+
+                    <img src="{urlFor name='home'}ui/img/download.svg" alt="download" class="mx-1" >
+
+
+          
+          
+          </div>
+          
+          </div>
          <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
             <iframe width="100%" height="100%"
                 src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
