@@ -45,7 +45,7 @@
 
                 </div>
 
-               <div class="bg-grayish p-4">
+               <div class="bg-grayish p-4 text-center">
 
                     <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-75" />
 
