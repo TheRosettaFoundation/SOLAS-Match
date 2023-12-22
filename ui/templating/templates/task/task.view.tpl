@@ -73,7 +73,7 @@
                             <div class="row"></div>
                                 <div class="row">
                                     <div class="span4 pull-right">
-                                        <h5 class="font-bold">{Localisation::getTranslation('users_also_viewed')}</h5>
+                                        <h5 class="fw-bold shadow">{Localisation::getTranslation('users_also_viewed')}</h5>
                                         
                                         {if isset($alsoViewedTasks)}
                                         <div id="also-viewed-tasks">
