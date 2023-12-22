@@ -103,16 +103,15 @@
                                                          
                                                          </div>   
                                                   
-                                                        <div class="mt-2">
-                                                                <p class="d-flex align-items-center">
-                        
+                                                        <div class="mt-2 d-flex align-items-center">                                                                
+                                
                                                                     <span type="button" class=" ms-1 rounded-pill badge bg-greenish border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
                                                              
                                                                     {if $alsoViewedTask->getWordCount()}
                                                                         <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
-                                                                </p>
+                                                            
                                                         </div>
                                                             <p class="px-1">
                                                             <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
