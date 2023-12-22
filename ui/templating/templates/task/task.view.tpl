@@ -86,9 +86,9 @@
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
                                                         <div class="bg-white">
-                                                            <h5>
-                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
-                                                            </h5>
+                                                            <div>
+                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
+                                                            </div>
                                                         {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
                                                             <span>
                                                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
@@ -99,14 +99,14 @@
                                                             </span>
                                                             <div>
                                                                 <p class="d-flex ">
-                                                                    <span class="type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{$taskStatusTexts[$also_viewed_status_id]}</span>
+                                                                    <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{$taskStatusTexts[$also_viewed_status_id]}</span>
                                                                     &nbsp;|&nbsp;
 
-                                                                    <span class="type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
+                                                                    <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
                                                                     &nbsp;|&nbsp;
                                                                     {if $alsoViewedTask->getWordCount()}
-                                                                        <span class=" type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
+                                                                        <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
                                                                 </p>
                                                             </div>
