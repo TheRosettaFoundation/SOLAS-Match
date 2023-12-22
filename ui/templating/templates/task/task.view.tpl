@@ -2,6 +2,11 @@
 
 {assign var="task_id" value=$task->getId()}
 
+{assign var="type_id" value=$task->getTaskType()}
+
+                    
+                    
+
 
 
 <div class="container-fluid">
@@ -33,7 +38,7 @@
                <div class="fw-bold">
 
                 {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} = {$type_id}
                 {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}
