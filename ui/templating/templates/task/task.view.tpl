@@ -80,7 +80,7 @@
                                             <div >
                                                 {for $count=0 to $alsoViewedTasksCount-1}
                                                     {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
-                                                    <div class="ts-task bg-secondary">
+                                                    <div class="">
                                                         {assign var="also_viewed_task_id" value=$alsoViewedTask->getId()}
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
