@@ -153,7 +153,7 @@
          {if !empty($file_preview_path)}
 
 
-          <div class="py-2 d-flex  justify-content-between align-items-center flex-wrap"> 
+          <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap"> 
           
           <div class="fw-bold">
 
@@ -163,14 +163,16 @@
 
           <div class="d-flex ">
 
-                    <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"> 
-                    
+                   
                         <img src="{urlFor name='home'}ui/img/print.svg" alt="print" class="mx-4" >
        
-                    </a>
+                   
 
+                     <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"> 
                     
                     <img src="{urlFor name='home'}ui/img/download.svg" alt="download"  >
+
+                     </a>
 
 
           
