@@ -3,7 +3,7 @@
 
 
 
-    <section>
+    <section class="container">
         <div class="page-header">
             <h4>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_proofreading_task')}</small></h4>
         </div>
