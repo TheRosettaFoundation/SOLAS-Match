@@ -19,7 +19,7 @@
 
 
                         <h5>{Localisation::getTranslation('task_claim_proofreading_0')}</h5>
-                        <p style="margin-bottom:20px;"></p>
+                        <p "></p>
                         <ol>
                             <li>{Localisation::getTranslation('task_claim_proofreading_2')}</li>
                             <li>
@@ -45,9 +45,13 @@
 
                 </div>
 
+               <div class="bg-grayish">
 
-                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-25 h-25" />
+                    <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-25 h-25" />
 
+               
+               </div>
+                
 
      
      
