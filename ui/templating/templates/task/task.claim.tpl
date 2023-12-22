@@ -40,7 +40,13 @@
              <div class="mt-2 mt-md-0">
            
                                 <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
-                             
+                                
+                                  {if !empty($matecat_url)}
+                                    <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                                        <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
+                                    </a>
+                                    {/if}
+
 
                                 {if !empty($allow_download)}
                                 <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
@@ -51,7 +57,7 @@
                                 <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
                                     <i class="icon-download icon-white"></i> Download Original File in its source language</a>
                                 {/if}
-                        <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
+                      
                         <p> 
                                 <button type="submit" class="btn btn-primary">
                                     <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('task_claim_proofreading_5')}
