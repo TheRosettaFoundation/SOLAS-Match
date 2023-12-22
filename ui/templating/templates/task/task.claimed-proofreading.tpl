@@ -1,16 +1,27 @@
 {assign var=task_id value=$task->getId()}
 
     <section>
+     <div class="container">
+
         <div class="page-header">
-            <h1>{Localisation::getTranslation('task_claimed_proofreading_proofreading_task_claimed')} <small>{Localisation::getTranslation('task_claimed_proofreading_please_proofread_it')}</small></h1>
+            <h4>{Localisation::getTranslation('task_claimed_proofreading_proofreading_task_claimed')} <small>{Localisation::getTranslation('task_claimed_proofreading_please_proofread_it')}</small></h4>
         </div>
         <div class="alert alert-success">
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </div>
+     
+     
+     
+     </div>
+        
     </section>
 
     <section>
-        <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
+
+     
+     <div class="container">
+
+            <h4>{Localisation::getTranslation('common_what_happens_now')}</h4>
         {if $translations_not_all_complete}
         <p>This is what you need to do:</p>
         <ol>
@@ -40,10 +51,16 @@
         {if isset($user)}
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
+     
+     
+     </div>
+        
     </section>
 
     <section>
-        <h3>When you have finished revising:</h3>
+     <div class="container">
+
+             <h4>When you have finished revising:</h4>
         <p>
             {if empty($memsource_task)}
             <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
@@ -63,6 +80,12 @@
             </a>
             {/if}
         </p>
+
+     
+     
+     <div/>
+       
+       
     </section>
 
     {if !empty($allow_download)}
