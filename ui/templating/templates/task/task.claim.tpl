@@ -3,6 +3,8 @@
 
 {assign var="taskType" value=$task->getTaskType()}
 
+{assign var="task_id" value=$task->getId()}
+
 
 <header class="">
 
@@ -11,7 +13,7 @@
          <div class="py-2" >
             <a  class="text-decoration-none text-dark-subtle"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
  
-            <a   href="#" class="text-dark-subtle text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+            <a  href="{urlFor name="task-claim-page" options="task_id.$task_id"}"  class="text-dark-subtle text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
 
             <a class="text-decoration-none text-primaryDark fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
         </div>
