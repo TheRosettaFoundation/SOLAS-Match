@@ -66,7 +66,7 @@
                                 <button type="submit" class="btn btn-primary fs-6">
                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
                                 </button>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow text-white">
+                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow ">
                                     <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
