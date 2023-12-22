@@ -87,7 +87,7 @@
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
                                                         <div class="bg-white shadow mt-4 p-2 fs-5 rounded-1">
                                                             <div class="px-1">
-                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
+                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none fw-bold text-dark fs-4 ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
                                                          <div class="mt-2 px-1">
 
