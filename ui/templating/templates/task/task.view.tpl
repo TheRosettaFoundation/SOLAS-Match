@@ -62,14 +62,14 @@
         
             <div class="row d-flex justify-content-between">
 
-                <div class=" col-12 col-sm-6 col-md-8 "> 
+                <div class=" col-12  col-md-6 "> 
 
                          {include file="task/task.details.tpl"} 
 
                 
                 </div>
 
-                <div class=" col-12 col-sm-6 col-md-4"> 
+                <div class=" col-12  col-md-4"> 
 
                                                         
                             {if ($alsoViewedTasksCount>0)}
@@ -168,9 +168,9 @@
        
                    
 
-                     <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"> 
+                     <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true" download = "{TemplateHelper::uiCleanseHTML($filename)}"> 
                     
-                    <img src="{urlFor name='home'}ui/img/download.svg" alt="download"  >
+                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download"  >
 
                      </a>
 
