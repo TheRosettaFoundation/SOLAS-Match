@@ -9,11 +9,11 @@
 <div class="container py-2">
 
          <div class="py-2" >
-            <a  class="text-decoration-none"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+            <a  class="text-decoration-none text-secondary"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
  
-            <a  class="text-decoration-none" href="#" class="text-primaryDark fw-bold"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+            <a   href="#" class="text-primaryDark fw-bold text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
 
-            <a class="text-decoration-none" href="#"> Claim </a>
+            <a class="text-decoration-none text-secondary" href="#"> Claim </a>
         </div>
 
 
