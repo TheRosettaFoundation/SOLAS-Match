@@ -179,7 +179,8 @@
 
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
-    <table width="100%" class="table table-striped">
+  <div class="table-responsive">
+    <table class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
@@ -283,6 +284,7 @@
             {/if}
         </tr>
     </table>
+    </div>
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
