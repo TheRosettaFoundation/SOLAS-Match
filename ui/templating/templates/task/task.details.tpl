@@ -17,7 +17,7 @@
 
     <tbody class="fs-6">
         <tr>
-            <td">
+            <td>
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
