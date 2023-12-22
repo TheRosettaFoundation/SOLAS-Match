@@ -29,7 +29,13 @@
                     
                     </div>
 
-                    <button class="btn btn-grayish"> Download original file in its source language </button>
+                    <div>
+
+                        <button class="btn btn-grayish"> Download original file in its source language </button>
+                    
+                    </div>
+
+                    
                    
 
                 </div>
