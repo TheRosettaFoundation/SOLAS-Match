@@ -11,7 +11,7 @@
          <div>
             <a href="#"> Home </a> >
             <a href="#" class="text-primary"> Task </a> >
-            <a href="#"> Clain </a> >
+            <a href="#"> Claim </a> >
         </div>
 
 
@@ -20,7 +20,7 @@
 
 </header>
 
-<section class="bg-light"> 
+<section class="bg-light-subtle"> 
 
         <div class="container ">
 
