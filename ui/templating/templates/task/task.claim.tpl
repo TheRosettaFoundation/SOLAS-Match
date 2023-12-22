@@ -116,7 +116,7 @@
 
  <main >
 
- <div class="container-fluid bg-light">
+ <div class="container-fluid bg-light-subtle">
 
           {if $taskType == TaskTypeEnum::SEGMENTATION}
         {include file="task/task.claim-segmentation.tpl"}
