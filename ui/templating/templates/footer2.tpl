@@ -69,6 +69,9 @@
 
                     // Variables on the theme of the site
 
+                    let imgL = document.getElementById("light");
+                    let imgN = document.getElementById("night");
+
                     let light = true;
                     
                     let theme = document.getElementById("theme");
