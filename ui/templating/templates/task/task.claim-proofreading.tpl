@@ -13,7 +13,7 @@
 
     <section class="py-4 container">
 
-     <div class="card  py-2">
+     <div class="card  d-flex py-2">
 
                 <div class="card-body">
 
@@ -46,7 +46,7 @@
                 </div>
 
 
-                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded float-end w-25 h-25" />
+                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-25 h-25" />
 
 
      
