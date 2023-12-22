@@ -1,4 +1,4 @@
-{include file="new_header.tpl"}
+{include file="header.tpl"}
 
     {assign var="taskType" value=$task->getTaskType()}
     {if $taskType == TaskTypeEnum::SEGMENTATION}
@@ -13,4 +13,4 @@
         {include file="task/task.claim-approval.tpl"}
     {/if}
 
-{include file="footer2.tpl"}
+{include file="footer.tpl"}
