@@ -91,6 +91,7 @@
                   
                     let tasksContainer = document.querySelector('.taskPagination');
 
+
                     let recents = document.querySelector('.recents') ;
                     
                     if(recents){
@@ -126,9 +127,11 @@
 
                     let last = document.querySelector(".last");
                     let first = document.querySelector(".first");
-                    let countPage = document.querySelector(".last").id
 
-                    console.log(`countPage : ${ countPage }`);
+                    if(last) {
+                    let countPage = document.querySelector(".last").id
+                    }
+               
 
                     last.addEventListener('click', function(e){
 
