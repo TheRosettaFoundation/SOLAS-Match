@@ -170,7 +170,7 @@
        
                    
 
-                     <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true" download = "{TemplateHelper::uiCleanseHTML($filename)}"> 
+                     <a href="$file_preview_path" download = "{TemplateHelper::uiCleanseHTML($filename)}"> 
                     
                             <img src="{urlFor name='home'}ui/img/download.svg" alt="download"  >
 
@@ -187,7 +187,7 @@
                 src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
                 frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
             </iframe>
-            </div>
+         </div>
 
        
         {/if}
