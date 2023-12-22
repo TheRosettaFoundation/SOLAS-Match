@@ -81,8 +81,8 @@
        
        </tr>
 
-        <tbody>
-            <tr ">
+        <tbody class="fs-6">
+            <tr>
                 <td>
                     <i>
                         {if $task->getComment() != ''}
