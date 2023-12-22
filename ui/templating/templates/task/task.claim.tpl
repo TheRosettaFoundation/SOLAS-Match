@@ -4,9 +4,11 @@
     {assign var="taskType" value=$task->getTaskType()}
     
 
-    <h1> {$taskType}</h1>
+ <main class="container">
 
-    {if $taskType == TaskTypeEnum::SEGMENTATION}
+ <div class="container">
+
+          {if $taskType == TaskTypeEnum::SEGMENTATION}
         {include file="task/task.claim-segmentation.tpl"}
         <div> SEGM</div>
     {elseif $taskType == TaskTypeEnum::TRANSLATION}
@@ -22,5 +24,13 @@
         {include file="task/task.claim-approval.tpl"}
          <div> APPR</div>
     {/if}
+ 
+ 
+ </div>
+
+ 
+ </main>
+
+  
 
 {include file="footer2.tpl"}
