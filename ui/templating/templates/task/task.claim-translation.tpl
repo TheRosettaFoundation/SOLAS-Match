@@ -30,8 +30,11 @@
                     </div>
 
                     <div>
-
-                        <button class="btn btn-grayish"> Download original file in its source language </button>
+                      
+                      {if !empty($memsource_task)}
+                        <button class="btn btn-grayish fs-6"> Download original file in its source language </button>
+                      {/if}
+                    
                     
                     </div>
 
