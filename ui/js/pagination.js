@@ -21,12 +21,12 @@ let recents = document.querySelector(".recents");
 
 if (recents) {
     let userId = recents.id;
-}
 
-recents.addEventListener("click", function (e) {
-    e.preventDefault();
-    fetchRecents();
-});
+    recents.addEventListener("click", function (e) {
+        e.preventDefault();
+        fetchRecents();
+    });
+}
 
 let light = true;
 let theme = document.getElementById("theme");
