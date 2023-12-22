@@ -11,9 +11,9 @@
         </p>
     {/if}
 
-    <section class="py-4 container">
+    <section class="py-4 container card">
 
-     <div class="d-flex py-2 justify-content-between align-items-center flex-wrap card">
+     <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
 
                 <div class=" w-50">
 
