@@ -4,11 +4,11 @@
 
 <div class="container-fluid">
 
-<header class="py-2">
+<header class="">
 
 <div class="container py-2">
 
-         <div>
+         <div class="text-decoration-none">
             <a href="#"> Home </a> >
             <a href="#" class="text-primary"> Task </a> >
             <a href="#"> Claim </a> >
