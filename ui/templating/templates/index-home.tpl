@@ -520,7 +520,7 @@ a:hover{
 	                                <select name="sourceLanguage" ID="sourceLanguage">
                                       <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>Any Language Pair</option>
                                       {foreach $active_languages as $lang}
-                                          <option value="{$lang['ls_code']}_{$lang['lt_code']}" {if ($selectedSourceLanguageCode === $lang['ls_code'] . '_' . $lang['lt_code'])}selected="selected"{/if}>{$lang['ls_name']} to {$lang['lt_name']}</option>
+                                          <option value="{$lang['ls_code']}_{$lang['lt_code']}" {if ($selectedSourceLanguageCode === ($lang['ls_code'] . '_' . $lang['lt_code']))}selected="selected"{/if}>{$lang['ls_name']} to {$lang['lt_name']}</option>
 	                                    {/foreach}
 	                                </select>
 	                            </td>
