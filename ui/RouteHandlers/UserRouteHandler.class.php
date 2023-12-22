@@ -236,7 +236,6 @@ class UserRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
-        $languageDao = new DAO\LanguageDao();
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -423,7 +422,7 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
-            'active_languages' => $languageDao->get_active_languages($user_id),
+            'active_languages' => $taskDao->get_active_languages($user_id),
             'selectedTaskType' => $selectedTaskType,
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
             'selectedTargetLanguageCode' => 0,
