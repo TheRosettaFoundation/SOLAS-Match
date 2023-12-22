@@ -1,8 +1,11 @@
 {assign var=task_id value=$task->getId()}
 
+
+
+
     <section>
         <div class="page-header">
-            <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_proofreading_task')}</small></h1>
+            <h4>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_proofreading_task')}</small></h4>
         </div>
     </section>
 
@@ -13,7 +16,7 @@
     {/if}
 
     <section>
-        <h2>{Localisation::getTranslation('task_claim_proofreading_0')}</h2>
+        <h5>{Localisation::getTranslation('task_claim_proofreading_0')}</h5>
         <p style="margin-bottom:20px;"></p>
         <ol>
             <li>{Localisation::getTranslation('task_claim_proofreading_2')}</li>

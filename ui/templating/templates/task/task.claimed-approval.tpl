@@ -1,7 +1,7 @@
 {assign var=task_id value=$task->getId()}
 
     <section>
-    <div class="container">
+    
 
           <div class="page-header">
             <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
@@ -12,7 +12,7 @@
 
     </div>
       
-    </section>
+
 
     <section>
 
