@@ -500,8 +500,7 @@ a:hover{
 	                <thead>
 	                    <tr>
 	                        <th>{Localisation::getTranslation('common_task_type')}</th>
-	                        <th>{Localisation::getTranslation('common_source_language')}<span style="color: red">*</span></th>
-	                        <th>{Localisation::getTranslation('common_target_language')}<span style="color: red">*</span></th>
+                          <th>Language Pair<span style="color: red">*</span></th>
 	                    </tr>
 	                </thead>
 	                <tbody>
@@ -519,18 +518,9 @@ a:hover{
 	                            </td>
 	                            <td>
 	                                <select name="sourceLanguage" ID="sourceLanguage">
-	                                    <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
-	                                    {foreach $activeSourceLanguages as $lang}
-	                                        <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
-	                                    {/foreach}
-	                                </select>
-	                            </td>
-	                            <td>
-	                                <select name="targetLanguage" ID="targetLanguage">
-	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
-$active_languages
-	                                    {foreach $activeTargetLanguages as $lang}
-	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+                                      <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>Any Language Pair</option>
+                                      {foreach $active_languages as $lang}
+                                          <option value="{$lang['ls_code']}_{$lang['lt_code']}" {if ($selectedSourceLanguageCode === $lang['ls_code'] . '_' . $lang['lt_code'])}selected="selected"{/if}>{$lang['ls_name']} to {$lang['lt_name']}</option>
 	                                    {/foreach}
 	                                </select>
 	                            </td>

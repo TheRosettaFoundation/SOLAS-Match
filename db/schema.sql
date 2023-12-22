@@ -2437,9 +2437,7 @@ BEGIN
         ls.code      AS ls_code,
         ls.`en-name` AS ls_name,
         lt.code      AS lt_code,
-        lt.`en-name` AS lt_name,
-        ct.code      AS ct_code,
-        ct.`en-name` AS ct_name
+        lt.`en-name` AS lt_name
     FROM      Tasks                            t
     JOIN      Languages                       ls ON t.`language_id-source`=ls.id
     JOIN      Languages                       lt ON t.`language_id-target`=lt.id
@@ -2467,12 +2465,10 @@ BEGIN
         )
     GROUP BY
         ls.code,
-        lt.code,
-        ct.code
+        lt.code
     ORDER BY
         ls.`en-name`,
-        lt.`en-name`,
-        ct.`en-name`;
+        lt.`en-name`;
 END//
 DELIMITER ;
 

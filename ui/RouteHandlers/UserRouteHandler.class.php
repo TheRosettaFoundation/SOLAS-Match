@@ -426,6 +426,7 @@ class UserRouteHandler
             'active_languages' => $languageDao->get_active_languages($user_id),
             'selectedTaskType' => $selectedTaskType,
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
+            'selectedTargetLanguageCode' => 0,
             'topTasks' => $topTasks,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
