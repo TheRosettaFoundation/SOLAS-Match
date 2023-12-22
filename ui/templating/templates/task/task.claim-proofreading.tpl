@@ -19,7 +19,7 @@
 
      <div class="card d-flex justify-content-between py-2">
 
-                <div>
+                <div class="card-body">
 
 
                         <h5>{Localisation::getTranslation('task_claim_proofreading_0')}</h5>
@@ -50,7 +50,7 @@
                 </div>
 
 
-                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1" />
+                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 card-img-left" />
 
 
      
