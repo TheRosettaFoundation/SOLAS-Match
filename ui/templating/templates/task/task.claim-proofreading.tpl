@@ -13,9 +13,9 @@
 
     <section class="py-4 container">
 
-     <div class="card  d-flex py-2">
+     <div class="card d-flex py-2">
 
-                <div class="card-body">
+                <div class=" w-50">
 
 
                         <h5>{Localisation::getTranslation('task_claim_proofreading_0')}</h5>
