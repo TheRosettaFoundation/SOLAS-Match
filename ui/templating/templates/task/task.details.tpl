@@ -71,18 +71,18 @@
 <div class="well">
     <table class="table">
        <tr>
-            <thead>
+            <thead class="fs-6">
 
-            <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
-            <th></th>
-            <th width="48%" align="left">{Localisation::getTranslation('common_project_description')}<hr/></th>
+            <th >{Localisation::getTranslation('common_task_comment')}<hr/></th>
+      
+            <th >{Localisation::getTranslation('common_project_description')}<hr/></th>
 
             </thead>
        
        </tr>
 
         <tbody>
-            <tr style="overflow-wrap: break-word;" valign="top">
+            <tr ">
                 <td>
                     <i>
                         {if $task->getComment() != ''}
@@ -94,13 +94,13 @@
                 </td>
                 <td></td>
                 <td>
-                    <i>
+                  
                         {if $project->getDescription() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
-                    </i>
+                    
                 </td>
             </tr>
             <tr>
