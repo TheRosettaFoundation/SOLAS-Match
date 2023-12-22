@@ -27,7 +27,7 @@
 
           <div class="d-flex py-4  flex-wrap justify-content-between align-items-center">
 
-               <div class="fw-bold w-75">
+               <div class="fw-bold">
 
                 {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -39,7 +39,7 @@
 
              <div class="mt-2 mt-md-0">
            
-                                <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                                <form class=" fs-5" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                                 
                                   {if !empty($matecat_url)}
                                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
