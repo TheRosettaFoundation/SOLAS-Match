@@ -85,7 +85,7 @@
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="bg-white">
+                                                        <div class="bg-white p-2">
                                                             <div>
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
