@@ -67,7 +67,7 @@
         <div class="container">
 
         
-            <div class="row d-flex justify-content-between">
+            <div class="row d-flex justify-content-between py-4">
 
                 <div class=" col-12  col-md-6 "> 
 
