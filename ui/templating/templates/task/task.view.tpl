@@ -96,7 +96,7 @@
                                                                             {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
                                                                         </span>
 
-                                                                         <img src="{urlFor name='home'}ui/img/lang_arrow.svg" alt="arrow" class="mx-1" >
+                                                                         <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" >
                                                                      {/if}
                                                                         <span>
                                                                             {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
