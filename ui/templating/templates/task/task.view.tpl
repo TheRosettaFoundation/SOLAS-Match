@@ -113,11 +113,11 @@
                                                                         <span type="button" class="ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
                                                                 </p>
-                                                            </div>
-                                                            <p>
+                                                        </div>
+                                                            <p class="px-1">
                                                             <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
                                                             </p>
-                                                        <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
+                                                        <p class="px-1">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
                                                         </div>
                                                     </div>
                                                 {/for}
