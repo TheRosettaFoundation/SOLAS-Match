@@ -23,7 +23,7 @@
 </header>
 
 
-<div class="container-fluid bg-light">
+<div class="container-fluid bg-light-subtle">
 
           <div class=" container  d-flex py-4  flex-wrap justify-content-between align-items-center">
 
