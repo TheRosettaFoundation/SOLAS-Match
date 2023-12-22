@@ -12,7 +12,7 @@
 
      <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
 
-                <div class="w-50 d-flex-column justify-content-between">
+                <div class="w-50 d-flex-column justify-content-end">
 
                     <div> 
 
