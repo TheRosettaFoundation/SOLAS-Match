@@ -15,7 +15,7 @@
         </p>
     {/if}
 
-    <section class="container">
+    <section class="py-4">
 
      <div class="card d-flex justify-content-between">
 
@@ -50,7 +50,7 @@
                 </div>
 
 
-                <<img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1" />
+                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1" />
 
 
      
