@@ -85,7 +85,7 @@
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="bg-white mt-4 p-2 fs-5 rounded-1">
+                                                        <div class="bg-white mt-4 p-2 fs-5 shadow rounded-1">
                                                             <div class="px-1">
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none fw-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
@@ -95,6 +95,8 @@
                                                                         <span>
                                                                             {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
                                                                         </span>
+
+                                                                         <img src="{urlFor name='home'}ui/img/lang_arrow.svg" alt="arrow" class="mx-1" >
                                                                      {/if}
                                                                         <span>
                                                                             {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
