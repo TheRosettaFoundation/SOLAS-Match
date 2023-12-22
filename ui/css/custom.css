@@ -274,12 +274,7 @@ h3, .h3 {
 }
 
 h4, .h4 {
-  font-size: calc(1.275rem + 0.3vw);
-}
-@media (min-width: 1200px) {
-  h4, .h4 {
-    font-size: 1.5rem;
-  }
+  font-size: 1rem;
 }
 
 h5, .h5 {
@@ -8976,7 +8971,7 @@ textarea.form-control-lg {
 }
 
 .fs-4 {
-  font-size: calc(1.275rem + 0.3vw) !important;
+  font-size: 1rem !important;
 }
 
 .fs-5 {
@@ -12918,9 +12913,6 @@ textarea.form-control-lg {
   }
   .fs-3 {
     font-size: 1.75rem !important;
-  }
-  .fs-4 {
-    font-size: 1.5rem !important;
   }
 }
 @media print {

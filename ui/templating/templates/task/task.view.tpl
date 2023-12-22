@@ -73,7 +73,7 @@
                             <div class="row"></div>
                                 <div>
                                     <div>
-                                        <div class="fw-bold">{Localisation::getTranslation('users_also_viewed')}</div>
+                                        <h4 class="fw-bold">{Localisation::getTranslation('users_also_viewed')}</h4>
                                         
                                         {if isset($alsoViewedTasks)}
                                         <div>
@@ -85,7 +85,7 @@
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="bg-white shadow mt-4 p-2">
+                                                        <div class="bg-white shadow mt-4 p-2 fs-5">
                                                             <div class="px-1">
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
