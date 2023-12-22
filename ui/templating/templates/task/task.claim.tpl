@@ -23,9 +23,9 @@
 </header>
 
 
-<div class="container ">
+<div class="container-fluid">
 
-          <div class="d-flex py-4  flex-wrap justify-content-between align-items-center">
+          <div class=" container bg-info d-flex py-4  flex-wrap justify-content-between align-items-center">
 
                <div class="fw-bold">
 
