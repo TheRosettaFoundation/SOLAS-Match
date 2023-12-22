@@ -41,12 +41,9 @@
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
-                <span class="hidden">
-                    <div id="siteLocationURL">{Settings::get("site.location")}</div>
-                    <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
-                </span>
                 <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
             </td>
+            
             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                 <td>
                     {assign var="status_id" value=$task->getTaskStatus()}
