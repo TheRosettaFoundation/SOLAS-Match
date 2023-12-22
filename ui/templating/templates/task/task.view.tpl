@@ -29,7 +29,7 @@
 
 </header>
 
-<section class="bg-light-subtle"> 
+<section class="bg-light-subtle py-4"> 
 
         <div class="container ">
 
@@ -67,7 +67,7 @@
         <div class="container">
 
         
-            <div class="row d-flex justify-content-between py-4">
+            <div class="row d-flex justify-content-between ">
 
                 <div class=" col-12  col-md-6 "> 
 
