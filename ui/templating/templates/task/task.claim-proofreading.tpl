@@ -3,11 +3,7 @@
 
 
 
-    <section class="container">
-        <div class="page-header">
-            <h4>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_proofreading_task')}</small></h4>
-        </div>
-    </section>
+  
 
     {if isset($flash['error'])}
         <p class="alert alert-error">
@@ -17,7 +13,7 @@
 
     <section class="py-4 container">
 
-     <div class="card d-flex justify-content-between py-2">
+     <div class="card  py-2">
 
                 <div class="card-body">
 
@@ -50,7 +46,7 @@
                 </div>
 
 
-                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 card-img-left" />
+                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded float-end w-50 h-50" />
 
 
      
