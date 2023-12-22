@@ -76,8 +76,8 @@
                                         <div class="fw-bold">{Localisation::getTranslation('users_also_viewed')}</div>
                                         
                                         {if isset($alsoViewedTasks)}
-                                        <div id="also-viewed-tasks">
-                                            <div class="ts">
+                                        <div>
+                                            <div >
                                                 {for $count=0 to $alsoViewedTasksCount-1}
                                                     {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
                                                     <div class="ts-task bg-secondary">
@@ -85,7 +85,7 @@
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="bg-white shadow mt-2">
+                                                        <div class="bg-white shadow mt-2 p-1">
                                                             <div>
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
