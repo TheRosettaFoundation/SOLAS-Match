@@ -13,7 +13,7 @@
 
     <section class="py-4 container">
 
-     <div class="card d-flex py-2">
+     <div class="d-flex py-2">
 
                 <div class=" w-50">
 
@@ -45,7 +45,7 @@
 
                 </div>
 
-               <div class="bg-grayish">
+               <div class="bg-grayish p-4">
 
                     <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-25 h-25" />
 
