@@ -1,15 +1,15 @@
 <!-- Editor Hint: ¿áéíóú -->
 <table class="table">
     <thead>
-       <tr >
+       <tr class="fs-5">
 
-                <th class="fs-6">Project</th>
-                <th class="fs-6">Source Language</th>
-                <th class="fs-6"> Target Language</th>
-                <th class="fs-6">Created </th>
-                <th class="fs-6"> Task Deadline</th>
-                <th class="fs-6"> Word Count</th>
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th class="fs-6">{Localisation::getTranslation('common_status')}</th>{/if}
+                <th>Project</th>
+                <th>Source Language</th>
+                <th> Target Language</th>
+                <th>Created </th>
+                <th> Task Deadline</th>
+                <th> Word Count</th>
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
             
        </tr>
       
@@ -68,7 +68,7 @@
 <div class="well">
     <table class="table">
        <tr>
-            <thead>
+            <thead class="fs-6">
 
             <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
             <th></th>
@@ -78,7 +78,7 @@
        
        </tr>
 
-        <tbody>
+        <tbody class="fs-6">
             <tr style="overflow-wrap: break-word;" valign="top">
                 <td>
                     <i>
