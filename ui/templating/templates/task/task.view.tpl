@@ -59,14 +59,14 @@
         
             <div class="row d-flex justify-content-between">
 
-                <div class="col-6 "> 
+                <div class=" col-12 col-md-6 "> 
 
                          {include file="task/task.details.tpl"} 
 
                 
                 </div>
 
-                <div class="col-4"> 
+                <div class=" col-12 col-md-4"> 
 
                                                         
                             {if ($alsoViewedTasksCount>0)}
