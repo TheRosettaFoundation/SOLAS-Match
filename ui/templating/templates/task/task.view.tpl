@@ -8,12 +8,12 @@
 
 <div class="container py-2">
 
-         <div >
+         <div class="py-2" >
             <a  class="text-decoration-none"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
  
-            <a  class="text-decoration-none" href="#" class="text-primary"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+            <a  class="text-decoration-none" href="#" class="text-primaryDark fw-bold"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
 
-            <a class="text-decoration-none" href="#"> Claim </a> >
+            <a class="text-decoration-none" href="#"> Claim </a>
         </div>
 
 
@@ -163,9 +163,14 @@
 
           <div class="d-flex ">
 
-                    <img src="{urlFor name='home'}ui/img/print.svg" alt="print" class="mx-1" >
+                    <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"> 
+                    
+                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" class="mx-4" >
+       
+                    </a>
 
-                    <img src="{urlFor name='home'}ui/img/download.svg" alt="download" class="mx-1" >
+                    
+                    <img src="{urlFor name='home'}ui/img/download.svg" alt="download"  >
 
 
           
