@@ -150,7 +150,7 @@
          {if !empty($file_preview_path)}
 
 
-          <div>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}</div>
+          <div class="py-2 fw-bold">{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}</div>
          <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
             <iframe width="100%" height="100%"
                 src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
