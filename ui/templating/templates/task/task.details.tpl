@@ -68,7 +68,7 @@
 </table>
 
 <div class="well">
-    <table width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
+    <table class="table"">
         <thead>
             <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
             <th></th>
