@@ -37,6 +37,7 @@
                 </div>
 
              <div class="mt-2 mt-md-0">
+                 {assign var="task_id" value=$task->getId()}
                 {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
                     <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primaryDark shadow text-white">
