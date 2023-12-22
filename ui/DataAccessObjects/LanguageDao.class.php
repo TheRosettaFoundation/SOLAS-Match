@@ -38,6 +38,13 @@ class LanguageDao extends BaseDao
         return $languages;
     }
 
+    public function get_active_languages($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_active_languages', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function getLanguageByCode($code)
     {
         $request = "{$this->siteApi}v0/languages/getByCode/$code";

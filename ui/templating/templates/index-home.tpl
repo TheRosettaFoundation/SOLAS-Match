@@ -528,6 +528,7 @@ a:hover{
 	                            <td>
 	                                <select name="targetLanguage" ID="targetLanguage">
 	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
+$active_languages
 	                                    {foreach $activeTargetLanguages as $lang}
 	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
 	                                    {/foreach}
