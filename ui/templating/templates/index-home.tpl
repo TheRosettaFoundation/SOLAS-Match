@@ -499,8 +499,8 @@ a:hover{
 	            <table>
 	                <thead>
 	                    <tr>
-	                        <th>{Localisation::getTranslation('common_task_type')}</th>
-                          <th>Language Pair<span style="color: red">*</span></th>
+                          <th style="text-align: left">{Localisation::getTranslation('common_task_type')}</th>
+                          <th style="text-align: left">Language Pair<span style="color: red">*</span></th>
 	                    </tr>
 	                </thead>
 	                <tbody>
