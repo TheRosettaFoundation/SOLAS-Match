@@ -33,7 +33,7 @@
 
         <div class="container ">
 
-          <div class="d-flex py-4  flex-wrap justify-content-between">
+          <div class="d-flex  flex-wrap justify-content-between">
 
                <div class="fw-bold">
 
