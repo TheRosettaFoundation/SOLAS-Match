@@ -32,6 +32,10 @@ let navi = document.getElementById("nav");
 let pages = document.querySelectorAll(".page");
 
 let previous = document.querySelector("#previous");
+
+console.log(`previous`);
+
+console.log(previous);
 let next = document.querySelector("#next");
 
 let last = document.querySelector(".last");
@@ -305,13 +309,7 @@ if (previous) {
             projects = parsed.projects;
         }
 
-        console.log(`parsed projects`);
-
-        console.log(projects);
-
         let newData = document.createElement("div");
-
-        console.log("displaying new tasks");
 
         for (const item of parsed.tasks) {
             let taskType = "";
@@ -439,8 +437,6 @@ if (previous) {
      </div>
         
         `;
-
-            console.log(timezone);
 
             if (image) {
                 imageHtml = document
