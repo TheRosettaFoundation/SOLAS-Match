@@ -2810,12 +2810,19 @@ error_log("result: $result");//(**)
         $hours_donated = $print_data_by_key[0]['hours_donated'];
         $hours_paid = $print_data_by_key[0]['hours_paid'];
         $word_words = [];
-        if ($words_donated) $word_words[] = "$words_donated words in volunteer tasks";
-        if ($hours_donated) $word_words[] = "$hours_donated hours in volunteer tasks";
-        if ($words_paid) $word_words[] = "$words_paid words in paid tasks";
-        if ($hours_paid) $word_words[] = "$hours_paid hours in paid tasks";
+        if ($words_donated || $hours_donated) {
+            $donated = [];
+            if ($words_donated) $donated[] = "$words_donated words";
+            if ($hours_donated) $donated[] = "$hours_donated hours";
+            $word_words[] = implode(' and ', $donated) . ' in volunteer tasks';
+        }
+        if ($words_paid || $hours_paid) {
+            $paid = [];
+            if ($words_paid) $paid[] = "$words_paid words";
+            if ($hours_paid) $paid[] = "$hours_paid hours";
+            $word_words[] = implode(' and ', $paid) . ' in paid tasks';
+        }
         $word_words = implode(' and ', $word_words);
-        // $word_words = "$words_donated words in volunteer tasks and $hours_donated hours in volunteer tasks and $words_paid words in paid tasks and $hours_paid hours in paid tasks";
 
         $hours_words = '';
         $hours_donated_for_cert = $print_data_by_key[0]['hours_donated_for_cert'];
@@ -2943,10 +2950,18 @@ public static function downloadletter(Request $request, Response $response, $arg
         $hours_donated = $print_data_by_key[0]['hours_donated'];
         $hours_paid = $print_data_by_key[0]['hours_paid'];
         $word_words = [];
-        if ($words_donated) $word_words[] = "$words_donated words in volunteer tasks";
-        if ($hours_donated) $word_words[] = "$hours_donated hours in volunteer tasks";
-        if ($words_paid) $word_words[] = "$words_paid words in paid tasks";
-        if ($hours_paid) $word_words[] = "$hours_paid hours in paid tasks";
+        if ($words_donated || $hours_donated) {
+            $donated = [];
+            if ($words_donated) $donated[] = "$words_donated words";
+            if ($hours_donated) $donated[] = "$hours_donated hours";
+            $word_words[] = implode(' and ', $donated) . ' in volunteer tasks';
+        }
+        if ($words_paid || $hours_paid) {
+            $paid = [];
+            if ($words_paid) $paid[] = "$words_paid words";
+            if ($hours_paid) $paid[] = "$hours_paid hours";
+            $word_words[] = implode(' and ', $paid) . ' in paid tasks';
+        }
         $word_words = implode(' and ', $word_words);
 
         $hours_words = '';
