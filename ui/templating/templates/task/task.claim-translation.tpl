@@ -1,10 +1,6 @@
 {assign var=task_id value=$task->getId()}
 
-    <section>
-        <div class="page-header">
-            <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_translation_task')}</small></h1>
-        </div>
-    </section>
+ 
 
     {if isset($flash['error'])}
         <p class="alert alert-error">
@@ -41,5 +37,4 @@
 
     </section>
 
-  
-    
+ 
