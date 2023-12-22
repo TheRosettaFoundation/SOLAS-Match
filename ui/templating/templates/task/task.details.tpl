@@ -1,11 +1,11 @@
 <!-- Editor Hint: ¿áéíóú -->
 <table class="table">
     <thead>
-       <tr>
+       <tr >
 
                 <th class="fs-6">Project</th>
                 <th class="fs-6">Source Language</th>
-                <th fclass="fs-6"> Target Language</th>
+                <th class="fs-6"> Target Language</th>
                 <th class="fs-6">Created </th>
                 <th class="fs-6"> Task Dealine</th>
                 <th class="fs-6"> Word Count</th>
@@ -43,7 +43,7 @@
             <td>
                 <div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div>
             </td>
-            
+
             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                 <td>
                     {assign var="status_id" value=$task->getTaskStatus()}
