@@ -68,12 +68,18 @@
 </table>
 
 <div class="well">
-    <table class="table"">
-        <thead>
+    <table class="table">
+       <tr>
+            <thead>
+
             <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
             <th></th>
             <th width="48%" align="left">{Localisation::getTranslation('common_project_description')}<hr/></th>
-        </thead>
+            
+            </thead>
+       
+       </tr>
+
         <tbody>
             <tr style="overflow-wrap: break-word;" valign="top">
                 <td>
