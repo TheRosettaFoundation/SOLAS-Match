@@ -73,7 +73,7 @@
                             <div class="row"></div>
                                 <div class="row">
                                     <div class="span4 pull-right">
-                                        <h3>{Localisation::getTranslation('users_also_viewed')}</h3>
+                                        <h5 class="font-bold">{Localisation::getTranslation('users_also_viewed')}</h5>
                                         
                                         {if isset($alsoViewedTasks)}
                                         <div id="also-viewed-tasks">
@@ -89,15 +89,21 @@
                                                             <div>
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
-                                                        {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
-                                                            <span>
-                                                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
-                                                            </span>
-                                                        {/if}
-                                                            <span>
-                                                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
-                                                            </span>
-                                                            <div class="mt-2">
+                                                         <div class="mt-1">
+
+                                                                      {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
+                                                                        <span>
+                                                                            {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
+                                                                        </span>
+                                                                     {/if}
+                                                                        <span>
+                                                                            {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
+                                                                        </span>
+                                                         
+                                                         
+                                                         </div>   
+                                                  
+                                                        <div class="mt-2">
                                                                 <p class="d-flex align-items-center">
                         
                                                                     <span type="button" class=" ms-1 rounded-pill badge bg-greenish border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
@@ -120,7 +126,7 @@
                                         {/if}
                                         
                                     </div>
-                                    <div class="pull-left" style="max-width: 70%;">
+                                  
                             {/if}
            
         
