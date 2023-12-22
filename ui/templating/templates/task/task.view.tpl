@@ -86,9 +86,9 @@
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
                                                         <div class="bg-white">
-                                                            <h4 class="text-decoration-none font-bold">
-                                                            <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
-                                                            </h4>
+                                                            <h5>
+                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
+                                                            </h5>
                                                         {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
                                                             <span>
                                                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
