@@ -33,381 +33,375 @@ let pages = document.querySelectorAll(".page");
 
 let previous = document.querySelector("#previous");
 
-console.log(`previous`);
-
-console.log(previous);
 let next = document.querySelector("#next");
 
 let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
-if (previous) {
-    let countPage = document.querySelector(".last").id;
+let countPage = document.querySelector(".last").id;
 
-    last.addEventListener("click", function (e) {
-        e.preventDefault();
+last.addEventListener("click", function (e) {
+    e.preventDefault();
 
-        let prevPage = document.getElementById(pagePosition.p).parentNode;
+    let prevPage = document.getElementById(pagePosition.p).parentNode;
+    console.log(`previous`);
 
-        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    console.log(previous);
 
-        let url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
-        pagePosition.p = countPage;
+    let url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        requestPage(url);
-    });
+    pagePosition.p = countPage;
 
-    first.addEventListener("click", function (e) {
-        e.preventDefault();
+    requestPage(url);
+});
 
-        let prevPage = document.getElementById(pagePosition.p).parentNode;
+first.addEventListener("click", function (e) {
+    e.preventDefault();
 
-        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    let prevPage = document.getElementById(pagePosition.p).parentNode;
 
-        let firstPage = document.getElementById("1").parentNode;
+    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
-        pagePosition.p = 1;
+    let firstPage = document.getElementById("1").parentNode;
 
-        if (pagePosition.p == 1) {
-            firstPage.classList.add("bg-primary", "opacity-75", "text-primary");
-        }
+    pagePosition.p = 1;
 
-        let url = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    if (pagePosition.p == 1) {
+        firstPage.classList.add("bg-primary", "opacity-75", "text-primary");
+    }
 
-        pagePosition.p = 1;
+    let url = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        requestPage(url);
-    });
+    pagePosition.p = 1;
 
-    let selectedLanguage = document.querySelector("#sourceLanguage");
+    requestPage(url);
+});
 
-    let targetLanguage = document.querySelector("#targetLanguage");
-    let taskType = document.querySelector("#taskTypes");
-    let selectL = "";
-    let selectT = "";
-    let selectTask = "";
+let selectedLanguage = document.querySelector("#sourceLanguage");
 
-    let allPages = document.querySelectorAll(".page");
-    let listPage = document.querySelectorAll(".listPage");
-    selectedLanguage.addEventListener("change", function () {
-        let page = document.querySelector(".page");
-        let url = page.href;
-        pagePosition.sl = this.value;
-        selectedL = this.value;
+let targetLanguage = document.querySelector("#targetLanguage");
+let taskType = document.querySelector("#taskTypes");
+let selectL = "";
+let selectT = "";
+let selectTask = "";
 
-        if (selectedL == 0) {
-            validation.sl = false;
-            console.log(validation);
-        } else {
-            validation.sl = true;
-            console.log(validation);
-        }
-        console.log(`Value : ${selectedL}`);
-        let find = url.indexOf("sl/");
-        let findN = url.indexOf("tl");
-        let firstL = url.slice(0, find);
-        let firstR = url.slice(findN);
-        let newUrl = firstL + `sl/${selectedL}/` + firstR;
+let allPages = document.querySelectorAll(".page");
+let listPage = document.querySelectorAll(".listPage");
+selectedLanguage.addEventListener("change", function () {
+    let page = document.querySelector(".page");
+    let url = page.href;
+    pagePosition.sl = this.value;
+    selectedL = this.value;
 
-        allPages.forEach((page) => {
-            let firstPart = page.href.split("/tt");
-            let endPart = newUrl.split("/tt");
-            let finUrl = firstPart[0] + "/tt" + endPart[1];
-
-            page.href = finUrl;
-        });
-    });
-
-    targetLanguage.addEventListener("change", function () {
-        let page = document.querySelector(".page");
-        let url = page.href;
-        targetL = this.value;
-
-        if (targetL == 0) {
-            validation.tl = false;
-            console.log(validation);
-        } else {
-            validation.tl = true;
-            console.log(validation);
-        }
-
-        pagePosition.tl = this.value;
-        console.log(`Value : ${targetL}`);
-        let find = url.indexOf("tl/");
-        let firstL = url.slice(0, find);
-        let newUrl = firstL + `tl/${targetL}`;
-        allPages.forEach((page) => {
-            page.href = newUrl;
-        });
-    });
-
-    taskType.addEventListener("change", function (e) {
-        console.log(e.type);
-
-        let page = document.querySelector(".page");
-        let url = page.href;
-
-        pagePosition.tt = this.value;
-
-        selectTask = this.value;
-
-        if (selectTask == 0) {
-            validation.tt = false;
-        } else {
-            validation.tt = true;
-        }
+    if (selectedL == 0) {
+        validation.sl = false;
         console.log(validation);
-        let find = url.indexOf("tt/");
-        let findN = url.indexOf("/sl");
+    } else {
+        validation.sl = true;
+        console.log(validation);
+    }
+    console.log(`Value : ${selectedL}`);
+    let find = url.indexOf("sl/");
+    let findN = url.indexOf("tl");
+    let firstL = url.slice(0, find);
+    let firstR = url.slice(findN);
+    let newUrl = firstL + `sl/${selectedL}/` + firstR;
 
-        let firstL = url.slice(0, find);
-        let firstR = url.slice(findN);
-        let newUrl = firstL + `tt/${selectTask}` + firstR;
-        allPages.forEach((page) => {
-            page.href = newUrl;
-        });
+    allPages.forEach((page) => {
+        let firstPart = page.href.split("/tt");
+        let endPart = newUrl.split("/tt");
+        let finUrl = firstPart[0] + "/tt" + endPart[1];
+
+        page.href = finUrl;
     });
+});
 
-    pages.forEach((page) => {
-        let hr = page.href;
+targetLanguage.addEventListener("change", function () {
+    let page = document.querySelector(".page");
+    let url = page.href;
+    targetL = this.value;
 
-        let id = page.id;
+    if (targetL == 0) {
+        validation.tl = false;
+        console.log(validation);
+    } else {
+        validation.tl = true;
+        console.log(validation);
+    }
 
-        page.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            for (var i = 0; i < listPage.length; i++) {
-                let pageC = listPage[i].firstElementChild;
-
-                if (pageC.id == id) {
-                    listPage[i].classList.add(
-                        "bg-primary",
-                        "opacity-75",
-                        "text-primary"
-                    );
-                } else {
-                    listPage[i].classList.remove(
-                        "bg-primary",
-                        "opacity-75",
-                        "text-primary"
-                    );
-                }
-            }
-
-            if (page.id == "previous") {
-                requestPage(previous.href);
-
-                let newPrevPosition =
-                    pagePosition.p > 1 ? pagePosition.p - 1 : 1;
-
-                pagePosition.prev = newPrevPosition;
-
-                let prevP = pagePosition.prev;
-
-                if (pagePosition.p <= 6) {
-                    let pagePrev = document.getElementById(prevP).parentNode;
-
-                    console.log(`pagePrev`);
-
-                    console.log(pagePrev);
-
-                    pagePrev.classList.add(
-                        "bg-primary",
-                        "opacity-75",
-                        "text-primary"
-                    );
-                }
-
-                let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-                previous.href = newPrevUrl;
-
-                pagePosition.p = newPrevPosition;
-            } else if (page.id == "next") {
-                requestPage(next.href);
-
-                let newNextPosition =
-                    pagePosition.p <= countPage
-                        ? pagePosition.p + 1
-                        : pagePosition.p;
-
-                let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-                pagePosition.next = newNextPosition;
-
-                let nextP = pagePosition.next;
-
-                if (pagePosition.next <= 6) {
-                    let pageNext = document.getElementById(nextP).parentNode;
-
-                    pageNext.classList.add(
-                        "bg-primary",
-                        "opacity-75",
-                        "text-primary"
-                    );
-                }
-
-                if (pagePosition.p < countPage) {
-                    pagePosition.p = pagePosition.p + 1;
-                }
-
-                next.href = newNextUrl;
-            } else {
-                pagePosition.p = parseInt(page.id);
-
-                let newPrevPosition =
-                    pagePosition.p > 1 ? pagePosition.p - 1 : 1;
-
-                let newNextPosition =
-                    pagePosition.p <= countPage
-                        ? pagePosition.p + 1
-                        : pagePosition.p;
-
-                let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-                let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-                if (pagePosition.p == 1) {
-                    previous.classList.add("disabled");
-                } else {
-                    previous.classList.remove("disabled");
-                }
-
-                previous.href = newPrevUrl;
-
-                next.href = newNextUrl;
-
-                requestPage(hr);
-            }
-        });
+    pagePosition.tl = this.value;
+    console.log(`Value : ${targetL}`);
+    let find = url.indexOf("tl/");
+    let firstL = url.slice(0, find);
+    let newUrl = firstL + `tl/${targetL}`;
+    allPages.forEach((page) => {
+        page.href = newUrl;
     });
+});
 
-    const requestPage = (url) => {
-        const req = new XMLHttpRequest();
-        req.addEventListener("load", reqListner);
-        req.open("GET", url, true);
-        req.send();
-    };
+taskType.addEventListener("change", function (e) {
+    console.log(e.type);
 
-    function displayTasks(pages) {
-        let parsed;
-        let images;
-        let projects;
+    let page = document.querySelector(".page");
+    let url = page.href;
 
-        try {
-            parsed = typeof pages == "string" ? JSON.parse(pages) : pages;
-        } catch (error) {
-            console.log(` invalid json  ${error}`);
-        }
+    pagePosition.tt = this.value;
 
-        if (parsed.hasOwnProperty("images")) {
-            images = parsed.images;
-        }
+    selectTask = this.value;
 
-        if (parsed.hasOwnProperty("projects")) {
-            projects = parsed.projects;
-        }
+    if (selectTask == 0) {
+        validation.tt = false;
+    } else {
+        validation.tt = true;
+    }
+    console.log(validation);
+    let find = url.indexOf("tt/");
+    let findN = url.indexOf("/sl");
 
-        let newData = document.createElement("div");
+    let firstL = url.slice(0, find);
+    let firstR = url.slice(findN);
+    let newUrl = firstL + `tt/${selectTask}` + firstR;
+    allPages.forEach((page) => {
+        page.href = newUrl;
+    });
+});
 
-        for (const item of parsed.tasks) {
-            let taskType = "";
-            let imageId;
-            let image;
-            let imageHtml;
+pages.forEach((page) => {
+    let hr = page.href;
 
-            const innerDiv = document.createElement("div");
-            const itemElement = document.createElement("div");
-            itemElement.classList.add(
-                "mb-4",
-                "bg-body-tertiary",
-                "p-3",
-                "rounded-3"
-            );
-            const itemNameElement = document.createElement("div");
-            itemNameElement.classList.add("100");
+    let id = page.id;
 
-            const itemFlexContainer = document.createElement("id");
-            itemFlexContainer.classList.add(
-                "d-flex",
-                "justify-content-between"
-            );
-            const itemSubFlex = document.createElement("div");
-            const titleContainer = document.createElement("div");
-            const title = document.createElement("div");
-            title.classList.add("text-primaryDark", "d-inline-block");
-            title.textContent = item.title;
+    page.addEventListener("click", (e) => {
+        e.preventDefault();
 
-            const spanTitle = document.createElement("div");
-            const spanImg = document.createElement("img");
-            spanImg.src = "/ui/img/question.svg";
-            spanImg.classList.add("mx-1");
-            spanTitle.appendChild(spanImg);
+        for (var i = 0; i < listPage.length; i++) {
+            let pageC = listPage[i].firstElementChild;
 
-            title.appendChild(spanImg);
-
-            titleContainer.classList.add(
-                "fw-bold",
-                "fs-4",
-                "d-flex",
-                "align-items-center"
-            );
-            titleContainer.appendChild(title);
-
-            const badgeContainer = document.createElement("div");
-            badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
-
-            if (item.taskType == 2) {
-                taskType = "Translation";
-            } else if (item.taskType == 3) {
-                taskType = "Revision";
+            if (pageC.id == id) {
+                listPage[i].classList.add(
+                    "bg-primary",
+                    "opacity-75",
+                    "text-primary"
+                );
             } else {
-                taskType = "Approval";
+                listPage[i].classList.remove(
+                    "bg-primary",
+                    "opacity-75",
+                    "text-primary"
+                );
+            }
+        }
+
+        if (page.id == "previous") {
+            requestPage(previous.href);
+
+            let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+
+            pagePosition.prev = newPrevPosition;
+
+            let prevP = pagePosition.prev;
+
+            if (pagePosition.p <= 6) {
+                let pagePrev = document.getElementById(prevP).parentNode;
+
+                console.log(`pagePrev`);
+
+                console.log(pagePrev);
+
+                pagePrev.classList.add(
+                    "bg-primary",
+                    "opacity-75",
+                    "text-primary"
+                );
             }
 
-            const badge = document.createElement("span");
-            badge.classList.add(
-                "badge",
-                "rounded-pill",
-                "bg-greenish",
-                "border",
-                "border-2",
-                "border-greenBorder",
-                "border-opacity-25",
-                "text-white",
-                "text-uppercase",
-                "fs-7",
-                "font-bold"
-            );
-            badge.textContent = taskType;
-            badgeContainer.appendChild(badge);
+            let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            const badgeW = document.createElement("span");
-            badgeW.classList.add(
-                "ms-1",
-                "badge",
-                "rounded-pill",
-                "bg-quartenary",
-                "border",
-                "border-2",
-                "border-quartBorder",
-                "border-opacity-25",
-                "text-white",
-                "fs-7",
-                "font-bold"
-            );
+            previous.href = newPrevUrl;
 
-            badgeW.textContent = `${item.wordCount} Words`;
+            pagePosition.p = newPrevPosition;
+        } else if (page.id == "next") {
+            requestPage(next.href);
 
-            badgeContainer.appendChild(badgeW);
+            let newNextPosition =
+                pagePosition.p <= countPage
+                    ? pagePosition.p + 1
+                    : pagePosition.p;
 
-            if (images) {
-                imageId = images[item.id] !== "" ? images[item.id] : "";
+            let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-                image =
-                    imageId.length > 2
-                        ? `
+            pagePosition.next = newNextPosition;
+
+            let nextP = pagePosition.next;
+
+            if (pagePosition.next <= 6) {
+                let pageNext = document.getElementById(nextP).parentNode;
+
+                pageNext.classList.add(
+                    "bg-primary",
+                    "opacity-75",
+                    "text-primary"
+                );
+            }
+
+            if (pagePosition.p < countPage) {
+                pagePosition.p = pagePosition.p + 1;
+            }
+
+            next.href = newNextUrl;
+        } else {
+            pagePosition.p = parseInt(page.id);
+
+            let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+
+            let newNextPosition =
+                pagePosition.p <= countPage
+                    ? pagePosition.p + 1
+                    : pagePosition.p;
+
+            let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+            let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+            if (pagePosition.p == 1) {
+                previous.classList.add("disabled");
+            } else {
+                previous.classList.remove("disabled");
+            }
+
+            previous.href = newPrevUrl;
+
+            next.href = newNextUrl;
+
+            requestPage(hr);
+        }
+    });
+});
+
+const requestPage = (url) => {
+    const req = new XMLHttpRequest();
+    req.addEventListener("load", reqListner);
+    req.open("GET", url, true);
+    req.send();
+};
+
+function displayTasks(pages) {
+    let parsed;
+    let images;
+    let projects;
+
+    try {
+        parsed = typeof pages == "string" ? JSON.parse(pages) : pages;
+    } catch (error) {
+        console.log(` invalid json  ${error}`);
+    }
+
+    if (parsed.hasOwnProperty("images")) {
+        images = parsed.images;
+    }
+
+    if (parsed.hasOwnProperty("projects")) {
+        projects = parsed.projects;
+    }
+
+    let newData = document.createElement("div");
+
+    for (const item of parsed.tasks) {
+        let taskType = "";
+        let imageId;
+        let image;
+        let imageHtml;
+
+        const innerDiv = document.createElement("div");
+        const itemElement = document.createElement("div");
+        itemElement.classList.add(
+            "mb-4",
+            "bg-body-tertiary",
+            "p-3",
+            "rounded-3"
+        );
+        const itemNameElement = document.createElement("div");
+        itemNameElement.classList.add("100");
+
+        const itemFlexContainer = document.createElement("id");
+        itemFlexContainer.classList.add("d-flex", "justify-content-between");
+        const itemSubFlex = document.createElement("div");
+        const titleContainer = document.createElement("div");
+        const title = document.createElement("div");
+        title.classList.add("text-primaryDark", "d-inline-block");
+        title.textContent = item.title;
+
+        const spanTitle = document.createElement("div");
+        const spanImg = document.createElement("img");
+        spanImg.src = "/ui/img/question.svg";
+        spanImg.classList.add("mx-1");
+        spanTitle.appendChild(spanImg);
+
+        title.appendChild(spanImg);
+
+        titleContainer.classList.add(
+            "fw-bold",
+            "fs-4",
+            "d-flex",
+            "align-items-center"
+        );
+        titleContainer.appendChild(title);
+
+        const badgeContainer = document.createElement("div");
+        badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
+
+        if (item.taskType == 2) {
+            taskType = "Translation";
+        } else if (item.taskType == 3) {
+            taskType = "Revision";
+        } else {
+            taskType = "Approval";
+        }
+
+        const badge = document.createElement("span");
+        badge.classList.add(
+            "badge",
+            "rounded-pill",
+            "bg-greenish",
+            "border",
+            "border-2",
+            "border-greenBorder",
+            "border-opacity-25",
+            "text-white",
+            "text-uppercase",
+            "fs-7",
+            "font-bold"
+        );
+        badge.textContent = taskType;
+        badgeContainer.appendChild(badge);
+
+        const badgeW = document.createElement("span");
+        badgeW.classList.add(
+            "ms-1",
+            "badge",
+            "rounded-pill",
+            "bg-quartenary",
+            "border",
+            "border-2",
+            "border-quartBorder",
+            "border-opacity-25",
+            "text-white",
+            "fs-7",
+            "font-bold"
+        );
+
+        badgeW.textContent = `${item.wordCount} Words`;
+
+        badgeContainer.appendChild(badgeW);
+
+        if (images) {
+            imageId = images[item.id] !== "" ? images[item.id] : "";
+
+            image =
+                imageId.length > 2
+                    ? `
         <div>
         
             <div id=""  >
@@ -416,13 +410,13 @@ if (previous) {
             </div>
 
         `
-                        : `<div> </div>`;
-            }
+                    : `<div> </div>`;
+        }
 
-            let time = item.deadline.split(" ");
-            let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        let time = item.deadline.split(" ");
+        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-            let languages = `<div class="mt-3 mb-3">
+        let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
                         Languages:  ${item.sourceLocale.languageName} -  ${item.targetLocale.languageName}
                     </span>
@@ -438,18 +432,16 @@ if (previous) {
         
         `;
 
-            if (image) {
-                imageHtml = document
-                    .createRange()
-                    .createContextualFragment(image);
-            }
+        if (image) {
+            imageHtml = document.createRange().createContextualFragment(image);
+        }
 
-            const langHtml = document
-                .createRange()
-                .createContextualFragment(languages);
-            let projectItem = projects ? projects[item.id] : "";
+        const langHtml = document
+            .createRange()
+            .createContextualFragment(languages);
+        let projectItem = projects ? projects[item.id] : "";
 
-            const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
+        const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                             <div> <span class="text-primaryDark"> ${projectItem} </span> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
                                 <a class="btn btn-secondary fs-5 px-3"  href= "task/${item.id}/view" target="_blank">View Task</a>
@@ -457,51 +449,50 @@ if (previous) {
 
                             </div>`;
 
-            const viewHtml = document
-                .createRange()
-                .createContextualFragment(viewTask);
-            itemSubFlex.appendChild(titleContainer);
-            itemFlexContainer.appendChild(itemSubFlex);
-            itemSubFlex.appendChild(badgeContainer);
-            itemSubFlex.appendChild(langHtml);
+        const viewHtml = document
+            .createRange()
+            .createContextualFragment(viewTask);
+        itemSubFlex.appendChild(titleContainer);
+        itemFlexContainer.appendChild(itemSubFlex);
+        itemSubFlex.appendChild(badgeContainer);
+        itemSubFlex.appendChild(langHtml);
 
-            if (imageHtml) {
-                itemFlexContainer.appendChild(imageHtml);
-            }
-            itemNameElement.appendChild(itemFlexContainer);
-
-            itemElement.appendChild(itemNameElement);
-            itemElement.appendChild(viewHtml);
-
-            innerDiv.appendChild(itemElement);
-
-            newData.appendChild(innerDiv);
+        if (imageHtml) {
+            itemFlexContainer.appendChild(imageHtml);
         }
+        itemNameElement.appendChild(itemFlexContainer);
 
-        newDataString = newData.outerHTML;
+        itemElement.appendChild(itemNameElement);
+        itemElement.appendChild(viewHtml);
 
-        tasksContainer.innerHTML = newDataString;
+        innerDiv.appendChild(itemElement);
+
+        newData.appendChild(innerDiv);
     }
 
-    async function fetchRecents() {
-        const fetched = await fetch(`/user/${userId}/recent/tasks/`);
+    newDataString = newData.outerHTML;
 
-        const res = await fetched.json();
+    tasksContainer.innerHTML = newDataString;
+}
 
-        displayTasks(res);
+async function fetchRecents() {
+    const fetched = await fetch(`/user/${userId}/recent/tasks/`);
 
-        let page = document.querySelector(".pagination");
+    const res = await fetched.json();
 
-        page.remove();
-    }
+    displayTasks(res);
 
-    function reqListner() {
-        let pages = this.response;
+    let page = document.querySelector(".pagination");
 
-        try {
-            displayTasks(pages);
-        } catch (error) {
-            console.log(error);
-        }
+    page.remove();
+}
+
+function reqListner() {
+    let pages = this.response;
+
+    try {
+        displayTasks(pages);
+    } catch (error) {
+        console.log(error);
     }
 }
