@@ -86,10 +86,10 @@
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
                                                         <div class="bg-white shadow mt-4 p-2">
-                                                            <div>
+                                                            <div class="px-1">
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
-                                                         <div class="mt-1">
+                                                         <div class="mt-1 px-1">
 
                                                                       {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
                                                                         <span>
