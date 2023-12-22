@@ -96,16 +96,20 @@
                     if(recents){
 
                           let userId =  recents.id ;
+
+                            recents.addEventListener("click", function(e){
+
+                                        e.preventDefault();
+                                        fetchRecents();   
+
+                          })
+
+
                         
                     }
                   
 
-                    recents.addEventListener("click", function(e){
-
-                       e.preventDefault();
-                       fetchRecents();   
-
-                    })
+                  
 
                   
 
