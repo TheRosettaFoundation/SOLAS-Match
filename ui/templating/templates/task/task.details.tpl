@@ -144,7 +144,7 @@
             </tr>
             <tr valign="top">
                 <td>
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug} btn btn-grayish text-white" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn btn-grayish text-white" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>{/if}
                 </td>
                 <td></td>
                 <td>
