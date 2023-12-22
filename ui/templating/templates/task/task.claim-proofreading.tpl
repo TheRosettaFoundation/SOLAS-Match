@@ -15,9 +15,9 @@
         </p>
     {/if}
 
-    <section class="py-4">
+    <section class="py-4 container">
 
-     <div class="card d-flex justify-content-between">
+     <div class="card d-flex justify-content-between py-2">
 
                 <div>
 
