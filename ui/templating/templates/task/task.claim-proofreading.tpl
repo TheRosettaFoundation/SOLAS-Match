@@ -13,7 +13,7 @@
 
     <section class="py-4 container">
 
-     <div class="d-flex py-2">
+     <div class="d-flex py-2 justify-content-between align-items-center">
 
                 <div class=" w-50">
 
@@ -47,7 +47,7 @@
 
                <div class="bg-grayish p-4">
 
-                    <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-25 h-25" />
+                    <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-75" />
 
                
                </div>
