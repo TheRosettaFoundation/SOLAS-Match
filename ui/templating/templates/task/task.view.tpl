@@ -89,7 +89,7 @@
                                                             <div class="px-1">
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none font-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
-                                                         <div class="mt-1 px-1">
+                                                         <div class="mt-2 px-1">
 
                                                                       {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
                                                                         <span>
@@ -120,7 +120,7 @@
                                                         </div>
 
 
-                                                        
+
                                                     </div>
                                                 {/for}
                                             </div>
