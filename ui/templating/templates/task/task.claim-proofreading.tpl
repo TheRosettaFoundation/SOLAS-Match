@@ -46,7 +46,7 @@
                 </div>
 
 
-                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded float-end w-50 h-50" />
+                <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded float-end w-25 h-25" />
 
 
      
