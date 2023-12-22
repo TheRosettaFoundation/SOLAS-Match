@@ -7,7 +7,7 @@
                 <th class="fs-6">Source Language</th>
                 <th class="fs-6"> Target Language</th>
                 <th class="fs-6">Created </th>
-                <th class="fs-6"> Task Dealine</th>
+                <th class="fs-6"> Task Deadline</th>
                 <th class="fs-6"> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th class="fs-6">{Localisation::getTranslation('common_status')}</th>{/if}
             
@@ -32,7 +32,11 @@
                 {/if}
             </td>
             <td>
+                {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                
                 {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}
+
+                {/if}
             </td>
             <td>
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
