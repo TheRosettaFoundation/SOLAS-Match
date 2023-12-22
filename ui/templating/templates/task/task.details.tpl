@@ -81,23 +81,23 @@
         <tbody class="fs-6">
             <tr style="overflow-wrap: break-word;" valign="top">
                 <td>
-                    <i>
+                    
                         {if $task->getComment() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}
                         {else}
                             {Localisation::getTranslation('common_no_comment_has_been_listed')}
                         {/if}
-                    </i>
+                    
                 </td>
                 <td></td>
                 <td>
-                    <i>
+                   
                         {if $project->getDescription() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
-                    </i>
+                   
                 </td>
             </tr>
             <tr>
@@ -180,7 +180,7 @@
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
   <div class="table-responsive">
-    <table class="table table-striped">
+    <table Fclass="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
