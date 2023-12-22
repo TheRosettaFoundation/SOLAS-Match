@@ -156,7 +156,7 @@
 		        </thead>
 		        <tbody>
 		            <tr>
-		                <td align="center"><iframe src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  style="border: none;"></iframe></td>
+		                <td align="center"><iframe src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true" width="100%" height="100%"  style="border: none;"></iframe></td>
 		            </tr>
 		        </tbody>
 		    </table>
