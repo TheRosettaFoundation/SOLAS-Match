@@ -1,16 +1,24 @@
 {assign var=task_id value=$task->getId()}
 
     <section>
-        <div class="page-header">
-            <h1>Proofreading and Approval task claimed <small>Please proofread it!</small></h1>
+    <div class="container">
+
+          <div class="page-header">
+            <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
         </div>
         <div class="alert alert-success">
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </div>
+
+    </div>
+      
     </section>
 
     <section>
-        <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
+
+        <div class="container">
+
+                 <h4>{Localisation::getTranslation('common_what_happens_now')}</h4>
         {if $translations_not_all_complete}
         <p>This is what you need to do:</p>
         <ol>
@@ -31,6 +39,10 @@
         {if isset($user)}
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
+        
+        
+        </div>
+       
     </section>
 
     <section>
