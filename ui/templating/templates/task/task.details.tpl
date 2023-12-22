@@ -3,13 +3,13 @@
     <thead>
        <tr>
 
-                <th class="fs-5">{Localisation::getTranslation('common_project')}</th>
+                <th class="fs-6">{Localisation::getTranslation('common_project')}</th>
                 <th class="fs-5">{Localisation::getTranslation('common_source_language')}</th>
                 <th fclass="fs-5">{Localisation::getTranslation('common_target_language')}</th>
                 <th class="fs-5">{Localisation::getTranslation('common_created')}</th>
                 <th class="fs-5">{Localisation::getTranslation('common_task_deadline')}</th>
                 <th class="fs-5">{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th class="fs-5">{Localisation::getTranslation('common_status')}</th>{/if}
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th class="fs-6">{Localisation::getTranslation('common_status')}</th>{/if}
             
        </tr>
       
