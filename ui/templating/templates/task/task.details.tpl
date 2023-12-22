@@ -32,10 +32,8 @@
                 {/if}
             </td>
             <td>
-                {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                 
                 {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}
-                
             </td>
             <td>
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
@@ -69,7 +67,7 @@
 
 <div class="well">
     <table class="table">
-       <tr class = "fs-6">
+       <tr>
             <thead>
 
             <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
@@ -80,7 +78,7 @@
        
        </tr>
 
-        <tbody class="fs-6">
+        <tbody>
             <tr style="overflow-wrap: break-word;" valign="top">
                 <td>
                     <i>
