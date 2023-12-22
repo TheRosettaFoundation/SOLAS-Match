@@ -1,17 +1,23 @@
 <!-- Editor Hint: ¿áéíóú -->
-<table class="table table-striped">
+<table class="table">
     <thead>
-        <th style="text-align: left"><strong>{Localisation::getTranslation('common_project')}</strong></th>
-        <th>{Localisation::getTranslation('common_source_language')}</th>
-        <th>{Localisation::getTranslation('common_target_language')}</th>
-        <th>{Localisation::getTranslation('common_created')}</th>
-        <th>{Localisation::getTranslation('common_task_deadline')}</th>
-        <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
-        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+       <tr>
+
+              <th>{Localisation::getTranslation('common_project')}</th>
+                <th>{Localisation::getTranslation('common_source_language')}</th>
+                <th>{Localisation::getTranslation('common_target_language')}</th>
+                <th>{Localisation::getTranslation('common_created')}</th>
+                <th>{Localisation::getTranslation('common_task_deadline')}</th>
+                <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+            
+       </tr>
+      
     </thead>
+
     <tbody>
         <tr>
-            <td style="text-align: left; word-break:break-all; width: 150px">
+            <td">
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
