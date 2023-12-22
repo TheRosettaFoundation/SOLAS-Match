@@ -92,11 +92,11 @@
                         {/if}
                         
                         <p> 
-                                <button type="submit" class="btn btn-primary fs-6" >
-                                    <i class="icon-ok-circle icon-white"></i> Yes, I promise I will proofread this file
+                                <button type="submit" class="btn btn-primary fs-6 fw-bold text-white" >
+                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will proofread this file
                                 </button>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow">
-                                    <i class="icon-ban-circle icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow fw-bold text-white">
+                                    <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
