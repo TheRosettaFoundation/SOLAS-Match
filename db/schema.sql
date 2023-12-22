@@ -2408,6 +2408,75 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `get_active_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_active_languages`(IN uID INT)
+BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+    SET @isSiteAdmin = 0;
+    SET @NGO_list = '';
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
+
+    SET @site_linguist = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
+        SET @site_linguist = 1;
+    ELSE
+        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+    END IF;
+
+    SELECT
+        ls.code      AS ls_code,
+        ls.`en-name` AS ls_name,
+        lt.code      AS lt_code,
+        lt.`en-name` AS lt_name,
+        ct.code      AS ct_code,
+        ct.`en-name` AS ct_name
+    FROM      Tasks                            t
+    JOIN      Languages                       ls ON t.`language_id-source`=ls.id
+    JOIN      Languages                       lt ON t.`language_id-target`=lt.id
+    JOIN      Countries                       ct ON t.`country_id-target`=ct.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN      Projects                         p ON t.project_id=p.id
+    LEFT JOIN UserQualifiedPairs             uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target
+    LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks                  r ON t.id=r.restricted_task_id
+    WHERE
+        t.`task-status_id`=2 AND
+        t.published=1 AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
+        (
+            @isSiteAdmin=1 OR
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    GROUP BY
+        ls.code,
+        lt.code,
+        ct.code
+    ORDER BY
+        ls.`en-name`,
+        lt.`en-name`,
+        ct.`en-name`;
+END//
+DELIMITER ;
+
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getActiveLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveLanguages`()
@@ -2423,7 +2492,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getActiveSourceLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveSourceLanguages`()
@@ -2438,7 +2507,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getActiveTargetLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTargetLanguages`()

@@ -34,43 +34,4 @@ class LanguageDao
 
         return $languages;
     }
-
-    public static function getActiveLanguages()
-    {
-        $languages = null;
-        $result = Lib\PDOWrapper::call("getActiveLanguages", "");
-        if ($result) {
-            $languages = array();
-            foreach ($result as $row) {
-                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
-            }
-        }
-        return $languages;
-    }
-    
-    public static function getActiveSourceLanguages()
-    {
-        $languages = null;
-        $result  = Lib\PDOWrapper::call("getActiveSourceLanguages", "");
-        if ($result) {
-            $languages = array();
-            foreach ($result as $row) {
-                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
-            }
-        }
-        return $languages;
-    }
-    
-    public static function getActiveTargetLanguages()
-    {
-        $languages = null;
-        $result = Lib\PDOWrapper::call("getActiveTargetLanguages", "");
-        if ($result) {
-            $languages = array();
-            foreach ($result as $row) {
-                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
-            }
-        }
-        return $languages;
-    }
 }

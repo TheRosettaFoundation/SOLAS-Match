@@ -18,18 +18,6 @@ class Langs
         global $app;
 
         $app->get(
-            '/api/v0/languages/getActiveLanguages/',
-            '\SolasMatch\API\V0\Langs:getActiveLanguages');
-
-        $app->get(
-            '/api/v0/languages/getActiveSourceLanguages/',
-            '\SolasMatch\API\V0\Langs:getActiveSourceLanguages');
-
-        $app->get(
-            '/api/v0/languages/getActiveTargetLanguages/',
-            '\SolasMatch\API\V0\Langs:getActiveTargetLanguages');
-
-        $app->get(
             '/api/v0/languages/getByCode/{code}/',
             '\SolasMatch\API\V0\Langs:getLanguageByCode');
 
@@ -40,21 +28,6 @@ class Langs
         $app->get(
             '/api/v0/languages/',
             '\SolasMatch\API\V0\Langs:getLanguages');
-    }
-
-    public static function getActiveLanguages(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveLanguages(), null);
-    }
-
-    public static function getActiveSourceLanguages(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveSourceLanguages(), null);
-    }
-
-    public static function getActiveTargetLanguages(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\LanguageDao::getActiveTargetLanguages(), null);
     }
 
     public static function getLanguageByCode(Request $request, Response $response, $args)

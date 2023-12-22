@@ -38,30 +38,6 @@ class LanguageDao extends BaseDao
         return $languages;
     }
 
-    public function getActiveLanguages()
-    {
-        $languages = null;
-        $request = "{$this->siteApi}v0/languages/getActiveLanguages";
-        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
-        return $languages;
-    }
-    
-    public function getActiveSourceLanguages()
-    {
-        $languages = null;
-        $request = "{$this->siteApi}v0/languages/getActiveSourceLanguages";
-        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
-        return $languages;
-    }
-     
-    public function getActiveTargetLanguages()
-    {
-        $languages = null;
-        $request = "{$this->siteApi}v0/languages/getActiveTargetLanguages";
-        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
-        return $languages;
-    }
-    
     public function getLanguageByCode($code)
     {
         $request = "{$this->siteApi}v0/languages/getByCode/$code";
