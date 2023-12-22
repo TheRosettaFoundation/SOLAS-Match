@@ -298,6 +298,7 @@ class UserRouteHandler
             }
             if (isset($post['sourceLanguage'])) {
                 $selectedSourceLanguageCode = $post['sourceLanguage'];
+error_log("POST selectedSourceLanguageCode: $selectedSourceLanguageCode");
             }
         }
         // Post or route handler may return '0', need an explicit zero
@@ -307,6 +308,7 @@ class UserRouteHandler
         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
         if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
         if ($selectedSourceLanguageCode !== 0) {
+error_log("selectedSourceLanguageCode: $selectedSourceLanguageCode");
             $codes = explode($selectedSourceLanguageCode, '_');
             $filter['sourceLanguage'] = $codes[0];
             $filter['targetLanguage'] = $codes[1];
