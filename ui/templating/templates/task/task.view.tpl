@@ -80,36 +80,38 @@
                                             <div class="ts">
                                                 {for $count=0 to $alsoViewedTasksCount-1}
                                                     {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
-                                                    <div class="ts-task">
+                                                    <div class="ts-task bg-secondary">
                                                         {assign var="also_viewed_task_id" value=$alsoViewedTask->getId()}
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="task">
-                                                            <h2>
+                                                        <div class="bg-white">
+                                                            <h4 class="text-decoration-none font-bold">
                                                             <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
-                                                            </h2>
+                                                            </h4>
                                                         {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
-                                                            <p>
+                                                            <span>
                                                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
-                                                            </p>
+                                                            </span>
                                                         {/if}
-                                                            <p>
+                                                            <span>
                                                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
-                                                            </p>
+                                                            </span>
                                                             <div>
-                                                                <p>
-                                                                    <span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
+                                                                <p class="d-flex ">
+                                                                    <span class="type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{$taskStatusTexts[$also_viewed_status_id]}</span>
                                                                     &nbsp;|&nbsp;
-                                                            <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
+
+                                                                    <span class="type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
+
                                                                     &nbsp;|&nbsp;
                                                                     {if $alsoViewedTask->getWordCount()}
-                                                                <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
+                                                                        <span class=" type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
                                                                 </p>
                                                             </div>
                                                             <p>
-                                                            Due by <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
+                                                            <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
                                                             </p>
                                                         <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
                                                         </div>
