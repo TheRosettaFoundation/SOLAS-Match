@@ -13,7 +13,7 @@
 
     <section class="py-4 container">
 
-     <div class="d-flex py-2 justify-content-between align-items-center">
+     <div class="d-flex py-2 justify-content-between align-items-center flex-wrap">
 
                 <div class=" w-50">
 
