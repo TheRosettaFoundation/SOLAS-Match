@@ -85,7 +85,7 @@
                                                         {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
                                                         {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
-                                                        <div class="bg-white mt-4 p-2 fs-5 shadow rounded-1">
+                                                        <div class="card mt-4 p-2 fs-5 shadow rounded-1">
                                                             <div class="px-1">
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none fw-bold text-dark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
                                                             </div>
