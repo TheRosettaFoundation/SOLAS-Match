@@ -150,13 +150,13 @@
          {if !empty($file_preview_path)}
 
           <class="table-responsive">
-		    <table width="100%">
+		    <table>
 		        <thead>
                 <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>
-		                <td align="center"><iframe src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
+		                <td align="center"><iframe src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  style="border: none;"></iframe></td>
 		            </tr>
 		        </tbody>
 		    </table>
