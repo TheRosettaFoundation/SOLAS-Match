@@ -38,7 +38,7 @@
                <div class="fw-bold">
 
                 {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} = {$type_id}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} 
                 {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}
