@@ -69,7 +69,9 @@
 
                     // Variables on the theme of the site
 
+                    let light = true;
                     
+                    let theme = document.getElementById("theme");
 
                     let logo = document.querySelector('.logo')
 
