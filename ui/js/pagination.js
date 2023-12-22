@@ -28,7 +28,6 @@ if (recents) {
     });
 }
 
-let navi = document.getElementById("nav");
 let pages = document.querySelectorAll(".page");
 
 let previous = document.querySelector("#previous");

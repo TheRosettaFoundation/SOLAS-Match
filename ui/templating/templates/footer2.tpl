@@ -69,6 +69,8 @@
 
                     // Variables on the theme of the site
 
+                    let navi = document.getElementById("nav");
+
                     let imgL = document.getElementById("light");
                     let imgN = document.getElementById("night");
 
