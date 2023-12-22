@@ -15,7 +15,7 @@
       
     </thead>
 
-    <tbody>
+    <tbody class="fs-6">
         <tr>
             <td">
                 {if isset($project)}
