@@ -145,8 +145,9 @@
         
 
 </section>
+ <div class="container">
 
-       {if !empty($file_preview_path)}
+         {if !empty($file_preview_path)}
 		    <table width="100%">
 		        <thead>
                 <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
@@ -158,6 +159,10 @@
 		        </tbody>
 		    </table>
         {/if}
+ 
+ 
+ <div>
+      
 
   
 
