@@ -1,5 +1,7 @@
 {include file="new_header.tpl"}
 
+    <h1> ${$taskType}</h1>
+
     {assign var="taskType" value=$task->getTaskType()}
     {if $taskType == TaskTypeEnum::SEGMENTATION}
         {include file="task/task.claim-segmentation.tpl"}
