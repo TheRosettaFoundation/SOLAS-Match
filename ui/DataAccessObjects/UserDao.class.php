@@ -145,7 +145,7 @@ class UserDao extends BaseDao
     public function getUserTasks($userId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks";   
+        $request = "{$this->siteApi}v0/users/$userId/tasks";
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $ret;
     }
@@ -165,9 +165,7 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-
     public function getUserPageTasks($user_id, $strict, $limit, $offset, $taskType,  $sourceLanguageCode, $targetLanguageCode)
-
     {
         $ret = [];
         $args = LibAPI\PDOWrapper::cleanse($user_id).',';
@@ -179,21 +177,17 @@ class UserDao extends BaseDao
         }
 
         $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
-                LibAPI\PDOWrapper::cleanse($offset).', ';        
+                LibAPI\PDOWrapper::cleanse($offset).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNull($taskType).', ';
         $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
+        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
 
-
-        $result = LibAPI\PDOWrapper::call('getUserTopTasks', $args);     
-
+        $result = LibAPI\PDOWrapper::call('getUserTopTasks', $args);
         if ($result) {
-          
             foreach ($result as $row) {
                  $ret[] = Common\Lib\ModelFactory::buildModel('Task', $row);
             }
         }
-
         return $ret;
     }
 
@@ -201,7 +195,6 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/topTasks";
- 
 
         $args = array();
         if ($limit) {
@@ -230,8 +223,6 @@ class UserDao extends BaseDao
         }
 
         $args['strict'] = $strict;
-       
-       
 
         $ret = $this->client->call(
             array("\SolasMatch\Common\Protobufs\Models\Task"),
@@ -240,8 +231,6 @@ class UserDao extends BaseDao
             null,
             $args
         );
-
-    
         return $ret;
     }
 
