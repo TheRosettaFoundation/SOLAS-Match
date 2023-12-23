@@ -242,41 +242,26 @@ class TaskDao
         $targetLanguageCode
     ) {
         $ret = false;
-    
         $args = Lib\PDOWrapper::cleanse($userId).", ";
-
-      
 
         if ($strict) {
             $args .= "1, ";
         } else {
             $args .= "0, ";
         }
-
-        error_log($limit);
-        error_log($sourceLanguageCode);
-
         $args .= Lib\PDOWrapper::cleanseNullOrWrapStr($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset).', ';
         
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode); 
-
-        error_log($args);
-
-        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);       
-
-       
-
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);
         if ($result) {
             $ret = array();
             foreach ($result as $row) {
                  $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
-
-
         return $ret;
     }
     
