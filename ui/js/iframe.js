@@ -6,5 +6,6 @@ console.log(`iframe working`);
 
 print.addEventListener("click", (e) => {
     e.preventDefault();
+    console.log("clicked");
     iframeWindow.print();
 });
