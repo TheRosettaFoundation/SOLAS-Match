@@ -8,7 +8,7 @@
         </p>
     {/if}
 
-  <section class="py-4 container card">
+  <section class="py-4 container card mb-4">
 
      <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
 
