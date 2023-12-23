@@ -1865,11 +1865,9 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
-
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
-            
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (empty($foundOrgs)) {
