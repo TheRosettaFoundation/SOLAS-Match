@@ -29,11 +29,11 @@
 
 </header>
 
-<section class="bg-light-subtle py-4"> 
+<section class="bg-light-subtle my-4"> 
 
         <div class="container ">
 
-          <div class="d-flex  flex-wrap justify-content-between">
+          <div class="d-flex  py-4S flex-wrap justify-content-between">
 
                <div class="fw-bold">
 
