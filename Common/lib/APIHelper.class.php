@@ -29,10 +29,6 @@ class APIHelper
         $headers = array()
     ) {
         $url = "$url/?";
-
- 
-      
-
         if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
@@ -44,9 +40,7 @@ class APIHelper
                 $url .= "$key=$val";
             }
         }
-     
         $re = curl_init($url);
-        
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
         if (!is_null($data) && "null" != $data) {
@@ -84,12 +78,10 @@ class APIHelper
         curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false); // Calls will be local so no need to verify hostname (& test server may not have proper certificate)
         curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false); // Calls will be local so no need to verify certificate (& test server may not have proper certificate)
         $res = curl_exec($re);
-
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
         $header = substr($res, 0, $header_size);
         $this->outputHeaders = http_parse_headers($header);
         $res = substr($res, $header_size);
-      
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
@@ -97,7 +89,6 @@ class APIHelper
 
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
-            
         } else {
             throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
