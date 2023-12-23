@@ -1,4 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
+<div class="table-responsive">
 <table class="table">
     <thead>
        <tr class="fs-5">
@@ -64,8 +65,9 @@
         </tr>
     </tbody>
 </table>
+</div>
 
-<div class="well">
+<div class="table-responsive">
     <table class="table">
        <tr>
             <thead class="fs-6">
@@ -180,7 +182,7 @@
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
   <div class="table-responsive">
-    <table Fclass="table table-striped">
+    <table class="table table-striped">
         <thead>
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
@@ -288,6 +290,7 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+    <div  class="table-responsive">
     <table width="100%" class="table table-striped">
         <thead>
           {if !empty($paid_status)}
@@ -404,4 +407,5 @@
             </td>
         </tr>
     </table>
+    </div>
 {/if}
