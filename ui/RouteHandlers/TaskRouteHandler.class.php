@@ -1360,6 +1360,7 @@ class TaskRouteHandler
         }
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView3.js");
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/iframe.js\"></script>";
 
         $alsoViewedTasks = [];
         $alsoViewedTasksCount = 0;
