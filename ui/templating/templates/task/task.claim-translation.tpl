@@ -8,7 +8,7 @@
         </p>
     {/if}
 
-  <section class="py-4 container card mb-4">
+  <section class="my-4 container card ">
 
      <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
 
@@ -43,7 +43,7 @@
 
                 </div>
        
-                  <div class="bg-grayish p-4 text-center">
+                  <div class="bg-grayish  text-center">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 rounded  w-75" />
 
