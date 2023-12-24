@@ -29,13 +29,10 @@ class UserRouteHandler
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeDemo')
         ->setName('home-demo'); 
 
-
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeIndex')
             ->setName('home-paged');
-
-
 
         $app->map(['GET', 'POST'],
             '/register[/]',
@@ -231,11 +228,8 @@ class UserRouteHandler
             ->setName('invite_site_admins');
     }
 
-
-
     public function homeIndex(Request $request, Response $response, $args)
     {
-
         global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
@@ -378,38 +372,24 @@ class UserRouteHandler
                 htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
             );
 
-            
             $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
             $taskImages[$taskId] = '';
             if ($project->getImageApproved() && $project->getImageUploaded()) {
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
-
-           
         }
-        
-
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
-           
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
-       
 
-        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs  ) );
-         
+        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
         $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
-
         $response->getBody()->write($results);
-
         return $response->withHeader('Content-Type', 'application/json');
- 
-
     }
-
-
 
     public function home(Request $request, Response $response, $args)
     {
@@ -418,10 +398,6 @@ class UserRouteHandler
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
-
-  
-      
-        
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -433,8 +409,6 @@ class UserRouteHandler
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
-        
-       
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -490,8 +464,6 @@ class UserRouteHandler
         $topTasks = null;
         $topTasksC = null;
 
-   
-
         $filter = array();
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -521,10 +493,9 @@ class UserRouteHandler
                 $strict = false;
                 $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
          
-                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
+                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
-
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
@@ -534,7 +505,6 @@ class UserRouteHandler
             $topTasks = array();
             $topTasksCount = 0;
         }
-
 
         $taskTags = array();
         $created_timestamps = array();
@@ -583,14 +553,11 @@ class UserRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
-     
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
-
-                
             }
         }
 
@@ -659,7 +626,6 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
             'page_count' => $pages,
-       
         ));
         
         return UserRouteHandler::render('index-home.tpl', $response);
