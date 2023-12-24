@@ -128,7 +128,7 @@
                             {/if}
                 {if isset($site_admin)}
                             <li class="nav-item">
-                                <a href="https://analytics.translatorswb.org" target="_blank" class=" fs-5 nav-link fw-bold">Analytics</a>
+                                <a href="{urlFor name="analytics"}" target="_blank" class=" fs-5 nav-link fw-bold">Analytics</a>
                             </li>
                         {/if}
                  {if !isset($site_admin)}
