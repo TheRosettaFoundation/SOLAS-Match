@@ -1105,7 +1105,7 @@ class UserRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         $admin_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($admin_id);
-       
+
         if ($request->getMethod() === 'POST' && !(($roles&NGO_PROJECT_OFFICER) && $post['role'] == NGO_ADMIN && !empty($post['email']) )) {
             $post = $request->getParsedBody();
             $email = trim($post['email']);
