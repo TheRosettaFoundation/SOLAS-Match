@@ -519,7 +519,6 @@ class TaskRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-                
             }
         }
 
@@ -547,16 +546,10 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
         ));
 
-
-
-        $results = json_encode(array('tasks'=> $recentTasks , 'projects' => $projectAndOrgs )  );
-         
+        $results = json_encode(['tasks'=> $recentTasks , 'projects' => $projectAndOrgs]);
         $payload = json_encode($results, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
-
         $response->getBody()->write($results);
-
         return $response->withHeader('Content-Type', 'application/json');
-
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)
