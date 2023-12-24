@@ -311,7 +311,6 @@ class UserRouteHandler
         if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
         if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
 
-
         try {
             if ($user_id) {
                 $strict = false;                       
@@ -328,7 +327,6 @@ class UserRouteHandler
             // $topTasks = array();
             $topTasksCount = 0;
         }
-
 
         $taskImages = array();
 
@@ -493,13 +491,12 @@ class UserRouteHandler
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                $userTasks = $userDao ->getUserTasks($user_id);
+                $userTasks = $userDao->getUserTasks($user_id);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-        
             $topTasks = array();
             $topTasksCount = 0;
         }
@@ -739,14 +736,12 @@ class UserRouteHandler
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                $userTasks = $userDao ->getUserTasks($user_id);
-
+                $userTasks = $userDao->getUserTasks($user_id);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-        
             $topTasks = array();
             $topTasksCount = 0;
         }
