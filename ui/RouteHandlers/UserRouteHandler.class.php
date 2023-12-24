@@ -315,11 +315,10 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;                       
-                $topTasks = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode);
+                $topTasks      = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                $userTasks = $userDao ->getUserTasks($user_id);
-
+                $userTasks = $userDao->getUserTasks($user_id);
             } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
@@ -491,8 +490,7 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-         
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
@@ -738,8 +736,7 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset); 
-         
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao ->getUserTasks($user_id);
