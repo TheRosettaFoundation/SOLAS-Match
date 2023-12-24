@@ -633,10 +633,6 @@ class UserRouteHandler
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
         $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
-  
-      
-        
-
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -647,8 +643,6 @@ class UserRouteHandler
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
-        
-
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -703,8 +697,6 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = null;
 
-   
-
         $filter = array();
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -744,7 +736,6 @@ class UserRouteHandler
             $topTasks = array();
             $topTasksCount = 0;
         }
-
 
         $taskTags = array();
         $created_timestamps = array();
@@ -798,8 +789,6 @@ class UserRouteHandler
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
-
-                
             }
         }
 
@@ -843,7 +832,6 @@ class UserRouteHandler
         if (empty($topTasks) && !empty($user_id)) {
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
-
         
         $taskNumber = array("4.2" , "2.3" , "1.5.1", "1.1.3","3.4.1", "7.1");
 
@@ -870,9 +858,7 @@ class UserRouteHandler
             'user_monthly_count' => $userDao->get_users_by_month(),
             'page_count' => $pages,
             'taskN' =>$taskNumber
-       
         ));
-        
         return UserRouteHandler::render('index-home-demo.tpl', $response);
     }
 
@@ -3710,10 +3696,7 @@ EOF;
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
-      
-        // var_dump($response);
         $response->getBody()->write($smarty->fetch($template));
-    
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
 }
