@@ -245,7 +245,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
+        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -408,7 +408,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
+        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -652,7 +652,7 @@ class UserRouteHandler
 
         $languageDao = new DAO\LanguageDao();
         $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        $activeTargetLanguages = $languageDao-> getActiveTargetLanguages();
+        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
         
 
 
