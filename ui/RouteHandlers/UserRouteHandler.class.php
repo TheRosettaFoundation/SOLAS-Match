@@ -394,7 +394,6 @@ class UserRouteHandler
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
-        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -402,10 +401,6 @@ class UserRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
-
-        $languageDao = new DAO\LanguageDao();
-        $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
-        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $viewData = array();
         $viewData['current_page'] = 'home';
@@ -471,19 +466,18 @@ class UserRouteHandler
             if (isset($post['sourceLanguage'])) {
                 $selectedSourceLanguageCode = $post['sourceLanguage'];
             }
-            if (isset($post['targetLanguage'])) {
-                $selectedTargetLanguageCode = $post['targetLanguage'];
-            }
         }
         // Post or route handler may return '0', need an explicit zero
         $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
-        if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
 
         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
         if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
-        if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
-        if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
+        if ($selectedSourceLanguageCode !== 0) {
+            $codes = explode('_', $selectedSourceLanguageCode);
+            $filter['sourceLanguage'] = $codes[0];
+            $filter['targetLanguage'] = $codes[1];
+        }
 
         try {
             if ($user_id) {
@@ -509,7 +503,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksC /5);
+        $pages = ceil($topTasksC/5);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
@@ -600,11 +594,10 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
-            'activeSourceLanguages' => $activeSourceLanguages,
-            'activeTargetLanguages' => $activeTargetLanguages,
+            'active_languages' => $taskDao->get_active_languages($user_id),
             'selectedTaskType' => $selectedTaskType,
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
-            'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
+            'selectedTargetLanguageCode' => 0,
             'topTasks' => $topTasks,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
@@ -621,7 +614,6 @@ class UserRouteHandler
             'user_monthly_count' => $userDao->get_users_by_month(),
             'page_count' => $pages,
         ));
-        
         return UserRouteHandler::render('index-home.tpl', $response);
     }
 
