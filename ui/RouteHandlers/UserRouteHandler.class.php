@@ -289,7 +289,7 @@ class UserRouteHandler
 
         try {
             if ($user_id) {
-                $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset,  $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode);
+                $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode);
                 $topTasksCount = intval($userDao->getUserPageTasksCount($user_id, $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode));
             }
         } catch (\Exception $e) {
