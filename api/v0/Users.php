@@ -155,16 +155,6 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->get(
-            '/api/v0/users/{userId}/topTasksCount/',
-            '\SolasMatch\API\V0\Users:getUserTopTasksCount')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
-            '/api/v0/users/{userId}/topTasks/',
-            '\SolasMatch\API\V0\Users:getUserTopTasks')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/users/{userId}/archivedTasks/{limit}/{offset}/',
             '\SolasMatch\API\V0\Users:getUserArchivedTasks')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -512,70 +502,6 @@ error_log("userClaimTask($userId, $taskId)");
                     DAO\TaskDao::dequeue_claim_task($task_id);
         }
         die;
-    }
-
-    public static function getUserTopTasks(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $limit = API\Dispatcher::clenseArgs($request, 'limit', 5);
-        $offset = API\Dispatcher::clenseArgs($request, 'offset', 0);
-        $filter = API\Dispatcher::clenseArgs($request, 'filter', '');
-        $strict = API\Dispatcher::clenseArgs($request, 'strict', false);
-        $filters = Common\Lib\APIHelper::parseFilterString($filter);
-        $filter = "";
-        $taskType = '';
-        $sourceLanguageCode = '';
-        $targetLanguageCode = '';
-        if (isset($filters['taskType']) && $filters['taskType'] != '') {
-            $taskType = $filters['taskType'];
-        }
-        if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
-            $sourceLanguageCode = $filters['sourceLanguage'];
-        }
-        if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
-            $targetLanguageCode = $filters['targetLanguage'];
-        }
-        $dao = new DAO\TaskDao();
-        $data = $dao->getUserTopTasks(
-            $userId,
-            $strict,
-            $limit,
-            $offset,
-            $taskType,
-            $sourceLanguageCode,
-            $targetLanguageCode
-        );
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function getUserTopTasksCount(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $filter = API\Dispatcher::clenseArgs($request, 'filter', '');
-        $strict = API\Dispatcher::clenseArgs($request, 'strict', false);
-        $filters = Common\Lib\APIHelper::parseFilterString($filter);
-        $filter = "";
-        $taskType = '';
-        $sourceLanguageCode = '';
-        $targetLanguageCode = '';
-        if (isset($filters['taskType']) && $filters['taskType'] != '') {
-            $taskType = $filters['taskType'];
-        }
-        if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
-            $sourceLanguageCode = $filters['sourceLanguage'];
-        }
-        if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
-            $targetLanguageCode = $filters['targetLanguage'];
-        }
-        $dao = new DAO\TaskDao();
-        $data = $dao->getUserTopTasksCount(
-            $userId,
-            $strict,
-            $taskType,
-            $sourceLanguageCode,
-            $targetLanguageCode
-        );
-        return API\Dispatcher::sendResponse($response, $data, null);
     }
 
     public static function getFilteredUserClaimedTasks(Request $request, Response $response, $args)
