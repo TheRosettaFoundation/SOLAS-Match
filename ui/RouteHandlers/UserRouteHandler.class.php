@@ -263,7 +263,6 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = null;
 
-        $filter = array();
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -351,7 +350,6 @@ class UserRouteHandler
         }
 
         $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
-        $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -404,7 +402,6 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = [];
 
-        $filter = array();
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -509,26 +506,6 @@ class UserRouteHandler
                 interval: 5000,
                 pause:'hover'
               });
-            /*
-          var user_count = $('#value').text();
-            $('.carousel').carousel({
-              interval: 2000,
-            })
-            function animateValue(obj, start, end, duration) {
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                  if (!startTimestamp) startTimestamp = timestamp;
-                  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                  obj.innerHTML = Math.floor(progress * (end - start) + start);
-                  if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                  }
-                };
-                window.requestAnimationFrame(step);
-              }
-              const obj = document.getElementById('value');
-              animateValue(obj, 0, user_count, 3000);
-              */
           });
         </script>";
 
