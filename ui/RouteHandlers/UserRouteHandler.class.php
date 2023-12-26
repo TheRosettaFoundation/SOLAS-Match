@@ -255,25 +255,6 @@ class UserRouteHandler
             $viewData['user_tags'] = $user_tags;
         }
 
-        $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
-        if ($maintenance_msg == 'y') {
-            $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
-            if ($maintenanceCustomMsg == 'n') {
-                $maintenanceDate     = Common\Lib\Settings::get('maintenance.maintenance_date');
-                $maintenanceTime     = Common\Lib\Settings::get('maintenance.maintenance_time');
-                $maintenanceDuration = Common\Lib\Settings::get('maintenance.maintenance_duration');
-                $msg = sprintf(
-                    Lib\Localisation::getTranslation('common_maintenance_message'),
-                    $maintenanceDate,
-                    $maintenanceTime,
-                    $maintenanceDuration
-                );
-            } elseif ($maintenanceCustomMsg == 'y') {
-                $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
-            }
-            UserRouteHandler::flashNow('warning', $msg);
-        }
-
         $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
@@ -421,25 +402,6 @@ class UserRouteHandler
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
             $viewData['user_tags'] = $user_tags;
-        }
-
-        $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
-        if ($maintenance_msg == 'y') {
-            $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
-            if ($maintenanceCustomMsg == 'n') {
-                $maintenanceDate     = Common\Lib\Settings::get('maintenance.maintenance_date');
-                $maintenanceTime     = Common\Lib\Settings::get('maintenance.maintenance_time');
-                $maintenanceDuration = Common\Lib\Settings::get('maintenance.maintenance_duration');
-                $msg = sprintf(
-                    Lib\Localisation::getTranslation('common_maintenance_message'),
-                    $maintenanceDate,
-                    $maintenanceTime,
-                    $maintenanceDuration
-                );
-            } elseif ($maintenanceCustomMsg == 'y') {
-                $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
-            }
-            UserRouteHandler::flashNow('warning', $msg);
         }
 
         $template_data = array_merge($template_data, $viewData);
