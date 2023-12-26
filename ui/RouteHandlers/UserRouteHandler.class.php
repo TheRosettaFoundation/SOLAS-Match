@@ -294,9 +294,6 @@ class UserRouteHandler
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao->getUserTasks($user_id);
-            } else {
-                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
-                $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
             // var_dump($e);
@@ -443,9 +440,6 @@ class UserRouteHandler
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
                 $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
                 $userTasks = $userDao->getUserTasks($user_id);
-            } else {
-                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
-                $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
             $topTasks = array();
