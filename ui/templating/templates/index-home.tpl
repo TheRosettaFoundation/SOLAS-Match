@@ -382,7 +382,7 @@ h3{
                  <h2 >Connect</h2>
                 </div>
        
-            <div>
+            <div class="mt-2">
            
                 Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
@@ -393,7 +393,7 @@ h3{
         
         </div>
 
-
+  
 
         <div class="col-12 col-md-6 col-lg-3">
               <div class="text-center">
