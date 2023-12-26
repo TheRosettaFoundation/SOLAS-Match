@@ -291,13 +291,9 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;                       
                 $topTasks      = $userDao->getUserPageTasks($user_id, $strict, $itemsPerScrollPage, $offset,  $selectedTaskType, $selectedSourceLanguageCode, $selectedTargetLanguageCode);
-                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);            
-                $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                $userTasks = $userDao->getUserTasks($user_id);
+                $topTasksCount = intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
             }
         } catch (\Exception $e) {
-            // var_dump($e);
-            // $topTasks = array();
             $topTasksCount = 0;
         }
 
@@ -407,8 +403,7 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
-        $topTasks = null;
-        $topTasksC = null;
+        $topTasks = [];
 
         $filter = array();
         if ($request->getMethod() === 'POST') {
@@ -437,12 +432,10 @@ class UserRouteHandler
             if ($user_id) {
                 $strict = false;
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-                $topTasksC =  intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
-                $userTasks = $userDao->getUserTasks($user_id);
+                $topTasksCount = intval($userDao->getUserTopTasksCount($user_id, $strict, $filter));
             }
         } catch (\Exception $e) {
-            $topTasks = array();
+            $topTasks = [];
             $topTasksCount = 0;
         }
 
@@ -454,7 +447,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksC/5);
+        $pages = ceil($topTasksCount/5);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
