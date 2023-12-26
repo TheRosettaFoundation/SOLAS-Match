@@ -165,23 +165,15 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function getUserPageTasks($user_id, $strict, $limit, $offset, $taskType,  $sourceLanguageCode, $targetLanguageCode)
+    public function getUserPageTasks($user_id, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
         $ret = [];
-        $args = LibAPI\PDOWrapper::cleanse($user_id).',';
-
-        if ($strict) {
-            $args .= '1,';
-        } else {
-            $args .= '0,';
-        }
-
-        $args .= LibAPI\PDOWrapper::cleanse($limit).', '.
-                LibAPI\PDOWrapper::cleanse($offset).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNull($taskType).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
-        $args .=  LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
-
+        $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($limit) . ', ' .
+                 LibAPI\PDOWrapper::cleanse($offset) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = LibAPI\PDOWrapper::call('getUserTopTasks', $args);
         if ($result) {
             foreach ($result as $row) {
@@ -189,6 +181,17 @@ class UserDao extends BaseDao
             }
         }
         return $ret;
+    }
+
+    public function getUserPageTasksCount($user_id, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
+    {
+        $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
+                 LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = LibAPI\PDOWrapper::call('getUserTopTasksCount', $args);
+        if ($result) return $result[0]['result'];
+        return 0;
     }
 
     public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
