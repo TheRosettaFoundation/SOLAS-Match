@@ -35,7 +35,7 @@
 
           <div class="d-flex  flex-wrap justify-content-between">
 
-               <div class="fw-bold">
+               <div class="fw-bold primaryDark fs-3">
 
                 {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} 

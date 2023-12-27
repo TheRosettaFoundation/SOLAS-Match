@@ -2,7 +2,7 @@
 <div class="table-responsive">
 <table class="table">
     <thead>
-       <tr class="fs-5">
+       <tr class="fs-5 align-middle">
 
                 <th>Project</th>
                 <th>Source Language</th>

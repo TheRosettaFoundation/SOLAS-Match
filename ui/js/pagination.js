@@ -331,7 +331,7 @@ function displayTasks(pages) {
         const itemSubFlex = document.createElement("div");
         const titleContainer = document.createElement("div");
         const title = document.createElement("div");
-        title.classList.add("text-primaryDark", "d-inline-block");
+        title.classList.add("text-primaryDark", "d-inline-block", "h3");
         title.textContent = item.title;
 
         const spanTitle = document.createElement("div");

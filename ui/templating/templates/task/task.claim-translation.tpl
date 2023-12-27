@@ -8,11 +8,11 @@
         </p>
     {/if}
 
-  <section class="my-4 container card ">
+  <section class="py-5 container card ">
 
-     <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex  justify-content-between align-items-center flex-wrap ">
 
-                <div class="w-50 d-flex flex-column justify-content-end">
+                <div class="w-50 d-flex flex-column justify-content-end py-2">
 
                     <div> 
 
