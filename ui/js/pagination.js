@@ -19,8 +19,10 @@ let tasksContainer = document.querySelector(".taskPagination");
 
 let recents = document.querySelector(".recents");
 
+let userid;
+
 if (recents) {
-    let userId = recents.id;
+    userId = recents.id;
 
     recents.addEventListener("click", function (e) {
         e.preventDefault();

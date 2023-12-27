@@ -642,7 +642,7 @@ h3{
                         {/if}
                             <div class="d-flex justify-content-between mb-2 flex-wrap">
                                 <div class="">
-                                        <div class="fw-bold fs-4  d-flex align-items-center ">
+                                        <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
                                         </div>
