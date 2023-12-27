@@ -424,7 +424,7 @@ function displayTasks(pages) {
 
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
-                        Languages:  ${item.sourceLocale.languageName} -  ${item.targetLocale.languageName}
+                        Languages:  ${item.sourceLocale.languageName}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" />  ${item.targetLocale.languageName}
                     </span>
         </div>
         <div class="text-muted d-flex" > <div> Due by </div> 
