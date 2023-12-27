@@ -18,13 +18,13 @@
 
                          <h5>{Localisation::getTranslation('task_claim_translation_0')}</h5>
                         <p style="margin-bottom:20px;"></p>
-                        <ol>
+                        <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
                             <li>{sprintf(Localisation::getTranslation('task_claim_translation_3'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
                             {if !empty($matecat_url)}
                             <li>{sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_translation_5')})}</li>
                             {/if}
-                        </ol>
+                        </ul>
                     
                     
                     </div>

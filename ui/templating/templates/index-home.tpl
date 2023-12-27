@@ -658,7 +658,7 @@ h3{
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                             <div class="mb-3  text-muted">
                                                 <span class=" ">
-                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
+                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
                                             {/if}
                                             <span>
