@@ -177,82 +177,33 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
+    public function getUserPageTasks($user_id, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/topTasks";
-
-        $args = array();
-        if ($limit) {
-            $args["limit"] = $limit;
-        }
-
-        if ($offset) {
-            $args["offset"] = $offset;
-        }
-
-        $filterString = "";
-        if ($filter) {
-            if (isset($filter['taskType']) && $filter['taskType'] != '') {
-                $filterString .= "taskType:".$filter['taskType'].';';
-            }
-            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
-                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
-            }
-            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
-                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+        $ret = [];
+        $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($limit) . ', ' .
+                 LibAPI\PDOWrapper::cleanse($offset) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = LibAPI\PDOWrapper::call('getUserTopTasks', $args);
+        if ($result) {
+            foreach ($result as $row) {
+                 $ret[] = Common\Lib\ModelFactory::buildModel('Task', $row);
             }
         }
-
-        if ($filterString != '') {
-            $args['filter'] = $filterString;
-        }
-
-        $args['strict'] = $strict;
-
-        $ret = $this->client->call(
-            array("\SolasMatch\Common\Protobufs\Models\Task"),
-            $request,
-            Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
-        );
         return $ret;
     }
 
-    public function getUserTopTasksCount($userId, $strict = false, $filter = array())
+    public function getUserPageTasksCount($user_id, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/topTasksCount";
-
-        $args = array();
-
-        $filterString = '';
-        if ($filter) {
-            if (isset($filter['taskType']) && $filter['taskType'] != '') {
-                $filterString .= "taskType:".$filter['taskType'].';';
-            }
-            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
-                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
-            }
-            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
-                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
-            }
-        }
-
-        if ($filterString != '') {
-            $args['filter'] = $filterString;
-        }
-
-        $args['strict'] = $strict;
-        $ret = $this->client->call(
-            null,
-            $request,
-            Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
-        );
-        return $ret;
+        $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
+                 LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = LibAPI\PDOWrapper::call('getUserTopTasksCount', $args);
+        if ($result) return $result[0]['result'];
+        return 0;
     }
 
     public function getFilteredUserClaimedTasks($userId, $selectedOrdering, $limit, $offset, $selectedTaskType, $selectedTaskStatus)

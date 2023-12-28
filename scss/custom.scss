@@ -1,0 +1,103 @@
+// 2. Include any default variable overrides here
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Merriweather:wght@300&family=Montserrat:wght@500;600&family=Mukta:wght@200;300&display=swap");
+
+// @import "../node_modules/bootstrap/scss/variables-dark";
+
+$enable-shadows: true;
+
+$font-family-sans-serif: Inter, sans-serif;
+$font-family-base: $font-family-sans-serif;
+
+$body-color: #1c1d36;
+$primary: #f89406;
+$secondary: #133978;
+$green: #1b8912;
+$blue-400: #36a6e7;
+$indigo: #7b61ff;
+$secondary-text-emphasis: $secondary;
+$navbar-light-color: $secondary-text-emphasis;
+$navbar-light-hover-color: $primary;
+
+// $nav-link-font-weight: 700 !important;
+
+$custom-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "quartenary": $blue-400,
+    "quinary": $indigo,
+    "tertiary": $secondary,
+    "greenish": $green,
+    "greenBorder": #0d5520,
+    "quartBorder": #116fa5,
+    "primaryDark": #e8991c,
+    "grayish": #112940,
+);
+
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: 16px;
+$h5-font-size: 14px;
+$h6-font-size: 12px;
+
+$font-sizes: (
+    1: $h1-font-size,
+    2: $h2-font-size,
+    3: $h3-font-size,
+    4: $h4-font-size,
+    5: $h5-font-size,
+    6: $h6-font-size,
+    7: 11px,
+);
+
+// $font-size-base: 16px;
+
+// $h1-font-size: $font-size-base * 6;
+// $h2-font-size: $font-size-base * 5;
+// $h3-font-size: $font-size-base * 4;
+// $h4-font-size: $font-size-base * 3;
+
+// $h6-font-size: $font-size-base;
+
+$spacer: 8px;
+$spacers: (
+    0: 2px,
+    1: $spacer * 0.5,
+    2: $spacer,
+    3: $spacer * 2,
+    4: $spacer * 3,
+    5: $spacer * 4,
+    6: $spacer * 5,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+.btn-secondary:hover {
+    background-color: #f89406 !important;
+    border: #f89406 !important;
+}
+
+.custom-tooltip {
+    --bs-tooltip-b: $indigo;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// 6. Optionally include any other parts as needed
+// @import "../node_modules/bootstrap/scss/maps";
+// @import "../node_modules/bootstrap/scss/mixins";
+// @import "../node_modules/bootstrap/scss/root";
+// @import "../node_modules/bootstrap/scss/utilities";
+// @import "../node_modules/bootstrap/scss/reboot";
+// @import "../node_modules/bootstrap/scss/type";
+// @import "../node_modules/bootstrap/scss/images";
+// @import "../node_modules/bootstrap/scss/containers";
+// @import "../node_modules/bootstrap/scss/grid";
+// @import "../node_modules/bootstrap/scss/helpers";
+
+// // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+// @import "../node_modules/bootstrap/scss/utilities/api";

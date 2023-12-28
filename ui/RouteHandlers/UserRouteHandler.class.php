@@ -26,7 +26,7 @@ class UserRouteHandler
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeIndex')
             ->setName('home-paged');
 
         $app->map(['GET', 'POST'],
@@ -223,6 +223,105 @@ class UserRouteHandler
             ->setName('invite_site_admins');
     }
 
+    public function homeIndex(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        $viewData = array();
+        $viewData['current_page'] = 'home';
+
+        $tagDao = new DAO\TagDao();
+        $top_tags = $tagDao->getTopTags(10);
+        $viewData['top_tags'] = $top_tags;
+
+        if ($user_id != null) {
+            $user_tags = $userDao->getUserTags($user_id);
+            $viewData['user_tags'] = $user_tags;
+        }
+
+        $template_data = array_merge($template_data, $viewData);
+
+        $siteLocation = Common\Lib\Settings::get('site.location');
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $topTasks = null;
+
+        $selectedTaskType = (int)$selectedTaskType;
+        $filter_source = NULL;
+        $filter_target = NULL;
+        if (!is_null($selectedSourceLanguageCode)) {
+            $codes = explode('_', $selectedSourceLanguageCode);
+            $filter_source = $codes[0];
+            $filter_target = $codes[1];
+        }
+
+        try {
+            if ($user_id) {
+                $topTasks = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $filter_source, $filter_target);
+            }
+        } catch (\Exception $e) {
+        }
+
+        $taskImages = [];
+        foreach ($topTasks as $topTask) {
+            $taskId = $topTask->getId();
+            $project = $projectDao->getProject($topTask->getProjectId());
+            $org_id = $project->getOrganisationId();
+            $org = $orgDao->getOrganisation($org_id);
+
+            $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
+
+            $created = $topTask->getCreatedTime();
+            $selected_year   = (int)substr($created,  0, 4);
+            $selected_month  = (int)substr($created,  5, 2);
+            $selected_day    = (int)substr($created,  8, 2);
+            $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($created, 14, 2);
+            $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $deadline = $topTask->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+            $projectName = $project->getTitle();
+            $orgUri = "{$siteLocation}org/{$org_id}/profile";
+            $orgName = $org->getName();
+
+            $projectAndOrgs[$taskId] = sprintf(
+                Lib\Localisation::getTranslation('common_part_of_for'),
+                $projectUri,
+                htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
+                $orgUri,
+                htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
+            );
+
+            $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
+
+            $taskImages[$taskId] = '';
+            if ($project->getImageApproved() && $project->getImageUploaded()) {
+                $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
+            }
+        }
+
+        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function home(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -263,33 +362,14 @@ class UserRouteHandler
             $viewData['user_tags'] = $user_tags;
         }
 
-        $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
-        if ($maintenance_msg == 'y') {
-            $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
-            if ($maintenanceCustomMsg == 'n') {
-                $maintenanceDate     = Common\Lib\Settings::get('maintenance.maintenance_date');
-                $maintenanceTime     = Common\Lib\Settings::get('maintenance.maintenance_time');
-                $maintenanceDuration = Common\Lib\Settings::get('maintenance.maintenance_duration');
-                $msg = sprintf(
-                    Lib\Localisation::getTranslation('common_maintenance_message'),
-                    $maintenanceDate,
-                    $maintenanceTime,
-                    $maintenanceDuration
-                );
-            } elseif ($maintenanceCustomMsg == 'y') {
-                $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
-            }
-            UserRouteHandler::flashNow('warning', $msg);
-        }
-
         $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
+        $topTasks = [];
 
-        $filter = array();
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
@@ -304,25 +384,24 @@ class UserRouteHandler
         $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
 
+        $filter_type   = NULL;
+        $filter_source = NULL;
+        $filter_target = NULL;
         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
-        if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
+        if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
         if ($selectedSourceLanguageCode !== 0) {
             $codes = explode('_', $selectedSourceLanguageCode);
-            $filter['sourceLanguage'] = $codes[0];
-            $filter['targetLanguage'] = $codes[1];
+            $filter_source = $codes[0];
+            $filter_target = $codes[1];
         }
 
         try {
             if ($user_id) {
-                $strict = false;
-                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
-                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-            } else {
-                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
-                $topTasksCount = $taskDao->getTopTasksCount();
+                $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $filter_type, $filter_source, $filter_target);
+                $topTasksCount = intval($userDao->getUserPageTasksCount($user_id, $filter_type, $filter_source, $filter_target));
             }
         } catch (\Exception $e) {
-            $topTasks = array();
+            $topTasks = [];
             $topTasksCount = 0;
         }
 
@@ -334,6 +413,8 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        $pages = ceil($topTasksCount/5);
+
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
@@ -385,6 +466,7 @@ class UserRouteHandler
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
@@ -392,26 +474,6 @@ class UserRouteHandler
                 interval: 5000,
                 pause:'hover'
               });
-            /*
-          var user_count = $('#value').text();
-            $('.carousel').carousel({
-              interval: 2000,
-            })
-            function animateValue(obj, start, end, duration) {
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                  if (!startTimestamp) startTimestamp = timestamp;
-                  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                  obj.innerHTML = Math.floor(progress * (end - start) + start);
-                  if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                  }
-                };
-                window.requestAnimationFrame(step);
-              }
-              const obj = document.getElementById('value');
-              animateValue(obj, 0, user_count, 3000);
-              */
           });
         </script>";
 
@@ -440,6 +502,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
+            'page_count' => $pages,
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }

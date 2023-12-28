@@ -1,97 +1,131 @@
             <br/><br/>
             
-            <div class="well pull-left" style="display:none;">
+          
+
                 <footer>
-                    <table>
-                        <tr>
-                            <td width="31%" style="text-align: center">
-                                <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">
-                                    <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/88x31.png" />
-                                </a>
-                                <br />
-                                {sprintf(Localisation::getTranslation('footer_0'), "http://creativecommons.org/licenses/by/3.0/ie/", {urlFor name='terms'})}
-                            </td>
-                            <td width="38%" style="text-align: center">
+
+
+                            <div class="text-center mb-4">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
-                            </td>
-                            <td width="31%" style="text-align: center">
-                            	<a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
+                                <div class="my-4 py-4">
+                                <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
                                     <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
-                                </a>
-                                <br />
-                                {sprintf(Localisation::getTranslation('footer_powered_by'), "https://github.com/TheRosettaFoundation/SOLAS-Match", "Solas")}
-                            </td>
-                        </tr>
-                    </table>
-                    <div id="footer-menu">
-                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text={Localisation::getTranslation("footer_contact_us")}} |
-                        <a href="{urlFor name='terms'}">
-                            {Localisation::getTranslation('footer_terms_and_conditons')}
-                        </a> |
-                        <a href="https://twbplatform.org/static/privacy/">
-                            {Localisation::getTranslation('footer_privacy_policy')}
-                        </a>
-                        {if Settings::get('site.forum_enabled') == 'y'}
-                            | <a href="{Settings::get('site.forum_link')}" target="_blank">
-                                {Localisation::getTranslation('common_forum')}
+                                    <h1 class="fs-5 text-decoration-none text-secondary"> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary ">Solas</a> </h1>
+                                </div>
+                              
+                            
+                            
+                             </div>
+
+
+                                                
+
+
+
+
+                      <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
+
+                        <div class="d-md-flex wrap"> 
+                           <div class ="mx-md-2 mx-5 text-white"> Follow Us :</div>
+                           <div class ="mx-md-2  mx-5 mt-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
+                           <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
+                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
+                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href=""https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
+                           
+       
+                        
+                        </div>
+
+                        <div class= "mx-5 mx-md-2 mt-4 mt-md-0">
+                            <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none text-white" target="_blank">Contact Us</a>
+                             | 
+                            <a href="/static/terms/" class="text-decoration-none text-white" target="_blank" >
+                            Terms and Conditions
+                            </a> 
+                            | <a href="https://twbplatform.org/static/privacy/" class="text-decoration-none text-white" target="_blank"> Privacy Policy </a> 
+                            | <a href="https://community.translatorswb.org/" target="_blank" class="text-decoration-none text-white">
+                                TWB Community                           
                             </a>
-                        {/if}
+
+                        </div>
+
+                       
+
+                        <div class="d-flex justify-content-end mt-4 mx-5 mx-md-2  mt-md-0">
+                             <div  class ="text-end"> <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&amp;__hssc=84675846.1.1634309162966&amp;__hsfp=2187346942" target="_blank" class="text-decoration-none text-white"> <img alt="" class="mx-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter  </a>  </div>
+                            
+                        </div>
+
+
                     </div>
-                    
-                </footer>    
-            </div>
-        </div>
-         <!-- Container -->
-        <div class="row-fluid">
-        <div class="span4" style="text-align: center;margin-left:-880px;">
-         <a href="https://facebook.com/translatorswithoutborders" target="_blank" class="fa fa-facebook"></a>
-         <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" class="fa fa-instagram"></a>
-         <a href="https://linkedin.com/company/translators-without-borders" target="_blank" class="fa fa-linkedin"></a>
-         <a href="https://twitter.com/TranslatorsWB" target="_blank" class="fa fa-twitter" style="background: #55ACEE;color: white;"></a>
-         <a href="https://www.youtube.com/user/TranslatorsWB" target="_blank" class="fa fa-youtube"></a>
-         <br/>
-         <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&__hssc=84675846.1.1634309162966&__hsfp=2187346942" target="_blank" class="btn btn-primary">Subscribe to TWB Newsletter</a>
+ 
+                </footer>  
 
-           
-        </div>
-        <div class="span4" style="text-align: center;margin-left:-430px;margin-top:15px;">
-        <br />
-        <br />
-        {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
-        <br />
-        The platform is hosted by Azure through a donation from Microsoft<br />
-        <a href="https://microsoft.com" target="_blank">
-            <img alt="Microsoft" style="border-width:0;" src="{urlFor name='home'}ui/img/Microsoft-logo_rgb_c-gray.png" />
-        </a>
-        </div>
-        <div class="span4" style="text-align: center;margin-left:895px;margin-top:-25px;">
-                                	<a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
-                                    <img alt="Solas Logo" style="border-width:0;" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
-                                </a>
-                                <br />
-                                {sprintf(Localisation::getTranslation('footer_powered_by'), "https://github.com/TheRosettaFoundation/SOLAS-Match", "Solas")}
-        </div>
-        </div>
-    
-<br/>
-             <div id="footer-menu">
-                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text={Localisation::getTranslation("footer_contact_us")}} |
-                        <a href="{urlFor name='terms'}">
-                            {Localisation::getTranslation('footer_terms_and_conditons')}
-                        </a> |
-                        <a href="https://twbplatform.org/static/privacy/">
-                            {Localisation::getTranslation('footer_privacy_policy')}
-                        </a>
-                        {if Settings::get('site.forum_enabled') == 'y'}
-                            | <a href="{Settings::get('site.forum_link')}" target="_blank">
-                                {Localisation::getTranslation('common_forum')}
-                            </a>
-                        {/if}
-                        <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/" target="_blank"><img style="margin-top: -30px;" class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a>
-             </div>
 
+                   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
                 
-                    <br/>
-                    <br/>
-    </body>  
+                    <script>
+
+
+                    // Variables on the theme of the site
+
+                    let navi = document.getElementById("nav");
+
+                    let imgL = document.getElementById("light");
+                    let imgN = document.getElementById("night");
+
+                    let light = true;
+                    
+                    let theme = document.getElementById("theme");
+
+                    let logo = document.querySelector('.logo')
+
+                    let savedTheme = localStorage.getItem('theme');
+
+                    if (savedTheme == 'dark') {
+
+                        imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          localStorage.setItem('theme', 'dark');
+
+                        
+                    } 
+       
+
+                    theme.addEventListener("click" , function(e) {
+                       
+                       light = !light ;
+                       
+   
+                       if(light){
+                        imgL.classList.remove("d-none");
+                        imgN.classList.add("d-none");
+                        document.documentElement.setAttribute('data-bs-theme', 'light')
+                        navi.setAttribute('data-bs-theme', 'light')
+                        logo.src = "/ui/img/TWB_Logo.svg" ;
+                        localStorage.setItem('theme', 'light');
+                        
+                       }
+                       else{
+                          imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
+                           localStorage.setItem('theme', 'dark');
+                       }
+
+                       
+                    })
+                   
+                    
+                    </script>
+
+                  
+                 
+                    
+                    
 </html> 

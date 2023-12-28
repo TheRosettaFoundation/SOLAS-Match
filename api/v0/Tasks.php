@@ -82,14 +82,6 @@ class Tasks
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/tasks/topTasksCount/',
-            '\SolasMatch\API\V0\Tasks:getTopTasksCount');
-
-        $app->get(
-            '/api/v0/tasks/topTasks/',
-            '\SolasMatch\API\V0\Tasks:getTopTasks');
-
-        $app->get(
             '/api/v0/tasks/{taskId}/',
             '\SolasMatch\API\V0\Tasks:getTask');
     }
@@ -215,18 +207,6 @@ class Tasks
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getProofreadTask($taskId), null);
     }   
     
-    public static function getTopTasks(Request $request, Response $response)
-    {
-        $limit = API\Dispatcher::clenseArgs($request, 'limit', 15);
-        $offset = API\Dispatcher::clenseArgs($request, 'offset', 0);
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null);
-    }
-    
-    public static function getTopTasksCount(Request $request, Response $response)
-    {
-        return API\Dispatcher::sendResponse($response, DAO\TaskDao::getLatestAvailableTasksCount(), null);
-    }
-
     public static function getTask(Request $request, Response $response, $args)
     {
         $taskId = $args['taskId'];

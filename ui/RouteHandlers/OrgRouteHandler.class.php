@@ -1821,7 +1821,7 @@ class OrgRouteHandler
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-            
+
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (empty($foundOrgs)) {

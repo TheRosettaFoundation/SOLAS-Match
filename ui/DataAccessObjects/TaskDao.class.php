@@ -59,41 +59,6 @@ class TaskDao extends BaseDao
         return $response;
     }
 
-    public function getTopTasks($limit = null, $offset = null)
-    {
-        $request = "{$this->siteApi}v0/tasks/topTasks";
-        $args = array();
-        if ($limit != null) {
-            $args['limit'] = $limit;
-        }
-        if ($offset != null) {
-            $args['offset'] = $offset;
-        }
-        $response = $this->client->call(
-            array("\SolasMatch\Common\Protobufs\Models\Task"),
-            $request,
-            Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
-        );
-        return $response;
-    }
-
-    public function getTopTasksCount()
-    {
-        $request = "{$this->siteApi}v0/tasks/topTasksCount";
-        $args = array();
-
-        $response = $this->client->call(
-            null,
-            $request,
-            Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
-        );
-        return $response;
-    }
-
     public function getTaskTags($taskId, $limit = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";

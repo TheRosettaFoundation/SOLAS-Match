@@ -10,7 +10,7 @@
                 </div>            
             {/foreach}
             <div class="tag">
-                <a class="btn btn-primary btn-small" href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
+                <a class="btn btn-primary " href="{urlFor name="tags-list"}"><i class="icon-list icon-white"></i> {Localisation::getTranslation('tags_top_list_inc_more_tags')}</a>
             </div>
         </li>
     </ul>

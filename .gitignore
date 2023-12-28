@@ -18,3 +18,4 @@ ui/dart/deploy/web/conf/conf.json
 .buildpath
 /.settings
 .vagrant
+node_modules

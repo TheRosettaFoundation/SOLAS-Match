@@ -16,45 +16,6 @@ a:hover{
     color:#143878 !important;
 }
 
-h3{
-    font-size:12px;
-
-}
-
-
-@media (min-width: 400px ){
-
-    h3{
-        font-size: 16px;
-    } 
-
-}
-
-
-
-
-@media (min-width: 900px ){
-
-    h3{
-        font-size: 24px;
-    } 
-
-}
-
-.car{
-    display:none ;
-}
-
-@media (min-width: 700px ){
-
-    .car{
-        
-      display:block;
-            
-    } 
-}
-
-
 .twbheader{
     color:#e8991c !important;
 }
@@ -144,10 +105,6 @@ h3{
 }
 </style>
 
-
-
-        <div class="container">
-
 <span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
@@ -204,7 +161,7 @@ h3{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left">
-                        <h3 >We provide growth opportunities for<br/> our community members</h3>
+                        <h2 >We provide growth opportunities for<br/> our community members</h2>
                         <br/>
                         <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                         <br/>                   
@@ -215,9 +172,10 @@ h3{
                         <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                     <div class="carousel-caption">
-                        <div class="row-fluid d-flex justify-content-center flex-wrap">
-                 
-                        <div  class="car"><h3 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h3></div>
+                        <div class="row-fluid">
+                        <div class="span4"></div>
+                        <div class="span4"></div>
+                        <div  class="span4 pull-right"><h4 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h4></div>
                     </div>
                       <p></p>
                     </div>
@@ -229,7 +187,7 @@ h3{
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
                     
-                    <div class="top-left"><h3>We connect community members<br/> and humanitarian organizations</h3><br/>
+                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/>
                         <h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -243,8 +201,8 @@ h3{
                            <div class="row-fluid">
                                 <div class="span4"></div>
                                 <div class="span4"></div>
-                                    <div  class="car">
-                                        <h3>“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h3>
+                                    <div  class="">
+                                        <h4 >“Volunteering allows me to appreciate the difficulties imposed by language barriers and the impact on the wellbeing of people who live in communities where they don’t understand the local language.”<br/> - Nabil Salibi</h4>
                                     </div>
                             </div>                      
                                 <p></p>                           
@@ -255,7 +213,7 @@ h3{
                             
                 <div class="carousel-item">
                     <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img" class="w-100 d-block">
-                    <div class="top-left"><h3>We offer references, certificates, <br/>and courses</h3><br/>
+                    <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/>
                         <h3>Join to grow your professional profile and <br/>advance your career.</h3>
                         <br/>                   
                         <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -269,7 +227,7 @@ h3{
                         <div class="row-fluid">
                             <div class="span4"></div>
                             <div class="span4"></div>
-                            <div  class="car"><h3>“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h3></div>
+                            <div  class="span4 pull-right"><h4 >“Volunteering with TWB has impacted me very deeply on an emotional and intellectual level. People living in refugee camps face critical situations.”<br/> - Freddy Nkurunziza</h4></div>
                         </div>
                       
                         <p></p>
@@ -283,7 +241,7 @@ h3{
                           <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img" class="d-block w-100">
 
                         <div class="top-left">
-                            <h3>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h3><br/>
+                            <h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/>
                             <h3>Join to have a real-world impact.</h3>
                             <br/>
                             <button class="button_join button1"><a href="{urlFor name='register'}"> JOIN</a></button>
@@ -297,8 +255,8 @@ h3{
                         <div class="row-fluid">
                             <div class="span4"></div>
                             <div class="span4"></div>
-                            <div  class="car">
-                            <h3>“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h3>
+                            <div  class="span4 pull-right">
+                            <h4 >“When I speak my own language, I am free. When I hear someone else speaking Rohingya, I feel like I am home.”<br/> – Rohingya person talking to TWB</h4>
                             </div>
                         </div>                  
                         <p></p>
@@ -358,9 +316,9 @@ h3{
          </div>
          <div class="span4">
          <div id="globe" style="text-align: center">
-               
-	                <a class="btn btn-primary text-white font-bold" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
-	           
+                <button class="btn btn-primary btn-home-slider" type="submit">
+	                <a class="login" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
+	            </button>
                 </div>
          </div>
          <div class="span4">
@@ -371,109 +329,61 @@ h3{
 <br/>
 
 
-
-
-  <div class="container">  
-    <div class="row">
-
-        <div class="col-12 col-md-6 col-lg-3" >
-                <div class="text-center">
-                <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
-                 <h2 >Connect</h2>
-                </div>
-       
-            <div>
-           
-                Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
+<div class="row-fluid d-flex flex-row justify-content-between" id="learnmore">
+    <div >
+    <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con"></div>
+   
+        <div>
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Connect</h2></div>
+                <div>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
                 Learn about the nonprofits that work with TWB and why they come to us.<br/>
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
-                
-            </div>
-
-        
+                </div>   
         </div>
+    
+    </div>
 
-
-
-        <div class="col-12 col-md-6 col-lg-3">
-              <div class="text-center">
-                    <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
-                    <h2 ">Learn</h2>
-              
-              </div>
-            
-              
-              <div>
-             
-                
+    <div>
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con"></div>
+        <div>
+            <h2  class="clearheader" style="text-align: center">Learn</h2>
+                <div>
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
                         Receive feedback on your translations from more senior linguists and grow in the process.
-                
-        
-            </div>
-        
-        </div>
+                </div>
 
-
-        <div  class="col-12  col-md-6 col-lg-3" >
-           
-           <div class="text-center">
-                  <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
-                    <h2>Grow</h2>          
-           </div>
-
-          
-            
-            <div>
-
-         
-             Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
-            The most active linguists also get featured on TWB's blog and in the TWB Community Forum. 
-        
-            </div>
-
-
-         </div>
-
-
-
-
-         <div class="col-12   col-md-6 col-lg-3">
-           
-           <div class="text-center">
-
-                   <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
-                   <h2 >Impact</h2>
-           
-           </div>
-         
-             
-             <div>
-            
-             
-                Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
-                Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
-                Bridge the world's language gap and help respond more sensitively to the existing need.  
-             
 
         
-            </div>
-
-            
-            
         </div>
 
     </div>
+
+    <div >
+        <div style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con"></div>
+        <div>
+
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Grow</h2></div>
+             <div>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
+            The most active linguists also get featured on TWB's blog and in the TWB Community Forum. </div>
         
-  </div>
-    
+        </div>
+    </div>
 
+    <div>
+        <p style="text-align: center"><img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Con"></p>
+        <div>
+            <div class="span3"><h2 class="clearheader" style="text-align: center">Impact</h2></div>
+              <div>
+                Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
+                Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
+                Bridge the world's language gap and help respond more sensitively to the existing need.  
+             </div>
 
+        
+        </div>
 
-
-
-
+    </div>
 </div>
 
 
@@ -529,39 +439,34 @@ h3{
 
 <div class="d-flex row justify-content-between ">
    
-
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
+         <div class="mb-3 input-group">
+        
+            <input type="text" class="form-control" placeholder= "search organizations"> 
 
-        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8" class="needs-validation" novalidate> 
+            <span class="input-group-text bg-primary">
+                <a href="{urlFor name='home'}org/search">
+                      <img src="{urlFor name='home'}ui/img/search.svg" alt="search" ">
+                
+                </a>
+          
+            </span>
+
+        
          
-            <div class="d-flex mb-3 ">
-
-             <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
-                <button class="position-relative border-0 bg-primary rounded-end-2" style="left:-3px ;" type="submit" name="submit">
-                    
-                        <img src="{urlFor name='home'}ui/img/search.svg" alt="search" >
-                </button>
-
-            </div>
-         
-
-
-         </form>
-
-
+         </div>
      {if isset($user)}
             <h5 class="fw-bold">{Localisation::getTranslation('index_filter_available_tasks')}
             
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
             <h5 class="mt-5 mb-2 fw-bold"> Industry </h5>
-            <form method="post" action="{urlFor name="home"}" class="needs-validation" novalidate>
+            <form method="post" action="{urlFor name="home"}">
 	           
 	                    <div>
                             <div class="mb-3">
-                                   
                                  
-                                    <select name="taskTypes" id="taskTypes" class="form-select" required >
+                                    <select name="taskTypes" id="taskTypes" class="form-select">
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                                       <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
 	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
@@ -569,22 +474,28 @@ h3{
                                       <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
                                       <option value="6" {if ($selectedTaskType === 6)}selected="selected"{/if}>Proofreading and Approval</option>
 	                                 </select>
-                                     <div class="invalid-feedback"> Please select task type </div>
 
                             </div>
 
                             <div class="mb-3">
                                    
-                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-select" required>
-                                                <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>Any Language Pair</option>
-                                                {foreach $active_languages as $lang}
-                                                    {assign var="pair" value="`$lang['ls_code']`_`$lang['lt_code']`"}
-                                                    <option value="{$pair}" {if ($selectedSourceLanguageCode === $pair)}selected="selected"{/if}>{$lang['ls_name']} to {$lang['lt_name']}</option>
+                                            <select name="sourceLanguage" ID="sourceLanguage" class="form-select">
+                                                <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
+                                                {foreach $activeSourceLanguages as $lang}
+                                                    <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
                                                 {/foreach}
                                             </select>	                            
+
                             </div>
 
                             <div class"mb-3">
+                                    
+                                        <select name="targetLanguage" ID="targetLanguage" class="form-select">
+	                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
+	                                    {foreach $activeTargetLanguages as $lang}
+	                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+	                                    {/foreach}
+	                                </select>
                             </div>
 	                        
 	                    </div>
@@ -610,7 +521,7 @@ h3{
                     {if isset($topTasks) && count($topTasks) > 0}
             <div class="d-flex justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
                 
-                     <div class="mt-2 mt-md-0">
+                     <div class="">
                                     
                                         <select name="sorttype"  class="form-select recents" id="{$user_id}">
 	                                    <option value=""> Recently viewed </option>
@@ -628,22 +539,25 @@ h3{
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
+                        {assign var="task_number" value=$taskN}
                         {if $taskImages[$task_id]}
                         <div  id="task_{$task_id}">
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between mb-2 flex-wrap">
+                            <div class="d-flex justify-content-between mb-2 flex-wrap ">
                                 <div class="">
                                         <div class="fw-bold fs-4  d-flex align-items-center ">
-                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primary ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} {if ($task_number[$count])} <span> - {$task_number[$count]}</span> {/if}
+                                             <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img"  data-bs-toggle="tooltip" data-bs-placement="top"
+                                            data-bs-custom-class="custom-tooltip"
+                                            data-bs-title="this task is part of project " class=" me-1"/></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
-                                            <span class=" badge rounded-pill bg-greenish border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
+                                            <button class="badge rounded-pill bg-greenish border border-2  border-greenBorder border-opacity-25">  <span class="fs-6 p-1 text-white fw-bold align-middle">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span> </button>
                                                 {if $task->getWordCount()}
-                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} Words </span>
+                                                <button type="button" class="  ms-1 badge rounded-pill bg-quartenary border border-2 border-quartBorder border-opacity-25 "><div class="fs-6 p-1 text-white fw-bold align-middle"> {Localisation::getTranslation('common_word_count')}: <strong>{$task->getWordCount()}</strong> </div> </button>
                                                 {/if}
 
                                         </div>
@@ -661,7 +575,7 @@ h3{
                                         
                                             
                                             </div>
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                            
 
@@ -680,16 +594,15 @@ h3{
                             
                             </div>
                            
-                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                            {/if}
+                         
 
 
                             
-                            <div class =" d-flex justify-content-between align-items-center flex-wrap ">
-                                    <div class=" d-flex text-decoration-none text-secondary flex-wrap ">  <span class="text-primaryDark "> {$projectAndOrgs[$task_id]}</span> 
+                            <div class ="d-flex justify-content-between align-items-center flex-wrap ">
+                                    <div class="w-50 d-flex  flex-wrap">  <span class="text-secondary f4-6"> {$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
-                                     <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
+                                     <div class="d-flex justify-content-end">
                                         <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
                                      </div>
                             
@@ -706,7 +619,7 @@ h3{
             </div>
         </div>
 
-            <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination mt-1 mt-md-0">
+            <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination">
 
                     {assign var="url_nam" value="home-paged"}
                     {if $page_count> 6}
@@ -715,18 +628,18 @@ h3{
                         {assign var="count" value= $page_count}
                     {/if}    
 
-                     <li class="mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0 listPage" >
+                     <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="first text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
-                    <li class="mx-2  border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2 listPage" >
+                    <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
                     {for $page=1 to $count}
-                            <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
+                            <li class="m-3 border border-dark-subtle rounded-3 py-1 px-1 listPage">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                     {/for}
-                    <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage ">
+                    <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage ">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
-                     <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" >
+                     <li class="m-3 border border-dark-subtle rounded-3 py-1 px-2 listPage" >
                             <a class="last text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
             </ul>
 
@@ -759,10 +672,8 @@ h3{
                         <li>
                             <a class="page-link" href="{urlFor name="$url_name" options="page_no.$lastScrollPage|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Last">&gt;&gt;</a>
                         </li>
-
                     {/if}
                 </div>
-
             </ul>
         {else}
             <p>
@@ -770,20 +681,20 @@ h3{
                 There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> <br/> to be notified of new available tasks. Meanwhile, you can:
                 <ol>
                 <li>
-                    <a href="https://translatorswithoutborders.org/blog/" target="_blank" class="text-primary">Learn more</a> about the work we do
+                    <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
                 </li>
                 <li>
-                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" class="text-primary" target="_blank">Register</a> and browse our forum
+                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
                 </li>
                 <li>
-                    New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank" class="text-primary">Translator's Toolkit</a> to find out how to get started with us.
+                    New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank">Translator's Toolkit</a> to find out how to get started with us.
                 </li>
                 </ol>
                     <p>
-                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank" class="text-primary">translators@translatorswithoutborders.org</a>
+                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
                     </p>
                 {else}
-                    Since you are not a translator, there are no tasks here. Click on <a href="https://twbplatform.org/org/dashboard/" class="text-prinary">your organization's Dashboard</a>
+                    Since you are not a translator, there are no tasks here. Click on <a href="https://twbplatform.org/org/dashboard/">your organization's Dashboard</a>
                 {/if}
             </p>
         {/if}
