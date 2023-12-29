@@ -195,7 +195,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserPageTasksCount($user_id, $limit, $offset, $taskType, $sourceLanguageCode, $targetLanguageCode)
+    public function getUserPageTasksCount($user_id, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
         $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
                  LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
