@@ -382,10 +382,10 @@ h3{
                  <h2 >Connect</h2>
                 </div>
        
-            <div>
+            <div class="mt-2">
            
-                Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
-                Learn about the nonprofits that work with TWB and why they come to us.<br/>
+                Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff
+                Learn about the nonprofits that work with TWB and why they come to us.
                 Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees 
                 
             </div>
@@ -393,12 +393,12 @@ h3{
         
         </div>
 
-
+  
 
         <div class="col-12 col-md-6 col-lg-3">
               <div class="text-center">
                     <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
-                    <h2 ">Learn</h2>
+                    <h2>Learn</h2>
               
               </div>
             
@@ -406,8 +406,8 @@ h3{
               <div>
              
                 
-                        Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.<br/>
-                        Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.<br/>
+                        Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.
+                        Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.
                         Receive feedback on your translations from more senior linguists and grow in the process.
                 
         
@@ -428,7 +428,7 @@ h3{
             <div>
 
          
-             Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
+             Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.
             The most active linguists also get featured on TWB's blog and in the TWB Community Forum. 
         
             </div>
@@ -452,8 +452,8 @@ h3{
              <div>
             
              
-                Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
-                Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
+                Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.
+                Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.
                 Bridge the world's language gap and help respond more sensitively to the existing need.  
              
 
@@ -581,7 +581,7 @@ h3{
                                                     {assign var="pair" value="`$lang['ls_code']`_`$lang['lt_code']`"}
                                                     <option value="{$pair}" {if ($selectedSourceLanguageCode === $pair)}selected="selected"{/if}>{$lang['ls_name']} to {$lang['lt_name']}</option>
                                                 {/foreach}
-                                            </select>	                            
+                                            </select>
                             </div>
 
                             <div class"mb-3">
@@ -635,7 +635,7 @@ h3{
                         {/if}
                             <div class="d-flex justify-content-between mb-2 flex-wrap">
                                 <div class="">
-                                        <div class="fw-bold fs-4  d-flex align-items-center ">
+                                        <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
                                         </div>
@@ -651,7 +651,7 @@ h3{
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                             <div class="mb-3  text-muted">
                                                 <span class=" ">
-                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} - </strong>
+                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
                                             {/if}
                                             <span>

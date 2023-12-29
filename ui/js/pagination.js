@@ -19,8 +19,10 @@ let tasksContainer = document.querySelector(".taskPagination");
 
 let recents = document.querySelector(".recents");
 
+let userid;
+
 if (recents) {
-    let userId = recents.id;
+    userId = recents.id;
 
     recents.addEventListener("click", function (e) {
         e.preventDefault();
@@ -329,7 +331,12 @@ function displayTasks(pages) {
         const itemSubFlex = document.createElement("div");
         const titleContainer = document.createElement("div");
         const title = document.createElement("div");
-        title.classList.add("text-primaryDark", "d-inline-block");
+        title.classList.add(
+            "text-primaryDark",
+            "d-inline-block",
+            "h3",
+            "fw-bold"
+        );
         title.textContent = item.title;
 
         const spanTitle = document.createElement("div");
@@ -417,7 +424,9 @@ function displayTasks(pages) {
 
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
-                        Languages:  ${item.sourceLocale.languageName} -  ${item.targetLocale.languageName}
+                        Languages:  ${item.sourceLocale.languageName}  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 12H21M21 12L18 9M21 12L18 15M7 12C7 12.5304 6.78929 13.0391 6.41421 13.4142C6.03914 13.7893 5.53043 14 5 14C4.46957 14 3.96086 13.7893 3.58579 13.4142C3.21071 13.0391 3 12.5304 3 12C3 11.4696 3.21071 10.9609 3.58579 10.5858C3.96086 10.2107 4.46957 10 5 10C5.53043 10 6.03914 10.2107 6.41421 10.5858C6.78929 10.9609 7 11.4696 7 12Z" stroke="#E8991C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>  ${item.targetLocale.languageName}
                     </span>
         </div>
         <div class="text-muted d-flex" > <div> Due by </div> 
