@@ -734,7 +734,7 @@ h3{
 
 
              {* pagination begins here *}
-            
+ <!--
 
             {assign var="url_name" value="home-paged"}
             <ul class="pager pull-left">
@@ -764,6 +764,7 @@ h3{
                 </div>
 
             </ul>
+ -->
         {else}
             <p>
                 {if !$org_admin}
