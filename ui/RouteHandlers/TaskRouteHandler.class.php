@@ -546,9 +546,10 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
         ));
 
-        $results = json_encode(['tasks'=> $recentTasks , 'projects' => $projectAndOrgs]);
-        $response->getBody()->write($results);
-        return $response->withHeader('Content-Type', 'application/json');
+        return UserRouteHandler::render('task/recent-tasks.tpl', $response);
+        //$results = json_encode(['tasks'=> $recentTasks , 'projects' => $projectAndOrgs]);
+        //$response->getBody()->write($results);
+        //return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)
