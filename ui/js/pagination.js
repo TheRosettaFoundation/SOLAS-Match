@@ -81,8 +81,6 @@ first.addEventListener("click", function (e) {
 });
 
 let selectedLanguage = document.querySelector("#sourceLanguage");
-
-let targetLanguage = document.querySelector("#targetLanguage");
 let taskType = document.querySelector("#taskTypes");
 let selectL = "";
 let selectT = "";
@@ -116,29 +114,6 @@ selectedLanguage.addEventListener("change", function () {
         let finUrl = firstPart[0] + "/tt" + endPart[1];
 
         page.href = finUrl;
-    });
-});
-
-targetLanguage.addEventListener("change", function () {
-    let page = document.querySelector(".page");
-    let url = page.href;
-    targetL = this.value;
-
-    if (targetL == 0) {
-        validation.tl = false;
-        console.log(validation);
-    } else {
-        validation.tl = true;
-        console.log(validation);
-    }
-
-    pagePosition.tl = this.value;
-    console.log(`Value : ${targetL}`);
-    let find = url.indexOf("tl/");
-    let firstL = url.slice(0, find);
-    let newUrl = firstL + `tl/${targetL}`;
-    allPages.forEach((page) => {
-        page.href = newUrl;
     });
 });
 
@@ -409,7 +384,7 @@ function displayTasks(pages) {
                 imageId.length > 2
                     ? `
         <div>
-        
+
             <div id=""  >
                 <img style="width:100px ; height:100px"  src= ${imageId}  class="image" />
             </div>
@@ -429,15 +404,15 @@ function displayTasks(pages) {
                         </svg>  ${item.targetLocale.languageName}
                     </span>
         </div>
-        <div class="text-muted d-flex" > <div> Due by </div> 
+        <div class="text-muted d-flex" > <div> Due by </div>
         <strong class="d-flex align-items-center"> <div class="mx-2 "> ${time[0]} </div>  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="mx-1">
     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
     </svg>  <div class="mx-2"> ${time[1]}</div>  </strong>
     <div class="ms-2"> ${timezone}</div>
-    
+
      </div>
-        
+
         `;
 
         if (image) {
