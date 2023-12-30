@@ -11169,7 +11169,7 @@ BEGIN
         t.`created-time`,
         t.deadline,
         IFNULL(tcd.complete_date, '') AS complete_date,
-        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         tc.user_id,
         IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), '') AS linguist,
         pos.status AS po_status,

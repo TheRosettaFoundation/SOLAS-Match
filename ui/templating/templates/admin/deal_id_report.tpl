@@ -61,43 +61,31 @@
         <th>Linguist</th>
         <th>Service Type</th>
         <th>PO #</th>
-        <th>PO Approved</th>
         <th>Amount</th>
-        <th>Linguists' Rate</th>
-        <th>TOTAL</th>
+        <th>Total</th>
         <th>Date Submitted</th>
-        <th>Project</th>
-        <th>File Name</th>
+        <th>Project & Task</th>
         <th>Language Pair</th>
         <th>Status</th>
         <th>Source Units</th>
-        <th>Translation Launch Date</th>
-        <th>Estimated Translation deadline</th>
-        <th>Translation Delivery Date</th>
-        <th>PO Supplier</th>
-        <th>PO Total</th>
+        <th>Launch Date</th>
+        <th>Deadline</th>
     </thead>    
     <tbody>
         {foreach $pos as $po}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$po['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($po['linguist'])}</a></td>
             <td>{$po['type_text']}</td>
-            <td>{$po['purchase_order']}</td>
-            <td>{$po['po_status']}</td>
-            <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']}</td>
-            <td>${$po['unit_rate']} for {$po['pricing_and_recognition_unit_text_hours']}</td>
+            <td>{$po['purchase_order']}<br />{$po['po_total']}[[[maybe icon tick if {$po['po_status']} == 'Completed']]]</td>
+            <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']} at ${$po['unit_rate']}</td>
             <td>${round($po['total_expected_cost'], 2)}</td>
-            <td>{$po['po_creation_date']}</td>
-            <td><a href="{urlFor name="project-view" options="project_id.{$po['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['title'])}</a></td>
-            <td><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
+            <td>{$po['po_creation_date']} DATE NOT TIME! MIGHT BE NULL</td>
+            <td><i><a href="{urlFor name="project-view" options="project_id.{$po['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['title'])}</a></i><br /><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
             <td>{$po['language_pair']}</td>
             <td>{$po['task_status']}</td>
             <td>{$po['source_quantity']} {$po['source_unit_for_later_stats']}</td>
-            <td>{$po['created-time']}</td>
-            <td>{$po['deadline']}</td>
-            <td>{$po['complete_date']}</td>
-            <td>{$po['po_supplier']}</td>
-            <td>{$po['po_total']}</td>
+            <td>{$po['created-time']}DATE NOT TIME!</td>
+            <td>{$po['deadline']}HIDE SECONDS!</td>
         </tr>
         {/foreach}
     </tbody>
