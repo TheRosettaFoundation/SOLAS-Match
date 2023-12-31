@@ -21,7 +21,7 @@
 <body>
     <h2 style="text-align:center;">All Paid Projects (with at least one paid task)</h2>
 
-    <table id="myTable" style="overflow-wrap: break-word; width: 90%; margin-left: 5%; margin-right: 5%;" class="container table table-striped">
+    <table id="myTable" style="overflow-wrap: break-word; width: 1200px; margin-left: auto; margin-right: auto;" class="container table table-striped">
         <thead>
             <th width="4%"></th>
             <th width="8%">Project</th>
