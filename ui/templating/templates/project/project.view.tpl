@@ -128,23 +128,17 @@
         <thead>
             <th>Deal ID</th>
             <th>Allocated Budget</th>
-            <th>Expense (Expected)</th>
-            <th>Expense (Claimed Tasks)</th>
+            <th>Project Cost</th>
             <th>Remaining Budget</th>
-            <th>Margin</th>
-            <th>Expense (Completed Tasks)</th>
-            <th>Expense (Ready for payment Tasks)</th>
+            <th>Waived Tasks (In-kind, In-house, waived)</th>
         </thead>
         <tbody>
             <tr style="overflow-wrap: break-word;">
                 <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
                 <td>${round($total_expected_cost, 2)}</td>
-                <td>${round($total_expected_cost_claimed, 2)}</td>
-                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost_claimed, 2)}</td>
-                <td>{if $project_complete_date['allocated_budget'] > 0}{round((($project_complete_date['allocated_budget'] - $total_expected_cost_claimed)/$project_complete_date['allocated_budget'])*100)}%{else}-{/if}</td>
-                <td>${round($total_expected_cost_complete, 2)}</td>
-                <td>${round($total_expected_cost_ready, 2)}</td>
+                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
+                <td>${round($total_expected_cost_waived, 2)}</td>
             </tr>
         </tbody>
     </table>

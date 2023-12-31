@@ -11169,7 +11169,7 @@ BEGIN
         t.`created-time`,
         t.deadline,
         IFNULL(tcd.complete_date, '') AS complete_date,
-        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         tc.user_id,
         IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), '') AS linguist,
         pos.status AS po_status,
@@ -11191,7 +11191,8 @@ BEGIN
     LEFT JOIN TaskCompleteDates       tcd ON t.id=tcd.task_id
     LEFT JOIN zahara_purchase_orders  pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
     WHERE
-        hd.deal_id=dID;
+        hd.deal_id=dID
+    ORDER BY p.id, l1.code, c1.code, l2.code, c2.code, t.title, t.`task-type_id`;
 END//
 DELIMITER ;
 

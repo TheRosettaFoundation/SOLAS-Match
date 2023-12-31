@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+
+    <style>
+        .container {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
 {if !empty($pos)}
@@ -16,7 +24,7 @@
 <h2 style="text-align:center;">All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
 <br />
 
-<table id="myTable0" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+<table id="myTable0" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th width="15%">Company Name</th>
         <th width="15%">Deal Name</th>
@@ -43,61 +51,55 @@
 
 {if !empty($pos[0]['project_id'])}
 
-<table id="myTable1" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+<table id="myTable1" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
-        <th width="50%">Total Allocated Budget for Projects</th>
-        <th width="50%">Total Expected Cost (from TOTAL below)</th>
+        <th>Total Allocated Budget for Projects</th>
+        <th>Total Expected Cost (from Total below)</th>
+        <th>Total Words</th>
+        <th>Total Hours</th>
+        <th>Total Terms</th>
     </thead>
     <tbody>
         <tr>
             <td>${round($pos[0]['total_allocated_budget'], 2)}</td>
             <td>${round($pos[0]['total_total_expected_cost'], 2)}</td>
+            <td>${round($pos[0]['total_paid_words_only_words'], 2)}</td>
+            <td>${round($pos[0]['total_paid_words_only_hours'], 2)}</td>
+            <td>${round($pos[0]['total_paid_words_only_terms'], 2)}</td>
         </tr>
     </tbody>
 </table>
 
-<table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+<table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>Linguist</th>
         <th>Service Type</th>
         <th>PO #</th>
-        <th>PO Approved</th>
         <th>Amount</th>
-        <th>Linguists' Rate</th>
-        <th>TOTAL</th>
+        <th>Total</th>
         <th>Date Submitted</th>
-        <th>Project</th>
-        <th>File Name</th>
+        <th>Project & Task</th>
         <th>Language Pair</th>
         <th>Status</th>
         <th>Source Units</th>
-        <th>Translation Launch Date</th>
-        <th>Estimated Translation deadline</th>
-        <th>Translation Delivery Date</th>
-        <th>PO Supplier</th>
-        <th>PO Total</th>
+        <th>Launch Date</th>
+        <th>Deadline</th>
     </thead>    
     <tbody>
         {foreach $pos as $po}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$po['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($po['linguist'])}</a></td>
             <td>{$po['type_text']}</td>
-            <td>{$po['purchase_order']}</td>
-            <td>{$po['po_status']}</td>
-            <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']}</td>
-            <td>${$po['unit_rate']} for {$po['pricing_and_recognition_unit_text_hours']}</td>
+            <td>{$po['purchase_order']}<br />{$po['po_total']}{if !empty($po['po_status']) && in_array($po['po_status'], ['Settled'])}<i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:0px;"></i>{/if}</td>
+            <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']} at ${$po['unit_rate']}</td>
             <td>${round($po['total_expected_cost'], 2)}</td>
-            <td>{$po['po_creation_date']}</td>
-            <td><a href="{urlFor name="project-view" options="project_id.{$po['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['title'])}</a></td>
-            <td><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
+            <td>{if !empty($po['po_creation_date'])}{substr($po['po_creation_date'], 0, 10)}{/if}</td>
+            <td><i><a href="{urlFor name="project-view" options="project_id.{$po['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['title'])}</a></i><br /><a href="{urlFor name="task-view" options="task_id.{$po['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($po['task_title'])}</a></td>
             <td>{$po['language_pair']}</td>
             <td>{$po['task_status']}</td>
             <td>{$po['source_quantity']} {$po['source_unit_for_later_stats']}</td>
-            <td>{$po['created-time']}</td>
-            <td>{$po['deadline']}</td>
-            <td>{$po['complete_date']}</td>
-            <td>{$po['po_supplier']}</td>
-            <td>{$po['po_total']}</td>
+            <td>{substr($po['created-time'], 0, 10)}</td>
+            <td>{substr($po['deadline'],  0, 16)}</td>
         </tr>
         {/foreach}
     </tbody>
