@@ -21,7 +21,7 @@
 <body>
 {if !empty($pos)}
 
-<h2>All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
+<h2 style="text-align:center;">All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
 <br />
 
 <table id="myTable0" style="overflow-wrap: break-word;" class="container table table-striped">
