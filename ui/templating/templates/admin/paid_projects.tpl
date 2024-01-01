@@ -20,9 +20,9 @@
 
     <style>
         .container {
-            width: 94%;
-            margin-left: 3%;
-            margin-right: 3%;
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
 </head>
