@@ -17,11 +17,19 @@
         table.order([0, 'desc']).draw();
       });
     </script>
+
+    <style>
+        .container {
+            width: 94%;
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+    </style>
 </head>
 <body>
     <h2 style="text-align:center;">All Paid Projects (with at least one paid task)</h2>
 
-    <table id="myTable" style="overflow-wrap: break-word; width: 800px; margin-left: auto; margin-right: auto;" class="container table table-striped">
+    <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
         <thead>
             <th width="4%"></th>
             <th width="8%">Project</th>
