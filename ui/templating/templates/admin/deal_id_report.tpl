@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+
+    <style>
+        .container {
+            width: 94%;
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+    </style>
 </head>
 <body>
 {if !empty($pos)}
@@ -16,7 +24,7 @@
 <h2 style="text-align:center;">All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
 <br />
 
-<table id="myTable0" style="overflow-wrap: break-word; width: 90%; margin-left: 5%; margin-right: 5%;" class="container table table-striped">
+<table id="myTable0" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th width="15%">Company Name</th>
         <th width="15%">Deal Name</th>
@@ -43,7 +51,7 @@
 
 {if !empty($pos[0]['project_id'])}
 
-<table id="myTable1" style="overflow-wrap: break-word; width: 90%; margin-left: 5%; margin-right: 5%;" class="container table table-striped">
+<table id="myTable1" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>Total Allocated Budget for Projects</th>
         <th>Total Expected Cost (from Total below)</th>
@@ -62,7 +70,7 @@
     </tbody>
 </table>
 
-<table id="myTable" style="overflow-wrap: break-word; width: 90%; margin-left: 5%; margin-right: 5%;" class="container table table-striped">
+<table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>Linguist</th>
         <th>Service Type</th>
