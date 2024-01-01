@@ -12,16 +12,16 @@
 
     <style>
         .container {
-            width: 94%;
-            margin-left: 3%;
-            margin-right: 3%;
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
 </head>
 <body>
 {if !empty($pos)}
 
-<h2 style="text-align:center;">All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
+<h2>All Paid Projects (with at least one paid task) for Hubspot Deal ID: {$pos[0]['deal_id']}</h2>
 <br />
 
 <table id="myTable0" style="overflow-wrap: break-word;" class="container table table-striped">
