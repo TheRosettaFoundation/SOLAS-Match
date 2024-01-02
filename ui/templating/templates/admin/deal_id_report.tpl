@@ -63,9 +63,9 @@
         <tr>
             <td>${round($pos[0]['total_allocated_budget'], 2)}</td>
             <td>${round($pos[0]['total_total_expected_cost'], 2)}</td>
-            <td>${round($pos[0]['total_paid_words_only_words'], 2)}</td>
-            <td>${round($pos[0]['total_paid_words_only_hours'], 2)}</td>
-            <td>${round($pos[0]['total_paid_words_only_terms'], 2)}</td>
+            <td>{round($pos[0]['total_paid_words_only_words'], 2)}</td>
+            <td>{round($pos[0]['total_paid_words_only_hours'], 2)}</td>
+            <td>{round($pos[0]['total_paid_words_only_terms'], 2)}</td>
         </tr>
     </tbody>
 </table>
@@ -90,7 +90,7 @@
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$po['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($po['linguist'])}</a></td>
             <td>{$po['type_text']}</td>
-            <td>{$po['purchase_order']}<br />{$po['po_total']}{if !empty($po['po_status']) && in_array($po['po_status'], ['Settled'])}<i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:0px;"></i>{/if}</td>
+            <td>{$po['purchase_order']}<br />${$po['po_total']}{if !empty($po['po_status']) && in_array($po['po_status'], ['Completed'])}<i class="fa fa-check-circle-o" style="font-size: 15px !important; padding:0 !important; width:12px !important; margin-left:0px; display: inline-block !important;"></i>{/if}</td>
             <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']} at ${$po['unit_rate']}</td>
             <td>${round($po['total_expected_cost'], 2)}</td>
             <td>{if !empty($po['po_creation_date'])}{substr($po['po_creation_date'], 0, 10)}{/if}</td>
