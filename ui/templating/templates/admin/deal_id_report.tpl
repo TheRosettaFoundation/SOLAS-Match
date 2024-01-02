@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
         .container {
@@ -90,7 +91,7 @@
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$po['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($po['linguist'])}</a></td>
             <td>{$po['type_text']}</td>
-            <td>{$po['purchase_order']}<br />${$po['po_total']}{if !empty($po['po_status']) && in_array($po['po_status'], ['Completed'])}<i class="fa fa-check-circle-o" style="font-size: 15px !important; padding:0 !important; width:12px !important; margin-left:0px; display: inline-block !important;"></i>{/if}</td>
+            <td>{$po['purchase_order']}<br />{if !empty($po['po_total'])}${$po['po_total']}{/if}{if !empty($po['po_status']) && in_array($po['po_status'], ['Completed'])}<i class="fa fa-check-circle-o" style="font-size: 15px !important; padding:0 !important; width:12px !important; margin-left:2px; display: inline-block !important;"></i>{/if}</td>
             <td>{round($po['total_paid_words'], 2)} {$po['pricing_and_recognition_unit_text_hours']} at ${$po['unit_rate']}</td>
             <td>${round($po['total_expected_cost'], 2)}</td>
             <td>{if !empty($po['po_creation_date'])}{substr($po['po_creation_date'], 0, 10)}{/if}</td>
