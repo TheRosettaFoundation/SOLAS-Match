@@ -16,6 +16,7 @@
 <div class="well">
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+    <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
     <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
   {/if}
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>

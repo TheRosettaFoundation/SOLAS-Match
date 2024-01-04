@@ -10987,6 +10987,10 @@ BEGIN
     SELECT
         pcd.project_id,
         p.title,
+        p.created,
+        p.deadline,
+        CONCAT(l1.code, '-', c1.code) AS language_pair,
+        o.name,
         pcd.deal_id,
         pcd.allocated_budget,
         SUM(                           IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)    ) AS total_expected_cost,
@@ -10994,6 +10998,8 @@ BEGIN
         SUM(IF(t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_complete,
         SUM(IF(t.`task-status_id`=4 AND tp.payment_status NOT IN ('Unsettled', 'Pending documentation')
                                      , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_ready,
+        SUM(IF(                         tp.payment_status     IN ('In-kind', 'In-house', 'Waived')
+                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived,
         hd.company_name,
         hd.company_id,
         hd.deal_name,
@@ -11008,6 +11014,9 @@ BEGIN
     JOIN      Tasks                    t ON p.id=t.project_id
     JOIN      TaskPaids               tp ON t.id=tp.task_id
     JOIN      task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN      Organisations            o ON p.organisation_id=o.id
+    JOIN      Languages               l1 ON p.language_id=l1.id
+    JOIN      Countries               c1 ON p.country_id=c1.id
     LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
     LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
     GROUP BY p.id
@@ -11193,6 +11202,46 @@ BEGIN
     WHERE
         hd.deal_id=dID
     ORDER BY p.id, l1.code, c1.code, l2.code, c2.code, t.title, t.`task-type_id`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_deals_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_deals_report`()
+BEGIN
+    SELECT
+        hd.deal_id,
+        hd.company_name,
+        hd.company_id,
+        hd.deal_name,
+        hd.start_date,
+        hd.expiration_date,
+        hd.deal_total,
+        hd.deal_partnership,
+        hd.deal_supplements,
+        hd.link_to_contract,
+        SUM(IF(tp.payment_status IS NOT NULL                                                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost,
+        SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived
+    FROM      hubspot_deals           hd
+    LEFT JOIN project_complete_dates pcd ON hd.deal_id=pcd.deal_id
+    LEFT JOIN Tasks                    t ON pcd.project_id=t.project_id
+    LEFT JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
+    GROUP BY hd.deal_id
+    ORDER BY hd.company_name, hd.start_date;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_deals_report_allocated_budget`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_deals_report_allocated_budget`()
+BEGIN
+    SELECT
+        hd.deal_id,
+        SUM(pcd.allocated_budget) AS deal_allocated_budget
+    FROM hubspot_deals           hd
+    JOIN project_complete_dates pcd ON hd.deal_id=pcd.deal_id
+    GROUP BY hd.deal_id ;
 END//
 DELIMITER ;
 
@@ -12072,6 +12121,80 @@ BEGIN
         p_match0_words,
         p_match0_percent,
         NOW());
+
+    SET @compare_id=NULL;
+    SET @compare_claimant_id=NULL;
+    SELECT
+        t2.id, tc.user_id INTO @compare_id, @compare_claimant_id
+    FROM Tasks               t
+    JOIN MemsourceTasks     mt ON t.id=mt.task_id
+    JOIN Tasks              t2 ON t.project_id=t2.project_id AND t.id!=t2.id
+    JOIN MemsourceTasks    mt2 ON t2.id=mt2.task_id AND mt.internalId=mt2.internalId AND mt2.workflowLevel=p_compareWorkflowLevel
+                                  AND mt.beginIndex=mt2.beginIndex AND mt.endIndex=mt2.endIndex
+    JOIN TaskClaims         tc ON t2.id=tc.task_id
+    WHERE t.id=p_task_id
+    LIMIT 1;
+
+    IF @compare_id IS NOT NULL AND @compare_claimant_id IS NOT NULL THEN
+    INSERT INTO compare_analysis_s (
+        task_id,
+        claimant_id,
+        analyse_uid,
+        memsource_project_uid,
+        sourceWorkflowLevel,
+        compareWorkflowLevel,
+        repetitions_segments,
+        repetitions_words,
+        repetitions_percent,
+        match100_segments,
+        match100_words,
+        match100_percent,
+        match95_segments,
+        match95_words,
+        match95_percent,
+        match85_segments,
+        match85_words,
+        match85_percent,
+        match75_segments,
+        match75_words,
+        match75_percent,
+        match50_segments,
+        match50_words,
+        match50_percent,
+        match0_segments,
+        match0_words,
+        match0_percent,
+        saved_time)
+    VALUES (
+        @compare_id,
+        @compare_claimant_id,
+        p_analyse_uid,
+        p_memsource_project_uid,
+        p_compareWorkflowLevel,
+        p_sourceWorkflowLevel,
+        p_repetitions_segments,
+        p_repetitions_words,
+        p_repetitions_percent,
+        p_match100_segments,
+        p_match100_words,
+        p_match100_percent,
+        p_match95_segments,
+        p_match95_words,
+        p_match95_percent,
+        p_match85_segments,
+        p_match85_words,
+        p_match85_percent,
+        p_match75_segments,
+        p_match75_words,
+        p_match75_percent,
+        p_match50_segments,
+        p_match50_words,
+        p_match50_percent,
+        p_match0_segments,
+        p_match0_words,
+        p_match0_percent,
+        NOW());
+    END IF;
 END//
 DELIMITER ;
 

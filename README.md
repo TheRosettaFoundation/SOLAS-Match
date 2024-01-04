@@ -45,6 +45,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Reports added...
   - All Paid Projects (with at least one paid task)
   - All Paid Projects (with at least one paid task) for Hubspot Deal ID: ...
+  - All Deals
   - In Project View (new info on paid projects)
 - new Shell Tasks added...
   - "Translation Outside Phrase"
@@ -52,6 +53,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - "Audiovisual Sign Off"
 - Updates to Linguist Certificates and Letter
 - Filter on home page only shows language pairs for which the linguist has claimable tasks
+- When a Phrase compare analysis is generated for an exact match Job pair, the complementary compare analyses for the reverse pair is copied from that and stored in the TWB Platform database.
 
 ## Version 15.0
 
