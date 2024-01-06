@@ -52,6 +52,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
   - "Audiovisual Sign Off"
 - Updates to Linguist Certificates and Letter
 - Filter on home page only shows language pairs for which the linguist has claimable tasks
+- When a Phrase compare analysis is generated for a top level Job pair, the complementary compare analyses are generated and stored in the TWB Platform database.
 
 ## Version 15.0
 
