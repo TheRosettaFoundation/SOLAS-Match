@@ -12078,7 +12078,7 @@ BEGIN
     SELECT
         t2.id, tc.user_id INTO @compare_id, @compare_claimant_id
     FROM Tasks               t
-    JOIN MemsourceTasks     mt ON t.id=mt.task_id AND LOCATE('.', mt.internalId)=0
+    JOIN MemsourceTasks     mt ON t.id=mt.task_id
     JOIN Tasks              t2 ON t.project_id=t2.project_id AND t.id!=t2.id
     JOIN MemsourceTasks    mt2 ON t2.id=mt2.task_id AND mt.internalId=mt2.internalId AND mt2.workflowLevel=p_compareWorkflowLevel
     JOIN TaskClaims         tc ON t2.id=tc.task_id
