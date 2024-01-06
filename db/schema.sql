@@ -12081,6 +12081,7 @@ BEGIN
     JOIN MemsourceTasks     mt ON t.id=mt.task_id
     JOIN Tasks              t2 ON t.project_id=t2.project_id AND t.id!=t2.id
     JOIN MemsourceTasks    mt2 ON t2.id=mt2.task_id AND mt.internalId=mt2.internalId AND mt2.workflowLevel=p_compareWorkflowLevel
+                                  AND mt.beginIndex=mt2.beginIndex AND mt.endIndex=mt2.endIndex
     JOIN TaskClaims         tc ON t2.id=tc.task_id
     WHERE t.id=p_task_id
     LIMIT 1;
