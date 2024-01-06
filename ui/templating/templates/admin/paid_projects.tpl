@@ -55,8 +55,8 @@
                 <td>${round($paid_project['total_expected_cost_waived'], 2)}</td>
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['name'])}</td>
                 <td>{$paid_project['language_pair']}</td>
-                <td>substr($paid_project['created'], 0, 10)}</td>
-                <td>substr($paid_project['deadline'], 0, 10)}</td>
+                <td>{substr($paid_project['created'], 0, 10)}</td>
+                <td>{substr($paid_project['deadline'], 0, 10)}</td>
             </tr>
             {/foreach}
         </tbody>
