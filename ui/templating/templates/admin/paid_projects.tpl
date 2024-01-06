@@ -40,8 +40,8 @@
             <th width="8%">Waived Tasks (In-kind, In-house, waived)</th>
             <th width="18%">Organization</th>
             <th width="6%">Source Language</th>
-            <th width="6%">Proj Start Date</th>
-            <th width="6%">Proj Deadline</th>
+            <th width="6%">Project Start Date</th>
+            <th width="6%">Project Deadline</th>
         </thead>
         <tbody>
             {foreach $paid_projects as $paid_project}
