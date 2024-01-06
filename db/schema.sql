@@ -12072,6 +12072,79 @@ BEGIN
         p_match0_words,
         p_match0_percent,
         NOW());
+
+    SET @compare_id=NULL;
+    SET @compare_claimant_id=NULL;
+    SELECT
+        t2.id, tc.user_id INTO @compare_id, @compare_claimant_id
+    FROM Tasks               t
+    JOIN MemsourceTasks     mt ON t.id=mt.task_id AND LOCATE('.', mt.internalId)=0
+    JOIN Tasks              t2 ON t.project_id=t2.project_id AND t.id!=t2.id
+    JOIN MemsourceTasks    mt2 ON t2.id=mt2.task_id AND mt.internalId=mt2.internalId AND mt2.workflowLevel=p_compareWorkflowLevel
+    JOIN TaskClaims         tc ON t2.id=tc.task_id
+    WHERE t.id=p_task_id
+    LIMIT 1;
+
+    IF @compare_id IS NOT NULL AND @compare_claimant_id IS NOT NULL THEN
+    INSERT INTO compare_analysis_s (
+        task_id,
+        claimant_id,
+        analyse_uid,
+        memsource_project_uid,
+        sourceWorkflowLevel,
+        compareWorkflowLevel,
+        repetitions_segments,
+        repetitions_words,
+        repetitions_percent,
+        match100_segments,
+        match100_words,
+        match100_percent,
+        match95_segments,
+        match95_words,
+        match95_percent,
+        match85_segments,
+        match85_words,
+        match85_percent,
+        match75_segments,
+        match75_words,
+        match75_percent,
+        match50_segments,
+        match50_words,
+        match50_percent,
+        match0_segments,
+        match0_words,
+        match0_percent,
+        saved_time)
+    VALUES (
+        @compare_id,
+        @compare_claimant_id,
+        p_analyse_uid,
+        p_memsource_project_uid,
+        p_compareWorkflowLevel,
+        p_sourceWorkflowLevel,
+        p_repetitions_segments,
+        p_repetitions_words,
+        p_repetitions_percent,
+        p_match100_segments,
+        p_match100_words,
+        p_match100_percent,
+        p_match95_segments,
+        p_match95_words,
+        p_match95_percent,
+        p_match85_segments,
+        p_match85_words,
+        p_match85_percent,
+        p_match75_segments,
+        p_match75_words,
+        p_match75_percent,
+        p_match50_segments,
+        p_match50_words,
+        p_match50_percent,
+        p_match0_segments,
+        p_match0_words,
+        p_match0_percent,
+        NOW());
+    END IF;
 END//
 DELIMITER ;
 
