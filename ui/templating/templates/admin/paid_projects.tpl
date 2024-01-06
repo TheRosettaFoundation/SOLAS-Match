@@ -31,24 +31,17 @@
 
     <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
         <thead>
-            <th width="4%"></th>
-            <th width="8%">Project</th>
-            <th width="6%">Deal ID</th>
-            <th width="6%">Allocated Budget</th>
-            <th width="6%">Expense (Expected)</th>
-            <th width="6%">Expense (Claimed Tasks)</th>
-            <th width="6%">Remaining Budget</th>
-            <th width="4%">Margin</th>
-            <th width="5%">Expense (Completed Tasks)</th>
-            <th width="5%">Expense (Ready for payment Tasks)</th>
-            <th width="8%">Company Name</th>
-            <th width="5%">Deal Name</th>
-            <th width="5%">Contract Start Date</th>
-            <th width="5%">Contract Expiration Date</th>
-            <th width="6%">Deal Amount</th>
-            <th width="5%">LS Supplements (core agreement)</th>
-            <th width="5%">Supplements (add-ons)</th>
-            <th width="5%">Link to Contract</th>
+            <th width="5%"></th>
+            <th width="19%">Project</th>
+            <th width="8%">Deal ID</th>
+            <th width="8%">Allocated Budget</th>
+            <th width="8%">Project Cost</th>
+            <th width="8%">Remaining Budget</th>
+            <th width="8%">Waived Tasks (In-kind, In-house, waived)</th>
+            <th width="18%">Organization</th>
+            <th width="6%">Source Language</th>
+            <th width="6%">Proj Start Date</th>
+            <th width="6%">Proj Deadline</th>
         </thead>
         <tbody>
             {foreach $paid_projects as $paid_project}
@@ -58,19 +51,12 @@
                 <td>{if $paid_project['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$paid_project['deal_id']}"}" target="_blank">{$paid_project['deal_id']}</a>{else}{$paid_project['deal_id']}{/if}</td>
                 <td>${round($paid_project['allocated_budget'], 2)}</td>
                 <td>${round($paid_project['total_expected_cost'], 2)}</td>
-                <td>${round($paid_project['total_expected_cost_claimed'], 2)}</td>
-                <td>${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost_claimed'], 2)}</td>
-                <td>{if $paid_project['allocated_budget'] > 0}{round((($paid_project['allocated_budget'] - $paid_project['total_expected_cost_claimed'])/$paid_project['allocated_budget'])*100)}%{else}-{/if}</td>
-                <td>${round($paid_project['total_expected_cost_complete'], 2)}</td>
-                <td>${round($paid_project['total_expected_cost_ready'], 2)}</td>
-                <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['company_name'])}</td>
-                <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['deal_name'])}</td>
-                <td>{$paid_project['start_date']}</td>
-                <td>{$paid_project['expiration_date']}</td>
-                <td>{if isset($paid_project['deal_total'])}${$paid_project['deal_total']}{/if}</td>
-                <td>{if isset($paid_project['deal_partnership'])}${$paid_project['deal_partnership']}{/if}</td>
-                <td>{if isset($paid_project['deal_supplements'])}${$paid_project['deal_supplements']}{/if}</td>
-                <td><a href="{$paid_project['link_to_contract']}" target="_blank">contract</a></td>
+                <td>${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}</td>
+                <td>${round($paid_project['total_expected_cost_waived'], 2)}</td>
+                <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['name'])}</td>
+                <td>{$paid_project['language_pair']}</td>
+                <td>substr($paid_project['created'], 0, 10)}</td>
+                <td>substr($paid_project['deadline'], 0, 10)}</td>
             </tr>
             {/foreach}
         </tbody>

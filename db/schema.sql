@@ -10987,6 +10987,10 @@ BEGIN
     SELECT
         pcd.project_id,
         p.title,
+        p.created,
+        p.deadline,
+        CONCAT(l1.code, '-', c1.code) AS language_pair,
+        o.name,
         pcd.deal_id,
         pcd.allocated_budget,
         SUM(                           IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)    ) AS total_expected_cost,
@@ -10994,6 +10998,8 @@ BEGIN
         SUM(IF(t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_complete,
         SUM(IF(t.`task-status_id`=4 AND tp.payment_status NOT IN ('Unsettled', 'Pending documentation')
                                      , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_ready,
+        SUM(IF(                         tp.payment_status     IN ('In-kind', 'In-house', 'Waived')
+                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived,
         hd.company_name,
         hd.company_id,
         hd.deal_name,
@@ -11008,6 +11014,9 @@ BEGIN
     JOIN      Tasks                    t ON p.id=t.project_id
     JOIN      TaskPaids               tp ON t.id=tp.task_id
     JOIN      task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN      Organisations            o ON p.organisation_id=o.id
+    JOIN      Languages               l1 ON p.language_id=l1.id
+    JOIN      Countries               c1 ON p.country_id=c1.id
     LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
     LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
     GROUP BY p.id
