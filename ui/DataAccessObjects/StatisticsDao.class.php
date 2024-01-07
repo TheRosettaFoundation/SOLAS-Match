@@ -391,7 +391,7 @@ class StatisticsDao extends BaseDao
         }
         $result = LibAPI\PDOWrapper::call('all_deals_report_allocated_budget', '');
         foreach ($result as $r) {
-            $deals[$r['deal_id']]['deal_allocated_budget'] = $r['deal_allocated_budget'];
+            $deals[$r['deal_id']]['allocated_budget'] = $r['deal_allocated_budget'];
         }
         return $deals;
     }
