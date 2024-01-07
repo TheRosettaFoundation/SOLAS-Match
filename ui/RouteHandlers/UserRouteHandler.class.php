@@ -422,7 +422,7 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
-            'active_languages' => $taskDao->get_active_languages($user_id),
+            'active_languages' => !empty($user_id) ? $taskDao->get_active_languages($user_id) : [],
             'selectedTaskType' => $selectedTaskType,
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
             'selectedTargetLanguageCode' => 0,
