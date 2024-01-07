@@ -393,6 +393,6 @@ class StatisticsDao extends BaseDao
         foreach ($result as $r) {
             $deals[$r['deal_id']]['deal_allocated_budget'] = $r['deal_allocated_budget'];
         }
-        return $deals
+        return $deals;
     }
 }
