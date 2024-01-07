@@ -55,10 +55,10 @@
                 <td>${round($deal['deal_total'], 2)}</td>
                 <td>${round($deal['deal_partnership'], 2)}</td>
                 <td>${round($deal['deal_supplements'], 2)}</td>
-                <td>${round($deal['allocated_budget'], 2)}</td>
-                <td>${round($deal['total_expected_cost'], 2)}</td>
-                <td>${round($deal['allocated_budget'] - $deal['total_expected_cost'], 2)}</td>
-                <td>${round($deal['total_expected_cost_waived'], 2)}</td>
+                <td>{if !empty($deal['allocated_budget'])}${round($deal['allocated_budget'], 2)}{/if}</td>
+                <td>{if !empty($deal['total_expected_cost'])}${round($deal['total_expected_cost'], 2)}{/if}</td>
+                <td>{if !empty($deal['allocated_budget']) && !empty($deal['total_expected_cost'])}${round($deal['allocated_budget'] - $deal['total_expected_cost'], 2)}{/if}</td>
+                <td>{if !empty($deal['total_expected_cost_waived'])}${round($deal['total_expected_cost_waived'], 2)}{/if}</td>
             </tr>
             {/foreach}
         </tbody>

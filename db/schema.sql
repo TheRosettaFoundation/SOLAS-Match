@@ -11220,12 +11220,13 @@ BEGIN
         hd.deal_partnership,
         hd.deal_supplements,
         hd.link_to_contract,
-        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
-        SUM(IF(tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived
-    FROM hubspot_deals                hd
-    JOIN project_complete_dates      pcd ON hd.deal_id=pcd.deal_id
-    JOIN Tasks                         t ON pcd.project_id=t.project_id
-    JOIN TaskPaids                    tp ON t.id=tp.task_id
+        SUM(IF(tp.payment_status IS NOT NULL                                                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost,
+        SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived
+    FROM      hubspot_deals           hd
+    LEFT JOIN project_complete_dates pcd ON hd.deal_id=pcd.deal_id
+    LEFT JOIN Tasks                    t ON pcd.project_id=t.project_id
+    LEFT JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
     GROUP BY hd.deal_id
     ORDER BY hd.company_name, hd.start_date;
 END//
