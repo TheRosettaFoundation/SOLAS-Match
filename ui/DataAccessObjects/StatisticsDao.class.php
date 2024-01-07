@@ -381,4 +381,18 @@ class StatisticsDao extends BaseDao
     {
         return LibAPI\PDOWrapper::call('get_paid_project_data', '');
     }
+
+    public function all_deals_report()
+    {
+        $result = LibAPI\PDOWrapper::call('all_deals_report', '');
+        $deals = [];
+        foreach ($result as $r) {
+            $deals[$r['deal_id']] = $r;
+        }
+        $result = LibAPI\PDOWrapper::call('all_deals_report_allocated_budget', '');
+        foreach ($result as $r) {
+            $deals[$r['deal_id']]['deal_allocated_budget'] = $r['deal_allocated_budget'];
+        }
+        return $deals
+    }
 }
