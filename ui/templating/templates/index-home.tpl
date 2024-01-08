@@ -734,37 +734,6 @@ h3{
 
 
              {* pagination begins here *}
- <!--
-
-            {assign var="url_name" value="home-paged"}
-            <ul class="pager pull-left">
-                <div class="pagination-centered" id="ias-pagination">
-                    {if $currentScrollPage > 1}
-                        <li>
-                            <a href="{urlFor name="$url_name" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="First">&lt;&lt;</a>
-                        </li>
-                        <li class="ts-previous">
-                            {assign var="previous" value=($currentScrollPage - 1)}
-                            <button href="{urlFor name="$url_name" options="page_no.$previous|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Previous">&lt;</button>
-                        </li>
-                    {/if}
-                    <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
-                    </li>
-                    {if $currentScrollPage < $lastScrollPage}
-                        <li class="ts-next">
-                            {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="page_no.$next|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Next" >&gt;</a>
-                        </li>
-                        <li>
-                            <a class="page-link" href="{urlFor name="$url_name" options="page_no.$lastScrollPage|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Last">&gt;&gt;</a>
-                        </li>
-
-                    {/if}
-                </div>
-
-            </ul>
- -->
         {else}
             <p>
                 {if !$org_admin}

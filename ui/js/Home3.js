@@ -4,21 +4,6 @@ var parametersLoaded = false;
 // Passed from PHP
 var siteLocation;
 
-/*
-// http://infiniteajaxscroll.com
-var ias = $.ias({
-    container: ".ts",
-    item: ".ts-task",
-    pagination: "#ias-pagination",
-    next: ".ts-next a",
-});
-
-ias.extension(new IASSpinnerExtension());
-ias.extension(new IASTriggerExtension({ offset: 100 }));
-
-ias.on("rendered", renderTaskDetails);
-*/
-
 $(document).ready(documentReady);
 
 function getSetting(text) {
