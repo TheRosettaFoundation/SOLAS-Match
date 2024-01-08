@@ -269,6 +269,7 @@ class UserRouteHandler
                 $topTasks = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $filter_source, $filter_target);
             }
         } catch (\Exception $e) {
+            $topTasks = [];
         }
 
         $taskImages = [];
