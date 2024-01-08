@@ -636,14 +636,14 @@ h3{
                             <div class="d-flex justify-content-between mb-2 flex-wrap">
                                 <div class="">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
-                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
+                                            <div id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-primaryDark ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}XXX 
                                              <img src="{urlFor name='home'}ui/img/question.svg" alt="question_Img" /></div> 
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
                                             <span class=" badge rounded-pill bg-greenish border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
                                                 {if $task->getWordCount()}
-                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} Words </span>
+                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()}XXX Words </span>
                                                 {/if}
 
                                         </div>
@@ -651,17 +651,17 @@ h3{
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                             <div class="mb-3  text-muted">
                                                 <span class=" ">
-                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
+                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}XXX  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
                                             {/if}
                                             <span>
-                                            <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                            <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}XXX</strong>
                                             </span>
                                          
                                         
                                             
                                             </div>
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}XXX</div>
                              </div>
                            
 
