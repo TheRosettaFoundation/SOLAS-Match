@@ -253,7 +253,7 @@ class UserRouteHandler
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
-        $topTasks = null;
+        $topTasks = [];
 
         $selectedTaskType = (int)$selectedTaskType;
         $filter_source = NULL;
