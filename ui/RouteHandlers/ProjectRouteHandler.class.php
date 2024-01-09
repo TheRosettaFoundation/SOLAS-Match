@@ -2579,7 +2579,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 "1200269602122257" => "$projectId"
                             ),
                             "due_at" => $objDateTime->format('c'),
-                            "notes" => "TWB Platform details for Task area/language pair, Project ID: $projectId",
+                            "notes" => "TWB Platform details for Task area/language pair, Project ID: $projectId. <a href=\"https://twbplatform.org/metabase/projectdash.php?projectid=$projectId\">See Project Dashboard</a>",
                             ));
                             if (!$self_service) $data['data']['assignee'] = $pm;
                     } else {
