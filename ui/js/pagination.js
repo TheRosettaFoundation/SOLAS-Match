@@ -376,7 +376,7 @@ function displayTasks(pages) {
             "font-bold"
         );
 
-        badge.style.color = colours[4];
+        badge.style.backgroundColor = colours[item.taskType];
         badge.textContent = taskType;
         badgeContainer.appendChild(badge);
 
