@@ -354,13 +354,7 @@ function displayTasks(pages) {
         const badgeContainer = document.createElement("div");
         badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
 
-        if (item.taskType == 2) {
-            taskType = "Translation";
-        } else if (item.taskType == 3) {
-            taskType = "Revision";
-        } else {
-            taskType = "Approval";
-        }
+        taskType = type_texts[item.taskType];
 
         const badge = document.createElement("span");
         badge.classList.add(
