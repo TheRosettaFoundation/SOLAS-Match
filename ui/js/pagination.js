@@ -395,7 +395,8 @@ function displayTasks(pages) {
             "font-bold"
         );
 
-        badgeW.textContent = `${item.wordCount} Words`;
+        let typeWord = unit_count_text_shorts[item.taskType];
+        badgeW.textContent = `${item.wordCount} ${typeWord}`;
 
         badgeContainer.appendChild(badgeW);
 
