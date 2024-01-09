@@ -391,7 +391,7 @@ function displayTasks(pages) {
                     : `<div> </div>`;
         }
 
-        let time = item.deadline.split(" ");
+        let time = item.deadline;
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         let utcTime = parseInt(time) * 1000;
