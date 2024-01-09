@@ -1,6 +1,7 @@
 <!-- Editor Hint: ¿áéíóú -->
 <table class="table table-striped">
     <thead>
+<<<<<<< HEAD
         <th style="text-align: left"><strong>{Localisation::getTranslation('common_project')}</strong></th>
         <th>{Localisation::getTranslation('common_source_language')}</th>
         <th>{Localisation::getTranslation('common_target_language')}</th>
@@ -8,6 +9,20 @@
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
         <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+=======
+       <tr class="fs-5 align-middle">
+
+                <th>Project</th>
+                <th>Source Language</th>
+                <th> Target Language</th>
+                <th>Created </th>
+                <th> Task Deadline</th>
+                <th> Word Count</th>
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+            
+       </tr>
+      
+>>>>>>> taskpage_revamp_debug
     </thead>
     <tbody>
         <tr>

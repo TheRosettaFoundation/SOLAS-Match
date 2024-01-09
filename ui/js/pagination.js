@@ -96,12 +96,10 @@ selectedLanguage.addEventListener("change", function () {
 
     if (selectedL == 0) {
         validation.sl = false;
-        console.log(validation);
     } else {
         validation.sl = true;
-        console.log(validation);
     }
-    console.log(`Value : ${selectedL}`);
+
     let find = url.indexOf("sl/");
     let findN = url.indexOf("tl");
     let firstL = url.slice(0, find);
@@ -117,9 +115,30 @@ selectedLanguage.addEventListener("change", function () {
     });
 });
 
-taskType.addEventListener("change", function (e) {
-    console.log(e.type);
+targetLanguage.addEventListener("change", function () {
+    let page = document.querySelector(".page");
+    let url = page.href;
+    targetL = this.value;
 
+    if (targetL == 0) {
+        validation.tl = false;
+        console.log(validation);
+    } else {
+        validation.tl = true;
+        console.log(validation);
+    }
+
+    pagePosition.tl = this.value;
+    console.log(`Value : ${targetL}`);
+    let find = url.indexOf("tl/");
+    let firstL = url.slice(0, find);
+    let newUrl = firstL + `tl/${targetL}`;
+    allPages.forEach((page) => {
+        page.href = newUrl;
+    });
+});
+
+taskType.addEventListener("change", function (e) {
     let page = document.querySelector(".page");
     let url = page.href;
 
@@ -132,7 +151,7 @@ taskType.addEventListener("change", function (e) {
     } else {
         validation.tt = true;
     }
-    console.log(validation);
+
     let find = url.indexOf("tt/");
     let findN = url.indexOf("/sl");
 
@@ -181,10 +200,6 @@ pages.forEach((page) => {
 
             if (pagePosition.p <= 6) {
                 let pagePrev = document.getElementById(prevP).parentNode;
-
-                console.log(`pagePrev`);
-
-                console.log(pagePrev);
 
                 pagePrev.classList.add(
                     "bg-primary",
@@ -333,19 +348,13 @@ function displayTasks(pages) {
         const badgeContainer = document.createElement("div");
         badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
 
-        if (item.taskType == 2) {
-            taskType = "Translation";
-        } else if (item.taskType == 3) {
-            taskType = "Revision";
-        } else {
-            taskType = "Approval";
-        }
+        taskType = type_texts[item.taskType];
 
         const badge = document.createElement("span");
         badge.classList.add(
             "badge",
             "rounded-pill",
-            "bg-greenish",
+
             "border",
             "border-2",
             "border-greenBorder",
@@ -355,6 +364,8 @@ function displayTasks(pages) {
             "fs-7",
             "font-bold"
         );
+
+        badge.style.backgroundColor = colours[item.taskType];
         badge.textContent = taskType;
         badgeContainer.appendChild(badge);
 
@@ -373,7 +384,8 @@ function displayTasks(pages) {
             "font-bold"
         );
 
-        badgeW.textContent = `${item.wordCount} Words`;
+        let typeWord = unit_count_text_shorts[item.taskType];
+        badgeW.textContent = `${item.wordCount} ${typeWord}`;
 
         badgeContainer.appendChild(badgeW);
 

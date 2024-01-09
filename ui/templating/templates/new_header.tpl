@@ -27,7 +27,7 @@
         
         
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
-        
+      
         
 		
         
@@ -70,12 +70,38 @@
 
 </script>
 
+         <script>
+              var task_types = [0,
+            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                {$ui['type_enum']},
+            {/foreach}
+            ]; 
+            var colours = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['colour']}",
+                {/foreach}
+            ];
+            var unit_count_text_shorts = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['unit_count_text_short']}",
+                {/foreach}
+            ];
+
+             var type_texts = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['type_text']}",
+                {/foreach}
+            ];
+        
+        
+        </script>
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
     
-   
+         
+        
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>

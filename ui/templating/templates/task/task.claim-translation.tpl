@@ -12,6 +12,7 @@
         </p>
     {/if}
 
+<<<<<<< HEAD
     <section>
         <h2>{Localisation::getTranslation('task_claim_translation_0')}</h2>
         <p style="margin-bottom:20px;"></p>
@@ -22,6 +23,51 @@
             <li>{sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_translation_5')})}</li>
             {/if}
         </ol>
+=======
+  <section class="py-5 container card ">
+
+     <div class="d-flex  justify-content-between align-items-center flex-wrap ">
+
+                <div class="w-50 d-flex flex-column justify-content-end py-2">
+
+                    <div> 
+
+                         <h5>{Localisation::getTranslation('task_claim_translation_0')}</h5>
+                        <p style="margin-bottom:20px;"></p>
+                        <ul>
+                            <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
+                            <li>{sprintf(Localisation::getTranslation('task_claim_translation_3'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
+                            {if !empty($matecat_url)}
+                            <li>{sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_translation_5')})}</li>
+                            {/if}
+                        </ul>
+                    
+                    
+                    </div>
+
+                    <div>
+                      
+                      {if !empty($memsource_task)}
+                        <button class="btn btn-grayish fs-6"> Download original file in its source language </button>
+                      {/if}
+                    
+                    
+                    </div>
+
+                    
+                   
+
+                </div>
+       
+                  <div class="bg-grayish  text-center">
+
+                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 rounded  w-75" />
+
+                  </div>
+
+                </div>   
+
+>>>>>>> taskpage_revamp_debug
     </section>
 
     <section>

@@ -65,11 +65,6 @@ function renderTaskDetails() {
     $(".process_deadline_utc").each(function () {
         $(this).removeClass("process_deadline_utc");
         var utcTime = $(this).text();
-        var image = document.createElement("img");
-        image.src = "../img/clock.svg";
-
-        console.log("image");
-        console.log(image);
 
         utcTime = parseInt(utcTime) * 1000;
         var deadline = new Date(utcTime);

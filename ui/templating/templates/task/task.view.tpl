@@ -2,11 +2,52 @@
 
     {assign var="task_id" value=$task->getId()}
 
+<<<<<<< HEAD
     <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
             {else}
+=======
+{assign var="type_id" value=$task->getTaskType()}
+
+                    
+                    
+
+
+
+<div class="container-fluid">
+
+<header class="">
+
+<div class="container py-2">
+
+         <div class="py-2" >
+            <a  class="text-decoration-none text-dark-subtle"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+ 
+            <a   href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+
+            <a class="text-decoration-none text-dark-subtle" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
+        </div>
+
+
+</div>
+   
+
+</header>
+
+<section class="bg-light-subtle my-4"> 
+
+        <div class="container py-5 ">
+
+          <div class="d-flex  flex-wrap justify-content-between">
+
+               <div class="fw-bold primaryDark fs-3">
+
+                {if $task->getTitle() != ''}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} 
+                {else}
+>>>>>>> taskpage_revamp_debug
                 {Localisation::getTranslation('common_task')} {$task->getId()}
             {/if}
 
@@ -156,11 +197,59 @@
               </td>
             </tr></table>
 
+<<<<<<< HEAD
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
             </div>
         {/if}
+=======
+         {if !empty($file_preview_path)}
+
+
+          <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap"> 
+          
+          <div class="fw-bold">
+
+                {Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}
+          
+          </div>
+
+          <div class="d-flex ">
+
+                   
+                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4" >
+       
+                   
+
+                     <a href="$file_preview_path" download = "{TemplateHelper::uiCleanseHTML($filename)}"> 
+                    
+                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download" id="download"  >
+
+                     </a>
+
+
+          
+          
+          </div>
+          
+          </div>
+         <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
+            <iframe width="100%" height="100%" id="iframe"
+                src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
+                frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
+            </iframe>
+         </div>
+
+       
+        {/if}
+ 
+ 
+ </div>
+
+ </div>
+      
+>>>>>>> taskpage_revamp_debug
 
         <p style="margin-bottom: 40px" />
 
