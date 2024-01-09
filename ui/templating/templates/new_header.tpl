@@ -68,6 +68,32 @@
   gtag('js', new Date());
   gtag('config', 'G-3Z3VNH71D6');
 
+         <script>
+              var task_types = [0,
+            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                {$ui['type_enum']},
+            {/foreach}
+            ]; 
+            var colours = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['colour']}",
+                {/foreach}
+            ];
+            var unit_count_text_shorts = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['unit_count_text_short']}",
+                {/foreach}
+            ];
+
+             var type_texts = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['type_text']}",
+                {/foreach}
+            ];
+        
+        
+        </script>
+
 </script>
 
         <!-- extra Scripts -->
