@@ -1,4 +1,3 @@
-
 let pagePosition = {
     p: 1,
     tt: 0,
@@ -99,12 +98,10 @@ selectedLanguage.addEventListener("change", function () {
 
     if (selectedL == 0) {
         validation.sl = false;
-        console.log(validation);
     } else {
         validation.sl = true;
-        console.log(validation);
     }
-    console.log(`Value : ${selectedL}`);
+
     let find = url.indexOf("sl/");
     let findN = url.indexOf("tl");
     let firstL = url.slice(0, find);
@@ -127,14 +124,12 @@ targetLanguage.addEventListener("change", function () {
 
     if (targetL == 0) {
         validation.tl = false;
-        console.log(validation);
     } else {
         validation.tl = true;
-        console.log(validation);
     }
 
     pagePosition.tl = this.value;
-    console.log(`Value : ${targetL}`);
+
     let find = url.indexOf("tl/");
     let firstL = url.slice(0, find);
     let newUrl = firstL + `tl/${targetL}`;
@@ -144,8 +139,6 @@ targetLanguage.addEventListener("change", function () {
 });
 
 taskType.addEventListener("change", function (e) {
-    console.log(e.type);
-
     let page = document.querySelector(".page");
     let url = page.href;
 
@@ -158,7 +151,7 @@ taskType.addEventListener("change", function (e) {
     } else {
         validation.tt = true;
     }
-    console.log(validation);
+
     let find = url.indexOf("tt/");
     let findN = url.indexOf("/sl");
 
@@ -207,10 +200,6 @@ pages.forEach((page) => {
 
             if (pagePosition.p <= 6) {
                 let pagePrev = document.getElementById(prevP).parentNode;
-
-                console.log(`pagePrev`);
-
-                console.log(pagePrev);
 
                 pagePrev.classList.add(
                     "bg-primary",
