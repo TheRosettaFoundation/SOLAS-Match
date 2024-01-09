@@ -331,7 +331,7 @@ class UserRouteHandler
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
-            // var_dump($e);
+
             // $topTasks = array();
             $topTasksCount = 0;
         }
@@ -390,17 +390,15 @@ class UserRouteHandler
         }
         
 
-
         $org_admin = false;
+
         if (empty($topTasks) && !empty($user_id)) {
            
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
        
 
-        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs  ) );
-         
-        $payload = json_encode($topTasks, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+        $results = json_encode(array('tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs  ) );        
 
         $response->getBody()->write($results);
 
@@ -544,7 +542,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksC /5);
+        $pages = ceil($topTasksC /6);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
