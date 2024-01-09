@@ -72,7 +72,7 @@
 </script>
 
 <script>
-              var task_types = [0,
+            var task_types = [0,
             {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                 {$ui['type_enum']},
             {/foreach}
