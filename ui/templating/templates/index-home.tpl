@@ -613,6 +613,16 @@ h3{
                 {$ui['type_enum']},
             {/foreach}
             ];
+        var colours = ["",
+            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                "{$ui['colour']}",
+            {/foreach}
+        ];
+        var unit_count_text_shorts = ["",
+            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                "{$ui['unit_count_text_short']}",
+            {/foreach}
+        ];
         
    
     </div>
