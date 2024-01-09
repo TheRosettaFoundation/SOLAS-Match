@@ -1,5 +1,4 @@
-console.log("task type");
-console.log(colours);
+
 let pagePosition = {
     p: 1,
     tt: 0,
