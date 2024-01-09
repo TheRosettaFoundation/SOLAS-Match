@@ -1,4 +1,5 @@
 console.log("pagination");
+console.log(colours);
 
 let pagePosition = {
     p: 1,
