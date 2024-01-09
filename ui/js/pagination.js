@@ -1,3 +1,5 @@
+console.log("pagination");
+
 let pagePosition = {
     p: 1,
     tt: 0,

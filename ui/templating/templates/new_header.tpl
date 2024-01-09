@@ -70,12 +70,7 @@
 
 </script>
 
-        <!-- extra Scripts -->
-        {if isset($extra_scripts)}
-            {$extra_scripts}
-        {/if}
-    
-          <script>
+         <script>
               var task_types = [0,
             {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                 {$ui['type_enum']},
@@ -94,6 +89,12 @@
         
         
         </script>
+        <!-- extra Scripts -->
+        {if isset($extra_scripts)}
+            {$extra_scripts}
+        {/if}
+    
+         
         
     </head>
 
