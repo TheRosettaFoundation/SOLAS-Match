@@ -86,6 +86,12 @@
                     "{$ui['unit_count_text_short']}",
                 {/foreach}
             ];
+
+             var type_texts = ["",
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    "{$ui['type_text']}",
+                {/foreach}
+            ];
         
         
         </script>
