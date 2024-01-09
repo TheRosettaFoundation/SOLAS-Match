@@ -392,6 +392,7 @@ function displayTasks(pages) {
         }
 
         let time = item.deadline.split(" ");
+        console.log(item.deadline);
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         let languages = `<div class="mt-3 mb-3">
