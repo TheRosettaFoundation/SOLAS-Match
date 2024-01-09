@@ -1,5 +1,6 @@
 console.log("pagination");
 console.log(colours);
+console.log(task_types);
 
 let pagePosition = {
     p: 1,
