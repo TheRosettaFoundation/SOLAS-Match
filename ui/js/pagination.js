@@ -362,19 +362,21 @@ function displayTasks(pages) {
         }
 
         const badge = document.createElement("span");
-        badge.classList.add(
-            "badge",
-            "rounded-pill",
-            "bg-greenish",
-            "border",
-            "border-2",
-            "border-greenBorder",
-            "border-opacity-25",
-            "text-white",
-            "text-uppercase",
-            "fs-7",
-            "font-bold"
-        );
+        // badge.classList.add(
+        //     "badge",
+        //     "rounded-pill",
+        //     "bg-greenish",
+        //     "border",
+        //     "border-2",
+        //     "border-greenBorder",
+        //     "border-opacity-25",
+        //     "text-white",
+        //     "text-uppercase",
+        //     "fs-7",
+        //     "font-bold"
+        // );
+
+        badge.style.color = colours[item.taskType];
         badge.textContent = taskType;
         badgeContainer.appendChild(badge);
 
