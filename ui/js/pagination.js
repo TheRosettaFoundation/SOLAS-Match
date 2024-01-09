@@ -1,9 +1,3 @@
-console.log("pagination");
-console.log(colours);
-console.log(task_types);
-console.log(unit_count_text_shorts);
-console.log(type_texts);
-
 let pagePosition = {
     p: 1,
     tt: 0,
