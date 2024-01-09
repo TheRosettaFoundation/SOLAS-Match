@@ -607,6 +607,12 @@ h3{
         {/if}
 
           {include file="tag/tags.top-list.flex.inc.tpl"}
+
+          var task_types = [0,
+            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                {$ui['type_enum']},
+            {/foreach}
+            ];
         
    
     </div>
