@@ -394,18 +394,39 @@ function displayTasks(pages) {
         let time = item.deadline.split(" ");
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+        let utcTime = parseInt(time) * 1000;
+        var deadline = new Date(utcTime);
+        var m = deadline.getMonth() + 1;
+        if (m < 10) {
+            m = "0" + m;
+        }
+        var d = deadline.getDate();
+        if (d < 10) {
+            d = "0" + d;
+        }
+        var h = deadline.getHours();
+        if (h < 10) {
+            h = "0" + h;
+        }
+        var mi = deadline.getMinutes();
+        if (mi < 10) {
+            mi = "0" + mi;
+        }
+
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
-                        Languages:  ${item.sourceLocale.languageName}  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        Languages:  ${
+                            item.sourceLocale.languageName
+                        }  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 12H21M21 12L18 9M21 12L18 15M7 12C7 12.5304 6.78929 13.0391 6.41421 13.4142C6.03914 13.7893 5.53043 14 5 14C4.46957 14 3.96086 13.7893 3.58579 13.4142C3.21071 13.0391 3 12.5304 3 12C3 11.4696 3.21071 10.9609 3.58579 10.5858C3.96086 10.2107 4.46957 10 5 10C5.53043 10 6.03914 10.2107 6.41421 10.5858C6.78929 10.9609 7 11.4696 7 12Z" stroke="#E8991C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>  ${item.targetLocale.languageName}
                     </span>
         </div>
         <div class="text-muted d-flex" > <div> Due by </div>
-        <strong class="d-flex align-items-center"> <div class="mx-2 "> ${time[0]} </div>  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="mx-1">
+        <strong class="d-flex align-items-center"> <div class="mx-2 ">  ${deadline.getFullYear()}- ${m} - ${d} +  </div>  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="mx-1">
     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
-    </svg>  <div class="mx-2"> ${time[1]}</div>  </strong>
+    </svg>  <div class="mx-2"> ${h}</div>  </strong>
     <div class="ms-2"> ${timezone}</div>
 
      </div>
