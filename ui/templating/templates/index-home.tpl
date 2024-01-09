@@ -649,7 +649,7 @@ h3{
                                         </div>
 
                                         <div class="d-flex mt-2 mb-3 ">
-                                            <span class=" badge rounded-pill  border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="backgroundColor: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']} ">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
+                                            <span class="badge rounded-pill  border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']} ">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
                                                 {if $task->getWordCount()}
                                                 <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} Words </span>
                                                 {/if}
