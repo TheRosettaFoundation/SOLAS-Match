@@ -68,7 +68,10 @@
   gtag('js', new Date());
   gtag('config', 'G-3Z3VNH71D6');
 
-         <script>
+         
+</script>
+
+<script>
               var task_types = [0,
             {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                 {$ui['type_enum']},
@@ -94,7 +97,7 @@
         
         </script>
 
-</script>
+
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
