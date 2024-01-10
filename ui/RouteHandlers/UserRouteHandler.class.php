@@ -371,16 +371,16 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = [];
 
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
+        // if ($request->getMethod() === 'POST') {
+        //     $post = $request->getParsedBody();
 
-            if (isset($post['taskTypes'])) {
-                $selectedTaskType = $post['taskTypes'];
-            }
-            if (isset($post['sourceLanguage'])) {
-                $selectedSourceLanguageCode = $post['sourceLanguage'];
-            }
-        }
+        //     if (isset($post['taskTypes'])) {
+        //         $selectedTaskType = $post['taskTypes'];
+        //     }
+        //     if (isset($post['sourceLanguage'])) {
+        //         $selectedSourceLanguageCode = $post['sourceLanguage'];
+        //     }
+        // }
         // Post or route handler may return '0', need an explicit zero
         $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
@@ -389,12 +389,12 @@ class UserRouteHandler
         $filter_source = NULL;
         $filter_target = NULL;
         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
-        if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
-        if ($selectedSourceLanguageCode !== 0) {
-            $codes = explode('_', $selectedSourceLanguageCode);
-            $filter_source = $codes[0];
-            $filter_target = $codes[1];
-        }
+        // if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
+        // if ($selectedSourceLanguageCode !== 0) {
+        //     $codes = explode('_', $selectedSourceLanguageCode);
+        //     $filter_source = $codes[0];
+        //     $filter_target = $codes[1];
+        // }
 
         try {
             if ($user_id) {
