@@ -484,7 +484,7 @@ class UserRouteHandler
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $discourse_slug,
             'taskImages' => $taskImages,
-            'currentScrollPage' => $currentScrollPage,
+       
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
