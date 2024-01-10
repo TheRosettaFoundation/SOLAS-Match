@@ -395,8 +395,11 @@ function displayTasks(pages) {
         const dateNow = new Date(time);
         console.log(dateNow);
         console.log(time[1]);
-        // let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // const timeLocal = now.toLocaleString("en-US", { timeZone: timezone });
+        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const timeLocal = dateNow.toLocaleString("en-US", {
+            timeZone: timezone,
+        });
+        console.log(timeLocal);
 
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
