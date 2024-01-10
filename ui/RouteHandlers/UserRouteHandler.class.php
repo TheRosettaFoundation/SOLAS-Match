@@ -263,7 +263,7 @@ class UserRouteHandler
             $filter_source = $codes[0];
             $filter_target = $codes[1];
         }
-       
+
         try {
             if ($user_id) {
                 $topTasks = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $filter_source, $filter_target);
@@ -326,7 +326,9 @@ class UserRouteHandler
     public function home(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-    
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -342,26 +344,57 @@ class UserRouteHandler
         $top_tags = $tagDao->getTopTags(10);
         $viewData['top_tags'] = $top_tags;
 
-      
+        $use_statistics = Common\Lib\Settings::get('site.stats');
+        if ($use_statistics == 'y') {
+            $statsDao = new DAO\StatisticsDao();
+            $statistics = $statsDao->getStats();
+            $statsArray = null;
+            if ($statistics) {
+                $statsArray = array();
+                foreach ($statistics as $stat) {
+                    $statsArray[$stat->getName()] = $stat;
+                }
+            }
+            $viewData['statsArray'] = $statsArray;
+        }
+
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
             $viewData['user_tags'] = $user_tags;
         }
 
-        
-
         $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
-        $offset = 0;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
         $topTasks = [];
+
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+
+            if (isset($post['taskTypes'])) {
+                $selectedTaskType = $post['taskTypes'];
+            }
+            if (isset($post['sourceLanguage'])) {
+                $selectedSourceLanguageCode = $post['sourceLanguage'];
+            }
+        }
+        // Post or route handler may return '0', need an explicit zero
+        $selectedTaskType = (int)$selectedTaskType;
+        if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
 
         $filter_type   = NULL;
         $filter_source = NULL;
         $filter_target = NULL;
-        
+        // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
+        if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
+        if ($selectedSourceLanguageCode !== 0) {
+            $codes = explode('_', $selectedSourceLanguageCode);
+            $filter_source = $codes[0];
+            $filter_target = $codes[1];
+        }
 
         try {
             if ($user_id) {
@@ -377,12 +410,13 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
+        $discourse_slug = array();
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksCount/6);
+        $pages = ceil($topTasksCount/5);
 
-     
+        if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
@@ -418,16 +452,18 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-               
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-        
+        }
 
-      
+        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        }
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469r\" defer ></script>";
@@ -456,8 +492,10 @@ class UserRouteHandler
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
-            'projectAndOrgs' => $projectAndOrgs,         
-            'taskImages' => $taskImages,       
+            'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $discourse_slug,
+            'taskImages' => $taskImages,
+            'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
