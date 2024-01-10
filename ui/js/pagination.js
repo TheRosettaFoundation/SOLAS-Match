@@ -399,9 +399,9 @@ function displayTasks(pages) {
         console.log("offset");
         console.log(offset);
         const timeLocal = new Date(deadlineDate.getTime() + offset * 60 * 1000);
-        const hour = timeLocal.getHours();
-        const min = timeLocal.getMinutes();
-        const sec = timeLocal.getSeconds();
+        const hour = timeLocal.getHours() % 12 || 12;
+        const min = timeLocal.getMinutes().toString.padStart(2, "0");
+        const sec = timeLocal.getSeconds().toString.padStart(2, "0");
 
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let date = deadline.split(" ")[0];
