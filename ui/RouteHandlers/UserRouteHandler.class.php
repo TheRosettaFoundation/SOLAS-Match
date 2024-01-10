@@ -483,10 +483,7 @@ class UserRouteHandler
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $discourse_slug,
-            'taskImages' => $taskImages,
-       
-            'itemsPerScrollPage' => $itemsPerScrollPage,
-            'lastScrollPage' => $lastScrollPage,
+            'taskImages' => $taskImages                 
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
