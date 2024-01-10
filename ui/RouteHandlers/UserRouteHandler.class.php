@@ -326,9 +326,7 @@ class UserRouteHandler
     public function home(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $currentScrollPage          =  1;
-        // $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
-        // $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+    
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
