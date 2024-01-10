@@ -392,7 +392,7 @@ function displayTasks(pages) {
         }
 
         let time = item.deadline.split(" ");
-        const dateNow = new Date(time[1]);
+        const dateNow = new Date(time);
         console.log(dateNow);
         console.log(time[1]);
         // let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
