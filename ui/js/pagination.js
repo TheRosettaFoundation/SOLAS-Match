@@ -404,7 +404,7 @@ function displayTasks(pages) {
         const sec = timeLocal.getSeconds();
 
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        let date = deadline.split(" ");
+        let date = deadline.split(",");
 
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
