@@ -399,6 +399,7 @@ function displayTasks(pages) {
         console.log("offset");
         console.log(offset);
         const timeLocal = new Date(deadlineDate.getTime() + offset * 60 * 1000);
+        console.log(timeLocal);
         const hour = timeLocal.getHours() % 12 || 12;
         const min = timeLocal.getMinutes().toString().padStart(2, "0");
         const sec = timeLocal.getSeconds();
