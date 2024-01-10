@@ -399,7 +399,7 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
-        $discourse_slug = array();
+        // $discourse_slug = array();
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -441,7 +441,7 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
+                // $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -481,9 +481,10 @@ class UserRouteHandler
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
-            'projectAndOrgs' => $projectAndOrgs,
-            'discourse_slug' => $discourse_slug,
-            'taskImages' => $taskImages                 
+            'projectAndOrgs' => $projectAndOrgs,         
+            'taskImages' => $taskImages,       
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
