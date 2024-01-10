@@ -407,9 +407,9 @@ function displayTasks(pages) {
         console.log("timeLocal");
         console.log(timeLocale);
 
-        const hour = timeLocal.getHours() % 12 || 12;
+        const hour = timeLocal.getHours();
         const min = timeLocal.getMinutes().toString().padStart(2, "0");
-        const sec = timeLocal.getSeconds();
+        const sec = timeLocal.getSeconds().toString().padStart(2, "0");
 
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let date = deadline.split(" ")[0];
