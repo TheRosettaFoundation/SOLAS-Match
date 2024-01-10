@@ -226,9 +226,9 @@ class UserRouteHandler
     public function homeIndex(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        // $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
-        // $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
-        // $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -252,7 +252,7 @@ class UserRouteHandler
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
-        $offset = 0;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasks = [];
 
         $selectedTaskType = (int)$selectedTaskType;
@@ -466,7 +466,7 @@ class UserRouteHandler
         }
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469r\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" defer ></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
