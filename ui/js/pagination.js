@@ -391,8 +391,8 @@ function displayTasks(pages) {
                     : `<div> </div>`;
         }
 
-        let time = item.deadline.split(" ");
-        const dateNow = new Date(time);
+        let deadline = item.deadline;
+        const dateNow = new Date(deadline);
 
         const hour = dateNow.getHours();
         const min = dateNow.getMinutes();
