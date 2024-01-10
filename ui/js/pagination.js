@@ -398,7 +398,9 @@ function displayTasks(pages) {
         let offset = deadlineDate.getTimezoneOffset();
         console.log("offset");
         console.log(offset);
-        const timeLocal = new Date(deadlineDate.getTime() + offset * 60 * 1000);
+        const timeLocal = new Date(
+            deadlineDate.getTime() + offset * 60 * 1000
+        ).toLocaleDateString("en-GB");
 
         console.log("timeLocal");
         console.log(timeLocal);
