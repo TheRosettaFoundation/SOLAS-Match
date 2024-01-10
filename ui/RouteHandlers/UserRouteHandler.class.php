@@ -327,8 +327,8 @@ class UserRouteHandler
     {
         global $app, $template_data;
         $currentScrollPage          =  1;
-        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
-        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        // $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        // $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -356,7 +356,7 @@ class UserRouteHandler
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
-        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $offset = 0;
         $topTasksCount = 0;
         $topTasks = [];
 
