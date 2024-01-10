@@ -226,9 +226,9 @@ class UserRouteHandler
     public function homeIndex(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
-        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
-        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
+        // $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        // $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
+        // $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -252,7 +252,7 @@ class UserRouteHandler
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
-        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $offset = 0;
         $topTasks = [];
 
         $selectedTaskType = (int)$selectedTaskType;
