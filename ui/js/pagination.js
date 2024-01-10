@@ -402,7 +402,7 @@ function displayTasks(pages) {
         let offset = dateNow.getTimezoneOffset();
         console.log("offset");
         console.log(offset);
-        const timeLocal = new Date(new Date().getTime() + offset * 60 * 1000);
+        const timeLocal = new Date(dateNow.getTime() + offset * 60 * 1000);
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         console.log("time local :");
         console.log(timeLocal);
