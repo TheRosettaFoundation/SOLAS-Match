@@ -407,7 +407,7 @@ function displayTasks(pages) {
         console.log("timeLocal");
         console.log(timeLocale);
 
-        const hour = timeLocal.getHours();
+        const hour = timeLocal.getHours().toString().padStart(2, "0");
         const min = timeLocal.getMinutes().toString().padStart(2, "0");
         const sec = timeLocal.getSeconds().toString().padStart(2, "0");
 
