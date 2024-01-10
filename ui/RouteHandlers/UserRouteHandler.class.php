@@ -360,16 +360,16 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = [];
 
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
+        // if ($request->getMethod() === 'POST') {
+        //     $post = $request->getParsedBody();
 
-            if (isset($post['taskTypes'])) {
-                $selectedTaskType = $post['taskTypes'];
-            }
-            if (isset($post['sourceLanguage'])) {
-                $selectedSourceLanguageCode = $post['sourceLanguage'];
-            }
-        }
+        //     if (isset($post['taskTypes'])) {
+        //         $selectedTaskType = $post['taskTypes'];
+        //     }
+        //     if (isset($post['sourceLanguage'])) {
+        //         $selectedSourceLanguageCode = $post['sourceLanguage'];
+        //     }
+        // }
         // Post or route handler may return '0', need an explicit zero
         $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
