@@ -392,9 +392,10 @@ function displayTasks(pages) {
         }
 
         let time = item.deadline.split(" ");
-        const date = new Date(time[1]);
-        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const timeLocal = now.toLocaleString("en-US", { timeZone: timezone });
+        const dateNow = new Date(time[1]);
+        console.log(dateNow);
+        // let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // const timeLocal = now.toLocaleString("en-US", { timeZone: timezone });
 
         let languages = `<div class="mt-3 mb-3">
         <span class="mb-1  text-muted">
