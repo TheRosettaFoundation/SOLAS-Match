@@ -393,12 +393,10 @@ function displayTasks(pages) {
 
         let time = item.deadline.split(" ");
         const dateNow = new Date(time);
-        console.log(dateNow);
-        console.log(time[1]);
-        let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const timeLocal = dateNow.toLocaleString("en-US", {
-            timeZone: timezone,
-        });
+
+        let offset = dateNow.getTimezoneOffset();
+        const timeLocal = new Date(new Date().getTime() + offset * 60 * 1000);
+        console.log("time local :");
         console.log(timeLocal);
 
         let languages = `<div class="mt-3 mb-3">
