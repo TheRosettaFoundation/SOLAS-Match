@@ -326,7 +326,7 @@ class UserRouteHandler
     public function home(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $currentScrollPage          =  1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
 
