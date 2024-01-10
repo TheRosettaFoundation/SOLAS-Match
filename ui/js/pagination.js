@@ -400,7 +400,7 @@ function displayTasks(pages) {
         console.log(offset);
         const timeLocal = new Date(deadlineDate.getTime() + offset * 60 * 1000);
         const hour = timeLocal.getHours() % 12 || 12;
-        const min = timeLocal.getMinutes();
+        const min = timeLocal.getMinutes().toString().padStart(2, "0");
         const sec = timeLocal.getSeconds();
 
         let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
