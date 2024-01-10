@@ -405,7 +405,7 @@ class UserRouteHandler
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksCount/6);
 
-        if ($currentScrollPage <= $lastScrollPage) {
+     
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
@@ -448,11 +448,11 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-        }
+        
 
-        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
-            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
-        }
+        // if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+        //     $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        // }
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469r\" defer ></script>";
