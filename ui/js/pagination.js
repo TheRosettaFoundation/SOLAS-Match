@@ -394,6 +394,7 @@ function displayTasks(pages) {
         let time = item.deadline.split(" ");
         const dateNow = new Date(time[1]);
         console.log(dateNow);
+        console.log(time[1]);
         // let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         // const timeLocal = now.toLocaleString("en-US", { timeZone: timezone });
 
