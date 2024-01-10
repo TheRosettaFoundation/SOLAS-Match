@@ -398,12 +398,14 @@ function displayTasks(pages) {
         let offset = deadlineDate.getTimezoneOffset();
         console.log("offset");
         console.log(offset);
-        const timeLocal = new Date(
+        const timeLocal = new Date(deadlineDate.getTime() + offset * 60 * 1000);
+
+        const timeLocale = new Date(
             deadlineDate.getTime() + offset * 60 * 1000
         ).toLocaleDateString("en-GB");
 
         console.log("timeLocal");
-        console.log(timeLocal);
+        console.log(timeLocale);
 
         const hour = timeLocal.getHours() % 12 || 12;
         const min = timeLocal.getMinutes().toString().padStart(2, "0");
