@@ -263,7 +263,7 @@ class UserRouteHandler
             $filter_source = $codes[0];
             $filter_target = $codes[1];
         }
-
+       
         try {
             if ($user_id) {
                 $topTasks = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $filter_source, $filter_target);
@@ -344,24 +344,13 @@ class UserRouteHandler
         $top_tags = $tagDao->getTopTags(10);
         $viewData['top_tags'] = $top_tags;
 
-        $use_statistics = Common\Lib\Settings::get('site.stats');
-        if ($use_statistics == 'y') {
-            $statsDao = new DAO\StatisticsDao();
-            $statistics = $statsDao->getStats();
-            $statsArray = null;
-            if ($statistics) {
-                $statsArray = array();
-                foreach ($statistics as $stat) {
-                    $statsArray[$stat->getName()] = $stat;
-                }
-            }
-            $viewData['statsArray'] = $statsArray;
-        }
-
+      
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
             $viewData['user_tags'] = $user_tags;
         }
+
+        var_dump($user_id, $itemsPerScrollPage, $offset, $selectedTaskType, $filter_source, $filter_target);
 
         $template_data = array_merge($template_data, $viewData);
 
@@ -414,7 +403,7 @@ class UserRouteHandler
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
-        $pages = ceil($topTasksCount/5);
+        $pages = ceil($topTasksCount/6);
 
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
