@@ -393,19 +393,10 @@ function displayTasks(pages) {
 
         let deadline = item.deadline;
         const deadlineDate = new Date(deadline);
-        console.log(`utc time is ${deadline}`);
 
         let offset = deadlineDate.getTimezoneOffset();
-        console.log("offset");
-        console.log(offset);
+
         const timeLocal = new Date(deadlineDate.getTime() - offset * 60 * 1000);
-
-        const timeLocale = new Date(
-            deadlineDate.getTime() + offset * 60 * 1000
-        ).toLocaleDateString("en-GB");
-
-        console.log("timeLocal");
-        console.log(timeLocale);
 
         const hour = timeLocal.getHours().toString().padStart(2, "0");
         const min = timeLocal.getMinutes().toString().padStart(2, "0");
