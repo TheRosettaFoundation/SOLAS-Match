@@ -327,8 +327,8 @@ class UserRouteHandler
     {
         global $app, $template_data;
         $page          = 1;
-        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
-        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        // $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        // $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -344,19 +344,19 @@ class UserRouteHandler
         $top_tags = $tagDao->getTopTags(10);
         $viewData['top_tags'] = $top_tags;
 
-        $use_statistics = Common\Lib\Settings::get('site.stats');
-        if ($use_statistics == 'y') {
-            $statsDao = new DAO\StatisticsDao();
-            $statistics = $statsDao->getStats();
-            $statsArray = null;
-            if ($statistics) {
-                $statsArray = array();
-                foreach ($statistics as $stat) {
-                    $statsArray[$stat->getName()] = $stat;
-                }
-            }
-            $viewData['statsArray'] = $statsArray;
-        }
+        // $use_statistics = Common\Lib\Settings::get('site.stats');
+        // if ($use_statistics == 'y') {
+        //     $statsDao = new DAO\StatisticsDao();
+        //     $statistics = $statsDao->getStats();
+        //     $statsArray = null;
+        //     if ($statistics) {
+        //         $statsArray = array();
+        //         foreach ($statistics as $stat) {
+        //             $statsArray[$stat->getName()] = $stat;
+        //         }
+        //     }
+        //     $viewData['statsArray'] = $statsArray;
+        // }
 
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
@@ -416,7 +416,7 @@ class UserRouteHandler
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksCount/6);
 
-        if ($page <= $lastScrollPage) {
+     
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
@@ -459,7 +459,7 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-        }
+        
 
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
