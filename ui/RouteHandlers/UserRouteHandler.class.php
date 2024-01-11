@@ -344,19 +344,6 @@ class UserRouteHandler
         $top_tags = $tagDao->getTopTags(10);
         $viewData['top_tags'] = $top_tags;
 
-        $use_statistics = Common\Lib\Settings::get('site.stats');
-        if ($use_statistics == 'y') {
-            $statsDao = new DAO\StatisticsDao();
-            $statistics = $statsDao->getStats();
-            $statsArray = null;
-            if ($statistics) {
-                $statsArray = array();
-                foreach ($statistics as $stat) {
-                    $statsArray[$stat->getName()] = $stat;
-                }
-            }
-            $viewData['statsArray'] = $statsArray;
-        }
 
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
@@ -371,16 +358,7 @@ class UserRouteHandler
         $topTasksCount = 0;
         $topTasks = [];
 
-        // if ($request->getMethod() === 'POST') {
-        //     $post = $request->getParsedBody();
-
-        //     if (isset($post['taskTypes'])) {
-        //         $selectedTaskType = $post['taskTypes'];
-        //     }
-        //     if (isset($post['sourceLanguage'])) {
-        //         $selectedSourceLanguageCode = $post['sourceLanguage'];
-        //     }
-        // }
+    
         // Post or route handler may return '0', need an explicit zero
         $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
@@ -388,13 +366,7 @@ class UserRouteHandler
         $filter_type   = NULL;
         $filter_source = NULL;
         $filter_target = NULL;
-        // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
-        // if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
-        // if ($selectedSourceLanguageCode !== 0) {
-        //     $codes = explode('_', $selectedSourceLanguageCode);
-        //     $filter_source = $codes[0];
-        //     $filter_target = $codes[1];
-        // }
+       
 
         try {
             if ($user_id) {
@@ -416,7 +388,7 @@ class UserRouteHandler
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksCount/6);
 
-        if ($currentScrollPage <= $lastScrollPage) {
+        
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
@@ -459,7 +431,7 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-        }
+        
 
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
