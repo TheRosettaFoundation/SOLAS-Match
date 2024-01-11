@@ -310,7 +310,7 @@ class UserRouteHandler
                 htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
             );
 
-            $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
+           
 
             $taskImages[$taskId] = '';
             if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -433,9 +433,9 @@ class UserRouteHandler
             }
         
 
-        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
-            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
-        }
+        // if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+        //     $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        // }
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" defer ></script>";
@@ -467,7 +467,7 @@ class UserRouteHandler
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $discourse_slug,
             'taskImages' => $taskImages,
-            'currentScrollPage' => $currentScrollPage,
+            // 'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
