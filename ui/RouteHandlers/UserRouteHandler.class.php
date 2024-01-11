@@ -326,7 +326,7 @@ class UserRouteHandler
     public function home(Request $request, Response $response, $args)
     {
         global $app, $template_data;
-        $currentScrollPage          = 1;
+        $page          = 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
 
@@ -416,7 +416,7 @@ class UserRouteHandler
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksCount/6);
 
-        if ($currentScrollPage <= $lastScrollPage) {
+        if ($page <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
