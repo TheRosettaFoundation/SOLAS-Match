@@ -360,7 +360,7 @@ class UserRouteHandler
 
     
         // Post or route handler may return '0', need an explicit zero
-        $selectedTaskType = (int)$selectedTaskType;
+       
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
 
         $filter_type   = NULL;
@@ -382,10 +382,9 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
-        $discourse_slug = array();
         $taskImages = array();
 
-        // $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+       
         $pages = ceil($topTasksCount/6);
 
         
@@ -465,7 +464,6 @@ class UserRouteHandler
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,        
             'itemsPerScrollPage' => $itemsPerScrollPage,
-            // 'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
