@@ -127,6 +127,12 @@
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
+
+                 {if isset($dashboard)}
+                             <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
+                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
+                             </li>
+                         {/if}
                 
             
                 {if isset($user_has_active_tasks)}
