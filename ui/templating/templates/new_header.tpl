@@ -124,13 +124,13 @@
             <ul class="navbar-nav  d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">
-                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} class="active"{/if}>{Localisation::getTranslation('header_home')}</a>
+                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} {/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
 
                  {if isset($dashboard)}
-                             <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
-                                 <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
+                             <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if}  class="nav-item ms-md-6 fw-bold">
+                                 <a href="{urlFor name="org-dashboard"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_dashboard')}</a>
                              </li>
                          {/if}
                 
