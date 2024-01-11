@@ -6948,7 +6948,7 @@ BEGIN
         i.`first-name` AS first_name,
         i.`last-name` AS last_name,
         MAX(IF(tau.user_id IS NOT NULL, 'Yes', '')) AS terms,
-        MAX(IF( ad.user_id IS NOT NULL, 'Yes', '')) AS admin
+        MAX(IF( ad.user_id IS NOT NULL AND (ad.roles&(64 | 32 | 16 | 8 | 4)!=0), 'Yes', '')) AS admin
     FROM Users u
     LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     LEFT JOIN Countries c ON u.country_id=c.id
