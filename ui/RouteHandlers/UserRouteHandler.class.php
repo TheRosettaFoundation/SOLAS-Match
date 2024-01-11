@@ -433,9 +433,7 @@ class UserRouteHandler
             }
         
 
-        // if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
-        //     $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
-        // }
+     
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" defer ></script>";
@@ -465,9 +463,7 @@ class UserRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
-            'discourse_slug' => $discourse_slug,
-            'taskImages' => $taskImages,
-            // 'currentScrollPage' => $currentScrollPage,
+            'taskImages' => $taskImages,        
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
