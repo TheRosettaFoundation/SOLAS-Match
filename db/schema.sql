@@ -6948,7 +6948,7 @@ BEGIN
         i.`first-name` AS first_name,
         i.`last-name` AS last_name,
         MAX(IF(tau.user_id IS NOT NULL, 'Yes', '')) AS terms,
-        MAX(IF( ad.user_id IS NOT NULL AND (ad.roles&(64 | 32 | 16 | 8 | 4)!=0), 'Yes', '')) AS admin
+        IF(BIT_OR(ad.roles) IS NULL, '', IF(BIT_OR(ad.roles)&64, 'TWB Admin', IF(BIT_OR(ad.roles)&32, 'Project Officer', IF(BIT_OR(ad.roles)&16, 'Community Officer', IF(BIT_OR(ad.roles)&8, 'NGO Admin', IF(BIT_OR(ad.roles)&4, 'NGO Project Officer', IF(BIT_OR(ad.roles)&2, 'NGO Linguist', ''))))))) AS admin
     FROM Users u
     LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     LEFT JOIN Countries c ON u.country_id=c.id
