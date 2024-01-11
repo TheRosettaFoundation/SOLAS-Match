@@ -385,7 +385,7 @@ class UserRouteHandler
         $discourse_slug = array();
         $taskImages = array();
 
-        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        // $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         $pages = ceil($topTasksCount/6);
 
         
@@ -465,7 +465,7 @@ class UserRouteHandler
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,        
             'itemsPerScrollPage' => $itemsPerScrollPage,
-            'lastScrollPage' => $lastScrollPage,
+            // 'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
