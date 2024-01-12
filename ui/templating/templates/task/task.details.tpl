@@ -116,7 +116,7 @@
    </div>   
 
     <div class="table-responsive">
-    <table class="table">
+    <table class="table text-center">
         <thead class="fs-5">        
             <tr>
                 <th class="w-50">
@@ -157,7 +157,7 @@
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
            <div class="table-responsive">
-            <table class="table ">
+            <table class="table text-center ">
 
             <thead class="fs-5">
              <tr class="align-middle">
@@ -215,7 +215,7 @@
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
   <div class=" table table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped text-center">
         <thead>
          <tr class="fs-5 align-middle">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
@@ -328,7 +328,7 @@
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
     <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped text-center">
         <thead>
           <tr class="fs-5 align-middle">
           {if !empty($paid_status)}
