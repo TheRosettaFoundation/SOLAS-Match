@@ -173,11 +173,11 @@
             <tbody class="fs-6">
             <tr>
                 <td class="w-50">
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm  btn-grayish fs-6 text-white fs-6" target="_blank"> Discuss </a>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn btn-sm btn-grayish  text-white " target="_blank"> Discuss </a>{/if}
                 </td>
               
                 <td class="w-50">
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="text-wrap" target="_blank">{$matecat_url}</a>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish  text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
                 </td>
 
             </tr>
