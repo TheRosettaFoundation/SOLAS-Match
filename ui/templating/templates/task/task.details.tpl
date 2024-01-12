@@ -210,7 +210,7 @@
             {/if}
          </tr>   
         </thead>
-        <tr align="center">
+        <tr>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -276,7 +276,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if empty($paid_status)}
                         <input type="hidden" name="paid_status" value="2" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish mt-2">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish mt-2">
                             <i class="icon-check icon-black"></i> Make Paid
                         </a>
                     {else}
