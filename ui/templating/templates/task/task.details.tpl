@@ -1,6 +1,6 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive">
-<table class="table">
+<table class="table table-striped">
     <thead>
        <tr class="fs-5 align-middle">
 
@@ -79,9 +79,9 @@
        <tr>
             <thead class="fs-6">
 
-            <th width="48%" align="left">{Localisation::getTranslation('common_task_comment')}<hr/></th>
+            <th >{Localisation::getTranslation('common_task_comment')}<hr/></th>
             <th></th>
-            <th width="48%" align="left">{Localisation::getTranslation('common_project_description')}<hr/></th>
+            <th>{Localisation::getTranslation('common_project_description')}<hr/></th>
 
             </thead>
        
