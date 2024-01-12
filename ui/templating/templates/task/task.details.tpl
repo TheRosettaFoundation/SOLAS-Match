@@ -276,12 +276,12 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if empty($paid_status)}
                         <input type="hidden" name="paid_status" value="2" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish mt-2">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish">
                             <i class="icon-check icon-black"></i> Make Paid
                         </a>
                     {else}
                         <input type="hidden" name="paid_status" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish mt-2">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish">
                             <i class="icon-remove-circle icon-white"></i> Make Unpaid
                         </a>
                     {/if}
