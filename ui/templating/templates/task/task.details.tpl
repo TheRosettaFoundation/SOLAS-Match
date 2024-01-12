@@ -74,14 +74,14 @@
 </table>
 </div>
 
-<div class="table-responsive">
+<div class="table-responsive mt-4 bg-info">
     <table class="table striped">
        <tr>
             <thead class="fs-6">
 
-            <th >{Localisation::getTranslation('common_task_comment')}<hr/></th>
-            <th></th>
-            <th>{Localisation::getTranslation('common_project_description')}<hr/></th>
+            <th >{Localisation::getTranslation('common_task_comment')}</th>
+          
+            <th>{Localisation::getTranslation('common_project_description')}</th>
 
             </thead>
        
@@ -98,7 +98,7 @@
                         {/if}
                     
                 </td>
-                <td></td>
+               
                 <td>
                    
                         {if $project->getDescription() != ''}
@@ -109,9 +109,7 @@
                    
                 </td>
             </tr>
-            <tr>
-                <td colspan="3" style="padding-bottom: 40px"/>
-            </tr>
+         
             <tr>
                 <td>
                     <strong>{Localisation::getTranslation('task_details_project_impact')}</strong><hr/>
