@@ -1,9 +1,6 @@
 {include file="header.tpl"}
 
     {assign var="task_id" value=$task->getId()}
-    <div>
-
-
 
     <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
@@ -130,7 +127,9 @@
               <td>
                 <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     {Localisation::getTranslation('task_view_assign_label')}<br />
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                     <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                    {/if}
                     {if !empty($list_qualified_translators)}
                         <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
                             <option value="">...</option>
