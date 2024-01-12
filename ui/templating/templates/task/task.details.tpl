@@ -155,13 +155,13 @@
        </table>
        </div> 
 
-       
+
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
            <div class="table-responsive">
             <table class="table ">
 
-            <thead>
-             <tr>
+            <thead class="fs-5">
+             <tr class="align-middle">
                 <th>
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong>{/if}
                 </th>
@@ -171,7 +171,7 @@
                 </th>
               </tr>  
             </thead>
-            <tbody>
+            <tbody class="fs-6">
             <tr>
                 <td>
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm btn-grayish text-white" target="_blank"> Discuss </a>{/if}
@@ -191,12 +191,12 @@
             {if !empty($required_qualification_for_details)}
             <div class="table-responsive">
             <table class="table">
-              <thead>
+              <thead class="fs-5">
                 <tr>
                     <th>{Localisation::getTranslation('required_qualification_level')}: </th>
                 </tr>              
               </thead>
-              <tbody>
+              <tbody class="fs-6">
                <tr>
                <td>
                     <i>
@@ -218,7 +218,7 @@
   <div class=" table table-responsive">
     <table class="table table-striped">
         <thead>
-         <tr class="fs-5">
+         <tr class="fs-5 align-middle">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
@@ -239,7 +239,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish fs-6">
                             <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
                         </a>
                     {else}
