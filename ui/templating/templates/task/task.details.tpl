@@ -331,7 +331,7 @@
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
-          <tr class="fs-5">
+          <tr class="fs-5 align-middle">
           {if !empty($paid_status)}
             <th>Purchase Order</th>
             <th>Payment Status</th>
