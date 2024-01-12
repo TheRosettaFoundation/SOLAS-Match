@@ -75,7 +75,7 @@
 </div>
 
 <div class="table-responsive mt-4  ">
-    <table class="table striped bg-info w-50 ">
+    <table class="table striped bg-info ">
        <tr>
             <thead class="fs-6">
 
