@@ -74,14 +74,14 @@
 </table>
 </div>
 
-<div class="table-responsive mt-4 ">
+<div class="table-responsive mt-4 w-100 ">
     <table class="table striped bg-info">
        <tr>
             <thead class="fs-6">
 
-            <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
+            <th  >{Localisation::getTranslation('common_task_comment')}</th>
           
-            <th class="w-50">{Localisation::getTranslation('common_project_description')}</th>
+            <th >{Localisation::getTranslation('common_project_description')}</th>
 
             </thead>
        
