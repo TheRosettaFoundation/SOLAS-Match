@@ -74,12 +74,12 @@
 </table>
 </div>
 
-<div class=" table table-responsive mt-4  ">
+<div class="table-responsive mt-4  ">
     <table class="table striped bg-info ">
        <tr>
             <thead class="fs-5">
 
-            <th  >{Localisation::getTranslation('common_task_comment')}</th>
+            <th >{Localisation::getTranslation('common_task_comment')}</th>
             <th></th>
           
             <th >{Localisation::getTranslation('common_project_description')}</th>
@@ -111,18 +111,26 @@
                    
                 </td>
             </tr>
-         
-            <tr>
-                <td>
-                    <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
-                </td>
+        </tbody>
+    </table>
+   </div>   
 
-                 <td></td>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>        
+            <tr>
+                <th>
+                    <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
+                </th>
+
+                 <th></th>
               
-                <td>
+                <th>
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong>
-                </td>
+                </th>
             </tr>
+        </thead>
+        <tbody class="fs-6">
 
             <tr>                
                 <td>
@@ -143,6 +151,9 @@
                     {/foreach}
                 </td>                    
             </tr>
+        </tbody>
+       </table>
+       </div> 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
             <tr>
                 <td colspan="3" />
@@ -210,6 +221,7 @@
             {/if}
          </tr>   
         </thead>
+        <tbody class="fs-6">
         <tr>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
@@ -299,6 +311,7 @@
             </td>
             {/if}
         </tr>
+       </tbody>
     </table>
     </div>
 {/if}
@@ -324,7 +337,7 @@
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </tr>
         </thead>
-        <tbody class="fs-5">
+        <tbody class="fs-6">
         <tr >
 {if !empty($paid_status)}
         
