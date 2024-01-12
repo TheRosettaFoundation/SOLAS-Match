@@ -174,7 +174,7 @@
             <tbody class="fs-6">
             <tr>
                 <td>
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm btn-grayish text-white" target="_blank"> Discuss </a>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm btn-grayish text-white fs-6" target="_blank"> Discuss </a>{/if}
                 </td>
                 <td></td>
                 <td>
@@ -244,7 +244,7 @@
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish fs-6">
                             <i class="icon-check icon-black"></i> {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
