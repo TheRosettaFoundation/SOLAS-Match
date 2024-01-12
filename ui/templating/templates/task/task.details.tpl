@@ -271,7 +271,7 @@
                     </a>
                 {else}
                     <a href="#" class="btn  btn-sm  btn-grayish fs-6" disabled>
-                         <img src="{urlFor name='home'}ui/img/disabled.svg" alt="disabled" /> No
+                         <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disabled" /> No
                     </a>
                 {/if}
             </td>
@@ -286,7 +286,7 @@
                     {else}
                         <input type="hidden" name="track" value="Track" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish fs-6">
-                            <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_task')}
+                            <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
                         </a>
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
