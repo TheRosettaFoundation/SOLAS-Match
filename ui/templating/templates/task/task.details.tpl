@@ -75,7 +75,7 @@
 </div>
 
 <div class="table-responsive mt-4  ">
-    <table class="table striped bg-info ">
+    <table class="table striped bg-info text-center ">
        <tr>
             <thead class="fs-5">
 
@@ -441,7 +441,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                    <input type="submit" class="btn btn-sm  btn-grayish fs-6 mt-2" name="source_quantity_submit" value="Submit" />
+                    <input type="submit" class="btn btn-sm  btn-grayish fs-6" name="source_quantity_submit" value="Submit" />
                     <input type="hidden" name="mark_source_quantity" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
