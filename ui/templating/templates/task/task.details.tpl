@@ -74,10 +74,10 @@
 </table>
 </div>
 
-<div class="table-responsive mt-4  ">
+<div class=" table table-responsive mt-4  ">
     <table class="table striped bg-info ">
        <tr>
-            <thead class="fs-6">
+            <thead class="fs-5">
 
             <th  >{Localisation::getTranslation('common_task_comment')}</th>
           
@@ -119,7 +119,8 @@
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong><hr/>
                 </td>
             </tr>
-            <tr >                
+
+            <tr>                
                 <td>
                     <i>
                     {if $project->getImpact() != ''}
