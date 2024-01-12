@@ -119,12 +119,12 @@
     <table class="table">
         <thead class="fs-5">        
             <tr>
-                <th>
+                <th class="w-50">
                     <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
                 </th>
 
               
-                <th>
+                <th class="w-50">
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong>
                 </th>
             </tr>
@@ -132,7 +132,7 @@
         <tbody class="fs-6">
 
             <tr>                
-                <td>
+                <td class="w-50">
                     <i>
                     {if $project->getImpact() != ''}
                         {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
@@ -144,7 +144,7 @@
 
           
               
-                <td>
+                <td class="w-50">
                     {foreach from=$project->getTag() item=tag}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
