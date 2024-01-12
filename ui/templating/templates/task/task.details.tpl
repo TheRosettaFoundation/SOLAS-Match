@@ -79,10 +79,10 @@
        <tr>
             <thead class="fs-5">
 
-            <th >{Localisation::getTranslation('common_task_comment')}</th>
+            <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
          
           
-            <th >{Localisation::getTranslation('common_project_description')}</th>
+            <th class="w-50" >{Localisation::getTranslation('common_project_description')}</th>
 
             </thead>
        
@@ -90,7 +90,7 @@
 
         <tbody class="fs-6">
             <tr>
-                <td>
+                <td class="w-50">
                     
                         {if $task->getComment() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}
@@ -101,7 +101,7 @@
                 </td>
                
                
-                <td>
+                <td class="w-50">
                    
                         {if $project->getDescription() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
@@ -123,7 +123,6 @@
                     <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
                 </th>
 
-                
               
                 <th>
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong>
