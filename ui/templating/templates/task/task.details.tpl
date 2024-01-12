@@ -324,7 +324,7 @@
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </tr>
         </thead>
-        <tbody class="fs-6">
+        <tbody class="fs-5">
         <tr >
 {if !empty($paid_status)}
         
