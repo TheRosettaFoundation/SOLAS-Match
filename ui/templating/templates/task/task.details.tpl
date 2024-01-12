@@ -304,8 +304,8 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-    <div  class="table-responsive">
-    <table width="100%" class="table table-striped">
+    <div class="table-responsive">
+    <table class="table table-striped">
         <thead>
           <tr class="fs-5">
           {if !empty($paid_status)}
@@ -324,7 +324,7 @@
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </tr>
         </thead>
-        <tr align="center">
+        <tr >
 {if !empty($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
