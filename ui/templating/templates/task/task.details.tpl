@@ -155,18 +155,21 @@
        </table>
        </div> 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
-            <tr>
-                <td colspan="3" />
-            </tr>
-            <tr>
-                <td>
+           <div class="table-responsive">
+            <table class="table ">
+
+            <thead>
+             <tr>
+                <th>
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong>{/if}
-                </td>
-                <td></td>
-                <td>
+                </th>
+                <th></th>
+                <th>
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong>{/if}
-                </td>
-            </tr>
+                </th>
+              </tr>  
+            </thead>
+            <tbody>
             <tr>
                 <td>
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm btn-grayish text-white" target="_blank"> Discuss </a>{/if}
@@ -175,32 +178,38 @@
                 <td>
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="text-wrap" target="_blank">{$matecat_url}</a>{/if}
                 </td>
+
             </tr>
+            </tbody>
+          </table>
+          </div>
+         
             {/if}
+
             {if !empty($required_qualification_for_details)}
-            <tr>
-                <td colspan="3" />
-            </tr>
-            <tr>
-                <td>
-                    <strong>{Localisation::getTranslation('required_qualification_level')}:</strong><hr/>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><i>
+            <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                    <th>{Localisation::getTranslation('required_qualification_level')}: </th>
+                </tr>              
+              </thead>
+              <tbody>
+               <tr>
+               <td>
+                    <i>
                     {if $required_qualification_for_details == 1}{Localisation::getTranslation('user_qualification_level_1')}{/if}
                     {if $required_qualification_for_details == 2}{Localisation::getTranslation('user_qualification_level_2')}{/if}
                     {if $required_qualification_for_details == 3}{Localisation::getTranslation('user_qualification_level_3')}{/if}
-                </i></td>
-                <td></td>
-                <td></td>
-            </tr>
+                    </i>
+               </td>
+               
+               </tr>
+                 </tbody>
+            </table>
+         </div>  
             {/if}
-        </tbody>
-    </table>
-</div>
+ 
 
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
