@@ -327,7 +327,7 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-    <div class="table-responsive">
+    <div class="table-responsive mt-4">
     <table class="table table-striped text-center">
         <thead>
           <tr class="fs-5 align-middle">
