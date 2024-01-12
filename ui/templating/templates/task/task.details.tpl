@@ -161,22 +161,22 @@
 
             <thead class="fs-5">
              <tr class="align-middle">
-                <th>
+                <th class="w-50">
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong>{/if}
                 </th>
-                <th></th>
-                <th>
+             
+                <th class="w-50" >
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong>{/if}
                 </th>
               </tr>  
             </thead>
             <tbody class="fs-6">
             <tr>
-                <td>
+                <td class="w-50">
                     {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn  btn-sm  btn-grayish fs-6 text-white fs-6" target="_blank"> Discuss </a>{/if}
                 </td>
-                <td></td>
-                <td>
+              
+                <td class="w-50">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="text-wrap" target="_blank">{$matecat_url}</a>{/if}
                 </td>
 
