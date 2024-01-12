@@ -60,8 +60,9 @@
            
                 {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
+                        <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" >
                         <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primaryDark shadow text-white me-2">
-                        {Localisation::getTranslation('task_view_download_task')} <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" > </a>
+                        {Localisation::getTranslation('task_view_download_task')}  </a>
                     {/if}
                 {/if}
                  {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
@@ -112,7 +113,7 @@
         
             <div class="row d-flex justify-content-between ">
 
-                <div class=" col-12  col-md-6 "> 
+                <div class=" col-sm-12  col-md-8 "> 
 
                          {include file="task/task.details.tpl"} 
 
