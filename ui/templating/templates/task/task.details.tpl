@@ -80,6 +80,7 @@
             <thead class="fs-5">
 
             <th  >{Localisation::getTranslation('common_task_comment')}</th>
+            <th></th>
           
             <th >{Localisation::getTranslation('common_project_description')}</th>
 
@@ -98,6 +99,7 @@
                         {/if}
                     
                 </td>
+                <td></td>
                
                 <td>
                    
@@ -114,6 +116,8 @@
                 <td>
                     <strong>{Localisation::getTranslation('task_details_project_impact')}</strong><hr/>
                 </td>
+
+                 <td></td>
               
                 <td>
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong><hr/>
