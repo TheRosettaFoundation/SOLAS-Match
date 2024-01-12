@@ -188,7 +188,7 @@
             {/if}
 
             {if !empty($required_qualification_for_details)}
-            <div class="table-responsive">
+            <div class="table-responsive mt-4">
             <table class="table">
               <thead class="fs-5">
                 <tr>
@@ -214,7 +214,7 @@
 
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
-  <div class=" table table-responsive">
+  <div class=" table table-responsive mt-4">
     <table class="table table-striped text-center">
         <thead>
          <tr class="fs-5 align-middle">
@@ -239,12 +239,12 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish fs-6 fs-6">
-                            <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
+                            <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_unpublish')}
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish fs-6 fs-6">
-                            <i class="icon-check icon-black"></i> {Localisation::getTranslation('common_publish')}
+                            <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -257,7 +257,7 @@
                     <input type="hidden" name="complete_task" value="1" />
                     <a class="btn  btn-sm  btn-grayish fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                         
-                         <img src="{urlFor name='home'}ui/img/alarm.svg" alt="search" >
+                         <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
                     </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -267,11 +267,11 @@
             <td>
                 {if $task->get_cancelled()}
                     <a href="#" class="btn  btn-sm  btn-grayish fs-6 btn-inverse" disabled>
-                        <i class="icon-check icon-white"></i> Yes
+                       <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Yes
                     </a>
                 {else}
                     <a href="#" class="btn  btn-sm  btn-grayish fs-6" disabled>
-                        <i class="icon-remove-circle icon-black"></i> No
+                         <img src="{urlFor name='home'}ui/img/disabled.svg" alt="disabled" /> No
                     </a>
                 {/if}
             </td>
@@ -281,7 +281,7 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish fs-6 btn-inverse">
-                            <i class="icon-inbox icon-white"></i> {Localisation::getTranslation('common_untrack_task')}
+                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                     {else}
                         <input type="hidden" name="track" value="Track" />
@@ -299,12 +299,12 @@
                     {if empty($paid_status)}
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish fs-6">
-                            <i class="icon-check icon-black"></i> Make Paid
+                             <img src="{urlFor name='home'}ui/img/yes.svg" alt="ok_icon" /> Make Paid
                         </a>
                     {else}
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish fs-6">
-                            <i class="icon-remove-circle icon-white"></i> Make Unpaid
+                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Make Unpaid
                         </a>
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
