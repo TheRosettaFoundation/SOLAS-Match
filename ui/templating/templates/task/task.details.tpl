@@ -75,7 +75,7 @@
 </div>
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table striped">
        <tr>
             <thead class="fs-6">
 
@@ -88,7 +88,7 @@
        </tr>
 
         <tbody class="fs-6">
-            <tr style="overflow-wrap: break-word;" valign="top">
+            <tr >
                 <td>
                     
                         {if $task->getComment() != ''}
@@ -121,7 +121,7 @@
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong><hr/>
                 </td>
             </tr>
-            <tr valign="top">                
+            <tr >                
                 <td>
                     <i>
                     {if $project->getImpact() != ''}
@@ -140,7 +140,7 @@
             </tr>
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
             <tr>
-                <td colspan="3" style="padding-bottom: 40px"/>
+                <td colspan="3" />
             </tr>
             <tr>
                 <td>
