@@ -324,8 +324,10 @@
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </tr>
         </thead>
+        <tbody class="fs-6">
         <tr >
 {if !empty($paid_status)}
+        
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
@@ -422,6 +424,7 @@
                 </form>
             </td>
         </tr>
+       </tbody>
     </table>
     </div>
 {/if}
