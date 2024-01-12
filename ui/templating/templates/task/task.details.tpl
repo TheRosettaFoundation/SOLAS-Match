@@ -114,13 +114,13 @@
          
             <tr>
                 <td>
-                    <strong>{Localisation::getTranslation('task_details_project_impact')}</strong><hr/>
+                    <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
                 </td>
 
                  <td></td>
               
                 <td>
-                    <strong>{Localisation::getTranslation('task_details_project_tags')}</strong><hr/>
+                    <strong>{Localisation::getTranslation('task_details_project_tags')}</strong>
                 </td>
             </tr>
 
@@ -134,6 +134,8 @@
                     {/if}  
                     </i> 
                 </td>    
+
+                <td></td>
               
                 <td>
                     {foreach from=$project->getTag() item=tag}
