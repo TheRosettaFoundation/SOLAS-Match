@@ -191,6 +191,7 @@
   <div class="table-responsive">
     <table class="table table-striped">
         <thead>
+         <tr class="fs-5">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
@@ -202,6 +203,7 @@
             <th>{Localisation::getTranslation('common_claimed_date')}</th>
             <th>{Localisation::getTranslation('common_claimed_by')}</th>
             {/if}
+         </tr>   
         </thead>
         <tr align="center">
             <td>
@@ -300,6 +302,7 @@
     <div  class="table-responsive">
     <table width="100%" class="table table-striped">
         <thead>
+          <tr class="fs-5">
           {if !empty($paid_status)}
             <th>Purchase Order</th>
             <th>Payment Status</th>
@@ -314,13 +317,14 @@
             <th></th>
           {/if}
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
+        </tr>
         </thead>
         <tr align="center">
 {if !empty($paid_status)}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
-                    <input type="submit" class="btn btn-primary mt-2" name="purchase_order_submit" value="Submit" />
+                    <input type="submit" class="btn btn-secondary mt-2" name="purchase_order_submit" value="Submit" />
                     <input type="hidden" name="mark_purchase_order" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
@@ -329,17 +333,17 @@
                 {$paid_status['payment_status']}
                 {if $paid_status['payment_status'] == 'Unsettled'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to In-kind" />
                         <input type="hidden" name="mark_payment_status" value="In-kind" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to In-house" />
+                        <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to In-house" />
                         <input type="hidden" name="mark_payment_status" value="In-house" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to Waived" />
+                        <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to Waived" />
                         <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
@@ -356,11 +360,11 @@
                 {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                         {if $paid_status['payment_status'] == 'Pending documentation'}
-                            <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to Ready for payment" />
+                            <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to Ready for payment" />
                             <input type="hidden" name="mark_payment_status" value="Ready for payment" />
                         {/if}
                         {if $paid_status['payment_status'] == 'Ready for payment'}
-                            <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to Pending documentation" />
+                            <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to Pending documentation" />
                             <input type="hidden" name="mark_payment_status" value="Pending documentation" />
                         {/if}
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -368,12 +372,12 @@
                 {/if}
                 {if $paid_status['payment_status'] == 'Ready for payment'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                            <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to Settled" />
+                            <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to Settled" />
                             <input type="hidden" name="mark_payment_status" value="Settled" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn btn-primary mt-2" name="payment_status_submit" value="Change to Waived" />
+                        <input type="submit" class="btn btn-secondary mt-2" name="payment_status_submit" value="Change to Waived" />
                         <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
@@ -382,7 +386,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
-                    <input type="submit" class="btn btn-primary mt-2" name="unit_rate_submit" value="Submit" />
+                    <input type="submit" class="btn btn-secondary mt-2" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
