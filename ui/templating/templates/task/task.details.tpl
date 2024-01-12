@@ -80,7 +80,7 @@
             <thead class="fs-5">
 
             <th >{Localisation::getTranslation('common_task_comment')}</th>
-            <th></th>
+         
           
             <th >{Localisation::getTranslation('common_project_description')}</th>
 
@@ -89,7 +89,7 @@
        </tr>
 
         <tbody class="fs-6">
-            <tr >
+            <tr>
                 <td>
                     
                         {if $task->getComment() != ''}
@@ -99,7 +99,7 @@
                         {/if}
                     
                 </td>
-                <td></td>
+               
                
                 <td>
                    
@@ -117,13 +117,13 @@
 
     <div class="table-responsive">
     <table class="table">
-        <thead>        
+        <thead class="fs-5">        
             <tr>
                 <th>
                     <strong>{Localisation::getTranslation('task_details_project_impact')}</strong>
                 </th>
 
-                 <th></th>
+                
               
                 <th>
                     <strong>{Localisation::getTranslation('task_details_project_tags')}</strong>
@@ -143,7 +143,7 @@
                     </i> 
                 </td>    
 
-                <td></td>
+          
               
                 <td>
                     {foreach from=$project->getTag() item=tag}
@@ -154,6 +154,8 @@
         </tbody>
        </table>
        </div> 
+
+       
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
            <div class="table-responsive">
             <table class="table ">
