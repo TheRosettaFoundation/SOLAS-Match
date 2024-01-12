@@ -79,9 +79,9 @@
        <tr>
             <thead class="fs-6">
 
-            <th >{Localisation::getTranslation('common_task_comment')}</th>
+            <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
           
-            <th>{Localisation::getTranslation('common_project_description')}</th>
+            <th class="w-50">{Localisation::getTranslation('common_project_description')}</th>
 
             </thead>
        
