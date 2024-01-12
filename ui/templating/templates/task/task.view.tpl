@@ -56,7 +56,7 @@
 
                 </div>
 
-             <div class="mt-2 mt-md-0">
+             <div class="d-flex mt-2 mt-md-0">
            
                 {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
@@ -65,7 +65,7 @@
                     {/if}
                 {/if}
                  {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
-                    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary' style="margin-top: -12.5%;margin-right: 45%;">
+                    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primaryDark shadow text-white'">
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                     </a>
                 {/if}
