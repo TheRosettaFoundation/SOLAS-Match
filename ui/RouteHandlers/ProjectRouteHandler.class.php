@@ -664,8 +664,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $analyse_uid = $hook['uid'];
                 $analyse_id  = $hook['id'];
                 if (!$projectDao->get_requested_analysis($analyse_id)) {
-                    error_log("Not Requested analyse_id: $analyse_id");
-//                    return;
+                    error_log("Not Requested analyse_id: $analyse_id ($analyse_uid)");
+                    return;
                 }
                 $memsource_project_uid = $hook['project']['uid'];
                 $task = $taskDao->getTask($task_id);
