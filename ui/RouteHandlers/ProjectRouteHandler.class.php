@@ -2670,7 +2670,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         else {
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $resultset = json_decode($result, true);
-            if (!empty($resultset['analyses'][0]['analyse']['id'])) $projectDao->insert_requested_analysis($task_id, $resultset['analyses'][0]['analyse']['id'])
+            if (!empty($resultset['analyses'][0]['analyse']['id'])) $projectDao->insert_requested_analysis($task_id, $resultset['analyses'][0]['analyse']['id']);
             error_log("analyses/byProviders ($task_id) responseCode: $responseCode");
             error_log(print_r($resultset, true));
         }
