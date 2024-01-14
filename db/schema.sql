@@ -11652,6 +11652,39 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE requested_analysis_s (
+  task_id    BIGINT UNSIGNED NOT NULL,
+  status     INT NOT NULL DEFAULT 0,
+  analyse_id BIGINT UNSIGNED NOT NULL,
+  KEY (task_id),
+  KEY (analyse_id),
+  CONSTRAINT `FK_requested_analysis_s_task_id` FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_requested_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_requested_analysis`(
+    IN p_task_id    BIGINT UNSIGNED,
+    IN p_analyse_id BIGINT UNSIGNED)
+BEGIN
+    INSERT INTO requested_analysis_s (
+        task_id,
+        analyse_id)
+    VALUES (
+        p_task_id,
+        p_analyse_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_requested_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_requested_analysis`(IN p_analyse_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM requested_analysis_s WHERE analyse_id=p_analyse_id;
+END//
+DELIMITER ;
+
+
 CREATE TABLE post_analysis_s (
   task_id                    BIGINT UNSIGNED NOT NULL,
   claimant_id                INT UNSIGNED NOT NULL,

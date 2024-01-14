@@ -662,6 +662,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task_id = $memsource_task['task_id'];
                 $claimant_id = $projectDao->getUserClaimedTask($task_id);
                 $analyse_uid = $hook['uid'];
+                $analyse_id  = $hook['id'];
+                if (!$projectDao->get_requested_analysis($analyse_id)) {
+                    error_log("Not Requested analyse_id: $analyse_id");
+//                    return;
+                }
                 $memsource_project_uid = $hook['project']['uid'];
                 $task = $taskDao->getTask($task_id);
                 list($translation_level, $revision_level) = $this->get_workflow_levels($task->getProjectId());
@@ -2664,8 +2669,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         if ($error_number = curl_errno($ch)) error_log("analyses/byProviders ($task_id) Curl error ($error_number): " . curl_error($ch));
         else {
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            error_log("analyses/byProviders ($task_id) responseCode: $responseCode");
             $resultset = json_decode($result, true);
+            if (!empty($resultset['analyses'][0]['analyse']['id'])) $projectDao->insert_requested_analysis($task_id, $resultset['analyses'][0]['analyse']['id'])
+            error_log("analyses/byProviders ($task_id) responseCode: $responseCode");
             error_log(print_r($resultset, true));
         }
         curl_close($ch);

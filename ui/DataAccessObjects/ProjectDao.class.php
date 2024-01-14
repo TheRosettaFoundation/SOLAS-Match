@@ -1565,6 +1565,19 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             $args);
     }
 
+    public function insert_requested_analysis($task_id, $analyse_id)
+    {
+        error_log(LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($analyse_id));
+        LibAPI\PDOWrapper::call('insert_requested_analysis', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($analyse_id));
+    }
+
+    public function get_requested_analysis($analyse_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_requested_analysis', LibAPI\PDOWrapper::cleanse($analyse_id));
+        if (empty($result)) return 0;
+        return $result;
+    }
+
     public function set_task_resource_info_trigger($task_id)
     {
         LibAPI\PDOWrapper::call('set_task_resource_info_trigger', LibAPI\PDOWrapper::cleanse($task_id));
