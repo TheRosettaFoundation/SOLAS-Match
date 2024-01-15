@@ -2,7 +2,7 @@
 <div class="table-responsive ">
 <table class=" rounded-3 bg-white ">
     <thead >
-       <tr class="fs-5 align-middle p-3">
+       <tr class="fs-5 align-middle p-3 bg-info">
 
                 <th>Project</th>
                 <th>Source Language</th>
