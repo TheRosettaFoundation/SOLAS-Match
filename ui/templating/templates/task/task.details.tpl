@@ -1,8 +1,8 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive ">
-<table class="task_view_assign_label ">
+<table class="table">
     <thead >
-       <tr class="fs-5 align-middle  bg-info">
+       <tr class="fs-5 align-middle  ">
 
                 <th>Project</th>
                 <th>Source Language</th>
