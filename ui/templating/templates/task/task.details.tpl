@@ -116,7 +116,7 @@
    </div>   
 
     <div class="table-responsive">
-    <table class="table text-center">
+    <table class="table ">
         <thead class="fs-5">        
             <tr>
                 <th class="w-50">
@@ -157,7 +157,7 @@
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
            <div class="table-responsive">
-            <table class="table text-center ">
+            <table class="table">
 
             <thead class="fs-5">
              <tr class="align-middle">
