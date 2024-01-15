@@ -15,6 +15,7 @@ $font-family-base: $font-family-sans-serif;
 $body-color: #1c1d36;
 $primary: #f89406;
 $secondary: #133978;
+$info: $gray-500;
 $green: #1b8912;
 $blue-400: #36a6e7;
 $indigo: #7b61ff;
@@ -27,7 +28,7 @@ $navbar-light-hover-color: $primary;
 $custom-colors: (
     "primary": $primary,
     "secondary": $secondary,
-    "info": $gray-500,
+
     "quartenary": $blue-400,
     "quinary": $indigo,
     "tertiary": $secondary,
