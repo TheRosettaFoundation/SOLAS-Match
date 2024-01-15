@@ -122,9 +122,15 @@
 
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-                            <div class="table-responsive">
-                            <table><tr>
-                            <td>
+                            <div>
+                           
+                               <div class="d-flex justify-content-between"> 
+                                    <div> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                    <div> {Localisation::getTranslation('task_view_assign_label')}</div>
+                               
+                                </div>
+                                </hr>
+
                                 <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -143,7 +149,7 @@
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form> 
-                            </td>
+                            
                             <td>
                                 <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     Remove a user from deny list for this task:<br />
@@ -154,8 +160,7 @@
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
                             </td>
-                            </tr></table>
-
+                           
                                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                                 </a>
@@ -244,7 +249,7 @@
                             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
                         </p>
                     {/if}
-                          FF   
+                         
                             {if ($alsoViewedTasksCount>0)}
                             <div class="row"></div>
                                 <div>
