@@ -4,9 +4,6 @@
 
     {assign var="type_id" value=$task->getTaskType()}
 
-                    
-                    
-
 
 
 <div class="container-fluid">
@@ -24,11 +21,10 @@
                 </div>
 
         </div>
-    
 
     </header>
 
-<section class="bg-dark-subtle my-4"> 
+<section class="bg-light-subtle my-4"> 
 
         <div class="container py-5 ">
 
