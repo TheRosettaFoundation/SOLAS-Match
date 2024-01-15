@@ -1,8 +1,8 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive ">
-<table class="p-3 rounded-3 bg-white ">
+<table class="p-2 rounded-3 bg-white ">
     <thead >
-       <tr class="fs-5 align-middle">
+       <tr class="fs-5 align-middle p-2">
 
                 <th>Project</th>
                 <th>Source Language</th>
