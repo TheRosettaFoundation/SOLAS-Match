@@ -244,7 +244,7 @@
                             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
                         </p>
                     {/if}
-                             
+                          FF   
                             {if ($alsoViewedTasksCount>0)}
                             <div class="row"></div>
                                 <div>
