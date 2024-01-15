@@ -122,7 +122,7 @@
 		    {include file="task/task.details.tpl"} 
 
         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-            <div class="well">
+            <div class="table-responsive">
             <table><tr>
               <td>
                 <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
