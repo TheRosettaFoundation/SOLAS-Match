@@ -130,15 +130,15 @@
                                
                                 </div>
                                 </hr>
-                               <div class="d-flex justify-content-between p-2">
+                               <div class="d-flex justify-content-between p-2 fs-6">
 
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-control" type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                    <input class="form-control w-50 " type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select w-50" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
@@ -153,7 +153,7 @@
 
                                     <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     Remove a user from deny list for this task:<br />
-                                    <input type="text" class="form-control" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                    <input type="text" class="form-control w-50" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                     <a class="btn btn-grayish btn-sm fs-6" onclick="$('#removeUserFromDenyListForm').submit();">
                                         <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
                                     </a>
