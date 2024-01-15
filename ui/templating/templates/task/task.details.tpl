@@ -1,7 +1,7 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive">
 <table class="table p-3 rounded-3 ">
-    <thead>
+    <thead class="p-3">
        <tr class="fs-5 align-middle">
 
                 <th>Project</th>
