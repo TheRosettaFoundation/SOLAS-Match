@@ -1,6 +1,6 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive">
-<table class="table table-striped">
+<table class="table ">
     <thead>
        <tr class="fs-5 align-middle">
 
@@ -75,7 +75,7 @@
 </div>
 
 <div class="table-responsive mt-4  ">
-    <table class="table striped bg-white ">
+    <table class="table ">
        <tr>
             <thead class="fs-5">
 
@@ -215,7 +215,7 @@
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
   <div class=" table table-responsive mt-4">
-    <table class="table table-striped ">
+    <table class="table  ">
         <thead>
          <tr class="fs-5 align-middle">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
@@ -328,7 +328,7 @@
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
     <div class="table-responsive mt-4">
-    <table class="table table-striped ">
+    <table class="table  ">
         <thead>
           <tr class="fs-5 align-middle">
           {if !empty($paid_status)}
