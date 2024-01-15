@@ -122,7 +122,7 @@
 
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-                            <div>
+                            <div class="bg-white">
                            
                                <div class="d-flex justify-content-between p-2 bg-white"> 
                                     <div> {Localisation::getTranslation('task_view_assign_label')}</div>
