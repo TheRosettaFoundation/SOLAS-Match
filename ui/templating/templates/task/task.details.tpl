@@ -1,6 +1,6 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive">
-<table class="table ">
+<table class="table p-3 rounded-3 ">
     <thead>
        <tr class="fs-5 align-middle">
 
@@ -76,7 +76,7 @@
 
 <div class="table-responsive mt-4  ">
     <table class="table ">
-       <tr>
+       <tr class="">
             <thead class="fs-5">
 
             <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
