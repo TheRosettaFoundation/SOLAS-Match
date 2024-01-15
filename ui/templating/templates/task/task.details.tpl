@@ -2,7 +2,7 @@
 <div class="table-responsive ">
 <table class=" rounded-3 bg-white px-3 ">
     <thead >
-       <tr class="fs-5 align-middle px-3 bg-info">
+       <div class="fs-5 align-middle  bg-info">
 
                 <th>Project</th>
                 <th>Source Language</th>
@@ -12,7 +12,7 @@
                 <th> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
             
-       </tr>
+       </div>
       
     </thead>
 
