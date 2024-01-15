@@ -135,17 +135,17 @@
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-control w-50 " type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                    <input class="form-control-sm w-50 " type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select w-50" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select-sm w-50" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
                                             {/foreach}
                                         </select>
                                     {/if}
-                                        <a class="btn btn-grayish btn-sm" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class="btn btn-grayish btn-sm mt-2" onclick="$('#assignTaskToUserForm').submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" ></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -153,7 +153,7 @@
 
                                     <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     Remove a user from deny list for this task:<br />
-                                    <input type="text" class="form-control" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                    <input type="text" class="form-control-sm" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                     <a class="btn btn-grayish btn-sm fs-6" onclick="$('#removeUserFromDenyListForm').submit();">
                                         <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
                                     </a>
