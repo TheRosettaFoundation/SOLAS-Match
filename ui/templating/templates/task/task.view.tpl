@@ -124,7 +124,7 @@
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div>
                            
-                               <div class="d-flex justify-content-between p-2"> 
+                               <div class="d-flex justify-content-between p-2 bg-white"> 
                                     <div> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     <div> {Localisation::getTranslation('task_view_assign_label')}</div>
                                
@@ -135,18 +135,18 @@
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-select" type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                    <input class="form-control" type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
+                                        <select class="form-select" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
                                             {/foreach}
-                                        </select><br />
+                                        </select>
                                     {/if}
                                         <a class="btn btn-grayish btn-sm" onclick="$('#assignTaskToUserForm').submit();">
-                                        <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
+                                         <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" ></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form> 
@@ -154,7 +154,7 @@
                                     <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     Remove a user from deny list for this task:<br />
                                     <input type="text" class="form-control" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                    <a class="btn btn-grayish btn-sm" onclick="$('#removeUserFromDenyListForm').submit();">
+                                    <a class="btn btn-grayish btn-sm fs-6" onclick="$('#removeUserFromDenyListForm').submit();">
                                         <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
                                     </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -166,8 +166,8 @@
 
     
                            
-                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
-                                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
+                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-sm btn-grayish fs-6">
+                                     <img src="{urlFor name='home'}ui/img/search-user.svg" alt="arrow" class="mx-1" ></i>&nbsp;Search for Translators
                                 </a>
                             </div>
                         {/if}
