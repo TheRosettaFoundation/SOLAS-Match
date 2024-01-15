@@ -1,8 +1,8 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="table-responsive ">
-<table class=" rounded-3 bg-white px-3 ">
+<table class="task_view_assign_label ">
     <thead >
-       <div class="fs-5 align-middle  bg-info">
+       <tr class="fs-5 align-middle  bg-info">
 
                 <th>Project</th>
                 <th>Source Language</th>
@@ -12,7 +12,7 @@
                 <th> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
             
-       </div>
+       </tr>
       
     </thead>
 
