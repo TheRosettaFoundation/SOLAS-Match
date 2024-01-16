@@ -11,7 +11,7 @@
 
      <div class="d-flex justify-content-between  flex-wrap ">
 
-                <div class="w-50 h-100 d-flex flex-column justify-content-end  bg-light-subtle">
+                <div class="w-50 h-100  bg-light-subtle">
 
                     <div > 
 
