@@ -7,9 +7,9 @@
         </p>
     {/if}
 
-  <section class="container  bg-grayish">
+  <section class="bg-grayish py-2">
 
-     <div class="d-flex justify-content-between  flex-wrap ">
+     <div class="d-flex justify-content-between flex-wrap ">
 
                 <div class="w-50 h-100  bg-light-subtle">
 
