@@ -7,11 +7,11 @@
         </p>
     {/if}
 
-  <section class=" container card py-2">
+  <section class=" container card ">
 
      <div class="d-flex">
 
-                <div class="flex-grow-1  bg-light-subtle">
+                <div class="flex-grow-1">
 
                     <div > 
 
