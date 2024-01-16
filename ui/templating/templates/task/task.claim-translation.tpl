@@ -13,7 +13,7 @@
 
                 <div class="w-50 d-flex flex-column justify-content-end py-2">
 
-                    <div> 
+                    <div > 
 
                          <h5>{Localisation::getTranslation('task_claim_translation_0')}</h5>
                    
