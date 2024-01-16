@@ -7,7 +7,7 @@
         </p>
     {/if}
 
-  <section class=" container bg-grayish py-2">
+  <section class=" container card py-2">
 
      <div class="d-flex">
 
