@@ -7,9 +7,9 @@
         </p>
     {/if}
 
-  <section class=" container card bg-grayish ">
+  <section class="container  bg-grayish">
 
-     <div class="d-flex   justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex justify-content-between align-items-center flex-wrap ">
 
                 <div class="w-50 d-flex flex-column justify-content-end  bg-light-subtle">
 
