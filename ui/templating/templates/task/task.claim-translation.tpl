@@ -9,7 +9,7 @@
 
   <section class=" container bg-grayish py-2">
 
-     <div class="flex ">
+     <div class="d-flex">
 
                 <div class="flex-grow-1  bg-light-subtle">
 
