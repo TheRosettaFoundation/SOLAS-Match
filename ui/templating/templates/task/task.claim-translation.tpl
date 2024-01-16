@@ -9,13 +9,13 @@
 
   <section class=" container card ">
 
-     <div class="d-flex">
+     <div class="d-flex justify-content-between">
 
-                <div class="flex-grow-1">
+                <div class="flex-grow-1 py-4">
 
                     <div > 
 
-                         <h5>{Localisation::getTranslation('task_claim_translation_0')}</h5>
+                         <h2>{Localisation::getTranslation('task_claim_translation_0')}</h2>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
