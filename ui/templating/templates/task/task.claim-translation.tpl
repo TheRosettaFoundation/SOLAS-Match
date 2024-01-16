@@ -9,9 +9,9 @@
 
   <section class="container  bg-grayish">
 
-     <div class="d-flex justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex justify-content-between  flex-wrap ">
 
-                <div class="w-50 d-flex flex-column justify-content-end  bg-light-subtle">
+                <div class="w-50 h-100 d-flex flex-column justify-content-end  bg-light-subtle">
 
                     <div > 
 
@@ -42,7 +42,7 @@
 
                 </div>
        
-                  <div class="bg-grayish  text-center">
+                  <div class="bg-grayish h-100 text-center">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 rounded  w-75" />
 
