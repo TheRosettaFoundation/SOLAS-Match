@@ -7,7 +7,7 @@
         </p>
     {/if}
 
-  <section class=" container bg-white mb-4 ">
+  <section class="container bg-white mb-4 ">
 
      <div class="d-flex justify-content-between">
 
@@ -51,5 +51,6 @@
             </div>   
 
     </section>
+    <br/>
 
  
