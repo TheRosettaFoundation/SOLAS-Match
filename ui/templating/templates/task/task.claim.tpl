@@ -23,8 +23,9 @@
 
 </header>
 
+<div class="bg-light-subtle">
 
-<div class="container-fluid bg-light-subtle py-4 mb-2">
+<div class="container-fluid  py-4 mb-2">
 
           <div class=" container  d-flex py-4  flex-wrap justify-content-between align-items-center">
 

@@ -52,4 +52,4 @@
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
     </section>
-    
+</div>
