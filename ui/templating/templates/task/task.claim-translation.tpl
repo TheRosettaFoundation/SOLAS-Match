@@ -7,11 +7,11 @@
         </p>
     {/if}
 
-  <section class="bg-grayish py-2">
+  <section class=" container bg-grayish py-2">
 
-     <div class="d-flex justify-content-between flex-wrap ">
+     <div class=" ">
 
-                <div class="w-50 h-100  bg-light-subtle">
+                <div class="w-50 h-100 d-inline-block bg-light-subtle">
 
                     <div > 
 
@@ -42,7 +42,7 @@
 
                 </div>
        
-                  <div class="bg-grayish h-100 text-center">
+                  <div class="bg-grayish h-100 text-center d-inline-block">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 rounded  w-75" />
 
