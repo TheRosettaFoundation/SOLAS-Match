@@ -48,7 +48,7 @@
 
                               {if $taskType == TaskTypeEnum::PROOFREADING }
            
-                                <form class=" fs-5" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                                <form class="d-flex" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                                 
                                     {if !empty($matecat_url)}
                                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
@@ -66,13 +66,20 @@
                                         <i class="icon-download icon-white"></i> Download Original File in its source language</a>
                                     {/if}
                       
-                                <p> 
-                                <button type="submit" class="btn btn-primary fs-6">
-                                   <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
-                                </button>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow ">
-                                    <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
-                                </a>
+                                
+                                    <div>
+                                        
+                                        <button type="submit" class="btn  btn-sm btn-secondary fs-6 fw-bold text-white me-2 py-1">
+                                            <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
+                                        </button>
+                                    </div>
+                                    
+                                    <div>
+
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-sm btn-secondary fs-6 fw-bold text-white me-2 py-1">
+                                            <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                        </a>
+                                    </div>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
 
@@ -96,6 +103,7 @@
 
                            
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
  
              {/if}
 
