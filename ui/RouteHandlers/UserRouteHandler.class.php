@@ -356,27 +356,45 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = 0;
         $topTasksCount = 0;
-        $topTasks = [];
+        $topTasks = [];³
 
-    
-        // Post or route handler may return '0', need an explicit zero
-       
-        if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
 
-        $filter_type   = NULL;
-        $filter_source = NULL;
-        $filter_target = NULL;
-       
-
-        try {
-            if ($user_id) {
-                $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $filter_type, $filter_source, $filter_target);
-                $topTasksCount = intval($userDao->getUserPageTasksCount($user_id, $filter_type, $filter_source, $filter_target));
+            if (isset($post['taskTypes'])) {
+                $selectedTaskType = $post['taskTypes'];
             }
-        } catch (\Exception $e) {
-            $topTasks = [];
-            $topTasksCount = 0;
+            if (isset($post['sourceLanguage'])) {
+                $selectedSourceLanguageCode = $post['sourceLanguage'];
+            }
         }
+ 
+       
+         // Post or route handler may return '0', need an explicit zero
+         $selectedTaskType = (int)$selectedTaskType;
+         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
+
+         $filter_type   = NULL;
+         $filter_source = NULL;
+         $filter_target = NULL;
+         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
+         if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
+         if ($selectedSourceLanguageCode !== 0) {
+             $codes = explode('_', $selectedSourceLanguageCode);
+             $filter_source = $codes[0];
+             $filter_target = $codes[1];
+         }
+ 
+         try {
+             if ($user_id) {
+                 $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $filter_type, $filter_source, $filter_target);
+                 $topTasksCount = intval($userDao->getUserPageTasksCount($user_id, $filter_type, $filter_source, $filter_target));
+             }
+         } catch (\Exception $e) {
+             $topTasks = [];
+             $topTasksCount = 0;
+         }
+ 
 
         $taskTags = array();
         $created_timestamps = array();
