@@ -42,7 +42,7 @@
 
                 </div>
        
-                  <div class="bg-grayish h-100 text-center d-inline-block">
+                  <div class="bg-grayish h-100 w-100">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="object-fit-fill" />
 

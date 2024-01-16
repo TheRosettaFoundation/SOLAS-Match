@@ -6,14 +6,16 @@
         </p>
     {/if}
 
-    <section class="py-5 container card">
+    <section class="container bg-white mb-4 ">
 
-     <div class="d-flex py-2 justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex justify-content-between flex-wrap ">
 
-                <div class=" w-50">
+                <div class="flex-grow-1 py-4">
 
-                        <h5>{Localisation::getTranslation('task_claim_proofreading_0')}</h5>
-                        <p "></p>
+                     <div>
+
+                                                     <h4>{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
+                        
                         <ol>
                             <li>{Localisation::getTranslation('task_claim_proofreading_2')}</li>
                             <li>
@@ -35,17 +37,24 @@
                             </li>
                             {/if}
                         </ol>
+                     
+                     
+                     </div>
 
-                </div>
+                       <div class="bg-grayish h-100 w-100">
 
-               <div class="bg-grayish p-4 text-center">
-
-                    <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 img-thumbnail rounded  w-75" />
+                            <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="class="object-fit-fill"" />
                
-               </div>                     
+                        </div>     
+
+              </div>
+
+                             
      
      </div>
         
     </section>
+
+    </div>
 
   
