@@ -89,7 +89,7 @@
                             
                             <div>
                                  <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-sm btn-light fs-6  fw-bold ">
-                                 {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
                             </div>
                            
