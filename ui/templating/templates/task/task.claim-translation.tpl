@@ -9,9 +9,9 @@
 
   <section class=" container bg-grayish py-2">
 
-     <div class=" ">
+     <div class="flex ">
 
-                <div class="w-50 h-100 d-inline-block bg-light-subtle">
+                <div class="flex-grow-1  bg-light-subtle">
 
                     <div > 
 
@@ -44,7 +44,7 @@
        
                   <div class="bg-grayish h-100 text-center d-inline-block">
 
-                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 rounded  w-75" />
+                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-fill" />
 
                   </div>
 
