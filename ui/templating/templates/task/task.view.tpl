@@ -33,7 +33,7 @@
                <div class="fw-bold primaryDark fs-3">
 
                 {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} 
+                {TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_translation_task')}</small>
                 {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}

@@ -16,7 +16,7 @@
                     <div> 
 
                          <h5>{Localisation::getTranslation('task_claim_translation_0')}</h5>
-                        <p style="margin-bottom:20px;"></p>
+                   
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
                             <li>{sprintf(Localisation::getTranslation('task_claim_translation_3'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>

@@ -31,7 +31,7 @@
                <div class="fw-bold">
 
                 {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                {TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('common_translation_task')}</small>
                 {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}
@@ -44,24 +44,23 @@
            
                                 <form class=" fs-5" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                                 
-                                  {if !empty($matecat_url)}
+                                    {if !empty($matecat_url)}
                                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                                         <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
                                     </a>
                                     {/if}
 
-
-                                {if !empty($allow_download)}
-                                <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                                    <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
-                                {/if}
+                                    {if !empty($allow_download)}
+                                    <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                                        <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
+                                    {/if}
                               
-                                {if !empty($memsource_task)}
-                                <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                                    <i class="icon-download icon-white"></i> Download Original File in its source language</a>
-                                {/if}
+                                    {if !empty($memsource_task)}
+                                    <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                                        <i class="icon-download icon-white"></i> Download Original File in its source language</a>
+                                    {/if}
                       
-                        <p> 
+                                <p> 
                                 <button type="submit" class="btn btn-primary fs-6">
                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
                                 </button>
@@ -69,40 +68,29 @@
                                     <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+                        </form>
 
              {elseif $taskType == TaskTypeEnum::TRANSLATION}
 
 
-                        <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
-                        {if !empty($matecat_url)}
-                        <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                            <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
-                        </a>
-                        {/if}
-
-                        {if !empty($allow_download)}
-                        <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                            <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
-                        {/if}
-                        {if !empty($memsource_task)}
-                        <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                            <i class="icon-download icon-white"></i> Download Original File in its source language</a>
-                        {/if}
-                        
-                        <p> 
-                                <button type="submit" class="btn btn-primary fs-6 fw-bold text-white" >
-                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will proofread this file
-                                </button>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn fs-6 shadow fw-bold ">
-                                    <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                        <form class="d-flex" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                            
+                            <div>
+                                 <button type="submit" class="btn btn-secondary btn-sm fs-6 fw-bold text-white" >
+                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will translate this file
+                                 </button>
+                            </div>
+                            
+                            <div>
+                                 <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-sm fs-6 shadow fw-bold ">
+                                <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
-                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                            </form>
+                            </div>
+                           
 
-
-        
-
+                           
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+ 
              {/if}
 
             </div>
