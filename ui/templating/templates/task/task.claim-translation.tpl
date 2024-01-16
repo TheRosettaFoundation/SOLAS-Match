@@ -9,9 +9,9 @@
 
   <section class=" container card bg-grayish ">
 
-     <div class="d-flex  py-3 justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex   justify-content-between align-items-center flex-wrap ">
 
-                <div class="w-50 p-4 d-flex flex-column justify-content-end py-2 bg-light-subtle">
+                <div class="w-50 d-flex flex-column justify-content-end  bg-light-subtle">
 
                     <div > 
 
