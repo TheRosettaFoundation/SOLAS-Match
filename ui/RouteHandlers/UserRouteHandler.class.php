@@ -356,7 +356,7 @@ class UserRouteHandler
         $itemsPerScrollPage = 6;
         $offset = 0;
         $topTasksCount = 0;
-        $topTasks = [];³
+        $topTasks = [];
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
