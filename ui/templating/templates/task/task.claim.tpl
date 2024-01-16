@@ -83,7 +83,7 @@
                             
                             <div>
                                  <button type="submit" class="btn  btn-sm btn-secondary fs-6 fw-bold text-white me-2" >
-                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will translate this file
+                                  Yes, I promise I will translate this file
                                  </button>
                             </div>
                             
