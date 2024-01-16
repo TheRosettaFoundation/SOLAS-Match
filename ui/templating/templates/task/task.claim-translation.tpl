@@ -15,7 +15,7 @@
 
                     <div > 
 
-                         <h2>{Localisation::getTranslation('task_claim_translation_0')}</h2>
+                         <h4>{Localisation::getTranslation('task_claim_translation_0')}</h3>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
