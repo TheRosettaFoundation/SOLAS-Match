@@ -7,9 +7,9 @@
         </p>
     {/if}
 
-  <section class="py-5 container card bg-grayish ">
+  <section class=" container card bg-grayish ">
 
-     <div class="d-flex  justify-content-between align-items-center flex-wrap ">
+     <div class="d-flex  py-3 justify-content-between align-items-center flex-wrap ">
 
                 <div class="w-50 d-flex flex-column justify-content-end py-2">
 
@@ -48,7 +48,7 @@
 
                   </div>
 
-                </div>   
+            </div>   
 
     </section>
 
