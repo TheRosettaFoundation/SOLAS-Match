@@ -10,7 +10,7 @@
   <section class="container  ">
 
 
-  <div>
+  <div class="bg-white">
 
      <div class="d-flex justify-content-between  flex-wrap">
 
