@@ -26,7 +26,7 @@
 
 <div class="container-fluid   mb-2">
 
-          <div class=" container d-flex py-4  flex-wrap justify-content-between align-items-center">
+          <div class="container d-flex py-4  flex-wrap justify-content-between align-items-center">
 
                <div class="fw-bold mb-sm-2">
 
@@ -61,15 +61,10 @@
                                         <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
                                     {/if}
                               
-                                    {if !empty($memsource_task)}
-                                    <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                                        <i class="icon-download icon-white"></i> Download Original File in its source language</a>
-                                    {/if}
-                      
-                                
-                                    <div>
+                                   
+                                    <div class="class="mb-sm-2"">
                                         
-                                        <button type="submit" class="btn  btn-secondary fs-6 fw-bold text-white me-2 py-1">
+                                        <button type="submit" class="btn  btn-primary fs-6 fw-bold text-white me-2 py-1">
                                             <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
                                         </button>
                                     </div>
@@ -77,7 +72,7 @@
                                     <div>
 
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn  btn-secondary fs-6 fw-bold text-white me-2 py-1">
-                                            <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                         </a>
                                     </div>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -88,7 +83,7 @@
 
                         <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                             
-                            <div>
+                            <div class="mb-sm-2">
                                  <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
                                     <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will translate this file
                                  </button>

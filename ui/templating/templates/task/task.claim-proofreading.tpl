@@ -7,14 +7,16 @@
     {/if}
 
     <section class="container  mb-4 ">
+    
+    <div class="bg-body">
 
      <div class="d-flex justify-content-between flex-wrap ">
 
-                <div class="d-flex flex-column justify-content-between flex-grow-1 py-4 bg-">
+                <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 >
 
                      <div class="flex-grow-1">
 
-                        <h3 class="mb-2 font-bold">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
+                        <h3 class="mb-4 fw-bold">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
                         
                         <ol>
                             <li>{Localisation::getTranslation('task_claim_proofreading_2')}</li>
@@ -39,27 +41,19 @@
                         </ol>
 
 
-                        {if !empty($matecat_url)}
-                            <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
-                            </a>
-                        {/if}
-
-                        {if !empty($allow_download)}
-                        <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                            <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
-                        {/if}
-                        {if !empty($memsource_task)}
-                        <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
-                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon"  /></i> Download Original File in its source language</a>
-                        {/if}
+                        <div>
+                            {if !empty($memsource_task)}
+                            <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                                <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon"  /></i> Download Original File in its source language</a>
+                            {/if}
+                        </div>
                      
                      
                      </div>
 
-                       <div class="bg-grayish h-100 text-center d-inline-block ">
+                       <div class="bg-grayish h-100 text-center d-inline-block ms-4 ">
 
-                            <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="class="object-fit-fill"" />
+                            <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="object-fit-cover" />
                
                         </div>     
 
@@ -68,7 +62,9 @@
                              
      
      </div>
-        
+
+    </div>
+
     </section>
 
     </div>
