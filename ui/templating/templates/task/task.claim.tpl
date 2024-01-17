@@ -26,9 +26,9 @@
 
 <div class="container-fluid   mb-2">
 
-          <div class=" container  d-flex py-4  flex-wrap justify-content-between align-items-center">
+          <div class=" container d-flex py-4  flex-wrap justify-content-between align-items-center">
 
-               <div class="fw-bold">
+               <div class="fw-bold mb-sm-2">
 
                 {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTML($task->getTitle())}  -
@@ -86,7 +86,7 @@
              {elseif $taskType == TaskTypeEnum::TRANSLATION}
 
 
-                        <form class="d-flex flex-wrap mt-sm-2" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                        <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                             
                             <div>
                                  <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
