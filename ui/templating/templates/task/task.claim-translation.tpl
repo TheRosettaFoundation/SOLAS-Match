@@ -9,9 +9,9 @@
 
   <section class=" container card ">
 
-     <div class="d-flex justify-content-between flex-wrap">
+     <div class="d-flex justify-content-between bg-grayish flex-wrap">
 
-                <div class="flex-grow-1 py-4">
+                <div class="flex-grow-1 py-4 bg-white">
 
                     <div class="d-flex flex-column justify-content-between" > 
 
