@@ -86,7 +86,7 @@
              {elseif $taskType == TaskTypeEnum::TRANSLATION}
 
 
-                        <form class="d-flex flex-wrap mt-md-2" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                        <form class="d-flex flex-wrap mt-sm-2" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                             
                             <div>
                                  <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
