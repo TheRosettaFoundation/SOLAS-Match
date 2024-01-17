@@ -45,7 +45,7 @@
 
                 </div>
        
-                  <div class="bg-grayish h-100 text-center d-inline-block p-sm-4">
+                  <div class="bg-grayish h-100 text-center d-inline-block mx-sm-auto">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-cover" />
 
