@@ -14,7 +14,7 @@
 
                      <div>
 
-                        <h4 class="mb-2">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
+                        <h3 class="mb-2 font-bold">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
                         
                         <ol>
                             <li>{Localisation::getTranslation('task_claim_proofreading_2')}</li>
