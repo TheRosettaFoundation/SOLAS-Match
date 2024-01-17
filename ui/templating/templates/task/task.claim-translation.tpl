@@ -10,7 +10,7 @@
   <section class="container  ">
 
 
-  <div class="bg-white">
+  <div class="bg-light-subtle">
 
      <div class="d-flex justify-content-between  flex-wrap">
 
@@ -18,7 +18,7 @@
 
                     <div class="flex-grow-1 " > 
 
-                         <h3 class="mb-4 font-bold">{Localisation::getTranslation('task_claim_translation_0')}</h3>
+                         <h3 class="mb-4 fw-bold">{Localisation::getTranslation('task_claim_translation_0')}</h3>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
