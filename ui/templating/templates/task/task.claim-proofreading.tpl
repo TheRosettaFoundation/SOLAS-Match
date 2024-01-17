@@ -10,9 +10,9 @@
 
      <div class="d-flex justify-content-between flex-wrap ">
 
-                <div class="d-flex flex-column justify-content-between flex-grow-1 py-4">
+                <div class="d-flex flex-column justify-content-between flex-grow-1 py-4 bg-">
 
-                     <div>
+                     <div class="flex-grow-1">
 
                         <h3 class="mb-2 font-bold">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
                         

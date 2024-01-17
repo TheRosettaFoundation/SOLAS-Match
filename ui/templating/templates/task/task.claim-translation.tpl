@@ -11,9 +11,9 @@
 
      <div class="d-flex justify-content-between bg-grayish flex-wrap">
 
-                <div class="flex-grow-1 py-4 bg-white">
+                <div class=" d-flex flex-column justify-content-between flex-grow-1 py-4 ">
 
-                    <div class="d-flex flex-column justify-content-between" > 
+                    <div class="flex-grow-1" > 
 
                          <h4 class="mb-2">{Localisation::getTranslation('task_claim_translation_0')}</h>
                    
