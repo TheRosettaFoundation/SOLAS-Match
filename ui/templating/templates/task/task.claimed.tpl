@@ -33,6 +33,7 @@
  
 
   <section class="container ">
+    <div>
 
     {if isset($flash['error'])}
        
@@ -44,11 +45,12 @@
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </p>
     {/if}
+    </div>
 
 
   <div class="bg-body">
 
-     <div class="d-flex justify-content-between  flex-wrap">
+     <div class="d-flex justify-content-between fs-6 flex-wrap">
 
                 <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
 
@@ -85,7 +87,6 @@
 
        </div>    
 
-       </div>
        </div>  
 
     </section>
