@@ -95,8 +95,8 @@
                             </div>
                             
                             <div>
-                                <button  class="btn btn-primary fs-6 fw-bold text-white me-2 " > <a href="{urlFor name="task-view" options="task_id.$task_id"}" >
-                                <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                <button  class="btn btn-light fs-6 fw-bold text-white me-2 " > <a href="{urlFor name="task-view" options="task_id.$task_id"}" >
+                                <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a> 
                                 </button>
                             </div>
