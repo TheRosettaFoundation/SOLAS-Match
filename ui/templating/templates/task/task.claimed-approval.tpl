@@ -6,13 +6,13 @@
         <div class="page-header">
             <h1>Proofreading and Approval task claimed <small>Please proofread it!</small></h1>
         </div>
-        
+
         <p class="alert alert-error">
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </p>
     {/if}
 
-  <section class="container  ">
+  <section class="container ">
 
 
   <div class="bg-body">
