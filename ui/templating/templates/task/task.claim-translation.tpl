@@ -34,7 +34,7 @@
                     <div>
                       
                       {if !empty($memsource_task)}
-                        <button class="btn btn-grayish fs-6 p-sm-4"> <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" /> Download original file in its source language </button>
+                        <button class="btn btn-grayish fs-6 "> <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" /> Download original file in its source language </button>
                       {/if}
                     
                     
@@ -45,7 +45,7 @@
 
                 </div>
        
-                  <div class="bg-grayish h-100 text-center d-inline-block">
+                  <div class="bg-grayish h-100 text-center d-inline-block ps-sm-4">
 
                         <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-cover" />
 
