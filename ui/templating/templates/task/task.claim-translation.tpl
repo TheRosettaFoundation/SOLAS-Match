@@ -7,7 +7,7 @@
         </p>
     {/if}
 
-  <section class=" container card mb-4 ">
+  <section class=" container card ">
 
      <div class="d-flex justify-content-between">
 
@@ -15,7 +15,7 @@
 
                     <div > 
 
-                         <h4>{Localisation::getTranslation('task_claim_translation_0')}</h3>
+                         <h4>{Localisation::getTranslation('task_claim_translation_0')}</h>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
@@ -44,12 +44,13 @@
        
                   <div class="bg-grayish h-100 text-center d-inline-block">
 
-                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="object-fit-fill" />
+                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-cover" />
 
                   </div>
 
             </div>   
 
-    </secti
+    </section>
+</div>
 
  
