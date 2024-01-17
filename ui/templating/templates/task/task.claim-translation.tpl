@@ -14,11 +14,11 @@
 
      <div class="d-flex justify-content-between  flex-wrap">
 
-                <div class=" d-flex flex-column justify-content-between flex-grow-1 py-4 ">
+                <div class=" d-flex flex-column justify-content-between flex-grow-1 p-4 ">
 
-                    <div class="flex-grow-1" > 
+                    <div class="flex-grow-1 " > 
 
-                         <h4 class="mb-2">{Localisation::getTranslation('task_claim_translation_0')}</h>
+                         <h3 class="mb-4 font-bold">{Localisation::getTranslation('task_claim_translation_0')}</h3>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
