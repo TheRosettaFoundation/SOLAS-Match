@@ -69,14 +69,14 @@
                                 
                                     <div>
                                         
-                                        <button type="submit" class="btn  btn-sm btn-secondary fs-6 fw-bold text-white me-2 py-1">
+                                        <button type="submit" class="btn  btn-secondary fs-6 fw-bold text-white me-2 py-1">
                                             <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}
                                         </button>
                                     </div>
                                     
                                     <div>
 
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-sm btn-secondary fs-6 fw-bold text-white me-2 py-1">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn  btn-secondary fs-6 fw-bold text-white me-2 py-1">
                                             <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                         </a>
                                     </div>
@@ -89,13 +89,13 @@
                         <form class="d-flex" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                             
                             <div>
-                                 <button type="submit" class="btn  btn-sm btn-secondary fs-6 fw-bold text-white me-2 py-1" >
+                                 <button type="submit" class="btn  btn-secondary fs-6 fw-bold text-white me-2 py-1" >
                                     <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will translate this file
                                  </button>
                             </div>
                             
                             <div>
-                                 <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-sm btn-light fs-6  fw-bold ">
+                                 <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-light fs-6  fw-bold ">
                                 <img src="{urlFor name='home'}ui/img/no.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                 </a>
                             </div>

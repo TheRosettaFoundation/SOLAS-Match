@@ -9,13 +9,13 @@
 
   <section class=" container card ">
 
-     <div class="d-flex justify-content-between">
+     <div class="d-flex justify-content-between flex-wrap">
 
                 <div class="flex-grow-1 py-4">
 
                     <div > 
 
-                         <h4>{Localisation::getTranslation('task_claim_translation_0')}</h>
+                         <h4 class="mb-2">{Localisation::getTranslation('task_claim_translation_0')}</h>
                    
                         <ul>
                             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
@@ -31,7 +31,7 @@
                     <div>
                       
                       {if !empty($memsource_task)}
-                        <button class="btn btn-grayish fs-6"> Download original file in its source language </button>
+                        <button class="btn btn-grayish fs-6"> <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" /> Download original file in its source language </button>
                       {/if}
                     
                     
