@@ -106,25 +106,27 @@
             {elseif $taskType == TaskTypeEnum::APPROVAL}
 
 
-            <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+            <div class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                             
-                            <div class="mb-sm-2">
-                                 <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
-                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will translate this file
-                                 </button>
-                            </div>
-                            
-                            <div>
-                                <a href="{urlFor name="task-view" options="task_id.$task_id"}"  class="btn btn-light fs-6 fw-bold  me-2 ">
-                                <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
-                                </a> 
-                              
-                            </div>
+                     {if isset($user)}
+                        <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn btn-primary">
+                        {else}
+                        
+                        <a href="{urlFor name="home"}" class="btn btn-primary">
+                        {/if}
+                        <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
+                        </a>
+
+                        {if $isSiteAdmin}
+                        <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn btn-light">
+                            <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
+                        </a>
+                        {/if}
                            
 
                            
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
+                          
+            </div>
 
  
             {/if}
