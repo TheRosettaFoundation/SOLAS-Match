@@ -274,6 +274,7 @@ class UserRouteHandler
 
         $taskImages = [];
         foreach ($topTasks as $topTask) {
+            $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
             $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
             $topTask->getTargetLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getTargetLocale()));
 
