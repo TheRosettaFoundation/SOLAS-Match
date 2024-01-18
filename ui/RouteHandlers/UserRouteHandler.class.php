@@ -274,6 +274,9 @@ class UserRouteHandler
 
         $taskImages = [];
         foreach ($topTasks as $topTask) {
+            $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
+            $topTask->getTargetLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getTargetLocale()));
+
             $taskId = $topTask->getId();
             $project = $projectDao->getProject($topTask->getProjectId());
             $org_id = $project->getOrganisationId();
