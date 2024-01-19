@@ -290,12 +290,11 @@ class UserRouteHandler
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function home(Request $request, Response $response, $args)
+    public function home(Request $request, Response $response)
     {
         global $app, $template_data;
-        $currentScrollPage          = 1;
-        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
-        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        $selectedTaskType           = 0;
+        $selectedSourceLanguageCode = 0;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
@@ -310,7 +309,6 @@ class UserRouteHandler
         $tagDao = new DAO\TagDao();
         $top_tags = $tagDao->getTopTags(10);
         $viewData['top_tags'] = $top_tags;
-
 
         if ($user_id != null) {
             $user_tags = $userDao->getUserTags($user_id);
@@ -335,8 +333,7 @@ class UserRouteHandler
                 $selectedSourceLanguageCode = $post['sourceLanguage'];
             }
         }
- 
-       
+
          // Post or route handler may return '0', need an explicit zero
          $selectedTaskType = (int)$selectedTaskType;
          if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
@@ -361,33 +358,17 @@ class UserRouteHandler
              $topTasks = [];
              $topTasksCount = 0;
          }
- 
 
-        $taskTags = array();
-        $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
         $taskImages = array();
-
        
         $pages = ceil($topTasksCount/6);
-
-        
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
-
-                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
-
-                $created = $topTask->getCreatedTime();
-                $selected_year   = (int)substr($created,  0, 4);
-                $selected_month  = (int)substr($created,  5, 2);
-                $selected_day    = (int)substr($created,  8, 2);
-                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-                $selected_minute = (int)substr($created, 14, 2);
-                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
                 $deadline = $topTask->getDeadline();
                 $selected_year   = (int)substr($deadline,  0, 4);
@@ -408,17 +389,14 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-        
 
-     
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" defer ></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
@@ -443,8 +421,6 @@ class UserRouteHandler
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
             'selectedTargetLanguageCode' => 0,
             'topTasks' => $topTasks,
-            'taskTags' => $taskTags,
-            'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,        
@@ -452,7 +428,6 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
-            'user_monthly_count' => $userDao->get_users_by_month(),
             'page_count' => $pages,
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
