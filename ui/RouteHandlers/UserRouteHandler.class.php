@@ -225,7 +225,6 @@ class UserRouteHandler
 
     public function homeIndex(Request $request, Response $response, $args)
     {
-        global $app, $template_data;
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : NULL;
@@ -234,21 +233,6 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
-        $taskDao = new DAO\TaskDao();
-
-        $viewData = array();
-        $viewData['current_page'] = 'home';
-
-        $tagDao = new DAO\TagDao();
-        $top_tags = $tagDao->getTopTags(10);
-        $viewData['top_tags'] = $top_tags;
-
-        if ($user_id != null) {
-            $user_tags = $userDao->getUserTags($user_id);
-            $viewData['user_tags'] = $user_tags;
-        }
-
-        $template_data = array_merge($template_data, $viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
         $itemsPerScrollPage = 6;
@@ -282,25 +266,6 @@ class UserRouteHandler
             $project = $projectDao->getProject($topTask->getProjectId());
             $org_id = $project->getOrganisationId();
             $org = $orgDao->getOrganisation($org_id);
-
-            $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
-
-            $created = $topTask->getCreatedTime();
-            $selected_year   = (int)substr($created,  0, 4);
-            $selected_month  = (int)substr($created,  5, 2);
-            $selected_day    = (int)substr($created,  8, 2);
-            $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($created, 14, 2);
-            $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-            $deadline = $topTask->getDeadline();
-            $selected_year   = (int)substr($deadline,  0, 4);
-            $selected_month  = (int)substr($deadline,  5, 2);
-            $selected_day    = (int)substr($deadline,  8, 2);
-            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($deadline, 14, 2);
-            $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
             $projectUri = "{$siteLocation}project/{$project->getId()}/view";
             $projectName = $project->getTitle();
             $orgUri = "{$siteLocation}org/{$org_id}/profile";
@@ -313,8 +278,6 @@ class UserRouteHandler
                 $orgUri,
                 htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
             );
-
-           
 
             $taskImages[$taskId] = '';
             if ($project->getImageApproved() && $project->getImageUploaded()) {
