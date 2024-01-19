@@ -424,7 +424,7 @@ class UserRouteHandler
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,        
-            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'itemsPerScrollPage' => min($itemsPerScrollPage, $topTasksCount),
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
