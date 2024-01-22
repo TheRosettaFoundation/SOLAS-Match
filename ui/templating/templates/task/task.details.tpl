@@ -13,7 +13,7 @@
                 <th> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
 
-                 <hr class=" "/>
+
        </tr>
       
       
@@ -21,7 +21,7 @@
     
    
 
-    <tbody class="fs-6 table-group-divider">
+    <tbody class="fs-6">
         <tr>
             <td>
                 {if isset($project)}
@@ -123,9 +123,9 @@
    </div>  
    </div> 
 
-    <div class="bg-body p-2 border-secondary rounded-3 mt-4">
+    <div class="bg-body p-2 border-secondary rounded-3 ">
     <div class="table-responsive">
-    <table class="table ">
+    <table class="table table-borderless ">
         <thead class="fs-5">        
             <tr>
                 <th class="w-50">
@@ -169,7 +169,7 @@
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
            <div class="bg-body p-2 border-secondary rounded-3"> 
            <div class="table-responsive">
-            <table class="table">
+            <table class="table table-borderless">
 
             <thead class="fs-5">
              <tr class="align-middle">
@@ -201,9 +201,9 @@
             {/if}
 
             {if !empty($required_qualification_for_details)}
-            <div class="bg-body p-2 border-secondary rounded-3 mt-4">
+            <div class="bg-body p-2 border-secondary rounded-3 ">
             <div class="table-responsive mt-4">
-            <table class="table">
+            <table class="table table-borderless">
               <thead class="fs-5">
                 <tr>
                     <th>{Localisation::getTranslation('required_qualification_level')}: </th>
