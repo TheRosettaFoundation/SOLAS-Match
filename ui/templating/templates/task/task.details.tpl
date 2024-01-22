@@ -185,11 +185,11 @@
             <tbody class="fs-6">
             <tr>
                 <td class="w-50">
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn btn-sm btn-grayish border  border-dark border-bottom-4  text-white " target="_blank"> Discuss </a>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Discuss </a>{/if}
                 </td>
               
                 <td class="w-50">
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish border  border-dark border-bottom-4  text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
                 </td>
 
             </tr>
@@ -254,12 +254,12 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 fs-6">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_unpublish')}
                         </a>
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 fs-6">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
@@ -271,7 +271,7 @@
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
-                    <a class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                    <a class="btn  btn-sm  btn-grayish  fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
@@ -372,7 +372,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
-                    <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="purchase_order_submit" value="Submit" />
+                    <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="purchase_order_submit" value="Submit" />
                     <input type="hidden" name="mark_purchase_order" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
@@ -381,17 +381,17 @@
                 {$paid_status['payment_status']}
                 {if $paid_status['payment_status'] == 'Unsettled'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to In-kind" />
                         <input type="hidden" name="mark_payment_status" value="In-kind" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to In-house" />
+                        <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to In-house" />
                         <input type="hidden" name="mark_payment_status" value="In-house" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to Waived" />
+                        <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to Waived" />
                         <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
@@ -408,11 +408,11 @@
                 {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                         {if $paid_status['payment_status'] == 'Pending documentation'}
-                            <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to Ready for payment" />
+                            <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to Ready for payment" />
                             <input type="hidden" name="mark_payment_status" value="Ready for payment" />
                         {/if}
                         {if $paid_status['payment_status'] == 'Ready for payment'}
-                            <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to Pending documentation" />
+                            <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to Pending documentation" />
                             <input type="hidden" name="mark_payment_status" value="Pending documentation" />
                         {/if}
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -420,12 +420,12 @@
                 {/if}
                 {if $paid_status['payment_status'] == 'Ready for payment'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                            <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to Settled" />
+                            <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to Settled" />
                             <input type="hidden" name="mark_payment_status" value="Settled" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="payment_status_submit" value="Change to Waived" />
+                        <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="payment_status_submit" value="Change to Waived" />
                         <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
@@ -434,7 +434,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
-                    <input type="submit" class="btn  btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="unit_rate_submit" value="Submit" />
+                    <input type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
@@ -459,7 +459,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                    <input type="submit" class="btn btn-sm  btn-grayish border  border-dark border-bottom-4 fs-6 mt-2" name="source_quantity_submit" value="Submit" />
+                    <input type="submit" class="btn btn-sm  btn-grayish  fs-6 mt-2" name="source_quantity_submit" value="Submit" />
                     <input type="hidden" name="mark_source_quantity" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
