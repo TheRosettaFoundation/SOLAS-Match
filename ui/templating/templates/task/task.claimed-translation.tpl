@@ -1,24 +1,15 @@
 {assign var=task_id value=$task->getId()}
 
-    <section>
-        <div> 
-        </div>
-        <div class="page-header">
-            <h1>{Localisation::getTranslation('task_claimed_translation_translation_task_claimed')} <small>{Localisation::getTranslation('task_claimed_translation_please_translate_it')}</small></h1>
-        </div>
-        <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
-        </div>
-    </section>
+ 
         
     <section>
-            <h1>{Localisation::getTranslation('common_what_happens_now')} <small>{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
+            <h4 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')} <small class="text-light-emphasis">{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
             <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
             <ol>
                 {if $matecat_url != ''}
                 <li>{if !empty($memsource_task)}Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
-                    <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                    <a href="{$matecat_url}" class="btn btn-grayish" target="_blank">
                     <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('common_can_you_open_file')}</li>
@@ -28,12 +19,12 @@
             </ol>
 
         {if isset($user)}
-            <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
+            <p class="bg-light-subtle">{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
     </section>
 
     <section>
-        <h3>When you have finished translating: Test</h3>
+        <h3>When you have finished translating: </h3>
         <p>
             {if empty($memsource_task)}
             <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
