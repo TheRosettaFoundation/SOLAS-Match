@@ -183,7 +183,7 @@
               </tr>  
             </thead>
             <tbody class="fs-6">
-            <tr class="d-flex">
+            <tr class="d-flex justify-content-between">
                 <td class="w-50 d-flex">
                    <div class="pb-1 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btn btn-sm btn-grayish" target="_blank"> Discuss </a>{/if}</div>
                 </td>
