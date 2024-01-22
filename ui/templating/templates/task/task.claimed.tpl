@@ -60,7 +60,7 @@
 
      <div class="d-flex justify-content-between fs-5  align-items-center">
 
-                <div class=" d-sm-block d-md-flex flex-column justify-content-between    ">
+                <div class=" d-block d-md-flex flex-column justify-content-between    ">
 
                     <div class="p-4  ">
 
