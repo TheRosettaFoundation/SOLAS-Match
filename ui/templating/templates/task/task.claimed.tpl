@@ -79,7 +79,7 @@
        
                 <div class="bg-grayish h-100 text-center d-inline-block ms-4 ">
 
-                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-cover" />
+                        <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
                 </div>
 
