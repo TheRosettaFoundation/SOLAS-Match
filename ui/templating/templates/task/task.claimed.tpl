@@ -60,7 +60,7 @@
 
      <div class="d-flex justify-content-between fs-5 flex-wrap align-items-center">
 
-                <div class="d-flex flex-column justify-content-between w-50  ">
+                <div class="d-flex flex-column justify-content-between   ">
 
                     <div class="p-4">
 
@@ -78,7 +78,7 @@
 
                 </div>
        
-                <div class="h-100 text-center d-inline-block ms-4 ">
+                <div class="h-100 text-center d-inline-block ms-4 flex-grow-1 ">
 
                         <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
