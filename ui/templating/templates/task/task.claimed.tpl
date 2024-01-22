@@ -78,7 +78,7 @@
 
                 </div>
        
-                <div class="bg-grayish h-100 text-center d-inline-block ms-4  py-4">
+                <div class="h-100 text-center d-inline-block ms-4 ">
 
                         <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
@@ -117,7 +117,7 @@
             </a>
             {/if}
         </p>
-    </section>
+    
 
             <div class=""py-4>
         
@@ -126,6 +126,7 @@
                 </dib>
 
             </div>
+    </section>
 
 </div>
 
