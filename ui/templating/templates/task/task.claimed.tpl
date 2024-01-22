@@ -58,7 +58,7 @@
 
   <div class="bg-body ">
 
-     <div class="d-flex justify-content-between fs-5 flex-wrap align-items-center">
+     <div class="d-flex justify-content-between fs-5  align-items-center">
 
                 <div class="d-md-flex flex-column justify-content-between    ">
 
