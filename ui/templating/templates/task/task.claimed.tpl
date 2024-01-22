@@ -19,7 +19,7 @@
 
     </div>
 
-      <section>
+      <section class="container">
 
         <div class="alert alert-success">
           <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
@@ -58,7 +58,7 @@
 
   <div class="bg-body ">
 
-     <div class="d-flex justify-content-between fs-6 flex-wrap">
+     <div class="d-flex justify-content-between fs-6 flex-wrap align-items-center">
 
                 <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
 
@@ -74,14 +74,7 @@
                              
                     </div>
 
-                    <div>
-                  
 
-                        <button class="btn btn-grayish fs-6 ">  <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" />  ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
-                        {sprintf('Download the <a href="%s">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
-                         </button>
-  
-                  </div>
 
                 </div>
        
@@ -125,6 +118,14 @@
             {/if}
         </p>
     </section>
+
+            <div class=""py-4>
+        
+                < div>    ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+                {sprintf('Download the <a href="%s" class="text-primary  fw-bold">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
+                </dib>
+
+            </div>
 
 </div>
 
