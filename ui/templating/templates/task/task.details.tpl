@@ -82,7 +82,7 @@
 
 <div class="bg-body p-2 border-secondary rounded-3 mt-4">
 <div class="table-responsive mt-4  ">
-    <table class="table ">
+    <table class="table table-borderless ">
        <tr class="">
             <thead class="fs-5">
 
