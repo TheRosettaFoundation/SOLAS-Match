@@ -1,7 +1,7 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="bg-body p-2 border-secondary rounded-3">
 <div class="table-responsive ">
-<table class="table">
+<table class="table table-borderless">
     <thead >
        <tr class="fs-5 align-middle  ">
 
@@ -16,6 +16,7 @@
        </tr>
       
     </thead>
+    <hr>
 
     <tbody class="fs-6">
         <tr>
