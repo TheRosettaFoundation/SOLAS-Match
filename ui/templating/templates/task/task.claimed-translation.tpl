@@ -24,7 +24,7 @@
     </section>
   
   </div>
-    <div class="container bg-body py-2">
+    
     <section>
         <h3>When you have finished translating: </h3>
         <p>
@@ -64,4 +64,6 @@
         </small>
     </p>
     {/if}
-    </div>
+
+    <div class="bg-body py-2">  container  </div>
+ 
