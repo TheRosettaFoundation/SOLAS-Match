@@ -1,4 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
+<div class="bg-body p-2 border-secondary rounded-2">
 <div class="table-responsive ">
 <table class="table">
     <thead >
@@ -73,6 +74,8 @@
     </tbody>
 </table>
 </div>
+</div>
+
 
 <div class="table-responsive mt-4  ">
     <table class="table ">
