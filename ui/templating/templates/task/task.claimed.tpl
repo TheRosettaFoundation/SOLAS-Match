@@ -107,7 +107,7 @@
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
             {else}
-            <a href="{urlFor name="home"}" class="btn">
+            <a href="{urlFor name="home"}" class="btn btn-gray text-dark fw-bold">
             {/if}
                 <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1" />  {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
             </a>
