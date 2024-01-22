@@ -128,7 +128,8 @@
                                 </div>
                                 
                                <div class="d-flex justify-content-between p-2 fs-6">
-
+                                 <div>
+                                    <div> {Localisation::getTranslation('task_view_assign_label')}</div>
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -148,15 +149,20 @@
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form> 
+                                    </div>
+                                    
+                                    <div>
+                                        <div> {Localisation::getTranslation('task_view_assign_label')}</div>
 
-                                    <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-                                    Remove a user from deny list for this task:<br />
-                                    <input type="text" class="form-control-sm fs-6" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                    <a class="btn btn-grayish btn-sm fs-6 mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
-                                        <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
-                                    </a>
-                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                </form>
+                                        <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                                        Remove a user from deny list for this task:<br />
+                                        <input type="text" class="form-control-sm fs-6" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                        <a class="btn btn-grayish btn-sm fs-6 mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
+                                            <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
+                                        </a>
+                                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                    </div>
 
 
                                
