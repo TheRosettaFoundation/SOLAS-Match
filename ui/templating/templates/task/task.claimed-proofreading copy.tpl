@@ -10,7 +10,7 @@
     </section>
 
     <section>
-        <h2 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')}</h2>
+        <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
         {if $translations_not_all_complete}
         <p>This is what you need to do:</p>
         <ol>
@@ -38,8 +38,44 @@
         </ol>
         {/if}
         {if isset($user)}
-            <div class=" btn btn btn-gray"> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon" class="mx-1" /> {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
+            <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
     </section>
 
-   
+    <section>
+        <h3>When you have finished revising:</h3>
+        <p>
+            {if empty($memsource_task)}
+            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
+                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_proofreading_upload_proofread_task')}
+            </a>
+            {/if}
+            {if isset($user)}
+            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
+            {else}
+            <a href="{urlFor name="home"}" class="btn">
+            {/if}
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
+            </a>
+            {if $isSiteAdmin}
+            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
+                <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
+            </a>
+            {/if}
+        </p>
+    </section>
+
+    {if !empty($allow_download)}
+    <p>
+        <small>({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+            {sprintf(Localisation::getTranslation('common_download_the_file'), {urlFor name="download-task" options="task_id.$task_id"})})
+        </small>
+    </p>
+    {/if}
+    {if !empty($memsource_task)}
+    <p>
+        <small>({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+            {sprintf('Download the <a href="%s">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
+        </small>
+    </p>
+    {/if}
