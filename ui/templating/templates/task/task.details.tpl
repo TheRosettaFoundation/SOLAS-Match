@@ -1,5 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
-<div class="bg-body p-2 border-secondary rounded-3">
+<div class="bg-body p-2 border-secondary rounded-3 position-relative">
 <div class="table-responsive ">
 <table class="table table-borderless">
     <thead >
@@ -16,6 +16,7 @@
        </tr>
       
     </thead>
+    <hr class="position-relative w-100">
    
 
     <tbody class="fs-6 table-group-divider">
