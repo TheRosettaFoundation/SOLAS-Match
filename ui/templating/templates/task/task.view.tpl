@@ -120,11 +120,18 @@
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div class="bg-white">
+                              <div class="d-flex justify-content-between align-items-center">
+
+                                   <div class="fs-5 fw-bold"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                      <div class="fs-5 fw-bold"> Remove a user from deny list for this task:</div>
+
+                    
+                              </div>
                            
                         
                                <div class="d-flex justify-content-between p-2 fs-6">
                                  <div>
-                                    <div class="fs-5 fw-bold"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                    <div class="fs-5 fw-bold mb-4"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -147,7 +154,7 @@
                                     </div>
                                     
                                     <div>
-                                        <div class="fs-5 fw-bold"> Remove a user from deny list for this task:</div>
+                                        <div class="fs-5 fw-bold mb-4"> Remove a user from deny list for this task:</div>
 
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                         Remove a user from deny list for this task:<br />
