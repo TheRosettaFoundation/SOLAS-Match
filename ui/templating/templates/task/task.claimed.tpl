@@ -77,7 +77,7 @@
 
                 </div>
        
-                <div class="bg-grayish h-100 text-center d-inline-block ms-4 ">
+                <div class="bg-grayish h-100 text-center d-inline-block ms-4  py-4">
 
                         <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
