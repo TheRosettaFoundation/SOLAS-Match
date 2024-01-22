@@ -192,10 +192,12 @@
             </tbody>
           </table>
           </div>
+          </div>
          
             {/if}
 
             {if !empty($required_qualification_for_details)}
+            <div class="bg-body p-2 border-secondary rounded-3 mt-4">
             <div class="table-responsive mt-4">
             <table class="table">
               <thead class="fs-5">
