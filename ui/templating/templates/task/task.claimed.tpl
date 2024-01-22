@@ -52,7 +52,7 @@
 
      <div class="d-flex justify-content-between fs-6 flex-wrap">
 
-                <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
+                <div class="d-flex flex-column justify-content-between  flex-grow-1 p-4 ">
 
                     <div class="flex-grow-1">
 
@@ -66,7 +66,7 @@
                              
                     </div>
 
-                    <div>
+                    <div class="align-self-center">
                   
 
                         <button class="btn btn-grayish fs-6 ">  <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" />  ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
