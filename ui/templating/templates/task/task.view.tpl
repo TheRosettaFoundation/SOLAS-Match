@@ -14,7 +14,7 @@
 
                 <div class="py-2" >
 
-                    <a  class="text-decoration-none text-secondary-subtle"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" /<img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
+                    <a  class="text-decoration-none link-underline-secondary link-underline-opacity-0"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" /<img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
         
                     <a   href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
 
