@@ -17,19 +17,6 @@
                 <a class="text-decoration-none text-primaryDark fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
             </div>
 
-
-           <section>
-     
-        <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
-        </div>
-
-</section>
- 
-
-
-
-
     </div>
 
 
@@ -37,8 +24,6 @@
    
 
 </header>
-
-
 
 <div class="bg-light-subtle py-4">
 
@@ -78,8 +63,6 @@
                             {/if}
                         {/foreach}
 
-                        
-
                              
                     </div>
 
@@ -94,9 +77,9 @@
 
                 </div>
        
-                <div class=" h-100 text-center d-inline-block ms-4 ">
+                <div class="bg-grayish h-100 text-center d-inline-block ms-4 ">
 
-                        <img src="{urlFor name='home'}ui/img/languages.svg" alt="languages" class="mx-1 object-fit-cover" />
+                        <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="mx-1 object-fit-cover" />
 
                 </div>
 
