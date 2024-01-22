@@ -184,11 +184,11 @@
             </thead>
             <tbody class="fs-6">
             <tr>
-                <td class="w-50">
-                   <div class="border-bottom-4 border-primary"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btn btn-sm btn-grayish" target="_blank"> Discuss </a>{/if}</div>
+                <td class="w-50 d-flex">
+                   <div class="pb-1 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btn btn-sm btn-grayish" target="_blank"> Discuss </a>{/if}</div>
                 </td>
               
-                <td class="w-50">
+                <td class="w-50 ">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
                 </td>
 
