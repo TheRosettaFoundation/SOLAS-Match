@@ -13,7 +13,7 @@
         <div class="container py-2">
 
                 <div class="py-2" >
-                
+
                     <a  class="text-decoration-none text-dark-subtle"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" /<img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >>
         
                     <a   href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" class="mx-1" >
@@ -121,12 +121,12 @@
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div class="bg-white">
                            
-                               <div class="d-flex justify-content-between p-2 bg-white"> 
+                               <div class="d-flex justify-content-between p-2 bg-white align-items-center"> 
                                     <div> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     <div> {Localisation::getTranslation('task_view_assign_label')}</div>
                                
                                 </div>
-                                </hr>
+                                
                                <div class="d-flex justify-content-between p-2 fs-6">
 
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
