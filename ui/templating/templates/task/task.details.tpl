@@ -12,9 +12,10 @@
                 <th> Task Deadline</th>
                 <th> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
-            
+
+                 <hr class="position-relative w-100"/>
        </tr>
-       <hr class="position-relative w-100"/>
+      
       
     </thead>
     
