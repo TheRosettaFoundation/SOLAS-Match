@@ -19,10 +19,12 @@
             </ol>
 
         {if isset($user)}
-            <p class="bg-light-subtle">{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
+            <div class=" btn btn btn-light">{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
     </section>
-
+  
+  </div>
+    <div class="container bg-body py-2">
     <section>
         <h3>When you have finished translating: </h3>
         <p>
