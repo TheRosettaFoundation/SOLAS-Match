@@ -3,7 +3,7 @@
 <div class="table-responsive ">
 <table class="table table-borderless">
     <thead >
-       <tr class="fs-5 align-middle  ">
+       <tr class="fs-5 align-middle position-relative  ">
 
                 <th>Project</th>
                 <th>Source Language</th>
@@ -14,9 +14,10 @@
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
             
        </tr>
+       <hr class="position-relative w-100"/>
       
     </thead>
-    <hr class="position-relative w-100">
+    
    
 
     <tbody class="fs-6 table-group-divider">
