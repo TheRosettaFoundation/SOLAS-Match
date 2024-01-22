@@ -66,7 +66,7 @@
                              
                     </div>
 
-                    <div class="align-self-center">
+                    <div >
                   
 
                         <button class="btn btn-grayish fs-6 ">  <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon" class="me-1" />  ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
@@ -77,7 +77,7 @@
 
                 </div>
        
-                <div class="bg-grayish h-100 text-center d-inline-block ms-4  py-4">
+                <div class="bg-grayish h-100 text-center d-inline-block ms-4 class="align-self-center"">
 
                         <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
