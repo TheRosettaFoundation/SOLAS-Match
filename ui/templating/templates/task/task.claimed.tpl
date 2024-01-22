@@ -60,9 +60,9 @@
 
      <div class="d-flex justify-content-between fs-6 flex-wrap align-items-center">
 
-                <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
+                <div class="d-flex flex-column justify-content-between  p-4 ">
 
-                    <div class="w-50">
+                    <div class="">
 
                         {assign var="taskTypeId" value=$task->getTaskType()}
                         {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
