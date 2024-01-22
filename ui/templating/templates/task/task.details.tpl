@@ -347,7 +347,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if empty($paid_status)}
                     <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-grayish rounded-2 pb-1">
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-gray fs-6 text-dark">
                              <img src="{urlFor name='home'}ui/img/check.svg" alt="ok_icon" /> Make Paid
@@ -357,7 +357,7 @@
                         
                     {else}
                     <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-grayish rounded-2 pb-1">
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" /> Make Unpaid
