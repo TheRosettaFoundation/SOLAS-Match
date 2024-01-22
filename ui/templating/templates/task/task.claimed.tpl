@@ -58,11 +58,11 @@
 
   <div class="bg-body ">
 
-     <div class="d-flex justify-content-between fs-5  align-items-center">
+     <div class="d-block d-md-flex justify-content-between fs-5  align-items-center">
 
-                <div class=" d-block d-md-flex flex-column justify-content-between    ">
+                <div class="d-xs-block d-md-flex flex-column justify-content-between    ">
 
-                    <div class="p-4  ">
+                    <div class="p-4 ">
 
                         {assign var="taskTypeId" value=$task->getTaskType()}
                         {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
