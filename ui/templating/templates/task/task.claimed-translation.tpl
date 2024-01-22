@@ -22,9 +22,8 @@
             <div class=" btn btn btn-light">{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
     </section>
-  
-  </div>
-    
+
+
     <section>
         <h3>When you have finished translating: </h3>
         <p>
@@ -64,6 +63,3 @@
         </small>
     </p>
     {/if}
-
-    <div class="bg-body py-2">  container  </div>
- 
