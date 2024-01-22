@@ -24,7 +24,7 @@
 
     </header>
 
-<section class="bg-light-subtle my-4"> 
+<section class="bg-light-subtle my-4 py-2"> 
 
         <div class="container py-5 ">
 
