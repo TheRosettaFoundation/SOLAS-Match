@@ -1,13 +1,6 @@
 {assign var=task_id value=$task->getId()}
 
-    <section>
-        <div class="page-header">
-            <h1>{Localisation::getTranslation('task_claimed_proofreading_proofreading_task_claimed')} <small>{Localisation::getTranslation('task_claimed_proofreading_please_proofread_it')}</small></h1>
-        </div>
-        <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
-        </div>
-    </section>
+   
 
     <section>
         <h2 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')}</h2>
