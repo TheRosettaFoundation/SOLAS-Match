@@ -94,7 +94,7 @@
 
 
 
-<div class="bg-light-subtle py-4 px-2">
+<div class="bg-light-subtle py-4 ps-4">
 
      <section class="container">
         <h3 class="fw-bold">When you have finished translating: </h3>
