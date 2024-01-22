@@ -129,7 +129,7 @@
                               </div>
                            
                         
-                               <div class="d-flex justify-content-between p-4 fs-6">
+                               <div class="d-flex justify-content-between p-2 fs-6">
                                  <div>
                                     <div class="fs-5 fw-bold mb-4"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                   <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
