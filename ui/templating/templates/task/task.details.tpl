@@ -16,14 +16,14 @@
        </tr>
       
     </thead>
-    <hr>
+   
 
-    <tbody class="fs-6">
+    <tbody class="fs-6 table-group-divider">
         <tr>
             <td>
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
-                    <a href="{urlFor name="project-view" class="text-primary" options="project_id.$projectId"}">
+                    <a href="{urlFor name="project-view" class="link-primary" options="project_id.$projectId"}">
                     {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                     </a>
                 {/if}
