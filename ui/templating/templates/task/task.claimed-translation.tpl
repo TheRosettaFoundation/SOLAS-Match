@@ -28,7 +28,7 @@
     </section>
 
        {if isset($user)}
-            <div class=" btn btn btn-gray"> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon"  />  {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
+            <div class=""> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon"  />  {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
 
 
