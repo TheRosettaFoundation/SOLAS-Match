@@ -19,6 +19,14 @@
 
     </div>
 
+      <section>
+
+        <div class="alert alert-success">
+          <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+            <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+        </div>
+    </section>
+
 
   
    

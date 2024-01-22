@@ -19,7 +19,7 @@
             </ol>
 
         {if isset($user)}
-            <div class=" btn btn btn-light">{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
+            <div class=" btn btn btn-light"> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon" class="mx-1 " />  {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
     </section>
 
