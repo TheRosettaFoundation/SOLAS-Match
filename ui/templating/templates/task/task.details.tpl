@@ -257,7 +257,7 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-2">
+                        <div class="bg-dark rounded-2 pb-1">
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_unpublish')}
                         </a>
