@@ -10,7 +10,7 @@
         </div>
     </section>
         
-    <section>
+    <section class="fs-5">
             <h1>{Localisation::getTranslation('common_what_happens_now')} <small>{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
             <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
             <ol>

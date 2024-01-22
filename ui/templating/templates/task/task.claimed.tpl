@@ -94,7 +94,7 @@
 
 
 
-<div class="bg-light-subtle py-4">
+<div class="bg-light-subtle py-4 px-2">
 
      <section class="container">
         <h3 class="fw-bold">When you have finished translating: </h3>
@@ -109,11 +109,11 @@
             {else}
             <a href="{urlFor name="home"}" class="btn">
             {/if}
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
+                <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1" />  {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
             </a>
             {if $isSiteAdmin}
-            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
+            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn btn-gray text-dark fw-bold">
+               <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1" /> Just bring me back to the project page.
             </a>
             {/if}
         </p>
