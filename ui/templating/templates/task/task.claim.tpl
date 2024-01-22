@@ -166,33 +166,7 @@
  </div>
 
 
- <div class="container bg-body">
-
-    <section>
-        <h3>When you have finished translating: </h3>
-        <p>
-            {if empty($memsource_task)}
-            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
-            </a>
-            {/if}
-            {if isset($user)}
-            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
-            {else}
-            <a href="{urlFor name="home"}" class="btn">
-            {/if}
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
-            </a>
-            {if $isSiteAdmin}
-            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
-            </a>
-            {/if}
-        </p>
-    </section>
  
- 
- </div>
 
  
  </main>
