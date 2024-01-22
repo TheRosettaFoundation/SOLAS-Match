@@ -203,7 +203,7 @@ h3{
                 <div class="carousel-item active">
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
-                    <div class="top-left">
+                    <div class="top-left py-2 mb-2">
                         <h3 >We provide growth opportunities for<br/> our community members</h3>
                         <br/>
                         <h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
