@@ -1,5 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
-<div class="bg-body p-2 border-secondary rounded-3 position-relative">
+<div class="bg-body p-2 border-secondary rounded-3 ">
 <div class="table-responsive ">
 <table class="table table-borderless">
     <thead >
@@ -13,7 +13,7 @@
                 <th> Word Count</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
 
-                 <hr class="position-relative w-100"/>
+                 <hr class=" "/>
        </tr>
       
       
