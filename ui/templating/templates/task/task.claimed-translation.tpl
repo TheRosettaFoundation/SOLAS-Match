@@ -33,7 +33,7 @@
     </section>
 
     <section>
-        <h3>When you have finished translating:</h3>
+        <h3>When you have finished translating: Test</h3>
         <p>
             {if empty($memsource_task)}
             <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
