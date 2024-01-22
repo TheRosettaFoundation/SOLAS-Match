@@ -76,7 +76,7 @@
 </div>
 </div>
 
-<div class="bg-body p-2 border-secondary rounded-3">
+<div class="bg-body p-2 border-secondary rounded-3 mt-4">
 <div class="table-responsive mt-4  ">
     <table class="table ">
        <tr class="">
@@ -119,7 +119,7 @@
    </div>  
    </div> 
 
-    <div class="bg-body p-2 border-secondary rounded-3">
+    <div class="bg-body p-2 border-secondary rounded-3 mt-4">
     <div class="table-responsive">
     <table class="table ">
         <thead class="fs-5">        
@@ -223,7 +223,7 @@
 
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
-<div class="bg-body p-2 border-secondary rounded-3">
+<div class="bg-body p-2 border-secondary rounded-3 mt-4">
   <div class=" table table-responsive mt-4">
     <table class="table  ">
         <thead>
@@ -338,7 +338,7 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-<div class="bg-body p-2 border-secondary rounded-3">
+<div class="bg-body p-2 border-secondary rounded-3 mt-4">
     <div class="table-responsive mt-4">
     <table class="table  ">
         <thead>
