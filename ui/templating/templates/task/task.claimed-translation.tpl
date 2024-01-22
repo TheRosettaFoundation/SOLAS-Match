@@ -7,7 +7,7 @@
             <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
             <ol>
                 {if $matecat_url != ''}
-                <li>{if !empty($memsource_task)}Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
+                <li>{if !empty($memsource_task)}Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" class="fw-bold text-primary" target="_blank">Translator’s Toolkit</a> before working on this task.{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
                     <a href="{$matecat_url}" class="btn btn-grayish" target="_blank">
                     <img src="{urlFor name='home'}ui/img/lang.svg" alt="phrase-lang-icon" class="mx-1 " />  {if !empty($memsource_task)}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}</a></li>

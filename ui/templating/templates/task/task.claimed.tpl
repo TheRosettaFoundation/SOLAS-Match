@@ -97,7 +97,7 @@
 <div class="bg-light-subtle py-4">
 
      <section class="container">
-        <h3>When you have finished translating: </h3>
+        <h3 class="fw-bold">When you have finished translating: </h3>
         <p>
             {if empty($memsource_task)}
             <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
@@ -119,9 +119,9 @@
         </p>
     
 
-            <div class=""py-4>
+            <div class="py-2 fs-6">
         
-                <div>    ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+                <div class="">    ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
                 {sprintf('Download the <a href="%s" class="text-primary  fw-bold">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
                 </div>
 
