@@ -261,12 +261,20 @@
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_unpublish')}
                         </a>
-                        <div>
+                        </div>
+                        </div>
+
                     {else}
+                        <div class="bg-dark rounded-2 pb-1">
+                        
                         <input type="hidden" name="published" value="1" />
+                        <div class="d-flex">
+                        <div class="bg-dark rounded-2 pb-1">
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_publish')}
                         </a>
+                        </div>
+                        </div>
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
@@ -276,12 +284,16 @@
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
+                    <div class="d-flex">
+                        <div class="bg-dark rounded-2 pb-1">
                     <a class="btn  btn-sm  btn-grayish  fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
                     </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </div>
+                    </div>
                 </form>
             </td>
             {/if}
