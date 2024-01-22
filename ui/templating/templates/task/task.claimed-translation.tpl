@@ -24,12 +24,10 @@
                     <a href="{$matecat_url}" class="btn btn-grayish" target="_blank">
                     <img src="{urlFor name='home'}ui/img/lang.svg" alt="phrase-lang-icon" class="mx-1" />  {if !empty($memsource_task)}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}</a></div>    
         {/if}
-     
-    </section>
-
-       {if isset($user)}
-            <div class=""> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon"  />  {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
+        {if isset($user)}
+            <div class=" btn btn-gray"> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon"  />  {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
+    </section>
 
 
    
