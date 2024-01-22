@@ -93,8 +93,7 @@
 
 
 
-
-<div class="container  py-4">
+    <div class="container  py-4">
 
      <section>
         <h3>When you have finished translating: </h3>
@@ -121,25 +120,10 @@
 
 </div>
 
-
-     {if !empty($allow_download)}
-    <p>
-        <small>
-            ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
-            {sprintf(Localisation::getTranslation('common_download_the_file'), {urlFor name="download-task" options="task_id.$task_id"})})
-        </small>
-    </p>
-    {/if}
-    {if !empty($memsource_task)}
-    <p>
-        <small>
-            ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
-            {sprintf('Download the <a href="%s">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
-        </small>
-    </p>
-    {/if}
-
 </div>
+
+
+
 
 
 
