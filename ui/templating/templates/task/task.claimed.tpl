@@ -62,7 +62,7 @@
 
                 <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
 
-                    <div class="flex-grow-1">
+                    <div class="w-50">
 
                         {assign var="taskTypeId" value=$task->getTaskType()}
                         {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
