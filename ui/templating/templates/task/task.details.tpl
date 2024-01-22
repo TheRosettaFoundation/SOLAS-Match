@@ -185,7 +185,7 @@
             <tbody class="fs-6">
             <tr>
                 <td class="w-50">
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="bg-grayish px-2 py-1 border border-bottom-4 border-dark text-white " target="_blank"> Discuss </a>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="bg-grayish px-4 py-4  border-bottom-4 border-dark text-white " target="_blank"> Discuss </a>{/if}
                 </td>
               
                 <td class="w-50">
