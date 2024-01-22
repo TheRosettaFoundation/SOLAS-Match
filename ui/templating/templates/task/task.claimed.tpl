@@ -60,7 +60,7 @@
 
      <div class="d-flex justify-content-between fs-6 flex-wrap align-items-center">
 
-                <div class="d-flex flex-column justify-content-between  p-4 ">
+                <div class="d-flex flex-column justify-content-between  ">
 
                     <div class="">
 
@@ -80,7 +80,7 @@
        
                 <div class="h-100 text-center d-inline-block ms-4 ">
 
-                        <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
+                        <img src="{urlFor name='home'}ui/img/languages.svg" alt="languages images" class="mx-1 object-fit-cover" />
 
                 </div>
 
