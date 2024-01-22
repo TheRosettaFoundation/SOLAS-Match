@@ -17,6 +17,19 @@
                 <a class="text-decoration-none text-primaryDark fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
             </div>
 
+
+            <section>
+     
+                <div class="alert alert-success">
+                    <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+                </div>
+
+            </section>
+ 
+
+
+
+
     </div>
 
 
@@ -26,16 +39,6 @@
 </header>
 
 
-<section>
-        <div> 
-        </div>
-        <div class="page-header">
-            <h1>{Localisation::getTranslation('task_claimed_translation_translation_task_claimed')} <small>{Localisation::getTranslation('task_claimed_translation_please_translate_it')}</small></h1>
-        </div>
-        <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
-        </div>
-</section>
 
 <div class="bg-light-subtle py-4">
 
