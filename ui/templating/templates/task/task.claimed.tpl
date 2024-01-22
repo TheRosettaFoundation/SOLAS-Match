@@ -25,6 +25,18 @@
 
 </header>
 
+
+<section>
+        <div> 
+        </div>
+        <div class="page-header">
+            <h1>{Localisation::getTranslation('task_claimed_translation_translation_task_claimed')} <small>{Localisation::getTranslation('task_claimed_translation_please_translate_it')}</small></h1>
+        </div>
+        <div class="alert alert-success">
+            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+        </div>
+</section>
+
 <div class="bg-light-subtle py-4">
 
 
@@ -62,6 +74,8 @@
                                 {include file=$ui['claimed_template'] task=$task}
                             {/if}
                         {/foreach}
+
+                        
 
                              
                     </div>

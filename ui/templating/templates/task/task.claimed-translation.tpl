@@ -1,7 +1,7 @@
 {assign var=task_id value=$task->getId()}
 
     <section>
-        <div> TEST 
+        <div> 
         </div>
         <div class="page-header">
             <h1>{Localisation::getTranslation('task_claimed_translation_translation_task_claimed')} <small>{Localisation::getTranslation('task_claimed_translation_please_translate_it')}</small></h1>
