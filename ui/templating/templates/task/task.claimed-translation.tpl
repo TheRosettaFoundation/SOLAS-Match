@@ -3,7 +3,7 @@
  
         
     <section>
-            <h4 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')} <small class="text-light-emphasis">{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
+            <h3 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')} <small class="text-light">{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h3>
             <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
             <ol>
                 {if $matecat_url != ''}
