@@ -1,7 +1,7 @@
 <!-- Editor Hint: ¿áéíóú -->
 <div class="bg-body p-2 border-secondary rounded-3 ">
 <div class="table-responsive ">
-<table class="table table-borderless">
+<table class="table ">
     <thead >
        <tr class="fs-5 align-middle position-relative  ">
 
