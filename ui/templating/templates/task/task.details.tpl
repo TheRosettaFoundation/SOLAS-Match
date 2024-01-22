@@ -22,7 +22,7 @@
             <td>
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
-                    <a href="{urlFor name="project-view" options="project_id.$projectId"}">
+                    <a href="{urlFor name="project-view" class="text-primary" options="project_id.$projectId"}">
                     {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                     </a>
                 {/if}
@@ -76,7 +76,7 @@
 </div>
 </div>
 
-
+<div class="bg-body p-2 border-secondary rounded-3">
 <div class="table-responsive mt-4  ">
     <table class="table ">
        <tr class="">
@@ -116,8 +116,10 @@
             </tr>
         </tbody>
     </table>
-   </div>   
+   </div>  
+   </div> 
 
+    <div class="bg-body p-2 border-secondary rounded-3">
     <div class="table-responsive">
     <table class="table ">
         <thead class="fs-5">        
@@ -155,10 +157,13 @@
             </tr>
         </tbody>
        </table>
+    
        </div> 
+       </div>
 
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
+           <div class="bg-body p-2 border-secondary rounded-3"> 
            <div class="table-responsive">
             <table class="table">
 
@@ -212,11 +217,13 @@
                  </tbody>
             </table>
          </div>  
+        </div> 
             {/if}
  
 
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
+<div class="bg-body p-2 border-secondary rounded-3">
   <div class=" table table-responsive mt-4">
     <table class="table  ">
         <thead>
@@ -327,9 +334,11 @@
        </tbody>
     </table>
     </div>
+</div>
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+<div class="bg-body p-2 border-secondary rounded-3">
     <div class="table-responsive mt-4">
     <table class="table  ">
         <thead>
@@ -453,4 +462,5 @@
        </tbody>
     </table>
     </div>
+</div>
 {/if}
