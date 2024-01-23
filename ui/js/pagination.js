@@ -446,7 +446,17 @@ function displayTasks(pages) {
             .createContextualFragment(languages);
         let projectItem = projects ? projects[item.id] : "";
 
-        console.log(projectItem);
+        const match = string.match(/<a.*?>(.*?)<\/a>/);
+
+        if (match) {
+            console.log(match);
+            const anchorTag = match[0]; // Entire anchor tag
+            const anchorText = match[1]; // Text content of the anchor tag
+            console.log(anchorTag);
+            console.log(anchorText);
+        } else {
+            console.log("No anchor tag found");
+        }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                             <div> <span class="text-dark"> ${projectItem} </span> </div>
