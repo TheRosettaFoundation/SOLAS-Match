@@ -15,6 +15,7 @@ let validation = {
 
 const projects = document.querySelectorAll("#project");
 
+console.log(projects);
 for (let project in projects) {
     console.log(project);
 }
