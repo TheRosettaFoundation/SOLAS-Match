@@ -146,14 +146,14 @@
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
-                    <li class="nav-item" {if isset($current_page) && $current_page == 'site-admin-dashboard'}" {/if}>
-                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id" class=" fs-5 nav-link fw-bold"}">{Localisation::getTranslation('header_admin')} test1 </a>
+                    <li class="nav-item fw-bold" {if isset($current_page) && $current_page == 'site-admin-dashboard'}" {/if}>
+                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id" class="fs-5 nav-link fw-bold"}">{Localisation::getTranslation('header_admin')}  </a>
                     </li>
                 {/if} 
 
                  {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="nav-item ">
-                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_faq')} test 2</a>
+                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_faq')} </a>
                             </li>
                 {/if}
                 {if Settings::get('site.forum_enabled') == 'y'}
