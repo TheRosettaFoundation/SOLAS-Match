@@ -452,40 +452,25 @@ function displayTasks(pages) {
 
         console.log(anchorTags);
 
-        // const matches = projectItem.matchAll(/<a.*?>(.*?)<\/a>/g);
+        let anchors = { href: "" , text:""};
+       
 
-        // let part1;
-        // let part2;
 
-        // console.log(matches);
+        for(let i = 0; i<anchorTags ; i++){
+            
+            anchors[i].href = anchorTags[i].href;
+            anchors[i].text = anchorTags[i].innerText;
+ 
+        }
 
-        // let text = "";
-        // let anchor = "";
+            console.log(anchors);
 
-        // for (const match of matches) {
-        //     const part1 = match[1];
-        //     const anch = match[0];
-        //     const parser = new DOMParser();
-        //     const doc = parser.parseFromString(anch, "text/html");
-        //     console.log(doc);
-        //     anchor += anch;
-        //     anchor += ",";
 
-        //     text += part1;
-        //     text += ",";
-        // }
 
-        // console.log(text.split(","));
-        // console.log(anchor.split(","));
-
-        // if (matches) {
-        //     console.log(matches);
-        // } else {
-        //     console.log("No anchor tag found");
-        // }
+     
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                            <div> <span class="text-dark"> Part of <> ${projectItem} </span> </div>
+                            <div> <span class="text-dark"> Part of  <a class="text-decoration-none link-primary" href=${anchor}> ${} </a> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
                                 <a class="btn btn-secondary fs-5 px-3"  href= "task/${item.id}/view" target="_blank">View Task</a>
                             </div>
