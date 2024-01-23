@@ -17,7 +17,10 @@ const projects = document.querySelectorAll("#project");
 
 console.log(projects);
 for (let i = 0; i < projects.length; i++) {
-    console.log(projects[i].children[0]);
+    let firstLink = projects[i].children[0];
+    let secondLink = projects[i].children[1];
+    firstLink.classList.add("text-decoration-none", "link-primary");
+    secondLink.classList.add("text-decoration-none", "link-primary");
 }
 
 let taskTypeVal = document.getElementById("taskTypes");
