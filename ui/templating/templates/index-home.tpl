@@ -724,10 +724,10 @@ h3{
                             <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                     {/for}
-                    <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2  ">
-                            <a class=" text-decoration-none link-body-emphasis fs-6" id="next" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
-                     <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
-                            <a class="last text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
+                    <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                            <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
+                     <li class=" last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
+                            <a class=" text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">LAST</a></li>
             </ul>
 
   
