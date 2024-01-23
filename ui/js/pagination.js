@@ -326,6 +326,7 @@ function displayTasks(pages) {
             "h3",
             "fw-bold"
         );
+        title.href = `https://dev2.translatorswb.org/task/${item.id}/view`;
         title.textContent = item.title;
 
         const spanTitle = document.createElement("div");
