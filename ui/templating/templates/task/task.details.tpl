@@ -190,7 +190,7 @@
               
                 <td class="w-50 ">
                   <div class="d-flex">
-                    <div class="pb-1 bg-dark rounded-2">{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a><div>{/if}
+                    <div class="pb-0 bg-dark rounded-2">{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a><div>{/if}
                  <div>
                  </td>
 
@@ -257,7 +257,7 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_unpublish')}
                         </a>
@@ -265,11 +265,11 @@
                         </div>
 
                     {else}
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                         
                         <input type="hidden" name="published" value="1" />
                         <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-grayish  fs-6 fs-6">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish_icon" /> {Localisation::getTranslation('common_publish')}
                         </a>
@@ -285,7 +285,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
                     <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                     <a class="btn  btn-sm  btn-grayish  fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
@@ -300,7 +300,7 @@
             <td>
                 {if $task->get_cancelled()}
                      <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                     <a href="#" class="btn  btn-sm  btn-gray fs-6 text-dark " disabled>
                        <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Yes
                     </a>
@@ -308,7 +308,7 @@
                     </div>
                 {else}
                       <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                         <a href="#" class="btn  btn-sm  btn-gray fs-6 text-dark" disabled>
                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disabled" /> No
                         </a>
@@ -322,7 +322,7 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                      <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">   
+                        <div class="bg-dark rounded-2 pb-0">   
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
                              <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
                         </a>
@@ -331,7 +331,7 @@
                     {else}
                         <input type="hidden" name="track" value="Track" />
                         <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-1">
+                        <div class="bg-dark rounded-2 pb-0">
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
                         </a>
@@ -357,7 +357,7 @@
                         
                     {else}
                     <div class="d-flex">
-                        <div class="bg-grayish rounded-2 pb-1">
+                        <div class="bg-grayish rounded-2 pb-0">
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" /> Make Unpaid
