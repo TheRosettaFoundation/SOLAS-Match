@@ -13,6 +13,12 @@ let validation = {
     tl: false,
 };
 
+const project = document.querySelector(".project");
+
+const firstLink = project.children[0];
+
+console.log(firstLink);
+
 let taskTypeVal = document.getElementById("taskTypes");
 
 let tasksContainer = document.querySelector(".taskPagination");
@@ -392,8 +398,15 @@ function displayTasks(pages) {
         }
 
         let deadline = item.deadline;
-        const deadlineDate = new Date(deadline.substring(0, 10) + "T" + deadline.substring(11) + "Z");
-        let date = deadlineDate.getFullYear() + "-" + (deadlineDate.getMonth() + 1).toString().padStart(2, "0") + "-" + deadlineDate.getDate().toString().padStart(2, "0");
+        const deadlineDate = new Date(
+            deadline.substring(0, 10) + "T" + deadline.substring(11) + "Z"
+        );
+        let date =
+            deadlineDate.getFullYear() +
+            "-" +
+            (deadlineDate.getMonth() + 1).toString().padStart(2, "0") +
+            "-" +
+            deadlineDate.getDate().toString().padStart(2, "0");
         const hour = deadlineDate.getHours().toString().padStart(2, "0");
         const min = deadlineDate.getMinutes().toString().padStart(2, "0");
         const sec = deadlineDate.getSeconds().toString().padStart(2, "0");
