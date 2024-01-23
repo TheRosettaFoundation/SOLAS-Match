@@ -450,15 +450,11 @@ function displayTasks(pages) {
         const doc = parser.parseFromString(projectItem, "text/html");
         const anchorTags = doc.querySelectorAll("a");
 
-        console.log(anchorTags);
-
         let anchors = { href: "", text: "" };
 
         for (let i = 0; i < anchorTags; i++) {
             console.log(anchorTags[i][0].href);
         }
-
-        console.log(anchors);
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                             <div> <span class="text-dark"> Part of  <a class="text-decoration-none link-primary" > </a> </div>
