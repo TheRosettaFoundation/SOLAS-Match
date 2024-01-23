@@ -608,7 +608,7 @@ h3{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="d-flex justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
+                    <div class="d-flex justify-content-start align-items-center mb-3">  
                 
                      <div class="mt-2 mt-md-0">
                                     
@@ -616,6 +616,14 @@ h3{
 	                                    <option value=""> Recently viewed </option>
 	                                   
 	                                </select>
+                            </div>
+                    <div class="mt-2 mt-md-0">
+                                    
+                                        <button name="sorttype"  class="form-select recents" id="{$user_id}">
+	                                     
+                                            Recently viewed 
+	                                   
+	                                    </button>
                             </div>
                 
             
