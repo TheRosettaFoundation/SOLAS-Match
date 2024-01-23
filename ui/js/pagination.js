@@ -455,14 +455,15 @@ function displayTasks(pages) {
         let anchors = { href: "", text: "" };
 
         for (let i = 0; i < anchorTags; i++) {
-            anchors[i].href = anchorTags[i].href;
-            anchors[i].text = anchorTags[i].innerText;
+            console.log(anchorTags[i]);
+            // anchors[i].href = anchorTags[i].href;
+            // anchors[i].text = anchorTags[i].innerText;
         }
 
         console.log(anchors);
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                            <div> <span class="text-dark"> Part of  <a class="text-decoration-none link-primary" href=${anchors[0].href}> ${anchors[0].text}</a> </div>
+                            <div> <span class="text-dark"> Part of  <a class="text-decoration-none link-primary" > </a> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
                                 <a class="btn btn-secondary fs-5 px-3"  href= "task/${item.id}/view" target="_blank">View Task</a>
                             </div>
