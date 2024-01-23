@@ -446,31 +446,37 @@ function displayTasks(pages) {
             .createContextualFragment(languages);
         let projectItem = projects ? projects[item.id] : "";
 
-        const matches = projectItem.matchAll(/<a.*?>(.*?)<\/a>/g);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(projectItem, "text/html");
+        const anchorTags = doc.querySelectorAll("a");
 
-        let part1;
-        let part2;
+        console.log(anchorTags);
 
-        console.log(matches);
+        // const matches = projectItem.matchAll(/<a.*?>(.*?)<\/a>/g);
 
-        let text = "";
-        let anchor = "";
+        // let part1;
+        // let part2;
 
-        for (const match of matches) {
-            const part1 = match[1];
-            const anch = match[0];
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(anch, "text/html");
-            console.log(doc);
-            anchor += anch;
-            anchor += ",";
+        // console.log(matches);
 
-            text += part1;
-            text += ",";
-        }
+        // let text = "";
+        // let anchor = "";
 
-        console.log(text.split(","));
-        console.log(anchor.split(","));
+        // for (const match of matches) {
+        //     const part1 = match[1];
+        //     const anch = match[0];
+        //     const parser = new DOMParser();
+        //     const doc = parser.parseFromString(anch, "text/html");
+        //     console.log(doc);
+        //     anchor += anch;
+        //     anchor += ",";
+
+        //     text += part1;
+        //     text += ",";
+        // }
+
+        // console.log(text.split(","));
+        // console.log(anchor.split(","));
 
         // if (matches) {
         //     console.log(matches);
