@@ -13,11 +13,9 @@ let validation = {
     tl: false,
 };
 
-const project = document.querySelector(".project");
+const project = document.querySelector("#project");
 
 console.log(project);
-
-console.log(firstLink);
 
 let taskTypeVal = document.getElementById("taskTypes");
 
