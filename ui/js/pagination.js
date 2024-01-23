@@ -17,14 +17,6 @@ const projects = document.querySelectorAll("#project");
 
 for (let project in projects) {
     console.log(project);
-
-    project.classList.add("text-dark");
-
-    const firstLink = project.children[0];
-    const secondLink = project.children[1];
-
-    firstLink.classList.add("text-decoration-none", "link-primary");
-    secondLink.classList.add("text-decoration-none", "link-primary");
 }
 
 let taskTypeVal = document.getElementById("taskTypes");
