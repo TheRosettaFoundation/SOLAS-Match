@@ -14,6 +14,13 @@ let validation = {
 };
 
 const project = document.querySelector("#project");
+project.classList.add("text-dark");
+
+const firstLink = project.children[0];
+const secondLink = project.children[1];
+
+firstLink.classList.add("text-decoration-none", "link-primary");
+secondLink.classList.add("text-decoration-none", "link-primary");
 
 console.log(project);
 
