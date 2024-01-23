@@ -459,6 +459,9 @@ function displayTasks(pages) {
         for (const match of matches) {
             const part1 = match[1];
             const anch = match[0];
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(anch, "text/html");
+            console.log(doc);
             anchor += anch;
             anchor += ",";
 
