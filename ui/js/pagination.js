@@ -448,12 +448,17 @@ function displayTasks(pages) {
 
         const matches = projectItem.matchAll(/<a.*?>(.*?)<\/a>/g);
 
-        for (const match of matches) {
-            const anchorTag = match[0];
-            const anchorText = match[1];
-            console.log(anchorTag);
-            console.log(anchorText);
-        }
+        let part1;
+        let part2;
+
+        console.log(matches);
+
+        // for (const match of matches) {
+        //     const part1 = match[0];
+        //     const part2 = match[1];
+        //     console.log(anchorTag);
+        //     console.log(anchorText);
+        // }
 
         // if (matches) {
         //     console.log(matches);
@@ -462,7 +467,7 @@ function displayTasks(pages) {
         // }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                            <div> <span class="text-dark"> ${projectItem} </span> </div>
+                            <div> <span class="text-dark"> Part of  ${projectItem} </span> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
                                 <a class="btn btn-secondary fs-5 px-3"  href= "task/${item.id}/view" target="_blank">View Task</a>
                             </div>
