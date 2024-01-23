@@ -446,13 +446,20 @@ function displayTasks(pages) {
             .createContextualFragment(languages);
         let projectItem = projects ? projects[item.id] : "";
 
-        const match = projectItem.match(/<a.*?>(.*?)<\/a>/);
+        const matches = projectItem.matchAll(/<a.*?>(.*?)<\/a>/g);
 
-        if (match) {
-            console.log(match);
-        } else {
-            console.log("No anchor tag found");
+        for (const match of matches) {
+            const anchorTag = match[0];
+            const anchorText = match[1];
+            console.log(anchorTag);
+            console.log(anchorText);
         }
+
+        // if (matches) {
+        //     console.log(matches);
+        // } else {
+        //     console.log("No anchor tag found");
+        // }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                             <div> <span class="text-dark"> ${projectItem} </span> </div>
