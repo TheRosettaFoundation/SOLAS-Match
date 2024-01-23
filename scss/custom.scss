@@ -81,6 +81,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     --bs-tooltip-b: $indigo;
 }
 
+a:hover {
+    text-decorat: #e8991c;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
