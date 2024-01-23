@@ -453,7 +453,7 @@ function displayTasks(pages) {
         let anchors = { href: "", text: "" };
 
         for (let i = 0; i < anchorTags.length; i++) {
-            console.log(anchorTags[i]);
+            console.log(anchorTags[i].href);
         }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
