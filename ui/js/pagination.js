@@ -102,9 +102,12 @@ next.addEventListener("click", function (e) {
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-    let newPage = document.getElementById(pagePosition.p).parentNode;
+    console.log(url);
+    console.log(nextPosition);
 
-    newPage.classList.add("bg-primary", "opacity-75", "text-primary");
+    // let newPage = document.getElementById(pagePosition.p).parentNode;
+
+    // newPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
     requestPage(url);
 });
