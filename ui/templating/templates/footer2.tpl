@@ -6,10 +6,11 @@
 
 
                             <div class="container d-flex flex-wrap mb-4 justify-content-end">
-                                {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
+                               
                                 
-                                <div class="d-flex justify-content-between">
-                                    <div class="align-middle me-4">
+                                <div class="d-flex justify-content-between py-4">
+                                    <div class="align-middle me-4 ">
+                                     {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
                                     <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
                                         <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
                                         <h1 class="fs-5 text-decoration-none text-secondary"> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary ">Solas</a> </h1>
