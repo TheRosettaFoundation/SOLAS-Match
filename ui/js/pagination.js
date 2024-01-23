@@ -16,8 +16,8 @@ let validation = {
 const projects = document.querySelectorAll("#project");
 
 console.log(projects);
-for (let project in projects) {
-    console.log(project.children[0]);
+for (let i = 0; i < projects.length; i++) {
+    console.log(projects[i].children[0]);
 }
 
 let taskTypeVal = document.getElementById("taskTypes");
