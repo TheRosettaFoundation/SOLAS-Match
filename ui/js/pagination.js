@@ -452,8 +452,7 @@ function displayTasks(pages) {
             console.log(match);
             const anchorTag = match[0]; // Entire anchor tag
             const anchorText = match[1]; // Text content of the anchor tag
-            console.log(anchorTag);
-            console.log(anchorText);
+            anchorTag.classList.add("text-decoration-none", "link-primary");
         } else {
             console.log("No anchor tag found");
         }
