@@ -17,7 +17,7 @@ const projects = document.querySelectorAll("#project");
 
 console.log(projects);
 for (let project in projects) {
-    console.log(project);
+    console.log(project.children[0]);
 }
 
 let taskTypeVal = document.getElementById("taskTypes");
