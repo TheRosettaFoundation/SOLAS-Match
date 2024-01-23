@@ -51,21 +51,60 @@ let first = document.querySelector(".first");
 
 let countPage = document.querySelector(".last").id;
 
-console.log(countPage);
-
 last.addEventListener("click", function (e) {
     e.preventDefault();
-
+    // Saving the  previous page
     let prevPage = document.getElementById(pagePosition.p).parentNode;
-    console.log(`previous`);
 
-    console.log(previous);
-
+    //Removing  highlight from the previous page
     prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
     let url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     pagePosition.p = countPage;
+
+    requestPage(url);
+});
+
+previous.addEventListener("click", function (e) {
+    e.preventDefault();
+    // Saving the  previous page
+    let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+    //Removing  highlight from the previous page
+    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+
+    let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+
+    pagePosition.p = prevPosition;
+
+    let url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+    let newPage = document.getElementById(pagePosition.p).parentNode;
+
+    newPage.classList.add("bg-primary", "opacity-75", "text-primary");
+
+    requestPage(url);
+});
+
+next.addEventListener("click", function (e) {
+    e.preventDefault();
+    // Saving the  previous page
+    let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+    //Removing  highlight from the previous page
+    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+
+    let nextPosition =
+        pagePosition.p < countPage ? pagePosition.p + 1 : countPage;
+
+    pagePosition.p = nextPosition;
+
+    let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+    let newPage = document.getElementById(pagePosition.p).parentNode;
+
+    newPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
     requestPage(url);
 });
@@ -81,9 +120,7 @@ first.addEventListener("click", function (e) {
 
     pagePosition.p = 1;
 
-    if (pagePosition.p == 1) {
-        firstPage.classList.add("bg-primary", "opacity-75", "text-primary");
-    }
+    firstPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
     let url = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
@@ -182,89 +219,113 @@ pages.forEach((page) => {
             }
         }
 
-        if (page.id == "previous") {
-            requestPage(previous.href);
+        pagePosition.p = parseInt(page.id);
 
-            let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+        let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
-            pagePosition.prev = newPrevPosition;
+        let newNextPosition =
+            pagePosition.p <= countPage ? pagePosition.p + 1 : pagePosition.p;
 
-            let prevP = pagePosition.prev;
+        let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            if (pagePosition.p <= 6) {
-                let pagePrev = document.getElementById(prevP).parentNode;
+        let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-                console.log(`pagePrev`);
-
-                console.log(pagePrev);
-
-                pagePrev.classList.add(
-                    "bg-primary",
-                    "opacity-75",
-                    "text-primary"
-                );
-            }
-
-            let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-            previous.href = newPrevUrl;
-
-            pagePosition.p = newPrevPosition;
-        } else if (page.id == "next") {
-            requestPage(next.href);
-
-            let newNextPosition =
-                pagePosition.p <= countPage
-                    ? pagePosition.p + 1
-                    : pagePosition.p;
-
-            let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-            pagePosition.next = newNextPosition;
-
-            let nextP = pagePosition.next;
-
-            if (pagePosition.next <= 6) {
-                let pageNext = document.getElementById(nextP).parentNode;
-
-                pageNext.classList.add(
-                    "bg-primary",
-                    "opacity-75",
-                    "text-primary"
-                );
-            }
-
-            if (pagePosition.p < countPage) {
-                pagePosition.p = pagePosition.p + 1;
-            }
-
-            next.href = newNextUrl;
+        if (pagePosition.p == 1) {
+            previous.classList.add("disabled");
         } else {
-            pagePosition.p = parseInt(page.id);
-
-            let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
-
-            let newNextPosition =
-                pagePosition.p <= countPage
-                    ? pagePosition.p + 1
-                    : pagePosition.p;
-
-            let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-            let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-            if (pagePosition.p == 1) {
-                previous.classList.add("disabled");
-            } else {
-                previous.classList.remove("disabled");
-            }
-
-            previous.href = newPrevUrl;
-
-            next.href = newNextUrl;
-
-            requestPage(hr);
+            previous.classList.remove("disabled");
         }
+
+        previous.href = newPrevUrl;
+
+        next.href = newNextUrl;
+
+        requestPage(hr);
+
+        // if (page.id == "previous") {
+
+        //     requestPage(previous.href);
+
+        //     let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+
+        //     pagePosition.prev = newPrevPosition;
+
+        //     let prevP = pagePosition.prev;
+
+        //     if (pagePosition.p <= 6) {
+        //         let pagePrev = document.getElementById(prevP).parentNode;
+
+        //         console.log(`pagePrev`);
+
+        //         console.log(pagePrev);
+
+        //         pagePrev.classList.add(
+        //             "bg-primary",
+        //             "opacity-75",
+        //             "text-primary"
+        //         );
+        //     }
+
+        //     let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+        //     previous.href = newPrevUrl;
+
+        //     pagePosition.p = newPrevPosition;
+        // } else if (page.id == "next") {
+        //     requestPage(next.href);
+
+        //     let newNextPosition =
+        //         pagePosition.p <= countPage
+        //             ? pagePosition.p + 1
+        //             : pagePosition.p;
+
+        //     let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+        //     pagePosition.next = newNextPosition;
+
+        //     let nextP = pagePosition.next;
+
+        //     if (pagePosition.next <= 6) {
+        //         let pageNext = document.getElementById(nextP).parentNode;
+
+        //         pageNext.classList.add(
+        //             "bg-primary",
+        //             "opacity-75",
+        //             "text-primary"
+        //         );
+        //     }
+
+        //     if (pagePosition.p < countPage) {
+        //         pagePosition.p = pagePosition.p + 1;
+        //     }
+
+        //     next.href = newNextUrl;
+        // } else {
+        //     pagePosition.p = parseInt(page.id);
+
+        //     let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+
+        //     let newNextPosition =
+        //         pagePosition.p <= countPage
+        //             ? pagePosition.p + 1
+        //             : pagePosition.p;
+
+        //     let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+        //     let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+        //     if (pagePosition.p == 1) {
+        //         previous.classList.add("disabled");
+        //     } else {
+        //         previous.classList.remove("disabled");
+        //     }
+
+        //     previous.href = newPrevUrl;
+
+        //     next.href = newNextUrl;
+
+        //     requestPage(hr);
+        // }
     });
 });
 
