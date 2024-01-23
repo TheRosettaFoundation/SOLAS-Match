@@ -398,7 +398,7 @@ class UserRouteHandler
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487546954\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=14875469f\" ></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
