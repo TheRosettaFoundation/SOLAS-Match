@@ -456,12 +456,13 @@ function displayTasks(pages) {
         let text = "";
 
         for (const match of matches) {
-            const part2 = match[1];
+            const part1 = match[1];
 
             text += part2;
+            text = ";";
         }
 
-        console.log(text);
+        console.log(text.split(","));
 
         // if (matches) {
         //     console.log(matches);
