@@ -715,8 +715,8 @@ h3{
                         {assign var="count" value= $page_count}
                     {/if}    
 
-                     <li class="mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
-                            <a class="first text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
+                     <li class="first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
+                            <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
                     <li class="mx-2  border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2" >
                             <a class="text-decoration-none link-body-emphasis fs-6" id="previous" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
