@@ -453,7 +453,7 @@ function displayTasks(pages) {
 
         console.log(matches);
 
-        const text = "";
+        let text = "";
 
         for (const match of matches) {
             const part2 = match[1];
