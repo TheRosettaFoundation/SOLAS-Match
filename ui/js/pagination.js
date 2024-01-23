@@ -459,7 +459,7 @@ function displayTasks(pages) {
             const part1 = match[1];
 
             text += part2;
-            text = ";";
+            text = ",";
         }
 
         console.log(text.split(","));
