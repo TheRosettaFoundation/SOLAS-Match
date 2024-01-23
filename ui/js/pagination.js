@@ -459,8 +459,6 @@ function displayTasks(pages) {
             texts.push(anchorTags[i].innerText);
         }
 
-        c;
-
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
                             <div> <span class="text-dark"> Part of  <a class="text-decoration-none link-primary" href=${anchors[0]} >${texts[0]} </a> for <a class="text-decoration-none link-primary" href=${anchors[1]} >${texts[1]} </a> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
