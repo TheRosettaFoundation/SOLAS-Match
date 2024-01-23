@@ -452,8 +452,8 @@ function displayTasks(pages) {
 
         let anchors = { href: "", text: "" };
 
-        for (let i = 0; i < anchorTags; i++) {
-            console.log(anchorTags[i][0].href);
+        for (let i = 0; i < anchorTags.length; i++) {
+            console.log(anchorTags);
         }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
