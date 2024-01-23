@@ -453,12 +453,15 @@ function displayTasks(pages) {
 
         console.log(matches);
 
-        // for (const match of matches) {
-        //     const part1 = match[0];
-        //     const part2 = match[1];
-        //     console.log(anchorTag);
-        //     console.log(anchorText);
-        // }
+        const text = "";
+
+        for (const match of matches) {
+            const part2 = match[1];
+
+            text += part2;
+        }
+
+        console.log(text);
 
         // if (matches) {
         //     console.log(matches);
