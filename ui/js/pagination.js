@@ -51,7 +51,9 @@ let next = document.querySelector("#next");
 let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
-let countPage = document.querySelector(".last").id;
+let countPage = document.querySelector(".last");
+
+console.log(countPage);
 
 last.addEventListener("click", function (e) {
     e.preventDefault();
