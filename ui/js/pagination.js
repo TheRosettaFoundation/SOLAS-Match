@@ -15,13 +15,7 @@ let validation = {
 
 const project = document.querySelector(".project");
 
-const firstLink = project.children[0];
-const secondLink = project.children[1];
-
-project.classList.add("text-secondary");
-
-firstLink.classList.add("text-decoration-none", "link-danger");
-secondLink.classList.add("text-decoration-none");
+console.log(project);
 
 console.log(firstLink);
 
