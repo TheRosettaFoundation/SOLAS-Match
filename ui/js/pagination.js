@@ -446,7 +446,7 @@ function displayTasks(pages) {
             .createContextualFragment(languages);
         let projectItem = projects ? projects[item.id] : "";
 
-        const match = string.match(/<a.*?>(.*?)<\/a>/);
+        const match = projectItem.match(/<a.*?>(.*?)<\/a>/);
 
         if (match) {
             console.log(match);
