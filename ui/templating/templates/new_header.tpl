@@ -147,7 +147,7 @@
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
                     <li class="nav-item fw-bold" {if isset($current_page) && $current_page == 'site-admin-dashboard'}" {/if}>
-                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id" class="fs-5 nav-link fw-bold"}">{Localisation::getTranslation('header_admin')}  </a>
+                        <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}"  class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_admin')}  </a>
                     </li>
                 {/if} 
 
