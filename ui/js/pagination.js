@@ -458,7 +458,7 @@ function displayTasks(pages) {
         for (const match of matches) {
             const part1 = match[1];
 
-            text += part2;
+            text += part1;
             text = ",";
         }
 
