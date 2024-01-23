@@ -29,7 +29,7 @@ let tasksContainer = document.querySelector(".taskPagination");
 
 let recents = document.querySelector(".recents");
 
-let userid;
+let userId;
 
 if (recents) {
     userId = recents.id;
@@ -302,6 +302,8 @@ function displayTasks(pages) {
         let image;
         let imageHtml;
 
+        console.log(item);
+
         const innerDiv = document.createElement("div");
         const itemElement = document.createElement("div");
         itemElement.classList.add(
@@ -317,7 +319,7 @@ function displayTasks(pages) {
         itemFlexContainer.classList.add("d-flex", "justify-content-between");
         const itemSubFlex = document.createElement("div");
         const titleContainer = document.createElement("div");
-        const title = document.createElement("div");
+        const title = document.createElement("a");
         title.classList.add(
             "text-primaryDark",
             "d-inline-block",
