@@ -455,9 +455,7 @@ function displayTasks(pages) {
         let anchors = { href: "", text: "" };
 
         for (let i = 0; i < anchorTags; i++) {
-            console.log(anchorTags[i]);
-            // anchors[i].href = anchorTags[i].href;
-            // anchors[i].text = anchorTags[i].innerText;
+            console.log(anchorTags[i][0].href);
         }
 
         console.log(anchors);
