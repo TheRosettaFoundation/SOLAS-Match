@@ -43,7 +43,7 @@ let next = document.querySelector("#next");
 let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
-let countPage = document.querySelector(".last");
+let countPage = document.querySelector(".last").id;
 
 console.log(countPage);
 
