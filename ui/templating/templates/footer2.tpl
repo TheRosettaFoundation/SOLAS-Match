@@ -8,7 +8,7 @@
                             <div class="container d-flex flex-wrap mb-4 justify-content-end">
                                
                                 
-                                <div class="d-flex justify-content-between py-4">
+                                <div class="d-flex justify-content-between py-4 w-50">
                                     <div class="d-flex flex-column align-items-center me-4 ">
                                      <div class="mb-2">{sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}</div>
                                     <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
