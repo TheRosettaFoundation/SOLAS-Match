@@ -27,18 +27,7 @@ let taskTypeVal = document.getElementById("taskTypes");
 
 let tasksContainer = document.querySelector(".taskPagination");
 
-let recents = document.querySelector(".recents");
-
 let userId;
-
-if (recents) {
-    userId = recents.id;
-
-    recents.addEventListener("click", function (e) {
-        e.preventDefault();
-        fetchRecents();
-    });
-}
 
 let pages = document.querySelectorAll(".page");
 
@@ -552,18 +541,6 @@ function displayTasks(pages) {
     newDataString = newData.outerHTML;
 
     tasksContainer.innerHTML = newDataString;
-}
-
-async function fetchRecents() {
-    const fetched = await fetch(`/user/${userId}/recent/tasks/`);
-
-    const res = await fetched.json();
-
-    displayTasks(res);
-
-    let page = document.querySelector(".pagination");
-
-    page.remove();
 }
 
 function reqListner() {
