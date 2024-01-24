@@ -98,6 +98,8 @@ next.addEventListener("click", function (e) {
     let nextPosition =
         pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
 
+    console.log(countPage);
+
     pagePosition.p = nextPosition;
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
