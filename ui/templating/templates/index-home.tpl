@@ -727,8 +727,14 @@ a:hover{
                             <a class="text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">PREVIOUS</a></li>
         
                     {for $page=1 to $count}
-                            <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
+                        {if $page = 1 }
+                            <li class="mx-2 bg-primary border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
                             <a class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
+                        {else}
+                             <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
+                            <a class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
+                        {/if}
+
                     {/for}
                     <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
                             <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.$paged|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT</a></li> 
