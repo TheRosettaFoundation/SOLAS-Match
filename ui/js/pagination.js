@@ -107,7 +107,7 @@ next.addEventListener("click", function (e) {
     next.href = url;
 
     console.log(url);
-    console.log(nextPosition);
+    console.log("nexPosition", nextPosition);
 
     if (pagePosition.next <= 6) {
         let pageNext = document.getElementById(pagePosition).parentNode;
