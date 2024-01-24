@@ -108,6 +108,7 @@
        <script>
        const currentPath = window.location.pathname;
        const navLinks = document.querySelectorAll(".nav-link");
+       console.log(navLinks);
        navLinks.forEach(link => {
         console.log(link);
         if(link.href === currentPath){
