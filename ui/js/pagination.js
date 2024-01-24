@@ -49,6 +49,7 @@ let next = document.querySelector("#next");
 let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
+//Selecting countPage on the last button
 let countPage = last.children[0].id;
 
 last.addEventListener("click", function (e) {
@@ -61,7 +62,7 @@ last.addEventListener("click", function (e) {
 
     let url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-    pagePosition.p = countPage;
+    pagePosition.p = parseInt(countPage);
 
     requestPage(url);
 });
@@ -80,9 +81,13 @@ previous.addEventListener("click", function (e) {
 
     let url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-    let newPage = document.getElementById(pagePosition.p).parentNode;
+    //Checking if there is dom element for the page
 
-    newPage.classList.add("bg-primary", "opacity-75", "text-primary");
+    if (pagePosition <= 6) {
+        let newPage = document.getElementById(pagePosition.p).parentNode;
+
+        newPage.classList.add("bg-primary", "opacity-75", "text-primary");
+    }
 
     previous.href = url;
 
@@ -102,26 +107,17 @@ next.addEventListener("click", function (e) {
             ? pagePosition.p + 1
             : pagePosition.p;
 
-    console.log("countPage", countPage);
-
     pagePosition.p = nextPosition;
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     next.href = url;
 
-    console.log(url);
-    console.log("nexPosition", nextPosition);
-
     if (pagePosition.p <= 6) {
         let pageNext = document.getElementById(pagePosition.p).parentNode;
 
         pageNext.classList.add("bg-primary", "opacity-75", "text-primary");
     }
-
-    // let newPage = document.getElementById(pagePosition.p).parentNode;
-
-    // newPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
     requestPage(url);
 });
