@@ -510,7 +510,7 @@ function displayTasks(pages) {
         }
 
         const viewTask = `<div class ="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                            <div> <span class="text-dark"> Part of  <a class="link-offset-2 link-primary link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href=${anchors[0]} style=" :hover {text-decoration:underline; }" >${texts[0]} </a> for <a class="text-decoration-none link-primary" href=${anchors[1]} >${texts[1]} </a> </div>
+                            <div> <span class="text-dark"> Part of  <a class="link-primary" href=${anchors[0]} style=":hover {text-decoration:underline; }" >${texts[0]} </a> for <a class="" href=${anchors[1]} style=":hover {text-decoration:underline; } >${texts[1]} </a> </div>
                             <div class="d-flex justify-content-end mt-2 mt-sm-4 mt-md-0">
                                 <a class="btn btn-secondary fs-5 px-3" style=" :hover {text-decoration:underline; }  href= "task/${item.id}/view" target="_blank">View Task</a>
                             </div>
