@@ -15,7 +15,6 @@ let validation = {
 
 const projects = document.querySelectorAll("#project");
 
-console.log(projects);
 for (let i = 0; i < projects.length; i++) {
     let firstLink = projects[i].children[0];
     let secondLink = projects[i].children[1];
@@ -230,8 +229,6 @@ selectedLanguage.addEventListener("change", function () {
 });
 
 taskType.addEventListener("change", function (e) {
-    console.log(e.type);
-
     let page = document.querySelector(".page");
     let url = page.href;
 
@@ -348,8 +345,6 @@ function displayTasks(pages) {
         let imageId;
         let image;
         let imageHtml;
-
-        console.log(item);
 
         const innerDiv = document.createElement("div");
         const itemElement = document.createElement("div");
