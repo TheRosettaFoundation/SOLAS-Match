@@ -613,9 +613,9 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >
+            <div class="justify-content-end align-items-center mb-3">  <span class =" d-inline-block" >
                 
-                     <div class="mt-2 mt-md-0">
+                     <div>
 
                         <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}" target="_blank" class="btn btn-primary text-white">
 	                        {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
