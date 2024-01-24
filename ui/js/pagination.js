@@ -96,7 +96,7 @@ next.addEventListener("click", function (e) {
     prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
     let nextPosition =
-        pagePosition.p < countPage ? pagePosition.p + 1 : countPage;
+        pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
 
     pagePosition.p = nextPosition;
 
