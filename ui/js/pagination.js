@@ -120,11 +120,14 @@ previous.addEventListener("click", function (e) {
 
 next.addEventListener("click", function (e) {
     e.preventDefault();
-    // Saving the  previous page
-    let prevPage = document.getElementById(pagePosition.p).parentNode;
 
-    //Removing  highlight from the previous page
-    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    if (pagePosition.p >= 6) {
+        // Saving the  previous page
+        let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+        //Removing  highlight from the previous page
+        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    }
 
     let nextPosition =
         pagePosition.p < parseInt(countPage)
