@@ -60,15 +60,15 @@ last.addEventListener("click", function (e) {
     pagePosition.p = parseInt(countPage);
 
     if (pagePosition.p == 1) {
-        previous.classList.add("bg-gray", "text-gray", "opacity-25");
+        previous.classList.add("bg-gray", "opacity-25");
     } else {
-        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+        previous.classList.remove("bg-gray", "opacity-25");
     }
 
     if (pagePosition.p >= countPage) {
-        next.classList.add("bg-gray", "text-gray", "opacity-25");
+        next.classList.add("bg-gray", "opacity-25");
     } else {
-        next.classList.remove("bg-gray", "text-gray", "opacity-25");
+        next.classList.remove("bg-gray", "opacity-25");
     }
 
     requestPage(url);
@@ -102,15 +102,15 @@ previous.addEventListener("click", function (e) {
     }
 
     if (pagePosition.p == 1) {
-        previous.classList.add("bg-gray", "text-gray", "opacity-25");
+        previous.classList.add("bg-gray", "text-body", "opacity-25");
     } else {
-        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+        previous.classList.remove("bg-gray", "text-body", "opacity-25");
     }
 
     if (pagePosition.p >= countPage) {
-        next.classList.add("bg-gray", "text-gray", "opacity-25");
+        next.classList.add("bg-gray", "text-body", "opacity-25");
     } else {
-        next.classList.remove("bg-gray", "text-gray", "opacity-25");
+        next.classList.remove("bg-gray", "text-body", "opacity-25");
     }
 
     previous.href = url;
@@ -139,15 +139,15 @@ next.addEventListener("click", function (e) {
     pagePosition.p = nextPosition;
 
     if (pagePosition.p == 1) {
-        previous.classList.add("bg-gray", "text-gray", "opacity-25");
+        previous.classList.add("bg-gray", "text-body", "opacity-25");
     } else {
-        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+        previous.classList.remove("bg-gray", "text-body", "opacity-25");
     }
 
     if (pagePosition.p >= countPage) {
-        last.classList.add("bg-gray", "text-gray", "opacity-25");
+        last.classList.add("bg-gray", "text-body", "opacity-25");
     } else {
-        last.classList.remove("bg-gray", "text-gray", "opacity-25");
+        last.classList.remove("bg-gray", "text-body", "opacity-25");
     }
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
@@ -186,9 +186,9 @@ first.addEventListener("click", function (e) {
 
     pagePosition.p = 1;
 
-    previous.classList.add("bg-gray", "text-gray", "opacity-25");
+    previous.classList.add("bg-gray", "text-body", "opacity-25");
 
-    next.classList.remove("bg-gray", "text-gray", "opacity-25");
+    next.classList.remove("bg-gray", "text-body", "opacity-25");
 
     requestPage(url);
 });
@@ -285,14 +285,14 @@ pages.forEach((page) => {
         pagePosition.p = parseInt(page.id);
 
         if (pagePosition.p == 1) {
-            previous.classList.add("bg-gray", "text-gray", "opacity-25");
+            previous.classList.add("bg-gray", "text-body", "opacity-25");
         } else {
-            previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+            previous.classList.remove("bg-gray", "text-body", "opacity-25");
         }
         if (pagePosition.p == countPage) {
-            next.classList.add("bg-gray", "text-gray", "opacity-25");
+            next.classList.add("bg-gray", "text-body", "opacity-25");
         } else {
-            next.classList.remove("bg-gray", "text-gray", "opacity-25");
+            next.classList.remove("bg-gray", "text-body", "opacity-25");
         }
 
         let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
