@@ -613,7 +613,7 @@ a:hover{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="justify-content-end align-items-center mb-3">  <span class =" d-inline-block" >
+            <div class=" d-flex justify-content-end align-items-center mb-3"> 
                 
                      <div>
 
