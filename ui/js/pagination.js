@@ -362,7 +362,7 @@ function displayTasks(pages) {
         const itemSubFlex = document.createElement("div");
         const titleContainer = document.createElement("div");
         const title = document.createElement("a");
-        title.classList.add("custom-link", "fw-bold");
+        title.classList.add("custom-link", "fw-bold", "fs-3");
         title.href = `https://dev2.translatorswb.org/task/${item.id}/view`;
         title.textContent = item.title;
 
