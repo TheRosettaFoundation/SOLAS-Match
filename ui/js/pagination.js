@@ -84,6 +84,8 @@ previous.addEventListener("click", function (e) {
 
     newPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
+    previous.href = url;
+
     requestPage(url);
 });
 
@@ -96,7 +98,9 @@ next.addEventListener("click", function (e) {
     prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
     let nextPosition =
-        pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
+        pagePosition.p < parseInt(countPage)
+            ? pagePosition.p + 1
+            : pagePosition.p;
 
     console.log("countPage", countPage);
 
@@ -211,9 +215,12 @@ pages.forEach((page) => {
 
     let id = page.id;
 
-    page.addEventListener("click", (e) => {
+    let parent = document.getElementById(id).parentNode;
+
+    parent.addEventListener("click", (e) => {
         e.preventDefault();
 
+        // Adding active state color on the selected page and removing on the previous selected page
         for (var i = 0; i < listPage.length; i++) {
             let pageC = listPage[i].firstElementChild;
 
