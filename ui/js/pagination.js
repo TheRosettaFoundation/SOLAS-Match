@@ -81,11 +81,16 @@ last.addEventListener("click", function (e) {
 
 previous.addEventListener("click", function (e) {
     e.preventDefault();
-    // Saving the  previous page
-    let prevPage = document.getElementById(pagePosition.p).parentNode;
 
-    //Removing  highlight from the previous page
-    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    let nodeExist = document.getElementById(pagePosition.p) ? true : false;
+
+    if (nodeExist) {
+        // Saving the  previous page
+        let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+        //Removing  highlight from the previous page
+        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    }
 
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
