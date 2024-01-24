@@ -608,7 +608,7 @@ h3{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="d-none justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
+            <div class="justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
                 
                      <div class="mt-2 mt-md-0">
 
