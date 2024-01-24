@@ -97,6 +97,8 @@ next.addEventListener("click", function (e) {
     //Removing  highlight from the previous page
     prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
 
+    let countPage = document.querySelector(".last").id;
+
     let nextPosition =
         pagePosition.p < parseInt(countPage)
             ? pagePosition.p + 1
