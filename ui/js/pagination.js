@@ -54,11 +54,16 @@ let countPage = last.children[0].id;
 
 last.addEventListener("click", function (e) {
     e.preventDefault();
-    // Saving the  previous page
-    let prevPage = document.getElementById(pagePosition.p).parentNode;
 
-    //Removing  highlight from the previous page
-    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    let nodeExist = document.getElementById(pagePosition.p) ? true : false;
+
+    if (nodeExist) {
+        // Saving the  previous page
+        let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+        //Removing  highlight from the previous page
+        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    }
 
     let url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
@@ -171,9 +176,15 @@ next.addEventListener("click", function (e) {
 first.addEventListener("click", function (e) {
     e.preventDefault();
 
-    let prevPage = document.getElementById(pagePosition.p).parentNode;
+    let nodeExist = document.getElementById(pagePosition.p) ? true : false;
 
-    prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    if (nodeExist) {
+        // Saving the  previous page
+        let prevPage = document.getElementById(pagePosition.p).parentNode;
+
+        //Removing  highlight from the previous page
+        prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
+    }
 
     let firstPage = document.getElementById("1").parentNode;
 
