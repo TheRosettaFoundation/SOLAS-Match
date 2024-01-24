@@ -200,7 +200,7 @@ first.addEventListener("click", function (e) {
 
     previous.classList.add("bg-gray", "text-gray", "opacity-25");
 
-    last.classList.remove("bg-gray", "text-gray", "opacity-25");
+    next.classList.remove("bg-gray", "text-gray", "opacity-25");
 
     requestPage(url);
 });
