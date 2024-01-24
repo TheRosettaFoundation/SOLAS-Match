@@ -105,22 +105,7 @@
         {/if}
        
 
-       <script>
-       const currentPath = window.location.pathname;
-       const navLinks = document.querySelectorAll(".nav-link");
-       console.log(navLinks);
-       navLinks.forEach(link => {
-        console.log(link);
-        if(link.href === currentPath){
-            link.classList.add("active");
-        }else{
-            link.classList.remove("active");
-        }
-       })
-
-       console.log(currentPath);
-       </script>
-   
+      
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
@@ -260,5 +245,20 @@
 		    </a>
 		    </div>
 		{/if}
-        <br/>
-        <br/>
+    
+          <script >
+       const currentPath = window.location.pathname;
+       const navLinks = document.querySelectorAll(".nav-link");
+       console.log(navLinks);
+       navLinks.forEach(link => {
+        console.log(link);
+        if(link.href === currentPath){
+            link.classList.add("active");
+        }else{
+            link.classList.remove("active");
+        }
+       })
+
+       console.log(currentPath);
+       </script>
+   
