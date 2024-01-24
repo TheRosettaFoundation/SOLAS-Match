@@ -50,7 +50,9 @@ let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
 //Selecting countPage on the last button
-let countPage = last.children[0].id;
+let countPage = parseInt(last.children[0].id);
+
+let dispayPage = countPage > 6 ? 6 : countPage;
 
 last.addEventListener("click", function (e) {
     e.preventDefault();
@@ -105,7 +107,7 @@ previous.addEventListener("click", function (e) {
 
     //Checking if there is dom element for the page
 
-    if (pagePosition.p <= 6) {
+    if (pagePosition.p <= dispayPage) {
         let newPage = document.getElementById(pagePosition.p).parentNode;
 
         newPage.classList.add("bg-primary", "opacity-75", "text-primary");
@@ -164,7 +166,7 @@ next.addEventListener("click", function (e) {
 
     next.href = url;
 
-    if (pagePosition.p <= 6) {
+    if (pagePosition.p <= dispayPage) {
         let pageNext = document.getElementById(pagePosition.p).parentNode;
 
         pageNext.classList.add("bg-primary", "opacity-75", "text-primary");
@@ -219,12 +221,10 @@ selectedLanguage.addEventListener("change", function () {
 
     if (selectedL == 0) {
         validation.sl = false;
-        console.log(validation);
     } else {
         validation.sl = true;
-        console.log(validation);
     }
-    console.log(`Value : ${selectedL}`);
+
     let find = url.indexOf("sl/");
     let findN = url.indexOf("tl");
     let firstL = url.slice(0, find);
@@ -255,7 +255,7 @@ taskType.addEventListener("change", function (e) {
     } else {
         validation.tt = true;
     }
-    console.log(validation);
+
     let find = url.indexOf("tt/");
     let findN = url.indexOf("/sl");
 
@@ -317,12 +317,6 @@ pages.forEach((page) => {
         let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        // if (pagePosition.p == 1) {
-        //     previous.classList.add("disabled");
-        // } else {
-        //     previous.classList.remove("disabled");
-        // }
 
         previous.href = newPrevUrl;
 
