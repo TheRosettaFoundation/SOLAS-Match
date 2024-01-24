@@ -83,7 +83,7 @@ previous.addEventListener("click", function (e) {
 
     //Checking if there is dom element for the page
 
-    if (pagePosition <= 6) {
+    if (pagePosition.p <= 6) {
         let newPage = document.getElementById(pagePosition.p).parentNode;
 
         newPage.classList.add("bg-primary", "opacity-75", "text-primary");
