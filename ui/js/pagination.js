@@ -107,7 +107,7 @@ previous.addEventListener("click", function (e) {
         previous.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
-    if (pagePosition.p < countPage) {
+    if (pagePosition.p >= countPage) {
         next.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
         next.classList.remove("bg-gray", "text-gray", "opacity-25");
