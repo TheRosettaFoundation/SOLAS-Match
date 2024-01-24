@@ -121,7 +121,9 @@ previous.addEventListener("click", function (e) {
 next.addEventListener("click", function (e) {
     e.preventDefault();
 
-    if (pagePosition.p >= 6) {
+    let nodeExist = document.getElementById(pagePosition.p) ? true : false;
+
+    if (nodeExist) {
         // Saving the  previous page
         let prevPage = document.getElementById(pagePosition.p).parentNode;
 
