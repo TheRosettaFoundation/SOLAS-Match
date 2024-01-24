@@ -89,7 +89,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 .custom-link:hover {
     text-decoration: underline;
     color: #f89406;
-    background-color: #116fa5;
+
     cursor: pointer;
 }
 
