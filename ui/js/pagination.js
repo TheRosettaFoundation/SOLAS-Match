@@ -26,8 +26,7 @@ const navItems = document.querySelectorAll(".nav-link");
 
 for (let i = 0; i < navItems.length; i++) {
     navItems[i].addEventListener("click", function (e) {
-        e.preventDefault();
-        console.log("clicked");
+        this.classList.add("active");
     });
 }
 
