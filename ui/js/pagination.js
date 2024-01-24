@@ -379,7 +379,7 @@ function displayTasks(pages) {
         const spanTitle = document.createElement("div");
         const spanImg = document.createElement("img");
         spanImg.src = "/ui/img/question.svg";
-        spanImg.classList.add("mx-1");
+        spanImg.classList.add("mx-1", "d-none");
         spanTitle.appendChild(spanImg);
 
         title.appendChild(spanImg);
