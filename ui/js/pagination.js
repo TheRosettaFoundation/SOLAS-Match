@@ -88,6 +88,11 @@ previous.addEventListener("click", function (e) {
 
         newPage.classList.add("bg-primary", "opacity-75", "text-primary");
     }
+    if (pagePosition.p == 1) {
+        previous.parentNode.classList.add("bg-gray", "text-gray");
+    } else {
+        previous.parentNode.classList.remove("bg-gray", "text-gray");
+    }
 
     previous.href = url;
 
@@ -138,6 +143,8 @@ first.addEventListener("click", function (e) {
     let url = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     pagePosition.p = 1;
+
+    previous.parentNode.classList.add("bg-gray", "text-gray");
 
     requestPage(url);
 });
@@ -237,6 +244,12 @@ pages.forEach((page) => {
 
         pagePosition.p = parseInt(page.id);
 
+        if (pagePosition.p == 1) {
+            previous.parentNode.classList.add("bg-gray", "text-gray");
+        } else {
+            previous.parentNode.classList.remove("bg-gray", "text-gray");
+        }
+
         let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
         let newNextPosition =
@@ -257,91 +270,6 @@ pages.forEach((page) => {
         next.href = newNextUrl;
 
         requestPage(hr);
-
-        // if (page.id == "previous") {
-
-        //     requestPage(previous.href);
-
-        //     let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
-
-        //     pagePosition.prev = newPrevPosition;
-
-        //     let prevP = pagePosition.prev;
-
-        //     if (pagePosition.p <= 6) {
-        //         let pagePrev = document.getElementById(prevP).parentNode;
-
-        //         console.log(`pagePrev`);
-
-        //         console.log(pagePrev);
-
-        //         pagePrev.classList.add(
-        //             "bg-primary",
-        //             "opacity-75",
-        //             "text-primary"
-        //         );
-        //     }
-
-        //     let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        //     previous.href = newPrevUrl;
-
-        //     pagePosition.p = newPrevPosition;
-        // } else if (page.id == "next") {
-        //     requestPage(next.href);
-
-        //     let newNextPosition =
-        //         pagePosition.p <= countPage
-        //             ? pagePosition.p + 1
-        //             : pagePosition.p;
-
-        //     let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        //     pagePosition.next = newNextPosition;
-
-        //     let nextP = pagePosition.next;
-
-        //     if (pagePosition.next <= 6) {
-        //         let pageNext = document.getElementById(nextP).parentNode;
-
-        //         pageNext.classList.add(
-        //             "bg-primary",
-        //             "opacity-75",
-        //             "text-primary"
-        //         );
-        //     }
-
-        //     if (pagePosition.p < countPage) {
-        //         pagePosition.p = pagePosition.p + 1;
-        //     }
-
-        //     next.href = newNextUrl;
-        // } else {
-        //     pagePosition.p = parseInt(page.id);
-
-        //     let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
-
-        //     let newNextPosition =
-        //         pagePosition.p <= countPage
-        //             ? pagePosition.p + 1
-        //             : pagePosition.p;
-
-        //     let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        //     let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        //     if (pagePosition.p == 1) {
-        //         previous.classList.add("disabled");
-        //     } else {
-        //         previous.classList.remove("disabled");
-        //     }
-
-        //     previous.href = newPrevUrl;
-
-        //     next.href = newNextUrl;
-
-        //     requestPage(hr);
-        // }
     });
 });
 
