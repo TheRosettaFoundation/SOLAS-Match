@@ -9,8 +9,18 @@
   --bs-tooltip-b: $indigo;
 }
 
+.custom-link {
+  text-decoration: none;
+  color: #f89406;
+}
+
+.custom-link:hover {
+  text-decoration: underline;
+  color: #f89406;
+}
+
 a:hover {
-  text-decorat: #e8991c;
+  text-decoration: #e8991c;
 }
 
 /*!

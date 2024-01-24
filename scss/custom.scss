@@ -81,8 +81,18 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     --bs-tooltip-b: $indigo;
 }
 
+.custom-link {
+    text-decoration: none;
+    color: $primary;
+}
+
+.custom-link:hover {
+    text-decoration: underline;
+    color: #f89406;
+}
+
 a:hover {
-    text-decorat: #e8991c;
+    text-decoration: #e8991c;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
