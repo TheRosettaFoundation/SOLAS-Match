@@ -271,11 +271,16 @@ pages.forEach((page) => {
 
         pagePosition.p = parseInt(page.id);
 
-        // if (pagePosition.p == 1) {
-        //     previous.classList.add("bg-gray", "text-gray","");
-        // } else {
-        //     previous.classList.remove("bg-gray", "text-gray");
-        // }
+        if (pagePosition.p == 1) {
+            previous.classList.add("bg-gray", "text-gray", "opacity-25");
+        } else {
+            previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+        }
+        if (pagePosition.p == countPage) {
+            next.classList.add("bg-gray", "text-gray", "opacity-25");
+        } else {
+            next.classList.remove("bg-gray", "text-gray", "opacity-25");
+        }
 
         let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
