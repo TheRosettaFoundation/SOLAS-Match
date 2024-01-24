@@ -89,9 +89,9 @@ previous.addEventListener("click", function (e) {
         newPage.classList.add("bg-primary", "opacity-75", "text-primary");
     }
     if (pagePosition.p == 1) {
-        previous.parentNode.classList.add("bg-gray", "text-gray");
+        previous.classList.add("bg-gray", "text-gray");
     } else {
-        previous.parentNode.classList.remove("bg-gray", "text-gray");
+        previous.classList.remove("bg-gray", "text-gray");
     }
 
     previous.href = url;
@@ -144,7 +144,7 @@ first.addEventListener("click", function (e) {
 
     pagePosition.p = 1;
 
-    previous.parentNode.classList.add("bg-gray", "text-gray");
+    previous.classList.add("bg-gray", "text-gray");
 
     requestPage(url);
 });
@@ -245,9 +245,9 @@ pages.forEach((page) => {
         pagePosition.p = parseInt(page.id);
 
         if (pagePosition.p == 1) {
-            previous.parentNode.classList.add("bg-gray", "text-gray");
+            previous.classList.add("bg-gray", "text-gray");
         } else {
-            previous.parentNode.classList.remove("bg-gray", "text-gray");
+            previous.classList.remove("bg-gray", "text-gray");
         }
 
         let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
