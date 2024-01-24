@@ -546,7 +546,7 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
         ));
 
-        return UserRouteHandler::render('recent-tasks.tpl', $response);
+        return UserRouteHandler::render('task/recent-tasks.tpl', $response);
 
         // $results = json_encode(['tasks'=> $recentTasks , 'projects' => $projectAndOrgs]);
         // $response->getBody()->write($results);
