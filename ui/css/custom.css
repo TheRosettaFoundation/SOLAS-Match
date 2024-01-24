@@ -15,7 +15,7 @@
 }
 
 .custom-link:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
   color: #f89406;
   cursor: pointer;
 }
