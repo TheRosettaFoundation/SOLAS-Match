@@ -96,6 +96,16 @@
         
         </script>
 
+        <script>
+
+
+            const currentPath = window.location.pathname;
+
+            console.log(currentPath);
+                    
+        
+        </script>
+
 
 
         <!-- extra Scripts -->
