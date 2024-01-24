@@ -5,7 +5,7 @@
                 <footer>
 
 
-                            <div class="container d-flex flex-wrap mb-4 justify-content-end">
+                            <div class="container d-flex flex-wrap mb-4 justify-content-center">
 
                                 
                                
