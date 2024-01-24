@@ -114,6 +114,12 @@ next.addEventListener("click", function (e) {
 
     pagePosition.p = nextPosition;
 
+    if (pagePosition.p == 1) {
+        previous.classList.add("bg-gray", "text-gray", "opacity-25");
+    } else {
+        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+    }
+
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     next.href = url;
