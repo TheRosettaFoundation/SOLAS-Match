@@ -608,11 +608,11 @@ h3{
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class="justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
+            <div class="justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >
                 
                      <div class="mt-2 mt-md-0">
 
-                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary" role="button">
+                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary text-white" role="button">
 	                        {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
 	                    </a>
                                     
