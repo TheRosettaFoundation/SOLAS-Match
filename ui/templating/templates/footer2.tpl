@@ -10,8 +10,8 @@
                                 
                                
                                 
-                                <div class="d-flex justify-content-between py-4  ">
-                                    <div class="d-flex flex-column align-items-center me-4 ">
+                                <div class="d-flex justify-content-between p-4  ">
+                                    <div class="d-flex flex-column align-items-center  ">
                                      <div class="mb-4">{sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}</div>
                                     <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" target="_blank">
                                         <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
@@ -19,7 +19,7 @@
                                     </div>
                                     <div>
 
-                                    <div class="align-middle">
+                                    <div class="align-middle ms-5 p-4">
                                         <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a>                          
                                     </div>
 
