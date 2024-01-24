@@ -109,6 +109,7 @@
        const currentPath = window.location.pathname;
        const navLinks = document.querySelectorAll(".nav-link");
        navLinks.forEach(link => {
+        console.log(link);
         if(link.href === currentPath){
             link.classList.add("active");
         }else{
@@ -116,7 +117,7 @@
         }
        })
 
-       console.log("testing the header");
+       console.log(currentPath);
        </script>
    
     </head>
