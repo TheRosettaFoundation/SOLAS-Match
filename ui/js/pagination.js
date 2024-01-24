@@ -67,7 +67,7 @@ last.addEventListener("click", function (e) {
     if (pagePosition.p == 1) {
         previous.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
-        previous.classList.remove("bg-gray", "text-gray");
+        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
     if (pagePosition.p >= countPage) {
@@ -98,13 +98,19 @@ previous.addEventListener("click", function (e) {
     if (pagePosition.p <= 6) {
         let newPage = document.getElementById(pagePosition.p).parentNode;
 
-        newPage.classList.add("bg-primary", "opacity-25", "text-primary");
+        newPage.classList.add("bg-primary", "opacity-75", "text-primary");
     }
 
     if (pagePosition.p == 1) {
         previous.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
         previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+    }
+
+    if (pagePosition.p < countPage) {
+        next.classList.add("bg-gray", "text-gray", "opacity-25");
+    } else {
+        next.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
     previous.href = url;
