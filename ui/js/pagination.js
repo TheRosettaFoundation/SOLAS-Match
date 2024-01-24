@@ -19,8 +19,8 @@ console.log(projects);
 for (let i = 0; i < projects.length; i++) {
     let firstLink = projects[i].children[0];
     let secondLink = projects[i].children[1];
-    firstLink.classList.add("text-decoration-none", "link-primary");
-    secondLink.classList.add("text-decoration-none", "link-primary");
+    firstLink.classList.add("custom-link");
+    secondLink.classList.add("custom-link");
 }
 
 let taskTypeVal = document.getElementById("taskTypes");
