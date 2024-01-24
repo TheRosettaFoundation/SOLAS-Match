@@ -13,10 +13,6 @@ let validation = {
     tl: false,
 };
 
-const currentPath = window.location.pathname;
-
-console.log(currentPath);
-
 const projects = document.querySelectorAll("#project");
 
 for (let i = 0; i < projects.length; i++) {

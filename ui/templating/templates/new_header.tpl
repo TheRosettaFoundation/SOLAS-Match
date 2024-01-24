@@ -99,7 +99,7 @@
         <script>
 
 
-            const currentPath = window.location.pathname;
+            let currentPath = window.location.pathname;
 
             console.log(currentPath);
                     
