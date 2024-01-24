@@ -54,7 +54,8 @@
             {$platformJS}
         {/if}
         <!-- javascript -->
-    
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
@@ -96,16 +97,6 @@
         
         </script>
 
-        <script>
-
-
-            let currentPath = window.location.pathname;
-
-            console.log(currentPath);
-                    
-        
-        </script>
-
 
 
         <!-- extra Scripts -->
@@ -113,7 +104,7 @@
             {$extra_scripts}
         {/if}
     
-       
+   
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
