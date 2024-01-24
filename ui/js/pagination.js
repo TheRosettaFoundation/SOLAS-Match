@@ -64,6 +64,18 @@ last.addEventListener("click", function (e) {
 
     pagePosition.p = parseInt(countPage);
 
+    if (pagePosition.p == 1) {
+        previous.classList.add("bg-gray", "text-gray", "opacity-25");
+    } else {
+        previous.classList.remove("bg-gray", "text-gray");
+    }
+
+    if (pagePosition.p >= countPage) {
+        last.classList.add("bg-gray", "text-gray", "opacity-25");
+    } else {
+        last.classList.remove("bg-gray", "text-gray", "opacity-25");
+    }
+
     requestPage(url);
 });
 
@@ -86,12 +98,13 @@ previous.addEventListener("click", function (e) {
     if (pagePosition.p <= 6) {
         let newPage = document.getElementById(pagePosition.p).parentNode;
 
-        newPage.classList.add("bg-primary", "opacity-75", "text-primary");
+        newPage.classList.add("bg-primary", "opacity-25", "text-primary");
     }
+
     if (pagePosition.p == 1) {
-        previous.classList.add("bg-gray", "text-gray");
+        previous.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
-        previous.classList.remove("bg-gray", "text-gray");
+        previous.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
     previous.href = url;
@@ -118,6 +131,12 @@ next.addEventListener("click", function (e) {
         previous.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
         previous.classList.remove("bg-gray", "text-gray", "opacity-25");
+    }
+
+    if (pagePosition.p >= countPage) {
+        last.classList.add("bg-gray", "text-gray", "opacity-25");
+    } else {
+        last.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
@@ -150,7 +169,9 @@ first.addEventListener("click", function (e) {
 
     pagePosition.p = 1;
 
-    previous.classList.add("bg-gray", "text-gray");
+    previous.classList.add("bg-gray", "text-gray", "opacity-25");
+
+    last.classList.remove("bg-gray", "text-gray", "opacity-25");
 
     requestPage(url);
 });
