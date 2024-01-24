@@ -115,8 +115,8 @@ next.addEventListener("click", function (e) {
     console.log(url);
     console.log("nexPosition", nextPosition);
 
-    if (pagePosition.next <= 6) {
-        let pageNext = document.getElementById(pagePosition).parentNode;
+    if (pagePosition.p <= 6) {
+        let pageNext = document.getElementById(pagePosition.p).parentNode;
 
         pageNext.classList.add("bg-primary", "opacity-75", "text-primary");
     }
