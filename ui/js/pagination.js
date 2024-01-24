@@ -49,7 +49,7 @@ let next = document.querySelector("#next");
 let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
-let countPage = document.querySelector(".last").id;
+let countPage = document.querySelector("#last").id;
 
 last.addEventListener("click", function (e) {
     e.preventDefault();
@@ -96,8 +96,6 @@ next.addEventListener("click", function (e) {
 
     //Removing  highlight from the previous page
     prevPage.classList.remove("bg-primary", "opacity-75", "text-primary");
-
-    let countPage = document.querySelector(".last").id;
 
     let nextPosition =
         pagePosition.p < parseInt(countPage)
