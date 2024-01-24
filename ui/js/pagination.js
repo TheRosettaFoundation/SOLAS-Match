@@ -71,9 +71,9 @@ last.addEventListener("click", function (e) {
     }
 
     if (pagePosition.p >= countPage) {
-        last.classList.add("bg-gray", "text-gray", "opacity-25");
+        next.classList.add("bg-gray", "text-gray", "opacity-25");
     } else {
-        last.classList.remove("bg-gray", "text-gray", "opacity-25");
+        next.classList.remove("bg-gray", "text-gray", "opacity-25");
     }
 
     requestPage(url);
