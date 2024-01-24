@@ -249,9 +249,9 @@
           <script >
        const currentPath = window.location.pathname;
        const navLinks = document.querySelectorAll(".nav-link");
-       console.log(navLinks);
+   
        navLinks.forEach(link => {
-        console.log(link);
+        console.log("link",link);
         if(link.href === currentPath){
             link.classList.add("active");
         }else{
@@ -259,6 +259,6 @@
         }
        })
 
-       console.log(currentPath);
+       console.log("currentPath",currentPath);
        </script>
    
