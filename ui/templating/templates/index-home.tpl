@@ -611,12 +611,13 @@ h3{
             <div class="d-none justify-content-end align-items-center mb-3">  <span class ="m-2 d-inline-block" >Sort By : </span>
                 
                      <div class="mt-2 mt-md-0">
+
+                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary" role="button">
+	                        {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
+	                    </a>
                                     
-                                        <select name="sorttype"  class="form-select recents" id="{$user_id}">
-	                                    <option value=""> Recently viewed </option>
-	                                   
-	                                </select>
-                            </div>
+                                     
+                    </div>
                 
             
              </div>        
