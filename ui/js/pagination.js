@@ -98,14 +98,22 @@ next.addEventListener("click", function (e) {
     let nextPosition =
         pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
 
-    console.log(countPage);
+    console.log("countPage", countPage);
 
     pagePosition.p = nextPosition;
 
     let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
+    next.href = url;
+
     console.log(url);
     console.log(nextPosition);
+
+    if (pagePosition.next <= 6) {
+        let pageNext = document.getElementById(pagePosition).parentNode;
+
+        pageNext.classList.add("bg-primary", "opacity-75", "text-primary");
+    }
 
     // let newPage = document.getElementById(pagePosition.p).parentNode;
 
