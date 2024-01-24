@@ -116,8 +116,7 @@
         }
        })
 
-       
-       
+       console.log("testing the header");
        </script>
    
     </head>
