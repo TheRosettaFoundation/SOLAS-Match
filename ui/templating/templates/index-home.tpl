@@ -728,8 +728,8 @@ a:hover{
         
                     {for $page=1 to $count}
                       
-                            <li class="mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage">
-                            <a {if $page==1 } class="page bg-primary text-decoration-none link-body-emphasis fs-6"{else} class="page text-decoration-none link-body-emphasis fs-6" {/if}   id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
+                            <li {if $page==1 } class="mx-2 bg-primary border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" {else} class="mx-2 border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" {/if}>
+                            <a  class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                    
 
                     {/for}
