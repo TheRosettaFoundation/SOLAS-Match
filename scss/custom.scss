@@ -88,12 +88,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .custom-link:hover {
     text-decoration: underline !important;
-    color: #f89406;
+    color: #432d0d;
     cursor: pointer;
-}
-
-a:hover {
-    text-decoration: #e8991c;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
