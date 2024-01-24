@@ -271,11 +271,11 @@ pages.forEach((page) => {
 
         pagePosition.p = parseInt(page.id);
 
-        if (pagePosition.p == 1) {
-            previous.classList.add("bg-gray", "text-gray");
-        } else {
-            previous.classList.remove("bg-gray", "text-gray");
-        }
+        // if (pagePosition.p == 1) {
+        //     previous.classList.add("bg-gray", "text-gray","");
+        // } else {
+        //     previous.classList.remove("bg-gray", "text-gray");
+        // }
 
         let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
@@ -286,11 +286,11 @@ pages.forEach((page) => {
 
         let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        if (pagePosition.p == 1) {
-            previous.classList.add("disabled");
-        } else {
-            previous.classList.remove("disabled");
-        }
+        // if (pagePosition.p == 1) {
+        //     previous.classList.add("disabled");
+        // } else {
+        //     previous.classList.remove("disabled");
+        // }
 
         previous.href = newPrevUrl;
 
