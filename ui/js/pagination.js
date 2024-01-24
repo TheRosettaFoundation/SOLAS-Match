@@ -22,14 +22,6 @@ for (let i = 0; i < projects.length; i++) {
     secondLink.classList.add("custom-link");
 }
 
-const navItems = document.querySelectorAll(".nav-link");
-
-for (let i = 0; i < navItems.length; i++) {
-    navItems[i].addEventListener("click", function (e) {
-        navItems[i].classList.add("active");
-    });
-}
-
 let taskTypeVal = document.getElementById("taskTypes");
 
 let tasksContainer = document.querySelector(".taskPagination");

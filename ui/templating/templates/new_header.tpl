@@ -103,7 +103,22 @@
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
-    
+       
+
+       <script>
+       const currentPath = window.location.pathname;
+       const navLinks = document.querySelectorAll(".nav-link");
+       navLinks.forEach(link => {
+        if(link.href === currentPath){
+            link.classList.add("active");
+        }else{
+            link.classList.remove("active");
+        }
+       })
+
+       
+       
+       </script>
    
     </head>
 
