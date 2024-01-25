@@ -142,14 +142,16 @@
 
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
-                            console.log(navLinks , currentPath);
+                            console.log(currentPath);
                         
 
                             navLinks.forEach(link => {
+
+                                console.log(link.href , currentPath);
                                 
                                 if(link.href == currentPath){
                                     link.classList.add("active");
-                                    console.log("link",link);
+                                   
                                 }else{
                                     link.classList.remove("active");
                                 }
