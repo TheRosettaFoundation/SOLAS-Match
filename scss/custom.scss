@@ -93,11 +93,6 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     cursor: pointer;
 }
 
-.activeLink {
-    color: $primary !important;
-    font-size: x-large;
-}
-
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed

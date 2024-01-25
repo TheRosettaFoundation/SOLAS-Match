@@ -20,11 +20,6 @@
   cursor: pointer;
 }
 
-.activeLink {
-  color: #f89406 !important;
-  font-size: x-large;
-}
-
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
@@ -4274,7 +4269,7 @@ textarea.form-control-lg {
   --bs-navbar-color: #133978;
   --bs-navbar-hover-color: #f89406;
   --bs-navbar-disabled-color: rgba(var(--bs-emphasis-color-rgb), 0.3);
-  --bs-navbar-active-color: rgba(var(--bs-emphasis-color-rgb), 1);
+  --bs-navbar-active-color: #0d6efd;
   --bs-navbar-brand-padding-y: 0.3125rem;
   --bs-navbar-brand-margin-end: 1rem;
   --bs-navbar-brand-font-size: 1.25rem;
