@@ -81,8 +81,16 @@
             {/foreach}
             ]; 
 
-            console.log(task_types);
-            
+
+
+            var source_and_target = [
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    {$ui['source_and_target']}
+                {/foreach}
+            ];
+
+            console.log(source_and_target);
+
             var colours = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['colour']}",
