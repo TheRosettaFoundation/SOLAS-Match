@@ -609,11 +609,11 @@ a:hover{
    
     </div>
 
-    <div class="col-sm-12 col-md-8 col-lg-9 mt-2">
+    <div class="col-sm-12 col-md-8 col-lg-9 mt-4">
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
-            <div class=" d-flex justify-content-end align-items-center mb-3 mt-2"> 
+            <div class=" d-flex justify-content-end align-items-center mb-3 "> 
                 
                      <div>
 
