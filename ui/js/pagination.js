@@ -22,6 +22,8 @@ for (let i = 0; i < projects.length; i++) {
     secondLink.classList.add("custom-link");
 }
 
+console.log(TaskTypeEnum);
+
 let taskTypeVal = document.getElementById("taskTypes");
 
 let tasksContainer = document.querySelector(".taskPagination");
