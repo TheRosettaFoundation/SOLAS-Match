@@ -115,9 +115,9 @@ function renderTaskDetails() {
                     "</div>" +
                     "</div>"
             ) +
-                "<div class=`fw-bold`>" +
+                `<div class="fw-bold">` +
                 Intl.DateTimeFormat().resolvedOptions().timeZone +
-                "</div>"
+                `</div>`
         );
 
         $(this).css("visibility", "visible");
