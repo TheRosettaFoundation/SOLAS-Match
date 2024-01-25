@@ -481,6 +481,8 @@ a:hover{
 
 </div>
 
+</div>
+
 
 
  	{if ((Settings::get('banner.enabled') == 'y'))}
