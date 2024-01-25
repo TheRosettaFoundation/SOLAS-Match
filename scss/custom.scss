@@ -97,6 +97,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     font-weight: bold;
 }
 
+$navbar-light-active-color: $primary;
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
