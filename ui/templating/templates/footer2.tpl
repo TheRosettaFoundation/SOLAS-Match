@@ -33,13 +33,13 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
-                        <div class="d-flex flex-wrap"> 
-                           <div class ="mx-md-2 mx-5 text-white"> Follow Us :</div>
-                           <div class ="mx-md-2  mx-5 mt-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
-                           <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
-                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
-                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
-                           <div class ="mx-md-2 mx-5 mt-4 mt-md-0">   <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" > <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" />  </a></div>
+                        <div class="d-flex align-items-center flex-wrap py-3"> 
+                           <div class =" mx-2 text-white"> Follow Us :</div>
+                           <div class ="  mx-2  mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
+                           <div class =" mx-2  mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
+                            <div class =" mx-2  mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
+                            <div class =" mx-2  mt-md-0">  <a href="https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
+                           <div class =" mx-2  mt-md-0">   <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" > <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" />  </a></div>
        
                         
                         </div>
