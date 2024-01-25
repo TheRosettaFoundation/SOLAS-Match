@@ -102,7 +102,7 @@
                         
                     } 
        
-
+                    if(theme){
                     theme.addEventListener("click" , function(e) {
                        
                        light = !light ;       
@@ -127,6 +127,7 @@
 
                        
                     })
+                    }
                    
                     
                     </script>

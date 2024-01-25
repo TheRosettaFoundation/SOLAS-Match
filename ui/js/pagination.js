@@ -38,8 +38,9 @@ let last = document.querySelector(".last");
 let first = document.querySelector(".first");
 
 //Selecting countPage on the last button
-let countPage = parseInt(last.children[0].id);
-
+if (last) {
+    let countPage = parseInt(last.children[0].id);
+}
 let dispayPage = countPage > 6 ? 6 : countPage;
 
 last.addEventListener("click", function (e) {
