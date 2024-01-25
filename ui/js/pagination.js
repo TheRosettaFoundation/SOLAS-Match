@@ -348,8 +348,6 @@ function displayTasks(pages) {
 
         console.log("checking the taskType");
 
-        console.log(task_types[item.taskType]);
-
         const innerDiv = document.createElement("div");
         const itemElement = document.createElement("div");
         itemElement.classList.add(
