@@ -150,10 +150,10 @@
                                 console.log(link.pathname , currentPath);
                                 
                                 if(link.pathname == currentPath){
-                                    link.classList.add("active");
+                                    link.classList.add("activeLink");
                                    
                                 }else{
-                                    link.classList.remove("active");
+                                    link.classList.remove("activeLink");
                                 }
                             })
 

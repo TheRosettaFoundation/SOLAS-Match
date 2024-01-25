@@ -20,7 +20,7 @@
   cursor: pointer;
 }
 
-.active {
+.activeLink {
   color: #f89406 !important;
   font-weight: bold;
 }
