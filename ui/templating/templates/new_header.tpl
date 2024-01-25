@@ -80,6 +80,9 @@
                 {$ui['type_enum']},
             {/foreach}
             ]; 
+
+            console.log(task_types);
+            
             var colours = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['colour']}",
@@ -98,7 +101,7 @@
             ];
         
         
-        </script>
+</script>
 
 
 
