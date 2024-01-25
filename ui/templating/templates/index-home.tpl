@@ -50,7 +50,7 @@ h3{
     .car{
         
       display:block;
-      background-color:#133978;
+      
      
             
     } 
@@ -222,8 +222,8 @@ a:hover{
                         <br/>  
                         <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
-                    <div class="carousel-caption ">
-                        <div class="row-fluid bg-secondary d-flex justify-content-center flex-wrap">
+                    <div class="carousel-caption bg-secondary  ">
+                        <div class="row-fluid  d-flex justify-content-center flex-wrap">
                  
                         <div  class="car"><h3 >“Volunteering as a translator for TWB also helps to keep your eyes peeled and see things through a different perspective.”<br/> - Andrea Alvisi</h3></div>
                     </div>
