@@ -41,9 +41,7 @@ let first = document.querySelector(".first");
 
 let countPage = parseInt(last.children[0].id);
 
-if (countPage) {
-    let dispayPage = countPage > 6 ? 6 : countPage;
-}
+let dispayPage = countPage > 6 ? 6 : countPage;
 
 last.addEventListener("click", function (e) {
     e.preventDefault();
