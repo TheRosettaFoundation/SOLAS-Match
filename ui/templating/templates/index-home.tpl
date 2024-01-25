@@ -793,4 +793,4 @@ a:hover{
 {/if}
 
        
-{include file="footer2.tpl"}
+{include file="footer.tpl"}

@@ -1,14 +1,9 @@
-            <br/><br/>
-            
-          
 
                 <footer>
 
 
                             <div class="container d-flex flex-wrap mb-4 justify-content-center">
 
-                                
-                               
                                 
                                 <div class="d-flex justify-content-between p-4  ">
                                     <div class="d-flex flex-column align-items-center  ">
@@ -80,7 +75,7 @@
                     <script>
 
 
-                    // Variables on the theme of the site
+                    // Variables for  the theme of the site
 
                     let navi = document.getElementById("nav");
 
@@ -110,8 +105,7 @@
 
                     theme.addEventListener("click" , function(e) {
                        
-                       light = !light ;
-                       
+                       light = !light ;       
    
                        if(light){
                         imgL.classList.remove("d-none");
@@ -139,6 +133,8 @@
 
 
                       <script>
+
+                            // Script for setting active navLink 
 
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
