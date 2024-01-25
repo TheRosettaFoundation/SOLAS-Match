@@ -142,7 +142,8 @@
 
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
-                            console.log(navLinks);
+                            console.log(navLinks , currentPath);
+                        
 
                             navLinks.forEach(link => {
                                 console.log("link",link);
@@ -153,7 +154,7 @@
                                 }
                             })
 
-                            console.log("currentPath",currentPath);
+                            
                  </script>
 
                   
