@@ -467,6 +467,7 @@ function displayTasks(pages) {
                         </svg>  ${item.targetLocale.languageName}
                     </span>
         </div>
+
         <div class="text-muted d-flex me-2" > <div> Due by </div>
         <strong class="d-flex align-items-center"> <div class="mx-2 "> ${date} </div>
          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="mx-1">
@@ -515,7 +516,9 @@ function displayTasks(pages) {
         itemSubFlex.appendChild(titleContainer);
         itemFlexContainer.appendChild(itemSubFlex);
         itemSubFlex.appendChild(badgeContainer);
-        itemSubFlex.appendChild(langHtml);
+        if (source_and_target[item.taskType] > 0) {
+            itemSubFlex.appendChild(langHtml);
+        }
 
         if (imageHtml) {
             itemFlexContainer.appendChild(imageHtml);
