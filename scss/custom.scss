@@ -94,10 +94,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .activeLink {
     color: $primary !important;
-    font-weight: bold;
 }
-
-$navbar-light-active-color: $primary;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
