@@ -142,16 +142,10 @@
 
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
-                            console.log(currentPath);
-
                             const currentOrigin = window.location.origin;
-                            console.log("currentOrigin",currentOrigin)
-                        
-
+ 
                             navLinks.forEach(link => {
 
-                                console.log(link.pathname , currentPath);
-                                console.log("link",link.href) ;
                                 let href = link.href ;
                                 
                                 if(link.pathname === currentPath && href.includes(currentOrigin)){
@@ -163,7 +157,7 @@
                             })
 
                             
-                 </script>
+                     </script>
 
                   
  </body>                
