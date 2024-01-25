@@ -44,7 +44,7 @@
                         
                         </div>
 
-                        <div class= "mx-5 mx-md-2 mt-4 mt-md-0 ">
+                        <div class= "mx-5 mx-md-2 mt-4 mt-md-0  py-3">
                             <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none text-white" target="_blank">Contact Us</a>
                              | 
                             <a href="/static/terms/" class="text-decoration-none text-white" target="_blank" >
@@ -59,7 +59,7 @@
 
                        
 
-                        <div class="d-flex justify-content-end mt-4 mx-5 mx-md-2  mt-md-0">
+                        <div class="d-flex justify-content-end mt-4 mx-5 mx-md-2  mt-md-0 py-3">
                              <div  class ="text-end"> <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&amp;__hssc=84675846.1.1634309162966&amp;__hsfp=2187346942" target="_blank" class="text-decoration-none text-white"> <img alt="" class="me-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter  </a>  </div>
                             
                         </div>
