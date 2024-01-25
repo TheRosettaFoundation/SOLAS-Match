@@ -39,8 +39,10 @@ let first = document.querySelector(".first");
 
 //Selecting countPage on the last button
 
+let countPage = 1;
+
 if (last) {
-    let countPage = parseInt(last.children[0].id);
+    countPage = parseInt(last.children[0].id);
 }
 
 if (countPage) {
