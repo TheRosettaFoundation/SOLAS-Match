@@ -149,7 +149,7 @@
 
                                 console.log(link.pathname , currentPath);
                                 
-                                if(link.href == currentPath){
+                                if(link.pathname == currentPath){
                                     link.classList.add("active");
                                    
                                 }else{
