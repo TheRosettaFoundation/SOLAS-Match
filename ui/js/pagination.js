@@ -39,11 +39,7 @@ let first = document.querySelector(".first");
 
 //Selecting countPage on the last button
 
-let countPage = 1;
-
-if (last) {
-    countPage = parseInt(last.children[0].id);
-}
+let countPage = parseInt(last.children[0].id);
 
 if (countPage) {
     let dispayPage = countPage > 6 ? 6 : countPage;
