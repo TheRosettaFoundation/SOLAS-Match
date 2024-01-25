@@ -364,6 +364,7 @@ function displayTasks(pages) {
         const title = document.createElement("a");
         title.classList.add("custom-link", "fw-bold", "fs-3");
         title.href = `https://dev2.translatorswb.org/task/${item.id}/view`;
+        title.target = "_blank";
         title.textContent = item.title;
 
         const spanTitle = document.createElement("div");
