@@ -146,9 +146,10 @@
                         
 
                             navLinks.forEach(link => {
-                                console.log("link",link);
-                                if(link.href === currentPath){
+                                
+                                if(link.href == currentPath){
                                     link.classList.add("active");
+                                    console.log("link",link);
                                 }else{
                                     link.classList.remove("active");
                                 }
