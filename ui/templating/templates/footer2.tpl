@@ -33,7 +33,7 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
-                        <div class="d-inline-block d-md-flex wrap"> 
+                        <div class="d-flex wrap"> 
                            <div class ="mx-md-2 mx-5 text-white"> Follow Us :</div>
                            <div class ="mx-md-2  mx-5 mt-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
