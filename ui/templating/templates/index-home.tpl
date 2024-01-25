@@ -778,9 +778,9 @@ a:hover{
 </div>
 
  
-<h1 class="end of container "></h1>
+<h1 class="end of container"></h1>
 
-    </div>
+</div>
 
 </div>
 
