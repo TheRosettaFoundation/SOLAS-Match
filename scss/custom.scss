@@ -94,6 +94,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .activeLink {
     color: $primary !important;
+    font-size: x-large;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
