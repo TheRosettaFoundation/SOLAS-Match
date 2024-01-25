@@ -28,23 +28,7 @@
         
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
 
-        <script defer>
-
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll(".nav-link");
-            console.log(navLinks);
-
-            navLinks.forEach(link => {
-                console.log("link",link);
-                if(link.href === currentPath){
-                    link.classList.add("active");
-                }else{
-                    link.classList.remove("active");
-                }
-            })
-
-            console.log("currentPath",currentPath);
-       </script>
+      
    
         
         
