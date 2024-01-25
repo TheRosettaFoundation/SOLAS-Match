@@ -33,7 +33,7 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 ">
 
-                        <div class="mx-5 d-flex align-items-center flex-wrap py-5"> 
+                        <div class="mx-5  mt-2 d-flex align-items-center flex-wrap py-5"> 
                            <div class =" text-white"> Follow Us :</div>
                            <div class ="  mx-2  mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class =" mx-2  mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
@@ -44,7 +44,7 @@
                         
                         </div>
 
-                        <div class= "mx-5   mt-2 mt-md-4 mt-md-0  py-5">
+                        <div class= "mx-5   mt-2  py-5">
                             <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none text-white" target="_blank">Contact Us</a>
                              | 
                             <a href="/static/terms/" class="text-decoration-none text-white" target="_blank" >
@@ -59,7 +59,7 @@
 
                        
 
-                        <div class="d-flex justify-content-end mt-2 mt-md-4 mx-5  mt-md-0 py-5">
+                        <div class="d-flex justify-content-end mt-2  mx-5  mt-md-0 py-5">
                              <div  class ="text-end"> <a href="https://share.hsforms.com/1ctab13J6RHWkhWHLjzk3wQ4fck2?__hstc=84675846.0317038ad40c7930bed861f0514d9b6b.1634021927382.1634021927382.1634309162966.2&amp;__hssc=84675846.1.1634309162966&amp;__hsfp=2187346942" target="_blank" class="text-decoration-none text-white"> <img alt="" class="me-2" src="{urlFor name='home'}ui/img/sub.svg" /> Subscribe To TWB Newsletter  </a>  </div>
                             
                         </div>
