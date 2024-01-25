@@ -93,7 +93,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 }
 
 .active {
-    color: $primary;
+    color: $primary !important;
     font-weight: bold;
 }
 
