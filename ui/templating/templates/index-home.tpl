@@ -61,8 +61,9 @@ h3{
 .top-left {
   position: absolute;
   top: 8px;
-  left: 16px;
+  left: 23px;
   color:white;
+  z-index:10;
 }
 .btn-block {
     width: 120px !important;
