@@ -10,7 +10,7 @@
                                      <div class="mb-4 ">{sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}</div>
                                     <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" class="text-decoration-none text-body" target="_blank">
                                         <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
-                                        <h1 class="fs-5 text-decoration-none text-secondary"> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary ">Solas </h1></a>
+                                        <h1 class="fs-5 text-decoration-none text-secondary"> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="custom-link">Solas </h1></a>
                                          <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a>
                                     </div>
                                     <div>
