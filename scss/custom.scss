@@ -60,9 +60,8 @@ $font-sizes: (
     7: 11px,
 );
 
-$spacer: 8px;
+$spacer: 4px;
 $spacers: (
-    0: 2px,
     1: $spacer * 0.5,
     2: $spacer,
     3: $spacer * 2,
