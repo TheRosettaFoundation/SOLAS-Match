@@ -346,8 +346,6 @@ function displayTasks(pages) {
         let image;
         let imageHtml;
 
-        console.log("checking the taskType");
-
         const innerDiv = document.createElement("div");
         const itemElement = document.createElement("div");
         itemElement.classList.add(

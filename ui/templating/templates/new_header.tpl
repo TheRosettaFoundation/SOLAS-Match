@@ -89,7 +89,7 @@
                 {/foreach}
             ];
 
-            console.log(source_and_target);
+    
 
             var colours = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
