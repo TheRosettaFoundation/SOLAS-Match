@@ -734,7 +734,7 @@ a:hover{
         
                     {for $page=1 to $count}
                       
-                            <li {if $page==1 } class="mx-2 bg-primary border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage text-primary" {else} class="mx-2 border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" {/if}>
+                            <li {if $page==1 } class="mx-2 bg-primary border border-dark-subtle mt-1 mt-md-0 rounded-3 py-0 px-2 listPage text-primary" {else} class="mx-2 border border-dark-subtle mt-1 mt-md-0 rounded-3 py-0 px-2 listPage" {/if}>
                             <a  class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
                    
 
