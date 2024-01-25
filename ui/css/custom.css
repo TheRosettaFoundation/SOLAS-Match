@@ -20,6 +20,11 @@
   cursor: pointer;
 }
 
+.active {
+  color: #f89406;
+  font-weight: bold;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

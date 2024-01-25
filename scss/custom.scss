@@ -92,6 +92,11 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     cursor: pointer;
 }
 
+.active {
+    color: $primary;
+    font-weight: bold;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
