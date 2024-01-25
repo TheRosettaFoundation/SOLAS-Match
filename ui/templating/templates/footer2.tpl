@@ -7,7 +7,7 @@
                                 
                                 <div class="d-flex justify-content-between p-4  ">
                                     <div class="d-flex flex-column align-items-center  ">
-                                     <div class="mb-4 link-primary">{sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}</div>
+                                     <div class="mb-4 ">{sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}</div>
                                     <a href="http://github.com/TheRosettaFoundation/SOLAS-Match" class="text-decoration-none text-body" target="_blank">
                                         <img alt="Solas Logo" style="border-width:0" src="{urlFor name='home'}ui/img/logo.png" height="48px" />
                                         <h1 class="fs-5 text-decoration-none text-secondary"> TWB Platform is powered by <a href="https://github.com/TheRosettaFoundation/SOLAS-Match" class="text-primary ">Solas </h1></a>
@@ -33,7 +33,7 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 py-5">
 
-                        <div class="d-md-flex wrap"> 
+                        <div class="d-inline-block d-md-flex wrap"> 
                            <div class ="mx-md-2 mx-5 text-white"> Follow Us :</div>
                            <div class ="mx-md-2  mx-5 mt-4 mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class ="mx-md-2 mx-5 mt-4 mt-md-0">  <a href="https://twitter.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>

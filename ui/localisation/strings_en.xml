@@ -1114,7 +1114,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
     <string name="footer_powered_by">TWB Platform is powered by <a href="%s">%s</a></string>
-    <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Maintained by <a href="%s" class="custom-link" target="_blank">%s</a></string>
     <string name="footer_contact_us">Contact Us</string>
 
 	<string name="header_home">Home</string>
