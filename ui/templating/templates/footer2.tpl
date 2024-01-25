@@ -151,9 +151,9 @@
                             navLinks.forEach(link => {
 
                                 console.log(link.pathname , currentPath);
-                                console.log(link.href)
+                                console.log("link",link.href) ;
                                 
-                                if(link.pathname == currentPath && link.href.includes(currentOrigin)){
+                                if(link.pathname == currentPath){
                                     link.classList.add("activeLink");
                                    
                                 }else{
