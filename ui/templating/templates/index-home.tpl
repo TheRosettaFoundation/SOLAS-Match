@@ -328,22 +328,7 @@ a:hover{
     </div>
 
 
-              
-   <!-- <div class="row-fluid">
-
-         <h2 class="twbheader" style="text-align: center">In the last 30 days</h2>
-         <div style="text-align: center" class="span4">
-           <h1 class="clearheader" id="value" >{$user_monthly_count}</h1>
-           <span class="clearheader" >Active Users</span>
-         </div>
-         <div class="span4">
-           <p></p>
-         </div>
-         <div class="span4">
-          <p></p>
-         </div>
-  
-   </div> -->
+ 
 
  <div class="row-fluid">
  <br/>
