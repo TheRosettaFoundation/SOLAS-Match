@@ -19,3 +19,5 @@ ui/dart/deploy/web/conf/conf.json
 /.settings
 .vagrant
 node_modules
+ui/css/custom.css.map
+
