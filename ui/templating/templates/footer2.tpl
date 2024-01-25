@@ -145,7 +145,7 @@
                             console.log(currentPath);
 
                             const currentOrigin = window.location.origin;
-                            console.log(currentOrigin)
+                            console.log("currentOrigin",currentOrigin)
                         
 
                             navLinks.forEach(link => {
@@ -153,7 +153,7 @@
                                 console.log(link.pathname , currentPath);
                                 console.log(link.href)
                                 
-                                if(link.pathname == currentPath){
+                                if(link.pathname == currentPath && link.href.includes(currentOrigin)){
                                     link.classList.add("activeLink");
                                    
                                 }else{
