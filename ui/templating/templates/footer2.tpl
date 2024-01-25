@@ -152,8 +152,9 @@
 
                                 console.log(link.pathname , currentPath);
                                 console.log("link",link.href) ;
+                                let href = link.href ;
                                 
-                                if(link.pathname == currentPath){
+                                if(link.pathname === currentPath && href.includes(currentOrigin)){
                                     link.classList.add("activeLink");
                                    
                                 }else{
