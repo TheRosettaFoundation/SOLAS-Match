@@ -29,9 +29,10 @@
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
 
         <script defer>
-        
+
             const currentPath = window.location.pathname;
             const navLinks = document.querySelectorAll(".nav-link");
+            console.log(navLinks);
 
             navLinks.forEach(link => {
                 console.log("link",link);
