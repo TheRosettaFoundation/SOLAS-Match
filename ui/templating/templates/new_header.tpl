@@ -44,7 +44,7 @@
             })
 
             console.log("currentPath",currentPath);
-    </script>
+       </script>
    
         
         
