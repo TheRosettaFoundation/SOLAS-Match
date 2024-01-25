@@ -22,7 +22,7 @@ for (let i = 0; i < projects.length; i++) {
     secondLink.classList.add("custom-link");
 }
 
-console.log(TaskTypeEnum);
+console.log(task_types);
 
 let taskTypeVal = document.getElementById("taskTypes");
 
