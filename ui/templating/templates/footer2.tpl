@@ -143,6 +143,9 @@
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
                             console.log(currentPath);
+
+                            const currentOrigin = window.location.origin;
+                            console.log(currentOrigin)
                         
 
                             navLinks.forEach(link => {
