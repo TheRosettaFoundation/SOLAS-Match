@@ -585,6 +585,8 @@ a:hover{
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                             </p>
                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+
+                            <span> TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target'] </span>
                             <p>
                                 {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                             </p>
