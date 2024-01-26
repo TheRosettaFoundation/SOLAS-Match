@@ -1114,7 +1114,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
 	<string name="footer_community_forum">Foro de la comunidad</string>
     <string name="footer_feedback"><a href="%s">Tus comentarios</a> son muy bienvenidos.</string>
     <string name="footer_powered_by">Desarrollado por <a href="%s">%s</a></string>
-    <string name="footer_maintained_by">Mantenido por <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Mantenido por <a href="%s" class="custom-link" target="_blank">%s</a></string>
     <string name="footer_contact_us">Contacto</string>
 
 	<string name="header_home">Inicio</string>

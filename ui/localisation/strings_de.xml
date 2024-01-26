@@ -1103,7 +1103,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
 	<string name="footer_community_forum">Community-Forum</string>
     <string name="footer_feedback">Wir schätzen Dein <a href="%s">Feedback</a>.</string>
     <string name="footer_powered_by">Betreiber: <a href="%s">%s</a></string>
-    <string name="footer_maintained_by">Wartung: <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Wartung: <a href="%s" class="custom-link" target="_blank">%s</a></string>
     <string name="footer_contact_us">Kontakt</string>
 
 	<string name="header_home">Startseite</string>

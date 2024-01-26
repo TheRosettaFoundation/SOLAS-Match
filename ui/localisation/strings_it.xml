@@ -1111,7 +1111,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@translatorswit
 	<string name="footer_community_forum">Forum</string>
     <string name="footer_feedback">Il tuo <a href="%s">feedback</a> è importante.</string>
     <string name="footer_powered_by">Con tecnologia <a href="%s">%s</a></string>
-    <string name="footer_maintained_by">Manutenzione a cura di <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Manutenzione a cura di <a href="%s" class="custom-link" target="_blank">%s</a></string>
     <string name="footer_contact_us">Contattaci</string>
 
 	<string name="header_home">Home</string>
