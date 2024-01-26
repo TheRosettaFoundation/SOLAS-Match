@@ -4099,6 +4099,7 @@ BEGIN
         (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
         LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700) +
         IF(DATEDIFF(CURDATE(), t.deadline) > 91, -5000, 0)
+        + t.id/50000.
         DESC
     LIMIT offset, lim;
 END//
