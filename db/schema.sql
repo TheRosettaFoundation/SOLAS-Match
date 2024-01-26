@@ -6948,7 +6948,7 @@ BEGIN
         i.`first-name` AS first_name,
         i.`last-name` AS last_name,
         MAX(IF(tau.user_id IS NOT NULL, 'Yes', '')) AS terms,
-        MAX(IF( ad.user_id IS NOT NULL, 'Yes', '')) AS admin
+        IF(BIT_OR(ad.roles) IS NULL, '', IF(BIT_OR(ad.roles)&64, 'TWB Admin', IF(BIT_OR(ad.roles)&32, 'Project Officer', IF(BIT_OR(ad.roles)&16, 'Community Officer', IF(BIT_OR(ad.roles)&8, 'NGO Admin', IF(BIT_OR(ad.roles)&4, 'NGO Project Officer', IF(BIT_OR(ad.roles)&2, 'NGO Linguist', ''))))))) AS admin
     FROM Users u
     LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     LEFT JOIN Countries c ON u.country_id=c.id
@@ -11223,9 +11223,9 @@ BEGIN
         SUM(IF(tp.payment_status IS NOT NULL                                                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost,
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived
     FROM      hubspot_deals           hd
-    LEFT JOIN project_complete_dates pcd ON hd.deal_id=pcd.deal_id
-    LEFT JOIN Tasks                    t ON pcd.project_id=t.project_id
-    LEFT JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN project_complete_dates pcd ON hd.deal_id=pcd.deal_id
+    JOIN Tasks                    t ON pcd.project_id=t.project_id
+    JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
     LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
     GROUP BY hd.deal_id
     ORDER BY hd.company_name, hd.start_date;
@@ -11648,6 +11648,39 @@ BEGIN
     ELSE
         SELECT 0 AS task_id;
     END IF;
+END//
+DELIMITER ;
+
+
+CREATE TABLE requested_analysis_s (
+  task_id    BIGINT UNSIGNED NOT NULL,
+  status     INT NOT NULL DEFAULT 0,
+  analyse_id BIGINT UNSIGNED NOT NULL,
+  KEY (task_id),
+  KEY (analyse_id),
+  CONSTRAINT `FK_requested_analysis_s_task_id` FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_requested_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_requested_analysis`(
+    IN p_task_id    BIGINT UNSIGNED,
+    IN p_analyse_id BIGINT UNSIGNED)
+BEGIN
+    INSERT INTO requested_analysis_s (
+        task_id,
+        analyse_id)
+    VALUES (
+        p_task_id,
+        p_analyse_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_requested_analysis`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_requested_analysis`(IN p_analyse_id BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM requested_analysis_s WHERE analyse_id=p_analyse_id;
 END//
 DELIMITER ;
 
