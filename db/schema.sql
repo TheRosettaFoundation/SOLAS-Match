@@ -4209,6 +4209,7 @@ BEGIN
              WHEN orderBy = 3 THEN deadline
              WHEN orderBy = 5 THEN title
             END DESC
+          , t.id DESC
             LIMIT offset, lim);
 END//
 DELIMITER ;
