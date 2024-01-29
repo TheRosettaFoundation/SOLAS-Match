@@ -48,15 +48,12 @@ if (isPagination) {
 
     let dispayPage = countPage > 6 ? 6 : countPage;
 
-
     let nextPosition =
-    pagePosition.p < parseInt(countPage)
-        ? pagePosition.p + 1
-        : pagePosition.p;
-    
-    let prevPosition =
-            pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+        pagePosition.p < parseInt(countPage)
+            ? pagePosition.p + 1
+            : pagePosition.p;
 
+    let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
     last.addEventListener("click", function (e) {
         e.preventDefault();
@@ -157,7 +154,6 @@ if (isPagination) {
             );
         }
 
-
         pagePosition.p = nextPosition;
 
         if (pagePosition.p == 1) {
@@ -173,7 +169,6 @@ if (isPagination) {
         }
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
 
         next.children[0] = url;
 
@@ -253,12 +248,10 @@ if (isPagination) {
             page.href = finUrl;
         });
 
-
-
         next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
- 
+
         first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     });
@@ -585,7 +578,8 @@ if (isPagination) {
 
         tasksContainer.innerHTML = newDataString;
 
-        next.children[0].href = `paged/${}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        previous.chidren[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     }
 
     function reqListner() {
