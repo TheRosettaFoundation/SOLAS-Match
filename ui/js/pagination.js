@@ -380,19 +380,6 @@ if (isPagination) {
         req.send();
     };
 
-    const entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-        "/": "&#x2F;",
-    };
-
-    function escapeHtml(unsafeHtml) {
-        return unsafeHtml.replace(/[&<>"'\/]/g, (entity) => entityMap[entity]);
-    }
-
     function displayTasks(pages) {
         let parsed;
         let images;
@@ -442,7 +429,7 @@ if (isPagination) {
             title.classList.add("custom-link", "fw-bold", "fs-3");
             title.href = `/task/${item.id}/view`;
             title.target = "_blank";
-            title.innerText = escapeHtml(item.title);
+            title.innerText = item.title;
 
             const spanTitle = document.createElement("div");
             const spanImg = document.createElement("img");
@@ -458,7 +445,7 @@ if (isPagination) {
                 "d-flex",
                 "align-items-center"
             );
-            titleContainer.appendChild(escapeHtml(title));
+            titleContainer.appendChild(title);
 
             const badgeContainer = document.createElement("div");
             badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
