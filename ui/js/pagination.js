@@ -3,6 +3,8 @@ const isPagination = document.querySelector(".pagination") ? true : false;
 console.log("isPagination", isPagination);
 
 if (isPagination) {
+    let page = document.querySelector(".page").children[0].href;
+
     let pagePosition = {
         p: 1,
         tt: 0,
@@ -151,8 +153,6 @@ if (isPagination) {
                 "text-primary"
             );
         }
-
-        pagePosition.p = pagePosition + 1;
 
         if (pagePosition.p == 1) {
             previous.classList.add("bg-gray", "text-body", "opacity-50");
@@ -377,23 +377,6 @@ if (isPagination) {
             let imageId;
             let image;
             let imageHtml;
-
-            pagePosition.sl = item.sourceLocale.languageCode;
-            pagePosition.tl = item.targetLocale.languageCode;
-            // pagePosition.p = 1;
-
-            // if (next) {
-            //     next.children[0].href = `paged/${nextPosition + 1}/tt/${
-            //         pagePosition.tt
-            //     }/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-            // }
-
-            // if (last) {
-            //     last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-            // }
-
-            first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-            previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
