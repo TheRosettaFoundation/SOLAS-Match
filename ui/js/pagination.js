@@ -11,7 +11,7 @@ if (isPagination) {
 
     console.log("sl", sl);
 
-    let sourceLan = page.substring(sl, 2);
+    let sourceLan = page.slice(sl, sl + 2);
 
     console.log("sourceLan", sourceLan);
 
