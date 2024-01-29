@@ -16,7 +16,7 @@ if (isPagination) {
     let targetLan = page.slice(tl, tl + 2);
 
     console.log("sourceLan", sourceLan);
-    console.log("targetLan", sourceLan);
+    console.log("targetLan", targetLan);
 
     console.log(page);
 
