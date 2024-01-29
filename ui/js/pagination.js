@@ -4,12 +4,12 @@ console.log("isPagination", isPagination);
 
 if (isPagination) {
     let page = document.querySelector(".page").href;
-
+    console.log(page);
     let pp = page.lastIndexOf("/paged/");
     let tt = page.lastIndexOf("/tt/");
     let sl = page.lastIndexOf("/sl/");
 
-    console.log("sl", page.slice(sl + 1, 2));
+    console.log("sl", sl);
 
     let tl = page.lastIndexOf("/tl/");
 
