@@ -6,17 +6,17 @@ if (isPagination) {
     let page = document.querySelector(".page").href;
     console.log(page);
     let pp = page.lastIndexOf("/paged/");
-    let tt = page.lastIndexOf("/tt/");
+    let tl = page.lastIndexOf("/tl/") + 4;
     let sl = page.lastIndexOf("/sl/") + 4;
 
     console.log("sl", sl);
     console.log("page sl", page[sl]);
 
     let sourceLan = page.slice(sl, sl + 2);
+    let targetLan = page.slice(tl, tl + 2);
 
     console.log("sourceLan", sourceLan);
-
-    let tl = page.lastIndexOf("/tl/");
+    console.log("targetLan", sourceLan);
 
     console.log(page);
 
