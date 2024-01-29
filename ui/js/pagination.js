@@ -5,11 +5,16 @@ console.log("isPagination", isPagination);
 if (isPagination) {
     let page = document.querySelector(".page").href;
 
+    let allpages = document.querySelectorAll(".page");
+
     const match = page.match(/\/sl\/([^/]+)\/tl/);
-    console.log(match[1]);
 
     let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
     let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
+
+    allPages.forEach((pg, i) => {
+        pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
+    });
 
     let pagePosition = {
         p: 1,
