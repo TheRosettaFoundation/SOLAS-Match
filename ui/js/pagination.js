@@ -10,8 +10,6 @@ if (isPagination) {
 
     const matchT = page.match(/\/tt\/([^/]+)\/sl/);
 
-    console.log(matchT);
-
     let sl = matchL[1] !== "0" ? matchL[1].split("_")[0] : 0;
     let tl = matchL[1] !== "0" ? matchL[1].split("_")[1] : 0;
     let tt = matchT[1];
@@ -161,7 +159,6 @@ if (isPagination) {
         } else {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
-        console.log(pagePosition);
 
         previous.children[0].href = url;
 
@@ -207,8 +204,6 @@ if (isPagination) {
         }
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        console.log(pagePosition);
 
         next.children[0].href = url;
 
@@ -269,7 +264,6 @@ if (isPagination) {
         let url = page.href;
         pagePosition.sl = this.value.split("_")[0];
         pagePosition.tl = this.value.split("_")[1];
-        console.log(pagePosition);
 
         selectedL = this.value;
 
@@ -278,7 +272,6 @@ if (isPagination) {
         let firstL = url.slice(0, find);
         let firstR = url.slice(findN);
         let newUrl = firstL + `sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        console.log("newUrl", newUrl);
 
         allPages.forEach((page) => {
             let firstPart = page.href.split("/tt");
