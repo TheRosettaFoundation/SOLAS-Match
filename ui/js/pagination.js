@@ -581,8 +581,8 @@ if (isPagination) {
         tasksContainer.innerHTML = newDataString;
 
         if (countPage <= 1) {
-            next.classList.add("hidden");
-            last.classList.add("hidden");
+            next.classList.add("d-none");
+            last.classList.add("d-none");
         }
 
         next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
