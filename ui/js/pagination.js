@@ -6,8 +6,8 @@ if (isPagination) {
     let pagePosition = {
         p: 1,
         tt: 0,
-        sl: "",
-        tl: "",
+        sl: 0,
+        tl: 0,
         prev: 0,
         next: 0,
     };
