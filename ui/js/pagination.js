@@ -607,11 +607,6 @@ if (isPagination) {
         newDataString = newData.outerHTML;
 
         tasksContainer.innerHTML = newDataString;
-
-        // if (countPage <= 1) {
-        //     next.classList.add("d-none");
-        //     last.classList.add("d-none");
-        // }
     }
 
     function reqListner() {
