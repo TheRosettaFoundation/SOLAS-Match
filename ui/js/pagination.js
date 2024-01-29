@@ -140,7 +140,7 @@ if (isPagination) {
 
         let url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        //Checking if there is dom element for the page
+        //Checking if there is dom element for the page position selected
 
         if (pagePosition.p <= dispayPage) {
             let newPage = document.getElementById(pagePosition.p).parentNode;
