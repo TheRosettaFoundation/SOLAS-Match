@@ -587,6 +587,8 @@ if (isPagination) {
         newDataString = newData.outerHTML;
 
         tasksContainer.innerHTML = newDataString;
+
+        if(countPage>)
     }
 
     function reqListner() {
