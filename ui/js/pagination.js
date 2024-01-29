@@ -14,10 +14,11 @@ if (isPagination) {
 
     let sl = matchL[1] !== "0" ? matchL[1].split("_")[0] : 0;
     let tl = matchL[1] !== "0" ? matchL[1].split("_")[1] : 0;
+    let tt = matchT[1];
 
     let pagePosition = {
         p: 1,
-        tt: 0,
+        tt: tt,
         sl: sl,
         tl: tl,
     };
