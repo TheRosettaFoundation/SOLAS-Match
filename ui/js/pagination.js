@@ -442,6 +442,7 @@ if (isPagination) {
             title.classList.add("custom-link", "fw-bold", "fs-3");
             title.href = `/task/${item.id}/view`;
             title.target = "_blank";
+            title.innerText = escapeHtml(item.title);
 
             const spanTitle = document.createElement("div");
             const spanImg = document.createElement("img");
