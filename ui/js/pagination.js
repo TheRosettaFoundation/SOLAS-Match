@@ -1,5 +1,7 @@
 const isPagination = document.querySelector(".pagination");
 
+console.log("isPagination", isPagination);
+
 if (isPagination) {
     let pagePosition = {
         p: 1,
