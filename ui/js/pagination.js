@@ -62,6 +62,7 @@ if (isPagination) {
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
     next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    prevPosition.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     last.addEventListener("click", function (e) {
         e.preventDefault();
@@ -253,13 +254,6 @@ if (isPagination) {
 
             page.href = finUrl;
         });
-
-        next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
-        first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     });
 
     taskType.addEventListener("change", function (e) {
@@ -329,16 +323,19 @@ if (isPagination) {
                 next.classList.remove("bg-gray", "text-body", "opacity-50");
             }
 
-            let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+            // let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
-            let newNextPosition =
-                pagePosition.p <= countPage
-                    ? pagePosition.p + 1
-                    : pagePosition.p;
+            // let newNextPosition =
+            //     pagePosition.p <= countPage
+            //         ? pagePosition.p + 1
+            //         : pagePosition.p;
 
-            let newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            console.log("prev", prevPosition);
+            console.log("next", nextPosition);
 
-            let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            let newPrevUrl = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+            let newNextUrl = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             previous.children[0].href = newPrevUrl;
 
