@@ -8,8 +8,6 @@ if (isPagination) {
         tt: 0,
         sl: 0,
         tl: 0,
-        prev: 0,
-        next: 0,
     };
 
     let validation = {
@@ -382,8 +380,15 @@ if (isPagination) {
 
             pagePosition.sl = item.sourceLocale.languageCode;
             pagePosition.tl = item.targetLocale.languageCode;
+            pagePosition.prev = 1;
 
-            console.log(`pagePosition`, pagePosition);
+            if (next) {
+                next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+                last.chidren[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            }
+
+            first.chidren[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            previous.chidren[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
@@ -584,11 +589,6 @@ if (isPagination) {
             next.classList.add("d-none");
             last.classList.add("d-none");
         }
-
-        next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        last.chidren[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        first.chidren[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        previous.chidren[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     }
 
     function reqListner() {
