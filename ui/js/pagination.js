@@ -379,9 +379,20 @@ if (isPagination) {
         req.open("GET", url, true);
         req.send();
     };
-    function escapeSpecialChar(text) {
-        return;
+
+    const entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+        "/": "&#x2F;",
+    };
+
+    function escapeHtml(unsafeHtml) {
+        return unsafeHtml.replace(/[&<>"'\/]/g, (entity) => entityMap[entity]);
     }
+
     function displayTasks(pages) {
         let parsed;
         let images;
@@ -431,7 +442,7 @@ if (isPagination) {
             title.classList.add("custom-link", "fw-bold", "fs-3");
             title.href = `/task/${item.id}/view`;
             title.target = "_blank";
-            title.innerText = item.title;
+            title.innerText = escapeHtml(item.title);
 
             const spanTitle = document.createElement("div");
             const spanImg = document.createElement("img");
