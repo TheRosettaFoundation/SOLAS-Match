@@ -152,7 +152,7 @@ if (isPagination) {
             );
         }
 
-        pagePosition.p = nextPosition;
+        pagePosition.p = pagePosition + 1;
 
         if (pagePosition.p == 1) {
             previous.classList.add("bg-gray", "text-body", "opacity-50");
@@ -380,15 +380,17 @@ if (isPagination) {
 
             pagePosition.sl = item.sourceLocale.languageCode;
             pagePosition.tl = item.targetLocale.languageCode;
-            pagePosition.prev = 1;
+            // pagePosition.p = 1;
 
-            if (next) {
-                next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-            }
+            // if (next) {
+            //     next.children[0].href = `paged/${nextPosition + 1}/tt/${
+            //         pagePosition.tt
+            //     }/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            // }
 
-            if (last) {
-                last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-            }
+            // if (last) {
+            //     last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            // }
 
             first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
             previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
