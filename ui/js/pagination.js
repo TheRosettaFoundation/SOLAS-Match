@@ -6,10 +6,14 @@ if (isPagination) {
     let allpages = document.querySelectorAll(".page");
 
     //Extracting the sl and tl from the pagination (sl/sl_tl/tl)
-    const match = page.match(/\/sl\/([^/]+)\/tl/);
+    const matchL = page.match(/\/sl\/([^/]+)\/tl/);
 
-    let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
-    let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
+    const matchT = page.match(/\/tt\/([^/]+)\/sl/);
+
+    console.log(matchT);
+
+    let sl = matchL[1] !== "0" ? matchL[1].split("_")[0] : 0;
+    let tl = matchL[1] !== "0" ? matchL[1].split("_")[1] : 0;
 
     let pagePosition = {
         p: 1,
