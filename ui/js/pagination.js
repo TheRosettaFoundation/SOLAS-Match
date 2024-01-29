@@ -11,8 +11,6 @@ if (isPagination) {
     let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
     let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
 
-  
-
     let pagePosition = {
         p: 1,
         tt: 0,
@@ -47,8 +45,6 @@ if (isPagination) {
 
     let next = document.querySelector("#next");
 
-  
-
     let last = document.querySelector(".last");
     let first = document.querySelector(".first");
 
@@ -65,9 +61,7 @@ if (isPagination) {
 
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
-
-    next.chidren[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`
-    last.chidren[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}
+    next.chidren[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     last.addEventListener("click", function (e) {
         e.preventDefault();
