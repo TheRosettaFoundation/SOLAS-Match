@@ -7,11 +7,7 @@ if (isPagination) {
 
     const match = page.match(/\/sl\/([^/]+)\/tl/);
 
-    console.log(match);
-
-    console.log("targetLan", targetLan);
-
-    console.log(page);
+    console.log("match", match);
 
     let pagePosition = {
         p: 1,
