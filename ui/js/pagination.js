@@ -8,8 +8,8 @@ if (isPagination) {
     const match = page.match(/\/sl\/([^/]+)\/tl/);
     console.log(match[1]);
 
-    let sl = match[1] !== 0 ? match[1].split("_")[0] : 0;
-    let tl = match[1] !== 0 ? match[1].split("_")[1] : 0;
+    let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
+    let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
 
     console.log("sl", sl);
     console.log("tl", tl);
