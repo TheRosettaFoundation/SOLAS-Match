@@ -744,7 +744,7 @@ a:hover{
                     {else}
 
                     
-                    <li  class="bg-gray opacity-50 mx-2 d-flex align-items-centermx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                    <li  class="bg-gray opacity-50 mx-2 d-flex align-items-centermx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next" disabled="true" >
                             <a class=" d-flex align-items-center text-decoration-none link-body-emphasis fs-6" >NEXT <img src="{urlFor name='home'}ui/img/next.svg" alt="prev icon" class="ms-2"></a></li> 
                      <li class="last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
                             <a class="pageCount text-decoration-none link-body-emphasis fs-6" id={$page_count}    > LAST</a></li>
