@@ -1,12 +1,11 @@
 const isPagination = document.querySelector(".pagination") ? true : false;
 
-console.log("isPagination", isPagination);
-
 if (isPagination) {
     let page = document.querySelector(".page").href;
 
     let allpages = document.querySelectorAll(".page");
 
+    //Extracting the sl and tl from the pagination (sl/sl_tl/tl)
     const match = page.match(/\/sl\/([^/]+)\/tl/);
 
     let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
@@ -19,6 +18,7 @@ if (isPagination) {
         tl: tl,
     };
 
+    //Setting the pagination with correct sl and tl
     allpages.forEach((pg, i) => {
         pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
     });
@@ -66,7 +66,7 @@ if (isPagination) {
 
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
-    //Setting url when loading page
+    //Setting url with appropriare sl and tl  on new  page load
 
     first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
