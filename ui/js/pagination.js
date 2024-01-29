@@ -390,6 +390,9 @@ if (isPagination) {
             let image;
             let imageHtml;
 
+            pagePosition.sl = item.sourceLocale.languageCode;
+            pagePosition.tl = item.targetLocale.languageCode;
+
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
             itemElement.classList.add(
