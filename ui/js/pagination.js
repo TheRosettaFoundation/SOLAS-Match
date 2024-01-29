@@ -7,7 +7,7 @@ if (isPagination) {
     console.log(page);
     let pp = page.lastIndexOf("/paged/");
     let tt = page.lastIndexOf("/tt/");
-    let sl = page.lastIndexOf("/sl/");
+    let sl = page.lastIndexOf("/sl/") + 4;
 
     console.log("sl", sl);
     console.log("page sl", page[sl]);
