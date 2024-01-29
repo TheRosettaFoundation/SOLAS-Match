@@ -721,9 +721,9 @@ a:hover{
                     {else}
 
                     
-                    <li class="d-none first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
+                    <li class=" first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
                             <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
-                    <li class=" d-none d-flex align-items-center mx-2 bg-gray align-middle opacity-50 border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2" id="previous"  >
+                    <li class=" bg-gray opacity-50 d-flex align-items-center mx-2 bg-gray align-middle opacity-50 border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2" id="previous"  >
                             <a class="d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">  <img src="{urlFor name='home'}ui/img/prev.svg" alt="prev icon" class="me-2">PREV</a></li>
 
                     {/if}
@@ -744,9 +744,9 @@ a:hover{
                     {else}
 
                     
-                    <li class="d-none mx-2 d-flex align-items-centermx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                    <li class="bg-gray opacity-50 mx-2 d-flex align-items-centermx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
                             <a class=" d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT <img src="{urlFor name='home'}ui/img/next.svg" alt="prev icon" class="ms-2"></a></li> 
-                     <li class="d-none last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
+                     <li class=" last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
                             <a class="pageCount text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}"> LAST</a></li>
                     {/if}
 
