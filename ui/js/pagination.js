@@ -48,6 +48,16 @@ if (isPagination) {
 
     let dispayPage = countPage > 6 ? 6 : countPage;
 
+
+    let nextPosition =
+    pagePosition.p < parseInt(countPage)
+        ? pagePosition.p + 1
+        : pagePosition.p;
+    
+    let prevPosition =
+            pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+
+
     last.addEventListener("click", function (e) {
         e.preventDefault();
 
@@ -101,9 +111,6 @@ if (isPagination) {
             );
         }
 
-        let prevPosition =
-            pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
-
         pagePosition.p = prevPosition;
 
         let url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
@@ -150,10 +157,6 @@ if (isPagination) {
             );
         }
 
-        let nextPosition =
-            pagePosition.p < parseInt(countPage)
-                ? pagePosition.p + 1
-                : pagePosition.p;
 
         pagePosition.p = nextPosition;
 
@@ -171,7 +174,6 @@ if (isPagination) {
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        console.log(`url next`, url);
 
         next.children[0] = url;
 
@@ -251,17 +253,12 @@ if (isPagination) {
             page.href = finUrl;
         });
 
-        let nextPosition =
-            pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
 
-        let prevPosition =
-            pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
-        console.log(next);
         next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        console.log("next", next.href);
+
         previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        console.log("previous", previous.href);
+ 
         first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     });
@@ -588,7 +585,7 @@ if (isPagination) {
 
         tasksContainer.innerHTML = newDataString;
 
-        if(countPage>)
+        next.children[0].href = `paged/${}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     }
 
     function reqListner() {
