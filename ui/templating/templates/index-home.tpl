@@ -549,7 +549,7 @@ a:hover{
             
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
-            <h5 class="mt-5 mb-2 fw-bold"> Industry </h5>
+           
             <form method="post" action="{urlFor name="home"}" class="needs-validation" novalidate>
 	           
 	                    <div>
@@ -711,7 +711,8 @@ a:hover{
                     {else}
                         {assign var="count" value= $page_count}
                     {/if}    
-                      {if $page_count>1}
+                      
+                    {if $page_count>1}
 
                     <li class="first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
                             <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
