@@ -3,7 +3,7 @@ const isPagination = document.querySelector(".pagination") ? true : false;
 console.log("isPagination", isPagination);
 
 if (isPagination) {
-    let page = document.querySelector(".page").children[0].href;
+    let page = document.querySelector(".page").href;
 
     let pp = page.lastIndexOf("/paged/");
     let tt = page.lastIndexOf("/tt/");
