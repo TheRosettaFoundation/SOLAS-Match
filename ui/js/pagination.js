@@ -184,9 +184,9 @@ if (isPagination) {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
 
-        let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
         pagePosition.p = nextPosition;
+
+        let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         console.log(pagePosition);
 
