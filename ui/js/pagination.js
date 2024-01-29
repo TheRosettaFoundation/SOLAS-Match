@@ -384,6 +384,9 @@ if (isPagination) {
 
             if (next) {
                 next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            }
+
+            if (last) {
                 last.chidren[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
             }
 
