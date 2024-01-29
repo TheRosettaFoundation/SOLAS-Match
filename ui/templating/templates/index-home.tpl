@@ -725,7 +725,7 @@ a:hover{
 
                     {/for}
                     {if $page_count>1}
-                    <li class="mx-2 d-flex align-items-centermx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                    <li class="mx-2 d-flex align-items-center mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
                             <a class=" d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT <img src="{urlFor name='home'}ui/img/next.svg" alt="prev icon" class="ms-2"></a></li> 
                      <li class=" last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
                             <a class="pageCount text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}"> LAST</a></li>
