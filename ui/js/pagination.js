@@ -23,6 +23,11 @@ if (isPagination) {
         pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
     });
 
+    first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
     let validation = {
         tt: false,
         sl: false,
@@ -65,9 +70,6 @@ if (isPagination) {
             : pagePosition.p;
 
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
-
-    next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-    prevPosition.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     last.addEventListener("click", function (e) {
         e.preventDefault();
