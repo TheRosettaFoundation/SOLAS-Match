@@ -11,7 +11,7 @@ if (isPagination) {
 
     console.log("sl", page.slice(sl + 1, 2));
 
-    let tl = page.index("/tl/");
+    let tl = page.lastIndexOf("/tl/");
 
     console.log(page);
 
