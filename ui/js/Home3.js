@@ -126,7 +126,6 @@ function renderTaskDetails() {
     $(".process_completed_utc").each(function () {
         $(this).removeClass("process_completed_utc");
         var utcTime = $(this).text();
-        console.log(image);
         utcTime = parseInt(utcTime) * 1000;
         var completed = new Date(utcTime);
         var m = completed.getMonth() + 1;
