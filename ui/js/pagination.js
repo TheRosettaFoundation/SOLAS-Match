@@ -4,8 +4,8 @@ if (isPagination) {
     let pagePosition = {
         p: 1,
         tt: 0,
-        sl: 0,
-        tl: 0,
+        sl: "",
+        tl: "",
         prev: 0,
         next: 0,
     };
@@ -215,7 +215,7 @@ if (isPagination) {
     });
 
     let selectedLanguage = document.querySelector("#sourceLanguage");
-    console.log(selectedLanguage):
+
     let taskType = document.querySelector("#taskTypes");
     let selectL = "";
     let selectT = "";
@@ -226,20 +226,17 @@ if (isPagination) {
     selectedLanguage.addEventListener("change", function () {
         let page = document.querySelector(".page");
         let url = page.href;
-        pagePosition.sl = this.value;
-        selectedL = this.value;
+        pagePosition.sl = this.value.split("_")[0];
+        pagePosition.tl = this.value.split("_")[1];
+        console.log(pagePosition);
 
-        if (selectedL == 0) {
-            validation.sl = false;
-        } else {
-            validation.sl = true;
-        }
+        selectedL = this.value;
 
         let find = url.indexOf("sl/");
         let findN = url.indexOf("tl");
         let firstL = url.slice(0, find);
         let firstR = url.slice(findN);
-        let newUrl = firstL + `sl/${selectedL}/` + firstR;
+        let newUrl = firstL + `sl/${pagePosition.sl}/` + firstR;
 
         allPages.forEach((page) => {
             let firstPart = page.href.split("/tt");
