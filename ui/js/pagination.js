@@ -323,12 +323,12 @@ if (isPagination) {
                 next.classList.remove("bg-gray", "text-body", "opacity-50");
             }
 
-            // let newPrevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
+            prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : 1;
 
-            // let newNextPosition =
-            //     pagePosition.p <= countPage
-            //         ? pagePosition.p + 1
-            //         : pagePosition.p;
+            nextPosition =
+                pagePosition.p < countPage
+                    ? pagePosition.p + 1
+                    : pagePosition.p;
 
             console.log("prev", prevPosition);
             console.log("next", nextPosition);
@@ -343,7 +343,7 @@ if (isPagination) {
 
             first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            last.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             requestPage(hr);
         });
