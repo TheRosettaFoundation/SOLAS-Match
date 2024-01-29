@@ -161,6 +161,7 @@ if (isPagination) {
         } else {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
+        console.log(pagePosition);
 
         previous.children[0].href = url;
 
@@ -206,6 +207,8 @@ if (isPagination) {
         }
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+        console.log(pagePosition);
 
         next.children[0].href = url;
 
