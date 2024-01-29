@@ -184,11 +184,18 @@ if (isPagination) {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
 
+        nextPosition =
+            pagePosition.p < parseInt(countPage)
+                ? pagePosition.p + 1
+                : pagePosition.p;
+
+        prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+
         pagePosition.p = nextPosition;
 
-        let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-
         console.log(pagePosition);
+
+        let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         if (pagePosition.p <= dispayPage) {
             let pageNext = document.getElementById(pagePosition.p).parentNode;
