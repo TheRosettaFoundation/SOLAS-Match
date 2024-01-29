@@ -253,7 +253,7 @@ if (isPagination) {
             pagePosition.p < countPage ? pagePosition.p + 1 : pagePosition.p;
 
         let prevPosition =
-            pagePositio.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+            pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
         next.href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         console.log(next.href);
