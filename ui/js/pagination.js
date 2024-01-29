@@ -12,16 +12,16 @@ if (isPagination) {
     let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
     let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
 
-    allpages.forEach((pg, i) => {
-        pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
-    });
-
     let pagePosition = {
         p: 1,
         tt: 0,
         sl: sl,
         tl: tl,
     };
+
+    allpages.forEach((pg, i) => {
+        pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
+    });
 
     let validation = {
         tt: false,
