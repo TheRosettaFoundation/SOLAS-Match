@@ -383,6 +383,8 @@ if (isPagination) {
             pagePosition.sl = item.sourceLocale.languageCode;
             pagePosition.tl = item.targetLocale.languageCode;
 
+            console.log(`pagePosition`, pagePosition);
+
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
             itemElement.classList.add(
