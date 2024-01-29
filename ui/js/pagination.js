@@ -197,7 +197,7 @@ if (isPagination) {
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        next.href = url;
+        next.children[0].href = url;
 
         if (pagePosition.p <= dispayPage) {
             let pageNext = document.getElementById(pagePosition.p).parentNode;
