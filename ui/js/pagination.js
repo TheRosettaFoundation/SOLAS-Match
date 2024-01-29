@@ -12,7 +12,7 @@ if (isPagination) {
     let sl = match[1] !== "0" ? match[1].split("_")[0] : 0;
     let tl = match[1] !== "0" ? match[1].split("_")[1] : 0;
 
-    allPages.forEach((pg, i) => {
+    allpages.forEach((pg, i) => {
         pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
     });
 
