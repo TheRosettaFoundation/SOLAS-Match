@@ -126,6 +126,13 @@ if (isPagination) {
             );
         }
 
+        nextPosition =
+            pagePosition.p < parseInt(countPage)
+                ? pagePosition.p + 1
+                : pagePosition.p;
+
+        prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
+
         pagePosition.p = prevPosition;
 
         let url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
