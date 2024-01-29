@@ -1,4 +1,4 @@
-const isPagination = document.querySelector(".pagination");
+const isPagination = document.querySelector(".pagination") ? true : false;
 
 console.log("isPagination", isPagination);
 
@@ -248,6 +248,17 @@ if (isPagination) {
 
             page.href = finUrl;
         });
+
+        let nextPosition =
+            pagePosition < countPage ? pagePosition.p + 1 : pagePosition.p;
+
+        let prevPosition =
+            pagePosition > 1 ? pagePosition.p - 1 : pagePosition.p;
+
+        next.href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        previous.href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        first.href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        last.href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     });
 
     taskType.addEventListener("change", function (e) {
