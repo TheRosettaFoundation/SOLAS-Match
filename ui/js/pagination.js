@@ -578,8 +578,15 @@ if (isPagination) {
 
         tasksContainer.innerHTML = newDataString;
 
+        if (countPage <= 1) {
+            next.classList.add("hidden");
+            last.classList.add("hidden");
+        }
+
         next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-        previous.chidren[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        last.chidren[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        first.chidren[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        previous.chidren[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
     }
 
     function reqListner() {
