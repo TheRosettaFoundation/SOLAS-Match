@@ -7,7 +7,11 @@ if (isPagination) {
 
     const match = page.match(/\/sl\/([^/]+)\/tl/);
 
-    console.log("match", match);
+    let sl = match[1].split("_")[0];
+    let tl = match[1].split("_")[1];
+
+    console.log("sl", sl);
+    console.log("tl", tl);
 
     let pagePosition = {
         p: 1,
