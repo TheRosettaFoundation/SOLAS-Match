@@ -4,18 +4,11 @@ console.log("isPagination", isPagination);
 
 if (isPagination) {
     let page = document.querySelector(".page").href;
-    console.log(page);
-    let pp = page.lastIndexOf("/paged/");
-    let tl = page.lastIndexOf("/tl/") + 4;
-    let sl = page.lastIndexOf("/sl/") + 4;
 
-    console.log("sl", sl);
-    console.log("page sl", page[sl]);
+    const match = page.match(/\/sl\/([^/]+)\/tl/);
 
-    let sourceLan = page.slice(sl, sl + 2);
-    let targetLan = page.slice(sl + 7, tl + 9);
+    console.log(match);
 
-    console.log("sourceLan", sourceLan);
     console.log("targetLan", targetLan);
 
     console.log(page);
