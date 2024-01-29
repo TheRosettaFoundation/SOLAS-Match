@@ -61,7 +61,7 @@ if (isPagination) {
 
     let prevPosition = pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
-    next.chidren[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     last.addEventListener("click", function (e) {
         e.preventDefault();
