@@ -7,8 +7,8 @@ if (isPagination) {
 
     const match = page.match(/\/sl\/([^/]+)\/tl/);
 
-    let sl = match[1].split("_")[0];
-    let tl = match[1].split("_")[1];
+    let sl = match[1] !== 0 ? match[1].split("_")[0] : 0;
+    let tl = match[1] !== 0 ? match[1].split("_")[1] : 0;
 
     console.log("sl", sl);
     console.log("tl", tl);
@@ -16,8 +16,8 @@ if (isPagination) {
     let pagePosition = {
         p: 1,
         tt: 0,
-        sl: 0,
-        tl: 0,
+        sl: sl,
+        tl: tl,
     };
 
     let validation = {
