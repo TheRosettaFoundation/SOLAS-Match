@@ -7,11 +7,11 @@ if (isPagination) {
     console.log(page);
     let pp = page.lastIndexOf("/paged/");
     let tt = page.lastIndexOf("/tt/");
-    let sl = page.lastIndexOf("/sl/") + 1;
+    let sl = page.lastIndexOf("/sl/") + 2;
 
     console.log("sl", sl);
 
-    let sourceLan = page.slice(sl, sl + 4);
+    let sourceLan = page.slice(sl, 3);
 
     console.log("sourceLan", sourceLan);
 
