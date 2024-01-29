@@ -457,7 +457,7 @@ if (isPagination) {
                 "d-flex",
                 "align-items-center"
             );
-            titleContainer.innerText(title);
+            titleContainer.appendChild(escapeHtml(title));
 
             const badgeContainer = document.createElement("div");
             badgeContainer.classList.add("d-flex", "mt-2", "mb-2");
