@@ -128,7 +128,7 @@ if (isPagination) {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
 
-        previous.href = url;
+        previous.children[0].href = url;
 
         requestPage(url);
     });
@@ -171,7 +171,7 @@ if (isPagination) {
 
         let url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-        next.href = url;
+        next.children[0] = url;
 
         if (pagePosition.p <= dispayPage) {
             let pageNext = document.getElementById(pagePosition.p).parentNode;
@@ -256,9 +256,9 @@ if (isPagination) {
             pagePosition.p > 1 ? pagePosition.p - 1 : pagePosition.p;
 
         console.log(next);
-        next.href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         console.log("next", next.href);
-        previous.href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         console.log("previous", previous.href);
         first.href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
         last.href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
