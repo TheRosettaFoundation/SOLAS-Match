@@ -208,7 +208,7 @@ a:hover{
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
 
-                <div class="carousel-item active" data-bs-interval="2000">
+                <div class="carousel-item active" data-bs-interval="5000">
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img" class="d-block w-100">
                     <div class="top-left py-2 mb-2">
@@ -233,7 +233,7 @@ a:hover{
                 </div>
 
                 
-                <div class="carousel-item" data-bs-interval="2000">
+                <div class="carousel-item" data-bs-interval="5000">
 
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img" class="d-block w-100">
                     
@@ -261,7 +261,7 @@ a:hover{
                 </div>
 
                             
-                <div class="carousel-item" data-bs-interval="2000">
+                <div class="carousel-item" data-bs-interval="5000">
                     <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img" class="w-100 d-block">
                     <div class="top-left"><h3>We offer references, certificates, <br/>and courses</h3><br/>
                         <h3>Join to grow your professional profile and <br/>advance your career.</h3>
@@ -286,7 +286,7 @@ a:hover{
                 </div>
 
 
-                <div class="carousel-item" data-bs-interval="2000">
+                <div class="carousel-item" data-bs-interval="5000">
 
                           <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img" class="d-block w-100">
 
