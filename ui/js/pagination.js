@@ -236,7 +236,8 @@ if (isPagination) {
         let findN = url.indexOf("tl");
         let firstL = url.slice(0, find);
         let firstR = url.slice(findN);
-        let newUrl = firstL + `sl/${pagePosition.sl}/` + firstR;
+        let newUrl = firstL + `sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        console.log("newUrl", newUrl);
 
         allPages.forEach((page) => {
             let firstPart = page.href.split("/tt");
