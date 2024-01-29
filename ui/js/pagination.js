@@ -342,9 +342,13 @@ if (isPagination) {
 
             let newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            previous.href = newPrevUrl;
+            previous.children[0].href = newPrevUrl;
 
-            next.href = newNextUrl;
+            next.children[0].href = newNextUrl;
+
+            first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+
+            last.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             requestPage(hr);
         });
