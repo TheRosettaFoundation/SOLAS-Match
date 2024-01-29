@@ -5,6 +5,16 @@ console.log("isPagination", isPagination);
 if (isPagination) {
     let page = document.querySelector(".page").children[0].href;
 
+    let pp = page.lastIndexOf("/paged/");
+    let tt = page.lastIndexOf("/tt/");
+    let sl = page.lastIndexOf("/sl/");
+
+    console.log("sl", page.slice(sl + 1, 2));
+
+    let tl = page.index("/tl/");
+
+    console.log(page);
+
     let pagePosition = {
         p: 1,
         tt: 0,
