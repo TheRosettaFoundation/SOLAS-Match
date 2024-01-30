@@ -79,27 +79,27 @@
         </div>
 
                 {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
-                <p class="alert alert-info">
+                <p class="alert alert-info mt-4">
                     {Localisation::getTranslation('task_view_0')}
                 </p>
                 {elseif $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
-                    <p class="alert alert-info">
+                    <p class="alert alert-info mt-4">
                         Note: You cannot claim this task, because you have previously claimed the matching translation task.
                     </p>
                 {elseif $is_denied_for_task}
-                    <p class="alert alert-info">
+                    <p class="alert alert-info mt-4">
                         Note: You cannot claim this task, because you have previously claimed the matching revision or proofreading task.
                     </p>
                 {/if}
             
                 {if isset($flash['success'])}
-                    <p class="alert alert-success">
+                    <p class="alert alert-success mt-4">
                         <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
                     </p>
                 {/if}
 
                 {if isset($flash['error'])}
-                    <p class="alert alert-error">
+                    <p class="alert alert-error mt-4">
                         <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
                     </p>
                 {/if}
