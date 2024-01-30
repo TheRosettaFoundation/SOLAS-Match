@@ -475,8 +475,8 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input class="form-control" type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
-                    <input  type="submit" class="btn  btn-sm  btn-grayish  fs-6 mt-2" name="unit_rate_submit" value="Submit" />
+                    <input  type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
+                    <input  type="submit" class="btn  btn-sm  btn-grayish fs-6 mt-2" name="unit_rate_submit" value="Submit" />
                     <input class="form-control" type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input class="form-control" type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
