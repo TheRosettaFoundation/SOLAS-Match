@@ -258,16 +258,18 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish fs-6">
-                            <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
+                             {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
-                            <i class="icon-check icon-black"></i> {Localisation::getTranslation('common_publish')}
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish fs-6">
+                             {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
+
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    
                 </form>
                 
             </td>
