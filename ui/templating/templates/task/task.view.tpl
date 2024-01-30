@@ -152,24 +152,7 @@
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form> 
 
-                                       <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-                                    {Localisation::getTranslation('task_view_assign_label')}<br />
-                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                    {/if}
-                                    {if !empty($list_qualified_translators)}
-                                        <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
-                                            <option value="">...</option>
-                                            {foreach $list_qualified_translators as $list_qualified_translator}
-                                                <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
-                                            {/foreach}
-                                        </select><br />
-                                    {/if}
-                                        <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
-                                        <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
-                                        </a>
-                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		                        </form> 
+                                     
                                     
                                     </div>
                                     
