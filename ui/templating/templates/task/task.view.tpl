@@ -109,7 +109,7 @@
        </div>
 
 
-        <div class="container bg-body">
+        <div class="container">
      
             <div class="row d-flex justify-content-between ">
 
