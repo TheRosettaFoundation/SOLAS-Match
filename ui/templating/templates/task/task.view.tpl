@@ -119,7 +119,7 @@
 
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-                            <div class="bg-white">
+                            <div class="bg-body p-2 border-secondary rounded-3 ">
                               <div class="d-flex justify-content-between align-items-center p-2">
 
                                    <div class="fs-5 fw-bold"> {Localisation::getTranslation('task_view_assign_label')}</div>
@@ -130,7 +130,7 @@
                            
                         
                                <div class="d-flex justify-content-between p-2 fs-6 mt-4">
-                                 <div class="bg-body p-2 border-secondary rounded-3 ">
+                                 <div >
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
