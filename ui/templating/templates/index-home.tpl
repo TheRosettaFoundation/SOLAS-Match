@@ -529,7 +529,7 @@ a:hover{
 
         <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8" class="needs-validation" novalidate> 
          
-            <div class="d-flex mb-3 ">
+            <div class="d-flex mb-4 ">
 
              <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
                 <button class="position-relative border-0 bg-primary rounded-end-2" style="left:-3px ;" type="submit" name="submit">
