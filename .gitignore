@@ -20,4 +20,5 @@ ui/dart/deploy/web/conf/conf.json
 .vagrant
 node_modules
 ui/css/custom.css.map
+.eslintrc.js
 
