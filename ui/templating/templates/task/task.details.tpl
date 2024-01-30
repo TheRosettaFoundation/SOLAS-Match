@@ -253,12 +253,16 @@
         <tr>
             <td>
               <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                      <div class="d-flex">
+                        <div class="bg-dark rounded-2 pb-0">
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
                             <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
                         </a>
+                      </div>
+                      </div>
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
@@ -267,7 +271,7 @@
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
-                
+
             </td>
             {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <td>
