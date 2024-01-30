@@ -135,7 +135,7 @@
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-control-sm w-50 fs-6 " type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                                    <input class="form-control-sm w-50 fs-6 " type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
                                         <select class="form-select-sm w-50 mt-2 fs-6" name="assignUserSelect" id="assignUserSelect"">
@@ -146,7 +146,7 @@
                                         </select>
                                     {/if}
                                        </br>
-                                        <a class="btn btn-grayish btn-sm mt-2" onclick="$('#).submit();">
+                                        <a class="btn btn-grayish btn-sm mt-2" onclick="$('#assignTaskToUserForm).submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" >&nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
