@@ -258,8 +258,8 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm btn-grayish  fs-6">
-                            <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish fs-6">
+                             {Localisation::getTranslation('common_unpublish')}
                         </a>
                       </div>
                       </div>
