@@ -359,7 +359,7 @@
        
                    
 
-                     <a href="$file_preview_path" download = "{TemplateHelper::uiCleanseHTML($filename)}"> 
+                     <a> 
                     
                             <img src="{urlFor name='home'}ui/img/download.svg" alt="download" id="download"  >
 
