@@ -135,7 +135,7 @@
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-control-sm w-50 fs-6 " type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                                    <input class="form-control-sm w-50 fs-6 border-dark-subtle" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
                                         <select class="form-select-sm w-50 mt-2 fs-6 border-dark-subtle" name="assignUserSelect" id="assignUserSelect"">
@@ -161,7 +161,7 @@
 
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" class="pe-4">
                                         Remove a user from deny list for this task:<br />
-                                        <input type="text" class="form-control-sm fs-6" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                        <input type="text" class="form-control-sm fs-6 border-dark-subtle" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class="btn btn-grayish btn-sm fs-6 mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
                                             <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
                                         </a>
