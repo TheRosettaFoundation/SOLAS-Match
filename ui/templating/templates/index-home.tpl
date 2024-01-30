@@ -687,7 +687,7 @@ a:hover{
                                          
                                     </div>
                                      <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
-                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view" target="_blank">View Task</a>
+                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view">View Task</a>
                                      </div>
                             
                             </div>

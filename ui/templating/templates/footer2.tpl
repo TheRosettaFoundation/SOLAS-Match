@@ -36,7 +36,7 @@
                         <div class="mx-5  mt-2 d-flex align-items-center flex-wrap py-2 py-md-5"> 
                            <div class =" text-white"> Follow Us :</div>
                            <div class ="  mx-2  mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
-                           <div class =" mx-2  mt-md-0">  <a href="https://twitter.com/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
+                           <div class =" mx-2  mt-md-0">  <a href="https://twitter.com/CLEARGlobalOrg" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
                             <div class =" mx-2  mt-md-0">  <a href="https://www.youtube.com/user/TranslatorsWB" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" /> </a> </div>
                             <div class =" mx-2  mt-md-0">  <a href="https://linkedin.com/company/translators-without-borders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/linkdin.svg" /> </a></div>
                            <div class =" mx-2  mt-md-0">   <a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank" > <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" />  </a></div>
