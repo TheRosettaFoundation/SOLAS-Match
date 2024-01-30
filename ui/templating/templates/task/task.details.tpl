@@ -261,8 +261,8 @@
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small btn-inverse">
                             <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('common_unpublish')}
                         </a>
-                     <div class="d-flex">
-                        <div class="bg-dark rounded-2 pb-0">
+                     </div>
+                        </div>
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
