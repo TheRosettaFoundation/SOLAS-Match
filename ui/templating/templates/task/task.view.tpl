@@ -109,7 +109,7 @@
        </div>
 
 
-        <div class="container">
+        <div class="container bg-body">
      
             <div class="row d-flex justify-content-between ">
 
@@ -178,7 +178,7 @@
                             </div>
                         {/if}
 
-                        <p style="margin-bottom: 40px" />
+                        <p  />
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                         <div class="well">
