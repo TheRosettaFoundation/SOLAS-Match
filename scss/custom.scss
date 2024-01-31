@@ -90,6 +90,18 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-radius: 4px;
 }
 
+.btngray {
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 12px;
+    background-color: #e4e4e4;
+    border-bottom: #112940 solid;
+    border-width: 2px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
 .btngray-lg {
     display: flex;
     justify-content: center;

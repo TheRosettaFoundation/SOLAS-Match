@@ -292,13 +292,13 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btngray-sm " disabled>
+                    <a href="#" class="btngray " disabled>
                        <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Yes
                     </a>
                    
                 {else}
                      
-                        <a href="#" class="btngray-sm" disabled>
+                        <a href="#" class="btngray" disabled>
                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disabled" /> No
                         </a>
                    
@@ -310,14 +310,14 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                              <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                 
                     {else}
                         <input type="hidden" name="track" value="Track" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
                         </a>
                  
@@ -332,7 +332,7 @@
                     {if empty($paid_status)}
                     
                         <input type="hidden" name="paid_status" value="2" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                              <img src="{urlFor name='home'}ui/img/check.svg" alt="ok_icon" /> Make Paid
                         </a>
                    
@@ -340,7 +340,7 @@
                     {else}
                 
                         <input type="hidden" name="paid_status" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" /> Make Unpaid
                         </a>
                     
