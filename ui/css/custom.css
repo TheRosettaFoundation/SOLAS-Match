@@ -5,6 +5,14 @@
   border: #f89406 !important;
 }
 
+.btngray {
+  padding: 4px;
+  background-color: #364f67;
+  border-bottom: #1c1d36;
+  border-width: 10px;
+  color: white;
+}
+
 .custom-tooltip {
   --bs-tooltip-b: $indigo;
 }
