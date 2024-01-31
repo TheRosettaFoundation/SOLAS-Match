@@ -79,10 +79,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 }
 
 .btngray-sm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px 4px;
+    text-align: center;
+    padding: 2px 2px;
     font-size: 12px;
     background-color: #364f67;
     border-bottom: #112940 solid;
