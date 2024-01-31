@@ -143,10 +143,10 @@
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class="form-control-sm w-50 fs-6 border-dark-subtle" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                                    <input class="form-control-sm w-50 fs-6 border-0" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select-sm w-50 mt-2 fs-6 border-dark-subtle" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select-sm w-50 mt-2 fs-6 border-0" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
@@ -154,7 +154,7 @@
                                         </select>
                                     {/if}
                                        </br>
-                                        <a class="btn btn-grayish btn-sm mt-2" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class=" btngray-sm  mt-2" onclick="$('#assignTaskToUserForm').submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -170,7 +170,7 @@
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" class="pe-4">
                                         Remove a user from deny list for this task:<br />
                                         <input type="text" class="form-control-sm fs-6 border-dark-subtle" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                        <a class="btn btn-grayish btn-sm fs-6 mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
+                                        <a class=" btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
                                             <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -183,7 +183,7 @@
 
     
                            
-                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-sm btn-grayish fs-6 m-2">
+                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btngray-sm mt-2">
                                      <img src="{urlFor name='home'}ui/img/search-user.svg" alt="arrow" class="mx-1" ></i>&nbsp;Search for Translators
                                 </a>
                             </div>
