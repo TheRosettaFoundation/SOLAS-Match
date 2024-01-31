@@ -221,6 +221,16 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('invite_site_admins');
+
+            $app->map(['GET', 'POST'],
+            '/docusign_redirect_uri',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_redirect_uri')
+            ->setName('docusign_redirect_uri');
+
+            $app->map(['GET', 'POST'],
+            '/docusign_hook',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_hook')
+            ->setName('docusign_hook');
     }
 
     public function home(Request $request, Response $response, $args)
@@ -3270,6 +3280,19 @@ EOF;
         ));
 
         return UserRouteHandler::render("user/user.task-reviews.tpl", $response);
+    }
+
+    public function docusign_redirect_uri()
+    {
+        error_log('docusign_redirect_uri:' . print_r($_GET, 1));
+        die;
+    }
+
+    public function docusign_hook(Request $request)
+    {
+        $body = (string)$request->getBody();
+        error_log('docusign_hook:' . print_r(json_decode($body, 1), 1));
+        die;
     }
 
     public static function flash($key, $value)
