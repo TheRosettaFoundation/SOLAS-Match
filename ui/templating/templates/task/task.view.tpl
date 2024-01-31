@@ -79,48 +79,46 @@
         </div>
 
                 {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
-                <p class="alert alert-info mt-4">
-                    <div class="d-flex justify-content-between">
-                    <div> {Localisation::getTranslation('task_view_0')}</div>
+                <p class="alert alert-info alert-dismissible fade show mt-4">
+                    
+                     {Localisation::getTranslation('task_view_0')}
 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-                    <div>
 
                 </p>
                 {elseif $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
-                    <p class="alert alert-info mt-4">
+                    <p class="alert alert-info  alert-dismissible fade show mt-4">
 
-                    <div class="d-flex justify-content-between">
-                        <div>Note: You cannot claim this task, because you have previously claimed the matching translation task.</div>
+                 
+                        Note: You cannot claim this task, because you have previously claimed the matching translation task.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                     </div>
+                    
                     </p>
                 {elseif $is_denied_for_task}
                   
-                    <p class="alert alert-info mt-4">
-                    <div class="d-flex justify-content-between">
-                        <div> Note: You cannot claim this task, because you have previously claimed the matching revision or proofreading task.</div>
+                    <p class="alert alert-info  alert-dismissible fade show mt-4">
+                  
+                         Note: You cannot claim this task, because you have previously claimed the matching revision or proofreading task.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                       
                     </p>
                 {/if}
             
                 {if isset($flash['success'])}
-                    <p class="alert alert-success mt-4 ">
-                    <div class="d-flex justify-content-between">
-                        <div><strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</div>
+                    <p class="alert alert-success  alert-dismissible fade show mt-4 ">
+                    <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                        
                     </p>
                 {/if}
 
                 {if isset($flash['error'])}
-                    <p class="alert alert-error mt-4">
-                    <div class="d-flex justify-content-between">
-                        <div><strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</div>
+                    <p class="alert alert-error  alert-dismissible fade show mt-4">
+                   
+                        <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                    
                     </p>
                 {/if}
         
