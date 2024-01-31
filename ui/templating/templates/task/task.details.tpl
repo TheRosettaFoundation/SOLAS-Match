@@ -294,14 +294,14 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btngray " disabled>
+                    <a href="#" class="btngray" disabled>
                        <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Yes
                     </a>
                    
                 {else}
                      
                         <a href="#" class="btngray" disabled>
-                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disabled" /> No
+                            <img src="{urlFor name='home'}ui/img/check.svg" alt="disabled" /> No
                         </a>
                    
                 {/if}
