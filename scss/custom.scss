@@ -80,38 +80,28 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .btngray-sm {
     display: flex;
-
+    justify-content: center;
     align-items: center;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    border-radius: 4px;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    font-size: 0.875rem;
+    padding : 2px 4px;
+    font-size: 12px;
     background-color: #364f67;
     border-bottom: #112940 solid;
     border-width: 3px;
     color: white;
     text-decoration: none;
-    text-align: center;
 }
 
 .btngray-lg {
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5remrem;
-    border-radius: 4px;
-    padding-left: 1;
-    padding-right: 1rem;
-    font-size: 0.875rem;
+    padding : 4px 8px;
+    font-size: 14px;
     background-color: #364f67;
     border-bottom: #112940 solid;
     border-width: 3px;
     color: white;
     text-decoration: none;
-    text-align: center;
-}
 
 .custom-tooltip {
     --bs-tooltip-b: $indigo;
