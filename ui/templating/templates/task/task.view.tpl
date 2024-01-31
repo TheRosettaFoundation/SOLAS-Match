@@ -148,7 +148,7 @@
                                <hr class="d-none d-md-block"></hr>
                            
                         
-                               <div class="d-flex flex-wrap justify-content-between p-2 fs-6 mt-2">
+                               <div class=" d-block d-sm-flex flex-wrap justify-content-between p-2 fs-6 mt-2">
                                  <div  class="w-50">
                                    <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
