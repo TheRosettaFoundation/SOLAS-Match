@@ -166,7 +166,7 @@
                                         </select>
                                     {/if}
                                        </br>
-                                        <a class=" btngray-sm  mt-4" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class=" btngray-sm  mt-1" onclick="$('#assignTaskToUserForm').submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -176,13 +176,13 @@
                                     
                                     </div>
                                     
-                                    <div class="w-50 ms-md-2 mb-4">
+                                    <div class="w-50 ms-md-2 mb-4" mb-md-0>
                                         
                                          <div class="fs-5 fw-bold w-50 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
                                         <input type="text" class=" form-control form-control-sm w-md-75  fs-6 " name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                        <a class="btngray-sm mt-2 w-100" onclick="$('#removeUserFromDenyListForm').submit();">
+                                        <a class="btngray-sm mt-1 w-100" onclick="$('#removeUserFromDenyListForm').submit();">
                                             Remove User from deny list
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
