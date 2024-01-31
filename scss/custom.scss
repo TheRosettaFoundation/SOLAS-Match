@@ -80,7 +80,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .btngray-sm {
     display: flex;
-    justify-content: center;
+
     align-items: center;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
@@ -98,7 +98,6 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 .btngray-lg {
     display: flex;
-    justify-content: center;
     align-items: center;
     padding-top: 0.5rem;
     padding-bottom: 0.5remrem;
