@@ -250,7 +250,7 @@
          </tr>   
         </thead>
         <tbody class="fs-6">
-        <tr>
+        <tr class="py-2">
             <td>
               <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                   
@@ -396,7 +396,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
-                    <input type="submit" class="btngray-sm " name="purchase_order_submit" value="Submit" />
+                    <input type="submit" class="btngray-sm mt-2" name="purchase_order_submit" value="Submit" />
                     <input type="hidden" name="mark_purchase_order" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
@@ -474,11 +474,11 @@
                 ${round($total_expected_cost, 2)}
             </td>
           {else}
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td class="d-none"></td>
+            <td class="d-none"></td>
+            <td class="d-none"></td>
+            <td class="d-none"></td>
+            <td class="d-none"></td>
           {/if}
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
