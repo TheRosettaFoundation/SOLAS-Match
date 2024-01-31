@@ -89,6 +89,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-bottom: #112940 solid;
     border-width: 3px;
     color: white;
+    text-decoration: none;
+    text-align: center;
 }
 
 .btngray-lg {
@@ -102,6 +104,8 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-bottom: #112940 solid;
     border-width: 3px;
     color: white;
+    text-decoration: none;
+    text-align: center;
 }
 
 .custom-tooltip {

@@ -16,6 +16,8 @@
   border-bottom: #112940 solid;
   border-width: 3px;
   color: white;
+  text-decoration: none;
+  text-align: center;
 }
 
 .btngray-lg {
@@ -29,6 +31,8 @@
   border-bottom: #112940 solid;
   border-width: 3px;
   color: white;
+  text-decoration: none;
+  text-align: center;
 }
 
 .custom-tooltip {
