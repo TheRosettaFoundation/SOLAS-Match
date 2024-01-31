@@ -258,12 +258,14 @@
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
                         <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                            <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
                              {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
                     {else}
                         <input type="hidden" name="published" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        
                              {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
