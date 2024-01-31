@@ -138,14 +138,22 @@
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div class="bg-body p-2 border-secondary rounded-3 mt-2">
-                        
+                              <div class="d-flex flex-wrap justify-content-between align-items-center p-2">
+
+                                   <div class="fs-5 fw-bold w-50"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                      <div class="fs-5 fw-bold w-50"> Remove a user from deny list for this task:</div>
+
+                    
+                              </div>
+                              <hr/>
+                           
                         
                                <div class="d-flex flex-wrap justify-content-between p-2 fs-6 mt-2">
                                  <div  class="w-50">
                                    <div class="fs-5 fw-bold w-50 mb-4"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-                                    <div class="mb-2">{Localisation::getTranslation('task_view_assign_label')}</div>
+                                   
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <input class="form-control-sm w-50 fs-6 border-1" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
@@ -158,7 +166,7 @@
                                         </select>
                                     {/if}
                                        </br>
-                                        <a class=" btngray-sm  mt-2" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class=" btngray-sm  mt-4" onclick="$('#assignTaskToUserForm').submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -170,9 +178,9 @@
                                     
                                     <div class="w-50">
                                         
-                                         <div class="fs-5 fw-bold w-50 mb-4"> Remove a user from deny list for this task:</div>
+                                         <div class="fs-5 fw-bold w-50 "> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
-                                        <div class="mb-2">Remove a user from deny list for this task:</div>
+                                     
                                         <input type="text" class="form-control-sm fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class="btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
                                             Remove User from deny list
