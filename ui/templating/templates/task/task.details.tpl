@@ -51,7 +51,7 @@
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
-                <span class="hidden">
+               <span class="d-none">
                     <div id="siteLocationURL">{Settings::get("site.location")}</div>
                     <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
                 </span>
