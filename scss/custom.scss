@@ -82,11 +82,11 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding : 12px 5.50px;
+    padding: 12px 5.5px;
     font-size: 12px;
     background-color: #364f67;
     border-bottom: #112940 solid;
-    border-width: 3px;
+    border-width: 2px;
     color: white;
     text-decoration: none;
 }
@@ -95,13 +95,14 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding : 16px 12px;
+    padding: 16px 12px;
     font-size: 14px;
     background-color: #364f67;
     border-bottom: #112940 solid;
-    border-width: 3px;
+    border-width: 2px;
     color: white;
     text-decoration: none;
+}
 
 .custom-tooltip {
     --bs-tooltip-b: $indigo;
