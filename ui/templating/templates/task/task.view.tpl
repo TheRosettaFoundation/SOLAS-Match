@@ -80,10 +80,12 @@
 
                 {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                 <p class="alert alert-info mt-4">
-
+                    <div class="d-flex justify-content-between">
                     {Localisation::getTranslation('task_view_0')}
 
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                    <div>
 
                 </p>
                 {elseif $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
@@ -119,7 +121,7 @@
 
         <div class="container">
      
-            <div class="row d-flex justify-content-between ">
+            <div class="row d-flex justify-content-between  ">
 
                 <div class=" col-sm-12  col-md-8 "> 
 
