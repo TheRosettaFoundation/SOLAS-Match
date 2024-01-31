@@ -145,12 +145,12 @@
 
                               </div>
                               
-                               <hr/>
+                               <hr class="d-none d-md-block"></hr>
                            
                         
                                <div class="d-flex flex-wrap justify-content-between p-2 fs-6 mt-2">
                                  <div  class="w-50">
-                                   <div class="fs-5 fw-bold w-50 mb-4"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                   <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                    
@@ -178,7 +178,7 @@
                                     
                                     <div class="w-50">
                                         
-                                         <div class="fs-5 fw-bold w-50 "> Remove a user from deny list for this task:</div>
+                                         <div class="fs-5 fw-bold w-50 d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
                                         <input type="text" class="form-control-sm fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
