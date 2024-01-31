@@ -138,7 +138,7 @@
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div class="bg-body p-2 border-secondary rounded-3 mt-2">
-                              <div class="d-none d-md-flex flex-wrap justify-content-between align-items-center p-2">
+                              <div class="d-none d-md-flex flex-wrap justify-content-around p-2">
 
                                    <div class="fs-5 fw-bold w-50"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                       <div class="fs-5 fw-bold w-50"> Remove a user from deny list for this task:</div>
