@@ -7,13 +7,14 @@
 
 .btngray {
   padding-top: 0.25rem;
-  padding-bottom: 0.25re;
+  padding-bottom: 0.25rem;
+  border-radius: 2px;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   font-size: 0.875rem;
   background-color: #364f67;
-  border-bottom: #1c1d36;
-  border-width: 10px;
+  border-bottom: #112940 solid;
+  border-width: 2px;
   color: white;
 }
 
