@@ -343,7 +343,7 @@
                 
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" /> Make Unpaid
+                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Make Unpaid
                         </a>
                     
                     {/if}
