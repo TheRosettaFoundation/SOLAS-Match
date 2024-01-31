@@ -172,13 +172,13 @@
                 {/if}
                 {if Settings::get('site.forum_enabled') == 'y'}
                     <li>
-                        <a href="{Settings::get('site.forum_link')}" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
+                        <a href="{Settings::get('site.forum_link')}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
                     </li>
                 {/if}
 
                 {if isset($site_admin)}
                             <li class="nav-item">
-                                <a href="{urlFor name="analytics"}" target="_blank" class=" fs-5 nav-link fw-bold">Analytics</a>
+                                <a href="{urlFor name="analytics"}"  class=" fs-5 nav-link fw-bold">Analytics</a>
                             </li>
                         {/if}
                  {if !isset($site_admin)}
