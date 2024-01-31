@@ -6,7 +6,11 @@
 }
 
 .btngray {
-  padding: 4px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25re;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
   background-color: #364f67;
   border-bottom: #1c1d36;
   border-width: 10px;
