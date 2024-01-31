@@ -176,9 +176,9 @@
                                     
                                     </div>
                                     
-                                    <div class="w-md-50">
+                                    <div class="w-md-50 mb-4">
                                         
-                                         <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> Remove a user from deny list for this task:</div>
+                                         <div class="fs-5 fw-bold w-50 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
                                         <input type="text" class="form-control-sm fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
