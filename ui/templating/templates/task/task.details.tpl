@@ -26,7 +26,7 @@
             <td>
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
-                    <a href="{urlFor name="project-view"  options="project_id.$projectId"}" class="link-primary text-decoration-none">
+                    <a href="{urlFor name="project-view"  options="project_id.$projectId"}" class="custom-link">
                     {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                     </a>
                 {/if}
