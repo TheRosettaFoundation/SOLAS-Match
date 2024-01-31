@@ -78,7 +78,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border: #f89406 !important;
 }
 
-.btngray {
+.btngray-sm {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
     border-radius: 4px;
@@ -87,7 +87,20 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     font-size: 0.875rem;
     background-color: #364f67;
     border-bottom: #112940 solid;
-    border-width: 4px;
+    border-width: 3px;
+    color: white;
+}
+
+.btngray-lg {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5remrem;
+    border-radius: 4px;
+    padding-left: 1;
+    padding-right: 1rem;
+    font-size: 0.875rem;
+    background-color: #364f67;
+    border-bottom: #112940 solid;
+    border-width: 3px;
     color: white;
 }
 
