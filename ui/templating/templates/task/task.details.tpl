@@ -185,12 +185,12 @@
             <tbody class="fs-6">
             <tr>
                 <td class="w-50 d-flex">
-                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btn btn-sm btn-grayish" target="_blank"> Discuss </a>{/if}</div>
+                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank"> Discuss </a>{/if}</div>
                 </td>
               
                 <td class="w-50 ">
                   <div class="d-flex">
-                    <div class="pb-0 bg-dark rounded-2">{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btn btn-sm btn-grayish   text-white " target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a><div>{/if}
+                    <div class="pb-0 bg-dark rounded-2">{if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a><div>{/if}
                  <div>
                  </td>
 
@@ -257,13 +257,13 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                              {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm btn-grayish fs-6">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                              {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
@@ -279,7 +279,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
                    
-                    <a class="btn  btn-sm  btn-grayish  fs-6" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                    <a class="btngray-sm" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
@@ -292,13 +292,13 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btn  btn-sm  btn-gray fs-6 text-dark " disabled>
+                    <a href="#" class="btngray-sm " disabled>
                        <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Yes
                     </a>
                    
                 {else}
                      
-                        <a href="#" class="btn  btn-sm  btn-gray fs-6 text-dark" disabled>
+                        <a href="#" class="btngray-sm" disabled>
                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disabled" /> No
                         </a>
                    
@@ -310,14 +310,14 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                              <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                 
                     {else}
                         <input type="hidden" name="track" value="Track" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
                         </a>
                  
@@ -332,7 +332,7 @@
                     {if empty($paid_status)}
                     
                         <input type="hidden" name="paid_status" value="2" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-sm  btn-gray fs-6 text-dark">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                              <img src="{urlFor name='home'}ui/img/check.svg" alt="ok_icon" /> Make Paid
                         </a>
                    
@@ -340,7 +340,7 @@
                     {else}
                 
                         <input type="hidden" name="paid_status" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btn  btn-sm  btn-gray fs-6 text-dark">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" /> Make Unpaid
                         </a>
                     
