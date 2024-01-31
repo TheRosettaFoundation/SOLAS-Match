@@ -148,7 +148,7 @@
                                <hr class="d-none d-md-block"></hr>
                            
                         
-                               <div class="d-block d-md-flex  p-2 fs-6 mt-2">
+                               <div class="d-block d-md-flex   p-2 fs-6 mt-2">
                                  <div class="w-md-50" >
                                    <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
@@ -158,7 +158,7 @@
                                     <input class="form-control-sm   fs-6 border-1" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select-sm    mt-2 mb-4 fs-6 border-1" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select-sm  mt-2 mb-4 fs-6 border-1" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
@@ -181,7 +181,7 @@
                                          <div class="fs-5 fw-bold w-50 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
-                                        <input type="text" class="form-control-sm  w-25 fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                        <input type="text" class="form-control-sm  fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class="btngray-sm mt-4" onclick="$('#removeUserFromDenyListForm').submit();">
                                             Remove User from deny list
                                         </a>
