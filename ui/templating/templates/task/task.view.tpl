@@ -137,7 +137,7 @@
                               </div>
                            
                         
-                               <div class="d-flex justify-content-around p-2 fs-6 mt-2">
+                               <div class="d-flex flex-wrap justify-content-around p-2 fs-6 mt-2">
                                  <div >
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
