@@ -167,11 +167,11 @@
                                     <div>
                                         
 
-                                        <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" class="pe-4">
+                                        <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                         Remove a user from deny list for this task:<br />
-                                        <input type="text" class="form-control-sm fs-6 border-dark-subtle" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                                        <input type="text" class="form-control-sm fs-6 border-0" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class=" btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
-                                            <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
+                                            Remove User from Deny List for this Task
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
