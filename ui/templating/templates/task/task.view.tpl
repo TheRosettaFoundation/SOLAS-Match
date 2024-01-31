@@ -137,8 +137,8 @@
                               </div>
                            
                         
-                               <div class="d-flex flex-wrap justify-content-around p-2 fs-6 mt-2">
-                                 <div >
+                               <div class="d-flex  justify-content-between p-2 fs-6 mt-2">
+                                 <div  class="w-50">
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                     {Localisation::getTranslation('task_view_assign_label')}<br />
@@ -164,15 +164,14 @@
                                     
                                     </div>
                                     
-                                    <div>
+                                    <div class="w-50">
                                         
 
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                         Remove a user from deny list for this task:<br />
                                         <input type="text" class="form-control-sm fs-6 border-1" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                        <a class=" btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
-                                            Remove User from Deny </br> 
-                                            List for this Task
+                                        <a class="btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
+                                            Remove User 
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
