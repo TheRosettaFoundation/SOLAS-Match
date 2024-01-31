@@ -175,7 +175,7 @@
                                         <div class="mb-2">Remove a user from deny list for this task:</div>
                                         <input type="text" class="form-control-sm fs-6 border-1 mb-2" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class="btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
-                                            Remove User 
+                                            Remove User from deny list
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
