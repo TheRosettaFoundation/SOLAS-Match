@@ -146,7 +146,7 @@
                                     <input class="form-control-sm w-50 fs-6 border-1" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select-sm w-50 my-2 fs-6 border-1" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select-sm w-50 mt-2 mb-4 fs-6 border-1" name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
@@ -154,7 +154,7 @@
                                         </select>
                                     {/if}
                                        </br>
-                                        <a class=" btngray-sm  mt-2" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class=" btngray-sm  mt-4" onclick="$('#assignTaskToUserForm').submit();">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
