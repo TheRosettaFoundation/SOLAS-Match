@@ -149,16 +149,16 @@
                            
                         
                                <div class="d-md-flex p-2 fs-6 mt-2">
-                                 <div class="w-50" >
+                                 <div class="w-md-50" >
                                    <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                    
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class=" form-control form-control-sm fs-6 w-md-75" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                                    <input class=" form-control form-control-sm fs-6" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select class="form-select form-select-sm my-2 w-md-75" name="assignUserSelect" id="assignUserSelect"">
+                                        <select class="form-select form-select-sm my-2 " name="assignUserSelect" id="assignUserSelect"">
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
