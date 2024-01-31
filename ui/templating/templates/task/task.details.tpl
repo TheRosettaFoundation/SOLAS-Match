@@ -257,7 +257,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                              {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
