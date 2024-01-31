@@ -9,26 +9,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 5.5px;
+  padding: 2px 4px;
   font-size: 12px;
   background-color: #364f67;
   border-bottom: #112940 solid;
   border-width: 2px;
   color: white;
   text-decoration: none;
+  border-radius: 4px;
 }
 
 .btngray-lg {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 12px;
+  padding: 4px 8px;
   font-size: 14px;
   background-color: #364f67;
   border-bottom: #112940 solid;
   border-width: 2px;
   color: white;
   text-decoration: none;
+  border-radius: 4px;
 }
 
 .custom-tooltip {
