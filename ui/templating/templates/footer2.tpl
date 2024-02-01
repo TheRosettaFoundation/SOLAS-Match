@@ -133,11 +133,10 @@
                         navi.setAttribute('data-bs-theme', 'light')
                         logo.src = "/ui/img/TWB_Logo.svg" ;
                         localStorage.setItem('theme', 'light');
-                         next.src = "/ui/img/bread.svg"
-                          next1.src = "/ui/img/bread.svg"
-                     
-                         print.src="/ui/img/print.svg"
-                          downimg.src="//ui/img/download.svg"
+                        next.src = "/ui/img/bread.svg"
+                        next1.src = "/ui/img/bread.svg"
+                        print.src="/ui/img/print.svg"
+                        downimg.src="//ui/img/download.svg"
                         
                        }
                        else{
@@ -147,7 +146,7 @@
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           print.src="/ui/img/print-white.svg"
-                              next.src = "/ui/img/next-white.svg"
+                            next.src = "/ui/img/next-white.svg"
                          next1.src = "/ui/img/next-white.svg"
                           downimg.src="//ui/img/download-white.svg"
                            localStorage.setItem('theme', 'dark');
