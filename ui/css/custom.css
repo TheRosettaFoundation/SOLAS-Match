@@ -5,11 +5,11 @@
   border: #f89406 !important;
 }
 
-select {
+.select {
   width: 250px !important;
 }
 
-input {
+#input {
   width: 250px !important;
 }
 
