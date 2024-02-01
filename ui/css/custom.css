@@ -15,6 +15,7 @@
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  flex-wrap: nowrap;
 }
 
 .btngray {
