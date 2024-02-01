@@ -2437,16 +2437,18 @@ error_log(print_r($result, true));//(**)
 
     public function insert_sent_contract($user_id, $admin_id, $status, $type)
     {
+        $result = LibAPI\PDOWrapper::call('insert_sent_contract',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($type));
+$result[0]['id']
+
 
 
 DOCUSIGN CODE
 
 
-        LibAPI\PDOWrapper::call('insert_sent_contract',
-            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($type));
     }
 
     public function get_sent_contracts($user_id)
