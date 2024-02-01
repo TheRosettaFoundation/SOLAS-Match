@@ -139,6 +139,12 @@
 
 
                     let print  = document.querySelector("#print");
+                    print.addEventListener("click", function(){
+                        if(confirm("Are you sure you want to print the document")){
+                            window.open(iframesrc, "_blank");  
+                        }
+
+                    })
 
                  
                   
