@@ -135,7 +135,15 @@
 
                     const iframe = document.querySelector("#iframe");
                     const iframesrc = iframe.src;
-                    const downloadFile = document.querySelectorAll("#download-file");
+                    const downloadFile = document.querySelector("#download-file");
+
+                    let print  = document.querySelector("print");
+
+                    print.addEventListener("click" , function(e){
+                        console.log("print");
+                    })
+
+
 
                     document.addEventListener('DOMContentLoaded', function(){
 

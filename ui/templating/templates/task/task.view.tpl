@@ -359,12 +359,9 @@
                    
 
                     
-                         <a href=""  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" alt="download" /> </a>
+                         <a href=""id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" alt="download" /> </a>
 
-                  
-
-
-          
+    
           
           </div>
           
