@@ -143,21 +143,6 @@
                         console.log("print");
                     })
 
-
-
-                    document.addEventListener('DOMContentLoaded', function(){
-
-
-                          downloadFile.addEventListener("click", function(e){
-                             e.preventDefault();
-                            console.log("click");
-
-                    })
-
-
-
-                    })
-
                   
 
                     console.log(downloadFile);
