@@ -103,7 +103,7 @@
 
 
                     let print  = document.querySelector("#print");
-                    let downimg = document.querySelector("#downimg");
+                    let downimg = document.querySelector("#downing");
 
                     if (savedTheme == 'dark') {
 
