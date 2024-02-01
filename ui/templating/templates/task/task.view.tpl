@@ -10,7 +10,7 @@
 
     <header class="">
 
-        <div class="container py-2">
+        <div class="container py-2"> 
 
                 <div class="py-2" >
 
@@ -140,8 +140,8 @@
                             <div class="bg-body p-2 border-secondary rounded-3 mt-2">
                               <div class="d-none d-md-flex justify-content-around p-2">
 
-                                   <div class="fs-5 fw-bold w-50"> {Localisation::getTranslation('task_view_assign_label')}</div>
-                                      <div class="fs-5 fw-bold w-50"> Remove a user from deny list for this task:</div>
+                                   <div class="fs-5 fw-bold w-75"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                      <div class="fs-5 fw-bold w-75"> Remove a user from deny list for this task:</div>
 
                               </div>
                               
@@ -150,7 +150,7 @@
                         
                                <div class=" d-block d-md-flex p-2 fs-6 mt-2">
                                  <div class="w-50" >
-                                   <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
+                                   <div class="fs-5 fw-bold w-75 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                    
@@ -178,7 +178,7 @@
                                     
                                     <div class="w-50">
                                         
-                                         <div class="fs-5 fw-bold w-50 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
+                                         <div class="fs-5 fw-bold w-75 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
                                         <input type="text" class="fs-6 mb-4" id='input' name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
