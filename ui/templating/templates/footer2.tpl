@@ -93,9 +93,8 @@
 
                     let savedTheme = localStorage.getItem('theme');
 
-                    let next= document.querySelector(".next") ;
-                    let next1= document.querySelector(".next2") ;
-
+                    let next= document.querySelector("#next") ;
+                  
                     
                     const iframe = document.querySelector("#iframe");
                     const iframesrc = iframe.src;
@@ -114,7 +113,6 @@
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           localStorage.setItem('theme', 'dark');
                           next.src = "/ui/img/bread.svg"
-                          next1.src = "/ui/img/bread.svg"
                           print.src="/ui/img/print.svg"
                           downimg.src="//ui/img/download.svg"
 
@@ -134,7 +132,6 @@
                         logo.src = "/ui/img/TWB_Logo.svg" ;
                         localStorage.setItem('theme', 'light');
                         next.src = "/ui/img/bread.svg"
-                        next1.src = "/ui/img/bread.svg"
                         print.src="/ui/img/print.svg"
                         downimg.src="//ui/img/download.svg"
                         
@@ -147,7 +144,6 @@
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           print.src="/ui/img/print-white.svg"
                             next.src = "/ui/img/next-white.svg"
-                         next1.src = "/ui/img/next-white.svg"
                           downimg.src="//ui/img/download-white.svg"
                            localStorage.setItem('theme', 'dark');
                        }
