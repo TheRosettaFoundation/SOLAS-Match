@@ -2434,4 +2434,25 @@ error_log(print_r($result, true));//(**)
             LibAPI\PDOWrapper::cleanse($country_id_target));
             error_log("remove_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target)");
     }
+
+    public function insert_sent_contract($user_id, $admin_id, $status, $type)
+    {
+
+
+DOCUSIGN CODE
+
+
+        LibAPI\PDOWrapper::call('insert_sent_contract',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($type));
+    }
+
+    public function get_sent_contracts($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_sent_contracts', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
 }

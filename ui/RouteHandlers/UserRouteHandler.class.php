@@ -2569,6 +2569,11 @@ error_log("result: $result");//(**)
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }
+
+            if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && !empty($post['send_contract'])) {
+                $userDao->insert_sent_contract($user_id, $loggedInUserId, 'Pending', 'On-Demand 2024 Contract');
+                UserRouteHandler::flashNow('success', 'Success');
+            }
         }
 
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
