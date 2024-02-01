@@ -137,10 +137,12 @@
                     const iframesrc = iframe.src;
                     const downloadFile = document.querySelector("#download-file");
 
+
                     let print  = document.querySelector("#print");
 
-                    print.addEventListener("click" , function(e){
-                        console.log("print");
+                    downloadFile.addEventListener("click" , function(e){
+                      downloadFile.download = filePath.substr(filePath.lastIndexOf('/') + 1) ;
+                      downloadFile.click();
                     })
 
                   
