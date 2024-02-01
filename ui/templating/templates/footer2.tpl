@@ -137,7 +137,7 @@
                     const iframesrc = iframe.src;
                     const downloadFile = document.querySelector("#download-file");
 
-                    let print  = document.querySelector("print");
+                    let print  = document.querySelector("#print");
 
                     print.addEventListener("click" , function(e){
                         console.log("print");
