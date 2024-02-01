@@ -137,10 +137,8 @@
                     const iframesrc = iframe.src;
                     const download = document.querySelectorAll("#download");
 
-                    download.addEventListener("click", (e)=>{
-                        e.preventDefault();
+                    download.addEventListener("click", function(){
                         console.log("click");
-                        console.log(iframesrc);
                     })
                     
                     </script>
