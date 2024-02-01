@@ -359,7 +359,7 @@
                    
 
                     
-                         <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" alt="download" /> </a>
+                         <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downimg" alt="download" /> </a>
 
     
           

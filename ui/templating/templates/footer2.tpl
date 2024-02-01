@@ -94,7 +94,16 @@
                     let savedTheme = localStorage.getItem('theme');
 
                     let next= document.querySelector(".next") ;
-                    let next1= document.querySelector(".next1") ;
+                    let next1= document.querySelector(".next2") ;
+
+                    
+                    const iframe = document.querySelector("#iframe");
+                    const iframesrc = iframe.src;
+                    const downloadFile = document.querySelector("#download-file");
+
+
+                    let print  = document.querySelector("#print");
+                    let downimg = document.querySelector("#downimg");
 
                     if (savedTheme == 'dark') {
 
@@ -106,6 +115,8 @@
                           localStorage.setItem('theme', 'dark');
                           next.src = "/ui/img/bread.svg"
                           next1.src = "/ui/img/bread.svg"
+                          print.src="/ui/img/print.svg"
+                          downimg.src="//ui/img/download.svg"
 
                         
                     } 
@@ -122,8 +133,11 @@
                         navi.setAttribute('data-bs-theme', 'light')
                         logo.src = "/ui/img/TWB_Logo.svg" ;
                         localStorage.setItem('theme', 'light');
-                         next.src = "/ui/img/next-white.svg"
-                         next1.src = "/ui/img/next-white.svg"
+                         next.src = "/ui/img/bread.svg"
+                          next1.src = "/ui/img/bread.svg"
+                     
+                         print.src="/ui/img/print.svg"
+                          downimg.src="//ui/img/download.svg"
                         
                        }
                        else{
@@ -132,6 +146,10 @@
                           document.documentElement.setAttribute('data-bs-theme', 'dark')
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          print.src="/ui/img/print-white.svg"
+                              next.src = "/ui/img/next-white.svg"
+                         next1.src = "/ui/img/next-white.svg"
+                          downimg.src="//ui/img/download-white.svg"
                            localStorage.setItem('theme', 'dark');
                        }
 
@@ -140,12 +158,6 @@
                     }
                     
 
-                    const iframe = document.querySelector("#iframe");
-                    const iframesrc = iframe.src;
-                    const downloadFile = document.querySelector("#download-file");
-
-
-                    let print  = document.querySelector("#print");
                     print.addEventListener("click", function(){
                         if(confirm("Are you sure you want to print the document")){
                             let wind = window.open(iframesrc, "_blank");  
