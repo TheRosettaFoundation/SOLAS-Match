@@ -6,7 +6,8 @@
 }
 
 .select {
-  width: 150px !important;
+  width: 180px !important;
+  padding: 2px 2px;
 }
 
 .btngray-sm {
