@@ -403,16 +403,8 @@ class UserRouteHandler
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487469ej4\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=18dl8296df\" defer ></script>";
-        // $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
-        // $extra_scripts .= "<script type=\"text/javascript\" >
-        // $(document).ready(function() {
-        //     $('.carousel').carousel({
-        //         interval: 5000,
-        //         pause:'hover'
-        //       });
-        //   });
-        // </script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=188fff296df\" defer ></script>";
+ 
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
