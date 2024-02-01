@@ -354,13 +354,13 @@
           <div class="d-flex ">
 
                    
-                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 d-none" >
+                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 " />
        
                    
 
                      <a> 
                     
-                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download" id="download"  class="d-none" >
+                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download" id="download" />
 
                      </a>
 
