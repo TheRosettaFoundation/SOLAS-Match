@@ -13,11 +13,6 @@
   width: 250px !important;
 }
 
-@media only sreen and (min-width: 600px) {
-  .remove {
-    display: block;
-  }
-}
 @media only sreen and (min-width: 768px) {
   .remove {
     display: flex;
