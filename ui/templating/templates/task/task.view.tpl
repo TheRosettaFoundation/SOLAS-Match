@@ -158,7 +158,7 @@
                                     <input id="input" class="fs-6" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"></br>
                                     {/if}
                                     {if !empty($list_qualified_translators)}
-                                        <select  name="assignUserSelect" id="assignUserSelect" class="select mt-2" >
+                                        <select  name="assignUserSelect" id="assignUserSelect" class="form-select mt-2" >
                                             <option value="">...</option>
                                             {foreach $list_qualified_translators as $list_qualified_translator}
                                                 <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
