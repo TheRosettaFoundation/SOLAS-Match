@@ -1,6 +1,13 @@
 const isPagination = !!document.querySelector(".pagination");
 const iframe = document.querySelector("#iframe");
 const iframesrc = iframe.src;
+const download = document.querySelectorAll("#download");
+
+download.addEventListener((e) => {
+    e.preventDefault;
+    console.log("clicking");
+    console.log(iframesrc);
+});
 
 console.log(iframesrc);
 console.log("testing");
