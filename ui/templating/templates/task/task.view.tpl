@@ -149,13 +149,13 @@
                            
                         
                                <div class="d-md-flex p-2 fs-6 mt-2">
-                                 <div class="w-md-50 me-4" >
+                                 <div class="w-50 " >
                                    <div class="fs-5 fw-bold w-50 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                     
                                     <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                                    
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <input class=" fs-6 w-md-50" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                                    <input class=" fs-6 " type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
                                     {/if}
                                     {if !empty($list_qualified_translators)}
                                         <select class=" my-2" name="assignUserSelect" id="assignUserSelect"">
@@ -176,7 +176,7 @@
                                     
                                     </div>
                                     
-                                    <div class="w-md-50 ms-md-2 mb-4" mb-md-0>
+                                    <div class="w-50 mb-4">
                                         
                                          <div class="fs-5 fw-bold w-50 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
