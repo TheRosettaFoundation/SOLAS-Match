@@ -358,11 +358,10 @@
        
                    
 
-                     <a> 
                     
-                         <a href="">   <img src="{urlFor name='home'}ui/img/download.svg" alt="download" id="download" /> </a>
+                         <a href=""  id="download">   <img src="{urlFor name='home'}ui/img/download.svg" alt="download" /> </a>
 
-                     </a>
+                  
 
 
           
