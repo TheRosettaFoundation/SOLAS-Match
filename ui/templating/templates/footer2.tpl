@@ -93,6 +93,9 @@
 
                     let savedTheme = localStorage.getItem('theme');
 
+                    let next= document.querySelector(".next") ;
+                    let next1= document.querySelector(".next1") ;
+
                     if (savedTheme == 'dark') {
 
                         imgL.classList.add("d-none");
@@ -101,6 +104,8 @@
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           localStorage.setItem('theme', 'dark');
+                          next.src = "/ui/img/bread.svg"
+                          next1.src = "/ui/img/bread.svg"
 
                         
                     } 
@@ -117,6 +122,8 @@
                         navi.setAttribute('data-bs-theme', 'light')
                         logo.src = "/ui/img/TWB_Logo.svg" ;
                         localStorage.setItem('theme', 'light');
+                         next.src = "/ui/img/next-white.svg"
+                         next1.src = "/ui/img/next-white.svg"
                         
                        }
                        else{

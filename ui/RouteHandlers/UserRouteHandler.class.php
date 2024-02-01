@@ -126,6 +126,7 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-download');
+        
 
         $app->get(
             '/users_review[/]',
@@ -2223,6 +2224,7 @@ class UserRouteHandler
         header('X-Sendfile: ' . realpath($destination));
         die;
     }
+
 
     public function users_review(Request $request, Response $response)
     {
