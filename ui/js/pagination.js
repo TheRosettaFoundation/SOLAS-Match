@@ -3,6 +3,7 @@ const iframe = document.querySelector("#iframe");
 const iframesrc = iframe.src;
 
 console.log(iframesrc);
+console.log("test");
 const iframeContent = iframe.contentWindow;
 
 if (isPagination) {
