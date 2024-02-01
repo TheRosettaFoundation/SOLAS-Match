@@ -78,9 +78,9 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border: #f89406 !important;
 }
 
-// .select {
-//     width: 250px !important;
-// }
+.select {
+    width: 50px !important;
+}
 
 // #input {
 //     width: 250px !important;
