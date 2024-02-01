@@ -141,7 +141,7 @@
                     let print  = document.querySelector("#print");
 
                     downloadFile.addEventListener("click" , function(e){
-                      downloadFile.download = filePath.substr(downloadFile.href.lastIndexOf('/') + 1) ;
+                      downloadFile.download = fdownloadFile.href.substr(downloadFile.href.lastIndexOf('/') + 1) ;
                       downloadFile.click();
                     })
 
