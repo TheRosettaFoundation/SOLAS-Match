@@ -78,22 +78,13 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border: #f89406 !important;
 }
 
-.select {
-    width: 250px !important;
-}
+// .select {
+//     width: 250px !important;
+// }
 
-#input {
-    width: 250px !important;
-}
-
-@media only sreen and (min-width: 600px) {
-}
-
-@media only sreen and (min-width: 768px) {
-    .remove {
-        display: flex;
-    }
-}
+// #input {
+//     width: 250px !important;
+// }
 
 .btngray-sm {
     text-align: center;

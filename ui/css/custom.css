@@ -5,19 +5,6 @@
   border: #f89406 !important;
 }
 
-.select {
-  width: 250px !important;
-}
-
-#input {
-  width: 250px !important;
-}
-
-@media only sreen and (min-width: 768px) {
-  .remove {
-    display: flex;
-  }
-}
 .btngray-sm {
   text-align: center;
   padding: 6px 8px;
