@@ -1,15 +1,4 @@
 const isPagination = !!document.querySelector(".pagination");
-const iframe = document.querySelector("#iframe");
-const iframesrc = iframe.src;
-const download = document.querySelectorAll("#download");
-
-download.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("click");
-});
-
-console.log(iframesrc);
-console.log("testing");
 
 if (isPagination) {
     const page = document.querySelector(".page").href;
