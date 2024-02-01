@@ -195,7 +195,7 @@
 
     
                            
-                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btngray-sm mt-4">
+                                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btngray-sm mt-4 mb-2">
                                      <img src="{urlFor name='home'}ui/img/search-user.svg" alt="arrow" class="mx-1" ></i>&nbsp;Search for Translators
                                 </a>
                             </div>
