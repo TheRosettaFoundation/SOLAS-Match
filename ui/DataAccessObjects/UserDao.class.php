@@ -2442,13 +2442,75 @@ error_log(print_r($result, true));//(**)
             LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($type));
-$result[0]['id']
+        $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
+        $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
+        $payload = json_encode([
+//(**)3 below??? and d.docusign.com everywhere (2)
+          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
+          'sub' => '0c77848b-477c-4b2d-9d21-a380dfdaab5f',
+          'aud' => 'account-d.docusign.com',
+          'iat' => time(),
+          'exp' => time() + 6000,
+          'scope' => 'signature impersonation'
+        ]);
+        $payload = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($payload)), '=');
 
+        $signature = '';
+        openssl_sign("$header.$payload", $signature, Common\Lib\Settings::get('docusign.private'), OPENSSL_ALGO_SHA256);
+        $signature = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($signature)), '=');
 
+        $ch = curl_init('https://account-d.docusign.com/oauth/token');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=$header.$payload.$signature");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign oauth/token responseCode: $responseCode");
+        $resultset = json_decode($result, true);
+        if (empty($resultset['access_token'])) return 1;
+        $access_token = $resultset['access_token'];
 
-DOCUSIGN CODE
-
-
+//(**)fix 2
+        $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
+        $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
+        $data = [
+//(**)take out or correct?...
+            'emailSettings' => ['emailSubject' => 'This request is sent from a Template'],
+            'templateId' => $template_id,
+            'templateRoles' => [
+                [
+(**)fix xn ...
+                    'roleName' => 'Signer1',
+                    'name' => 'Hank Scorpio',
+                    'email' => 'alanbarrett@therosettafoundation.org',
+                    'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => 'xxx From Alan']]]
+                ]
+            ],
+            'status' => 'sent',
+            'eventNotification' => [
+//chnage to TWB(**)
+//when TWB clear.php
+                'url' => 'https://dev.translatorswb.org/docusign_hook',
+                'requireAcknowledgment' => 'true',
+                'loggingEnabled' => 'true',
+                'deliveryMode' => 'SIM',
+                'events' => ['envelope-sent', 'envelope-resent', 'envelope-delivered', 'envelope-completed', 'envelope-declined', 'envelope-voided', 'recipient-authenticationfailed', 'recipient-autoresponded', 'recipient-declined', 'recipient-delivered', 'recipient-completed', 'recipient-sent', 'recipient-resent', 'envelope-corrected', 'envelope-purge', 'envelope-deleted', 'recipient-reassign', 'recipient-finish-later', 'recipient-delegate'],
+                'eventData' => ['version' => 'restv2.1', 'includeData' => [$result[0]['id']]]
+            ]
+        ];
+        $ch = curl_init("https://demo.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Accept: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign envelopes responseCode: $responseCode");
+        error_log($result);
+        if ($responseCode != 201) return 1;
+        return 0;
     }
 
     public function get_sent_contracts($user_id)

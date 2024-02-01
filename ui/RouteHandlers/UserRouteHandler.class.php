@@ -2571,8 +2571,8 @@ error_log("result: $result");//(**)
             }
 
             if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && !empty($post['send_contract'])) {
-                $userDao->insert_sent_contract($user_id, $loggedInUserId, 'Pending', 'On-Demand 2024 Contract');
-                UserRouteHandler::flashNow('success', 'Success');
+                if ($userDao->insert_sent_contract($user_id, $loggedInUserId, 'Pending', 'On-Demand 2024 Contract')) UserRouteHandler::flashNow('error', 'Connection to Docusign Failed');
+                else                                                                                                 UserRouteHandler::flashNow('success', 'Success');
             }
         }
 
