@@ -3,10 +3,9 @@ const iframe = document.querySelector("#iframe");
 const iframesrc = iframe.src;
 const download = document.querySelectorAll("#download");
 
-download.addEventListener((e) => {
-    e.preventDefault;
-    console.log("clicking");
-    console.log(iframesrc);
+download.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("click");
 });
 
 console.log(iframesrc);
