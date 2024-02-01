@@ -78,6 +78,9 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border: #f89406 !important;
 }
 
+select {
+    width: 100px !important;
+}
 .btngray-sm {
     text-align: center;
     padding: 6px 8px;
