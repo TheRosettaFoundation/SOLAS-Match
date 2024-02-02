@@ -183,7 +183,7 @@
                                      
                                         <input type="text" class="fs-6 mb-4" id='input' name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                                         <a class="btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
-                                            Remove User from deny list
+                                            <img src="{urlFor name='home'}ui/img/remove-user.svg" alt="remove user" class="mx-1" /> Remove User from deny list
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
@@ -212,15 +212,15 @@
 
                                 <span style="float: left; position: relative;">
                                     <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
-                                        <i class="icon-remove icon-white"></i> {Localisation::getTranslation('task_org_feedback_2')}
+                                        {Localisation::getTranslation('task_org_feedback_2')}
                                     </button>
                                 </span>
                                 <span style="float: right; position: relative;">
                                     <button type="submit" value="Submit" name="submit" class="btn btn-success">
-                                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_submit_feedback')}
+                                         {Localisation::getTranslation('common_submit_feedback')}
                                     </button>
                                     <button type="reset" value="Reset" name="reset" class="btn btn-primary">
-                                        <i class="icon-repeat icon-white"></i> {Localisation::getTranslation('common_reset')}
+                                        {Localisation::getTranslation('common_reset')}
                                     </button>
                                 </span>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -233,7 +233,7 @@
                                 <p>{Localisation::getTranslation('org_task_review_0')}</p>
                                 <p>
                                 <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
-                                    <i class="icon-download icon-white"></i> {Localisation::getTranslation('org_task_review_download_output_file')}
+                                    {Localisation::getTranslation('org_task_review_download_output_file')}
                                 </a>
                                 </p>
                             {/if}
@@ -246,10 +246,10 @@
                             <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
                             <p>
                                 <a class="btn btn-primary" href="{urlFor name="org-task-review" options="org_id.$org_id|task_id.$task_id"}">
-                                    <i class="icon-list-alt icon-white"></i>{Localisation::getTranslation('org_task_complete_provide_a_review')}
+                                   {Localisation::getTranslation('org_task_complete_provide_a_review')}
                                 </a>
                                 <a class="btn btn-primary" href="{urlFor name="org-task-reviews" options="org_id.$org_id|task_id.$task_id"}">
-                                    <i class="icon-list icon-white"></i>{Localisation::getTranslation('org_task_complete_view_reviews')}
+                                   {Localisation::getTranslation('org_task_complete_view_reviews')}
                                 </a>
                             </p>
                         {/if}
