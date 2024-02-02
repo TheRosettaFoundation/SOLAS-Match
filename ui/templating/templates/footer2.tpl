@@ -94,7 +94,7 @@
                     let savedTheme = localStorage.getItem('theme');
 
                     let next= document.querySelector("#next") ;
-                    let next1 = document.querySelector("#next1");
+                    let next1 = document.querySelector("#next2");
                   
                     
                     const iframe = document.querySelector("#iframe");
@@ -116,7 +116,7 @@
                           next.src = "/ui/img/bread.svg"
                            next1.src = "/ui/img/bread.svg"
                           print.src="/ui/img/print.svg"
-                          downimg.src="//ui/img/download.svg"
+                          downing.src="//ui/img/download.svg"
 
                         
                     } 
@@ -136,7 +136,7 @@
                         next.src = "/ui/img/bread.svg"
                          next1.src = "/ui/img/bread.svg"
                         print.src="/ui/img/print.svg"
-                        downimg.src="//ui/img/download.svg"
+                        downing.src="//ui/img/download.svg"
                         
                        }
                        else{
