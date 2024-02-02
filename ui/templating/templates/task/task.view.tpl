@@ -278,7 +278,7 @@
                                                         {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
                                                         <div class="card mt-4 p-2 fs-5 shadow rounded-1">
                                                             <div class="px-1">
-                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none fw-bold "> <h4>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)} </h4> </a>
+                                                            <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none custom-link fw-bold "> <h4>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)} </h4> </a>
                                                             </div>
                                                          <div class="mt-2 px-1">
 
@@ -308,7 +308,7 @@
                                                             <p class="px-1 mt-2">
                                                             <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
                                                             </p>
-                                                            <p class="px-1">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
+                                                            <p class="px-1 custom-link">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
                                                         </div>
 
 
