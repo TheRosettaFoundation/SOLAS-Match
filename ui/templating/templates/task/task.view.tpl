@@ -308,7 +308,7 @@
                                                             <p class="px-1 mt-2">
                                                             <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
                                                             </p>
-                                                            <p class="px-1  text-decoration-none">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
+                                                            <p  id="project" class="px-1  text-decoration-none">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
                                                         </div>
 
 
