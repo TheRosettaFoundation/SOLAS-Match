@@ -98,7 +98,10 @@
                   
                     
                     const iframe = document.querySelector("#iframe");
-                    const iframesrc = iframe.src;
+                    if(iframe){
+                        const iframesrc = iframe.src;
+                    }
+                 
                     const downloadFile = document.querySelector("#download-file");
 
 
@@ -157,7 +160,9 @@
                     }
                     
 
-                    print.addEventListener("click", function(){
+                    if(print){
+
+                           print.addEventListener("click", function(){
                         if(confirm("Are you sure you want to print the document")){
                             let wind = window.open(iframesrc, "_blank");  
                             wind.print();
@@ -166,11 +171,8 @@
 
                     })
 
-                 
-                  
+                    }
 
-                    console.log(downloadFile);
-                    console.log(iframesrc);
                     
                     </script>
 
