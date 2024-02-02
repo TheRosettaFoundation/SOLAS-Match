@@ -164,7 +164,7 @@
 
                            print.addEventListener("click", function(){
                                 if(confirm("Are you sure you want to print the document")){
-                                    let wind = window.open(iframesrc, "_blank");  
+                                    let wind = window.open(iframesrc);  
                                     wind.print();
 
                              }
