@@ -32,7 +32,7 @@ if (isPagination) {
         tl: false,
     };
 
-    const projects = document.querySelectorAll("#project");
+    const projects = document.querySelectorAll(".project");
 
     for (let i = 0; i < projects.length; i++) {
         const firstLink = projects[i].children[0];
