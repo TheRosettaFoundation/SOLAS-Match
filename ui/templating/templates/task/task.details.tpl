@@ -80,7 +80,7 @@
 </div>
 </div>
 
-<div class="bg-body p-2 border-secondary rounded-3 mt-4">
+<div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
 <div class="table-responsive mt-4  ">
     <table class="table table-borderless ">
        <tr class="">
@@ -123,7 +123,7 @@
    </div>  
    </div> 
 
-    <div class="bg-body p-2 border-secondary rounded-3 ">
+<div class="bg-body p-2 border-secondary  ">
     <div class="table-responsive">
     <table class="table table-borderless ">
         <thead class="fs-5">        
@@ -167,7 +167,7 @@
 
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
-           <div class="bg-body p-2 border-secondary rounded-3"> 
+           <div class="bg-body p-2 border-secondary rounded-bottom-3"> 
            <div class="table-responsive">
             <table class="table table-borderless">
 
