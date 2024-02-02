@@ -301,7 +301,7 @@
                                                                     <span type="button" class=" ms-1 rounded-pill badge  border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7" style="background-color:{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
                                                                     {if $alsoViewedTask->getWordCount()}
-                                                                        <span type="button" class="ms-1 rounded-pill badge  border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7" style="background-color:{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']} ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
+                                                                        <span type="button" class="ms-1 rounded-pill badge  border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 bg-quartenary"  ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
                                                             
                                                         </div>
