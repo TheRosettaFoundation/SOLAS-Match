@@ -354,12 +354,12 @@
           <div class="d-flex ">
 
                    
-                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 " />
+                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 d-none" />
        
                    
 
                     
-                         <a href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downing" alt="download" /> </a>
+                         <a class="d-none" href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downing" alt="download" /> </a>
 
     
           
