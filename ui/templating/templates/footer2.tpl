@@ -116,7 +116,7 @@
                           next.src = "/ui/img/bread.svg"
                            next1.src = "/ui/img/bread.svg"
                           print.src="/ui/img/print.svg"
-                          downing.src="//ui/img/download.svg"
+                          downing.src="/ui/img/download.svg"
 
                         
                     } 
@@ -136,7 +136,7 @@
                         next.src = "/ui/img/bread.svg"
                          next1.src = "/ui/img/bread.svg"
                         print.src="/ui/img/print.svg"
-                        downing.src="//ui/img/download.svg"
+                        downing.src="/ui/img/download.svg"
                         
                        }
                        else{
