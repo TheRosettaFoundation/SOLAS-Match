@@ -144,7 +144,7 @@
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           print.src="/ui/img/print-white.svg"
                             next.src = "/ui/img/next-white.svg"
-                          downimg.src="//ui/img/download-white.svg"
+                          downimg.src="/ui/img/download-white.svg"
                            localStorage.setItem('theme', 'dark');
                        }
 
