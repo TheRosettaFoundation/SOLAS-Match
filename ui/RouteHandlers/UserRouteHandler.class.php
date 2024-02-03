@@ -2774,6 +2774,7 @@ error_log("result: $result");//(**)
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
             'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
+            'sent_contracts' => $userDao->get_sent_contracts($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
