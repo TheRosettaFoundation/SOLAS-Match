@@ -2480,7 +2480,7 @@ error_log(print_r($result, true));//(**)
             'templateId' => $template_id,
             'templateRoles' => [
                 [
-(**)fix xn ...
+//(**)fix xn ...
                     'roleName' => 'Signer1',
                     'name' => 'Hank Scorpio',
                     'email' => 'alanbarrett@therosettafoundation.org',
