@@ -262,6 +262,7 @@ class UserRouteHandler
             $topTasks = [];
         }
 
+        $projectAndOrgs = [];
         $taskImages = [];
         foreach ($topTasks as $topTask) {
             $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
