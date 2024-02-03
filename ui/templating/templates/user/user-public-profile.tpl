@@ -732,11 +732,11 @@ If a language is to be removed from this list, the community will be informed be
 <table style="width:100%">
     <thead>
         <tr>
-            <td>Contract Type</td>
-            <td>Admin</td>
-            <td>Status</td>
-            <td>Update Date</td>
-            <td>Contract Date</td>
+            <td><strong>Contract Type</strong></td>
+            <td><strong>Admin</strong></td>
+            <td><strong>Status</strong></td>
+            <td><strong>Update Date</strong></td>
+            <td><strong>Contract Date</strong></td>
         </tr>
     </thead>
     {foreach $sent_contracts as $sent_contract}
