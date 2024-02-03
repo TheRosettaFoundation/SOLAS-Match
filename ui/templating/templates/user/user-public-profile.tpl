@@ -729,7 +729,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 {/if}
 {if !empty($sent_contracts)}
-<table id="printrequestletter" class="display" style="width:100%">
+<table style="width:100%">
     <thead>
         <tr>
             <th>Contract Type</th>
