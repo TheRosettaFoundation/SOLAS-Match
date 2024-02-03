@@ -41,7 +41,7 @@
         </div>
     </h1>
 
-		{include file="task/task.details.tpl"}
+    {include file="task/task.details_v0.tpl"}
 
     <h3>Manual Sourcing</h3>
     {if     $any_country == 3}
