@@ -741,11 +741,11 @@ If a language is to be removed from this list, the community will be informed be
     </thead>
     {foreach $sent_contracts as $sent_contract}
         <tr>
-            <td>$sent_contract['type']</td>
+            <td>{$sent_contract['type']}</td>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</td>
-            <td>$sent_contract['status']</td>
-            <td>$sent_contract['update_date']</td>
-            <td>$sent_contract['contract_date']</td>
+            <td>{$sent_contract['status']}</td>
+            <td>{$sent_contract['update_date']}</td>
+            <td>{$sent_contract['contract_date']}</td>
         </tr>
     {/foreach}
 </table>
