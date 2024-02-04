@@ -3296,8 +3296,13 @@ EOF;
 
     public function docusign_hook(Request $request)
     {
+        $userDao = new DAO\UserDao();
+
         $body = (string)$request->getBody();
-        error_log('docusign_hook:' . print_r(json_decode($body, 1), 1));
+        $docusign_hook = json_decode($body, 1);
+        error_log('docusign_hook:' . print_r($docusign_hook, 1));
+        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['data']['envelopeSummary']['status']))
+        $userDao->update_sent_contract($docusign_hook['data']['envelopeSummary']['status'], $docusign_hook['data']['envelopeId']);
         die;
     }
 

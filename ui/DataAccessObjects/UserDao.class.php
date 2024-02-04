@@ -2515,6 +2515,11 @@ error_log("(**)DELETE{Common\Lib\Settings::get('site.location')}docusign_hook");
         return 0;
     }
 
+    public function update_sent_contract($status, $envelopeId)
+    {
+        LibAPI\PDOWrapper::call('update_sent_contract', LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
+    }
+
     public function get_sent_contracts($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_sent_contracts', LibAPI\PDOWrapper::cleanse($user_id));
