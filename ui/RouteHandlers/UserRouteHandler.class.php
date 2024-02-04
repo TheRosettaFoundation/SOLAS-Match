@@ -3301,8 +3301,8 @@ EOF;
         $body = (string)$request->getBody();
         $docusign_hook = json_decode($body, 1);
         error_log('docusign_hook:' . print_r($docusign_hook, 1));
-error_log("update_sent_contract({$docusign_hook['data']['envelopeSummary']['status']}, {$docusign_hook['data']['envelopeId']}");
-        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['data']['envelopeSummary']['status'])) $userDao->update_sent_contract($docusign_hook['data']['envelopeSummary']['status'], $docusign_hook['data']['envelopeId']);
+error_log("update_sent_contract({$docusign_hook['event']}, {$docusign_hook['data']['envelopeId']}");//(**)DEL
+        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event'])) $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
         die;
     }
 
