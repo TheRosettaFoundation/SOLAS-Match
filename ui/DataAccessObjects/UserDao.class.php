@@ -2437,7 +2437,7 @@ error_log(print_r($result, true));//(**)
 
     public function insert_sent_contract($user_id, $admin_id, $status, $type)
     {
-        $result = LibAPI\PDOWrapper::call('insert_sent_contract',
+        $result_id = LibAPI\PDOWrapper::call('insert_sent_contract',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
@@ -2496,7 +2496,7 @@ error_log(print_r($result, true));//(**)
                 'loggingEnabled' => 'true',
                 'deliveryMode' => 'SIM',
                 'events' => ['envelope-sent', 'envelope-resent', 'envelope-delivered', 'envelope-completed', 'envelope-declined', 'envelope-voided', 'recipient-authenticationfailed', 'recipient-autoresponded', 'recipient-declined', 'recipient-delivered', 'recipient-completed', 'recipient-sent', 'recipient-resent', 'envelope-corrected', 'envelope-purge', 'envelope-deleted', 'recipient-reassign', 'recipient-finish-later', 'recipient-delegate'],
-                'eventData' => ['version' => 'restv2.1', 'includeData' => [$result[0]['id']]]
+                'eventData' => ['version' => 'restv2.1', 'includeData' => [$result_id[0]['id']]]
             ]
         ];
         $ch = curl_init("https://demo.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
