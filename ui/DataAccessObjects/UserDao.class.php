@@ -2469,7 +2469,6 @@ error_log(print_r($result, true));//(**)
 //(**)fix 2
         $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
         $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
-error_log('(**)DELETE docusign_hook: ' . Common\Lib\Settings::get('site.location') . 'docusign_hook');
         $data = [
 //(**)take out or correct?...
             'emailSettings' => ['emailSubject' => 'This request is sent from a Template'],
@@ -2517,6 +2516,7 @@ error_log('(**)DELETE docusign_hook: ' . Common\Lib\Settings::get('site.location
 
     public function update_sent_contract($status, $envelopeId)
     {
+error_log(LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
         LibAPI\PDOWrapper::call('update_sent_contract', LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
     }
 
