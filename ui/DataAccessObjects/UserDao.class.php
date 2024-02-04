@@ -2505,7 +2505,7 @@ error_log('(**)DELETE docusign_hook: ' . Common\Lib\Settings::get('site.location
         error_log($result);
         if ($responseCode != 201) return 1;
         $resultset = json_decode($result, true);
-        if (!empty($resultset['envelopeId'])) return 1;
+        if (empty($resultset['envelopeId'])) return 1;
         LibAPI\PDOWrapper::call('insert_sent_contract',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
