@@ -2437,11 +2437,6 @@ error_log(print_r($result, true));//(**)
 
     public function insert_sent_contract($user_id, $admin_id, $status, $type)
     {
-        $result_id = LibAPI\PDOWrapper::call('insert_sent_contract',
-            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($type));
         $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
         $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
         $payload = json_encode([
@@ -2474,6 +2469,7 @@ error_log(print_r($result, true));//(**)
 //(**)fix 2
         $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
         $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
+error_log("(**)DELETE{Common\Lib\Settings::get('site.location')}docusign_hook");
         $data = [
 //(**)take out or correct?...
             'emailSettings' => ['emailSubject' => 'This request is sent from a Template'],
@@ -2489,14 +2485,12 @@ error_log(print_r($result, true));//(**)
             ],
             'status' => 'sent',
             'eventNotification' => [
-//chnage to TWB(**)
-//when TWB clear.php
-                'url' => 'https://dev.translatorswb.org/docusign_hook',
+                'url' => "{Common\Lib\Settings::get('site.location')}docusign_hook",
                 'requireAcknowledgment' => 'true',
                 'loggingEnabled' => 'true',
                 'deliveryMode' => 'SIM',
                 'events' => ['envelope-sent', 'envelope-resent', 'envelope-delivered', 'envelope-completed', 'envelope-declined', 'envelope-voided', 'recipient-authenticationfailed', 'recipient-autoresponded', 'recipient-declined', 'recipient-delivered', 'recipient-completed', 'recipient-sent', 'recipient-resent', 'envelope-corrected', 'envelope-purge', 'envelope-deleted', 'recipient-reassign', 'recipient-finish-later', 'recipient-delegate'],
-                'eventData' => ['version' => 'restv2.1', 'includeData' => [$result_id[0]['id']]]
+                'eventData' => ['version' => 'restv2.1', 'includeData' => ['']]
             ]
         ];
         $ch = curl_init("https://demo.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
@@ -2510,6 +2504,14 @@ error_log(print_r($result, true));//(**)
         error_log("Docusign envelopes responseCode: $responseCode");
         error_log($result);
         if ($responseCode != 201) return 1;
+        $resultset = json_decode($result, true);
+        if (!empty($resultset['envelopeId'])) return 1;
+        LibAPI\PDOWrapper::call('insert_sent_contract',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($type) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($resultset['envelopeId']));
         return 0;
     }
 
