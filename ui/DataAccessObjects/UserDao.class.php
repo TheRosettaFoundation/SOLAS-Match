@@ -2516,7 +2516,6 @@ error_log(print_r($result, true));//(**)
 
     public function update_sent_contract($status, $envelopeId)
     {
-error_log(LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
         LibAPI\PDOWrapper::call('update_sent_contract', LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
     }
 
