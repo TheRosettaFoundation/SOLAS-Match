@@ -89,7 +89,8 @@
         {/if}
 
     
-        <div class=" table-responsive p-2 border-secondary rounded-3 mt-2 ">
+        <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+            <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
         <thead class="fs-5">            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
@@ -163,12 +164,14 @@
         </tbody>
     </table>    
     </div>  
+    </div>
 
 
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
-    <div class="p-2 border-secondary rounded-3">
-    <table class="table table-responsive" >
+    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+    <div class="table-responsive mt-4  ">
+    <table class="table table-borderless" >
         <thead class="fs-5">
             <th>Deal ID</th>
             <th>Allocated Budget</th>
@@ -187,11 +190,13 @@
         </tbody>
     </table>
     </div>
+    </div>
     {/if}
 
        <div class="d-flex justify-content-between flex-wrap">
-       <div class="p-2 border-secondary rounded-3 ">
-        <table class="table table-responsive">
+     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+        <div class="table-responsive mt-4  ">   
+        <table class="table table-borderless">
             <thead class="fs-5">
             <th >{Localisation::getTranslation('common_description')}</th>
             <th></th>   
@@ -252,11 +257,13 @@
             </tbody>
         </table>
     </div>   
+    </div>
 
 
 
-    <div class="border-secondary rounded-3 w-50 ">
-        <table class="table table-responsive">
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+    <div class="table-responsive mt-4  ">
+        <table class="table table-borderless">
             <thead class="fs-5">
         
             <th >{Localisation::getTranslation('common_project_image')}</th>
@@ -322,10 +329,13 @@
         </table>
 
     </div>   
+    </div>
 
 
     
-    </div> end of flex 
+    </div> 
+
+
 
 
 
@@ -336,7 +346,7 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <div class="fs-2 fw-bold">{Localisation::getTranslation('project_view_tasks')}
+            <div class="fs-5 fw-bold">{Localisation::getTranslation('project_view_tasks')}
                 <small>{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
@@ -517,8 +527,10 @@
                     </span>
                     </div>                
                     <hr />  
-                    <div class="p-2 border-secondary rounded-3 ">
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
+                  
+                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+                    <div class="table-responsive mt-4  ">
+                    <table class="table table-borderless" >
                         <thead class="fs-5">
                             <tr>
                                 
@@ -779,8 +791,9 @@
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>
                     <hr />
-
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
+                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+                    <div class="table-responsive mt-4  ">       
+                    <table class="table table-borderless" >
                         <thead>
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
@@ -793,7 +806,7 @@
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task['task_id']}
-                                <tr style="overflow-wrap: break-word;">
+                                <tr >
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
@@ -817,7 +830,7 @@
                                     <td>
                                         <strong>
                                             <small>
-                                                {assign var="type_id" value=$task['type_id']}
+                                      style="overflow-wrap: break-word; margin-bottom: 60px"          {assign var="type_id" value=$task['type_id']}
                                                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                                                     {if $type_id == $task_type}
                                                         <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
@@ -833,6 +846,8 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
+                    </div>
                 {/foreach}
     {/if}
 
@@ -898,8 +913,7 @@
 
 
 
-          
-    ### End of container in gray color
+
     </div>
 
 
@@ -909,7 +923,6 @@
 </div>
 
 
-#######
 
 
 {include file="footer2.tpl"}
