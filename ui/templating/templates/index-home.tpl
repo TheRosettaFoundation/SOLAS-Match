@@ -14,12 +14,7 @@ a:hover{
 
 .clearheader{
     color:#143878 !important;
-}
-
-h3{
-    font-size:12px;
-
-}
+}ui/templating/templates/task/claimed-tasks.tpl
 
 
 @media (min-width: 400px ){
@@ -538,8 +533,6 @@ a:hover{
                 </button>
 
             </div>
-         
-
 
          </form>
 
