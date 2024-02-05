@@ -141,15 +141,15 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="d-none" name="trackProject" value="0" />
-                                    <a class="btngray" onclick="$('#trackedProjectForm').submit();" >
+                                    <a class="btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="d-none" name="trackProject" value="1" />
-                                    <a class="btngray" onclick="$('#trackedProjectForm').submit();" >
-                                        <  <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_project')}
+                                    <a class="btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                         <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_project')}
                                     </a>
                                 </p>
                             {/if}
