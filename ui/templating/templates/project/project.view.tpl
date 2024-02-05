@@ -334,10 +334,13 @@
 
 
 
-        <h1 class="page-header" style="margin-bottom: 60px">
-        {Localisation::getTranslation('project_view_tasks')}
-        <small>{Localisation::getTranslation('project_view_0')}</small>
+        <div class="d-flex justify-content-between">
 
+            <div class="fs-4">{Localisation::getTranslation('project_view_tasks')}
+                <small>{Localisation::getTranslation('project_view_0')}</small>
+            </div>
+
+       <div>
         {if !empty($memsource_project)}
         <span class="" style="margin-left:480px;">
             <select name="task_options" id="task_options">
@@ -475,7 +478,8 @@
          </div>
         {/if}
 
-    </h1> 
+    </div>
+    </div> 
 
 
 
