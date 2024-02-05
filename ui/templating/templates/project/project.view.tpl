@@ -685,7 +685,7 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
                                                 <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
-                                                    <i class="icon-check icon-white"></i>
+                                                      <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}
@@ -708,7 +708,7 @@
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                 <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_track_task')}" >
-                                                    <i class="icon-envelope icon-black"></i>
+                                                     <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
                                                 </a>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
