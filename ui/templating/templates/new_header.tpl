@@ -209,6 +209,7 @@
              <ul class="navbar-nav d-flex align-items-center">
 
                         {if isset($user)}
+                        {assign var="user_id" value=$user->getId()}
                               <li class="nav_item me-2" id="theme">
                                <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
                            
