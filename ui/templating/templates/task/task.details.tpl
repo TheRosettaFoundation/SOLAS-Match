@@ -8,7 +8,7 @@
                 <th>Project</th>
                 <th>Source Language</th>
                 <th> Target Language</th>
-                <th>Created </th>
+                <th>Created</th>
                 <th> Task Deadline</th>
                 <th> {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
