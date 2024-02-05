@@ -507,11 +507,10 @@
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
-                <br/><br/>
-                <div>
+                <br/><br/>                <div>
                     <div>
                     
-                    <span class="language_name">
+                    <span>
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
@@ -556,7 +555,7 @@
                                 <tr style="overflow-wrap: break-word;">
                                 <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                        <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
                                         <br/>
