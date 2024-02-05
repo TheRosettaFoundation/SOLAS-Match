@@ -189,7 +189,7 @@
     </div>
     {/if}
 
-
+       <div class="d-flex">
        <div class="p-2 border-secondary rounded-3 bg-gray">
         <table class="table table-responsive">
             <thead>
@@ -303,6 +303,62 @@
             </tbody>
         </table>
     </div>   
+
+
+
+    <div class="p-2 border-secondary rounded-3 bg-gray">
+        <table class="table table-responsive">
+            <thead>
+        
+            <th >{Localisation::getTranslation('common_project_image')}</th>
+            </thead>
+            <tbody>
+                <tr >
+
+                    <td class="py-2 bg-gray rounded-3">
+                    	{if $project->getImageUploaded()}
+                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                              <div class="bg-white">
+                            
+	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                        {if !$project->getImageApproved()}
+		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		                       			<input type="hidden" name="imageApprove" value="0" />
+		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+		            				</form>
+                             </div>
+
+		            			{else}   
+		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		            				 	<input type="hidden" name="imageApprove" value="1" />
+		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();"">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+		            				 </form>
+		                        {/if}
+		                    {else}
+		                    	{if $project->getImageApproved()}
+		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                    	{else}
+			                    	{Localisation::getTranslation('common_project_image_not_approved')}
+		                    	{/if}
+		                    {/if}
+		                {else}
+		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
+                    	{/if}
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>   
+
+
+    
+    </div> end of flex 
 
     
 
