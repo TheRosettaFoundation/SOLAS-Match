@@ -14,7 +14,12 @@ a:hover{
 
 .clearheader{
     color:#143878 !important;
-}ui/templating/templates/task/claimed-tasks.tpl
+}
+
+h3{
+    font-size:12px;
+
+}
 
 
 @media (min-width: 400px ){
@@ -577,7 +582,7 @@ a:hover{
 	                        
 	                    </div>
 	          
-              
+                <div class=" d-grid mt-3 mb-5  ">
                     <button class="btn btn-primary" type="submit">
                         <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">
                         <span class="text-white"> Apply filters</span>
