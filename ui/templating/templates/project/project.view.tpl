@@ -189,8 +189,8 @@
     </div>
     {/if}
 
-       <div class="d-flex">
-       <div class="p-2 border-secondary rounded-3 bg-gray">
+       <div class="d-flex justify-content-between flex-wrap">
+       <div class="p-2 border-secondary rounded-3 ">
         <table class="table table-responsive">
             <thead>
             <th >{Localisation::getTranslation('common_description')}</th>
@@ -272,7 +272,7 @@
 
 
 
-    <div class="p-2 border-secondary rounded-3 bg-gray">
+    <div class="p-4 border-secondary rounded-3 ">
         <table class="table table-responsive">
             <thead>
         
