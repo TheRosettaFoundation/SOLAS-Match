@@ -211,12 +211,12 @@
                     
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding-bottom: 40px"></td>
+                    <td colspan="2"></td>
                 </tr>
                 
                  <tr>
                     <td colspan="2">
-                        <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
+                        <strong>{Localisation::getTranslation('common_impact')}</strong>
                     </td>
                 </tr>
                 <tr>                
@@ -233,24 +233,7 @@
                 <tr>
                     <td colspan="2"> </td>
                 </tr>
-                <tr>
-                    <td colspan="2">
-                        <strong>{Localisation::getTranslation('common_tags')}</strong>
-                    </td>
-                </tr>
-                <tr>                
-                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
-                    {if isset($project_tags) && is_array($project_tags)}
-                        {foreach $project_tags as $ptag}
-                            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
-                            {assign var="tagId" value=$ptag->getId()}
-                            <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
-                        {/foreach}
-                    {else}
-                        <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>                    
-                    {/if}
-                    </td>                
-                </tr>
+                
                 {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
                 <tr>
                     <td colspan="2" style="padding-bottom: 40px"></td>
@@ -315,6 +298,24 @@
 		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
                     	{/if}
                     </td>
+                </tr>
+                <tr>
+                    <td >
+                        <strong>{Localisation::getTranslation('common_tags')}</strong>
+                    </td>
+                </tr>
+                <tr>                
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                    {if isset($project_tags) && is_array($project_tags)}
+                        {foreach $project_tags as $ptag}
+                            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
+                            {assign var="tagId" value=$ptag->getId()}
+                            <a class="btngray me-2" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
+                        {/foreach}
+                    {else}
+                        <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>                    
+                    {/if}
+                    </td>                
                 </tr>
 
             </tbody>
