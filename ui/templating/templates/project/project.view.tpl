@@ -89,7 +89,7 @@
         {/if}
 
     
-        <div class=" p-2 border-secondary rounded-3 ">
+        <div class=" p-2 border-secondary rounded-3 mt-2 ">
         <table class="table table-responsive">
         <thead>            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
@@ -108,7 +108,7 @@
                 <td style="text-align: left; overflow-wrap: break-word;">
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
-                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="custom-link">{$org->getName()|escape:'html':'UTF-8'}</a>
                     {/if}
                 </td>
                 <td>
@@ -122,7 +122,7 @@
                     {/if}
                 </td>
                 <td>
-                    <span class="hidden">
+                    <span class="d-none">
                         <div id="siteLocationURL">{Settings::get("site.location")}</div>
                         <div id="project_id_for_updated_wordcount">{$project_id}</div>
                     </span>
@@ -140,14 +140,14 @@
                         <form id="trackedProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                              {if $userSubscribedToProject}
                                 <p>
-                                    <input type="hidden" name="trackProject" value="0" />
+                                    <input type="d-none" name="trackProject" value="0" />
                                     <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
                                         <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
                                 <p>
-                                    <input type="hidden" name="trackProject" value="1" />
+                                    <input type="d-none" name="trackProject" value="1" />
                                     <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
                                         <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_project')}
                                     </a>
