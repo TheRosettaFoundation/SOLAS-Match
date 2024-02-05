@@ -757,6 +757,7 @@
     <p class="alert alert-info">
         {Localisation::getTranslation('project_view_6')}
     </p>
+    {/if}
   
 
 
