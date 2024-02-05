@@ -203,7 +203,8 @@
 
                         <p  />
 
-                                              <div class="well">
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
+                        <div class="well">
                             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
                             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
                                 <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
@@ -225,13 +226,13 @@
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         </div>
-                        
+                        {/if}
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                             {if !empty($memsource_task)}
                                 <p>{Localisation::getTranslation('org_task_review_0')}</p>
                                 <p>
-                                <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
+                                <a class="btngray-sm" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
                                     {Localisation::getTranslation('org_task_review_download_output_file')}
                                 </a>
                                 </p>
@@ -244,10 +245,10 @@
 
                             <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
                             <p>
-                                <a class="btn btn-primary" href="{urlFor name="org-task-review" options="org_id.$org_id|task_id.$task_id"}">
+                                <a class="btngray-sm" href="{urlFor name="org-task-review" options="org_id.$org_id|task_id.$task_id"}">
                                    {Localisation::getTranslation('org_task_complete_provide_a_review')}
                                 </a>
-                                <a class="btn btn-primary" href="{urlFor name="org-task-reviews" options="org_id.$org_id|task_id.$task_id"}">
+                                <a class="btngray-sm" href="{urlFor name="org-task-reviews" options="org_id.$org_id|task_id.$task_id"}">
                                    {Localisation::getTranslation('org_task_complete_view_reviews')}
                                 </a>
                             </p>
