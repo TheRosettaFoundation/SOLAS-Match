@@ -203,8 +203,7 @@
 
                         <p  />
 
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
-                        <div class="well">
+                                              <div class="well">
                             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
                             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
                                 <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
@@ -226,7 +225,7 @@
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         </div>
-                        {/if}
+                        
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                             {if !empty($memsource_task)}
