@@ -785,15 +785,14 @@
     </h1>
                 {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
 
-                    <div style="display: inline-block; overflow-wrap: break-word;
-                                    font-weight: bold; font-size: large; max-width: 70%">
+                    <div class="fs-5 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>
                     <hr />
                     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
                     <div class="table-responsive mt-4  ">       
                     <table class="table table-borderless" >
-                        <thead>
+                        <thead class="fs-5">
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
                                 <th>{Localisation::getTranslation('common_status')}</th>
@@ -801,7 +800,7 @@
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-6">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task['task_id']}
@@ -829,7 +828,7 @@
                                     <td>
                                         <strong>
                                             <small>
-                                      style="overflow-wrap: break-word; margin-bottom: 60px"          {assign var="type_id" value=$task['type_id']}
+                                            {assign var="type_id" value=$task['type_id']}
                                                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                                                     {if $type_id == $task_type}
                                                         <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
