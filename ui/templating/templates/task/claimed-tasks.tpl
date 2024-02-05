@@ -140,7 +140,7 @@
                             {/if}
 
 
-                                                        <p>
+                                <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
@@ -223,6 +223,9 @@
                                         TWB Pre-Delivery Checklist
                                     </a>
                                 {/if}
+                            </p>
+                              <p>
+                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
                             </p>
                             <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
                                     <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
