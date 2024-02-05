@@ -1,5 +1,14 @@
 const isPagination = !!document.querySelector(".pagination");
 
+const projects = document.querySelectorAll(".project");
+
+for (let i = 0; i < projects.length; i++) {
+    const firstLink = projects[i].children[0];
+    const secondLink = projects[i].children[1];
+    firstLink.classList.add("custom-link");
+    secondLink.classList.add("custom-link");
+}
+
 if (isPagination) {
     const page = document.querySelector(".page").href;
 
@@ -31,15 +40,6 @@ if (isPagination) {
         sl: false,
         tl: false,
     };
-
-    const projects = document.querySelectorAll(".project");
-
-    for (let i = 0; i < projects.length; i++) {
-        const firstLink = projects[i].children[0];
-        const secondLink = projects[i].children[1];
-        firstLink.classList.add("custom-link");
-        secondLink.classList.add("custom-link");
-    }
 
     const tasksContainer = document.querySelector(".taskPagination");
 

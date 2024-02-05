@@ -1399,6 +1399,7 @@ class TaskRouteHandler
         $total_expected_cost = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_cost /= 60;
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk9dddkedf\" defer ></script>";
 
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
