@@ -193,12 +193,12 @@
        <div class="p-2 border-secondary rounded-3">
         <table class="table table-responsive">
             <thead>
-            <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
+            <th >{Localisation::getTranslation('common_description')}</th>
             <th></th>
-            <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
+            <th >{Localisation::getTranslation('common_project_image')}</th>
             </thead>
             <tbody>
-                <tr valign="top">
+                <tr >
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
@@ -209,7 +209,7 @@
                         </i>
                     </td>
                     <td></td>
-                    <td style = "text-align:center;">
+                    <td>
                     	{if $project->getImageUploaded()}
                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
 	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
@@ -244,7 +244,7 @@
                     <td colspan="3" style="padding-bottom: 40px"></td>
                 </tr>
                 
-                 <tr valign="top">
+                 <tr>
                     <td colspan="3">
                         <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
                     </td>
@@ -263,7 +263,7 @@
                 <tr>
                     <td colspan="3" style="padding-bottom: 40px"></td>
                 </tr>
-                <tr valign="top">
+                <tr>
                     <td colspan="3">
                         <strong>{Localisation::getTranslation('common_tags')}</strong><hr/>
                     </td>
