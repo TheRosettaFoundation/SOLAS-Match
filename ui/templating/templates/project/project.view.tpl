@@ -621,7 +621,7 @@
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i>   <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -661,7 +661,7 @@
                                     {if $task->get_cancelled()}
                                         <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                                            <a class=" btngray btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                            <a class=" btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                                 <i class="icon-check icon-white"></i> Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
@@ -671,8 +671,8 @@
                                         </span>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
-                                            <a class="btngray cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
-                                                <i class="icon-remove-circle icon-black"></i> No
+                                            <a class="btngray cancel" data-toggle="modal"  id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                                 <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
                                     {/if}
@@ -684,7 +684,7 @@
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
-                                                <a class="btngray btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
+                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
                                                     <i class="icon-check icon-white"></i>
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
@@ -702,8 +702,8 @@
                                             <input type="hidden" ndame="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a class="btngray btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_untrack_task')}">
-                                                    <i class="icon-inbox icon-white"></i>
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_untrack_task')}">
+                                                      <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
