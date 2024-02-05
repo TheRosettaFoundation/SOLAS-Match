@@ -76,8 +76,102 @@
 
         </div>
 
+        {if isset($flash['success'])}
+            <p class="alert alert-success">
+                {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+            </p>
+        {/if}
+
+        {if isset($flash['error'])}
+            <p class="alert alert-error">
+                {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+            </p>
+        {/if}
+
+    
+        <div class=" p-2 border-secondary rounded-3 ">
+        <table class="table table-responsive">
+        <thead>            
+            <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
+            <th>{Localisation::getTranslation('common_source_language')}</th>
+            <th>{Localisation::getTranslation('common_reference')}</th>
+            <th>{Localisation::getTranslation('common_word_count')}</th>
+            <th>{Localisation::getTranslation('common_created')}</th>
+            <th>{Localisation::getTranslation('project_view_project_deadline')}</th>
+            {if isset($userSubscribedToProject)}
+                <th>{Localisation::getTranslation('common_tracking')}</th>
+            {/if}
+
+        </thead>
+        <tbody>
+            <tr style="overflow-wrap: break-word;">
+                <td style="text-align: left; overflow-wrap: break-word;">
+                    {if isset($org)}
+                        {assign var="org_id" value=$org->getId()}
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
+                    {/if}
+                </td>
+                <td>
+                    {TemplateHelper::getTaskSourceLanguage($project)}
+                </td>
+                <td>
+                    {if $project->getReference() != ''}
+                        <a target="_blank" href="{TemplateHelper::uiCleanseHTML($project->getReference())}">{TemplateHelper::uiCleanseHTML($project->getReference())}</a>
+                    {else}
+                        -
+                    {/if}
+                </td>
+                <td>
+                    <span class="hidden">
+                        <div id="siteLocationURL">{Settings::get("site.location")}</div>
+                        <div id="project_id_for_updated_wordcount">{$project_id}</div>
+                    </span>
+                    <div id="put_updated_wordcount_here">{if $project->getWordCount() != '' && $project->getWordCount() > 1}{$project->getWordCount()}{else}-{/if}</div>
+                </td>
+                <td>
+                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div><br />{$pm}
+                </td>  
+                <td>
+                    <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$project->getDeadline()}</div>
+                </td>
+                {if isset($userSubscribedToProject)}
+                    <td>
+
+                        <form id="trackedProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                             {if $userSubscribedToProject}
+                                <p>
+                                    <input type="hidden" name="trackProject" value="0" />
+                                    <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('project_view_untrack_project')}
+                                    </a>
+                                </p>
+                            {else}
+                                <p>
+                                    <input type="hidden" name="trackProject" value="1" />
+                                    <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
+                                        <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_project')}
+                                    </a>
+                                </p>
+                            {/if}
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    </td>
+                {/if}
+            </tr>
+            <tr>
+            </tr> 
+        </tbody>
+    </table>    
+    </div>  
+
+
+
           
-        </div>
+    ### End of container in gray color
+    </div>
+
+
+
 </section>
 
 </div>
