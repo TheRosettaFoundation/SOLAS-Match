@@ -7,8 +7,9 @@
             <h1>Proofreading and Approval task claimed <small>Please proofread it!</small></h1>
         </div>
 
-        <p class= container d-flex justify-content-between  alert alert-error alert-dismissible fade show mt-4">
+        <p class="container d-flex justify-content-between  alert alert-error alert-dismissible fade show mt-4">
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </p>
     {/if}
 

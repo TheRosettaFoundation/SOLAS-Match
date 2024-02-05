@@ -21,9 +21,13 @@
 
       <section class="container">
 
-        <div class="alert alert-success">
-          <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+        <div class="alert alert-success alert-dismissible fade show mt-4  ">
+            <div class="d-flex justify-content-between">
+
+            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
             <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+            </div>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </section>
 
