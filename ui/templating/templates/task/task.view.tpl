@@ -167,7 +167,7 @@
                                         </br>
                                     {/if}
                                        </br>
-                                        <a class="btngray-sm mt-2" onclick="$('#assignTaskToUserForm').submit();">
+                                        <a class="btngray-sm mt-2" onclick="$('#assignTaskToUserForm').submit(); href="#"">
                                          <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
