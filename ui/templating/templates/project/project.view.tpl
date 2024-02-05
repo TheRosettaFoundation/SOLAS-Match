@@ -510,9 +510,7 @@
                 <br/><br/>                <div>
                     <div>
                     
-                    <span>
-                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
-                    </span>
+               
                     <span>
                         <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
                             <option value="">-- Choose --</option>
