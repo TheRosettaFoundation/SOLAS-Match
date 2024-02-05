@@ -194,8 +194,7 @@
         <table class="table table-responsive">
             <thead>
             <th >{Localisation::getTranslation('common_description')}</th>
-            <th></th>
-            <th >{Localisation::getTranslation('common_project_image')}</th>
+            <th></th>   
             </thead>
             <tbody>
                 <tr >
@@ -209,52 +208,19 @@
                         </i>
                     </td>
                     <td></td>
-                    <td class="py-2 bg-gray rounded-3">
-                    	{if $project->getImageUploaded()}
-                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                              <div class="bg-white">
-                            
-	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                        {if !$project->getImageApproved()}
-		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				</form>
-                             </div>
-
-		            			{else}   
-		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();"">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
-                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				 </form>
-		                        {/if}
-		                    {else}
-		                    	{if $project->getImageApproved()}
-		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                    	{else}
-			                    	{Localisation::getTranslation('common_project_image_not_approved')}
-		                    	{/if}
-		                    {/if}
-		                {else}
-		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
-                    	{/if}
-                    </td>
+                    
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
+                    <td colspan="2" style="padding-bottom: 40px"></td>
                 </tr>
                 
                  <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                         <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
                     </td>
                 </tr>
                 <tr>                
-                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                    <td  colspan="2">
                         <i>
 	                        {if $project->getImpact() != ''}
                               {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
@@ -265,11 +231,11 @@
                     </td>                
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
+                    <td colspan="2"> </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_tags')}</strong><hr/>
+                    <td colspan="2">
+                        <strong>{Localisation::getTranslation('common_tags')}</strong>
                     </td>
                 </tr>
                 <tr>                
@@ -287,16 +253,16 @@
                 </tr>
                 {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
                 <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
+                    <td colspan="2" style="padding-bottom: 40px"></td>
                 </tr>
                 <tr valign="top">
-                    <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong><hr/>
+                    <td colspan="2">
+                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                    <td >
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
                     </td>
                 </tr>
                 {/if}
