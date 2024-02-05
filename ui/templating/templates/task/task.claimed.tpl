@@ -51,9 +51,8 @@
        
         
         <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
-    
 
-        <p class="alert alert-error">
+        <p class="alert alert-success ">
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </p>
     {/if}
