@@ -1,4 +1,4 @@
-{include file="new_header.tpl"}
+{include file="header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
@@ -799,7 +799,7 @@
   </form>
 </div>
 
-{include file="footer2.tpl"}
+{include file="footer_no_end.tpl"}
         <script>
             $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
         </script>
