@@ -272,16 +272,16 @@
 
 
 
-    <div class="p-4 border-secondary rounded-3 w-50 ">
+    <div class="border-secondary rounded-3 w-50 ">
         <table class="table table-responsive">
             <thead>
         
             <th >{Localisation::getTranslation('common_project_image')}</th>
             </thead>
             <tbody>
-                <tr >
+                <tr class="p-4" >
 
-                    <td class="">
+                    <td >
                     	{if $project->getImageUploaded()}
                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                               <div class="bg-white">
@@ -290,8 +290,8 @@
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+		                        		<a class="btngray mt-4" onclick="$('#projectImageApproveForm').submit();">
+		            					<img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> {Localisation::getTranslation('project_view_image_approve')}</a>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				</form>
                              </div>
@@ -299,8 +299,8 @@
 		            			{else}   
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();"">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+		                        		<a class="btngray mt-4" onclick="$('#projectImageApproveForm').submit();"">
+		            					<img src="{urlFor name='home'}ui/img/cancel.svg" class="disapprove" />{Localisation::getTranslation('project_view_image_disapprove')}</a>
                              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				 </form>
 		                        {/if}
