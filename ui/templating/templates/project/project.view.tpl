@@ -26,14 +26,14 @@
         <div class="container py-5 ">
 
 
-            <div class="d-flex  flex-wrap justify-content-between">
+            <div class="d-flex flex-wrap justify-content-between">
 
                <div class="fw-bold primaryDark fs-3">
 
-                    <span class="hidden">
-                        <!-- Parameters... -->
-                            <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
-                        </span>
+                        <span class="d-none">
+                    <!-- Parameters... -->
+                        <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+                    </span>
 
                     <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
                      {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
@@ -41,31 +41,33 @@
                     </span>
 
                 </div>
+
+
             {assign var="project_id" value=$project->getId()}
-             <div class="d-flex mt-2 mt-md-0">
+             <div class=" ">
                
-                  <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
-                    <input type="hidden" name="copyChunks" value="1" />
-                    <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
-                        <i class="icon-upload icon-white"></i> Sync Phrase TMS
-                    </a>
-                    <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                        <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
-                    </a>
-                {/if}
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
-                    <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
-                        <i class="icon-wrench icon-white"></i> Add Shell Tasks
-                    </a>
-                {/if}
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
-                        <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
-                    </a> 
-                {/if}
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+                    <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
+                        <input type="hidden" name="copyChunks" value="1" />
+                        <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
+                            <i class="icon-upload icon-white"></i> Sync Phrase TMS
+                        </a>
+                        <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
+                            <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
+                        </a>
+                    {/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
+                            <i class="icon-wrench icon-white"></i> Add Shell Tasks
+                        </a>
+                    {/if}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
+                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
+                        </a> 
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
                
                 
             </div>
