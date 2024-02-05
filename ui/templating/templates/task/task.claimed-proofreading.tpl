@@ -1,5 +1,10 @@
 {assign var=task_id value=$task->getId()}
 
+        <div class="alert alert-success container d-flex justify-content-between alert alert-error alert-dismissible fade show mt-4">
+            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
    
 
     <section>
