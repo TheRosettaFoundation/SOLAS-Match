@@ -1,24 +1,12 @@
 {include file='new_header.tpl'}
 
 ####
+<div class="container">
 <div class="d-flex row justify-content-between mt-5 ">
    
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-        <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8" class="needs-validation" novalidate> 
-         
-            <div class="d-flex mb-4 ">
-
-             <input type="text" class="  form-control "  style="outline:none ;" name="search_name" id="search_name" placeholder= "search organizations"> 
-                <button class="position-relative border-0 bg-primary rounded-end-2" style="left:-3px ;" type="submit" name="submit">
-                    
-                        <img src="{urlFor name='home'}ui/img/search.svg" alt="search" >
-                </button>
-
-            </div>
-
-         </form>
 
 
      {if isset($user)}
@@ -27,10 +15,10 @@
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
            
-                    <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
+            <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
             <div class="filter-block">
                 <div class="filter-title">{Localisation::getTranslation('common_task_type')}</div>
-                <select name="taskTypes" id="taskTypes">
+                <select name="taskTypes" id="taskTypes" class="form-select">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $ui['enabled']}
@@ -41,7 +29,7 @@
             </div>
             <div class="filter-block">
                 <div class="filter-title">{Localisation::getTranslation('common_task_status')}</div>
-                <select name="taskStatusFilter" id="taskStatusFilter">
+                <select name="taskStatusFilter" id="taskStatusFilter" class="form-select">
                     <option value="3" {if ($selectedTaskStatus === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_in_progress')}</option>
                     <option value="0" {if ($selectedTaskStatus === 0)}selected="selected"{/if}>{Localisation::getTranslation('common_any_task_status')}</option>
                     <option value="4" {if ($selectedTaskStatus === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_complete')}</option>
@@ -49,7 +37,7 @@
             </div>
             <div class="filter-block">
                 <div class="filter-title">{Localisation::getTranslation('claimed_tasks_ordering')}</div>
-                <select name="ordering" id="ordering">
+                <select name="ordering" id="ordering" class="form-select">
                     <option value="0" {if ($selectedOrdering === 0)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_asc')}</option>
                     <option value="1" {if ($selectedOrdering === 1)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_desc')}</option>
                     <option value="2" {if ($selectedOrdering === 2)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_deadline_asc')}</option>
@@ -58,14 +46,14 @@
                     <option value="5" {if ($selectedOrdering === 5)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_title_desc')}</option>
                 </select>
             </div>
+              <div class=" d-grid mt-3 mb-5  ">
             <button class="btn btn-primary" type="submit">
-               <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('index_filter_task_stream')}
+               <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">{Localisation::getTranslation('index_filter_task_stream')}
             </button>
+            </div>
         </form>
 
         {/if}
-
-          {include file="tag/tags.top-list.flex.inc.tpl"}
         
    
     </div>
@@ -337,6 +325,7 @@
       
 
     </div>
+</div>
 </div>
 
 
