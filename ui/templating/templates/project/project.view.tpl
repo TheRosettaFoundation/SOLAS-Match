@@ -89,8 +89,8 @@
         {/if}
 
     
-        <div class=" p-2 border-secondary rounded-3 mt-2 ">
-        <table class="table table-responsive">
+        <div class=" table-responsive p-2 border-secondary rounded-3 mt-2 ">
+        <table class="table table-borderless">
         <thead class="fs-5">            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
