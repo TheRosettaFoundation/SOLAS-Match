@@ -99,6 +99,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-radius: 4px;
     flex-wrap: nowrap;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .btngray {
@@ -113,6 +114,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-radius: 4px;
     flex-wrap: nowrap;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .btngray-lg {
@@ -129,6 +131,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-radius: 4px;
     flex-wrap: nowrap;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .custom-tooltip {

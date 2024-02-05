@@ -211,15 +211,15 @@
                                 <p style="margin-bottom:30px;" />
 
                                 <span style="float: left; position: relative;">
-                                    <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
+                                    <button type="submit" value="1" name="revokeTask" class="btngray-sm">
                                         {Localisation::getTranslation('task_org_feedback_2')}
                                     </button>
                                 </span>
                                 <span style="float: right; position: relative;">
-                                    <button type="submit" value="Submit" name="submit" class="btn btn-success">
+                                    <button type="submit" value="Submit" name="submit" class="btngray-sm">
                                          {Localisation::getTranslation('common_submit_feedback')}
                                     </button>
-                                    <button type="reset" value="Reset" name="reset" class="btn btn-primary">
+                                    <button type="reset" value="Reset" name="reset" class="btngray-sm">
                                         {Localisation::getTranslation('common_reset')}
                                     </button>
                                 </span>
