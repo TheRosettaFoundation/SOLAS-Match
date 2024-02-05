@@ -2440,10 +2440,9 @@ error_log(print_r($result, true));//(**)
         $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
         $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
         $payload = json_encode([
-//(**)3 below??? and d.docusign.com everywhere (2)
-          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
-          'sub' => '0c77848b-477c-4b2d-9d21-a380dfdaab5f',
-          'aud' => 'account-d.docusign.com',
+(**)          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
+(**)          'sub' => '0c77848b-477c-4b2d-9d21-a380dfdaab5f',
+          'aud' => 'account.docusign.com',
           'iat' => time(),
           'exp' => time() + 6000,
           'scope' => 'signature impersonation'
@@ -2454,7 +2453,7 @@ error_log(print_r($result, true));//(**)
         openssl_sign("$header.$payload", $signature, Common\Lib\Settings::get('docusign.private'), OPENSSL_ALGO_SHA256);
         $signature = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($signature)), '=');
 
-        $ch = curl_init('https://account-d.docusign.com/oauth/token');
+        $ch = curl_init('https://account.docusign.com/oauth/token');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=$header.$payload.$signature");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -2466,18 +2465,16 @@ error_log(print_r($result, true));//(**)
         if (empty($resultset['access_token'])) return 1;
         $access_token = $resultset['access_token'];
 
-//(**)fix 2
-        $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
-        $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
+(**)        $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
+(**)        $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
         $data = [
             'templateId' => $template_id,
             'templateRoles' => [
                 [
-//(**)fix xn ...
-                    'roleName' => 'Signer1',
+(**)                    'roleName' => 'Signer1',
                     'name' => (!empty($userPersonalInfo->getFirstName()) ? $userPersonalInfo->getFirstName() : 'Linguist') . (!empty($userPersonalInfo->getLastName()) ? (' ' . $userPersonalInfo->getLastName()) : ''),
                     'email' => $user->getEmail(),
-                    'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => date('Y-m-d')]]]
+(**)                    'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => date('Y-m-d')]]]
                 ]
             ],
             'status' => 'sent',
@@ -2490,7 +2487,7 @@ error_log(print_r($result, true));//(**)
                 'eventData' => ['version' => 'restv2.1', 'includeData' => ['']]
             ]
         ];
-        $ch = curl_init("https://demo.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
+        $ch = curl_init("https://na3.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Accept: application/json', "Authorization: Bearer $access_token"]);
