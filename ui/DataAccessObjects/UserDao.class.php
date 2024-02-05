@@ -2435,7 +2435,7 @@ error_log(print_r($result, true));//(**)
             error_log("remove_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target)");
     }
 
-    public function insert_sent_contract($user_id, $admin_id, $status, $type)
+    public function insert_sent_contract($user, $userPersonalInfo, $admin_id)
     {
         $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
         $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
@@ -2470,16 +2470,14 @@ error_log(print_r($result, true));//(**)
         $account_id = '316096fd-6232-4ac9-8b54-8ccc7d0fa494';
         $template_id = '6fe09260-fb83-4922-b028-95e712c5dcfe';
         $data = [
-//(**)take out or correct?...
-            'emailSettings' => ['emailSubject' => 'This request is sent from a Template'],
             'templateId' => $template_id,
             'templateRoles' => [
                 [
 //(**)fix xn ...
                     'roleName' => 'Signer1',
-                    'name' => 'Hank Scorpio',
-                    'email' => 'alanbarrett@therosettafoundation.org',
-                    'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => 'xxx From Alan']]]
+                    'name' => !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '',
+                    'email' => $user->getEmail(),
+                    'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => date('Y-m-d')]]]
                 ]
             ],
             'status' => 'sent',
@@ -2506,10 +2504,10 @@ error_log(print_r($result, true));//(**)
         $resultset = json_decode($result, true);
         if (empty($resultset['envelopeId'])) return 1;
         LibAPI\PDOWrapper::call('insert_sent_contract',
-            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($user->getId()) . ',' .
             LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($type) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr('Pending') . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr('On-Demand 2024 Contract') . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($resultset['envelopeId']));
         return 0;
     }
