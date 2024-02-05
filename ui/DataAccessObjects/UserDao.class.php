@@ -2440,8 +2440,8 @@ error_log(print_r($result, true));//(**)
         $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
         $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
         $payload = json_encode([
-(**)          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
-(**)          'sub' => '0c77848b-477c-4b2d-9d21-a380dfdaab5f',
+          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
+          'sub' => 'e8cd02ef-ca57-41e6-8b37-28ec3d5b9db4',
           'aud' => 'account.docusign.com',
           'iat' => time(),
           'exp' => time() + 6000,
