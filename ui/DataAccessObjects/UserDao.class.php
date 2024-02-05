@@ -2475,7 +2475,7 @@ error_log(print_r($result, true));//(**)
                 [
 //(**)fix xn ...
                     'roleName' => 'Signer1',
-                    'name' => !empty($userPersonalInfo) ? $userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName() : '',
+                    'name' => (!empty($userPersonalInfo->getFirstName()) ? $userPersonalInfo->getFirstName() : 'Linguist') . (!empty($userPersonalInfo->getLastName()) ? (' ' . $userPersonalInfo->getLastName()) : ''),
                     'email' => $user->getEmail(),
                     'tabs' => ['textTabs' => [['tabLabel' => 'Text acf6920e-1891-4f83-93f2-5178c4abfb9c', 'value' => date('Y-m-d')]]]
                 ]
