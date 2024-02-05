@@ -166,6 +166,31 @@
 
 
 
+    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
+    <div class="p-2 border-secondary rounded-3">
+    <table class="table table-responsive" >
+        <thead>
+            <th>Deal ID</th>
+            <th>Allocated Budget</th>
+            <th>Project Cost</th>
+            <th>Remaining Budget</th>
+            <th>Waived Tasks (In-kind, In-house, waived)</th>
+        </thead>
+        <tbody>
+            <tr style="overflow-wrap: break-word;">
+                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
+                <td>${round($total_expected_cost, 2)}</td>
+                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
+                <td>${round($total_expected_cost_waived, 2)}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    {/if}
+
+
+
           
     ### End of container in gray color
     </div>
@@ -215,7 +240,7 @@
             </form>
         </div>
     </h1>
-####I am here
+
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
