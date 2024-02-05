@@ -190,6 +190,119 @@
     {/if}
 
 
+       <div class="p-2 border-secondary rounded-3">
+        <table class="table table-responsive">
+            <thead>
+            <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
+            <th></th>
+            <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
+            </thead>
+            <tbody>
+                <tr valign="top">
+                    <td>
+                        <i>
+                        {if $project->getDescription() != ''}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                        {else}
+                            {Localisation::getTranslation('common_no_description_has_been_listed')}
+                        {/if}  
+                        </i>
+                    </td>
+                    <td></td>
+                    <td style = "text-align:center;">
+                    	{if $project->getImageUploaded()}
+                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                        {if !$project->getImageApproved()}
+		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		                       			<input type="hidden" name="imageApprove" value="0" />
+		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+		            				</form>
+		            			{else}   
+		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		            				 	<input type="hidden" name="imageApprove" value="1" />
+		                        		<a class="image-approve-btn btn btn-inverse" onclick="$('#projectImageApproveForm').submit();"">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+		            				 </form>
+		                        {/if}
+		                    {else}
+		                    	{if $project->getImageApproved()}
+		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                    	{else}
+			                    	{Localisation::getTranslation('common_project_image_not_approved')}
+		                    	{/if}
+		                    {/if}
+		                {else}
+		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
+                    	{/if}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding-bottom: 40px"></td>
+                </tr>
+                
+                 <tr valign="top">
+                    <td colspan="3">
+                        <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
+                    </td>
+                </tr>
+                <tr>                
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                        <i>
+	                        {if $project->getImpact() != ''}
+                              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
+	                        {else}
+	                            {Localisation::getTranslation('No impact has been listed')}
+	                        {/if}  
+                        </i> 
+                    </td>                
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding-bottom: 40px"></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="3">
+                        <strong>{Localisation::getTranslation('common_tags')}</strong><hr/>
+                    </td>
+                </tr>
+                <tr>                
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                    {if isset($project_tags) && is_array($project_tags)}
+                        {foreach $project_tags as $ptag}
+                            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
+                            {assign var="tagId" value=$ptag->getId()}
+                            <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
+                        {/foreach}
+                    {else}
+                        <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>                    
+                    {/if}
+                    </td>                
+                </tr>
+                {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
+                <tr>
+                    <td colspan="3" style="padding-bottom: 40px"></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="3">
+                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong><hr/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                    </td>
+                </tr>
+                {/if}
+            </tbody>
+        </table>
+    </div>   
+
+    
+
+
 
           
     ### End of container in gray color
@@ -454,9 +567,11 @@
                     </td>
                 </tr>
                 {/if}
-            </tbody>
+            </tbody>                
         </table>
-    </div>            
+    </div>   
+
+######here         
                 
     <p style="margin-bottom:40px;"/>
 
