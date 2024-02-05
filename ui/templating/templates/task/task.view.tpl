@@ -182,7 +182,7 @@
                                         <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
                                      
                                         <input type="text" class="fs-6 mb-4" id='input' name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                                        <a class="btngray-sm mt-2" onclick="$('#removeUserFromDenyListForm').submit();">
+                                        <a class="btngray-sm mt-2" href="#" onclick="$('#removeUserFromDenyListForm').submit();">
                                             <img src="{urlFor name='home'}ui/img/remove-user.svg" alt="remove user" class="mx-1" /> Remove User from deny list
                                         </a>
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
