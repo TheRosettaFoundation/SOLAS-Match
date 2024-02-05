@@ -7,9 +7,16 @@
     </section>
 
     {if isset($flash['error'])}
-        <p class="alert alert-error">
-            <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+        <div class="container">
+        <p class=" alert alert-error alert-dismissible">  
+          <div class="d-flex justify-content-between">
+            <p >
+                <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
         </p>
+        </div>
     {/if}
 
     <section>

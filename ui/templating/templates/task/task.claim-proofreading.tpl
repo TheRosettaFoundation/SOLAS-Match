@@ -1,9 +1,15 @@
 {assign var=task_id value=$task->getId()}
 
     {if isset($flash['error'])}
-        <p class="alert alert-error">
+       <div class="container">
+        <p class=" alert alert-error alert-dismissible">    
+          <div class="justify-content-between">
             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+          </div>
         </p>
+        </div>
     {/if}
 
     <section class="container  mb-4 ">
