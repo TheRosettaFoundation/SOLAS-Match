@@ -91,7 +91,7 @@
     
         <div class=" p-2 border-secondary rounded-3 mt-2 ">
         <table class="table table-responsive">
-        <thead>            
+        <thead class="fs-5">            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
             <th>{Localisation::getTranslation('common_reference')}</th>
@@ -103,9 +103,9 @@
             {/if}
 
         </thead>
-        <tbody>
-            <tr style="overflow-wrap: break-word;">
-                <td style="text-align: left; overflow-wrap: break-word;">
+        <tbody class="fs-6">
+            <tr ">
+                <td >
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
                         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="custom-link">{$org->getName()|escape:'html':'UTF-8'}</a>
@@ -169,14 +169,14 @@
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
     <div class="p-2 border-secondary rounded-3">
     <table class="table table-responsive" >
-        <thead>
+        <thead class="fs-5">
             <th>Deal ID</th>
             <th>Allocated Budget</th>
             <th>Project Cost</th>
             <th>Remaining Budget</th>
             <th>Waived Tasks (In-kind, In-house, waived)</th>
         </thead>
-        <tbody>
+        <tbody class="fs-6">
             <tr style="overflow-wrap: break-word;">
                 <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
@@ -192,11 +192,11 @@
        <div class="d-flex justify-content-between flex-wrap">
        <div class="p-2 border-secondary rounded-3 ">
         <table class="table table-responsive">
-            <thead>
+            <thead class="fs-5">
             <th >{Localisation::getTranslation('common_description')}</th>
             <th></th>   
             </thead>
-            <tbody>
+            <tbody class="fs-6">
                 <tr >
                     <td>
                         <i>
@@ -257,11 +257,11 @@
 
     <div class="border-secondary rounded-3 w-50 ">
         <table class="table table-responsive">
-            <thead>
+            <thead class="fs-5">
         
             <th >{Localisation::getTranslation('common_project_image')}</th>
             </thead>
-            <tbody>
+            <tbody class="fs-6">
                 <tr class="p-4" >
 
                     <td >
@@ -517,9 +517,9 @@
                     </span>
                     </div>                
                     <hr />  
- 
+                    <div class="p-2 border-secondary rounded-3 ">
                     <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
+                        <thead class="fs-5">
                             <tr>
                                 
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
@@ -537,7 +537,7 @@
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-6">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
@@ -688,7 +688,7 @@
                                     </td>
                                     <td>
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                                            <input type="hidden" name="task_id" value="{$task_id}" />
+                                            <input type="hidden" ndame="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_untrack_task')}">
@@ -707,7 +707,7 @@
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_edit_task')}">
                                             <i class="icon-pencil icon-black"></i>
                                         </a>
-                                    </td>
+                                    </td>d
                                     <td>
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
@@ -740,6 +740,7 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 {/foreach}
             {else}
@@ -753,15 +754,142 @@
 
     {else}
 
-    {if isset($projectTasks)}
-    <p class="alert alert-info">
-        {Localisation::getTranslation('project_view_6')}
-    </p>
-    {/if}
+        {if isset($projectTasks)}
+        <p class="alert alert-info">
+            {Localisation::getTranslation('project_view_6')}
+        </p>
+        {/if}
   
 
 
     {/if}
+
+
+
+    {if !empty($volunteerTaskLanguageMap)}
+    <hr />
+    <h1 class="page-header" style="margin-bottom: 60px">
+        {Localisation::getTranslation('project_view_tasks')}
+        <small>{Localisation::getTranslation('project_view_0')}</small>
+    </h1>
+                {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
+
+                    <div style="display: inline-block; overflow-wrap: break-word;
+                                    font-weight: bold; font-size: large; max-width: 70%">
+                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                    </div>
+                    <hr />
+
+                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
+                        <thead>
+                            <tr>
+                                <th>{Localisation::getTranslation('common_title')}</th>
+                                <th>{Localisation::getTranslation('common_status')}</th>
+                                <th>{Localisation::getTranslation('common_type')}</th>
+                                <th>{Localisation::getTranslation('common_task_deadline')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {foreach from=$tasks item=task}
+                                {assign var="task_id" value=$task['task_id']}
+                                <tr style="overflow-wrap: break-word;">
+                                    <td width="24%">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
+                                        </a>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        {assign var="status_id" value=$task['status_id']}
+                                        {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                            {Localisation::getTranslation('common_waiting')}
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            {Localisation::getTranslation('common_unclaimed')}
+                                        {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                            {Localisation::getTranslation('common_in_progress')}
+                                        {elseif $status_id == TaskStatusEnum::CLAIMED}
+                                            Claimed
+                                        {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                            {Localisation::getTranslation('common_complete')}
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <small>
+                                                {assign var="type_id" value=$task['type_id']}
+                                                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                                                    {if $type_id == $task_type}
+                                                        <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
+                                                    {/if}
+                                                {/foreach}
+                                            </small>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task['deadline']}</div>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                {/foreach}
+    {/if}
+
+
+
+    <!-- Cancel Modal -->
+<div id="cancelmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Cancel Task</h3>
+    <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
+  </div>
+  <div class="modal-body">
+  <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
+  <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
+  <p>Reason to cancel selected task(s):</p>
+  <select name="cancel_task" id="cancel_task" style="width:450px;">
+    <option value="">--Select--</option>
+    <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
+    <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
+    <option value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
+    <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
+    <option value="other">Other</option>    
+  </select>
+  <br/>
+  <p name="reason_text">Further details:</p>
+  <br/>
+  <textarea rows="4" cols="50" name="reason" id="reason" style="width:auto;"></textarea>
+  <input type="hidden" name="cancel" value="" />
+  <input type="hidden" name="cancelled" value="" />
+   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
+  </div>
+  </form>
+</div>
+<!-- PO# Modal -->
+<div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Set Purchase Order #</h3>
+  </div>
+  <div class="modal-body">
+  <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+  PO #: <input type="text" name="po" value="" />
+  <input type="hidden" name="ponum" value="" />
+  <input type="hidden" name="ready_payment_status" value="Unsettled" />
+   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
+  </div>
+  </form>
+</div>
 
     
 
@@ -834,7 +962,7 @@
 {/if}
 
     <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>            
+        <thead class="fs-5">            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
             <th>{Localisation::getTranslation('common_reference')}</th>
@@ -846,7 +974,7 @@
             {/if}
 
         </thead>
-        <tbody>
+        <tbody class="fs-6">
             <tr style="overflow-wrap: break-word;">
                 <td style="text-align: left; overflow-wrap: break-word;">
                     {if isset($org)}
@@ -908,14 +1036,14 @@
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
     <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>
+        <thead class="fs-5">
             <th>Deal ID</th>
             <th>Allocated Budget</th>
             <th>Project Cost</th>
             <th>Remaining Budget</th>
             <th>Waived Tasks (In-kind, In-house, waived)</th>
         </thead>
-        <tbody>
+        <tbody class="fs-6">
             <tr style="overflow-wrap: break-word;">
                 <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
@@ -927,14 +1055,14 @@
     </table>
     {/if}
 
-    <div class="well">
-        <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
-            <thead>
+    <div class="p-2 border-secondary rounded-3 ">
+        <table class="table table-responsive">
+            <thead class="fs-5">
             <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
             <th></th>
             <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
             </thead>
-            <tbody>
+            <tbody class="fs-6">
                 <tr valign="top">
                     <td>
                         <i>
@@ -1037,9 +1165,7 @@
         </table>
     </div>   
 
-######here         
-                
-    <p style="margin-bottom:40px;"/>
+
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
     <hr />    
@@ -1220,9 +1346,10 @@
                     </span>
                     </div>                
                     <hr />  
- 
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
+                    
+                    <div class="p-2 border-secondary rounded-3 ">
+                    <table class="table table-responsive">
+                        <thead class="fs-5">
                             <tr>
                                 
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
@@ -1240,7 +1367,7 @@
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-6">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
@@ -1381,7 +1508,7 @@
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}
-                                                <input type="hidden" name="publishedTask" value="1" />
+                                          style="overflow-wrap: break-word; margin-bottom: 60px"      <input type="hidden" name="publishedTask" value="1" />
                                                 <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_publish')}" >
                                                     <i class="icon-remove-circle icon-black"></i>
                                                 </a>
@@ -1443,6 +1570,7 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 {/foreach}
             {else}
@@ -1475,9 +1603,9 @@
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>
                     <hr />
-
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
+                    <div class="p-2 border-secondary rounded-3 ">
+                    <table class="table table-responsive" >
+                        <thead class="fs-5">
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
                                 <th>{Localisation::getTranslation('common_status')}</th>
@@ -1485,7 +1613,7 @@
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-6">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task['task_id']}
@@ -1529,6 +1657,7 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
                 {/foreach}
 {/if}
 <!-- Cancel Modal -->

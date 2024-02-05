@@ -1,5 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
-<div class=" p-2 border-secondary rounded-3 ">
+<div class="p-2 border-secondary rounded-3 ">
 <div class="table-responsive ">
 <table class="table ">
     <thead >
