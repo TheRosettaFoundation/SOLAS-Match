@@ -272,7 +272,7 @@
 
 
 
-    <div class="p-4 border-secondary rounded-3 ">
+    <div class="p-4 border-secondary rounded-3 w-50 ">
         <table class="table table-responsive">
             <thead>
         
@@ -281,7 +281,7 @@
             <tbody>
                 <tr >
 
-                    <td class="py-2 bg-gray rounded-3">
+                    <td class="">
                     	{if $project->getImageUploaded()}
                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                               <div class="bg-white">
