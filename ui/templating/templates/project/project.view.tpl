@@ -261,7 +261,7 @@
 
 
 
-  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 w-50">
     <div class="table-responsive mt-4  ">
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -508,10 +508,10 @@
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                 <br/><br/>
-                <div style="background-color:#fef9f2;padding:3px;">
+                <div>
                     <div>
                     
-                    <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
+                    <span class="language_name">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
