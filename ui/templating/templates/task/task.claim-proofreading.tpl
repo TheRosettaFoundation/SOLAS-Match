@@ -2,8 +2,8 @@
 
     {if isset($flash['error'])}
        <div class="container">
-        <p class=" alert alert-error alert-dismissible">    
-          <div class="justify-content-between">
+        <p class=" alert alert-warning alert-dismissible">    
+          <div class=" d-flex justify-content-between">
             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
