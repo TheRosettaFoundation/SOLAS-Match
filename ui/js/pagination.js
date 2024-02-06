@@ -420,7 +420,6 @@ if (isPagination) {
             const title = document.createElement("a");
             title.classList.add("custom-link", "fw-bold", "fs-3");
             title.href = `/task/${item.id}/view`;
-            title.target = "_blank";
             title.innerHTML = `<span>${item.title}</span>`;
 
             const spanTitle = document.createElement("div");
@@ -562,9 +561,9 @@ if (isPagination) {
             }
 
             const viewTask = `<div class ='d-flex justify-content-between align-items-center flex-wrap mt-3'>
-                                <div> <span class='text-body'> Part of  <a class='custom-link' href=${anchors[0]} target='_blank'  >${texts[0]} </a> for <a class='custom-link' href=${anchors[1]} target='_blank' >${texts[1]} </a> </div>
+                                <div> <span class='text-body'> Part of  <a class='custom-link' href=${anchors[0]}   >${texts[0]} </a> for <a class='custom-link' href=${anchors[1]}  >${texts[1]} </a> </div>
                                 <div class='d-flex justify-content-end mt-2 mt-sm-4 mt-md-0'>
-                                    <a class='btn btn-secondary fs-5 px-3' href='/task/${item.id}/view'  target='_blank'>View Task</a>
+                                    <a class='btn btn-secondary fs-5 px-3' href='/task/${item.id}/view' >View Task</a>
                                 </div>
     
                                 </div>`;
