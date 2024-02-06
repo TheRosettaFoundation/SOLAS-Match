@@ -2465,6 +2465,18 @@ error_log(print_r($result, true));//(**)
         if (empty($resultset['access_token'])) return 1;
         $access_token = $resultset['access_token'];
 
+        $ch = curl_init('https://account.docusign.com/oauth/userinfo');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign userinfo responseCode: $responseCode");
+        if ($responseCode != 200) return 1;
+        $resultset = json_decode($result, true);
+        if (empty($resultset['accounts']['base_uri'])) return 1;
+        $base_uri = $resultset['accounts']['base_uri'];
+
         $account_id = '192fd025-39ec-4ba1-96ec-a61c6e58860b';
         $template_id = 'f9c1b01a-7297-44ed-997e-d29ea1ff7cd7';
         $data = [
@@ -2487,7 +2499,7 @@ error_log(print_r($result, true));//(**)
                 'eventData' => ['version' => 'restv2.1', 'includeData' => ['']]
             ]
         ];
-        $ch = curl_init("https://na3.docusign.net/restapi/v2.1/accounts/$account_id/envelopes");
+        $ch = curl_init("$base_uri/restapi/v2.1/accounts/$account_id/envelopes");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Accept: application/json', "Authorization: Bearer $access_token"]);
