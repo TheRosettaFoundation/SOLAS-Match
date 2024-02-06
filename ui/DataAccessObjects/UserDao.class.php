@@ -2476,8 +2476,8 @@ error_log(print_r($result, true));//(**)
 error_log($result);
         $resultset = json_decode($result, true);
 error_log(print_r($resultset, 1));
-        if (empty($resultset['accounts']['base_uri'])) return 1;
-        $base_uri = $resultset['accounts']['base_uri'];
+        if (empty($resultset['accounts'][0]['base_uri'])) return 1;
+        $base_uri = $resultset['accounts'][0]['base_uri'];
 
         $account_id = '192fd025-39ec-4ba1-96ec-a61c6e58860b';
         $template_id = 'f9c1b01a-7297-44ed-997e-d29ea1ff7cd7';
