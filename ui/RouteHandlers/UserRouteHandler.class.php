@@ -3302,7 +3302,7 @@ EOF;
         $body = (string)$request->getBody();
         $docusign_hook = json_decode($body, 1);
         error_log('docusign_hook:' . print_r($docusign_hook, 1));
-        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || $docusign_hook['data']['recipientId'] == 1))
+        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || (!empty($docusign_hook['data']['recipientId']) && $docusign_hook['data']['recipientId'] == 1)))
             $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
         die;
     }
