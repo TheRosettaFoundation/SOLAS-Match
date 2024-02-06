@@ -3,11 +3,9 @@
     {if isset($flash['error'])}
        <div class="container">
         <p class=" alert alert-warning alert-dismissible fade show mt-2">    
-          <div class=" d-flex justify-content-between">
+         
             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-
-          </div>
         </p>
         </div>
     {/if}
