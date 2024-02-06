@@ -47,7 +47,7 @@
 
                         <div>
                             {if !empty($memsource_task)}
-                            <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                            <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-grayish fs-6">
                                 <img src="{urlFor name='home'}ui/img/download.svg" alt="download-icon"  /></i> Download Original File in its source language</a>
                             {/if}
                         </div>
