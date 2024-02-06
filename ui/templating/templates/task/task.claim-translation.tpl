@@ -7,7 +7,7 @@
         
             <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          <
+          
         </p>
       </dib>
     {/if}

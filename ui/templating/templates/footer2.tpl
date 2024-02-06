@@ -128,8 +128,7 @@
                         localStorage.setItem('theme', 'light');
                         next.src = "/ui/img/bread.svg"
                          next1.src = "/ui/img/bread.svg"
-                        print.src="/ui/img/print.svg"
-                        downing.src="/ui/img/download.svg"
+                    
                         
                        }
                        else{
@@ -138,10 +137,10 @@
                           document.documentElement.setAttribute('data-bs-theme', 'dark')
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
-                          print.src="/ui/img/print-white.svg"
+                     
                             next.src = "/ui/img/next-white.svg"
                              next1.src = "/ui/img/next-white.svg"
-                          downimg.src="/ui/img/download-white.svg"
+                      
                            localStorage.setItem('theme', 'dark');
                        }
 
