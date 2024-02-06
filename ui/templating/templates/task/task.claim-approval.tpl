@@ -8,7 +8,7 @@
 
     {if isset($flash['error'])}
         <div class="container">
-        <p class=" alert alert-warning alert-dismissible">  
+        <p class=" alert alert-warning alert-dismissible fade show mt-2">  
           <div class="d-flex justify-content-between">
             <p >
                 <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
