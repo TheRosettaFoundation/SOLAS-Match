@@ -2385,4 +2385,102 @@ error_log(print_r($result, true));//(**)
             LibAPI\PDOWrapper::cleanse($country_id_target));
             error_log("remove_user_rate_pair($user_id, $task_type, $language_id_source, $language_id_target, $country_id_target)");
     }
+
+    public function insert_sent_contract($user, $userPersonalInfo, $admin_id)
+    {
+        $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
+        $header = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($header)), '=');
+        $payload = json_encode([
+          'iss' => 'c15bb9ab-1e2e-4c67-84fc-c9faf4ae4879',
+          'sub' => 'e8cd02ef-ca57-41e6-8b37-28ec3d5b9db4',
+          'aud' => 'account.docusign.com',
+          'iat' => time(),
+          'exp' => time() + 6000,
+          'scope' => 'signature impersonation'
+        ]);
+        $payload = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($payload)), '=');
+
+        $signature = '';
+        openssl_sign("$header.$payload", $signature, Common\Lib\Settings::get('docusign.private'), OPENSSL_ALGO_SHA256);
+        $signature = rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($signature)), '=');
+
+        $ch = curl_init('https://account.docusign.com/oauth/token');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=$header.$payload.$signature");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign oauth/token responseCode: $responseCode");
+        $resultset = json_decode($result, true);
+        if (empty($resultset['access_token'])) return 1;
+        $access_token = $resultset['access_token'];
+
+        $ch = curl_init('https://account.docusign.com/oauth/userinfo');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign userinfo responseCode: $responseCode");
+        if ($responseCode != 200) return 1;
+        $resultset = json_decode($result, true);
+        if (empty($resultset['accounts'][0]['base_uri'])) return 1;
+        $base_uri = $resultset['accounts'][0]['base_uri'];
+
+        $account_id = '192fd025-39ec-4ba1-96ec-a61c6e58860b';
+        $template_id = 'f9c1b01a-7297-44ed-997e-d29ea1ff7cd7';
+        $data = [
+            'templateId' => $template_id,
+            'templateRoles' => [
+                [
+                    'roleName' => 'Contractor',
+                    'name' => (!empty($userPersonalInfo->getFirstName()) ? $userPersonalInfo->getFirstName() : 'Linguist') . (!empty($userPersonalInfo->getLastName()) ? (' ' . $userPersonalInfo->getLastName()) : ''),
+                    'email' => $user->getEmail(),
+                    'tabs' => ['textTabs' => [['tabLabel' => 'Text 4e38bd5f-6d64-4f43-8508-ed3fe47e5652', 'value' => date('d-M-Y | H:i') . ' UTC']]]
+                ]
+            ],
+            'status' => 'sent',
+            'eventNotification' => [
+                'url' => Common\Lib\Settings::get('site.location') . 'docusign_hook',
+                'requireAcknowledgment' => 'true',
+                'loggingEnabled' => 'true',
+                'deliveryMode' => 'SIM',
+                'events' => ['envelope-sent', 'envelope-resent', 'envelope-delivered', 'envelope-completed', 'envelope-declined', 'envelope-voided', 'recipient-authenticationfailed', 'recipient-autoresponded', 'recipient-declined', 'recipient-delivered', 'recipient-completed', 'recipient-sent', 'recipient-resent', 'envelope-corrected', 'envelope-purge', 'envelope-deleted', 'recipient-reassign', 'recipient-finish-later', 'recipient-delegate'],
+                'eventData' => ['version' => 'restv2.1', 'includeData' => ['']]
+            ]
+        ];
+        $ch = curl_init("$base_uri/restapi/v2.1/accounts/$account_id/envelopes");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Accept: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        error_log("Docusign envelopes responseCode: $responseCode");
+        error_log($result);
+        if ($responseCode != 201) return 1;
+        $resultset = json_decode($result, true);
+        if (empty($resultset['envelopeId'])) return 1;
+        LibAPI\PDOWrapper::call('insert_sent_contract',
+            LibAPI\PDOWrapper::cleanse($user->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr('Pending') . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr('On-Demand 2024 Contract') . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($resultset['envelopeId']));
+        return 0;
+    }
+
+    public function update_sent_contract($status, $envelopeId)
+    {
+        LibAPI\PDOWrapper::call('update_sent_contract', LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($envelopeId));
+    }
+
+    public function get_sent_contracts($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_sent_contracts', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
 }

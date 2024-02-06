@@ -222,6 +222,16 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:invite_site_admins')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('invite_site_admins');
+
+            $app->map(['GET', 'POST'],
+            '/docusign_redirect_uri',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_redirect_uri')
+            ->setName('docusign_redirect_uri');
+
+            $app->map(['GET', 'POST'],
+            '/docusign_hook',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_hook')
+            ->setName('docusign_hook');
     }
 
     public function homeIndex(Request $request, Response $response, $args)
@@ -2548,6 +2558,12 @@ error_log("result: $result");//(**)
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }
+
+            if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && !empty($post['send_contract'])) {
+                if ($userDao->insert_sent_contract($user, $userPersonalInfo, $loggedInUserId)) UserRouteHandler::flash('error', 'Connection to Docusign Failed');
+                else                                                                           UserRouteHandler::flash('success', 'Success');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', ['user_id' => $user_id]));
+            }
         }
 
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -2748,6 +2764,7 @@ error_log("result: $result");//(**)
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
             'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
+            'sent_contracts' => $userDao->get_sent_contracts($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -3259,6 +3276,24 @@ EOF;
         ));
 
         return UserRouteHandler::render("user/user.task-reviews.tpl", $response);
+    }
+
+    public function docusign_redirect_uri()
+    {
+        error_log('docusign_redirect_uri:' . print_r($_GET, 1));
+        die;
+    }
+
+    public function docusign_hook(Request $request)
+    {
+        $userDao = new DAO\UserDao();
+
+        $body = (string)$request->getBody();
+        $docusign_hook = json_decode($body, 1);
+        error_log('docusign_hook:' . print_r($docusign_hook, 1));
+        if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || (!empty($docusign_hook['data']['recipientId']) && $docusign_hook['data']['recipientId'] == 1)))
+            $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
+        die;
     }
 
     public static function flash($key, $value)

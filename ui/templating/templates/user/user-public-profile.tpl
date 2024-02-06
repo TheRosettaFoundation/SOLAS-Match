@@ -721,6 +721,39 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+<div class="page-header">
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+{/if}
+{if !empty($sent_contracts)}
+<table style="width:100%">
+    <thead>
+        <tr>
+            <td><strong>Contract Type</strong></td>
+            <td><strong>Admin</strong></td>
+            <td><strong>Status</strong></td>
+            <td><strong>Update Date</strong></td>
+            <td><strong>Contract Date</strong></td>
+        </tr>
+    </thead>
+    {foreach $sent_contracts as $sent_contract}
+        <tr>
+            <td>{$sent_contract['type']}</td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</td>
+            <td>{$sent_contract['status']}</td>
+            <td>{$sent_contract['update_date']}</td>
+            <td>{$sent_contract['contract_date']}</td>
+        </tr>
+    {/foreach}
+</table>
+{/if}
+</div>
+{/if}
+
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
