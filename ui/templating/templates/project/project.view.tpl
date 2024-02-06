@@ -250,7 +250,7 @@
                 </tr>
                 <tr>
                     <td >
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank"> Discuss</a>
                     </td>
                 </tr>
                 {/if}
@@ -274,9 +274,9 @@
                     <td >
                     	{if $project->getImageUploaded()}
                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                              <div class="bg-white">
+                              <div>
                             
-	                        	<img class="mb-2" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+	                        	<img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
@@ -346,13 +346,13 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <div class="fs-5 fw-bold">{Localisation::getTranslation('project_view_tasks')}
-                <small>{Localisation::getTranslation('project_view_0')}</small>
+            <div class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+                <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
        <div>
         {if !empty($memsource_project)}
-        <span class=""">
+        <div class="">
             <select name="task_options" id="task_options">
                 <option value="">-- Choose --</option>
                 <option value="all_tasks">Select all Tasks</option>
@@ -366,34 +366,38 @@
                 {/if}
                 <option value="delesect_all">Deselect all</option>
             </select>
-        </span>
+        </div>
 
         <div>
-        <div class="dropdown" ">
-            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+        <div class="dropdown">
+            <a class=" btn btn-secondary dropdown-toggle"  role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                Dropdown
             </a>
-            <ul id="menu3" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+            <ul  class="dropdown-menu" >
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        <li class="dropdown-item">
             <form id="publish_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#publish_selected_tasks').submit();" >
-                    <i class="icon-check icon-black" ></i> Publish Selected Tasks
+                    Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-
+       </li>
+         <li class="dropdown-item">
             <form id="unpublish_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#unpublish_selected_tasks').submit();"   style="color:#000000;margin-right:52px;">
+                <a class="" onclick="$('#unpublish_selected_tasks').submit();"  ">
                    Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+         </li>
         {/if}
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+            <li class="dropdown-item">
             <form id="tasks_as_paid" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();">
                      Mark Selected Tasks as Paid
@@ -401,7 +405,9 @@
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             </li>
 
+            <li class="dropdown-item">
             <form id="tasks_as_unpaid" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_unpaid').submit();" >
                      Mark Selected Tasks as Unpaid
@@ -410,8 +416,9 @@
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+               </li>
         
-
+                <li class="dropdown-item">
             <form id="status_as_unclaimed" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_unclaimed').submit();" >
                    Set Status of Selected to Unclaimed
@@ -419,7 +426,9 @@
                 <input type="hidden" name="status_as_unclaimed" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+               </li>
 
+                <li class="dropdown-item">
             <form id="status_as_waiting" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_waiting').submit();">
                     Set Status of Selected to Waiting
@@ -427,7 +436,10 @@
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             </li>
 
+
+                <li class="dropdown-item">
             <form id="complete_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#complete_selected_tasks').submit();" >
                   Set Shell Tasks Status&nbsp;&nbsp;Complete
@@ -435,7 +447,10 @@
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             </li>
 
+
+                <li class="dropdown-item">
             <form id="uncomplete_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#uncomplete_selected_tasks').submit();">
                     Set Shell Tasks Status In Progress
@@ -443,10 +458,13 @@
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             
 
             <a class=" btngray open-cancel-modal" " data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                  Set Selected Tasks to Cancelled
             </a>
+            </li>
+
             <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btngray" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
@@ -458,6 +476,9 @@
             <a class=" btngray open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
                 <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-65px;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
+
+            </li>
+            <li class="dropdown-item">
             <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btngray" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set tasks to Ready for Payment
@@ -466,6 +487,9 @@
                 <input type="hidden" name="ready_payment_status" value="Ready for payment" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+            </li>
+
+            <li class="dropdown-item">
             <form id="pending_documentation" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btngray" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
@@ -474,6 +498,9 @@
                 <input type="hidden" name="ready_payment_status" value="Pending documentation" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             </li>
+
+            <li class="dropdown-item">
             <form id="tasks_settled" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             <a class=" btngray" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-70px;" aria-hidden="true"></i> Set tasks to Settled
@@ -482,6 +509,7 @@
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+             </li>
         {/if}
             </ul>
          </div>
@@ -493,12 +521,14 @@
 
 
     {if isset($flash['taskSuccess'])}
-        <div class="alert alert-success">
-            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}
+        <div class="alert alert-success alert-dismissible fade show mt-2">
+            <span>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}</span>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {else if isset($flash['taskError'])}
-        <div class="alert alert-error">
-            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}
+        <div class="alert alert-warning alert-dismissible fade show mt-2">
+            <span>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}</span>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {/if}      
 
@@ -575,7 +605,7 @@
                                                 {Localisation::getTranslation('common_in_progress')}<br />
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />

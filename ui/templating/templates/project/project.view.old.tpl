@@ -678,7 +678,6 @@
 {/if}
 
 
-############HERE
 
 {if !empty($volunteerTaskLanguageMap)}
     <hr />
