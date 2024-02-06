@@ -2473,9 +2473,7 @@ error_log(print_r($result, true));//(**)
         curl_close($ch);
         error_log("Docusign userinfo responseCode: $responseCode");
         if ($responseCode != 200) return 1;
-error_log($result);
         $resultset = json_decode($result, true);
-error_log(print_r($resultset, 1));
         if (empty($resultset['accounts'][0]['base_uri'])) return 1;
         $base_uri = $resultset['accounts'][0]['base_uri'];
 
