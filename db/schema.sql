@@ -12673,6 +12673,51 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `sent_contracts` (
+  user_id       INT UNSIGNED NOT NULL,
+  admin_id      INT UNSIGNED NOT NULL,
+  status        VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  type          VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  envelopeId    VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  contract_date DATETIME NOT NULL,
+  update_date   DATETIME NOT NULL,
+  KEY (user_id),
+  KEY (envelopeId),
+  CONSTRAINT FK_sent_contracts_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_sent_contract`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_sent_contract`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN stat VARCHAR(50), IN typ VARCHAR(255), IN eID VARCHAR(50))
+BEGIN
+    INSERT INTO sent_contracts (user_id, admin_id, status, type, envelopeId, contract_date, update_date) VALUES (uID, aID, stat, typ, eID, NOW(), NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_sent_contract`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sent_contract`(IN stat VARCHAR(50), IN eID VARCHAR(50))
+BEGIN
+    UPDATE sent_contracts SET status=stat, update_date=NOW() WHERE envelopeId=eID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_sent_contracts`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_sent_contracts`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT
+        sc.*,
+        IFNULL(upi.`first-name`, '') AS first_name,
+        IFNULL(upi.`last-name`,  '') AS last_name
+    FROM      sent_contracts           sc
+    LEFT JOIN UserPersonalInformation upi ON sc.admin_id=upi.user_id
+    WHERE sc.user_id=uiD
+    ORDER BY sc.contract_date DESC;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
