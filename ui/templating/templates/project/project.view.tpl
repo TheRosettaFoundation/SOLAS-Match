@@ -560,7 +560,7 @@
         </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <li><a class="dropdown-item" href="#">    
+            <li class="bg-primary"><a class="dropdown-item" href="#">    
             <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a  onclick="$('#publish_selected_tasks').submit();" class="btngray-lg text-decoration-none">
                      Publish Selected Tasks
@@ -604,8 +604,8 @@
                 <a class="dropdown-item" href="#">
 
                 <form id="tasks_as_unpaid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_unpaid').submit();" style="color:#000000;margin-right:22px;">
-                    <i class="fa fa-strikethrough" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Mark Selected Tasks as Unpaid
+                <a lass="btngray-lg onclick="$('#tasks_as_unpaid').submit();">
+                   Mark Selected Tasks as Unpaid
                 </a>
                 <input type="hidden" name="all_as_paid1" value="1" />
                 <input type="hidden" name="tasks_as_unpaid" value="" />
