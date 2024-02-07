@@ -194,7 +194,7 @@
     {/if}
 
        <div class="d-flex justify-content-between flex-wrap">
-     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-4">
+     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-md-2">
         <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -261,7 +261,7 @@
 
 
 
-  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 ms-4">
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 ms-md-2">
     <div class="table-responsive mt-4  ">
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -346,11 +346,11 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <div class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
-                <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
-            </div>
+            <h4 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+                <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
+            </h4>
 
-            <div>
+         
                 {if !empty($memsource_project)}
                 <div class="">
                     <select name="task_options" id="task_options">
@@ -592,7 +592,7 @@
 
      
        
-         </div>
+    
 
          </div>
 
