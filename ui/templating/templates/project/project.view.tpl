@@ -368,196 +368,14 @@
             </select>
         </div>
 
+
+        ########################################
         <div>
 
-     
-        <div class="dropdown">
-            <a class=" btn btn-secondary dropdown-toggle"  role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-            
-            </a>
-            <ul  class="dropdown-menu" >
-
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-        <li>
-        
-            <form  id="publish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="btngray" onclick="$('#publish_selected_tasks').submit();" >
-                    Publish Selected Tasks
-                </a>
-                <input type="hidden" name="publish_selected_tasks" value="1" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-          
-       </li>
-         <li >
-        
-            <form id="unpublish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#unpublish_selected_tasks').submit();"  ">
-                   Unpublish Selected Tasks
-                </a>
-                <input type="hidden" name="unpublish_selected_tasks" value="" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-          
-         </li>
-        {/if}
-
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <li>
-           
-            <form id="tasks_as_paid" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_paid').submit();">
-                     Mark Selected Tasks as Paid
-                </a>
-                <input type="hidden" name="tasks_as_paid" value="" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-        
-                
-             </li>
-
-            <li>
-            
-                <form id="tasks_as_unpaid" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_unpaid').submit();" >
-                     Mark Selected Tasks as Unpaid
-                </a>
-                <input type="hidden" name="all_as_paid1" value="1" />
-                <input type="hidden" name="tasks_as_unpaid" value="" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-             
-               </li>
-        
-                <li>
-              
-                    <form id="status_as_unclaimed"method="post" class="dropdown-item" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                        <a class="" onclick="$('#status_as_unclaimed').submit();" >
-                        Set Status of Selected to Unclaimed
-                        </a>
-                    <input type="hidden" name="status_as_unclaimed" value="" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                 
-               </li>
-
-                
-                <li>
-
-                   
-                        <form id="status_as_waiting" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                        <a class="" onclick="$('#status_as_waiting').submit();">
-                            Set Status of Selected to Waiting
-                        </a>
-                        <input type="hidden" name="status_as_waiting" value="" />
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                   
-                </li>
-
-
-                <li >
-                
-                <form class="btngray"  id="complete_selected_tasks" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#complete_selected_tasks').submit();" >
-                  Set Shell Tasks Status&nbsp;&nbsp;Complete
-                </a>
-                <input type="hidden" name="complete_selected_tasks" value="" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-                 
-             </li>
-
-
-                <li >
-                
-                    <form id="uncomplete_selected_tasks"  class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                    <a class="" onclick="$('#uncomplete_selected_tasks').submit();">
-                        Set Shell Tasks Status In Progress
-                    </a>
-                    <input type="hidden" name="uncomplete_selected_tasks" value="" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                
-
-                    <a class=" btngray open-cancel-modal" " data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
-                        Set Selected Tasks to Cancelled
-                    </a>
-             
-            </li>
-            
-            <li>
-             
-
-                <form id="cancel" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-                <a class=" btngray" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
-                    <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
-                </a>
-                    <input type="hidden" name="cancel" value="" />
-                    <input type="hidden" name="cancelled" value="0" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-                <a class=" btngray open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
-                    Set Purchase Order #
-                </a>
-
-
-            </li>
-
-            <li >
-            
-                <form id="ready_payment" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-                <a class=" btngray" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                    <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set tasks to Ready for Payment
-                </a>
-                    <input type="hidden" name="ready_payment" value="" />
-                    <input type="hidden" name="ready_payment_status" value="Ready for payment" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-       
-            </li>
-
-            <li>
-           
-            <form id="pending_documentation" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btngray" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
-            </a>
-                <input type="hidden" name="pending_documentation" value="" />
-                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-         
-             </li>
-
-            <li >
-           
-            <form id="tasks_settled" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class=" btngray" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-70px;" aria-hidden="true"></i> Set tasks to Settled
-            </a>
-                <input type="hidden" name="tasks_settled" value="" />
-                <input type="hidden" name="ready_payment_status" value="Settled" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-           
-             </li>
-        {/if}
-
-
-
-            </ul>
-         </div>
-         </div>
-
-
-
-        #####
-
-        <div class="dropdown">
-        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown button
-        </button>
+            <div class="dropdown">
+            <button class="dropdown-toggle btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Actions
+            </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li><a class="dropdown-item" >    
@@ -769,6 +587,19 @@
         </ul>
         
         </div>
+
+
+
+
+     
+       
+         </div>
+
+
+
+        #####
+
+     
 
         {/if}
 
