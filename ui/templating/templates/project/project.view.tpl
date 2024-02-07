@@ -574,7 +574,7 @@
 
              <li><a class="dropdown-item" href="#">
              <form id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a  class="btn btn-secondary" onclick="$('#unpublish_selected_tasks').submit();"  >
+                <a  class="btn btn-grayish h-100 w-100" onclick="$('#unpublish_selected_tasks').submit();"  >
                      Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
@@ -589,7 +589,7 @@
           <li>
                 <a class="dropdown-item" href="#">
                        <form id="tasks_as_paid"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="btngray-lg" onclick="$('#tasks_as_paid').submit();" >
+                <a class="btn btn-grayish h-100 w-100" onclick="$('#tasks_as_paid').submit();" >
                     <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
