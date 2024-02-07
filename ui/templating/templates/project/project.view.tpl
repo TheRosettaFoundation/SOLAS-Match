@@ -560,7 +560,7 @@
             </a>
             <ul  class="dropdown-menu" >
 
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+       
             <li>
         
              <a  class="dropdown-item" href="#"> Dropdown item 1</a>
@@ -573,7 +573,7 @@
             
             </li>
        
-        {/if}
+  
 
 
         
