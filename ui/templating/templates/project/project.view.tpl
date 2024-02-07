@@ -604,7 +604,7 @@
         {/if}
 
     </div>
-    </div> 
+
 
 
     {if isset($flash['taskSuccess'])}
