@@ -350,7 +350,7 @@
                 <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
-    
+       <div>
         {if !empty($memsource_project)}
         <div class="">
             <select name="task_options" id="task_options">
@@ -372,10 +372,10 @@
         ########################################
         <div>
 
-            <div class="dropdown">
-            <button class="dropdown-toggle btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Actions
-            </button>
+               <div class="dropdown">
+        <button class="dropdown-toggle btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+         Actions
+        </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li><a class="dropdown-item" >    
@@ -597,14 +597,14 @@
 
 
 
-       </div>
+        #####
 
      
 
         {/if}
 
     </div>
-
+    </div> 
 
 
     {if isset($flash['taskSuccess'])}
