@@ -77,13 +77,13 @@
         </div>
 
         {if isset($flash['success'])}
-            <p class="alert alert-success">
+            <p class="alert alert-success mt-2">
                 {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
             </p>
         {/if}
 
         {if isset($flash['error'])}
-            <p class="alert alert-error">
+            <p class="alert alert-warning mt-2">
                 {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
             </p>
         {/if}
@@ -346,11 +346,11 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <div class="fw-bold fs-5">{Localisation::getTranslation('project_view_tasks')}
+            <div class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
- 
+       <div>
         {if !empty($memsource_project)}
         <div class="">
             <select name="task_options" id="task_options">
@@ -368,13 +368,13 @@
             </select>
         </div>
 
-
-
-       
+        
+        ########################################
+        <div>
 
                <div class="dropdown">
-        <button class="dropdown-toggle btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-         Actions
+        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ACTIONS
         </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -597,15 +597,14 @@
 
 
 
+        #####
 
      
 
         {/if}
 
     </div>
-
-
-   
+    </div> 
 
 
     {if isset($flash['taskSuccess'])}
@@ -1021,7 +1020,7 @@
   </div>
   </form>
 </div>
-</div>
+
     
 
 
