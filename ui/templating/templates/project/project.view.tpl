@@ -543,9 +543,55 @@
            
              </li>
         {/if}
+
+
+
             </ul>
          </div>
          </div>
+
+
+
+        #####
+
+        <div class="dropdown">
+            <a class=" btn btn-primary dropdown-toggle"  role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+            
+            </a>
+            <ul  class="dropdown-menu" >
+
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+            <li>
+        
+                <form  id="publish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                    <a class="btngray" onclick="$('#publish_selected_tasks').submit();" >
+                        Publish Selected Tasks
+                    </a>
+                    <input type="hidden" name="publish_selected_tasks" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            
+            </li>
+
+            <li >
+            
+                <form id="unpublish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                    <a class="" onclick="$('#unpublish_selected_tasks').submit();"  ">
+                    Unpublish Selected Tasks
+                    </a>
+                    <input type="hidden" name="unpublish_selected_tasks" value="" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            
+            </li>
+       
+        {/if}
+
+
+        
+            </ul>
+         </div>
+
         {/if}
 
     </div>
