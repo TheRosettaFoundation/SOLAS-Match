@@ -194,7 +194,7 @@
     {/if}
 
        <div class="d-flex justify-content-between flex-wrap">
-     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1">
         <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -261,7 +261,7 @@
 
 
 
-  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 w-50">
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1">
     <div class="table-responsive mt-4  ">
         <table class="table table-borderless">
             <thead class="fs-5">
