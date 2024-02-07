@@ -350,7 +350,7 @@
                 <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
-       <div>
+    
         {if !empty($memsource_project)}
         <div class="">
             <select name="task_options" id="task_options">
@@ -597,7 +597,7 @@
 
 
 
-        #####
+       </div>
 
      
 
