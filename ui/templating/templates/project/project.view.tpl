@@ -346,14 +346,14 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <h4 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+            <h3 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
-            </h4>
+            </h3>
 
          
                 {if !empty($memsource_project)}
                 <div class="d-flex ">
-                    <select name="task_options" id="task_options">
+                    <select name="task_options" id="task_options" class="form-control">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
                         <option value="all_translation_tasks">Select all Translation Tasks</option>
@@ -371,9 +371,9 @@
 
      
 
-               <div class="dropdown">
-        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            ACTIONS
+        <div class="dropdown">
+        <button class="dropdown-toggle btn  btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+           ...
         </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -602,6 +602,8 @@
         {/if}
 
     </div>
+
+    <hr> </hr>
  
 
 
