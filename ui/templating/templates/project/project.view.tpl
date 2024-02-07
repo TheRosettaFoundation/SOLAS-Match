@@ -560,9 +560,9 @@
         </button>
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <li class="bg-primary d-flex"><a class="dropdown-item" href="#">    
-            <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view" class="flex-grow-1" options="project_id.$project_id"}" >
-                <a  onclick="$('#publish_selected_tasks').submit();" class="btn btn-grayish h-100 w-100">
+            <li class="bg-primary d-flex"><a class="dropdown-item btn btn-grayish" href="#">    
+            <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
+                <a  onclick="$('#publish_selected_tasks').submit();" >
                      Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
