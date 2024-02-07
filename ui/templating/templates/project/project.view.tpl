@@ -458,7 +458,7 @@
 
                 <li >
                 
-                <form id="complete_selected_tasks" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <form class="btngray"  id="complete_selected_tasks" class="dropdown-item"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#complete_selected_tasks').submit();" >
                   Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
@@ -498,7 +498,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
                 <a class=" btngray open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
-                    <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-65px;" aria-hidden="true"></i>  Set Purchase Order #
+                    Set Purchase Order #
                 </a>
 
 
@@ -681,7 +681,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <a class=" btn btn-small open-cancel-modal"  data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+            <a class=" class="btngray open-cancel-modal"  data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                  Set Selected Tasks to Cancelled
             </a>
 
@@ -701,7 +701,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" class="btngray-lg open-ponum-modal"  data-toggle="modal" href="#ponummodal" role="button">
+            <a class=" class="class="btngray open-ponum-modal"  data-toggle="modal" href="#ponummodal" role="button">
                  Set Purchase Order #
             </a>
 
