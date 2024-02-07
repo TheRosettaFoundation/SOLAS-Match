@@ -562,7 +562,7 @@
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li class="bg-primary"><a class="dropdown-item" href="#">    
             <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a  onclick="$('#publish_selected_tasks').submit();" class="btngray-lg text-decoration-none">
+                <a  onclick="$('#publish_selected_tasks').submit();" class="btn btn-grayish">
                      Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
@@ -574,7 +574,7 @@
 
              <li><a class="dropdown-item" href="#">
              <form id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a  class="secondary" onclick="$('#unpublish_selected_tasks').submit();"  >
+                <a  class="btn btn-secondary" onclick="$('#unpublish_selected_tasks').submit();"  >
                      Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
