@@ -103,6 +103,17 @@
 
                                         </div>
 
+                                           <p class="mb-3">
+                                         {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                                        </p>
+                                            <p class="mb-3">
+                                    {if !empty($taskTags) && !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
+                                        {foreach $taskTags[$task_id] as $tag}
+                                            <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
+                                        {/foreach}
+                                    {/if}
+                                </p>
+
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                          
                                             <div class="mb-3  text-muted">
@@ -140,7 +151,20 @@
                             {/if}
 
 
-                                <p>
+                          
+                              <p>
+                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                            </p>
+                            <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
+                                    <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
+                                         
+                                    </div>
+                                     <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
+                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view">View Task</a>
+
+                                     </div>
+
+                                                                 <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
@@ -224,16 +248,7 @@
                                     </a>
                                 {/if}
                             </p>
-                              <p>
-                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
-                            </p>
-                            <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
-                                    <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
-                                         
-                                    </div>
-                                     <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
-                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view">View Task</a>
-                                     </div>
+
                             
                             </div>
                             
