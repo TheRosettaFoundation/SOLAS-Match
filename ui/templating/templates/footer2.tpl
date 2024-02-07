@@ -106,11 +106,18 @@
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           localStorage.setItem('theme', 'dark');
-                          next.src = "/ui/img/bread.svg"
-                           next1.src = "/ui/img/bread.svg"
-                          print.src="/ui/img/print.svg"
-                          downing.src="/ui/img/download.svg"
+                          if(next){
+                                 next.src = "/ui/img/bread.svg" 
+                                next1.src = "/ui/img/bread.svg"
 
+                          }
+                          if(print){
+                               print.src="/ui/img/print.svg" 
+                            downing.src="/ui/img/download.svg"
+
+
+                          }
+                        
                         
                     } 
        
@@ -126,8 +133,13 @@
                         navi.setAttribute('data-bs-theme', 'light')
                         logo.src = "/ui/img/TWB_Logo.svg" ;
                         localStorage.setItem('theme', 'light');
-                        next.src = "/ui/img/bread.svg"
-                         next1.src = "/ui/img/bread.svg"
+                        if(next){
+
+                              next.src = "/ui/img/bread.svg"
+                            next1.src = "/ui/img/bread.svg"
+
+                        }
+                      
                     
                         
                        }
@@ -137,10 +149,14 @@
                           document.documentElement.setAttribute('data-bs-theme', 'dark')
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
-                     
-                            next.src = "/ui/img/next-white.svg"
-                             next1.src = "/ui/img/next-white.svg"
-                      
+                          
+                            if(next){
+
+                                   next.src = "/ui/img/next-white.svg"
+                                next1.src = "/ui/img/next-white.svg"
+                                
+                            }
+  
                            localStorage.setItem('theme', 'dark');
                        }
 
