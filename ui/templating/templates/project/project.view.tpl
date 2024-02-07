@@ -387,17 +387,17 @@
             <ul  class="dropdown-menu" >
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-        <li class="dropdown-item">
-            <form id="publish_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#publish_selected_tasks').submit();" >
+        <li>
+            <form class="dropdown-item" id="publish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="btngray" onclick="$('#publish_selected_tasks').submit();" >
                     Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
        </li>
-         <li class="dropdown-item">
-            <form id="unpublish_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+         <li c>
+            <form id="unpublish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#unpublish_selected_tasks').submit();"  ">
                    Unpublish Selected Tasks
                 </a>
@@ -408,8 +408,8 @@
         {/if}
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <li class="dropdown-item">
-            <form id="tasks_as_paid" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <li >
+            <form id="tasks_as_paid" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_paid').submit();">
                      Mark Selected Tasks as Paid
                 </a>
@@ -418,8 +418,8 @@
             </form>
              </li>
 
-            <li class="dropdown-item">
-            <form id="tasks_as_unpaid" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <li >
+            <form id="tasks_as_unpaid" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#tasks_as_unpaid').submit();" >
                      Mark Selected Tasks as Unpaid
                 </a>
@@ -429,8 +429,8 @@
             </form>
                </li>
         
-                <li class="dropdown-item">
-            <form id="status_as_unclaimed" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <li >
+            <form id="status_as_unclaimed" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_unclaimed').submit();" >
                    Set Status of Selected to Unclaimed
                 </a>
@@ -439,8 +439,8 @@
             </form>
                </li>
 
-                <li class="dropdown-item">
-            <form id="status_as_waiting" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <li >
+            <form id="status_as_waiting" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#status_as_waiting').submit();">
                     Set Status of Selected to Waiting
                 </a>
@@ -450,8 +450,8 @@
              </li>
 
 
-                <li class="dropdown-item">
-            <form id="complete_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <li >
+            <form id="complete_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#complete_selected_tasks').submit();" >
                   Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
@@ -461,8 +461,8 @@
              </li>
 
 
-                <li class="dropdown-item">
-            <form id="uncomplete_selected_tasks" class=" btngray" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <li >
+            <form id="uncomplete_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#uncomplete_selected_tasks').submit();">
                     Set Shell Tasks Status In Progress
                 </a>
