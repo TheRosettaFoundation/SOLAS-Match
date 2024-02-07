@@ -561,8 +561,8 @@
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li><a class="dropdown-item" href="#">    
-            <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#publish_selected_tasks').submit();" class="btngray-sm">
+            <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#publish_selected_tasks').submit();" class="btngray-lg text-decoration-none">
                      Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
@@ -573,9 +573,9 @@
             </li>
 
              <li><a class="dropdown-item" href="#">
-             <form id="unpublish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#unpublish_selected_tasks').submit();"   style="color:#000000;margin-right:52px;">
-                    <i class="icon-remove-circle icon-black" style="margin-left:-2px;"></i> Unpublish Selected Tasks
+             <form id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  class="btngray-lg text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();"  >
+                     Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
