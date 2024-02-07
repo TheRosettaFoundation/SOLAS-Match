@@ -370,16 +370,7 @@
 
         <div>
 
-        <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown button
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-        </div>
+     
         <div class="dropdown">
             <a class=" btn btn-secondary dropdown-toggle"  role="button" data-toggle="dropdown" data-target="#" href="/page.html">
                 Dropdown
@@ -388,22 +379,26 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <li>
-            <form class="dropdown-item" id="publish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class="dropdown-item" href="#">
+            <form  id="publish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="btngray" onclick="$('#publish_selected_tasks').submit();" >
                     Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+            </a>
        </li>
-         <li c>
-            <form id="unpublish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+         <li >
+           <a class="dropdown-item" href="#">
+            <form id="unpublish_selected_tasks"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#unpublish_selected_tasks').submit();"  ">
                    Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+            </a>
          </li>
         {/if}
 
