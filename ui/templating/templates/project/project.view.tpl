@@ -346,11 +346,11 @@
 
         <div class="d-flex justify-content-between mt-4">
 
-            <div class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+            <div class="fw-bold fs-5">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
-       <div>
+ 
         {if !empty($memsource_project)}
         <div class="">
             <select name="task_options" id="task_options">
@@ -369,8 +369,8 @@
         </div>
 
 
-        ########################################
-        <div>
+
+       
 
                <div class="dropdown">
         <button class="dropdown-toggle btn btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -597,13 +597,14 @@
 
 
 
-        #####
 
      
 
         {/if}
 
     </div>
+
+
     </div> 
 
 
