@@ -743,7 +743,14 @@ If a language is to be removed from this list, the community will be informed be
         <tr>
             <td>{$sent_contract['type']}</td>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</td>
-            <td>{$sent_contract['status']}</td>
+            <td>
+                {if     $sent_contract['status'] == 'recipient-sent'}Sent to Linguist
+                {elseif $sent_contract['status'] == 'recipient-delivered'}Viewed by Linguist
+                {elseif $sent_contract['status'] == 'recipient-completed'}Signed by Linguist
+                {elseif $sent_contract['status'] == 'envelope-completed'}Contract Completed
+                {else}{$sent_contract['status']}
+                {/if}
+            </td>
             <td>{$sent_contract['update_date']}</td>
             <td>{$sent_contract['contract_date']}</td>
         </tr>
