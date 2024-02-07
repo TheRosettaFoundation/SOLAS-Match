@@ -809,7 +809,8 @@
                                             {else}
                                                 <input type="hidden" name="publishedTask" value="1" />
                                                 <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}" >
-                                                    <i class="icon-remove-circle icon-black"></i>
+                                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="publish" >
+
                                                 </a>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -845,11 +846,11 @@
                                                 <a class="btngray btn-inverse" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
-                                                    <i class="icon-trash icon-white"></i>
+                                                     <img src="{urlFor name='home'}ui/img/cancel.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
                                                 <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btngray btn-inverse" disabled >
-                                                    <i class="icon-trash icon-white"></i>
+                                                     <img src="{urlFor name='home'}ui/img/yes.svg" alt="retrieve" >
                                                  </button> 
                                                 </div>
                                             {else}
