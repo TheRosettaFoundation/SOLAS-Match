@@ -561,7 +561,7 @@
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li><a class="dropdown-item" >    
-            <form id="publish_selected_tasks" class="btngray-sm w-100"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
+            <form id="publish_selected_tasks" class="text-center text-sm"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
                 <a  onclick="$('#publish_selected_tasks').submit();" >
                      Publish Selected Tasks
                 </a>
@@ -573,7 +573,7 @@
             </li>
 
              <li><a class="dropdown-item" href="#">
-             <form  class="btngray-sm w-100" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+             <form  class="text-center text-sm" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a   onclick="$('#unpublish_selected_tasks').submit();"  >
                      Unpublish Selected Tasks
                 </a>
@@ -588,7 +588,7 @@
          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
           <li>
                 <a class="dropdown-item" href="#">
-                       <form id="tasks_as_paid"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                       <form id="tasks_as_paid"  class="btngray-sm w-100" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a  onclick="$('#tasks_as_paid').submit();" >
                      Mark Selected Tasks as Paid
                 </a>
@@ -603,7 +603,7 @@
           <li>
                 <a class="dropdown-item" href="#">
 
-                <form id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <form  class="btngray-sm w-100" id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a  onclick="$('#tasks_as_unpaid').submit();">
                    Mark Selected Tasks as Unpaid
                 </a>
