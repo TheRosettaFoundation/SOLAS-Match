@@ -350,27 +350,26 @@
                 <small class="text-muted">{Localisation::getTranslation('project_view_0')}</small>
             </div>
 
-       <div>
-        {if !empty($memsource_project)}
-        <div class="">
-            <select name="task_options" id="task_options">
-                <option value="">-- Choose --</option>
-                <option value="all_tasks">Select all Tasks</option>
-                <option value="all_translation_tasks">Select all Translation Tasks</option>
-                <option value="all_revision_tasks">Select all Revision Tasks</option>
-                <option value="all_revtrans_tasks">Select all Translation and Revision</option>
-                <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
-                <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
-                {/if}
-                <option value="delesect_all">Deselect all</option>
-            </select>
-        </div>
+            <div>
+                {if !empty($memsource_project)}
+                <div class="">
+                    <select name="task_options" id="task_options">
+                        <option value="">-- Choose --</option>
+                        <option value="all_tasks">Select all Tasks</option>
+                        <option value="all_translation_tasks">Select all Translation Tasks</option>
+                        <option value="all_revision_tasks">Select all Revision Tasks</option>
+                        <option value="all_revtrans_tasks">Select all Translation and Revision</option>
+                        <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                        <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
+                        <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
+                        {/if}
+                        <option value="delesect_all">Deselect all</option>
+                    </select>
+                </div>
 
-        
-        ########################################
-        <div>
+
+     
 
                <div class="dropdown">
         <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -586,7 +585,7 @@
          
         </ul>
         
-        </div>
+   
 
 
 
@@ -595,9 +594,8 @@
        
          </div>
 
+         </div>
 
-
-        #####
 
      
 
