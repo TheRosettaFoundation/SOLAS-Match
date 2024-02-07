@@ -671,7 +671,7 @@
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr >
-                                <td> <input type="checkbox" class="form-control" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
+                                <td> <input type="checkbox"  name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
                                     <td >
                                         <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -820,12 +820,12 @@
                                             <input type="hidden" ndame="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_untrack_task')}">
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}">
                                                       <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_track_task')}" >
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
                                                      <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
                                                 </a>
                                             {/if}
@@ -833,8 +833,8 @@
                                         </form>
                                     </td>    
                                     <td>
-                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_edit_task')}">
-                                            <i class="icon-pencil icon-black"></i>
+                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
+                                            <img src="{urlFor name='home'}ui/img/edit.svg" alt="Edit" >
                                         </a>
                                     </td>d
                                     <td>
@@ -844,11 +844,11 @@
                                                 <input type="hidden" name="deleteTask" value="Delete" />
                                                 <a class="btngray btn-inverse" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
-                                                        $('#archiveDeleteForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_delete')}" >
+                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
                                                     <i class="icon-trash icon-white"></i>
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btngray btn-inverse" disabled >
+                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btngray btn-inverse" disabled >
                                                     <i class="icon-trash icon-white"></i>
                                                  </button> 
                                                 </div>
@@ -857,7 +857,7 @@
                                                 <input type="hidden" name="archiveTask" value="Delete" />
                                                 <a class="btngray btn-inverse"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
-                                                        $('#archiveDeleteForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_archive')}">
+                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}">
                                                     <i class="icon-fire icon-white"></i>
                                                 </a>
                                                 {/if}
