@@ -379,15 +379,15 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <li>
-            <a class="dropdown-item" href="#">
-            <form  id="publish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+        
+            <form  id="publish_selected_tasks" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="btngray" onclick="$('#publish_selected_tasks').submit();" >
                     Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            </a>
+          
        </li>
          <li >
            <a class="dropdown-item" href="#">
