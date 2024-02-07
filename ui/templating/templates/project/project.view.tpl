@@ -555,23 +555,27 @@
         #####
 
         <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown button
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">   <form id="pending_documentation" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btngray" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
-            </a>
-                <input type="hidden" name="pending_documentation" value="" />
-                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu">
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+            <li><a class="dropdown-item" href="#">    
+            <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="" onclick="$('#publish_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
+                    <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
+                </a>
+                <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-    </a> 
-    </li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
+
+            </a> 
+            </li>
+         {/if}
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+         
+        </ul>
 </div>
 
         {/if}
