@@ -559,7 +559,14 @@
     Dropdown button
   </button>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#"> test
+    <li><a class="dropdown-item" href="#">   <form id="pending_documentation" class="dropdown-item" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class=" btngray" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
+                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
+            </a>
+                <input type="hidden" name="pending_documentation" value="" />
+                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
     </a> 
     </li>
     <li><a class="dropdown-item" href="#">Another action</a></li>
