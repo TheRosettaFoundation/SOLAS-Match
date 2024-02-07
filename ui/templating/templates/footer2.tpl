@@ -106,7 +106,7 @@
                           navi.setAttribute('data-bs-theme', 'dark')
                           logo.src = "/ui/img/TWB_Logo1.svg" ;
                           localStorage.setItem('theme', 'dark');
-                          if(next){
+                          if(next && next1){
                                  next.src = "/ui/img/bread.svg" 
                                 next1.src = "/ui/img/bread.svg"
 
