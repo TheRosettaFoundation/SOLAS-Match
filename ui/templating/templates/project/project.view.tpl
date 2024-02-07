@@ -194,7 +194,7 @@
     {/if}
 
        <div class="d-flex justify-content-between flex-wrap">
-     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1">
+     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-4">
         <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -261,7 +261,7 @@
 
 
 
-  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1">
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 ms-4">
     <div class="table-responsive mt-4  ">
         <table class="table table-borderless">
             <thead class="fs-5">
@@ -588,8 +588,8 @@
          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
           <li>
                 <a class="dropdown-item" href="#">
-                       <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
+                       <form id="tasks_as_paid"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="btngray-lg" onclick="$('#tasks_as_paid').submit();" >
                     <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
