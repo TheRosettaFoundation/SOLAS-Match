@@ -574,7 +574,7 @@
 
              <li><a class="dropdown-item" href="#">
              <form id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a  class="btngray-lg text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();"  >
+                <a  class="secondary" onclick="$('#unpublish_selected_tasks').submit();"  >
                      Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
