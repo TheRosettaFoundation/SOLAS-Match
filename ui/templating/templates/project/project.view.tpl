@@ -555,30 +555,17 @@
         #####
 
         <div class="dropdown">
-            <a class=" btn btn-primary dropdown-toggle"  role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-            
-            </a>
-            <ul  class="dropdown-menu" >
-
-       
-            <li>
-        
-             <a  class="dropdown-item" href="#"> Dropdown item 1</a>
-            </li>
-
-            <li >
-
-          <a  class="dropdown-item" href="#"> Dropdown item 2</a>
-            
-            
-            </li>
-       
-  
-
-
-        
-            </ul>
-         </div>
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#"> test
+    </a> 
+    </li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</div>
 
         {/if}
 
