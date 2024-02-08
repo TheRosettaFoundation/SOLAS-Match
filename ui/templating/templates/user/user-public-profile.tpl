@@ -948,7 +948,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
     <tr valign="top">
         <td style="width: 25%"><strong>Maximum number of claimed/in progress tasks volunteer can have at any one time (0 => no limit)</strong></td>
-        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, blank => any)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, nothing in field (not a blank) => any)</strong></td>
         <td style="width: 25%"><strong>Comma separated list of partner IDs for which the volunteer cannot claim tasks</strong></td>
         <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
     </tr>
