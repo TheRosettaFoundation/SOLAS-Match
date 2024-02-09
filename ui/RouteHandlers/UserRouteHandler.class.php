@@ -2560,7 +2560,7 @@ error_log("result: $result");//(**)
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_user_task_limitation'])) {
                 if (!preg_match('/^[0-9]*$/', $post['max_not_comlete_tasks']) ||
-                    !preg_match('/^[,0-9]*$/', $post['allowed_types']) ||
+                    !preg_match('/^[,0-9]*$/', $post['allowed_types']) || $post['allowed_types'] === '0' ||
                     !preg_match('/^[,0-9]*$/', $post['excluded_orgs']) ||
                     !preg_match('/^[0-9]*$/', $post['limit_profile_changes'])
                 ) UserRouteHandler::flashNow('error', 'You must enter the correct format for values');
