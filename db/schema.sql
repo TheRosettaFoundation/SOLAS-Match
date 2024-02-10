@@ -2442,6 +2442,22 @@ BEGIN
         SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
+    SET @max_not_comlete_tasks = 1000000;
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @excluded_orgs = '';
+    SET @limited = 0;
+    SELECT
+        IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        excluded_orgs,
+        1
+        INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
+    FROM user_task_limitations
+    WHERE user_id=uID;
+
+  IF @limited AND EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
+      SELECT 1 WHERE FALSE;
+  ELSE
     SELECT
         ls.code      AS ls_code,
         ls.`en-name` AS ls_name,
@@ -2464,6 +2480,8 @@ BEGIN
         t.`task-status_id`=2 AND
         t.published=1 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
+        NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
         (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
@@ -2478,6 +2496,7 @@ BEGIN
     ORDER BY
         ls.`en-name`,
         lt.`en-name`;
+  END IF;
 END//
 DELIMITER ;
 
