@@ -4045,6 +4045,22 @@ BEGIN
         SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
+    SET @max_not_comlete_tasks = 1000000;
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @excluded_orgs = '';
+    SET @limited = 0;    
+    SELECT
+        IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        excluded_orgs,
+        1
+        INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
+    FROM user_task_limitations
+    WHERE user_id=uID;
+
+  IF @limited AND EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
+      SELECT 1 WHERE FALSE;
+  ELSE
     SELECT
         t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
         (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
@@ -4075,6 +4091,8 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
+        FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
+        NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
         (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
@@ -4102,6 +4120,7 @@ BEGIN
         + t.id/50000.
         DESC
     LIMIT offset, lim;
+  END IF;
 END//
 DELIMITER ;
 
@@ -4134,6 +4153,22 @@ BEGIN
         SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
 
+    SET @max_not_comlete_tasks = 1000000;
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @excluded_orgs = '';
+    SET @limited = 0;    
+    SELECT
+        IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        excluded_orgs,
+        1
+        INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
+    FROM user_task_limitations
+    WHERE user_id=uID;
+
+  IF @limited AND EXISTS (SELECT 1 FROM Tasks JOIN TaskClaims ON Tasks.id=TaskClaims.task_id AND TaskClaims.user_id=uID WHERE Tasks.`task-status_id`<4 GROUP BY user_id HAVING COUNT(*)>=@max_not_comlete_tasks) THEN
+      SELECT 0 AS tasks_to_be_counted;
+  ELSE
     SELECT COUNT(*) AS result FROM (
         SELECT t.id
         FROM Tasks t
@@ -4151,6 +4186,8 @@ BEGIN
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
+        AND FIND_IN_SET(t.`task-type_id`, @allowed_types)>0
+        AND NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0
         AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
@@ -4165,6 +4202,7 @@ BEGIN
         )
         GROUP BY t.id
     ) AS tasks_to_be_counted;
+  END IF;
 END//
 DELIMITER ;
 
