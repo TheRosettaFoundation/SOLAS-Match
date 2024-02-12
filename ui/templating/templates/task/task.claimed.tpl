@@ -52,9 +52,10 @@
         
         <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
 
-        <p class="alert alert-success  ">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
-        </p>
+         <div class="alert alert-success  alert-dismissible fade show mt-4">
+            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     {/if}
     </div>
 
