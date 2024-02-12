@@ -14,9 +14,8 @@
 
   <section class="container  ">
 
-
   <div class="bg-body">
-
+  
      <div class="d-flex justify-content-between  flex-wrap">
 
                 <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 ">
