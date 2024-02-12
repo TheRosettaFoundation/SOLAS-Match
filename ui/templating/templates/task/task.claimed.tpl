@@ -22,7 +22,7 @@
       <section class="container">
 
         <div class="alert alert-success alert-dismissible fade show mt-4  ">
-            <div class="d-flex justify-content-between">
+            <div >
 
             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
             <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
@@ -64,7 +64,7 @@
 
      <div class="d-block d-md-flex justify-content-between fs-5  align-items-center">
 
-                <div class="d-xs-block d-md-flex flex-column justify-content-between    ">
+                <div class="d-xs-block d-md-flex flex-column justify-content-between ">
 
                     <div class="p-4 ">
 
@@ -98,7 +98,7 @@
 
 
 
-<div class="bg-light-subtle py-4 ps-4">
+<div class="bg-light-subtle py-4 ps-4 ">
 
      <section class="container">
         <h3 class="fw-bold">When you have finished translating: </h3>
