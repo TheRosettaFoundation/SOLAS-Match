@@ -2413,6 +2413,7 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
+        $countryDao = new DAO\CountryDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($loggedInUserId);
 
@@ -2566,6 +2567,14 @@ error_log("result: $result");//(**)
                 ) UserRouteHandler::flashNow('error', 'You must enter the correct format for values');
                 else {
                     $taskDao->insert_update_user_task_limitation($user_id, $loggedInUserId, $post['max_not_comlete_tasks'], $post['allowed_types'], $post['excluded_orgs'], $post['limit_profile_changes']);
+                    UserRouteHandler::flashNow('success', 'Success');
+                }
+            }
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_linguist_payment_information'])) {
+                if (empty($post['country_id'])) UserRouteHandler::flashNow('error', 'You must enter a valid Country');
+                else {
+                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link']);
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }
@@ -2774,6 +2783,8 @@ error_log("result: $result");//(**)
             'valid_key_reference_letter' => $valid_key_reference_letter,
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
             'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
+            'linguist_payment_information' => $taskDao->get_linguist_payment_information($user_id),
+            'countries' => $countryDao->getCountries(),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
         ));

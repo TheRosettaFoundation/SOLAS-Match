@@ -969,6 +969,42 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <hr />
 
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
+        <td style="width: 33%"></td>
+        <td style="width: 34%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 33%"><strong>Admin</strong></td>
+        <td style="width: 33%"><strong>Country</strong></td>
+        <td style="width: 34%"><strong>Google Drive Link</strong></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</td>
+        <td style="width: 33%">
+            <select name="country_id" id="country">
+                <option value="">--Select--</option>
+                {foreach $countries as $country}
+                    {if $country->getCode() != 'LATN' && $country->getCode() != 'CYRL' && $country->getCode() != '419' && $country->getCode() != 'HANS' && $country->getCode() != 'HANT' && $country->getCode() != 'ARAB' && $country->getCode() != 'BENG' && $country->getCode() != 'ROHG'}
+                        <option value="{$country->getId()}" {if $country->getId() == $linguist_payment_information['country_id']}selected="selected"{/if}>{$country->getName()|escape:'html':'UTF-8'}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </td>
+        <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 33%"><input type="submit" class="btn btn-primary" name="mark_linguist_payment_information" value="Submit" /></td>
+        <td style="width: 33%"></td>
+        <td style="width: 34%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<hr />
+
 {/if}
 
 <p style="margin-bottom:50px;"/>

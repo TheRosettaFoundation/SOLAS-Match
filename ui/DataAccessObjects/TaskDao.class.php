@@ -1041,6 +1041,18 @@ error_log("createTaskDirectly: $args");
         return $result[0];
     }
 
+    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link)
+    {
+        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link));
+    }
+
+    public function get_linguist_payment_information($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['admin_id' => 0, 'admin_name' => '', 'country_id' => 0, 'google_drive_link' => ''];
+        return $result[0];
+    }
+
     public function get_active_languages($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_active_languages', LibAPI\PDOWrapper::cleanse($user_id));

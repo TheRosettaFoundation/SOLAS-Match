@@ -40,6 +40,13 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 15.2
+
+- Allow contracts to be sent to Linguists for Paid Work using Docusign.
+- Allow "Country of Residence" and  "Google Drive Link" to be saved in a Linguist's profile.
+- If a Linguist has some type of limit placed on claiming tasks, such tasks will not appear in their task stream.
+- Don't allow "Volunteer Restrictions" "allowed_types" to be "0".
+
 ## Version 15.1
 
 - Reports added...

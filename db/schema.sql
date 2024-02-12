@@ -12550,6 +12550,45 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `linguist_payment_informations` (
+  user_id           INT UNSIGNED NOT NULL,
+  admin_id          INT UNSIGNED NOT NULL,
+  country_id        INT UNSIGNED NOT NULL,
+  google_drive_link VARCHAR(255) NOT NULL,
+  PRIMARY KEY (user_id),
+  KEY FK_linguist_payment_informations_country (country_id),
+  CONSTRAINT FK_linguist_payment_informations_country FOREIGN KEY (country_id) REFERENCES Countries (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_linguist_payment_informations_user_id  FOREIGN KEY (user_id)  REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_linguist_payment_informations_admin_id FOREIGN KEY (admin_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_update_linguist_payment_information`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_linguist_payment_information`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN country INT UNSIGNED, IN link VARCHAR(255))
+BEGIN
+    DELETE FROM linguist_payment_informations WHERE user_id=uID;
+
+    INSERT INTO linguist_payment_informations (user_id,   admin_id, country_id, google_drive_link)
+    VALUES                                    (    uID,        aID,    country,              link);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_linguist_payment_information`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_linguist_payment_information`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT
+        lpi.*,
+        c.`en-name` AS country,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) as admin_name
+    FROM linguist_payment_informations lpi
+    JOIN Countries                       c ON lpi.country_id=c.id
+    LEFT JOIN UserPersonalInformation    i ON lpi.admin_id=i.user_id
+    WHERE lpi.user_id=uID;
+END//
+DELIMITER ;
+
+
 CREATE TABLE IF NOT EXISTS `task_resource_info_triggers` (
   task_id        BIGINT UNSIGNED NOT NULL,
   time_requested DATETIME NOT NULL,
