@@ -7,7 +7,7 @@
 
 <header class="">
 
-    <div class="container py-2">
+    <div class="container py-4">
 
             <div class="py-2" >
                 <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" >
@@ -109,11 +109,11 @@
             </a>
             {/if}
             {if isset($user)}
-            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
+            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="border border-dark-subtle">
             {else}
-            <a href="{urlFor name="home"}" class="btn btn-gray text-dark fw-bold">
+            <a href="{urlFor name="home"}" class="btn btn-gray text-dark fw-bold border border-dark-subtle">
             {/if}
-                <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1" />  {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
+                <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1 " />  {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
             </a>
             {if $isSiteAdmin}
             <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn btn-gray text-dark fw-bold">
