@@ -82,7 +82,7 @@
 
                 </div>
        
-                <div class="h-100 text-center d-inline-block ms-2  ">
+                <div class="h-100 text-center align-middle ms-2  ">
 
                         <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
 
