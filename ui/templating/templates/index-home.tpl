@@ -516,10 +516,16 @@ a:hover{
     </div>
 {/if}
 
+
 {if isset($flash['success'])}
-    <div class="alert alert-success">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
+  
+    <div class="alert alert-success alert-dismissible fade show mt-4  ">
+            <div >
+
+            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+          <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
+            </div>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
