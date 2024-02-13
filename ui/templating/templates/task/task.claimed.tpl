@@ -109,14 +109,14 @@
             </a>
             {/if}
             {if isset($user)}
-            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn border border-dark-subtle">
+            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn btn-light-subtle">
             {else}
             <a href="{urlFor name="home"}" class="btn btn-gray text-dark fw-bold border border-dark-subtle">
             {/if}
                 <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1 " />  {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
             </a>
             {if $isSiteAdmin}
-            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn btn-gray text-dark fw-bold">
+            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn btn-gray text-dark fw-bold F">
                <img src="{urlFor name='home'}ui/img/no.svg" alt="back" class="mx-1" /> Just bring me back to the project page.
             </a>
             {/if}

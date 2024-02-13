@@ -40,7 +40,7 @@
             </a>
             {/if}
             {if isset($user)}
-            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
+            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn btn-light-subtle">
             {else}
             <a href="{urlFor name="home"}" class="btn">
             {/if}
