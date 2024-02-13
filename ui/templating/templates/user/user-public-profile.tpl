@@ -969,7 +969,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <hr />
 
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
 <table border="0">
     <tr valign="top">
         <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
@@ -995,14 +995,18 @@ If a language is to be removed from this list, the community will be informed be
         </td>
         <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
     </tr>
+    {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
         <td style="width: 33%"><input type="submit" class="btn btn-primary" name="mark_linguist_payment_information" value="Submit" /></td>
         <td style="width: 33%"></td>
         <td style="width: 34%"></td>
     </tr>
+    {/if}
 </table>
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+{/if}
 <hr />
 
 {/if}
