@@ -742,7 +742,7 @@ If a language is to be removed from this list, the community will be informed be
     {foreach $sent_contracts as $sent_contract}
         <tr>
             <td>{$sent_contract['type']}</td>
-            <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</a></td>
             <td>
                 {if     $sent_contract['status'] == 'recipient-sent'}Sent to Linguist
                 {elseif $sent_contract['status'] == 'recipient-delivered'}Viewed by Linguist
@@ -982,7 +982,7 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 34%"><strong>Google Drive Link</strong></td>
     </tr>
     <tr valign="top">
-        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</td>
+        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
         <td style="width: 33%">
             <select name="country_id" id="country">
                 <option value="">--Select--</option>
