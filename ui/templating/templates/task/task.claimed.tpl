@@ -62,7 +62,7 @@
 
   <div class="bg-body ">
 
-     <div class="d-block d-md-flex justify-content-between fs-5  align-items-center">
+     <div class="d-block d-md-flex justify-content-between fs-5  align-items-center align-middle">
 
                 <div class="d-xs-block d-md-flex flex-column justify-content-between ">
 
