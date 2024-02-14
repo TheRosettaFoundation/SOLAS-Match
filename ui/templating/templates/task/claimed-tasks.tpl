@@ -127,44 +127,17 @@
                                          
                                         
                                             
-                                            </div>
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
-                             </div>
-                           
+                                              <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
+                            {if !empty($completed_timestamps[$task_id])}
+                                <p><div class="process_completed_utc" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                            {/if}
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
 
-                                <div>
-                                        {if $taskImages[$task_id]}
-                                        <div id="img_{$task_id}"  >
-                                            <img src="{$taskImages[$task_id]}" style ="width:100px ; height:100px">
-                                        </div>
-                                        {else}
-                                            <div id="img_{$task_id}" class="" ></div>
-                                        {/if}
-
-                                </div>
-                          
-
-                            
-                            </div>
-                           
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            <p>{Localisation::getTranslation('common_discuss_on_community')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
                             {/if}
 
-
-                          
-                              <p>
-                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
-                            </p>
-                            <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
-                                    <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
-                                         
-                                    </div>
-                                     <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
-                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view">View Task</a>
-
-                                     </div>
-
-                                                                 <p>
+                            <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if $type_id == 2}
@@ -247,6 +220,7 @@
                                         TWB Pre-Delivery Checklist
                                     </a>
                                 {/if}
+                            </p>
                             </p>
 
                             
