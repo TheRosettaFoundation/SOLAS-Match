@@ -809,7 +809,7 @@
                                             {else}
                                                 <input type="hidden" name="publishedTask" value="1" />
                                                 <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}" >
-                                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="publish" >
+                                                    <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
 
                                                 </a>
                                             {/if}
@@ -818,7 +818,7 @@
                                     </td>
                                     <td>
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                                            <input type="hidden" ndame="task_id" value="{$task_id}" />
+                                            <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}">
