@@ -178,25 +178,27 @@ a:hover{
             <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p> -->
         
-{if isset($flash['error'])}
+{if isset($flash['warning'])}
     <br>
 
 
-    <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+    <div class="alert alert-warning alert-dismissible fade show mt-4">
+       
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
 {if isset($flash['info'])}
-    <div class="alert alert-info">
-        <p style="font-size:15px;"><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+    <div class="alert alert-info alert-dismissible fade show mt-4">
+        <p ><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     
-     <div class="alert alert-success alert-dismissible fade show mt-4  ">
+     <div class="alert alert-success alert-dismissible fade show mt-4">
             <div >
 
             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
@@ -208,8 +210,9 @@ a:hover{
 {/if}
 
 {if isset($flash['warning'])}
-    <div class="alert alert-warning">
-        <p style="font-size:15px;"><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+    <div class="alert alert-warning alert-dismissible fade show mt-4">
+        <p ><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
@@ -502,24 +505,27 @@ a:hover{
 
 {if isset($user)}
 
-{if isset($flash['error'])}
-    <br>
-    <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+ 
+
+{if isset($flash['warning'])}
+
+    <div class="alert alert-warning alert-dismissible fade show mt-4"> 
         <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
 {if isset($flash['info'])}
-    <div class="alert alert-info">
+    <div class="alert alert-info alert-dismissible fade show mt-4">
         <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
 
 {if isset($flash['success'])}
   
-    <div class="alert alert-success alert-dismissible fade show mt-4  ">
+    <div class="alert alert-success alert-dismissible fade show mt-4 ">
             <div >
 
             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
@@ -530,8 +536,9 @@ a:hover{
 {/if}
 
 {if isset($flash['warning'])}
-    <div class="alert alert-warning">
+    <div class="alert alert-warning alert-dismissible fade show mt-4">
         <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 <div class ="container-fluid">
