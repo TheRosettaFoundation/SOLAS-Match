@@ -803,7 +803,7 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
                                                 <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
-                                                      <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
+                                                      <img src="{urlFor name='home'}ui/img/publish-project.svg" alt="unpublish" >
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
                                             {else}
@@ -822,12 +822,12 @@
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}">
-                                                      <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
+                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                 <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
-                                                     <img src="{urlFor name='home'}ui/img/track.svg" alt="track" >
+                                                     <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -835,7 +835,7 @@
                                     </td>    
                                     <td>
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
-                                            <img src="{urlFor name='home'}ui/img/edit.svg" alt="Edit" >
+                                            <img src="{urlFor name='home'}ui/img/edit-project.svg" alt="Edit" >
                                         </a>
                                     </td>d
                                     <td>
@@ -843,10 +843,10 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle btn-inverse" 
+                                                <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
-                                                     <img src="{urlFor name='home'}ui/img/cancel.svg" alt="archive" >
+                                                     <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
                                                 <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="  btn btn-sm btn-dark-subtle border border-dark-subtle btn-inverse" disabled >
@@ -856,7 +856,7 @@
                                             {else}
                                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle btn-inverse"
+                                                <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle "
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}">
                                                     <i class="icon-fire icon-white"></i>
