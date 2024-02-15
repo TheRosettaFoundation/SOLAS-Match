@@ -670,7 +670,7 @@
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
-                                <tr >
+                                <tr class="align-middle">
                                 <td> <input type="checkbox"  name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
                                     <td >
                                         <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
@@ -849,7 +849,7 @@
                                                      <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="  btn btn-sm btn-grayish" disabled >
+                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class=" btn btn-sm btn-grayish" disabled >
                                                      <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" >
                                                  </button> 
                                                 </div>
