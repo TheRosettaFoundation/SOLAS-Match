@@ -21,7 +21,7 @@
 
                      <div >
 
-                        <h3 class="mb-4 fw-bold">{Localisation::getTranslation('task_claim_proofreading_0')}</h4>
+                        <h3 class="mb-4 fw-bold">Do you want to proofread this file?</h4>
                         
                         <ol>
                             <li>Will you have enough time to proofread this file? Check how long the file is.</li>
