@@ -49,21 +49,21 @@
                     <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
-                        <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
+                        <a class="btn btn-sm btn-success" onclick="$('#copyChunksProjectForm').submit();" >
                             <i class="icon-upload icon-white"></i> Sync Phrase TMS
                         </a>
-                        <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                            <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
+                        <a href="{$matecat_analyze_url}" class="btn btn-sm btn-primary" target="_blank">
+                            {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                         </a>
                     {/if}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
-                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
-                            <i class="icon-wrench icon-white"></i> Add Shell Tasks
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm btn-primary">
+                             Add Shell Tasks
                         </a>
                     {/if}
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
-                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm btn-primary fixMargin'>
+                             {Localisation::getTranslation('common_edit_project')}
                         </a> 
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -142,14 +142,14 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <a class=" btn btn-dark-subtle mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <a class=" btn btn-dark-subtle mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_project')}
                                     </a>
                                 </p>
@@ -250,7 +250,7 @@
                 </tr>
                 <tr>
                     <td >
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btn btn-dark-subtle-lg" target="_blank"> Discuss</a>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank"> Discuss</a>
                     </td>
                 </tr>
                 {/if}
@@ -280,7 +280,7 @@
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class=" btn btn-dark-subtle mt-4" onclick="$('#projectImageApproveForm').submit();">
+		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
 		            					<img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> {Localisation::getTranslation('project_view_image_approve')}</a>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				</form>
@@ -289,7 +289,7 @@
 		            			{else}   
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class=" btn btn-dark-subtle mt-4" onclick="$('#projectImageApproveForm').submit();"">
+		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
 		            					<img src="{urlFor name='home'}ui/img/cancel.svg" class="disapprove" />{Localisation::getTranslation('project_view_image_disapprove')}</a>
                              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				 </form>
@@ -317,7 +317,7 @@
                         {foreach $project_tags as $ptag}
                             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
                             {assign var="tagId" value=$ptag->getId()}
-                            <a class=" btn btn-dark-subtle me-2" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
+                            <a class=" btngray me-2" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                         {/foreach}
                     {else}
                         <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>                    
@@ -378,7 +378,7 @@
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <li><a class="dropdown-item" >    
-            <form id="publish_selected_tasks" class=" btn btn-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
+            <form id="publish_selected_tasks" class=" btn-sm"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
                 <a  onclick="$('#publish_selected_tasks').submit();" >
                      Publish Selected Tasks
                 </a>
@@ -518,7 +518,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" class="btn btn-dark-subtle open-ponum-modal"  data-toggle="modal" href="#ponummodal" role="button">
+            <a class="btn btn-dark-subtle open-ponum-modal"  data-toggle="modal" href="#ponummodal" role="button">
                  Set Purchase Order #
             </a>
 
