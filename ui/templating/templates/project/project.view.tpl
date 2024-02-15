@@ -624,7 +624,7 @@
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
-                     <div class="mt-2">
+                     <div class="mt-4">
                 <div class="d-flex ">
                     <span class="me-4">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
