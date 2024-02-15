@@ -843,20 +843,20 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class=" btn btn-grayish" 
+                                                <a class=" btn btn-sm btn-grayish" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
                                                      <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="  btn btn-sm btn-dark-subtle border border-dark-subtle btn-inverse" disabled >
-                                                     <img src="{urlFor name='home'}ui/img/yes.svg" alt="retrieve" >
+                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="  btn btn-sm btn-grayish" disabled >
+                                                     <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" >
                                                  </button> 
                                                 </div>
                                             {else}
                                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="  btn btn-grayish"
+                                                <a class="  btn btn-sm btn-grayish"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}">
                                                    
