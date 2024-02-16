@@ -1,6 +1,6 @@
 {include file='new_header.tpl'}
 
-####
+
 <div class="container">
 <div class="d-flex row justify-content-between mt-5 ">
    
@@ -61,7 +61,7 @@
     <div class="col-sm-12 col-md-8 col-lg-9 mt-4">
 
 
-                    {if isset($topTasks) && count($topTasks) > 0}
+            {if isset($topTasks) && count($topTasks) > 0}
             <div class=" d-flex justify-content-end align-items-center mb-3 "> 
                 
                      <div>
@@ -74,10 +74,13 @@
                     </div>
                 
             
-             </div>        
+             </div>   
+
+
             <div class="taskPagination">
-                {for $count=0 to $itemsPerScrollPage-1}
-                    {assign var="task" value=$topTasks[$count]}
+
+            {for $count=0 to $itemsPerScrollPage-1}
+            {assign var="task" value=$topTasks[$count]}
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
                        <div class=" w-100">
                         {assign var="task_id" value=$task->getId()}
@@ -88,7 +91,7 @@
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                                                      <div class="d-flex justify-content-between mb-2 flex-wrap">
+                            <div class="d-flex justify-content-between mb-2 flex-wrap">
                                 <div class="">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
@@ -156,18 +159,15 @@
                         </div>
 
                         </div>
-                            
-                           
-                           
-                        </div>
-
-                        </div>
                         
                     </div>
-                {/for}
-            </div>
-        </div>
 
+                {/for}
+
+
+
+            </div> 
+            ##############End
             <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination mt-1 mt-md-0">
 
                     {assign var="url_nam" value="home-paged"}
@@ -221,6 +221,7 @@
   
 
 
+                                                   
              {* pagination begins here *}
         {else}
             <p>
