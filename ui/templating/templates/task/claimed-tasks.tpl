@@ -164,7 +164,7 @@
                                     <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
-                                     <div class="d-flex justify-content-end flex-wrap mt-4 mt-sm-4 mt-md-0 me-mt-2 ">
+                                     <div class=" mt-4  ">
 
 
                             <p>
