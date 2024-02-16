@@ -83,10 +83,11 @@
             {assign var="task" value=$topTasks[$count]}
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
                        <div class=" w-100">
-                       {assign var="task_id" value=$task->getId()}
+                        {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
-                        {assign var="status_id" value=$task->getTaskStatus()}
+   {                    assign var="status_id" value=$task->getTaskStatus()}    
                         {assign var="task_title" value=$task->getTitle()}
+                        {if $taskImages[$task_id]}
                         <div  id="task_{$task_id}">
                         {else}
                         <div  id="task_{$task_id}">
@@ -107,7 +108,7 @@
                                         </div>
 
                                                      <p>
-                                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                                            {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
                                          </p>
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
