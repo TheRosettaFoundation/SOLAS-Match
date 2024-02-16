@@ -65,10 +65,18 @@
             <div class=" d-flex justify-content-end align-items-center mb-3 "> 
                 
                      <div>
-
-                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}" target="_blank" class="btn btn-primary text-white">
-	                        {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
-	                    </a>
+                        <h1>
+                                {if isset($thisUser)}
+                                    {if $thisUser->getDisplayName() != ''}
+                                        {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
+                                    {else}
+                                        {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+                                    {/if}
+                                {else}
+                                    {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+                                {/if}
+                                <small>{Localisation::getTranslation('claimed_tasks_a_list_of_tasks')}</small>
+                            </h1>
                                     
                                      
                     </div>
@@ -156,7 +164,7 @@
                                     <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
-                                     <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
+                                     <div class="d-flex justify-content-end flex-wrap mt-4 mt-sm-4 mt-md-0 me-mt-2 ">
 
 
                             <p>
