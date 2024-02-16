@@ -62,10 +62,10 @@
 
 
             {if isset($topTasks) && count($topTasks) > 0}
-            <div class=" d-flex justify-content-end align-items-center mb-3 "> 
+            <div class=" d-flex justify-content-start align-items-center mb-3 "> 
                 
                      <div>
-                        <h5>
+                        <h4>
                                 {if isset($thisUser)}
                                     {if $thisUser->getDisplayName() != ''}
                                         {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
@@ -76,7 +76,7 @@
                                     {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                                 {/if}
                                 <small>{Localisation::getTranslation('claimed_tasks_a_list_of_tasks')}</small>
-                            </h5>
+                            </h4>
                                     
                                      
                     </div>
