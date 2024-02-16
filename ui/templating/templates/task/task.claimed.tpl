@@ -22,8 +22,6 @@
       <section class="container">
 
            
-            {if $taskType == TaskTypeEnum::TRANSLATION}
-
                  <div class="alert alert-success alert-dismissible fade show mt-4  ">
                         <div >
                          {if $taskType == TaskTypeEnum::TRANSLATION}
@@ -44,7 +42,7 @@
 
                         </div>
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-             {/if}
+         
                 </div>
     </section>
          

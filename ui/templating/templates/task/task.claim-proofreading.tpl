@@ -16,7 +16,7 @@
 
      <div class=" d-block d-md-flex justify-content-between ">
 
-                <div class="d-flex flex-column justify-content-between flex-shrink-1  p-4 >
+                <div class="d-flex flex-column justify-content-between  p-4 >
 
                      <div>
 
