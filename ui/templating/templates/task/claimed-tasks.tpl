@@ -106,6 +106,10 @@
 
                                         </div>
 
+                                                     <p>
+                                                {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                                         </p>
+
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                          
                                             <div class="mb-3  text-muted">
