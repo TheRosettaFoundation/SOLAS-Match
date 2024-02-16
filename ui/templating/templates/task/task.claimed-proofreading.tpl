@@ -1,8 +1,6 @@
 {assign var=task_id value=$task->getId()}
 
-     
 
-   
 
     <section>
         <h2 class="fw-bold">{Localisation::getTranslation('common_what_happens_now')}</h2>

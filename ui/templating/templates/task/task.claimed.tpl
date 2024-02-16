@@ -21,18 +21,34 @@
 
       <section class="container">
 
-        <div class="alert alert-success alert-dismissible fade show mt-4  ">
-            <div >
+           
+            {if $taskType == TaskTypeEnum::TRANSLATION}
 
-            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-            <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
-            </div>
+                 <div class="alert alert-success alert-dismissible fade show mt-4  ">
+                        <div >
+                         {if $taskType == TaskTypeEnum::TRANSLATION}
+
+                        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                        <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+                        {elseif $taskType == TaskTypeEnum::PROOFREADING}
+                        
+                        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                         <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+                        
+                        {elseif $taskType == TaskTypeEnum::APPROVAL}
+
+                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+
+                         {/if}
+
+                        </div>
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+                </div>
     </section>
-
-
-  
+         
+       
+ 
    
 
 </header>
@@ -52,9 +68,13 @@
         
         <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
 
-         <div class="alert alert-success  alert-dismissible fade show mt-4">
+         <div class="alert alert-warning  alert-dismissible fade show mt-4">
+
+              {if $taskType == TaskTypeEnum::TRANSLATION}
+
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            
         </div>
     {/if}
     </div>
