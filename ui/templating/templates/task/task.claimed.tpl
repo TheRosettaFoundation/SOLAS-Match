@@ -71,7 +71,7 @@
 
          <div class="alert alert-warning  alert-dismissible fade show mt-4">
 
-              {if $taskType == TaskTypeEnum::TRANSLATION}
+            
 
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
