@@ -14,7 +14,7 @@
     
     <div class="bg-body">
 
-     <div class="d-flex justify-content-between flex-wrap ">
+     <div class=" d-block d-md-flex justify-content-between ">
 
                 <div class="d-flex flex-column justify-content-between flex-shrink-1  p-4 >
 
