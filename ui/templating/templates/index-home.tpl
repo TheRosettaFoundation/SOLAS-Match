@@ -178,7 +178,7 @@ a:hover{
             <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p> -->
         
-{if isset($flash['warning'])}
+{if isset($flash['error'])}
     <br>
 
 
@@ -199,17 +199,17 @@ a:hover{
 {if isset($flash['success'])}
     
      <div class="alert alert-success alert-dismissible fade show mt-4">
-            <div >
+        
 
             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
             <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
-            </div>
+            
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
 {/if}
 
-{if isset($flash['warning'])}
+{if isset($flash['error'])}
     <div class="alert alert-warning alert-dismissible fade show mt-4">
         <p ><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -526,16 +526,16 @@ a:hover{
 {if isset($flash['success'])}
   
     <div class="alert alert-success alert-dismissible fade show mt-4 ">
-            <div >
+          
 
             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-          <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
-            </div>
+         <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+          
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 {/if}
 
-{if isset($flash['warning'])}
+{if isset($flash['error'])}
     <div class="alert alert-warning alert-dismissible fade show mt-4">
         <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
