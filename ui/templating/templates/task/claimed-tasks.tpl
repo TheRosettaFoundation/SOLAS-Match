@@ -107,9 +107,12 @@
 
                                         </div>
 
-                                                     <p>
+                                        <p>
                                         {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
                                          </p>
+
+                                         <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
+
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                          
