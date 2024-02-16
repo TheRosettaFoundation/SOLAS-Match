@@ -160,7 +160,7 @@
 
 
                             
-                            <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
+                            <div class ="  ">
                                     <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
