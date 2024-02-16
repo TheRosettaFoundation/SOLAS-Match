@@ -85,6 +85,7 @@
                        <div class=" w-100">
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
+                        {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
                         {if $taskImages[$task_id]}
                         <div  id="task_{$task_id}">
