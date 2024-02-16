@@ -36,8 +36,12 @@
                             {else}
                                 <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
                                 <ol>
-                                        <li>Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.</li>
-                                        <li>{sprintf('P     <section>
+                                  
+                                    <li>Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.</li>
+                                    <li>{sprintf('Proofread the <strong>%s</strong> translation to ensure that it meets <a href="https://community.translatorswb.org/t/what-is-translation-quality-for-translators-without-borders/10295" target="_blank">quality standards</a>:', {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
+                                        <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                                        <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Proofread using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}</a></li>
+                                    </ol>
                             {/if} 
 
                             {if isset($user)}
