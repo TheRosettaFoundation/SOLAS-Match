@@ -16,7 +16,7 @@
 
      <div class="d-flex justify-content-between flex-wrap ">
 
-                <div class="d-flex flex-column justify-content-between flex-grow-1 p-4 >
+                <div class="d-flex flex-column justify-content-between  p-4 >
 
                      <div class="flex-grow-1">
 
@@ -55,7 +55,7 @@
                      
                      </div>
 
-                       <div class="bg-grayish h-100 text-center d-inline-block ms-4 ">
+                       <div class="bg-grayish h-100 text-center d-inline-block ms-4 flex-grow-1">
 
                             <img src="{urlFor name='home'}ui/img/translator.svg" alt="translator" class="object-fit-cover" />
                
