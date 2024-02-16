@@ -31,7 +31,8 @@
                         {elseif $taskType == TaskTypeEnum::PROOFREADING}
                         
                         <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-                         <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+                         <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+
                         
                         {elseif $taskType == TaskTypeEnum::APPROVAL}
 
