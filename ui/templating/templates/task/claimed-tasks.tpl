@@ -157,7 +157,94 @@
                                          
                                     </div>
                                      <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
-                                        <a class="btn btn-secondary fs-5 px-3"  href="{$siteLocation}task/{$task_id}/view">View Task</a>
+
+
+                            <p>
+                               {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
+                                    {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
+                                        {if $type_id == 2}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
+                                            </a>
+                                        {elseif $type_id == 3}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                {if $memsource_tasks[$task_id]}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
+                                            </a>
+                                        {elseif $type_id == 6}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                Proofread using Phrase TMS
+                                            </a>
+                                        {/if}
+                                    {/if}
+                                    {if $allow_downloads[$task_id]}
+                                    <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
+                                        {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
+                                    </a>
+                                    {else}
+                                    {if $show_mark_chunk_complete[$task_id]}
+                                    <a href="{$siteLocation}task/{$task_id}/chunk-complete" class="btn btn-small btn-success">
+                                        Mark Chunk Complete
+                                    </a>
+                                    {/if}
+                                    {/if}
+                                {/if}
+                                {if $status_id == 3 && $type_id == 1}
+                                    <a href="{$siteLocation}task/{$task_id}/segmentation" class="btn btn-small btn-primary">
+                                        {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
+                                    </a>
+                                {/if}
+                                {if $status_id == 3 && $type_id == 4}
+                                    <a href="{$siteLocation}task/{$task_id}/desegmentation" class="btn btn-small btn-primary">
+                                        {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
+                                    </a>
+                                {/if}
+
+                               {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
+                                    <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                        Work using this URL
+                                    </a>
+                                {/if}
+
+                                <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary">
+                                    {Localisation::getTranslation('claimed_tasks_task_reviews')}
+                                </a>
+                                {if $status_id == 3 && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+                                    <a href="{$siteLocation}task/{$task_id}/user-feedback" class="btn btn-small btn-danger">
+                                        {Localisation::getTranslation('claimed_tasks_unclaim_task')}
+                                    </a>
+                                {/if}
+                                {if $type_id == 2}
+                                    {if $proofreadTaskIds[$task_id]}
+                                        {if $allow_downloads[$task_id]}
+                                        <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                            {Localisation::getTranslation('claimed_tasks_download_proofread_task')}
+                                        </a>
+                                        {/if}
+                                    {/if}
+                                {/if}
+                                {if $parentTaskIds[$task_id]}
+                                    <a href="{$siteLocation}task/{$parentTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Revised Version
+                                    </a>
+                                {/if}
+                                {if $show_memsource_revision[$task_id]}
+                                    <a href="{$siteLocation}task/{$show_memsource_revision[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Revised Version
+                                    </a>
+                                {/if}
+                                {if $show_memsource_approval[$task_id]}
+                                    <a href="{$siteLocation}task/{$show_memsource_approval[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Proofread Version
+                                    </a>
+                                {/if}
+                                {if false && ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2)}
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary" target="_blank">
+                                        TWB Pre-Delivery Checklist
+                                    </a>
+                                {/if}
+                            </p>
+                                        
+                                        
                                      </div>
                             
                             </div>
