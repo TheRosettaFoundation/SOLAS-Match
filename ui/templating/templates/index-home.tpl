@@ -526,7 +526,7 @@ a:hover{
   
     <div class="alert alert-success alert-dismissible fade show mt-4 ">
           
-        <<img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
          <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
           
              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
