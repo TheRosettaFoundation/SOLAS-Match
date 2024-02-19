@@ -74,7 +74,6 @@
         <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
 
          <div class="alert alert-warning  alert-dismissible fade show mt-4">
-
             
 
             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
