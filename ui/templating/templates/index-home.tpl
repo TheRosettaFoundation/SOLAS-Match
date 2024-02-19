@@ -208,7 +208,7 @@ a:hover{
 
 {/if}
 
-{if isset($flash['error'])}
+{if isset($flash['warning'])}
     <div class="alert alert-warning alert-dismissible fade show mt-4">
         <p ><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
