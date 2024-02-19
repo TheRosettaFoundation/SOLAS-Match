@@ -18,7 +18,7 @@
 
         <div class="container">
 
-                 <h4>{Localisation::getTranslation('common_what_happens_now')}</h4>
+        <h4>{Localisation::getTranslation('common_what_happens_now')}</h4>
         {if $translations_not_all_complete}
         <p>This is what you need to do:</p>
         <ol>
