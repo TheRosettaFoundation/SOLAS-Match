@@ -26,23 +26,7 @@
             <div class=" btn btn btn-gray"> <img src="{urlFor name='home'}ui/img/info.svg" alt="user feedaback icon" class="mx-1" /> {sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</div>
         {/if}
     </section>
-       <section>
-        <h3>When you have finished proofreading:</h3>
-        <p>
-            {if isset($user)}
-            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
-            {else}
-            <a href="{urlFor name="home"}" class="btn">
-            {/if}
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
-            </a>
-            {if $isSiteAdmin}
-            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
-            </a>
-            {/if}
-        </p>
-    </section>
+     
 
 
    
