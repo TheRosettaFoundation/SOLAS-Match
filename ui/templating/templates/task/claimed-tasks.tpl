@@ -272,7 +272,7 @@
             </div> 
             {* pagination begins here *}
             {assign var="url_name" value="claimed-tasks-paged"}
-            <ul class="pager pull-left">
+            <ul class="pager pull-left text-decoration-none">
                 <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <li>
