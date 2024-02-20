@@ -23,7 +23,7 @@
            
             <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
             <div class="filter-block">
-                <div class="filter-title">{Localisation::getTranslation('common_task_type')}</div>
+                
                 <select name="taskTypes" id="taskTypes" class="form-select">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
@@ -34,7 +34,7 @@
                 </select>
             </div>
             <div class="filter-block">
-                <div class="filter-title">{Localisation::getTranslation('common_task_status')}</div>
+              
                 <select name="taskStatusFilter" id="taskStatusFilter" class="form-select mt-1">
                     <option value="3" {if ($selectedTaskStatus === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_in_progress')}</option>
                     <option value="0" {if ($selectedTaskStatus === 0)}selected="selected"{/if}>{Localisation::getTranslation('common_any_task_status')}</option>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="filter-block">
-                <div class="filter-title">{Localisation::getTranslation('claimed_tasks_ordering')}</div>
+              
                 <select name="ordering" id="ordering" class="form-select">
                     <option value="0" {if ($selectedOrdering === 0)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_asc')}</option>
                     <option value="1" {if ($selectedOrdering === 1)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_desc')}</option>
@@ -280,27 +280,35 @@
 
                                                    
              {* pagination begins here *}
+              {assign var="url_name" value="claimed-tasks-paged"}
+            <ul class="pager pull-left">
+                <div class="pagination-centered" id="ias-pagination">
+                    {if $currentScrollPage > 1}
+                        <li>
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
+                        </li>
+                        <li class="ts-previous">
+                            {assign var="previous" value=($currentScrollPage - 1)}
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
+                        </li>
+                    {/if}
+                    <li>
+                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </li>
+                    {if $currentScrollPage < $lastScrollPage}
+                        <li class="ts-next">
+                            {assign var="next" value=($currentScrollPage + 1)}
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
+                        </li>
+                        <li>
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
+                        </li>
+                    {/if}
+                </div>
+            </ul>
         {else}
             <p>
-                {if !$org_admin}
-                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> <br/> to be notified of new available tasks. Meanwhile, you can:
-                <ol>
-                <li>
-                    <a href="https://translatorswithoutborders.org/blog/" target="_blank" class="text-primary">Learn more</a> about the work we do
-                </li>
-                <li>
-                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" class="text-primary" target="_blank">Register</a> and browse our forum
-                </li>
-                <li>
-                    New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank" class="text-primary">Translator's Toolkit</a> to find out how to get started with us.
-                </li>
-                </ol>
-                    <p>
-                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank" class="text-primary">translators@translatorswithoutborders.org</a>
-                    </p>
-                {else}
-                    Since you are not a translator, there are no tasks here. Click on <a href="https://twbplatform.org/org/dashboard/" class="text-prinary">your organization's Dashboard</a>
-                {/if}
+                   <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
             </p>
         {/if}
       
