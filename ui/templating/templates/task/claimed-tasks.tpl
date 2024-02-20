@@ -37,7 +37,7 @@
             </div>
             <div class="filter-block">
                 <div class="filter-title">{Localisation::getTranslation('claimed_tasks_ordering')}</div>
-                <select name="ordering" id="ordering" class="form-select mt-1">
+                <select name="ordering" id="ordering" class="form-select">
                     <option value="0" {if ($selectedOrdering === 0)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_asc')}</option>
                     <option value="1" {if ($selectedOrdering === 1)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_desc')}</option>
                     <option value="2" {if ($selectedOrdering === 2)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_deadline_asc')}</option>
@@ -270,44 +270,59 @@
 
 
             </div> 
-
-              {* pagination begins here *}
-            
-   {if isset($topTasks) && count($topTasks) > 0}    
-            {assign var="url_name" value="claimed-tasks-paged"}
-            <ul class="pager pull-left">
-                <div class="pagination-centered" id="ias-pagination">
-                    {if $currentScrollPage > 1}
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
-                        </li>
-                        <li class="ts-previous">
-                            {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
-                        </li>
-                    {/if}
-                    <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
-                    </li>
-                    {if $currentScrollPage < $lastScrollPage}
-                        <li class="ts-next">
-                            {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
-                        </li>
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
-                        </li>
-                    {/if}
-                </div>
-            </ul>
-        </div>
-    {else}
-        <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
-    {/if}
             
             
             ##############End
-      
+            <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination mt-1 mt-md-0">
+
+                    {assign var="url_nam" value="home-paged"}
+                    {if $page_count> 6}
+                        {assign var="count" value= 6}
+                    {else}
+                        {assign var="count" value= $page_count}
+                    {/if}    
+                      
+                    {if $page_count>1}
+
+                    <li class="first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
+                            <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
+                    <li class="d-flex align-items-center mx-2 bg-gray align-middle opacity-50 border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2" id="previous"  >
+                            <a class="d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">  <img src="{urlFor name='home'}ui/img/prev.svg" alt="prev icon" class="me-2">PREV</a></li>
+
+                    {else}
+
+                    
+                    <li class=" d-none first mx-2 border border-dark-subtle rounded-3 py-1 px-2 mt-1 mt-md-0" >
+                            <a class=" text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">FIRST</a></li>
+                    <li class="d-none d-flex align-items-center mx-2 bg-gray align-middle opacity-50 border border-dark-subtle rounded-3 mt-1 mt-md-0 py-1 px-2" id="previous"  >
+                            <a class="d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">  <img src="{urlFor name='home'}ui/img/prev.svg" alt="prev icon" class="me-2">PREV</a></li>
+
+                    {/if}
+
+
+                    {for $page=1 to $count}
+                      
+                            <li {if $page==1 } class="mx-2 bg-primary border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage text-primary" {else} class="mx-2 border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 listPage" {/if}>
+                            <a  class="page text-decoration-none link-body-emphasis fs-6" id={$page} href="{urlFor name="$url_nam" options="page_no.$page|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">{$page}</a></li>
+                   
+
+                    {/for}
+                    {if $page_count>1}
+                    <li class="mx-2 d-flex align-items-center mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                            <a class=" d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT <img src="{urlFor name='home'}ui/img/next.svg" alt="prev icon" class="ms-2"></a></li> 
+                     <li class=" last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
+                            <a class="pageCount text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}"> LAST</a></li>
+                    {else}
+
+                    
+                    <li class="d-none mx-2 d-flex align-items-center mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2" id="next">
+                            <a class=" d-flex align-items-center text-decoration-none link-body-emphasis fs-6" href="{urlFor name="$url_nam" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}">NEXT <img src="{urlFor name='home'}ui/img/next.svg" alt="prev icon" class="ms-2"></a></li> 
+                     <li class="d-none last mx-2  border border-dark-subtle mt-1 mt-md-0 rounded-3 py-1 px-2 " >
+                            <a class="pageCount text-decoration-none link-body-emphasis fs-6" id={$page_count}  href="{urlFor name="$url_nam" options="page_no.$page_count|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}"> LAST</a></li>
+                    {/if}
+
+            </ul>
+
   
 
 
@@ -349,10 +364,37 @@
 
 #####
 
+<span class="hidden">
+    <!-- Parameters... -->
+    <div id="siteLocation">{$siteLocation}</div>
+</span>
 
+{if isset($flash['error'])}
+    <br>
+    <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+    </div>
+{/if}
 
+<div class="page-header">
+    <h1>
+        {if isset($thisUser)}
+            {if $thisUser->getDisplayName() != ''}
+                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
+            {else}
+                {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+            {/if}
+        {else}
+            {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+        {/if}
+        <small>{Localisation::getTranslation('claimed_tasks_a_list_of_tasks')}</small>
+    </h1>
+</div>
 
-
+<div id="loading_warning">
+    <p>{Localisation::getTranslation('common_loading')}</p>
+</div>
 
 <div style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
     <h3>{Localisation::getTranslation('index_filter_available_tasks')}</h3>
