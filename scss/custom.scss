@@ -154,6 +154,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     font-weight: bold;
 }
 
+#footer {
+    position: absolute;
+    bottom: 0;
+}
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
