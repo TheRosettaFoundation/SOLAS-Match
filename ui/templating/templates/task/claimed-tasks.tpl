@@ -281,7 +281,7 @@
                                                    
              {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
-            <ul class="pager pull-left">
+            <ul class="text-decoration-none">
                 <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <li>
@@ -289,19 +289,19 @@
                         </li>
                         <li class="ts-previous">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
+                            <a  class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
                         </li>
                     {/if}
                     <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                        <a href="" class="text-decoration-none">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
                     </li>
                     {if $currentScrollPage < $lastScrollPage}
                         <li class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
+                            <a   class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
                         </li>
                         <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
+                            <a  class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
                         </li>
                     {/if}
                 </div>
