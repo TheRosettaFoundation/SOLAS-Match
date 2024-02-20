@@ -2486,7 +2486,7 @@ error_log(print_r($result, true));//(**)
                     'roleName' => 'Contractor',
                     'name' => (!empty($userPersonalInfo->getFirstName()) ? $userPersonalInfo->getFirstName() : 'Linguist') . (!empty($userPersonalInfo->getLastName()) ? (' ' . $userPersonalInfo->getLastName()) : ''),
                     'email' => $user->getEmail(),
-                    'tabs' => ['textTabs' => [['tabLabel' => 'Text 4e38bd5f-6d64-4f43-8508-ed3fe47e5652', 'value' => date('d-M-Y | H:i') . ' UTC']]]
+                    'tabs' => ['textTabs' => [['tabLabel' => 'Text 086cacfb-eef2-44c4-a0bb-fd5cd18186d9', 'value' => date('d-M-Y | H:i') . ' UTC']]]
                 ]
             ],
             'status' => 'sent',
