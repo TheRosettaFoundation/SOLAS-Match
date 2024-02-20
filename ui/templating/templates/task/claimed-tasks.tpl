@@ -270,6 +270,38 @@
 
 
             </div> 
+
+              {* pagination begins here *}
+            {assign var="url_name" value="claimed-tasks-paged"}
+            <ul class="pager pull-left">
+                <div class="pagination-centered" id="ias-pagination">
+                    {if $currentScrollPage > 1}
+                        <li>
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
+                        </li>
+                        <li class="ts-previous">
+                            {assign var="previous" value=($currentScrollPage - 1)}
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
+                        </li>
+                    {/if}
+                    <li>
+                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </li>
+                    {if $currentScrollPage < $lastScrollPage}
+                        <li class="ts-next">
+                            {assign var="next" value=($currentScrollPage + 1)}
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
+                        </li>
+                        <li>
+                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
+                        </li>
+                    {/if}
+                </div>
+            </ul>
+        </div>
+    {else}
+        <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
+    {/if}
             
             
             ##############End
@@ -315,37 +347,10 @@
 
 #####
 
-<span class="hidden">
-    <!-- Parameters... -->
-    <div id="siteLocation">{$siteLocation}</div>
-</span>
 
-{if isset($flash['error'])}
-    <br>
-    <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
-    </div>
-{/if}
 
-<div class="page-header">
-    <h1>
-        {if isset($thisUser)}
-            {if $thisUser->getDisplayName() != ''}
-                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
-            {else}
-                {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
-            {/if}
-        {else}
-            {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
-        {/if}
-        <small>{Localisation::getTranslation('claimed_tasks_a_list_of_tasks')}</small>
-    </h1>
-</div>
 
-<div id="loading_warning">
-    <p>{Localisation::getTranslation('common_loading')}</p>
-</div>
+
 
 <div style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
     <h3>{Localisation::getTranslation('index_filter_available_tasks')}</h3>
