@@ -1,8 +1,8 @@
 {include file='new_header.tpl'}
 
 
-<div class="container">
-<div class="d-flex row justify-content-between mt-5 vh-100 ">
+<div class="container d-flex flex-column ">
+<div class="d-flex row justify-content-between mt-5 flex-grow-1">
 
 <span class="d-none">
     <!-- Parameters... -->
