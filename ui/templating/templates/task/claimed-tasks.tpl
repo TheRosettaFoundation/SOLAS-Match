@@ -4,7 +4,7 @@
 <div class="container">
 <div class="d-flex row justify-content-between mt-5 ">
 
-<span class="hidden">
+<span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
@@ -277,10 +277,6 @@
 
             </div> 
             
-            
-            ##############End
-
-
 
                                                    
              {* pagination begins here *}
@@ -312,13 +308,6 @@
     </div>
 </div>
 </div>
-
-
-
-
-
-
-#####
 
 
 
