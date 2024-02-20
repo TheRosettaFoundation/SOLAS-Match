@@ -302,8 +302,7 @@
         <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
     {/if}
             
-            ##############End
-      
+
       
 
     </div>
@@ -313,9 +312,6 @@
 
 
 
-
-
-#####
 
 
 
