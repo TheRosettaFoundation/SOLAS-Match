@@ -281,31 +281,31 @@
                                                    
              {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
-            <ul class="text-decoration-none">
+            <div class="text-decoration-none">
                 <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
-                        </li>
-                        <li class="ts-previous">
+                        <div>
+                            <a class="custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
+                        </div>
+                        <div class="ts-previous">
                             {assign var="previous" value=($currentScrollPage - 1)}
                             <a  class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
-                        </li>
+                        </div>
                     {/if}
-                    <li>
-                        <a href="" class="text-decoration-none">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
-                    </li>
+                    <div>
+                        <a href="" class=" custom-link">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </div>
                     {if $currentScrollPage < $lastScrollPage}
-                        <li class="ts-next">
+                        <div class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a   class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
-                        </li>
-                        <li>
-                            <a  class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
-                        </li>
+                            <a   class=" custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
+                        </div>
+                        <div>
+                            <a  class="custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
+                        </div>
                     {/if}
                 </div>
-            </ul>
+            </div>
         {else}
             <p>
                    <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
