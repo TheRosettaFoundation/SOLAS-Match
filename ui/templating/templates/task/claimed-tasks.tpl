@@ -272,6 +272,8 @@
             </div> 
 
               {* pagination begins here *}
+            
+   {if isset($topTasks) && count($topTasks) > 0}    
             {assign var="url_name" value="claimed-tasks-paged"}
             <ul class="pager pull-left">
                 <div class="pagination-centered" id="ias-pagination">
