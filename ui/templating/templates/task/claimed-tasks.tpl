@@ -22,7 +22,7 @@
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
            
             <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
-            <div class="filter-block">
+            <div class="filter-block mb-2">
                 
                 <select name="taskTypes" id="taskTypes" class="form-select">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
@@ -33,7 +33,7 @@
                     {/foreach}
                 </select>
             </div>
-            <div class="filter-block">
+            <div class="filter-block mb-2">
               
                 <select name="taskStatusFilter" id="taskStatusFilter" class="form-select mt-1">
                     <option value="3" {if ($selectedTaskStatus === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_in_progress')}</option>
@@ -142,7 +142,7 @@
                                         
                                             
                                             </div>
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                                            <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                            
 
