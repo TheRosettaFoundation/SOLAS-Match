@@ -21,7 +21,7 @@
                 <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
                 {/if}
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
-                    <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                    <a href="{$matecat_url}" class="btn btn-grayish" target="_blank">
                     <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('task_claimed_proofreading_1')}</li>
