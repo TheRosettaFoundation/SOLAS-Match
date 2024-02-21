@@ -49,20 +49,20 @@
                     <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
-                        <a class="btn btn-sm btn-success" onclick="$('#copyChunksProjectForm').submit();" >
+                        <a class="btn btn-sm btn-success mt-2 mt-md-0" onclick="$('#copyChunksProjectForm').submit();" >
                             <i class="icon-upload icon-white"></i> Sync Phrase TMS
                         </a>
-                        <a href="{$matecat_analyze_url}" class="btn btn-sm btn-primary" target="_blank">
+                        <a href="{$matecat_analyze_url}" class="btn btn-sm btn-primary mt-2 mt-md-0 " target="_blank">
                             {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                         </a>
                     {/if}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
-                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm btn-primary">
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm btn-primary mt-2 mt-md-0">
                              Add Shell Tasks
                         </a>
                     {/if}
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm btn-primary fixMargin'>
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm btn-primary mt-2 mt-md-0 fixMargin'>
                              {Localisation::getTranslation('common_edit_project')}
                         </a> 
                     {/if}
