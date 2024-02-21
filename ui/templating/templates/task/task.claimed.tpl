@@ -66,22 +66,7 @@
  
 
   <section class="container ">
-    <div>
-
-    {if isset($flash['error'])}
-       
-        
-        <h4>Proofreading and Approval task claimed <small>Please proofread it!</small></h4>
-
-         <div class="alert alert-warning  alert-dismissible fade show mt-4">
-            
-
-            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            
-        </div>
-    {/if}
-    </div>
+  
 
 
   <div class="bg-body ">
@@ -127,11 +112,7 @@
      <section class="container">
         <h3 class="fw-bold">When you have finished translating: </h3>
         <p>
-            {if empty($memsource_task)}
-            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
-            </a>
-            {/if}
+        
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn btn-light-subtle border border-dark-subtle">
             {else}
