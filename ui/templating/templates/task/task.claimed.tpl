@@ -72,7 +72,7 @@
 
      <div class="d-block d-md-flex justify-content-between fs-5  align-items-center align-middle">
 
-                <div class="d-xs-block d-md-flex flex-column justify-content-between ">
+                <div class="d-xs-block d-md-flex flex-column justify-content-between flex-wrap ">
 
                     <div class="p-4 ">
 
