@@ -48,11 +48,11 @@
 
                 </div>
 
-             <div class="mt-2 mt-md-0">
+             <div class="mt-2 mt-md-0 ">
 
                               {if $taskType == TaskTypeEnum::PROOFREADING }
            
-                                <form class="d-flex" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                                <form class="d-flex flex-wrap mt-1 mt-md-0" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
                                 
                                     {if !empty($matecat_url)}
                                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
