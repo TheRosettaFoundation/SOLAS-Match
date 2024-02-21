@@ -643,8 +643,7 @@
                     </div>                
              
                   
-                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
-                    <div class="table-responsive mt-4 ">
+                
 
                     <table class="table table-borderless" >
                         <thead class="fs-5">
@@ -868,8 +867,7 @@
                             {/foreach}
                         </tbody>
                     </table>
-                    </div>
-                </div>
+               
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
