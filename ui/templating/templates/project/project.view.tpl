@@ -625,7 +625,7 @@
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                      <div class="mt-4">
-                <div class="d-flex ">
+                <div class="d-flex">
                     <span class="me-4">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
@@ -640,10 +640,10 @@
                             <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
                     </span>
-                    </div>                
-             
+                    </div>                             
                   
-                
+                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+                    <div class="table-responsive mt-4 ">
 
                     <table class="table table-borderless" >
                         <thead class="fs-5">
@@ -867,7 +867,8 @@
                             {/foreach}
                         </tbody>
                     </table>
-               
+                    </div>
+                </div>
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
