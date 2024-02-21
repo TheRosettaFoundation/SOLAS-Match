@@ -75,7 +75,7 @@
                                     
                                     <div>
 
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-light fs-6 fw-bold  me-2 py-1 border border-dark-subtle">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-light fs-6 fw-bold  me-2 mt-2 mt-md-0 py-1 border border-dark-subtle">
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="mx-1" /> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
                                         </a>
                                     </div>
