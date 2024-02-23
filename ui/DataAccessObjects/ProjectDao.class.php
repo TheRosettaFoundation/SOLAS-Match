@@ -1525,9 +1525,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $memsourceApiToken"]);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_exec($ch);
-        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        if ($responseCode != 200) error_log("ERROR $url responseCode: $responseCode");
     }
 
     public function insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $data)
