@@ -1514,6 +1514,20 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .
             $args);
+        $this->delete_phrase_analysis($analyse_uid);
+    }
+
+    public function delete_phrase_analysis($analyse_uid)
+    {
+        $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+        $url = "https://cloud.memsource.com/web/api2/v1/analyses/$analyse_uid?purge=true";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $memsourceApiToken"]);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($responseCode != 200) error_log("ERROR $url responseCode: $responseCode");
     }
 
     public function insert_compare_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $source_workflow_level, $compare_workflow_level, $data)
@@ -1563,6 +1577,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             LibAPI\PDOWrapper::cleanse($source_workflow_level) . ',' .
             LibAPI\PDOWrapper::cleanse($compare_workflow_level) . ',' .
             $args);
+        $this->delete_phrase_analysis($analyse_uid);
     }
 
     public function insert_requested_analysis($task_id, $analyse_id)
