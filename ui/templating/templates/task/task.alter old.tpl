@@ -2,60 +2,30 @@
 
 {assign var="task_id" value=$task->getId()}
 {assign var="task_status_id" value=$task->getTaskStatus()}
+    <h1 class="page-header">
+        {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+        <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
+        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
+            <i class="icon-list icon-white"></i> {Localisation::getTranslation('task_alter_view_task_details')}
+        </a>
+    </h1>
 
-<div class="container-fluid">
-
-    <header class="">
-
-        <div class="container py-2"> 
-
-                <div class="py-2" >
-
-                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" />
-        
-                    <a  href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a>       
-                    
-                    {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
-                         <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next2" class="mx-1" />
-                    <a class=" text-decoration-none text-body fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
-                    {/if}
-                     {/if}
-               
-                </div>
-                 
-
+    {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
+        <div class="alert alert-info">
+            <h3>
+                <p>{Localisation::getTranslation('common_note')}</p>
+            </h3>            
+            {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
+                <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
+            {else if $task_status_id == TaskStatusEnum::CLAIMED}
+                <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
+            {else if $task_status_id == TaskStatusEnum::COMPLETE}
+                <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
+            {/if}
         </div>
-
-    </header>
-
-<section class="bg-light-subtle my-4 pb-4"> 
-
-    <div class="container py-5">
-
-        <div class="d-flex  flex-wrap justify-content-between"> 
-
-
-            <h1 class="page-header">
-            {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-            <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
-        
-            </h1>
-
-            <div>
-
-                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-                {Localisation::getTranslation('task_alter_view_task_details')}
-                </a>
+    {/if}
             
-            
-            </div>
-        
-        
-        </div>
-
-
-            <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
+    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
         <table width="100%">
             <tr align="center">
                 <td width="50%">
@@ -256,40 +226,5 @@
         </table>
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
-
-
-    </div>
-
-
-
-</section>
-
-</div>
-
-
-    <h1 class="page-header">
-        {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-        <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
-        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-            <i class="icon-list icon-white"></i> {Localisation::getTranslation('task_alter_view_task_details')}
-        </a>
-    </h1>
-
-    {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
-        <div class="alert alert-info">
-            <h3>
-                <p>{Localisation::getTranslation('common_note')}</p>
-            </h3>            
-            {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
-                <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
-            {else if $task_status_id == TaskStatusEnum::CLAIMED}
-                <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
-            {else if $task_status_id == TaskStatusEnum::COMPLETE}
-                <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
-            {/if}
-        </div>
-    {/if}
-            
-
                         
 {include file="footer.tpl"}
