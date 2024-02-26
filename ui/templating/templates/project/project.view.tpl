@@ -196,12 +196,12 @@
        <div class="d-flex justify-content-between flex-wrap">
      <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-md-2">
         <div class="table-responsive mt-4  ">   
-        <table class="table table-borderless">
+        <table class="table table-borderless bg-primary">
             <thead class="fs-5">
             <th >{Localisation::getTranslation('common_description')}</th>
             <th></th>   
             </thead>
-            <tbody class="fs-6">
+            <tbody class="fs-6 ">
                 <tr >
                     <td>
                         <i>
