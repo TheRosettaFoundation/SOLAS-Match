@@ -29,11 +29,11 @@
                         <h3>
                             <div>{Localisation::getTranslation('common_note')}
                             {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
-                            <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
+                            <span>This task is in progress. {Localisation::getTranslation('task_alter_1')}</span>
                             {else if $task_status_id == TaskStatusEnum::CLAIMED}
-                                <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
+                                <span>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</span>
                             {else if $task_status_id == TaskStatusEnum::COMPLETE}
-                                <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
+                                <span>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</span>
                             </div>
                             {/if}
                         </h3>            
