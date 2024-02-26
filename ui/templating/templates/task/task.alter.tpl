@@ -81,7 +81,7 @@
 
             <div class="w-50">
 
-                <tr >
+                <tr>
                 <td >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
@@ -115,7 +115,7 @@
                     </div>
                     {/if}
                 </td>
-                <td>
+                <td class="ms-4 bg-info">
                     <div>
                         <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
