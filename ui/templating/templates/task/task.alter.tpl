@@ -111,9 +111,9 @@
                     </div>
                     {/if}
                 </td>
-                <td class="w-50">
+                <td>
                     <div>
-                        <label for="publishTask" class="form-label"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
+                        <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
                         <input class="form-control" type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
@@ -255,7 +255,7 @@
                 </td>
             </tr>
             {/if}
-            <tr 
+            <tr align="center">
                 <td>
                     <p style="margin-bottom:20px;"/>  
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
