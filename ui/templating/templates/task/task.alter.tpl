@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 
 {assign var="task_id" value=$task->getId()}
 {assign var="task_status_id" value=$task->getTaskStatus()}
