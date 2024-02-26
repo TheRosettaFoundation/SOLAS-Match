@@ -76,19 +76,19 @@
 
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
-        <table width="100%">
-            <tr align="center">
-                <td width="50%">
-                    <div style="margin-bottom:20px;">
-                        <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong></label>
-                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
+        <table class="w-full">
+            <tr >
+                <td class="w-50">
+                 
+                        <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
+                        <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
+         
+                    <div >
+                        <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
+                        <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    <div style="margin-bottom:20px;">
-                        <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
-                        <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
-                    </div>
-                    <div style="margin-bottom:20px;">
-                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
+                    <div>
+                        <label for="deadline" ><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
@@ -101,9 +101,9 @@
                         </p>
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                    <div style="margin-bottom:20px;">
-                        <label for="required_qualification_level" style="font-size: large"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
-                        <select name="required_qualification_level" id="required_qualification_level" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
+                    <div >
+                        <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
+                        <select class="form-control" name="required_qualification_level" id="required_qualification_level" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             <option value="1" {if $required_qualification_level == 1}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_1')}</option>
                             <option value="2" {if $required_qualification_level == 2}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_2')}</option>
                             <option value="3" {if $required_qualification_level == 3}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_3')}</option>
