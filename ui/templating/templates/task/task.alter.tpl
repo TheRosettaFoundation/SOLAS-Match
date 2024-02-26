@@ -287,15 +287,8 @@
 </div>
 
 
-    <h1 class="page-header">
-        {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-        <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
-        <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
-            <i class="icon-list icon-white"></i> {Localisation::getTranslation('task_alter_view_task_details')}
-        </a>
-    </h1>
 
    
 
                         
-{include file="footer.tpl"}
+{include file="footer2.tpl"}
