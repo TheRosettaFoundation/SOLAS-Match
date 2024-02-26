@@ -76,7 +76,7 @@
 
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
-        <table class="w-full">
+        <table class="w-full bg-grayish">
            <tbody>
 
         
