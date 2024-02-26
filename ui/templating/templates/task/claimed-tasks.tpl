@@ -159,7 +159,7 @@
                             </div>
 
                                     {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                                    <p class="mt-3">{Localisation::getTranslation('common_discuss_on_community')}: <a class="custom -link "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
+                                    <p class="mt-3">{Localisation::getTranslation('common_discuss_on_community')}: <a class="custom-link "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
                                     {/if}
                                 
                             <div class=" mt-4  ">
