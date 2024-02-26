@@ -80,7 +80,7 @@
         <table class="w-100 ">
            <tbody class="mx-4">
 
-                <tr class="d-flex justify-content-between  " >
+                <tr class="d-flex justify-content-between flex-wrap " >
                 <td class="" >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
@@ -270,20 +270,19 @@
 
             <div class="d-flex justify-content-center">
                 <div>
-                    <p style="margin-bottom:20px;"/>  
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
                         <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}
                     </a>
-                    <p style="margin-bottom:20px;"/>  
+                   
                 </div>
                 <div>
-                    <p style="margin-bottom:20px;"/>
+                   
                     <p>
                         <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary">
                             <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
                         </button>
                     </p>    
-                    <p style="margin-bottom:20px;"/>
+                  
                 </div>
             </div>     
      
