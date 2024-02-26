@@ -82,7 +82,7 @@
         
 
                 <tr class="d-flex justify-content-between  " >
-                <td class="flex-grow-1" >
+                <td class="" >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                         <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
