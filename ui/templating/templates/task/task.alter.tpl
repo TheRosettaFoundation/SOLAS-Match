@@ -27,6 +27,24 @@
 
         </div>
 
+         {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
+        <div class="alert alert-info alert-dismissible fade show mt-4">
+            <h3>
+                <p>{Localisation::getTranslation('common_note')}</p>
+                 {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
+                <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
+                {else if $task_status_id == TaskStatusEnum::CLAIMED}
+                    <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
+                {else if $task_status_id == TaskStatusEnum::COMPLETE}
+                    <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
+                {/if}
+            </h3>            
+           
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {/if}
+            
+
     </header>
 
 <section class="bg-light-subtle my-4 pb-4"> 
@@ -36,11 +54,11 @@
         <div class="d-flex  flex-wrap justify-content-between"> 
 
 
-            <h1 class="page-header">
+            <h3 class="page-header">
             {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
             <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
         
-            </h1>
+            </h3>
 
             <div>
 
@@ -275,21 +293,7 @@
         </a>
     </h1>
 
-    {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
-        <div class="alert alert-info">
-            <h3>
-                <p>{Localisation::getTranslation('common_note')}</p>
-            </h3>            
-            {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
-                <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
-            {else if $task_status_id == TaskStatusEnum::CLAIMED}
-                <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
-            {else if $task_status_id == TaskStatusEnum::COMPLETE}
-                <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
-            {/if}
-        </div>
-    {/if}
-            
+   
 
                         
 {include file="footer.tpl"}
