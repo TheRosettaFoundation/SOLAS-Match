@@ -27,7 +27,7 @@
                     {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
                     <div class="alert alert-info alert-dismissible fade show mt-4">
                         <h3>
-                            <div>{Localisation::getTranslation('common_note')}
+                            <div>{Localisation::getTranslation('common_note')} 
                             {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
                             <span>This task is in progress. {Localisation::getTranslation('task_alter_1')}</span>
                             {else if $task_status_id == TaskStatusEnum::CLAIMED}
@@ -58,7 +58,7 @@
 
 
             <h3 >
-            {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+            <span class="font-bold">{Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}<span>
             <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
         
             </h3>
