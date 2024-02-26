@@ -79,10 +79,10 @@
         <table class="w-full">
             <tr >
                 <td class="w-50">
-                 
+                    <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                         <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
-         
+                    </div>
                     <div >
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
                         <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
@@ -112,13 +112,13 @@
                     {/if}
                 </td>
                 <td>
-                    <div style="margin-bottom:20px;">
-                        <label for="publishTask" style="font-size: large"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
+                    <div>
+                        <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
-                        <input type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
+                        <input class="form-control" type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     {if $showRestrictTask}
-                    <div style="margin-bottom:60px;">
+                    <div >
                         <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('restrict_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
                         <input type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
@@ -126,8 +126,8 @@
                     {/if}
                     {if !empty($languages)}
                     <p>
-                        <label for="target" style="font-size: large"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>
-                        <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
+                        <label for="target" class="form-label"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>
+                        <select class="form-control" name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $languages as $language}
                                 {if $task->getTargetLocale()->getLanguageCode() == $language->getCode()}
                                         <option value="{$language->getCode()}" selected="selected" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} >{$language->getName()}</option>
@@ -139,7 +139,7 @@
                     </p>
                     <p>
                     {if isset($countries)}
-                        <select name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
+                        <select class="form-control" name="targetCountry" id="targetCountry" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
                             {foreach $countries as $country}
                                 {if $task->getTargetLocale()->getCountryCode() == $country->getCode()}
                                     <option value="{$country->getCode()}" selected="selected">{$country->getName()}</option>
@@ -151,22 +151,22 @@
                     {/if}
                     </p>
                     {/if}
-                    <p style="margin-bottom:60px;"/>
+                    <p />
 
                     {if !is_null($word_count_err)}
                         <div class="alert alert-error">
                             {$word_count_err}
                         </div>
                     {/if} 
-                    <p style="margin-bottom:40px;"/>
+                    <p />
 
-                    <label for="word_count" style="font-size: large"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
-                    <input type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
+                    <label for="word_count" class="form-label"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
+                    <input class="form-control" type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
 
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>
-                    <label for="shell_task_url" style="font-size: large"><strong>Shell Task Work URL</strong></label>
-                    <input type="text" name="shell_task_url" id="shell_task_url" value="{$shell_task_url}" style="width: 400px" />
+                    <label for="shell_task_url" class="form-label"><strong>Shell Task Work URL</strong></label>
+                    <input  type="text" name="shell_task_url" id="shell_task_url" value="{$shell_task_url}" class="form-control" />
                     {/if}
                 </td>             
             </tr>
