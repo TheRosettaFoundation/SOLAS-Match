@@ -893,10 +893,10 @@
 
     {if !empty($volunteerTaskLanguageMap)}
     <hr />
-    <h1 class="page-header" style="margin-bottom: 60px">
+    <h3 >
         {Localisation::getTranslation('project_view_tasks')}
         <small>{Localisation::getTranslation('project_view_0')}</small>
-    </h1>
+    </h3>
                 {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
 
                     <div class="fs-5 fw-bold">
@@ -920,7 +920,7 @@
                                 {assign var="task_id" value=$task['task_id']}
                                 <tr >
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
+                                        <a  class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
                                         <br/>
