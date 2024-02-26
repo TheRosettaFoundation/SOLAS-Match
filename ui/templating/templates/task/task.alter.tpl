@@ -176,6 +176,16 @@
             </tr>
 
 
+
+
+
+            </div>
+
+
+
+            <div class="w-50">
+
+
              
             {if !empty($projectTasks)}
             <tr>
@@ -258,13 +268,20 @@
             </tr>
             {/if}
 
+               
+ 
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
 
             </div>
 
 
 
-            <div class="w-50">
+           </tbody>
+
+       
+        
+        </table>
 
 
             <tr align="center">
@@ -284,17 +301,7 @@
                     </p>    
                     <p style="margin-bottom:20px;"/>
                 </td>
-            </tr>        
-        </table>
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-
-
-            </div>
-
-
-           </tbody>
-        
-        </table>
+            </tr>     
      
        
     </form>
