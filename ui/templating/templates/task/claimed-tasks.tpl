@@ -144,10 +144,6 @@
                                             <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                            
-
-                           
-                          
-
                             
                             </div>
                            

@@ -342,8 +342,6 @@
     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
 
-
-
         <div class="d-flex justify-content-between mt-4">
 
             <h3 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
@@ -664,7 +662,7 @@
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
-                        <tbody class="fs-6">
+                        <tbody class="fs-6 bg-primary">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
@@ -916,7 +914,7 @@
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
                             </tr>
                         </thead>
-                        <tbody class="fs-6">
+                        <tbody class="fs-6 ">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task['task_id']}
