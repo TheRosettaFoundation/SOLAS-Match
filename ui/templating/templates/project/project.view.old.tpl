@@ -566,7 +566,8 @@
                                     {/if}
                                     <td>
                                     {if $task->get_cancelled()}
-                                        <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                       
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                                 <i class="icon-check icon-white"></i> Yes
@@ -575,7 +576,7 @@
                                             <input type="hidden" name="cancelled" value="0" />
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                           </form>
-                                        </span>
+                                        </button>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
                                             <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">

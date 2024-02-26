@@ -774,7 +774,7 @@
                                     {/if}
                                     <td>
                                     {if $task->get_cancelled()}
-                                        <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                        <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                                 <i class="icon-check icon-white"></i> Yes
@@ -785,7 +785,7 @@
                                           </form>
                                         </span>
                                     {else}
-                                        <span data-toggle="tooltip" data-placement="right" title="Cancel" >
+                                        <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
                                             <a class="btngray" data-toggle="modal"  id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
@@ -799,16 +799,20 @@
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
-                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
+                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
                                                       <img src="{urlFor name='home'}ui/img/publish-project.svg" alt="unpublish" >
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
+                                                </span>
                                             {else}
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}" >
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
+                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
                                                     <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
 
                                                 </a>
+                                                </spam>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
@@ -818,23 +822,29 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
                                                       <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
+                                                </span>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
+                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
+                                                <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
+                                                </span>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
                                     <td>
-                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="  btngray" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
+                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
                                             <img src="{urlFor name='home'}ui/img/project-edit.svg" alt="Edit" >
                                         </a>
-                                    </td>d
+                                        </span>
+                                    </td>
                                     <td>
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
