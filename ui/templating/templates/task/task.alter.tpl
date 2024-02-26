@@ -81,7 +81,7 @@
 
         
 
-                <tr class="d-flex justify-content-between " >
+                <tr class="d-flex justify-content-between w-full bg-primary" >
                 <td class="flex-grow-1" >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
@@ -180,7 +180,7 @@
              
             {if !empty($projectTasks)}
             <tr>
-                <td colspan="2">
+                <td>
                     <h2>{Localisation::getTranslation('common_task_prerequisites')}</h2>
                     <p class="desc">{Localisation::getTranslation('common_assign_prerequisites_for_this_task_if_any')}</p>
                     <p>
