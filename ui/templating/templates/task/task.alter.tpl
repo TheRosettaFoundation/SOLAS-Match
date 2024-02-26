@@ -79,9 +79,9 @@
         <table class="w-full">
            <tbody class="d-flex justify-content-between">
 
-            <div class="w-50">
+            <div >
 
-                <tr>
+                <tr >
                 <td >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
@@ -183,7 +183,7 @@
 
 
 
-            <div class="w-50">
+            <div>
 
 
              
