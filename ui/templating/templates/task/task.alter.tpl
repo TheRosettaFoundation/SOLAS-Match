@@ -77,8 +77,12 @@
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
         <table class="w-full">
-            <tr >
-                <td class="w-50">
+           <tbody class="d-flex justify-content-between">
+
+            <div class="w-50">
+
+                <tr >
+                <td >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                         <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
@@ -170,11 +174,9 @@
                     {/if}
                 </td>             
             </tr>
-            <tr>
-                <td colspan="2">
-                    <hr/>
-                </td> 
-            </tr>
+
+
+             
             {if !empty($projectTasks)}
             <tr>
                 <td colspan="2">
@@ -255,6 +257,16 @@
                 </td>
             </tr>
             {/if}
+
+
+
+            </div>
+
+
+
+            <div class="w-50">
+
+
             <tr align="center">
                 <td>
                     <p style="margin-bottom:20px;"/>  
@@ -275,6 +287,16 @@
             </tr>        
         </table>
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+
+
+            </div>
+
+
+           </tbody>
+        
+        </table>
+     
+       
     </form>
 
 
