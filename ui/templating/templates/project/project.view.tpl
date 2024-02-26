@@ -663,7 +663,7 @@
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
-                        <tbody class="fs-6 bg-primary">
+                        <tbody class="fs-4 bg-primary">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
