@@ -8,7 +8,7 @@
 
 <section class="bg-light-subtle my-4 pb-4"> 
 
-        <div class="container py-5 ">
+        <div class="container  ">
 
 
             <div class="d-flex flex-wrap justify-content-between">
