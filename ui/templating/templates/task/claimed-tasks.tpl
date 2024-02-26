@@ -158,27 +158,26 @@
                             
                             <div class ="  ">
 
-                                           {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                            <p>{Localisation::getTranslation('common_discuss_on_community')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
-                            {/if}
+                             
                                     <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
 
-
+                                                  {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            <p class="">{Localisation::getTranslation('common_discuss_on_community')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
+                            {/if}
                                 
-                                    
                                     <div class=" mt-4  ">
 
 
-                            <p>
-                               {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
-                                    {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
-                                        {if $type_id == 2}
-                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
-                                            </a>
-                                        {elseif $type_id == 3}
+                                        <p>
+                                        {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
+                                                {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
+                                                    {if $type_id == 2}
+                                                        <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                            {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
+                                                        </a>
+                                                    {elseif $type_id == 3}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
