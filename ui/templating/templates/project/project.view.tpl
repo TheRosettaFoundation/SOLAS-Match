@@ -641,10 +641,10 @@
                     </div>                             
                   
                     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
-                    <h3> TEST </h3>
+         
                     <div class="table-responsive mt-4 ">
 
-                    <table class="table table-borderless " >
+                    <table class="table " >
                         <thead class="fs-5">
                             <tr>
                                 
