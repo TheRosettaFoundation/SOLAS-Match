@@ -267,7 +267,7 @@
 
                            {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-start">
                 <div class="d-flez" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <div>
