@@ -76,13 +76,13 @@
 
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
-        <table class="w-100 bg-grayish">
+        <table class="w-100 ">
            <tbody>
 
         
 
-                <tr class="d-flex justify-content-between  bg-primary" >
-                <td class="flex-grow-1" >
+                <tr class="d-flex justify-content-between  " >
+                <td class="" >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                         <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
@@ -115,7 +115,7 @@
                     </div>
                     {/if}
                 </td>
-                <td class="flex-grow-1">
+                <td class=" ms-4">
                     <div>
                         <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
