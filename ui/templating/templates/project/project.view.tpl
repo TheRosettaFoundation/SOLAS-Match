@@ -964,11 +964,10 @@
                 {/foreach}
     {/if}
 
+  
 
-
-
-    {if isset($projectTasks) && count($projectTasks) > 0}
-                {foreach from=$taskLanguageMap key=languageCountry item=tasks}
+  <div>
+                  {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                 <br/><br/>
                 <div style="background-color:#fef9f2;padding:3px;">
                     <div>
@@ -1214,94 +1213,11 @@
                     </table>
                 </div>
                 {/foreach}
-            {else}
-                <div class="alert alert-warning">
-                    <strong>{Localisation::getTranslation('common_what_happens_now')}?</strong> {Localisation::getTranslation('project_view_4')}
-                    {Localisation::getTranslation('project_view_5')}
-                </div>
-            {/if}
-        </div>
-    </div>
-        
-{else}
-    {if isset($projectTasks)}
-    <p class="alert alert-info">
-        {Localisation::getTranslation('project_view_6')}
-    </p>
-    {/if}
-{/if}
+  
+  </div>
 
 
-
-{if !empty($volunteerTaskLanguageMap)}
-    <hr />
-    <h1 class="page-header" style="margin-bottom: 60px">
-        {Localisation::getTranslation('project_view_tasks')}
-        <small>{Localisation::getTranslation('project_view_0')}</small>
-    </h1>
-                {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
-
-                    <div style="display: inline-block; overflow-wrap: break-word;
-                                    font-weight: bold; font-size: large; max-width: 70%">
-                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
-                    </div>
-                    <hr />
-
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
-                            <tr>
-                                <th>{Localisation::getTranslation('common_title')}</th>
-                                <th>{Localisation::getTranslation('common_status')}</th>
-                                <th>{Localisation::getTranslation('common_type')}</th>
-                                <th>{Localisation::getTranslation('common_task_deadline')}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {foreach from=$tasks item=task}
-                                {assign var="task_id" value=$task['task_id']}
-                                <tr style="overflow-wrap: break-word;">
-                                    <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
-                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
-                                        </a>
-                                        <br/>
-                                    </td>
-                                    <td>
-                                        {assign var="status_id" value=$task['status_id']}
-                                        {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
-                                            {Localisation::getTranslation('common_waiting')}
-                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
-                                            {Localisation::getTranslation('common_unclaimed')}
-                                        {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                            {Localisation::getTranslation('common_in_progress')}
-                                        {elseif $status_id == TaskStatusEnum::CLAIMED}
-                                            Claimed
-                                        {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                            {Localisation::getTranslation('common_complete')}
-                                        {/if}
-                                    </td>
-                                    <td>
-                                        <strong>
-                                            <small>
-                                                {assign var="type_id" value=$task['type_id']}
-                                                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                                                    {if $type_id == $task_type}
-                                                        <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
-                                                    {/if}
-                                                {/foreach}
-                                            </small>
-                                        </strong>
-                                    </td>
-                                    <td>
-                                        <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task['deadline']}</div>
-                                    </td>
-                                </tr>
-                            {/foreach}
-                        </tbody>
-                    </table>
-                {/foreach}
-{/if}
+    
 
 
 
