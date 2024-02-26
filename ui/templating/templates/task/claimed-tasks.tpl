@@ -265,12 +265,7 @@
                 {/for}
 
 
-
-            </div> 
-            
-
-                                                   
-             {* pagination begins here *}
+                           {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
             <div class="d-flex justify-content-center">
                 <div class="" id="ias-pagination">
@@ -297,6 +292,14 @@
                     {/if}
                 </div>
             </div>
+
+
+
+            </div> 
+            
+
+                                                   
+  
         {else}
             <p>
                    <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
