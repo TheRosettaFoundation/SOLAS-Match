@@ -269,7 +269,7 @@
         </div>
 
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-4 flex-wrap">
                 <div>
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
                         <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}

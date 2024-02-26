@@ -105,7 +105,7 @@
                         {else}
                         <div  id="task_{$task_id}">
                         {/if}
-                            <div class="d-flex justify-content-between mb-2 flex-wrap">
+                            <div class="d-flex justify-content-start mb-2 flex-wrap">
                                 <div class="">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
@@ -145,16 +145,7 @@
                              </div>
                            
 
-                                <div>
-                                        {if $taskImages[$task_id]}
-                                        <div id="img_{$task_id}"  >
-                                            <img src="{$taskImages[$task_id]}" style ="width:100px ; height:100px">
-                                        </div>
-                                        {else}
-                                            <div id="img_{$task_id}" class="" ></div>
-                                        {/if}
-
-                                </div>
+                           
                           
 
                             
