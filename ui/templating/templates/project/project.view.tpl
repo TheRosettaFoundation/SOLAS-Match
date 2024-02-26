@@ -5,7 +5,7 @@
 <div class="container-fluid bg-light-subtle">
 
 
-<section class=" my-4 pb-4"> 
+<section class="py-4"> 
 
         <div class="container py-5 ">
 
