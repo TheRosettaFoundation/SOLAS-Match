@@ -76,12 +76,12 @@
 
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
-        <table class="w-full bg-grayish">
+        <table class="w-100 bg-grayish">
            <tbody>
 
         
 
-                <tr class="d-flex justify-content-between w-full bg-primary" >
+                <tr class="d-flex justify-content-between  bg-primary" >
                 <td class="flex-grow-1" >
                     <div>
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
