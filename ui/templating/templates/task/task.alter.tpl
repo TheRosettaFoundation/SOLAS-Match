@@ -27,13 +27,14 @@
                     {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
                     <div class="alert alert-info alert-dismissible fade show mt-4">
                         <h3>
-                            <p>{Localisation::getTranslation('common_note')}</p>
+                            <div>{Localisation::getTranslation('common_note')}
                             {if $task_status_id == TaskStatusEnum::IN_PROGRESS}
                             <p>This task is in progress. {Localisation::getTranslation('task_alter_1')}</p>
                             {else if $task_status_id == TaskStatusEnum::CLAIMED}
                                 <p>This task has been claimed. {Localisation::getTranslation('task_alter_1')}</p>
                             {else if $task_status_id == TaskStatusEnum::COMPLETE}
                                 <p>This task has been completed. {Localisation::getTranslation('task_alter_you_can_only_edit')}</p>
+                            </div>
                             {/if}
                         </h3>            
                     
