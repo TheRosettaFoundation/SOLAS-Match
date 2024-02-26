@@ -268,7 +268,7 @@
                            {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
             <div class="d-flex justify-content-center">
-                <div class="" id="ias-pagination">
+                <div class="d-flez" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <div>
                             <a class="custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
