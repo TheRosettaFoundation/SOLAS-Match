@@ -76,10 +76,9 @@
 
 
             <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
+        <div class="table-responsive">    
         <table class="w-100 ">
-           <tbody>
-
-        
+           <tbody class="mx-4">
 
                 <tr class="d-flex justify-content-between  " >
                 <td class="" >
@@ -100,7 +99,7 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                            <input class="form-control" class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
@@ -125,7 +124,7 @@
                     <div >
                         <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('restrict_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
-                        <input type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
+                        <input class="form-check-input" type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
                     </div>
                     {/if}
                     {if !empty($languages)}
@@ -263,27 +262,21 @@
  
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
-
-
-
-
-
            </tbody>
 
-       
-        
         </table>
+        </div>
 
 
-            <tr align="center">
-                <td>
+            <div class="d-flex justify-content-center">
+                <div>
                     <p style="margin-bottom:20px;"/>  
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
                         <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}
                     </a>
                     <p style="margin-bottom:20px;"/>  
-                </td>
-                <td>
+                </div>
+                <div>
                     <p style="margin-bottom:20px;"/>
                     <p>
                         <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary">
@@ -291,8 +284,8 @@
                         </button>
                     </p>    
                     <p style="margin-bottom:20px;"/>
-                </td>
-            </tr>     
+                </div>
+            </div>     
      
        
     </form>
