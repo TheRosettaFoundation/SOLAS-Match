@@ -280,11 +280,11 @@
                         </div>
                         <div class="ts-previous">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a  class="text-decoration-none" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
+                            <a  class="custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
                         </div>
                     {/if}
                     <div>
-                        <a href="" class=" custom-link">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                        <a href="" class="custom-link">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
                     </div>
                     {if $currentScrollPage < $lastScrollPage}
                         <div class="ts-next">
