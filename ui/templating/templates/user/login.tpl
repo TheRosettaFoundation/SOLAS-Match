@@ -54,7 +54,7 @@
 
     <div class="d-flex justify-content-center"> 
 
-          <img src="{urlFor name='home'}ui/img/login_register.svg" alt="Con" class="img-fluid">
+          <img src="{urlFor name='home'}ui/img/login_register.svg" alt="Con" class="img-fluid w-75">
 
     </div>
 
