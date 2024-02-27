@@ -7,7 +7,7 @@
 
 <header class="">
 
-    <div class="container py-4">
+    <div class="container ">
 
             <div class="py-2" >
                 <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" >
@@ -26,7 +26,7 @@
       <section class="container">
 
            
-                 <div class="alert alert-success alert-dismissible fade show mt-4  ">
+                 <div class="alert alert-success alert-dismissible fade show mt-2  ">
                         <div >
                          {if $taskType == TaskTypeEnum::TRANSLATION}
 
