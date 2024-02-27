@@ -15,7 +15,7 @@
 
 
      {if isset($user)}
-            <h5 class="fw-bold mt-5">{Localisation::getTranslation('index_filter_available_tasks')}
+            <h5 class="fw-bold mt-5 mb-2">{Localisation::getTranslation('index_filter_available_tasks')}
             
             </h5>
          
