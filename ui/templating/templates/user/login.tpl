@@ -1,6 +1,5 @@
+{include file="header.tpl"}
 
- <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
-   
     <div class="page-header">
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
@@ -55,7 +54,7 @@
 
     <div class="d-flex justify-content-center"> 
 
-          <img src="{urlFor name='home'}ui/img/login_register.svg" alt="Con" class="me-1">
+          <img src="{urlFor name='home'}ui/img/login_register.svg" alt="Con" class="img-fluid">
 
     </div>
 
@@ -106,4 +105,5 @@
                         </div>
             </fieldset>
         </form>
-
+        </div>
+{include file="footer.tpl"}
