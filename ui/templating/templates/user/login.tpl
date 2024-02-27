@@ -27,7 +27,7 @@
 
 <div class=""container-fluid>
 
-<div class=" px-2">
+<div class="">
 
 <div class="vh-100 vw-50">
 
@@ -54,7 +54,7 @@
 
     <div class="d-flex justify-content-center"> 
 
-          <img src="{urlFor name='home'}ui/img/login-register.svg" alt="Con" class="me-1">
+          <img src="{urlFor name='home'}ui/img/login_register.svg" alt="Con" class="me-1">
 
     </div>
 
