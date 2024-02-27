@@ -24,46 +24,6 @@
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
-
-<div class=""container-fluid>
-
-<div class=" px-2">
-
-<div class="vh-100 vw-50">
-
-     <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-            <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email"/>
-            <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-            <input type="password" name="password" id="password"/>
-            <div>
-                <button type="submit" name="login" class="btn btn-primary">
-  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
-				</button>
-				
-				<button type="submit" class="btn btn-inverse" name="password_reset">
-  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
-				</button>
-            </div>
-        </form>
-
-</div>
-
-
-<div class="vh-100 vw-50 ">
-
-    <div class="d-flex justify-content-center"> 
-
-          <img src="{urlFor name='home'}ui/img/login-register.svg" alt="Con" class="me-1">
-
-    </div>
-
-</div>
-
-
-</div>
-
-</div>    
 <div class="row-fluid">
         <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
