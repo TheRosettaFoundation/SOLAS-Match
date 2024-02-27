@@ -21,7 +21,7 @@
     
 
 
-    <tbody class="fs--4">
+    <tbody class="fs-4">
         <tr>
             <td>
                 {if isset($project)}
@@ -95,7 +95,7 @@
        
        </tr>
 
-        <tbody class="fs--4">
+        <tbody class="fs-4">
             <tr>
                 <td class="w-50">
                     
@@ -138,7 +138,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody class="fs--4">
+        <tbody class="fs-4">
 
             <tr>                
                 <td class="w-50">
@@ -182,7 +182,7 @@
                 </th>
               </tr>  
             </thead>
-            <tbody class="fs--4">
+            <tbody class="fs-4">
             <tr>
                 <td class="w-50 d-flex">
                    <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank"> Discuss </a>{/if}</div>
@@ -211,7 +211,7 @@
                     <th>{Localisation::getTranslation('required_qualification_level')}: </th>
                 </tr>              
               </thead>
-              <tbody class="fs--4">
+              <tbody class="fs-4">
                <tr>
                <td>
                     <i>
@@ -249,7 +249,7 @@
             {/if}
          </tr>   
         </thead>
-        <tbody class="fs--4">
+        <tbody class="fs-4">
         <tr class="py-2">
             <td>
               <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
@@ -389,7 +389,7 @@
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </tr>
         </thead>
-        <tbody class="fs--4">
+        <tbody class="fs-4">
         <tr >
 {if !empty($paid_status)}
         
@@ -483,7 +483,7 @@
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                     <input type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                    <input type="submit" class="btngray-sm fs--4 mt-2" name="source_quantity_submit" value="Submit" />
+                    <input type="submit" class="btngray-sm fs-4 mt-2" name="source_quantity_submit" value="Submit" />
                     <input type="hidden" name="mark_source_quantity" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
