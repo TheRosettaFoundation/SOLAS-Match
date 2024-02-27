@@ -9,7 +9,7 @@
 
     <div class="container ">
 
-            <div class="py-2" >
+            <div class="py-4" >
                 <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" >
 
                 <a  href="{urlFor name="task-view" options="task_id.$task_id"}"  class="text-decoration-none text-body fw-bold"> Task </a> 
