@@ -4,8 +4,8 @@
 
 <div class="container-fluid ">
 
-
- <div class="py-2" >
+ 
+ <div class=" container py-4" >
 
                     <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" />
         
