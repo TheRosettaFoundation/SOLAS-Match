@@ -2,10 +2,20 @@
 <!-- Editor Hint: ¿áéíóú -->
 
 
-<div class="container-fluid bg-light-subtle">
+<div class="container-fluid ">
 
 
-<section class="py-4"> 
+ <div class="py-2" >
+
+                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" />
+        
+                    <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
+                           
+               
+                </div>
+
+
+<section class="py-4 bg-light-subtle"> 
 
         <div class="container py-5 ">
 
