@@ -125,7 +125,10 @@
                                          </p>
 
                                          <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
-
+                                          
+                                           {if !empty($completed_timestamps[$task_id])}
+                                            <p><div class="process_completed_utc" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                                            {/if}
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                          
@@ -154,9 +157,6 @@
                                 
                             </div>
 
-                                    {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                                    <p class="mt-3">{Localisation::getTranslation('common_discuss_on_community')}: <a class="custom-link "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
-                                    {/if}
                                 
                             <div class=" mt-4  ">
 
@@ -244,6 +244,12 @@
                                         TWB Pre-Delivery Checklist
                                     </a>
                                 {/if}
+
+
+                                    {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                                    <a class="btn btn-grayish "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Discuss</a>
+                                    {/if}
+                                
                             </p>
                                         
                                         
