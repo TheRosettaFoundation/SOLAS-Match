@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 
     <div class="page-header">
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
