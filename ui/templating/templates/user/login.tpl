@@ -1,3 +1,4 @@
+{include file="header.tpl"}
 
 
     <div class="page-header">

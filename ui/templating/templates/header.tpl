@@ -15,7 +15,7 @@
         <meta property="og:type" content="{Settings::get('openGraph.type')}" />
         <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
         <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
-        <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
+        <meta property="og:description" content="{Settings::get('openGraph.description')}"/> 
 
         <!-- Twitter Card data -->
         <meta name="twitter:card" content="{Settings::get('twitter.card')}"/>
