@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 
 
     <div class="page-header">
@@ -51,11 +51,11 @@
 </div>
 
 
-<div class="vh-100 vw-50 d-flex  ">
+<div class=" d-flex  ">
 
     <div class="d-flex justify-content-center w-75"> 
 
-        test
+        
 
     </div>
 
