@@ -440,6 +440,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
     #######################end of 2nd flez 
      </div>
      
+ 
      
      </div>
 
@@ -448,7 +449,6 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
 
-    ###########second flowing row
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="page-header">
