@@ -80,18 +80,19 @@
      
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
      <div class="d-flex justify-content-between p-2">
+     #########first flex
+
 
      <div class="bg-body ">
-     <span class="hidden">
-<div id="dialog_for_verification" title="Perform a translation test?">
-<p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
-<p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
-<p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
-<p>If you do not want to take the test, please click “Cancel”.</p>
-</div>
-</span>
-        #########first flex
-
+        <span class="hidden">
+        <div id="dialog_for_verification" title="Perform a translation test?">
+        <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
+        <p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
+        <p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
+        <p>If you do not want to take the test, please click “Cancel”.</p>
+        </div>
+        </span>
+        
 
                     {if isset($userPersonalInfo)}
                             <div>
@@ -439,6 +440,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
      </div>
      
      
+     </div>
+
      </div>
 
 
