@@ -2,7 +2,7 @@
 
 {if isset($this_user)}
  <div class="container-fluid bg-light-subtle">
-   <div class="container  pt-5">
+   <div class="container px-4  py-4 pt-5">
 
      <div class=" d-flex justify-content-between py-4 align-items-center px-2">
      <div >
