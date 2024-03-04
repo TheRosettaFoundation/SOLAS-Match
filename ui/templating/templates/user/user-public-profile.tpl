@@ -83,7 +83,8 @@
    
 
      <div class="bg-body ">
-       #########first flex
+       
+    ###########second flowing row
         <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
@@ -316,9 +317,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                             
 
-     </div>
+  
+
+     
      
      {/if}
+        </div>
       <div class="bg-body">
         #########second flex
 
@@ -331,6 +335,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
                  
+                  
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
