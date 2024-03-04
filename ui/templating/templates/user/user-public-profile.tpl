@@ -450,7 +450,6 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
     ###########second flowing row
 
-</div>
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
