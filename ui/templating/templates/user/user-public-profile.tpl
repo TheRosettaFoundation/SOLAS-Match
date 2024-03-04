@@ -425,7 +425,109 @@ alert('You have already requested to take a test in order to become a TWB Verifi
     {/if}
 
     {/if}
-   
+
+    ###########second flowing row
+
+
+    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+<div class="page-header">
+    <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
+</div>
+<p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
+As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
+Deliver tasks on the TWB platform to build up points.
+Once you reach the point thresholds described in the chart below, please request the respective reward by sending an email at
+<a href="mailto:recognition@translatorswithoutborders.org?subject=Request reward" target="_blank">recognition@translatorswithoutborders.org</a>.
+Our staff will process your request and get back to you within 2 business days.
+The points are cumulative and never reset to zero, so you keep accruing points even if you claim any rewards.</p>
+<p>Please remember that the quality of the work we submit is of utmost importance,
+as it can influence the lives of people affected by humanitarian crises.
+Only work that meets our minimum quality standards (as described in <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB’s Code of Conduct</a>)
+will qualify towards our Community Recognition Program.
+If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
+<a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
+</p>
+<p style="margin-bottom:50px;" />
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 48%">
+            <div>
+                <h2>
+                    <span style="color: #9e6100;">Rewards offered</span>
+                    <!--
+                    <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
+                    -->
+                </h2>
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Reward</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                   <td align="center" style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">15,000</td>                                  <td align="center" style="border:2px solid #e8991c">Reference letter</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">30,000</td>                                  <td align="center" style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
+                    </tbody>
+                </table>
+
+                <p style="margin-bottom:20px;" />
+                <h2 style="color: #9e6100;">How do I earn points?</h2>
+                The points are calculated as follows:
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Type of task</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Unit</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points accrued per unit</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                                   <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Proofreading/Approval</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.25</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                                 <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Voice recording</td>                               <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation of subtitles</td>                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision of subtitles</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Terminology</td>                                   <td align="center" style="border:2px solid #e8991c">1 term</td>                                <td align="center" style="border:2px solid #e8991c">10</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+
+        <td style="width: 4%"> </td>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                            {if empty($user_badges['strategic_points'])}
+                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <h5 class="recognition">
+                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="recognition_desc">RECOGNITION POINTS</span>
+                                </h5>
+                            {else}
+                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <p class="strategic">
+                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
+                                    <span class="strategic_desc2"> of which
+                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
+                                        POINTS
+                                    </span><br />
+                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
+                                </p>
+                            {/if}
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
+                        </div>
+                        </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{/if}   
+##############################################
    </div>
    </div>
    the rest of the page , I need to check the if closing
