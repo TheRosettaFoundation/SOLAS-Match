@@ -85,7 +85,7 @@
 
      <div class="bg-body ">
        #########first flex
-        <span class="hidden">
+        <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
         <p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
