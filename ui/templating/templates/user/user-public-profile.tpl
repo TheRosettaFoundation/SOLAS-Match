@@ -3,7 +3,7 @@
 {if isset($this_user)}
 
    <div class="container">
-     <div class=" d-flex justiy-content-between py-4">
+     <div class=" d-flex justify-content-between py-4 bg-grayish">
      <div>
 
      <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
