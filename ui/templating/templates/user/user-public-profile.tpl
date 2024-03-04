@@ -4,8 +4,8 @@
  <div class="container-fluid bg-light-subtle">
    <div class="container  pt-5">
 
-     <div class=" d-flex justify-content-between py-4 align-items-center">
-     <div>
+     <div class=" d-flex justify-content-between py-4 align-items-center px-2">
+     <div >
 
      <img  src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
@@ -20,7 +20,7 @@
      </div>
 
 
-     <div>
+     <div >
 
          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
@@ -62,9 +62,9 @@
      
      </div>
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
-     <div class="d-flex justify-content-between">
+     <div class="d-flex justify-content-between p-2">
 
-     <div class="bg-body">
+     <div class="bg-body ">
         #########first flex
 
 
