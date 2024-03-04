@@ -292,7 +292,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             
      
      </div>
-     
+
       <div>
         #########second flex
 
@@ -301,6 +301,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
      
      
      </div>
+    {/if}
+
     {/if}
    
    </div>
