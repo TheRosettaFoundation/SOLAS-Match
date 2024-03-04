@@ -82,7 +82,6 @@
      <div class="d-flex justify-content-between ">
    
 
-
      <div class="bg-body ">
        #########first flex
         <span class="d-none">
@@ -316,8 +315,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
                             
-     
-     </div>
+
      </div>
      {/if}
       <div class="bg-body">
@@ -451,7 +449,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
     ###########second flowing row
 
-
+</div>
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="page-header">
     <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
