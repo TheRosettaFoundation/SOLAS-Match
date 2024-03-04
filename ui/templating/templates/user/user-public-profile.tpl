@@ -7,7 +7,7 @@
      <div class=" d-flex justify-content-between py-4 align-items-center">
      <div>
 
-     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+     <img  src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
                     {if $this_user->getDisplayName() != ''}
                         {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
@@ -70,22 +70,22 @@
 
                     {if isset($userPersonalInfo)}
                             <div>
-                                 <td>
+                          
                                      {if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
                                      {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                      {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
                                      {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
                                      {/if}
-                                 </td>
+                                 
                              </div>
                         {/if}
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div>
                                 
-                                    {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
+                                    <div class="custom-link">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='custom-link'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
