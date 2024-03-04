@@ -58,9 +58,26 @@
                         {/if}
               
 
-    </div>       
+    </div> 
+
      
      </div>
+         {else} 
+       <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
+{/if}
+
+{if isset($flash['error'])}
+    <p class="alert alert-error" style="margin-bottom: 50px">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+    </p>
+{/if}
+{if isset($flash['success'])}
+    <p class="alert alert-success" style="margin-bottom: 50px">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+    </p>
+{/if}
+
+     
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
      <div class="d-flex justify-content-between p-2">
 
@@ -1166,6 +1183,6 @@ If a language is to be removed from this list, the community will be informed be
    
 
 {/if}
-{/if}
+
 
 {include file='footer2.tpl'}
