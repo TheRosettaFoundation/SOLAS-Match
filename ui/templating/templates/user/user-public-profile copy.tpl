@@ -1,68 +1,6 @@
 {include file='new_header.tpl'}
 
 {if isset($this_user)}
-
-   <div class="container">
-     <div class=" d-flex justiy-content-between py-4">
-     <div>
-
-     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
-                    {assign var="user_id" value=$this_user->getId()}
-                    {if $this_user->getDisplayName() != ''}
-                        {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
-                    {else}
-                        {Localisation::getTranslation('common_user_profile')}
-                    {/if}
-                    {if !isset($no_header)}<small>{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
-
-     
-     </div>
-
-
-     <div>
-
-         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
-                                <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
-                            </a>
-                        {/if}
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btn btn-success"
-                                   onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
-                                    <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
-                                </a>
-                        {/if} 
-                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                          {if $admin_role}
-                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
-                            </a>
-                          {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
-                            </a>
-                          {/if}
-                        {/if}
-                        {if false && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
-                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-primary" name="mark_reviewed" value="Mark New User as Reviewed" />
-                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                            </form>
-                        {/if}
-                        {if $show_create_memsource_user}
-                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-primary" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
-                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                            </form>
-                        {/if}
-              
-
-    </div>       
-     
-     </div>
-   
-   </div>
-   ####################### 
     <div class="page-header">
         <h1>
         <table>
