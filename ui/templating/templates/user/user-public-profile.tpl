@@ -621,6 +621,542 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 {/if}
 
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+<hr/>
+{/if}
+
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+<div class="page-header">
+{if !empty($valid_key_certificate)}
+    {assign var="valid_key" value=$valid_key_certificate[0]}
+    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+        <i class="icon-print icon-white"></i> Generate Certificate
+    </a>
+{/if}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<table id="printrequest" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Request Date</th>
+                <th>Request Made By</th>
+                <th>No of Words upon Request</th>
+                <th>No of Hours upon Request</th>
+                <th>Validation Key</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<div class="page-header">
+{if !empty($valid_key_reference_letter)}
+    {assign var="valid_key" value=$valid_key_reference_letter[0]}
+    <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+        <i class="icon-print icon-white"></i> Generate Letter
+    </a>
+{/if}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="PrintRequestLetter" value="Request Reference Letter" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<table id="printrequestletter" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Request Date</th>
+                <th>Request Made By</th>
+                <th>No of Words upon Request</th>
+                <th>No of Hours upon Request</th>
+                <th>Validation Key</th>
+            </tr>
+        </thead>
+
+    </table>
+    
+</div>
+{/if}
+
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+<div class="page-header">
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+    <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+{/if}
+{if !empty($sent_contracts)}
+<table style="width:100%">
+    <thead>
+        <tr>
+            <td><strong>Contract Type</strong></td>
+            <td><strong>Admin</strong></td>
+            <td><strong>Status</strong></td>
+            <td><strong>Update Date</strong></td>
+            <td><strong>Contract Date</strong></td>
+        </tr>
+    </thead>
+    {foreach $sent_contracts as $sent_contract}
+        <tr>
+            <td>{$sent_contract['type']}</td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</a></td>
+            <td>
+                {if     $sent_contract['status'] == 'recipient-sent'}Sent to Linguist
+                {elseif $sent_contract['status'] == 'recipient-delivered'}Viewed by Linguist
+                {elseif $sent_contract['status'] == 'recipient-completed'}Signed by Linguist
+                {elseif $sent_contract['status'] == 'envelope-completed'}Contract Completed
+                {else}{$sent_contract['status']}
+                {/if}
+            </td>
+            <td>{$sent_contract['update_date']}</td>
+            <td>{$sent_contract['contract_date']}</td>
+        </tr>
+    {/foreach}
+</table>
+{/if}
+</div>
+{/if}
+
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"><strong>Comment</strong></td>
+        <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
+    </tr>
+</table>
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+
+<table border="0">
+    {if !empty($admin_comments_average)}
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><strong>Average: {$admin_comments_average}</strong></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    {/if}
+{foreach $admin_comments as $admin_comment}
+    <tr valign="top">
+        <td style="width: 30%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 22%">{$admin_comment['work_again']}</td>
+        <td style="width: 18%">{$admin_comment['created']}</td>
+        <td style="width: 18%">{$admin_comment['admin_email']}</td>
+        <td style="width: 12%">
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
+                <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </td>
+    </tr>
+{/foreach}
+</table>
+
+<hr/>
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"><strong>Comment</strong></td>
+        <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
+    </tr>
+</table>
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+
+<table border="0">
+{foreach $adjust_points as $adjust_point}
+    <tr valign="top">
+        <td style="width: 30%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 22%">{$adjust_point['points']}</td>
+        <td style="width: 18%">{$adjust_point['created']}</td>
+        <td style="width: 18%">{$adjust_point['admin_email']}</td>
+        <td style="width: 12%">
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </td>
+    </tr>
+{/foreach}
+</table>
+<hr/>
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Strategic languages)</h3></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"><strong>Comment</strong></td>
+        <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
+    </tr>
+</table>
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points_strategic" value="Submit" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+
+<table border="0">
+{foreach $adjust_points_strategic as $adjust_point}
+    <tr valign="top">
+        <td style="width: 30%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 22%">{$adjust_point['points']}</td>
+        <td style="width: 18%">{$adjust_point['created']}</td>
+        <td style="width: 18%">{$adjust_point['admin_email']}</td>
+        <td style="width: 12%">
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_points_delete_strategic" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </td>
+    </tr>
+{/foreach}
+</table>
+<hr />
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 25%"><strong>Maximum number of claimed/in progress tasks volunteer can have at any one time (0 => no limit)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, nothing in field (not a blank) => any)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of partner IDs for which the volunteer cannot claim tasks</strong></td>
+        <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
+        <td style="width: 25%"><input type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 25%"><input type="submit" class="btn btn-primary" name="mark_user_task_limitation" value="Submit" /></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+        <td style="width: 25%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+<hr />
+
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
+<table border="0">
+    <tr valign="top">
+        <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
+        <td style="width: 33%"></td>
+        <td style="width: 34%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 33%"><strong>Admin</strong></td>
+        <td style="width: 33%"><strong>Country</strong></td>
+        <td style="width: 34%"><strong>Google Drive Link</strong></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
+        <td style="width: 33%">
+            <select name="country_id" id="country">
+                <option value="">--Select--</option>
+                {foreach $countries as $country}
+                    {if $country->getCode() != 'LATN' && $country->getCode() != 'CYRL' && $country->getCode() != '419' && $country->getCode() != 'HANS' && $country->getCode() != 'HANT' && $country->getCode() != 'ARAB' && $country->getCode() != 'BENG' && $country->getCode() != 'ROHG'}
+                        <option value="{$country->getId()}" {if $country->getId() == $linguist_payment_information['country_id']}selected="selected"{/if}>{$country->getName()|escape:'html':'UTF-8'}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </td>
+        <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+    </tr>
+    {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+    <tr valign="top">
+        <td style="width: 33%"><input type="submit" class="btn btn-primary" name="mark_linguist_payment_information" value="Submit" /></td>
+        <td style="width: 33%"></td>
+        <td style="width: 34%"></td>
+    </tr>
+    {/if}
+</table>
+{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+{/if}
+<hr />
+
+{/if}
+
+<p style="margin-bottom:50px;"/>
+{if $private_access}
+    <div class="page-header">
+        <h1>
+            {Localisation::getTranslation('user_public_profile_reference_email')} 
+            <small>{Localisation::getTranslation('user_public_profile_16')}</small>
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right"> 
+                <i class="icon-list-alt icon-white" style="position:relative; right:-30px; top:12px;"></i>
+                <input type="submit" class="btn btn-primary" name="referenceRequest" 
+                    value="    {Localisation::getTranslation('user_public_profile_request_reference')}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </h1>            
+    </div>
+    <p>{Localisation::getTranslation('user_public_profile_15')}</p>
+    {if isset($requestSuccess)}
+        <p class="alert alert-success">{Localisation::getTranslation('user_public_profile_reference_request_success')}</p>
+    {/if}
+    <p style="margin-bottom:50px;"/>
+{/if}
+
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+    {if !empty($badges)}
+        <div class='page-header'>
+            <h1>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small>
+                <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
+                    <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
+                </a>
+            </h1>
+        </div>
+
+        {foreach $badges as $badge}
+                {assign var="user_id" value=$this_user->getId()} 
+                    {if $private_access}
+                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
+                            <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
+                            <input type="hidden" name="badge_id" value="{$badge->getId()}" />
+                            <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
+                           onclick="return confirm('{Localisation::getTranslation('user_public_profile_5')}')"/>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>   
+                    {/if}
+                {assign var="org_id" value=$badge->getOwnerId()}
+                {assign var="org" value=$orgList[$org_id]}
+                <h3>
+                    <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                        {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
+                </h3>
+                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
+            <p style="margin-bottom:20px;"/>
+        {/foreach}
+        
+        <p style="margin-bottom:50px;"/>
+    {/if}
+
+{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+    <div class="page-header">
+        <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
+            <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
+                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
+            </a>
+        </h1>
+    </div>
+    <p>
+        {if isset($interval)}
+            <p>
+                {Localisation::getTranslation('common_how_often_receiving_emails')}
+                <strong>{$interval}</strong>
+            </p>
+            <p>
+                {if $lastSent != null}
+                    {sprintf(Localisation::getTranslation('common_the_last_email_was_sent_on'), {$lastSent})}
+                {else}
+                    {Localisation::getTranslation('common_no_emails_have_been_sent_yet')}
+                {/if}
+            </p>
+        {else}
+            {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
+        {/if}
+    </p>
+    <p style="margin-bottom:50px;"/>
+{/if}
+
+<div class="page-header">
+    <h1>{Localisation::getTranslation('common_tags')}<small> {Localisation::getTranslation('user_public_profile_8')}</small>
+        <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
+            <i class="icon-search icon-white"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
+        </a>
+    </h1>
+</div>
+
+{if isset($user_tags) && count($user_tags) > 0}
+    {foreach $user_tags as $tag}
+        <p>
+            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
+            {assign var="tagId" value=$tag->getId()}
+            <a class="tag" href="{urlFor name="tag-details" options="id.$tagId"}">
+                <span class="label">{$tag_label}</span>
+            </a>
+        </p>
+    {/foreach}
+{else}
+    <p class="alert alert-info">
+        {Localisation::getTranslation('user_public_profile_9')}
+    </p>
+{/if}
+<p style="margin-bottom:50px;"/>
+
+{if isset($user_orgs)}
+    {if count($user_orgs) > 0}
+        <div class='page-header'>
+            <h1>
+                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small>
+                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
+                    <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
+                </a>
+            </h1>
+        </div>
+
+        {foreach $user_orgs as $org}
+            <div class="row">
+                {assign var="org_id" value=$org->getId()}
+                {assign var="user_id" value=$this_user->getId()}
+                <div class="span8">
+                    <h3>
+                        <i class="icon-briefcase"></i>
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                    </h3>
+                </div>
+                <div class="row">
+                    <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                        {if $private_access}
+                            <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
+                            <input type="hidden" name="org_id" value="{$org_id}" />
+                            <input type="submit" class='btn btn-inverse' name="revoke" value="    {Localisation::getTranslation('user_public_profile_leave_organisation')}" 
+                                   onclick="return confirm('{Localisation::getTranslation('user_public_profile_11')}')"/>
+                        {/if}                      
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </div>
+                <div class="span8">
+                    <p>
+                        <strong>About Me</strong><br/>
+                        
+                        {if $org->getBiography() == ''}
+                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
+                        {else}                            
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
+                        {/if}
+                    </p>
+                    <p>
+                    <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
+                    {if $org->getHomepage() != "https://"}
+                        <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
+                    {else}
+                        {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
+                    {/if}
+                    </p>
+                </div>
+            </div>
+            <p style="margin-bottom:20px;"/>
+            <hr/>
+        {/foreach}
+        
+        <p style="margin-bottom:50px;"/>
+    {/if}
+{/if}
+
+{if isset($archivedJobs)}
+    {if count($archivedJobs) > 0}
+        <div class='page-header'>
+            <h1>{Localisation::getTranslation('common_archived_tasks')} <small>{Localisation::getTranslation('user_public_profile_14')}</small>
+                {if $private_access}
+                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
+                        <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
+                    </a>
+                {/if}
+            </h1>
+        </div>
+
+        {foreach $archivedJobs as $job}
+            {include file="task/task.profile-display.tpl" task=$job}
+        {/foreach}
+        <p style="margin-bottom:50px;"/>
+    {/if}
+{/if}
+{/if}
+
 
 ##############################################
    </div>
