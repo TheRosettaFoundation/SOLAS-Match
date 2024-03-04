@@ -82,7 +82,7 @@
      <div class="d-flex justify-content-between ">
    
 
-     <div class="bg-body ">
+     <div class="bg-body p-2 ">
        
     ###########second flowing row
         <span class="d-none">
@@ -323,7 +323,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
      
      {/if}
         </div>
-      <div class="bg-body">
+      <div class="ms-4 bg-body p-2">
         #########second flex
 
 
