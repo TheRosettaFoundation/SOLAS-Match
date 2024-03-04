@@ -60,6 +60,50 @@
     </div>       
      
      </div>
+    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
+     <div class="d-flex">
+
+  
+     <div>
+        #########first flex
+
+
+                    {if isset($userPersonalInfo)}
+                            <div>
+                                 <td>
+                                     {if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                     {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
+                                     {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
+                                     {/if}
+                                 </td>
+                             </div>
+                        {/if}
+
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            <div>
+                                
+                                    {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
+                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
+                                            <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
+                                        </a>
+                                    {/if}
+                               
+                            </div>
+                        {/if}
+
+     
+     </div>
+      <div>
+        #########second flex
+
+     
+     </div>
+     
+     
+     </div>
+    {/if}
    
    </div>
    ####################### 
