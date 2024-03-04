@@ -323,7 +323,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
      
      {/if}
         </div>
-      <div class=" bg-body p-2">
+      <div class=" bg-grayish p-2">
         #########second flex
 
 
