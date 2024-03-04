@@ -1183,7 +1183,8 @@ If a language is to be removed from this list, the community will be informed be
    the rest of the page , I need to check the if closing
    ####################### 
    
-
+{/if}
+{/if}
 
 
 
