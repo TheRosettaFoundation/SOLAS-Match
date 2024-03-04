@@ -94,7 +94,84 @@
                             </div>
                         {/if}
 
-                         <td>
+                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                            {if !empty($uuid)}
+                            <div>
+                               
+                                    <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class='pull-right btn btn-primary'>
+                                        <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
+                                    </a>
+                               
+                            </div>
+                            {/if}
+
+                               <div>
+                                
+                                    Joined: {substr($this_user->getCreatedTime(), 0, 10)}
+                               </div>     
+                                
+                        {/if}
+
+                        {if isset($userPersonalInfo)}
+                        {if !empty($userPersonalInfo->getMobileNumber())}
+                            <div>
+                               
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
+                               
+                            </div>
+                        {/if}
+                        {if !empty($userPersonalInfo->getCity())}
+                            <div>
+                          
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
+                               
+                            </div>
+                        {/if}
+                        {if !empty($userPersonalInfo->getCountry())}
+                            <div>
+                            
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                               
+                            </div>
+                        {/if}
+                        {/if}
+
+                        {foreach from=$url_list item=url}
+                            {if $url['state']}<tr><td><a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                        {/foreach}
+
+                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
+                        {if !empty($bio)}
+                       
+                            
+                                <h3>About Me</h3>
+                            
+                      
+                        <div>
+                            
+                                {$bio}
+                            
+                        </div>
+                        {/if}
+
+                        {assign var="native_language_code" value=""}
+                        {if $this_user->getNativeLocale() != null}
+                        {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
+                        <div>
+                            
+                                Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
+                          
+                        </div>
+                        {/if}
+
+                        {if !empty($userQualifiedPairs)}
+                       
+                         
+                               
+                                    <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
+                          
+                            <div>
+                                
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                         {$button_count.$pair=0}
@@ -134,10 +211,88 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                             {/if}
                                         </p>
                                     {/foreach}
-                                </td>
+                                
+                            </div>
+                        {/if}
+                        {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            
+                                    <h3>Language Rate Pairs</h3>
+                             
+                            <div>
+                                
+                                    {foreach from=$user_rate_pairs item=user_rate_pair}
+                                        <p>
+                                            {$user_rate_pair['selection_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
+                                        </p>
+                                    {/foreach}
+                               
+                            </div>
+                        {/if}
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                            <div>
+                                
+                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
+                                        <i class="icon-list icon-white"></i> Edit Linguist Unit Rate Exceptions
+                                    </a>
+                                
+                            </div>
+                        {/if}
 
+                           
+                                    <h3>Services</h3>
+                            
+                            <div>
+                               
+                                <ul>
+                                {foreach from=$capability_list item=capability}
+                                    {if $capability['state']}<li>{$capability['desc']|escape:'html':'UTF-8'}</li>{/if}
+                                {/foreach}
+                                </ul>
+                                
+                            </div>
+
+                           
+                                    <h3>Experienced in</h3>
+                            
+                            <div>
+                              
+                                <ul>
+                                {foreach from=$expertise_list item=expertise}
+                                    {if $expertise['state']}<li>{$expertise['desc']|escape:'html':'UTF-8'}</li>{/if}
+                                {/foreach}
+                                </ul>
+                              
+                            </div>
+
+                            {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            <div>
+                                
+                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                
+                            </div>
+                            <div>
+                               
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                               
+                            </div>
+                            {/if}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                            <div>
+                                <td style="padding-bottom: 10px" />
+                            </div>
+                          
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                        <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                    </form>
+                             
+
+
+                            
      
      </div>
+     
       <div>
         #########second flex
 
@@ -478,7 +633,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 </table>
             </div>
         </td>
-        
+ ########################       
         <td style="width: 4%"/>
         <td style="width: 48%">
             <div>
