@@ -348,6 +348,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
                       
+                      
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
@@ -434,19 +435,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
               
 
 
-
-
-
-
-    
-
-
     #######################end of 2nd flez 
      </div>
      
      
      </div>
-    {/if}
+
 
 
 
@@ -1190,7 +1184,6 @@ If a language is to be removed from this list, the community will be informed be
    ####################### 
    
 
-{/if}
 {/if}
 
 
