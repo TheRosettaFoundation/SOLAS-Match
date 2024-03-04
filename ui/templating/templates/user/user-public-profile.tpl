@@ -85,7 +85,7 @@
                                 
                                     <div class="custom-link">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='custom-link'>
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-secondart'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
