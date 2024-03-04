@@ -1,4 +1,4 @@
-{include file="new_header.tpl"}
+{include file="header.tpl"}
 
 
     <div class="page-header">
