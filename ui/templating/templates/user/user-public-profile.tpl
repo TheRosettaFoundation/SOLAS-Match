@@ -2,7 +2,8 @@
 
 {if isset($this_user)}
  <div class="container-fluid bg-light-subtle">
-   <div class="container pt-5">
+   <div class="container  pt-5">
+
      <div class=" d-flex justify-content-between py-4 align-items-center">
      <div>
 
@@ -92,6 +93,48 @@
                                
                             </div>
                         {/if}
+
+                         <td>
+                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                        {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                        {$button_count.$pair=0}
+                                    {/foreach}
+
+                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                        {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                        {if $userQualifiedPair['qualification_level'] > 1}
+                                            {$button_count.$pair=1}
+                                        {/if}
+                                    {/foreach}
+
+                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                        <p>
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <strong>
+                                            {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
+                                            {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
+                                            {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
+                                            </strong>
+
+                                            {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                            {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) && $button_count.$pair == 0}
+                                                {$button_count.$pair=1}
+                                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                                <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
+                                                <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
+                                                {if empty($testing_center_projects_by_code[$pair]) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                                                    <input type="submit" class="add_click_handler btn btn-primary" name="btnSubmit" value="Get Verified" />
+                                                {else}
+                                                    <input type="submit" class="btn btn-primary" name="btnSubmit" value="Get Verified" onclick="
+alert('You have already requested to take a test in order to become a TWB Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
+                                                    return false;" />
+                                                {/if}
+                                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                            </form>
+                                            {/if}
+                                        </p>
+                                    {/foreach}
+                                </td>
 
      
      </div>
