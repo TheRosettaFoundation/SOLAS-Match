@@ -30,9 +30,9 @@
     {/if}
 
 
-<div class=" grid  ">
+<div class=" grid  py-4 ">
 
-    <div class="g-col-6"> 
+    <div class="g-col-6 py-4"> 
 
 
     <div class="page-header">
@@ -84,7 +84,7 @@
     </div>
 
 
-    <div class="g-col-6"> 
+    <div class="g-col-6 py-4"> 
 
 
     <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class="w-50 text-center" />
