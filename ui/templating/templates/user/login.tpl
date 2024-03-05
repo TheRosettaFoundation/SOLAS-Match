@@ -86,7 +86,7 @@
     <div class="g-col-6 py-4"> 
 
 
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center" />
+    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-75" />
          
         
 
