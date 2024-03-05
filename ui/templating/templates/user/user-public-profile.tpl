@@ -362,7 +362,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                  
                             <h3>Use the link below to embed the above badge in another system:</h3>
                        
-                            <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank" class="d-none"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
                        
                         {/if}
                         {/if}

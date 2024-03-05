@@ -158,6 +158,10 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     position: absolute;
     bottom: 0;
 }
+
+a {
+    word-wrap: break-word;
+}
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
