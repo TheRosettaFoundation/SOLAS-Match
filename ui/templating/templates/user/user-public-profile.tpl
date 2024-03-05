@@ -1,8 +1,8 @@
 {include file='new_header.tpl'}
 
 {if isset($this_user)}
- <div class="container-fluid bg-light-subtle">
-   <div class="container px-4  py-4 pt-5">
+ <div class="-fluid bg-light-subtle">
+   <div class=" px-4  py-4 pt-5">
 
      <div class=" d-flex justify-content-between py-4 align-items-center px-2">
      <div >
@@ -344,7 +344,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
                         {if !empty($user_badges['hours_donated'])}
                      
-                        <div class="containerBox">
+                        <div class="">
                             <div class="">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
@@ -445,7 +445,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
      
  
      
-     </div>
+
 
 
 
@@ -519,7 +519,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody align="left" width="48%">
                         <tr><td>
-                        <div class="containerBox">
+                        <div class="">
                             <div class="">
                             {if empty($user_badges['strategic_points'])}
                                 <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
