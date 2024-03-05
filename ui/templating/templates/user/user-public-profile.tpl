@@ -317,7 +317,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
   
         </div>
-      <div class="bg-body p-2">
+      <div class="bg-body p-2 flex-shrink">
         #########second flex
 
 
