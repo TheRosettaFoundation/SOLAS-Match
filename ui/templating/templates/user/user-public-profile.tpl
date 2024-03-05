@@ -77,9 +77,9 @@
     </p>
 {/if}
 
-     
+       <div class="d-flex justify-content-between bg-primary"> 
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
-     <div class="d-flex justify-content-between bg-primary">
+  
 
      <div class=" p-2">
        
