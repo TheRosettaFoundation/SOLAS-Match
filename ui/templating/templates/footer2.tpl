@@ -1,6 +1,7 @@
     </main>
+                <footer class="mt-4 ">
 
-        
+
                             <div class="container d-flex flex-wrap mb-4 justify-content-center">
 
                                 
@@ -23,10 +24,6 @@
                             
                             
                              </div>
-
-                <footer class="mt-4 fixed-bottom">
-
-
 
 
                                                 
