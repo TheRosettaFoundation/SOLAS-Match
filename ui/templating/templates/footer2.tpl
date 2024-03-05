@@ -1,5 +1,5 @@
     </main>
-                <footer class="mt-4 align-self-end">
+                <footer class="mt-4 sticky-bottom">
 
 
                             <div class="container d-flex flex-wrap mb-4 justify-content-center">
@@ -72,7 +72,171 @@
  
                 </footer>  
                 </div>
-              
+                 <script>
+
+                    // Initializing tooltips
+
+                    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+                    // Variables for  the theme of the site
+
+                    let navi = document.getElementById("nav");
+
+                    let imgL = document.getElementById("light");
+                    let imgN = document.getElementById("night");
+
+                    let light = true;
+                    
+                    let theme = document.getElementById("theme");
+
+                    let logo = document.querySelector('.logo')
+
+                    let savedTheme = localStorage.getItem('theme');
+
+                    let next= document.querySelector("#next") ;
+                    let next1 = document.querySelector("#next2");
+
+                    const downloadFile = document.querySelector("#download-file");
+
+
+                    let print  = document.querySelector("#print");
+                    let downimg = document.querySelector("#downing");
+
+                    if (savedTheme == 'dark') {
+
+                        imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          localStorage.setItem('theme', 'dark');
+                          if(next && next1){
+                                 next.src = "/ui/img/bread.svg" 
+                                next1.src = "/ui/img/bread.svg"
+
+                          }
+                          if(print){
+                               print.src="/ui/img/print.svg" 
+                            downing.src="/ui/img/download.svg"
+
+
+                          }
+                        
+                        
+                    } 
+       
+                    if(theme){
+                    theme.addEventListener("click" , function(e) {
+                       
+                       light = !light ;       
+   
+                       if(light){
+                        imgL.classList.remove("d-none");
+                        imgN.classList.add("d-none");
+                        document.documentElement.setAttribute('data-bs-theme', 'light')
+                        navi.setAttribute('data-bs-theme', 'light')
+                        logo.src = "/ui/img/TWB_Logo.svg" ;
+                        localStorage.setItem('theme', 'light');
+                        if(next && next1){
+
+                              next.src = "/ui/img/bread.svg"
+                            next1.src = "/ui/img/bread.svg"
+
+                        }
+                      
+                    
+                        
+                       }
+                       else{
+                          imgL.classList.add("d-none");
+                          imgN.classList.remove("d-none");
+                          document.documentElement.setAttribute('data-bs-theme', 'dark')
+                          navi.setAttribute('data-bs-theme', 'dark')
+                          logo.src = "/ui/img/TWB_Logo1.svg" ;
+                          
+                            if(next && next1){
+
+                                   next.src = "/ui/img/next-white.svg"
+                                next1.src = "/ui/img/next-white.svg"
+                                
+                            }
+  
+                           localStorage.setItem('theme', 'dark');
+                       }
+
+                       
+                    })
+                    }
+                    
+                                      
+
+
+                    if(print){
+                                            
+                            const iframe = document.querySelector("#iframe");
+               
+                            const iframesrc = iframe.src;
+
+
+                          downing.addEventListener("click", function(){
+
+                            window.open(iframesrc);  
+
+                          })
+                           print.addEventListener("click", function(){
+                                if(confirm("Are you sure you want to print the document")){
+                                    let wind = window.open(iframesrc);  
+                                    wind.print();
+
+                             }
+
+                    })
+
+                    }
+
+                    const linkCopy= document.querySelector('#linkcopy') ;
+
+                  
+                    const buttonCopy = document.querySelector('#copy-button') ;
+
+                    buttonCopy.addEventListener("click" , async()=>{
+                          let linkText = linkCopy.textContent ;
+                        await navigator.clipboard.writeText(linkText).then(()=>{
+                            console.log('Link copied successfully') ;
+                            buttonCopy.textContent = "Copied"
+                        })
+                    })
+
+                    
+                    </script>
+
+                  
+                
+                   
+
+                      <script>
+
+                            // Script for setting active navLink 
+
+                            const currentPath = window.location.pathname;
+                            const navLinks = document.querySelectorAll(".nav-link");
+                            const currentOrigin = window.location.origin;
+ 
+                            navLinks.forEach(link => {
+
+                                let href = link.href ;
+                                
+                                if(link.pathname === currentPath && href.includes(currentOrigin)){
+                                    link.classList.add("activeLink");
+                                   
+                                }else{
+                                    link.classList.remove("activeLink");
+                                }
+                            })
+
+                            
+                     </script>
 
                      
 
