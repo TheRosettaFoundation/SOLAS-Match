@@ -331,6 +331,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <h4 class="">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <p class=""><span class="">{$user_badges['words_donated']}</span><br/> <span class="">Words donated</span></p>
                             </div>
+                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50" />
 
                             
                         </div>
