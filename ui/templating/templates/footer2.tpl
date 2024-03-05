@@ -71,7 +71,7 @@
                     </div>
  
                 </footer>  
-                </div>
+                </body>
                  <script>
 
                     // Initializing tooltips
