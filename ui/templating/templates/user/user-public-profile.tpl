@@ -329,7 +329,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png"  />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png"  width="25%" />
                         </div>
                  
                   
@@ -349,7 +349,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png"  />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="25%" />
                         </div>
                       
                       
@@ -540,7 +540,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
                                 </p>
                             {/if}
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="25%" />
                         </div>
                         </td></tr>
                     </tbody>
