@@ -175,28 +175,8 @@
     <div class="mb-4">
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
-          <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-           <div class="mb-2"> 
-            <label for="email" class="form-label"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email" class="form-control"/>
-           
-           </div>
-             <div class="mb-3"> 
-            <label for="password" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-            <input type="password" name="password" id="password" class="form-control"/>
-            </div>
-            <div>
-                <button type="submit" name="login" class="btn btn-primary">
-  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
-				</button>
-				
-				<button type="submit" class="btn btn-inverse" name="password_reset">
-  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
-				</button>
-            </div>
-        </form>
 
-
+          
         <form action="{urlFor name='login'}" method="post">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
@@ -221,6 +201,29 @@
                         </div>
             </fieldset>
         </form>
+        
+          <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
+           <div class="mb-2"> 
+            <label for="email" class="form-label"><strong>{Localisation::getTranslation('common_email')}</strong></label>
+            <input type="text" name="email" id="email" class="form-control"/>
+           
+           </div>
+             <div class="mb-3"> 
+            <label for="password" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+            <input type="password" name="password" id="password" class="form-control"/>
+            </div>
+            <div>
+                <button type="submit" name="login" class="btn btn-primary">
+  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
+				</button>
+				
+				<button type="submit" class="btn btn-inverse" name="password_reset">
+  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
+				</button>
+            </div>
+        </form>
+
+
         
 
     </div>
