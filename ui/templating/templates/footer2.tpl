@@ -195,7 +195,8 @@
 
                     }
 
-                    const linkCopy= document.querySelector("#linkcopy') ;
+                    const linkCopy= document.querySelector('#copy-button') ;
+
                   
                     const buttonCopy = document.querySelector('#copy-button') ;
 
