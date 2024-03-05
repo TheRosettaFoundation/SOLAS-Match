@@ -32,13 +32,49 @@
 
 
 
-<div class=" d-flex  ">
+<div class=" grid  ">
 
-    <div class="d-flex justify-content-center w-75"> 
-
+    <div class="g-col-6"> 
+          <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
+            <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
+            <input type="text" name="email" id="email"/>
+            <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+            <input type="password" name="password" id="password"/>
+            <div>
+                <button type="submit" name="login" class="btn btn-primary">
+  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
+				</button>
+				
+				<button type="submit" class="btn btn-inverse" name="password_reset">
+  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
+				</button>
+            </div>
+        </form>
         
 
     </div>
+
+
+    <div class="g-col-6"> 
+          <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
+            <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
+            <input type="text" name="email" id="email"/>
+            <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+            <input type="password" name="password" id="password"/>
+            <div>
+                <button type="submit" name="login" class="btn btn-primary">
+  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
+				</button>
+				
+				<button type="submit" class="btn btn-inverse" name="password_reset">
+  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
+				</button>
+            </div>
+        </form>
+        
+
+    </div>
+    
 
 </div>
 
