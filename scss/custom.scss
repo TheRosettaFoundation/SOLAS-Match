@@ -154,11 +154,6 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     font-weight: bold;
 }
 
-#footer {
-    position: absolute;
-    bottom: 0;
-}
-
 a {
     word-wrap: break-word;
 }
