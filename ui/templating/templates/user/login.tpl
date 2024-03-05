@@ -172,14 +172,18 @@
     <div class="g-col-6 py-4"> 
 
 
-    <div class="page-header">
+    <div class="mb-4">
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-            <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email"/>
-            <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-            <input type="password" name="password" id="password"/>
+           <div class="mb-3"> 
+            <label for="email" class="form-label"><strong>{Localisation::getTranslation('common_email')}</strong></label>
+            <input type="text" name="email" id="email" class="form-control"/>
+           
+           </div>
+           
+            <label for="password" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+            <input type="password" name="password" id="password" class="form-control"/>
             <div>
                 <button type="submit" name="login" class="btn btn-primary">
   				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
