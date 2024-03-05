@@ -197,9 +197,9 @@
 
                     const link= document.querySelector("#link-to-copy') ;
                   
-                    const buttonCopy = document.querySelector('#copy-button) ;
+                    const buttonCopy = document.querySelector('#copy-button') ;
 
-                    buttonCopy.addEventListener("click" , asycn()=>{
+                    buttonCopy.addEventListener("click" , async()=>{
                           let linkText = link.textContent ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
                             console.log('Link copied successfully') ;
