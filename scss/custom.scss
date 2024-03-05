@@ -157,6 +157,11 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 a {
     word-wrap: break-word;
 }
+
+$enable-grid-classes: false;
+
+$enable-cssgrid: true;
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed

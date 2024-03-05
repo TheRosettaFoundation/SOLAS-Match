@@ -1,9 +1,6 @@
 {include file="new_header.tpl"}
 
 
-    <div class="page-header">
-            <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
-    </div>
 
     {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -35,6 +32,11 @@
 <div class=" grid  ">
 
     <div class="g-col-6"> 
+
+
+    <div class="page-header">
+            <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
+    </div>
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email"/>
