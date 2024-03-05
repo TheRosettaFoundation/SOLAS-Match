@@ -82,8 +82,8 @@
   
        <div class="d-flex justify-content-around bg-primary flex-wrap"> 
      <div class=" p-2">
-       
-    ###########second flowing row
+  
+      <span>    ###########second flowing row</span>
         <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
@@ -91,6 +91,8 @@
         <p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
         <p>If you do not want to take the test, please click “Cancel”.</p>
         </div>
+             
+
         </span>
         
 
