@@ -1,5 +1,5 @@
     </main>
-                <footer class="mt-4">
+                <footer class="mt-4 align-self-end">
 
 
                             <div class="container d-flex flex-wrap mb-4 justify-content-center">
