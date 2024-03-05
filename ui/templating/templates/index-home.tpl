@@ -379,7 +379,7 @@ a:hover{
   <div class="container">  
     <div class="row">
 
-        <div class="col-12 col-md-6 col-lg-3" >
+        <div class="g-col-12 g-col-md-6 g-col-lg-3" >
                 <div class="text-center">
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
                  <h2 >Connect</h2>
@@ -398,7 +398,7 @@ a:hover{
 
   
 
-        <div class="col-12 col-md-6 col-lg-3">
+        <div class="g-col-12 g-col-md-6 g-col-lg-3">
               <div class="text-center">
                     <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
                     <h2>Learn</h2>
@@ -417,7 +417,7 @@ a:hover{
         </div>
 
 
-        <div  class="col-12  col-md-6 col-lg-3" >
+        <div  class="g-col-12  g-col-md-6 g-col-lg-3" >
            
            <div class="text-center">
                   <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
@@ -435,7 +435,7 @@ a:hover{
 
          </div>
 
-         <div class="col-12 col-md-6 col-lg-3" id="learnmore">
+         <div class="g-col-12 g-col-md-6 g-col-lg-3" id="learnmore">
            
            <div class="text-center">
 
@@ -537,7 +537,7 @@ a:hover{
 <div class="d-flex row justify-content-between mt-5 ">
    
 
-    <div class=" col-sm-12 col-md-4 col-lg-3 ">
+    <div class=" g-col-sm-12 g-col-md-4 g-col-lg-3 ">
 
         <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8" class="needs-validation" novalidate> 
          
@@ -609,7 +609,7 @@ a:hover{
    
     </div>
 
-    <div class="col-sm-12 col-md-8 col-lg-9 mt-4">
+    <div class="g-col-sm-12 g-col-md-8 g-col-lg-9 mt-4">
 
 
                     {if isset($topTasks) && count($topTasks) > 0}
