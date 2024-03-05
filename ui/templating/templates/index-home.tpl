@@ -404,16 +404,14 @@ a:hover{
                     <h2>Learn</h2>
               
               </div>
-            
+ 
               
               <div>
-             
-                
+
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.
                         Receive feedback on your translations from more senior linguists and grow in the process.
-                
-        
+
             </div>
         
         </div>
@@ -425,9 +423,7 @@ a:hover{
                   <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
                     <h2>Grow</h2>          
            </div>
-
-          
-            
+           
             <div>
 
          
@@ -438,9 +434,6 @@ a:hover{
 
 
          </div>
-
-
-
 
          <div class="col-12 col-md-6 col-lg-3" id="learnmore">
            
