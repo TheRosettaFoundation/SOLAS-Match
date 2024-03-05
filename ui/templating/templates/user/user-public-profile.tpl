@@ -321,7 +321,129 @@ alert('You have already requested to take a test in order to become a TWB Verifi
         </div>
       <div class="bg-body p-2 ">
 
-      TEST
+
+            
+
+                        <div >
+                         #########second flex
+
+                            <div class="">
+                                <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png"  width="25%" />
+                        </div>
+                 
+                  
+
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                       
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                        
+                    
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                        
+                        {/if}
+                        {if !empty($user_badges['hours_donated'])}
+                     
+                        <div class="">
+                            <div class="">
+                                <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
+                            </div>
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="25%" />
+                        </div>
+                      
+                      
+
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                 
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                       
+                           <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank" ><span class="d-none">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
+                       
+                        {/if}
+                        {/if}
+
+                       
+                                <h3>Supported Organizations</h3>
+                       
+                       
+                            <ul>
+                            {foreach from=$supported_ngos item=supported_ngo}
+                                <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
+                            {/foreach}
+                            </ul>
+                        
+
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($supported_ngos_paid)}
+                       
+                                <h3>NGOs supported with paid projects</h3>
+                       
+                      
+                            <ul>
+                            {foreach from=$supported_ngos_paid item=supported_ngo}
+                                <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
+                            {/foreach}
+                            </ul>
+                 
+                        {/if}
+
+                      
+                                <h3>Certificates and training courses</h3>
+                       
+                    
+                            <ul>
+                        {foreach from=$certifications item=certification}
+                        <li>
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
+                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Mark Reviewed" />
+                                <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
+                            </form>
+                           {else}
+                           <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
+                           {/if}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                    <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this certificate?')" />
+                                    <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                </form>
+                           {/if}
+                        {else}
+                        {$certification['note']|escape:'html':'UTF-8'}
+                        {/if}
+                        </li>
+                        {/foreach}
+                            </ul>
+                       
+
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a>
+                        {/if}
+
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                          
+                               <table>
+                                   <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
+                                   <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
+                                   <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
+                                   <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
+                                   <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
+                                   <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
+                               </table>
+                     
+                        {/if}
+              
+
+
+    #######################end of 2nd flez 
+
+     
  
      </div>
      </div>
