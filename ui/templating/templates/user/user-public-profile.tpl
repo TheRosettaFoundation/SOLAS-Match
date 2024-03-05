@@ -256,6 +256,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {/foreach}
                                
                             </div>
+                            <hr/>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <div>
