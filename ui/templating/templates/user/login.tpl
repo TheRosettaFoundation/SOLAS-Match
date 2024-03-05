@@ -28,7 +28,7 @@
 
 <div class=""container-fluid>
 
-
+<div class="container">
 
 
 
@@ -106,7 +106,8 @@
 
 </div>
 
+</div>
+
 </div>    
-<div class="row-fluid">
 
 {include file="footer.tpl"}
