@@ -167,7 +167,7 @@
     {/if}
 
 
-<div class=" grid  py-4 ">
+<div class=" grid   ">
 
     <div class="g-col-6 py-4"> 
 
