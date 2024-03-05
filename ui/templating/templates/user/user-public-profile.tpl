@@ -80,7 +80,7 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-flex justify-content-around bg-primary"> 
+       <div class="d-flex justify-content-around bg-primary flex-wrap"> 
      <div class=" p-2">
        
     ###########second flowing row
