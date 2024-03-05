@@ -80,7 +80,7 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-flex justify-content-between bg-primary "> 
+       <div class="d-flex justify-content-between bg-primary p-4"> 
         <div class="bg-body">
   
          <span>    ###########second flowing row</span>
@@ -331,6 +331,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <h4 class="">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <p class=""><span class="">{$user_badges['words_donated']}</span><br/> <span class="">Words donated</span></p>
                             </div>
+
                             
                         </div>
                  
