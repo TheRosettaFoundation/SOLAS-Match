@@ -2,7 +2,13 @@
 
 
 
-    {if isset($flash['error'])}
+   
+
+<div class=""container-fluid>
+
+<div class="container">
+
+ {if isset($flash['error'])}
         <div class="alert alert-error">
             <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
             <p>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
@@ -22,11 +28,6 @@
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
-
-<div class=""container-fluid>
-
-<div class="container">
-
 
 
 <div class=" grid  ">
@@ -86,7 +87,7 @@
     <div class="g-col-6"> 
 
 
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  />
+    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class="w-50 text-center" />
          
         
 
