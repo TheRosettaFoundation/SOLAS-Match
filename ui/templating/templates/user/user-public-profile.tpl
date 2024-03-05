@@ -190,7 +190,7 @@
                           
                         </div>
                         {/if}
-
+                        <hr/>
                         {if !empty($userQualifiedPairs)}
                        
                          
