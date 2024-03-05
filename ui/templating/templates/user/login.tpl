@@ -180,7 +180,7 @@
         <form action="{urlFor name='login'}" method="post">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
-                <legend><strong>or sign-in via Google</strong></legend>
+                <legend><strong> sign-in via Google</strong></legend>
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
@@ -201,7 +201,8 @@
                         </div>
             </fieldset>
         </form>
-        
+         <div class="fw-bold"> or </div>
+
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
             <label for="email" class="form-label"><strong>{Localisation::getTranslation('common_email')}</strong></label>
