@@ -20,7 +20,7 @@
      </div>
 
 
-     <div >
+     <div>
 
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
@@ -312,16 +312,10 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                         <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
+                             {/if}
                              
 
-
-                            
-
   
-
-     
-     
-     {/if}
         </div>
       <div class=" bg-body p-2">
         #########second flex
