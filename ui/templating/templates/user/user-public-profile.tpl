@@ -184,7 +184,7 @@
                         {assign var="native_language_code" value=""}
                         {if $this_user->getNativeLocale() != null}
                         {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
-                        <div>
+                        <div class="mt-3">
                             
                                 Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                           
@@ -242,6 +242,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 
                             </div>
                         {/if}
+                        <hr>
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             
                                     <h3>Language Rate Pairs</h3>
