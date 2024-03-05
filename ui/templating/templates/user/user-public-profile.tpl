@@ -80,8 +80,8 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-flex justify-content-between bg-primary p-4"> 
-        <div class="bg-body">
+       <div class="d-flex justify-content-between  p-4"> 
+        <div class="bg-body rounded-3 p-4">
   
          <span>    ###########second flowing row</span>
         <span class="d-none">
@@ -319,7 +319,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
   
         </div>
-      <div class="bg-body ">
+      <div class="bg-body p-4 rounded-3">
 
 
             
