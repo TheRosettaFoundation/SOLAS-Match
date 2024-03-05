@@ -176,14 +176,15 @@
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
-           <div class="mb-3"> 
+           <div class="mb-2"> 
             <label for="email" class="form-label"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email" class="form-control"/>
            
            </div>
-           
+             <div class="mb-3"> 
             <label for="password" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" class="form-control"/>
+            </div>
             <div>
                 <button type="submit" name="login" class="btn btn-primary">
   				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
@@ -228,7 +229,7 @@
     <div class="g-col-6 py-4"> 
 
 
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" w-75" />
+    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-auto" />
          
         
 
