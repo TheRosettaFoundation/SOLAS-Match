@@ -81,7 +81,7 @@
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
        <div class="d-flex justify-content-around bg-primary "> 
-        <div class=" p-2">
+        <div class="bg-body  p-2">
   
          <span>    ###########second flowing row</span>
         <span class="d-none">
@@ -325,7 +325,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         <div >
                          #########second flex
 
-                            <div class="text-box">
+                            <div class="">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
@@ -345,7 +345,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {if !empty($user_badges['hours_donated'])}
                      
                         <div class="containerBox">
-                            <div class="text-box">
+                            <div class="">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
                             </div>
@@ -520,7 +520,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
                     <tbody align="left" width="48%">
                         <tr><td>
                         <div class="containerBox">
-                            <div class="text-box">
+                            <div class="">
                             {if empty($user_badges['strategic_points'])}
                                 <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
                                 <h5 class="recognition">
