@@ -299,7 +299,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             <div>
                                <span id="linkcopy">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="stretched-link"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-secondary">Copy</button>
                             </div>
