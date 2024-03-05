@@ -82,7 +82,7 @@
      <div class="d-flex justify-content-between ">
    
 
-     <div class="bg-body ">
+     <div class="bg-body p-2">
        
     ###########second flowing row
         <span class="d-none">
