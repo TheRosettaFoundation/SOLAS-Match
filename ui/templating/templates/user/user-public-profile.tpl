@@ -324,8 +324,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
             
 
-                        <div >
-                         #########second flex
+                        <div>
+                
 
                             <div class="">
                                 <h4 class="">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
