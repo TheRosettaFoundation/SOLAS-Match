@@ -82,7 +82,7 @@
      <div class="d-flex justify-content-between ">
    
 
-     <div class="bg-body  ">
+     <div class="bg-body ">
        
     ###########second flowing row
         <span class="d-none">
@@ -301,7 +301,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="link-to-copy">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
-                                <button id="copy-button"></button>
+                                <button id="copy-button">Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
