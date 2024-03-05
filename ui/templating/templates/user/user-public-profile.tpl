@@ -328,7 +328,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                          #########second flex
 
                             <div class="">
-                                <h4 class="">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <h4 class="">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <p class=""><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
                             <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png"  width="25%" />
