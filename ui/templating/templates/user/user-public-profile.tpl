@@ -530,7 +530,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
-    <h3 class="fw-bold mb-3">Community Recognition Program <h4 class="text-muted">Contribute to our mission and obtain rewards</h4></h3>
+    <h3 class="fw-bold mb-3">Community Recognition Program <span class="text-muted fs-4">Contribute to our mission and obtain rewards</span></h3>
 
 <p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
 As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
@@ -581,9 +581,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" border border-1 border-primarydark rounded-3 mt-4">
+<div class=" border border-1 border-primaryDark rounded-3 mt-4">
 
-   <div class=" d-flex  border-bottom border-primarydark  pt-2 px-2" >
+   <div class=" d-flex  border-bottom border-primaryDark  pt-2 px-2" >
 
       <div class="fw-bold w-50 me-2">Type of task</div>
       <div class="fw-bold me-6" >Unit</div>
@@ -591,7 +591,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-       <div class=" d-flex  border-bottom border-primarydark  p-2" >
+       <div class=" d-flex  border-bottom border-primaryDark p-2" >
 
          <div class=" w-50 me-2">Translation</div>
         <div class=" me-4" > 1 word</div>
@@ -599,7 +599,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
         </div>
 
-      <div class=" d-flex  border-bottom border-primarydark  p-2" >
+      <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
         <div class="w-50 me-2">Revision</div>
         <div class=" me-4" > 1 word</div>
@@ -609,7 +609,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
      </div>
 
 
-     <div class=" d-flex p-2 border-bottom border-primarydark" >
+     <div class=" d-flex p-2 border-bottom border-primaryDark" >
 
        <div class=" w-50 me-2"> Proofreading/Approval</div>
         <div class=" me-4" > 1 word</div>
@@ -617,14 +617,14 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-     <div class=" d-flex p-2 border-bottom border-primarydark " >
+     <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-50 me-2"> Transcription</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 0.5 </div>
 
     </div>
-      <div class=" d-flex p-2 border-bottom border-primarydark " >
+      <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-50 me-2"> Voice Recording</div>
         <div class=" me-4" > 1 word</div>
@@ -632,7 +632,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-     <div class=" d-flex p-2 border-bottom border-primarydark " >
+     <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-50 me-2"> Translation of subtitles</div>
         <div class=" me-4" > 1 word</div>
