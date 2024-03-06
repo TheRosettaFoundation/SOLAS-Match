@@ -548,46 +548,37 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 
 
-<div class="">
 
+<table class="table rounded-3 border border-1 border-primary">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
 
-<span class="d-none"> DEBUT FLEX WITH PIC</span >
-
-
-<div class="d-flex  rounded-3 p-4 border border-primary border-1  w-25">
- <div class="d-flex  justify-content-between border border-primary border-1">
-
-
-    <div class="fw-bold border-primary  ">
-
-    Points
-
-    </div>
-
-    <div class="fw-bold border-primary  ">
-
-    Rewards
-
-    </div>
- 
- </div>
-    
-1
-</div>
-
-<div>
-2
-
-  <img src="{urlFor name='home'}ui/img/profile_badge"  />
-
-
-</div>
-
-
-
-
-
-</div>
 
 
 
