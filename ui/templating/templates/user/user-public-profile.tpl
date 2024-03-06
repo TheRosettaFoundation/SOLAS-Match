@@ -270,9 +270,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                            
-                                    <h4 class="mb-3 fw-bold">Services</h4>
+                                    <h3>Services</h3>
                             
-                            <div class="mb-3">
+                            <div>
                                
                                 <ul>
                                 {foreach from=$capability_list item=capability}
@@ -283,9 +283,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
 
                            
-                                    <h4 class="mb-3 fw-bold>Experienced in</h4>
+                                    <h3>Experienced in</h3>
                             
-                            <div class="mb-3">
+                            <div>
                               
                                 <ul>
                                 {foreach from=$expertise_list item=expertise}
@@ -296,12 +296,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
 
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div >
+                            <div>
                                 
-                                    <h4 class="mb-3 fw-bold>Share this link with anyone you wish to see your profile:</h4>
+                                    <h3>Share this link with anyone you wish to see your profile:</h3>
                                 
                             </div>
-                            <div class="mb-3">
+                            <div>
                                <span id="linkcopy">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
@@ -309,7 +309,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div class="mb-3">
+                            <div>
                                 <td style="padding-bottom: 10px" />
                             </div>
                           
