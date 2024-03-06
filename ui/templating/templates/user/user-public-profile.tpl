@@ -554,10 +554,17 @@ If you work on a revision task or a proofreading/approval task and notice that t
     <table class="table  ">
         <thead>
           <tr class="fs-5 align-middle">
+            header -1
+          </tr>
+                   <tr class="fs-5 align-middle">
+            header -2
           </tr>
         </thead>
         <tbody>
-        <tr><td>Test<td><tr>
+        <tr><
+        td>Test<td>
+          td>Test<td>
+        <tr>
         </tbody>
     <table>
     </div>
