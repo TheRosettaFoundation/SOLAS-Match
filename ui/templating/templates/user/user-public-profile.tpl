@@ -593,9 +593,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
        <div class=" d-flex  border-bottom border-primary  p-2" >
 
-         <div class=" flex-grow-1 me-2">Translation</div>
+         <div class=" w-50 me-2">Translation</div>
         <div class=" me-2" > 1 word</div>
-         <div class="" > 1 </div>
+         <div class="flex-grow-1" > 1 </div>
 
         </div>
 
