@@ -664,7 +664,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <div>
 
-     <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
+     <div class="bg-yellowish  ">
                 
 
                             <div class="d-flex flex-column">
