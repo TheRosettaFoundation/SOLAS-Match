@@ -548,14 +548,13 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between">
 
-<h4 class="fw-bold mb-3"> Reward offered</h4>
 
 <div class="w-25 border border-1 border-primary rounded-3 ">
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
-      <div class=" fw-bold me-4">Points</div>
-      <div class=" fw-bold flex-grow-1" >Reward</div>
+      <div class="  me-4">Points</div>
+      <div class=" flex-grow-1" >Reward</div>
     </div>
 
        <div class=" d-flex  border-bottom border-primary  p-2" >
@@ -581,8 +580,40 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 <div>
+<h4 class="fw-bold mb-3"> Reward offered</h4>
+<div class="bg-body p-2  border border-primary border-1 rounded-3   ">
+    <div class="table-responsive ">
+<table class="  table-primary table-sm">
+  <thead>
+    <tr class="border-primary" >
 
+      <th scope="col">Points</th>
+      <th scope="col">Reward</th>
+    </tr>
+    <hr  class="bg-primary"/>  </thead>
+  <tbody>
+    <tr class="border-primary">
 
+      <td>5,000</td>
+      <td>Certification of volunteer activity</td>
+  
+    </tr>
+    <tr class="">
+
+      <td>15,000</td>
+      <td>Reference Letter</td>
+      
+    </tr>
+    <tr class="">
+
+      <td >30,000</td>
+      <td>Recommendation on professional platforms</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
 
 
 <div>
