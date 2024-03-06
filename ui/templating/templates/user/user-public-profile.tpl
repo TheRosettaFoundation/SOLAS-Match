@@ -548,6 +548,18 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between">
 
+
+<div class="w-25 border border-1 border-primary ">
+
+   <div class="border border-bottom- 1 border-primary " >
+
+      <div >Points</div>
+      <div >Reward</div>
+    </div>
+
+
+</div>
+
 <div>
 <h4 class="fw-bold mb-3"> Reward offered</h4>
 <div class="bg-body p-2  border border-primary border-1 rounded-3   ">
