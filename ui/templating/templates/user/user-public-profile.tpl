@@ -546,39 +546,52 @@ will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
+<div class="d-flex justify-content-between">
 
-
-
+<div>
+<h4 class="fw-bold mb-3"> Reward offerer</h4>
+<div class="bg-body p-2 border-secondary rounded-3 mt-4 w-md-25 ">
+    <div class="table-responsive mt-4">
 <table class="table rounded-3 border border-1 border-primary">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+
+      <th scope="col">Points</th>
+      <th scope="col">Reward</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+
+      <td>5,000</td>
+      <td>Certification of volunteer activity</td>
+  
     </tr>
     <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
+
+      <td>15,000</td>
+      <td>Reference Letter</td>
+      
     </tr>
     <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
+
+      <td >30,000</td>
+      <td>Recommendation on professional platforms</td>
     </tr>
   </tbody>
 </table>
+</div>
+</div>
+</div>
 
+
+<div>
+
+      <img src="{urlFor name='home'}ui/img/profile_badge"  />
+
+</div>
+
+</div>
 
 
 
