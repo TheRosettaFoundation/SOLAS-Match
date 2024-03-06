@@ -529,9 +529,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
  <div class="mt-3 p-4 rounded-2 bg-body" >
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-<div class="page-header">
-    <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
-</div>
+
+    <h4 class="fw-bold mb-3">Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h4>
+
 <p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
 As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
 Deliver tasks on the TWB platform to build up points.
@@ -547,6 +547,25 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
 <p style="margin-bottom:50px;" />
+
+
+<div class="bg-body border-primary rounded-3 mt-4 flex align-items-center justify-content-center ">
+    <div class="table-responsive mt-4">
+    <table class="table  ">
+        <thead>
+          <tr class="fs-5 align-middle">
+          </tr>
+        </thead>
+        <tbody>
+        <tr><td>Test<td><tr>
+        </tbody>
+    <table>
+    </div>
+</div>
+
+
+
+
 
 <table border="0">
     <tr valign="top">
