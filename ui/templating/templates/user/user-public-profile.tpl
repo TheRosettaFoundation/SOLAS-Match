@@ -793,7 +793,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-<div class="d-flex justify-content-end m-4 rounded-3">
+<div class=" ">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
 
