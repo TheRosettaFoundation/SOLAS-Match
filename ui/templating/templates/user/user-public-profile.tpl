@@ -664,7 +664,16 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <div>
 
-      <img src="{urlFor name='home'}ui/img/profile_badge"  />
+     <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
+                
+
+                            <div class="d-flex flex-column">
+                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
+                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
+                                <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
+                                <div class="text-gray">WORDS DONATED</div>
+                              {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
+                            </div>
 
 </div>
 
