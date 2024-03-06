@@ -689,7 +689,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 </div>
-
+<div>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
@@ -787,10 +787,12 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 {/if}
 {/if}
+</div>
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 
 {/if}
+<div>
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 
@@ -802,11 +804,15 @@ If a language is to be removed from this list, the community will be informed be
         <i class="icon-print icon-white"></i> Generate Certificate
     </a>
     </div>
+
 {/if}
+</div>
+<div class="mt-4 p-4 rounded-3">
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 mb-4 ">
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+</div>
 <div class="table-responsive">
 <table id="printrequest" class="display" style="width:100%">
         <thead>
