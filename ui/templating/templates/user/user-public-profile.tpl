@@ -526,7 +526,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
 
-
+ <div class="mt-3 p-4 rounded-2 bg-body" >
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="page-header">
@@ -1259,6 +1259,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 ##############################################
+   </div>
    </div>
    </div>
    
