@@ -214,7 +214,7 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                          
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/ ><span class="bg-gray rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/ ><span class="bg-light-subtle rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -260,7 +260,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <hr/>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div>
+                            <div class="mb-3 fw-bold">
                                 
                                     <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
                                         <i class="icon-list icon-white"></i> Edit Linguist Unit Rate Exceptions
@@ -270,7 +270,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                            
-                                    <h3>Services</h3>
+                                    <h4 class="mb-3 fw-bold">Services</h4>
                             
                             <div>
                                
@@ -283,7 +283,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
 
                            
-                                    <h3>Experienced in</h3>
+                                    <h4 class="mb-3 fw-bold" >Experienced in</h4>
                             
                             <div>
                               
@@ -298,7 +298,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div>
                                 
-                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                    <h4 class="mb-3 fw-bold" >Share this link with anyone you wish to see your profile:</h4>
                                 
                             </div>
                             <div>
