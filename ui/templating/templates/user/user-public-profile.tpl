@@ -556,6 +556,11 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <div class="text-center">Points</div>
       <div class="text-center" >Reward</div>
     </div>
+      <div class=" d-flex justify-content-between border-bottom border-primary  p-2" >
+
+      <div class="text-center">5,000</div>
+      <div class="text-center" >Certification of volunteer activity</div>
+    </div>
 
 
 </div>
