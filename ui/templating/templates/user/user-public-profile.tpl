@@ -689,11 +689,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 
-{*
-    {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
-*}
 
 
+{if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
 <p>Our Community Recognition Program also includes monetary rewards for some marginalized languages.
 Speakers of marginalized languages often face high connectivity costs when offering their online support.
@@ -722,13 +720,8 @@ If a language is to be removed from this list, the community will be informed be
                 </h2>
                 {if !empty($user_has_strategic_languages) && $user_has_strategic_languages[0]['nigeria'] == 1}<div style="overflow: auto; max-height: 300px;">{/if}
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
-
-
-
-    {if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
-                 
-  <tbody>
-
+                    <tbody>
+{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
                         <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Points in strategic<br />languages</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Status</strong></td> <td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Recognition reward</strong></td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                         <td align="center" style="border:2px solid #e8991c">TWB New Community<br />Member</td><td align="center" style="border:2px solid #e8991c">10 USD phone top-up or online voucher,<br />where applicable</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">25,000</td>                                        <td align="center" style="border:2px solid #e8991c">TWB Traveler</td>            <td align="center" style="border:2px solid #e8991c">100 USD bank transfer</td></tr>
@@ -737,14 +730,8 @@ If a language is to be removed from this list, the community will be informed be
                         <tr><td align="center" style="border:2px solid #e8991c">200,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Navigator</td>           <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">300,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Voyager</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">400,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Trailblazer</td>         <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
-
                         <tr><td align="center" style="border:2px solid #e8991c">500,000</td>                                       <td align="center" style="border:2px solid #e8991c">TWB Pioneer</td>             <td align="center" style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
-
-
-
 {else}
-    
-
 <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Threshold</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Status</strong></td> <td align="center" style="border:2px solid #e8991c; color: #576e82;"><strong>Recognition reward</strong></td></tr>
 <tr><td align="center" style="border:2px solid #e8991c"><strong>First task delivered</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Translator</strong></td><td align="center" style="border:2px solid #e8991c"><strong>5 USD bank transfer</strong></td></tr>
 <tr><td align="center" style="border:2px solid #e8991c">2,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">5 USD bank transfer</td></tr>
@@ -787,12 +774,7 @@ If a language is to be removed from this list, the community will be informed be
 <tr><td align="center" style="border:2px solid #e8991c">95,000 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
 <tr><td align="center" style="border:2px solid #e8991c">97,500 points</td><td align="center" style="border:2px solid #e8991c"></td><td align="center" style="border:2px solid #e8991c">20 USD bank transfer</td></tr>
 <tr><td align="center" style="border:2px solid #e8991c"><strong>100,000 points</strong></td><td align="center" style="border:2px solid #e8991c"><strong>TWB Explorer</strong></td><td align="center" style="border:2px solid #e8991c"><strong>20 USD bank transfer</strong></td></tr>
-
-
-
 {/if}
-    
-
                     </tbody>
                 </table>
                 {if !empty($user_has_strategic_languages) && $user_has_strategic_languages[0]['nigeria'] == 1}</div>{/if}
@@ -803,13 +785,8 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 </table>
 </div>
-
-
-
-
 {/if}
 {/if}
-    
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 
