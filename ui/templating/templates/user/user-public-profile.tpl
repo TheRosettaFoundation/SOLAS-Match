@@ -461,6 +461,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     <div class="fw-bold"> Average scores in reviews </div>
                                     <div class="fw-bold">Average score out of 5</div>
                                 </div>
+
+                                  <div class="text-sm mb-4">This information is only visible to you</div>
                              
 
           
