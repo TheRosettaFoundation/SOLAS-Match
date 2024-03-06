@@ -36,7 +36,7 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
                             <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
+                                <i class="icon-wrench icon-white"></i>   <img src="{urlFor name='home'}ui/img/edit_profile" class="me-1" /> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
@@ -111,9 +111,9 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div class="mb-3">
                                 
-                                    <div class="custom-link">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-grayish mt-3'>
+                                        <a class="custom-link" href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-grayish mt-3'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -307,7 +307,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="linkcopy">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
-                                <button id="copy-button" class="btn btn-secondary">Copy</button>
+                                <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -329,7 +329,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
             
 
-                        <div class="bg-primary opacity-75 d-flex justify-content between ">
+                        <div class="bg-yellowish opacity-75 d-flex justify-content between rounded-3 ">
                 
 
                             <div class="d-flex flex-column">
@@ -348,6 +348,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                             
                         </div>
+
+                        <hr/>
                  
                   
 
