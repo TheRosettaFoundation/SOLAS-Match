@@ -559,6 +559,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <th scope="col">Points</th>
       <th scope="col">Reward</th>
     </tr>
+    <hr  class="bg-primary"/>
   </thead>
   <tbody>
     <tr class="border-primary">
