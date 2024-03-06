@@ -549,10 +549,10 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="d-flex justify-content-between">
 
 <div>
-<h4 class="fw-bold mb-3"> Reward offerer</h4>
-<div class="bg-body p-2 border-secondary rounded-3  w-md-25 ">
-    <div class="table-responsive mt-4">
-<table class="table ">
+<h4 class="fw-bold mb-3"> Reward offered</h4>
+<div class="bg-body p-2  border border-primary border-1 rounded-3  w-md-25 ">
+    <div class="table-responsive ">
+<table class="table border border-1 border-primary ">
   <thead>
     <tr>
 
