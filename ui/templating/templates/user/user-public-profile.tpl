@@ -793,13 +793,15 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-<div class=" ">
+
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
+    <div class=" d-flex justify-content-end mt-4">
 
     <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success" target="_blank" style="margin-top: -5px;">
         <i class="icon-print icon-white"></i> Generate Certificate
     </a>
+    </div>
 {/if}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
