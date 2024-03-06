@@ -367,8 +367,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             
                         
                         {/if}
+               
                         {if !empty($user_badges['hours_donated'])}
-                     
+
+
+                        <hr class="bg-light-subtle"/>
+                     {*
                         <div class="">
                             <div class="">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
@@ -387,9 +391,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
                         {/if}
                         {/if}
-
+                     *}
                        
-                                <h3>Supported Organizations</h3>
+                                <h4 class="mb-3 fw-bold">Supported Organizations</h4>
                        
                        
                             <ul>
@@ -401,7 +405,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($supported_ngos_paid)}
                        
-                                <h3>NGOs supported with paid projects</h3>
+                                <h4 class="mb-3 fw-bold">NGOs supported with paid projects</h4>
                        
                       
                             <ul>
@@ -413,7 +417,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                       
-                                <h3>Certificates and training courses</h3>
+                                <h4 class="mb-3 fw-bold">Certificates and training courses</h4>
                        
                     
                             <ul>
@@ -450,7 +454,55 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+
+
+
+                        <div class="p-2">
+                         <div class="d-flex justify-content-between">
+                         <div> Average scores in reviews </div>
+                         <div>Average score out of 5</div>
+                        <div>
+                        <div class="text-sm mb-4">This information is only visible to you</div>
+
+                        <div class='d-flex justify-content-between mt-2">
+
+                          <div class="d-flex flex-column">
+                                <div class="mb-2">Accuracy</div>
+                                <div class="mb-2">Fluency</div>
+                                <div class="mb-2">Terminology</div>
+                                <div class="mb-2">Style</div>
+                                <div class="mb-2">Design</div>
+                      
+                          </div>
+                          <div class="d-flex flex-column mb-2" >
+
+                               <div class="mb-2">{$quality_score['accuracy']}</div>
+                                <div class="mb-2">{$quality_score['fluency']}</div>
+                                <div class="mb-2">{$quality_score['terminology']}</div>
+                                <div class="mb-2">{$quality_score['style']}</div>
+                                <div class="mb-2">{$quality_score['design']}/div>
+                      
                           
+                          </div>
+                        
+                        </div>
+
+                        
+                        </div>
+                         
+                         </div>
+                        
+                        </div>
+                         
+                         {*
+                          <div class="bg-body p-2 border-secondary rounded-3 mt-4 flex align-items-center justify-content-center ">
+                             <div class="table-responsive mt-4">
+                                <table class="table  ">
+                                <thead>
+                                <tr>
+                                <th>Average </th>
+                                <th> </th>
+                                </tr>
                                <table>
                                    <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
                                    <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
@@ -459,6 +511,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                    <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
                                    <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
                                </table>
+                            *}
                      
                         {/if}
               
