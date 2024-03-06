@@ -554,26 +554,26 @@ If you work on a revision task or a proofreading/approval task and notice that t
     <div class="table-responsive ">
 <table class="table  ">
   <thead>
-    <tr class="border border-primary border-bottom-1" >
+    <tr class="" >
 
       <th scope="col">Points</th>
       <th scope="col">Reward</th>
     </tr>
   </thead>
   <tbody>
-    <tr class="border border-primary border-bottom-1">
+    <tr class="">
 
       <td>5,000</td>
       <td>Certification of volunteer activity</td>
   
     </tr>
-    <tr class="border border-primary border-bottom-1">
+    <tr class="">
 
       <td>15,000</td>
       <td>Reference Letter</td>
       
     </tr>
-    <tr class="border border-primary border-bottom-1">
+    <tr class="">
 
       <td >30,000</td>
       <td>Recommendation on professional platforms</td>
