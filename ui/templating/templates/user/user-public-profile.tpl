@@ -581,31 +581,40 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class="w-50 border border-1 border-primary rounded-3 ">
+<div class=" border border-1 border-primary rounded-3 mt-4">
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
-      <div class="fw-bold me-4">Points</div>
-      <div class="fw-bold flex-grow-1" >Reward</div>
+      <div class="fw-bold flex-grow-1 me-2">Type of task</div>
+      <div class="fw-bold me-2" >Unit</div>
+         <div class="fw-bold " >Points accrued per unit </div>
+
     </div>
 
        <div class=" d-flex  border-bottom border-primary  p-2" >
 
-      <div class="  me-4 ">5,000</div>
-      <div class=" flex-grow-1" >Certification of volunteer activity</div>
-    </div>
+         <div class=" flex-grow-1 me-2">Translation</div>
+        <div class=" me-2" > 1 word</div>
+         <div class="" > 1 </div>
+
+        </div>
 
       <div class=" d-flex  border-bottom border-primary  p-2" >
 
-      <div class=" me-4">15,000</div>
-      <div class=" flex-grow-1" >Reference Letter</div>
-    </div>
+        <div class=" flex-grow-1 me-2">Revision</div>
+        <div class=" me-2" > 1 word</div>
+         <div class="" > 0.5 </div>
+
+     
+     </div>
 
 
      <div class=" d-flex p-2" >
 
-      <div class="  me-4">30,000</div>
-      <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
+       <div class=" flex-grow-1 me-2"> Proofreading/Approval</div>
+        <div class=" me-2" > 1 word</div>
+         <div class="" > 0.25 </div>
+
     </div>
 
 
