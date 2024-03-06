@@ -551,10 +551,10 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <div class="w-25 border border-1 border-primary rounded-3 ">
 
-   <div class=" d-flex justify-content-between border-bottom border-primary  pt-2 px-2" >
+   <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
-      <div class=" flex-grow-1 me-4">Points</div>
-      <div class=" flex-grow-1" >Reward</div>
+      <div class=" fw-bold me-4">Points</div>
+      <div class=" fw-bold flex-grow-1" >Reward</div>
     </div>
 
        <div class=" d-flex  border-bottom border-primary  p-2" >
@@ -570,7 +570,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
     </div>
 
 
-     <div class=" d-flex  border-bottom border-primary  p-2" >
+     <div class=" d-flex    px-2" >
 
       <div class="  me-4">30,000</div>
       <div class=" flex-grow-1" >Recommendation on professional platforms</div>
