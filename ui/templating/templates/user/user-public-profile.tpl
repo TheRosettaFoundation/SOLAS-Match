@@ -190,7 +190,7 @@
                           
                         </div>
                         {/if}
-                        <hr/>
+                        <hr class="bg-light-subtle"/>
                         {if !empty($userQualifiedPairs)}
                        
                          
@@ -257,7 +257,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {/foreach}
                                
                             </div>
-                            <hr/>
+                            <hr class="bg-light-subtle"/>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <div class="mb-3 fw-bold">
@@ -267,7 +267,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     </a>
                                 
                             </div>
-                               <hr/>
+                               <hr class="bg-light-subtle"/>
                         {/if}
 
                            
@@ -282,7 +282,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </ul>
                                 
                             </div>
-                               <hr/>
+                               <hr class="bg-light-subtle"/>
                            
                                     <h4 class="mb-3 fw-bold" >Experienced in</h4>
                             
@@ -295,7 +295,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </ul>
                               
                             </div>
-                            <hr/>
+                            <hr class="bg-light-subtle"/>
 
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div>
@@ -329,7 +329,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
             
 
-                        <div class="bg-yellowish opacity-75 d-flex justify-content between rounded-3 ">
+                        <div class="bg-yellowish  d-flex justify-content-between rounded-3  p-2">
                 
 
                             <div class="d-flex flex-column">
@@ -349,7 +349,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             
                         </div>
 
-                        <hr/>
+                        <hr class="bg-light-subtle"/>
                  
                   
 
@@ -669,7 +669,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-<hr/>
+<hr class="bg-light-subtle"/>
 {/if}
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
@@ -830,7 +830,7 @@ If a language is to be removed from this list, the community will be informed be
 {/foreach}
 </table>
 
-<hr/>
+<hr class="bg-light-subtle"/>
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3></td>
@@ -885,7 +885,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
-<hr/>
+<hr class="bg-light-subtle"/>
 
 <table border="0">
     <tr valign="top">
@@ -941,7 +941,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
-<hr />
+<hr class="bg-light-subtle" />
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
@@ -972,7 +972,7 @@ If a language is to be removed from this list, the community will be informed be
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-<hr />
+<hr class="bg-light-subtle" />
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
 <table border="0">
@@ -1012,7 +1012,7 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 {/if}
-<hr />
+<hr class="bg-light-subtle" />
 
 {/if}
 
@@ -1177,7 +1177,7 @@ If a language is to be removed from this list, the community will be informed be
                 </div>
             </div>
             <p style="margin-bottom:20px;"/>
-            <hr/>
+            <hr class="bg-light-subtle"/>
         {/foreach}
         
         <p style="margin-bottom:50px;"/>
