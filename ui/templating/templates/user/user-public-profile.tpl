@@ -457,7 +457,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
-                               <div class="d-flex justify-content-between">
+                               <div class="d-flex justify-content-between mb-3">
                                     <div class="fw-bold"> Average scores in reviews </div>
                                     <div class="fw-bold">Average score out of 5</div>
                                 </div>
@@ -465,7 +465,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                                 <div class="text-sm mb-4">This information is only visible to you</div>
 
-                                <div class="d-flex justify-content-between"> 
+                                <div class="d-flex justify-content-between mt-2"> 
                                      <div>
 
                                         <div class="mb-2">Accuracy</div>
@@ -473,15 +473,20 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                         <div class="mb-2">Terminology</div>
                                         <div class="mb-2">Style</div>
                                         <div class="mb-2">Design</div>
-                                     
-                                     
-                                     
-                                     
-                                     
+
                                      
                                      
                                      </div>
-                                     <div>TEST</div>
+                                     <div>
+
+                                         <div class="mb-2">{$quality_score['accuracy']}</div>
+                                        <div class="mb-2">{$quality_score['fluency']}</div>
+                                        <div class="mb-2">{$quality_score['terminology']}</div>
+                                        <div class="mb-2">{$quality_score['style']}</div>
+                                        <div class="mb-2">{$quality_score['design']}/div>
+
+                                     
+                                     </div>
                                 
                                 </div>
 
