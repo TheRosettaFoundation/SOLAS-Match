@@ -546,11 +546,16 @@ will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
-<p style="margin-bottom:50px;" />
 
 
+<div class="">
 
-<div class="d-flex rounded-3 border border-primary border-1">
+
+<span class="d-none"> DEBUT FLEX WITH PIC</span >
+
+
+<div class="d-flex rounded-3 border border-primary border-1 ">
+
     <div class="fw-bold border-primary">
 
     Points
@@ -562,10 +567,22 @@ If you work on a revision task or a proofreading/approval task and notice that t
     Rewards
 
     </div>
+1
+</div>
+
+<div>
+2
+
+  <img src="{urlFor name='home'}ui/img/profile_badge"  />
+
 
 </div>
 
 
+
+
+
+</div>
 
 
 
