@@ -548,7 +548,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between">
 
-
+<div>
 <div class="w-50 border border-1 border-primary rounded-3 ">
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
@@ -609,6 +609,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
     </div>
 
 
+</div>
 </div>
 
 
