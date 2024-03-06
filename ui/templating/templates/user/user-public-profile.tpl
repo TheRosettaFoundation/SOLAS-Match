@@ -171,7 +171,7 @@
                         {if !empty($bio)}
                        
                             
-                                <h3>About Me</h3>
+                                <h4>About Me</h4>
                             
                       
                         <div class="mb-3" >
@@ -195,7 +195,7 @@
                        
                          
                                
-                                    <h3 class="mb-3">{Localisation::getTranslation('common_secondary_languages')}</h3>
+                                    <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
                           
                             <div class="mb-3">
                                 
@@ -214,7 +214,7 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                          
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" ><span class="bg-gray rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} </span> - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/ ><span class="bg-gray rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -244,7 +244,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             
-                                    <h3 class="mb-3">Language Rate Pairs</h3>
+                                    <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                              
                             <div>
                                 
@@ -270,9 +270,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                            
-                                    <h3>Services</h3>
+                                    <h4 class="mb-3 fw-bold">Services</h4>
                             
-                            <div>
+                            <div class="mb-3">
                                
                                 <ul>
                                 {foreach from=$capability_list item=capability}
@@ -283,9 +283,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
 
                            
-                                    <h3>Experienced in</h3>
+                                    <h4 class="mb-3 fw-bold>Experienced in</h4>
                             
-                            <div>
+                            <div class="mb-3">
                               
                                 <ul>
                                 {foreach from=$expertise_list item=expertise}
@@ -296,12 +296,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
 
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div>
+                            <div >
                                 
-                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                    <h4 class="mb-3 fw-bold>Share this link with anyone you wish to see your profile:</h4>
                                 
                             </div>
-                            <div>
+                            <div class="mb-3">
                                <span id="linkcopy">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
@@ -309,7 +309,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div>
+                            <div class="mb-3">
                                 <td style="padding-bottom: 10px" />
                             </div>
                           
