@@ -585,9 +585,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
-      <div class="fw-bold flex-grow-1 me-2">Type of task</div>
+      <div class="fw-bold w-50 me-2">Type of task</div>
       <div class="fw-bold me-2" >Unit</div>
-         <div class="fw-bold " >Points accrued per unit </div>
+         <div class="fw-bold flex-grow-1 " >Points accrued per unit </div>
 
     </div>
 
