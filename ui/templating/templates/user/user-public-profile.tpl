@@ -549,9 +549,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="d-flex justify-content-between">
 
 
-<div class="w-25 border border-1 border-primary ">
+<div class="w-25 border border-1 border-primary rounded-3 p-2">
 
-   <div class="border border-bottom- 1 border-primary " >
+   <div class=" d-flex justify-content-between border border-bottom- 1 border-primary " >
 
       <div >Points</div>
       <div >Reward</div>
