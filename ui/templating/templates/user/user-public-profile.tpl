@@ -803,7 +803,7 @@ If a language is to be removed from this list, the community will be informed be
     </a>
     </div>
 {/if}
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 mb-4 ">
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
