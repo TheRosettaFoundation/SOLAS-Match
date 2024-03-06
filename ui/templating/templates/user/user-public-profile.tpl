@@ -493,8 +493,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                          </div>
                         
                         </div>
-                         
-                         {*
+                        
                           <div class="bg-body p-2 border-secondary rounded-3 mt-4 flex align-items-center justify-content-center ">
                              <div class="table-responsive mt-4">
                                 <table class="table  ">
@@ -511,7 +510,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                    <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
                                    <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
                                </table>
-                            *}
+                  
                      
                         {/if}
               
