@@ -551,10 +551,10 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <div class="w-25 border border-1 border-primary rounded-3 ">
 
-   <div class=" d-flex justify-content-between border-bottom-1 border-primary  p-2" >
+   <div class=" d-flex justify-content-between border-bottom border-primary  p-2" >
 
-      <div >Points</div>
-      <div >Reward</div>
+      <div class="text-center">Points</div>
+      <div class="text-center" >Reward</div>
     </div>
 
 
