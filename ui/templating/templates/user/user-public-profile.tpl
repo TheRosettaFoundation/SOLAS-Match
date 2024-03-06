@@ -1,13 +1,12 @@
-{include file='new_header.tpl'}
+{include file='header.tpl'}
 
 {if isset($this_user)}
- <div class="container-fluid bg-light-subtle">
-   <div class="container px-4  py-4 pt-5">
-
-     <div class=" d-flex justify-content-between py-4 align-items-center px-2">
-     <div >
-
-     <img  src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+    <div class="page-header">
+        <h1>
+        <table>
+            <tr>
+                <td>                    
+                    <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
                     {if $this_user->getDisplayName() != ''}
                         {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
@@ -15,14 +14,11 @@
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
                     {if !isset($no_header)}<small>{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
-
-     
-     </div>
-
-
-     <div>
-
-                   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                    
+                </td>
+                <td>                    
+                    <div class="pull-right">
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
                                 <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
@@ -56,12 +52,15 @@
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
-    </div> 
-
-     
-     </div>
-         {else} 
-       <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </h1>
+    </div>
+            
+{else}
+    <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
 {/if}
 
 {if isset($flash['error'])}
@@ -75,90 +74,80 @@
     </p>
 {/if}
 
-      
-    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
-  
-       <div class="d-flex justify-content-between fs-4 flex-wrap "> 
 
-        <div class="bg-body rounded-3 p-4 me-4 flex-grow-1">
-   
-         <span class="d-none">    ###########second flowing row</span>
-        <span class="d-none">
-        <div id="dialog_for_verification" title="Perform a translation test?" class="d-none">
-        <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
-        <p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
-        <p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
-        <p>If you do not want to take the test, please click “Cancel”.</p>
-        </div>
-             
+{if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
 
-        </span>
-        
+<span class="hidden">
+<div id="dialog_for_verification" title="Perform a translation test?">
+<p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
+<p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
+<p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
+<p>If you do not want to take the test, please click “Cancel”.</p>
+</div>
+</span>
 
-                    {if isset($userPersonalInfo)}
-                            <div class="mb-3 fw-bold">
-                          
-                                     {if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
-                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                     {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
-                                     {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
-                                     {/if}
-                                 
-                             </div>
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody>
+                        {if isset($userPersonalInfo)}
+                            <tr>
+                                 <td>
+                                     <h3>{if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                 </td>
+                             </tr>
                         {/if}
-
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div class="mb-3">
-                                
-                                    <div >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                            <tr>
+                                <td>
+                                    {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a class="custom-link" href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-grayish mt-3'>
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
-                               
-                            </div>
+                                </td>
+                            </tr>
                         {/if}
-
-                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             {if !empty($uuid)}
-                            <div class="mb-3">
-                               
+                            <tr>
+                                <td>
                                     <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class='pull-right btn btn-primary'>
                                         <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
                                     </a>
-                               
-                            </div>
+                                </td>
+                            </tr>
                             {/if}
-
-                               <div>
-                                
+                            <tr>
+                                <td>
                                     Joined: {substr($this_user->getCreatedTime(), 0, 10)}
-                               </div>     
-                                
+                                </td>
+                            </tr>
                         {/if}
-
                         {if isset($userPersonalInfo)}
                         {if !empty($userPersonalInfo->getMobileNumber())}
-                            <div class="mb-3"  >
-                               
+                            <tr>
+                                <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
-                               
-                            </div>
+                                </td>
+                            </tr>
                         {/if}
                         {if !empty($userPersonalInfo->getCity())}
-                            <div class="mb-3" >
-                          
+                                <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
-                               
-                            </div>
+                                </td>
+                            </tr>
                         {/if}
                         {if !empty($userPersonalInfo->getCountry())}
-                            <div class="mb-3" >
-                            
+                            <tr>
+                                <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
-                               
-                            </div>
+                                </td>
+                            </tr>
                         {/if}
                         {/if}
 
@@ -168,36 +157,42 @@
 
                         {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
                         {if !empty($bio)}
-                       
-                            
-                                <h4>About Me</h4>
-                            
-                      
-                        <div class="mb-3" >
-                            
+                        <tr>
+                            <td>
+                                <h3>About Me</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 {$bio}
-                            
-                        </div>
+                            </td>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        </tr>
                         {/if}
 
                         {assign var="native_language_code" value=""}
                         {if $this_user->getNativeLocale() != null}
                         {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
-                        <div class="mb-3">
-                            
+                        <tr>
+                            <td>
                                 Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
-                          
-                        </div>
+                            </td>
+                        </tr>
                         {/if}
-                        <hr class="bg-light-subtle"/>
+
                         {if !empty($userQualifiedPairs)}
-                       
-                         
-                               
-                                    <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
-                          
-                            <div class="mb-3">
-                                
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                         {$button_count.$pair=0}
@@ -212,8 +207,7 @@
 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
-                                         
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/ ><span class="bg-light-subtle rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -238,188 +232,182 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                             {/if}
                                         </p>
                                     {/foreach}
-                                
-                            </div>
+                                </td>
+                            </tr>
                         {/if}
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            
-                                    <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
-                             
-                            <div>
-                                
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3>Language Rate Pairs</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
-
-                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {$user_rate_pair['selection_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
                                             ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
-                               
-                            </div>
-                            <hr class="bg-light-subtle"/>
+                                </td>
+                            </tr>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div class="mb-3 fw-bold">
-                                
+                            <tr>
+                                <td>
                                     <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
                                         <i class="icon-list icon-white"></i> Edit Linguist Unit Rate Exceptions
                                     </a>
-                                
-                            </div>
-                               <hr class="bg-light-subtle"/>
+                                </td>
+                            </tr>
                         {/if}
 
-                           
-                                    <h4 class="mb-3 fw-bold">Services</h4>
-                            
-                            <div>
-                               
+                            <tr>
+                                <td>
+                                    <h3>Services</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                 <ul>
                                 {foreach from=$capability_list item=capability}
                                     {if $capability['state']}<li>{$capability['desc']|escape:'html':'UTF-8'}</li>{/if}
                                 {/foreach}
                                 </ul>
-                                
-                            </div>
-                               <hr class="bg-light-subtle"/>
-                           
-                                    <h4 class="mb-3 fw-bold" >Experienced in</h4>
-                            
-                            <div>
-                              
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <h3>Experienced in</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                 <ul>
                                 {foreach from=$expertise_list item=expertise}
                                     {if $expertise['state']}<li>{$expertise['desc']|escape:'html':'UTF-8'}</li>{/if}
                                 {/foreach}
                                 </ul>
-                              
-                            </div>
-                            <hr class="bg-light-subtle"/>
+                                </td>
+                            </tr>
 
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div>
-                                
-                                    <h4 class="mb-3 fw-bold" >Share this link with anyone you wish to see your profile:</h4>
-                                
-                            </div>
-                            <div>
-                               <span id="linkcopy">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
-                               </span>
-                                <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
-                            </div>
+                            <tr>
+                                <td>
+                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                </td>
+                            </tr>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div>
+                            <tr>
                                 <td style="padding-bottom: 10px" />
-                            </div>
-                          
+                            </tr>
+                            <tr>
+                                <td>
                                     <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                         <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
-                             {/if}
-                             
-
-  
-        </div>
-      <div class="bg-body p-4 rounded-3 text-body">
-
-
-            
-
-                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
-                
-
-                            <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
-                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
-                                <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="text-muted">WORDS DONATED</div>
-                              {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
+                                </td>
+                            </tr>
+                            {/if}
+                    </tbody>
+                </table>
+            </div>
+        </td>
+        
+        <td style="width: 4%"/>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%"> 
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                                <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
+                                <p class="first_badge"><span class="first_badge_number">{$user_badges['words_donated']}</span><br/> <span class="first_badge_desc">Words donated</span></p>
                             </div>
-
-                            <div class="">
-
-                            <img src="{urlFor name='home'}ui/img/profile_badge"  />
-
-                            </div>                           
-
-                            
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
-
-                        <hr class="bg-light-subtle"/>
-                 
-                  
+                        </td></tr>
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                       
-                            <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
-
-                             <div class="">
-                               <span id="badgecopy" class="text-break link-primary me-2" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
-                               </span>
-                                <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
-                            </div>
-                        
-                    
-                            
-                        
+                        <tr><td>
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                        </td></tr>
+                        <tr><td>
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                        </td></tr>
                         {/if}
-               
                         {if !empty($user_badges['hours_donated'])}
-
-
-                        <hr class="bg-light-subtle"/>
-             
-                        <div class="">
-                            <div class="">
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
                                 <p class="first_badge"><span class="first_badge_number">{$user_badges['hours_donated']}</span><br/> <span class="first_badge_desc">Hours donated</span></p>
                             </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="25%" />
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
-                      
-                      
+                        </td></tr>
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                 
-                            <h4>Use the link below to embed the above badge in another system:</h4>
-                       
-                           <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank" ><span class="d-none">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
-                       
+                        <tr><td>
+                            <h3>Use the link below to embed the above badge in another system:</h3>
+                        </td></tr>
+                        <tr><td>
+                            <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
+                        </td></tr>
                         {/if}
                         {/if}
-                 
-                       
-                                <h4 class="mb-3 fw-bold">Supported Organizations</h4>
-                       
-                       
+
+                        <tr>
+                            <td>
+                                <h3>Supported NGOs</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                             <ul>
                             {foreach from=$supported_ngos item=supported_ngo}
                                 <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
                             {/foreach}
                             </ul>
-                        
+                            </td>
+                        </tr>
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($supported_ngos_paid)}
-                       
-                                <h4 class="mb-3 fw-bold">NGOs supported with paid projects</h4>
-                       
-                      
+                        <tr>
+                            <td>
+                                <h3>NGOs supported with paid projects</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                             <ul>
                             {foreach from=$supported_ngos_paid item=supported_ngo}
                                 <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
                             {/foreach}
                             </ul>
-                 
+                            </td>
+                        </tr>
                         {/if}
 
-                      
-                                <h4 class="mb-3 fw-bold">Certificates and training courses</h4>
-                       
-                    
+                        <tr>
+                            <td>
+                                <h3>Certificates and training courses</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                             <ul>
                         {foreach from=$certifications item=certification}
                         <li>
@@ -447,58 +435,19 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         </li>
                         {/foreach}
                             </ul>
-                       
+                            </td>
+                        </tr>
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a>
+                        <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a></td></tr>
                         {/if}
 
-                        <hr  class="bg-light-subtle"/>
-
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-
-                               <div class="d-flex justify-content-between mb-3">
-                                    <div class="fw-bold"> Average scores in reviews </div>
-                                    <div class="fw-bold">Average score out of 5</div>
-                                </div>
-
-
-                                <div class="text-sm mb-4">This information is only visible to you</div>
-
-                                <div class="d-flex justify-content-between mt-2"> 
-                                     <div>
-
-                                        <div class="mb-2">Accuracy</div>
-                                        <div class="mb-2">Fluency</div>
-                                        <div class="mb-2">Terminology</div>
-                                        <div class="mb-2">Style</div>
-                                        <div class="mb-2">Design</div>
-
-                                     
-                                     
-                                     </div>
-                                     <div>
-
-                                         <div class="mb-2">{$quality_score['accuracy']}</div>
-                                          <div class="mb-2">{$quality_score['fluency']}</div>
-                                           <div class="mb-2">{$quality_score['terminology']}</div>
-                                            <div class="mb-2">{$quality_score['style']}</div>
-                                             <div class="mb-2">{$quality_score['design']}</div>
-                                       
-                                     
-                                     </div>
-                                
-                                </div>
-
-
-                             
-
-
-                             
-
-          
-
-                            {*
+                        <tr>
+                            <td style="padding-bottom: 10px"/>
+                        </tr>
+                        <tr>
+                            <td>
                                <table>
                                    <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
                                    <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
@@ -507,31 +456,20 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                    <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
                                    <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
                                </table>
-                            *}
-                     
+                            </td>
+                        </tr>
                         {/if}
-              
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
 
-
-     
- 
-     </div>
-     </div>
-     
- 
-     
-
-
-
-
-
-
- <div class="mt-3 p-4 rounded-2 bg-body" >
-
-    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-
-    <h3 class="fw-bold mb-3">Community Recognition Program <span class="text-muted fs-4">Contribute to our mission and obtain rewards</span></h3>
-
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+<div class="page-header">
+    <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
+</div>
 <p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
 As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
 Deliver tasks on the TWB platform to build up points.
@@ -546,150 +484,84 @@ will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
-<div class="d-flex justify-content-between">
+<p style="margin-bottom:50px;" />
 
-<div class="w-50">
-<div class="border border-1 border-primaryDark rounded-3 ">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 48%">
+            <div>
+                <h2>
+                    <span style="color: #9e6100;">Rewards offered</span>
+                    <!--
+                    <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
+                    -->
+                </h2>
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Reward</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                   <td align="center" style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">15,000</td>                                  <td align="center" style="border:2px solid #e8991c">Reference letter</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">30,000</td>                                  <td align="center" style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
+                    </tbody>
+                </table>
 
-   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2" >
+                <p style="margin-bottom:20px;" />
+                <h2 style="color: #9e6100;">How do I earn points?</h2>
+                The points are calculated as follows:
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Type of task</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Unit</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points accrued per unit</strong></td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                                   <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Proofreading/Approval</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.25</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                                 <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Voice recording</td>                               <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Translation of subtitles</td>                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Revision of subtitles</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c">Terminology</td>                                   <td align="center" style="border:2px solid #e8991c">1 term</td>                                <td align="center" style="border:2px solid #e8991c">10</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
 
-      <div class="fw-bold me-4">Points</div>
-      <div class="fw-bold flex-grow-1" >Reward</div>
-    </div>
-
-       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-
-      <div class="  me-4 ">5,000</div>
-      <div class=" flex-grow-1" >Certification of volunteer activity</div>
-    </div>
-
-      <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-
-      <div class=" me-4">15,000</div>
-      <div class=" flex-grow-1" >Reference Letter</div>
-    </div>
-
-
-     <div class=" d-flex   p-2" >
-
-      <div class="  me-4">30,000</div>
-      <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
-    </div>
-
-
-</div>
-
-
-
-<div class=" border border-1 border-primaryDark rounded-3 mt-4">
-
-   <div class=" d-flex  border-bottom border-primaryDark  p-2 px-2" >
-
-      <div class="fw-bold w-50 me-2">Type of task</div>
-      <div class="fw-bold me-6" >Unit</div>
-         <div class="fw-bold flex-grow-1 " >Points accrued per unit </div>
-
-    </div>
-
-       <div class=" d-flex  border-bottom border-primaryDark p-2" >
-
-         <div class=" w-50 me-2">Translation</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 1 </div>
-
-        </div>
-
-      <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-
-        <div class="w-50 me-2">Revision</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 0.5 </div>
-
-     
-     </div>
-
-
-     <div class=" d-flex p-2 border-bottom border-primaryDark" >
-
-       <div class=" w-50 me-2"> Proofreading/Approval</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 0.25 </div>
-
-    </div>
-
-     <div class=" d-flex p-2 border-bottom border-primaryDark " >
-
-       <div class=" w-50 me-2"> Transcription</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 0.5 </div>
-
-    </div>
-      <div class=" d-flex p-2 border-bottom border-primaryDark " >
-
-       <div class=" w-50 me-2"> Voice Recording</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 1 </div>
-
-    </div>
-
-     <div class=" d-flex p-2 border-bottom border-primaryDark " >
-
-       <div class=" w-50 me-2"> Translation of subtitles</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 1 </div>
-
-    </div>
-
-       <div class=" d-flex p-2 border-bottom border-primaryDark" >
-
-       <div class=" w-50 me-2"> Revision of subtitles</div>
-        <div class=" me-4" > 1 word</div>
-         <div class="flex-grow-1" > 0.5 </div>
-
-    </div>
-
-      <div class=" d-flex p-2 " >
-
-       <div class=" w-50 me-2"> Terminology</div>
-        <div class=" me-4" > 1 term</div>
-         <div class="flex-grow-1" >10 </div>
-
-    </div>
-
-
-</div>
-</div>
-
-
-
-<div class="flex-grow-1 ms-6">
-
-      <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
-                
-
-                            <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
-                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
-                                <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="text-muted">WORDS DONATED</div>
-                              {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
+        <td style="width: 4%"> </td>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        <tr><td>
+                        <div class="containerBox">
+                            <div class="text-box">
+                            {if empty($user_badges['strategic_points'])}
+                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <h5 class="recognition">
+                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="recognition_desc">RECOGNITION POINTS</span>
+                                </h5>
+                            {else}
+                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <p class="strategic">
+                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
+                                    <span class="strategic_desc2"> of which
+                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
+                                        POINTS
+                                    </span><br />
+                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
+                                </p>
+                            {/if}
                             </div>
-
-                            <div class="">
-
-                            <img src="{urlFor name='home'}ui/img/profile_badge"  />
-
-                            </div>                           
-
-                            
+                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="65%" />
                         </div>
-
-</div>
-
-</div>
-
-</div>
-<div>
+                        </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
@@ -705,7 +577,7 @@ We hope that the rewards included in our Community Recognition Program may help 
 <p>Currently, the languages for which we can offer monetary rewards are Amharic; Bengali; Bengali, India; Bura-Pabir; Burmese; Chadian Arabic; Chadian Arabic Latin; Chittagonian; Dari; Fulah; Haitian; Hausa; Kanuri; Kibaku; Kurdish Bahdini; Kurdish Kurmanji; Kurdish Sorani; Lingala; Ganda; Wandala (formerly Mandara); Marghi Central; Mongo; Nande; Ngombe; Oromo; Pushto; Pushto, Pakistan; Rohingya Bengali; Rohingya Latin; Romani; Shi; Somali; Somali, Ethiopia; Swahili; Swahili, Congo; Tigrinya; Ukrainian; Lamang (formerly Waha).</p>
 <p>This list may change over time, depending on our strategic needs and budgetary constraints related to our crisis response work and international programs.
 If a language is to be removed from this list, the community will be informed beforehand.</p>
-<div class="table-responsive">
+
 <table border="0">
     <tr valign="top">
         <td style="width: 60%">
@@ -784,36 +656,25 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 40%"></td>
     </tr>
 </table>
-</div>
 {/if}
 {/if}
-</div>
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-
+<hr/>
 {/if}
-<div>
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-
+<div class="page-header">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
-    <div class=" d-flex justify-content-end mt-4">
-
-    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success" target="_blank" style="margin-top: -5px;">
+    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
         <i class="icon-print icon-white"></i> Generate Certificate
     </a>
-    </div>
-
 {/if}
-</div>
-<div class="mt-4 p-4 rounded-3">
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 mb-4 ">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-
-<div class="table-responsive">
 <table id="printrequest" class="display" style="width:100%">
         <thead>
             <tr>
@@ -827,8 +688,6 @@ If a language is to be removed from this list, the community will be informed be
 
     </table>
 </div>
-</div>
-<div class="table-responsive">
 
 <div class="page-header">
 {if !empty($valid_key_reference_letter)}
@@ -854,46 +713,6 @@ If a language is to be removed from this list, the community will be informed be
 
     </table>
     
-</div>
-{/if}
-
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-<div class="page-header">
-{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
-    <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
-    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-</form>
-{/if}
-{if !empty($sent_contracts)}
-<table style="width:100%">
-    <thead>
-        <tr>
-            <td><strong>Contract Type</strong></td>
-            <td><strong>Admin</strong></td>
-            <td><strong>Status</strong></td>
-            <td><strong>Update Date</strong></td>
-            <td><strong>Contract Date</strong></td>
-        </tr>
-    </thead>
-    {foreach $sent_contracts as $sent_contract}
-        <tr>
-            <td>{$sent_contract['type']}</td>
-            <td><a href="{urlFor name="user-public-profile" options="user_id.{$sent_contract['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($sent_contract['first_name'])} {TemplateHelper::uiCleanseHTML($sent_contract['last_name'])}</a></td>
-            <td>
-                {if     $sent_contract['status'] == 'recipient-sent'}Sent to Linguist
-                {elseif $sent_contract['status'] == 'recipient-delivered'}Viewed by Linguist
-                {elseif $sent_contract['status'] == 'recipient-completed'}Signed by Linguist
-                {elseif $sent_contract['status'] == 'envelope-completed'}Contract Completed
-                {else}{$sent_contract['status']}
-                {/if}
-            </td>
-            <td>{$sent_contract['update_date']}</td>
-            <td>{$sent_contract['contract_date']}</td>
-        </tr>
-    {/foreach}
-</table>
-{/if}
 </div>
 {/if}
 
@@ -962,7 +781,7 @@ If a language is to be removed from this list, the community will be informed be
 {/foreach}
 </table>
 
-<hr class="bg-light-subtle"/>
+<hr/>
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3></td>
@@ -1017,7 +836,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
-<hr class="bg-light-subtle"/>
+<hr/>
 
 <table border="0">
     <tr valign="top">
@@ -1073,7 +892,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
-<hr class="bg-light-subtle" />
+<hr />
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
@@ -1084,8 +903,8 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 25%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 25%"><strong>Maximum number of claimed/in progress tasks volunteer can have at any one time (0 => no limit)</strong></td>
-        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, nothing in field (not a blank) => any)</strong></td>
+        <td style="width: 25%"><strong>Maximumum number of claimed/in progress tasks volunteer can have at any one time (0 => no limit)</strong></td>
+        <td style="width: 25%"><strong>Comma separated list of task types volunteer can claim (e.g. 2 => Translation, blank => any)</strong></td>
         <td style="width: 25%"><strong>Comma separated list of partner IDs for which the volunteer cannot claim tasks</strong></td>
         <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
     </tr>
@@ -1104,47 +923,7 @@ If a language is to be removed from this list, the community will be informed be
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-<hr class="bg-light-subtle" />
-
-{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
-<table border="0">
-    <tr valign="top">
-        <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
-        <td style="width: 33%"></td>
-        <td style="width: 34%"></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 33%"><strong>Admin</strong></td>
-        <td style="width: 33%"><strong>Country</strong></td>
-        <td style="width: 34%"><strong>Google Drive Link</strong></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
-        <td style="width: 33%">
-            <select name="country_id" id="country">
-                <option value="">--Select--</option>
-                {foreach $countries as $country}
-                    {if $country->getCode() != 'LATN' && $country->getCode() != 'CYRL' && $country->getCode() != '419' && $country->getCode() != 'HANS' && $country->getCode() != 'HANT' && $country->getCode() != 'ARAB' && $country->getCode() != 'BENG' && $country->getCode() != 'ROHG'}
-                        <option value="{$country->getId()}" {if $country->getId() == $linguist_payment_information['country_id']}selected="selected"{/if}>{$country->getName()|escape:'html':'UTF-8'}</option>
-                    {/if}
-                {/foreach}
-            </select>
-        </td>
-        <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
-    </tr>
-    {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-    <tr valign="top">
-        <td style="width: 33%"><input type="submit" class="btn btn-primary" name="mark_linguist_payment_information" value="Submit" /></td>
-        <td style="width: 33%"></td>
-        <td style="width: 34%"></td>
-    </tr>
-    {/if}
-</table>
-{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-</form>
-{/if}
-<hr class="bg-light-subtle" />
+<hr />
 
 {/if}
 
@@ -1309,7 +1088,7 @@ If a language is to be removed from this list, the community will be informed be
                 </div>
             </div>
             <p style="margin-bottom:20px;"/>
-            <hr class="bg-light-subtle"/>
+            <hr/>
         {/foreach}
         
         <p style="margin-bottom:50px;"/>
@@ -1336,14 +1115,6 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 {/if}
 
-
-##############################################
-   </div>
-   </div>
-   </div>
-   
 {/if}
 
-
-
-{include file='footer2.tpl'}
+{include file='footer.tpl'}
