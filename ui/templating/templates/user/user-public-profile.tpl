@@ -356,8 +356,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
                             <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
 
-                             <div class="d-flex me-2">
-                               <span id="badgecopy" class="text-break w-25" >
+                             <div class="">
+                               <span id="badgecopy" class="text-break w-25 me-2" >
                                    <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
                                 <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
@@ -385,7 +385,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
-                            <h3>Use the link below to embed the above badge in another system:</h3>
+                            <h4>Use the link below to embed the above badge in another system:</h4>
                        
                            <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}" target="_blank" ><span class="d-none">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
                        
@@ -405,7 +405,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($supported_ngos_paid)}
                        
-                                <h3>NGOs supported with paid projects</h3>
+                                <h4 class="mb-3 fw-bold">NGOs supported with paid projects</h4>
                        
                       
                             <ul>
@@ -417,7 +417,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
 
                       
-                                <h3>Certificates and training courses</h3>
+                                <h4 class="mb-3 fw-bold">Certificates and training courses</h4>
                        
                     
                             <ul>
@@ -453,8 +453,49 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                      <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a>
                         {/if}
 
+                        <hr  class="bg-light-subtle"/>
+
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+
+                           <div class="p-2">
+                         <div class="d-flex justify-content-between">
+                         <div> Average scores in reviews </div>
+                         <div>Average score out of 5</div>
+                        <div>
+                        <div class="text-sm mb-4">This information is only visible to you</div>
+
+                        <div class='d-flex justify-content-between mt-2">
+
+                          <div class="d-flex flex-column">
+                                <div class="mb-2">Accuracy</div>
+                                <div class="mb-2">Fluency</div>
+                                <div class="mb-2">Terminology</div>
+                                <div class="mb-2">Style</div>
+                                <div class="mb-2">Design</div>
+                      
+                          </div>
+                          <div class="d-flex flex-column mb-2" >
+
+                               <div class="mb-2">{$quality_score['accuracy']}</div>
+                                <div class="mb-2">{$quality_score['fluency']}</div>
+                                <div class="mb-2">{$quality_score['terminology']}</div>
+                                <div class="mb-2">{$quality_score['style']}</div>
+                                <div class="mb-2">{$quality_score['design']}/div>
+                      
                           
+                          </div>
+                        
+                        </div>
+
+                        
+                        </div>
+                         
+                         </div>
+                        
+                        </div>
+          
+
+                            {*
                                <table>
                                    <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
                                    <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
@@ -463,6 +504,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                    <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
                                    <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
                                </table>
+                            *}
                      
                         {/if}
               
