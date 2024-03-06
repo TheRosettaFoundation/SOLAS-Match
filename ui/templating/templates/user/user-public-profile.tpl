@@ -552,28 +552,28 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <h4 class="fw-bold mb-3"> Reward offered</h4>
 <div class="bg-body p-2  border border-primary border-1 rounded-3  w-md-25 ">
     <div class="table-responsive ">
-<table class="table border border-1 border-primary ">
+<table class="table  ">
   <thead>
-    <tr>
+    <tr class="border border-primary border-bottom-1" >
 
       <th scope="col">Points</th>
       <th scope="col">Reward</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <tr class="border border-primary border-bottom-1">
 
       <td>5,000</td>
       <td>Certification of volunteer activity</td>
   
     </tr>
-    <tr>
+    <tr class="border border-primary border-bottom-1">
 
       <td>15,000</td>
       <td>Reference Letter</td>
       
     </tr>
-    <tr>
+    <tr class="border border-primary border-bottom-1">
 
       <td >30,000</td>
       <td>Recommendation on professional platforms</td>
