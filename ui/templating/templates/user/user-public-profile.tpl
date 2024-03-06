@@ -554,19 +554,24 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <span class="d-none"> DEBUT FLEX WITH PIC</span >
 
 
-<div class="d-flex rounded-3 border border-primary border-1 ">
+<div class=" rounded-3 border border-primary border-1  w-50">
+ <div class="flex justify-content-between">
 
-    <div class="fw-bold border-primary">
+
+    <div class="fw-bold border-primary  border border-primary border-1">
 
     Points
 
     </div>
 
-    <div class="fw-bold border-primary">
+    <div class="fw-bold border-primary  border border-primary border-1">
 
     Rewards
 
     </div>
+ 
+ </div>
+    
 1
 </div>
 
