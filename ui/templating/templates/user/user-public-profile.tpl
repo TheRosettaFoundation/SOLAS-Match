@@ -838,10 +838,11 @@ If a language is to be removed from this list, the community will be informed be
         <i class="icon-print icon-white"></i> Generate Letter
     </a>
 {/if}
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="mt-4 mb-4 "">
     <input type="submit" class="btn btn-primary" name="PrintRequestLetter" value="Request Reference Letter" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+<div class="table-responsive">
 <table id="printrequestletter" class="display" style="width:100%">
         <thead>
             <tr>
@@ -854,8 +855,10 @@ If a language is to be removed from this list, the community will be informed be
         </thead>
 
     </table>
+</div>
     
 </div>
+
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
