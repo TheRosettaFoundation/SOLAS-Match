@@ -36,11 +36,10 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
                             <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i>   <img src="{urlFor name='home'}ui/img/edit_profile" class="me-1" /> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
-                            </a>
+                                <i class="icon-wrench icon-white"></i>  {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary text-white'>
+                                 <img src="{urlFor name='home'}ui/img/edit_profile" class="me-1" /> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
                         {/if}
@@ -355,10 +354,17 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
-                            <h3>Use the link below to embed the above badge in another system:</h3>
+                            <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
+
+                             <div class="d-flex me-2">
+                               <span id="badgecopy" class="text-break w-25" >
+                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                               </span>
+                                <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                            </div>
                         
                     
-                            <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                            
                         
                         {/if}
                         {if !empty($user_badges['hours_donated'])}

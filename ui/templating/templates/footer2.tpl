@@ -197,8 +197,12 @@
 
                     const linkCopy= document.querySelector('#linkcopy') ;
 
+                     const badgeCopy= document.querySelector('#badgecopy') ;
+
+
                   
                     const buttonCopy = document.querySelector('#copy-button') ;
+                    const buttonBadge = document.querySelector('#badge-button') ;
 
                     buttonCopy.addEventListener("click" , async()=>{
                           let linkText = linkCopy.textContent ;
@@ -207,6 +211,16 @@
                             buttonCopy.textContent = "Copied"
                         })
                     })
+
+
+                    buttonBadge.addEventListener("click" , async()=>{
+                          let linkText = badgeCopy.textContent ;
+                        await navigator.clipboard.writeText(linkText).then(()=>{
+                            console.log('Link copied successfully') ;
+                            buttonBadge.textContent = "Copied"
+                        })
+                    })
+
 
                     
                     </script>
