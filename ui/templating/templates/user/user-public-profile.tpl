@@ -553,8 +553,8 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
-      <div class="  me-4">Points</div>
-      <div class=" flex-grow-1" >Reward</div>
+      <div class="fw-bold me-4">Points</div>
+      <div class="fw-bold flex-grow-1" >Reward</div>
     </div>
 
        <div class=" d-flex  border-bottom border-primary  p-2" >
