@@ -586,7 +586,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
       <div class="fw-bold w-50 me-2">Type of task</div>
-      <div class="fw-bold me-2" >Unit</div>
+      <div class="fw-bold me-4" >Unit</div>
          <div class="fw-bold flex-grow-1 " >Points accrued per unit </div>
 
     </div>
@@ -594,16 +594,16 @@ If you work on a revision task or a proofreading/approval task and notice that t
        <div class=" d-flex  border-bottom border-primary  p-2" >
 
          <div class=" w-50 me-2">Translation</div>
-        <div class=" me-2" > 1 word</div>
+        <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 1 </div>
 
         </div>
 
       <div class=" d-flex  border-bottom border-primary  p-2" >
 
-        <div class=" flex-grow-1 me-2">Revision</div>
-        <div class=" me-2" > 1 word</div>
-         <div class="" > 0.5 </div>
+        <div class="w-50 me-2">Revision</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 0.5 </div>
 
      
      </div>
@@ -611,9 +611,48 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
      <div class=" d-flex p-2" >
 
-       <div class=" flex-grow-1 me-2"> Proofreading/Approval</div>
-        <div class=" me-2" > 1 word</div>
-         <div class="" > 0.25 </div>
+       <div class=" w-50 me-2"> Proofreading/Approval</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 0.25 </div>
+
+    </div>
+
+     <div class=" d-flex p-2" >
+
+       <div class=" w-50 me-2"> Transcription</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 0.5 </div>
+
+    </div>
+      <div class=" d-flex p-2" >
+
+       <div class=" w-50 me-2"> Voice Recording</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 1 </div>
+
+    </div>
+
+     <div class=" d-flex p-2" >
+
+       <div class=" w-50 me-2"> Translation of subtitles</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 1 </div>
+
+    </div>
+
+       <div class=" d-flex p-2" >
+
+       <div class=" w-50 me-2"> Revision of subtitles</div>
+        <div class=" me-4" > 1 word</div>
+         <div class="flex-grow-1" > 0.5 </div>
+
+    </div>
+
+      <div class=" d-flex p-2" >
+
+       <div class=" w-50 me-2"> Terminology</div>
+        <div class=" me-4" > 1 term</div>
+         <div class="flex-grow-1" >10 </div>
 
     </div>
 
