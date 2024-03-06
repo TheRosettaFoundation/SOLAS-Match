@@ -530,7 +530,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
-    <h4 class="fw-bold mb-3">Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h4>
+    <h3 class="fw-bold mb-3">Community Recognition Program <h4 class="text-muted">Contribute to our mission and obtain rewards</h4></h3>
 
 <p>We believe it is important to acknowledge the value and impact of the crucial support that our TWB Community members provide.
 As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
@@ -549,21 +549,21 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="d-flex justify-content-between">
 
 <div class="w-50">
-<div class="border border-1 border-primary rounded-3 ">
+<div class="border border-1 border-primarydark rounded-3 ">
 
-   <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
+   <div class=" d-flex  border-bottom border-primarydark  pt-2 px-2" >
 
       <div class="fw-bold me-4">Points</div>
       <div class="fw-bold flex-grow-1" >Reward</div>
     </div>
 
-       <div class=" d-flex  border-bottom border-primary  p-2" >
+       <div class=" d-flex  border-bottom border-primarydark  p-2" >
 
       <div class="  me-4 ">5,000</div>
       <div class=" flex-grow-1" >Certification of volunteer activity</div>
     </div>
 
-      <div class=" d-flex  border-bottom border-primary  p-2" >
+      <div class=" d-flex  border-bottom border-primarydark  p-2" >
 
       <div class=" me-4">15,000</div>
       <div class=" flex-grow-1" >Reference Letter</div>
@@ -581,9 +581,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" border border-1 border-primary rounded-3 mt-4">
+<div class=" border border-1 border-primarydark rounded-3 mt-4">
 
-   <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
+   <div class=" d-flex  border-bottom border-primarydark  pt-2 px-2" >
 
       <div class="fw-bold w-50 me-2">Type of task</div>
       <div class="fw-bold me-6" >Unit</div>
@@ -591,7 +591,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-       <div class=" d-flex  border-bottom border-primary  p-2" >
+       <div class=" d-flex  border-bottom border-primarydark  p-2" >
 
          <div class=" w-50 me-2">Translation</div>
         <div class=" me-4" > 1 word</div>
@@ -599,7 +599,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
         </div>
 
-      <div class=" d-flex  border-bottom border-primary  p-2" >
+      <div class=" d-flex  border-bottom border-primarydark  p-2" >
 
         <div class="w-50 me-2">Revision</div>
         <div class=" me-4" > 1 word</div>
@@ -609,7 +609,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
      </div>
 
 
-     <div class=" d-flex p-2 border-bottom border-primary" >
+     <div class=" d-flex p-2 border-bottom border-primarydark" >
 
        <div class=" w-50 me-2"> Proofreading/Approval</div>
         <div class=" me-4" > 1 word</div>
@@ -617,14 +617,14 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-     <div class=" d-flex p-2 border-bottom border-primary " >
+     <div class=" d-flex p-2 border-bottom border-primarydark " >
 
        <div class=" w-50 me-2"> Transcription</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 0.5 </div>
 
     </div>
-      <div class=" d-flex p-2 border-bottom border-primary " >
+      <div class=" d-flex p-2 border-bottom border-primarydark " >
 
        <div class=" w-50 me-2"> Voice Recording</div>
         <div class=" me-4" > 1 word</div>
@@ -632,7 +632,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-     <div class=" d-flex p-2 border-bottom border-primary " >
+     <div class=" d-flex p-2 border-bottom border-primarydark " >
 
        <div class=" w-50 me-2"> Translation of subtitles</div>
         <div class=" me-4" > 1 word</div>
@@ -640,7 +640,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-       <div class=" d-flex p-2 border-bottom border-primary" >
+       <div class=" d-flex p-2 border-bottom border-primarydark" >
 
        <div class=" w-50 me-2"> Revision of subtitles</div>
         <div class=" me-4" > 1 word</div>
@@ -672,82 +672,6 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<table border="0">
-    <tr valign="top">
-        <td style="width: 48%">
-            <div>
-                <h2>
-                    <span style="color: #9e6100;">Rewards offered</span>
-                    <!--
-                    <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
-                        <i class="icon-list icon-white"></i> Request reward
-                    </a>
-                    -->
-                </h2>
-                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
-                    <tbody>
-                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Reward</strong></td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">5,000</td>                                   <td align="center" style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">15,000</td>                                  <td align="center" style="border:2px solid #e8991c">Reference letter</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">30,000</td>                                  <td align="center" style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
-                    </tbody>
-                </table>
-
-                <p style="margin-bottom:20px;" />
-                <h2 style="color: #9e6100;">How do I earn points?</h2>
-                The points are calculated as follows:
-                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
-                    <tbody>
-                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Type of task</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Unit</strong></td><td align="center" style="border:2px solid #e8991c; color: #576e82; font-size: 15px;"><strong>Points accrued per unit</strong></td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                                   <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Proofreading/Approval</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.25</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                                 <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Voice recording</td>                               <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Translation of subtitles</td>                      <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">1</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Revision of subtitles</td>                         <td align="center" style="border:2px solid #e8991c">1 word</td>                                <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
-                        <tr><td align="center" style="border:2px solid #e8991c">Terminology</td>                                   <td align="center" style="border:2px solid #e8991c">1 term</td>                                <td align="center" style="border:2px solid #e8991c">10</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </td>
-
-        <td style="width: 4%"> </td>
-        <td style="width: 48%">
-            <div>
-                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                    <tbody align="left" width="48%">
-                        <tr><td>
-                        <div class="">
-                            <div class="">
-                            {if empty($user_badges['strategic_points'])}
-                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <h5 class="recognition">
-                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
-                                    <span class="recognition_desc">RECOGNITION POINTS</span>
-                                </h5>
-                            {else}
-                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <p class="strategic">
-                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
-                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
-                                    <span class="strategic_desc2"> of which
-                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
-                                        POINTS
-                                    </span><br />
-                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
-                                </p>
-                            {/if}
-                            </div>
-                            <img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" width="25%" />
-                        </div>
-                        </td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </td>
-    </tr>
-</table>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
