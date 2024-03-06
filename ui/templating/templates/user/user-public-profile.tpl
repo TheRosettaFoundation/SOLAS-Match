@@ -829,9 +829,9 @@ If a language is to be removed from this list, the community will be informed be
     </table>
 </div>
 
+<hr class="bg-light-subtle"/>
 
-
-<div class="page-header">
+<div class="mt-4">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
