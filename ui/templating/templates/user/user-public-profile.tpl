@@ -551,13 +551,13 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 <div class="d-flex rounded-3 border border-primary border-1">
-    <div class="fw-bold">
+    <div class="fw-bold border-primary">
 
     Points
 
     </div>
 
-    <div class="fw-bold">
+    <div class="fw-bold border-primary">
 
     Rewards
 
