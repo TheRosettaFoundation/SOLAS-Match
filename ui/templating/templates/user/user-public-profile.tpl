@@ -549,7 +549,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="d-flex justify-content-between">
 
 
-<div class="w-25 border border-1 border-primary rounded-3 ">
+<div class="w-50 border border-1 border-primary rounded-3 ">
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
@@ -571,6 +571,38 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
      <div class=" d-flex   p-2" >
+
+      <div class="  me-4">30,000</div>
+      <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
+    </div>
+
+
+</div>
+
+
+
+<div class="w-50 border border-1 border-primary rounded-3 ">
+
+   <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
+
+      <div class="fw-bold me-4">Points</div>
+      <div class="fw-bold flex-grow-1" >Reward</div>
+    </div>
+
+       <div class=" d-flex  border-bottom border-primary  p-2" >
+
+      <div class="  me-4 ">5,000</div>
+      <div class=" flex-grow-1" >Certification of volunteer activity</div>
+    </div>
+
+      <div class=" d-flex  border-bottom border-primary  p-2" >
+
+      <div class=" me-4">15,000</div>
+      <div class=" flex-grow-1" >Reference Letter</div>
+    </div>
+
+
+     <div class=" d-flex p-2" >
 
       <div class="  me-4">30,000</div>
       <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
