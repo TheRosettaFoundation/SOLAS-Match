@@ -328,7 +328,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
             
 
-                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
+                        <div class="bg-yellowish-subtle  text-dark d-flex justify-content-between rounded-3  p-2">
                 
 
                             <div class="d-flex flex-column">
