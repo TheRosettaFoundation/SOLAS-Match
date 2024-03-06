@@ -662,7 +662,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div>
+<div class="flex-grow-1">
 
       <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
                 
