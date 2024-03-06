@@ -689,9 +689,13 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 
-
+{*
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
+    
+*}
+
+
 <p style="margin-bottom:20px;" />
 <p>Our Community Recognition Program also includes monetary rewards for some marginalized languages.
 Speakers of marginalized languages often face high connectivity costs when offering their online support.
