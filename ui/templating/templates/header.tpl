@@ -357,7 +357,7 @@
                                 </div>
                                 <div class="d-flex flex-column mb-2" >
 
-                                    <div class="mb-2">{$quality_score['accuracy']}</div>
+                                        <div class="mb-2">{$quality_score['accuracy']}</div>
                                         <div class="mb-2">{$quality_score['fluency']}</div>
                                         <div class="mb-2">{$quality_score['terminology']}</div>
                                         <div class="mb-2">{$quality_score['style']}</div>

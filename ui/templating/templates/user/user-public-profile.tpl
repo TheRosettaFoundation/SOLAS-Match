@@ -475,6 +475,16 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                             <div class="mb-2">Design</div>
 
                                         </div>
+                                          <div class="d-flex flex-column mb-2" >
+
+                                            <div class="mb-2">{$quality_score['accuracy']}</div>
+                                            <div class="mb-2">{$quality_score['fluency']}</div>
+                                            <div class="mb-2">{$quality_score['terminology']}</div>
+                                            <div class="mb-2">{$quality_score['style']}</div>
+                                            <div class="mb-2">{$quality_score['design']}/div>
+                                
+                                
+                                </div>
                             
                            
 
