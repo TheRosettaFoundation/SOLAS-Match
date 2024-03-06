@@ -83,7 +83,7 @@
        <div class="d-flex justify-content-between fs-4 "> 
         <div class="bg-body rounded-3 p-4">
   
-         <span>    ###########second flowing row</span>
+         <span class="d-none">    ###########second flowing row</span>
         <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
@@ -97,7 +97,7 @@
         
 
                     {if isset($userPersonalInfo)}
-                            <div>
+                            <div class="mb-3">
                           
                                      {if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
                                      {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -109,7 +109,7 @@
                         {/if}
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div>
+                            <div class="mb-3">
                                 
                                     <div class="custom-link">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -123,7 +123,7 @@
 
                              {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             {if !empty($uuid)}
-                            <div>
+                            <div class="mb-3">
                                
                                     <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class='pull-right btn btn-primary'>
                                         <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
@@ -141,21 +141,21 @@
 
                         {if isset($userPersonalInfo)}
                         {if !empty($userPersonalInfo->getMobileNumber())}
-                            <div>
+                            <div class="mb-3"  >
                                
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
                                
                             </div>
                         {/if}
                         {if !empty($userPersonalInfo->getCity())}
-                            <div>
+                            <div class="mb-3" >
                           
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
                                
                             </div>
                         {/if}
                         {if !empty($userPersonalInfo->getCountry())}
-                            <div>
+                            <div class="mb-3" >
                             
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
                                
@@ -174,7 +174,7 @@
                                 <h3>About Me</h3>
                             
                       
-                        <div>
+                        <div class="mb-3" >
                             
                                 {$bio}
                             
@@ -184,7 +184,7 @@
                         {assign var="native_language_code" value=""}
                         {if $this_user->getNativeLocale() != null}
                         {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
-                        <div>
+                        <div class="mb-3">
                             
                                 Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                           
@@ -197,7 +197,7 @@
                                
                                     <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
                           
-                            <div>
+                            <div class="mb-3">
                                 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
@@ -214,7 +214,7 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                          
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" ><span class=""> {Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" ><span class="bg-gray rounded-2 p-1"> {Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp<soan>;
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
