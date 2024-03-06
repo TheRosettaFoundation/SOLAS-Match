@@ -469,7 +469,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <div class='d-flex justify-content-between mt-2">
 
                                 </div>
-                                #####end of flex an column grid
+                                <class="d-none">#####end of flex an column grid</div>
 
 
                              
@@ -491,7 +491,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
               
 
 
-    #######################end of 2nd flez 
+   <span class="d-none"> #######################end of 2nd flez </span>
 
      
  
