@@ -97,7 +97,7 @@
         
 
                     {if isset($userPersonalInfo)}
-                            <div class="mb-3">
+                            <div class="mb-3 fw-bold">
                           
                                      {if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
                                      {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -113,7 +113,7 @@
                                 
                                     <div class="custom-link">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-secondart'>
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-grayish mt-3'>
                                             <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -195,7 +195,7 @@
                        
                          
                                
-                                    <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
+                                    <h3 class="mb-3">{Localisation::getTranslation('common_secondary_languages')}</h3>
                           
                             <div class="mb-3">
                                 
@@ -214,7 +214,7 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                          
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" ><span class="bg-gray rounded-2 p-1"> {Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp<soan>;
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" ><span class="bg-gray rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} </span> - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -244,7 +244,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             
-                                    <h3>Language Rate Pairs</h3>
+                                    <h3 class="mb-3">Language Rate Pairs</h3>
                              
                             <div>
                                 
