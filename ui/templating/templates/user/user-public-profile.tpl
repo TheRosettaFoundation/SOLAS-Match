@@ -467,17 +467,14 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                    <div class='d-flex justify-content-between mt-2">
 
                                         <div class="d-flex flex-column">
-
-                                            <div class="mb-2">Accuracy</div>
-                                            <div class="mb-2">Fluency</div>
-                                            <div class="mb-2">Terminology</div>
-                                            <div class="mb-2">Style</div>
-                                            <div class="mb-2">Design</div>
-
+                                        <div class="mb-2">Accuracy</div>
+                                        <div class="mb-2">Fluency</div>
+                                        <div class="mb-2">Terminology</div>
+                                        <div class="mb-2">Style</div>
+                                        <div class="mb-2">Design</div>
                                         </div>
-                                        
                             
-                           
+                                  </div>
 
 
                                    </div>
