@@ -789,14 +789,15 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-<hr class="bg-light-subtle"/>
+
 {/if}
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-<div class="page-header">
+<div class="d-flex justify-content-end m-4 rounded-3">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
-    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+
+    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success" target="_blank" style="margin-top: -5px;">
         <i class="icon-print icon-white"></i> Generate Certificate
     </a>
 {/if}
