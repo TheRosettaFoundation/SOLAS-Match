@@ -84,7 +84,7 @@
   
          <span class="d-none">    ###########second flowing row</span>
         <span class="d-none">
-        <div id="dialog_for_verification" title="Perform a translation test?">
+        <div id="dialog_for_verification" title="Perform a translation test?" class="d-none">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
         <p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
         <p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
