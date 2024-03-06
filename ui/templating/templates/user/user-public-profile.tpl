@@ -552,7 +552,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <h4 class="fw-bold mb-3"> Reward offered</h4>
 <div class="bg-body p-2  border border-primary border-1 rounded-3  w-md-25 ">
     <div class="table-responsive ">
-<table class="table  ">
+<table class="table-primary  ">
   <thead>
     <tr class="" >
 
