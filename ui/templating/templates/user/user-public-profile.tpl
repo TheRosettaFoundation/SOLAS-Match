@@ -556,16 +556,22 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <div class=" flex-grow-1">Points</div>
       <div class=" flex-grow-1" >Reward</div>
     </div>
+
+       <div class=" d-flex justify-content-between border-bottom border-primary  p-2" >
+
+      <div class=" flex-grow-1">5,000</div>
+      <div class=" flex-grow-1" >Certification of volunteer activity</div>
+    </div>
+
       <div class=" d-flex justify-content-between border-bottom border-primary  p-2" >
 
-     
       <div class=" flex-grow-1">15,000</div>
       <div class=" flex-grow-1" >Reference Letter</div>
     </div>
 
+
      <div class=" d-flex justify-content-between border-bottom border-primary  p-2" >
 
-     
       <div class=" flex-grow-1">30,000</div>
       <div class=" flex-grow-1" >Recommendation on professional platforms</div>
     </div>
