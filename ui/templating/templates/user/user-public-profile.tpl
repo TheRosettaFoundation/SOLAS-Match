@@ -705,7 +705,7 @@ We hope that the rewards included in our Community Recognition Program may help 
 <p>Currently, the languages for which we can offer monetary rewards are Amharic; Bengali; Bengali, India; Bura-Pabir; Burmese; Chadian Arabic; Chadian Arabic Latin; Chittagonian; Dari; Fulah; Haitian; Hausa; Kanuri; Kibaku; Kurdish Bahdini; Kurdish Kurmanji; Kurdish Sorani; Lingala; Ganda; Wandala (formerly Mandara); Marghi Central; Mongo; Nande; Ngombe; Oromo; Pushto; Pushto, Pakistan; Rohingya Bengali; Rohingya Latin; Romani; Shi; Somali; Somali, Ethiopia; Swahili; Swahili, Congo; Tigrinya; Ukrainian; Lamang (formerly Waha).</p>
 <p>This list may change over time, depending on our strategic needs and budgetary constraints related to our crisis response work and international programs.
 If a language is to be removed from this list, the community will be informed beforehand.</p>
-
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 60%">
@@ -784,6 +784,7 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 40%"></td>
     </tr>
 </table>
+</div>
 {/if}
 {/if}
 
@@ -803,6 +804,7 @@ If a language is to be removed from this list, the community will be informed be
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+<div class="table-responsive">
 <table id="printrequest" class="display" style="width:100%">
         <thead>
             <tr>
@@ -816,6 +818,7 @@ If a language is to be removed from this list, the community will be informed be
 
     </table>
 </div>
+<div class="table-responsive">
 
 <div class="page-header">
 {if !empty($valid_key_reference_letter)}
