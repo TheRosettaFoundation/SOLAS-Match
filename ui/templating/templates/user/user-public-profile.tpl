@@ -671,7 +671,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
                                 <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="text-gray">WORDS DONATED</div>
+                                <div class="text-muted">WORDS DONATED</div>
                               {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
                             </div>
 
