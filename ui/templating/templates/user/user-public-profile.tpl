@@ -648,7 +648,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
     </div>
 
-      <div class=" d-flex p-2 border-bottom border-primary" >
+      <div class=" d-flex p-2 " >
 
        <div class=" w-50 me-2"> Terminology</div>
         <div class=" me-4" > 1 term</div>
