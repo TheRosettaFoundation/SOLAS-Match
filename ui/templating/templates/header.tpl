@@ -335,3 +335,43 @@
 		{/if}
         <br/>
         <br/>
+
+
+
+                        <div class="p-2">
+                         <div class="d-flex justify-content-between">
+                         <div> Average scores in reviews </div>
+                         <div>Average score out of 5</div>
+                        <div>
+                        <div class="text-sm mb-4">This information is only visible to you</div>
+
+                        <div class='d-flex justify-content-between mt-2">
+
+                          <div class="d-flex flex-column">
+                                <div class="mb-2">Accuracy</div>
+                                <div class="mb-2">Fluency</div>
+                                <div class="mb-2">Terminology</div>
+                                <div class="mb-2">Style</div>
+                                <div class="mb-2">Design</div>
+                      
+                          </div>
+                          <div class="d-flex flex-column mb-2" >
+
+                               <div class="mb-2">{$quality_score['accuracy']}</div>
+                                <div class="mb-2">{$quality_score['fluency']}</div>
+                                <div class="mb-2">{$quality_score['terminology']}</div>
+                                <div class="mb-2">{$quality_score['style']}</div>
+                                <div class="mb-2">{$quality_score['design']}/div>
+                      
+                          
+                          </div>
+                        
+                        </div>
+
+                        
+                        </div>
+                         
+                         </div>
+                        
+                        </div>
+          
