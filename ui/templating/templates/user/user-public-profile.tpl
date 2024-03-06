@@ -267,6 +267,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     </a>
                                 
                             </div>
+                               <hr/>
                         {/if}
 
                            
@@ -281,7 +282,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </ul>
                                 
                             </div>
-
+                               <hr/>
                            
                                     <h4 class="mb-3 fw-bold" >Experienced in</h4>
                             
@@ -294,6 +295,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 </ul>
                               
                             </div>
+                            <hr/>
 
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div>
