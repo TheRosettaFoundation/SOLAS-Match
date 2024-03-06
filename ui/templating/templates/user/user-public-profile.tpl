@@ -570,10 +570,10 @@ If you work on a revision task or a proofreading/approval task and notice that t
     </div>
 
 
-     <div class=" d-flex    px-2" >
+     <div class=" d-flex   p-2" >
 
       <div class="  me-4">30,000</div>
-      <div class=" flex-grow-1" >Recommendation on professional platforms</div>
+      <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
     </div>
 
 
