@@ -550,7 +550,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <h4 class="fw-bold mb-3"> Reward offered</h4>
 
-<div class="w-50 border border-1 border-primary rounded-3 ">
+<div class="w-25 border border-1 border-primary rounded-3 ">
 
    <div class=" d-flex  border-bottom border-primary  pt-2 px-2" >
 
@@ -581,6 +581,17 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 <div>
+
+
+
+
+<div>
+
+      <img src="{urlFor name='home'}ui/img/profile_badge"  />
+
+</div>
+
+</div>
 
 
 
