@@ -457,7 +457,10 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
-                        
+                             <div class="d-flex justify-content-between">
+                                    <div class="fw-bold"> Average scores in reviews </div>
+                                    <div class="fw-bold">Average score out of 5</div>
+                                </div>
                              
 
           
