@@ -372,7 +372,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
                         <hr class="bg-light-subtle"/>
-                     {*
+             
                         <div class="">
                             <div class="">
                                 <h4 class="first_badge_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br/><br/>
@@ -391,7 +391,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
                         {/if}
                         {/if}
-                     *}
+                 
                        
                                 <h4 class="mb-3 fw-bold">Supported Organizations</h4>
                        
