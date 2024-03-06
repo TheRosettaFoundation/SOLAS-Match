@@ -550,9 +550,9 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 <div>
 <h4 class="fw-bold mb-3"> Reward offerer</h4>
-<div class="bg-body p-2 border-secondary rounded-3 mt-4 w-md-25 ">
+<div class="bg-body p-2 border-secondary rounded-3  w-md-25 ">
     <div class="table-responsive mt-4">
-<table class="table rounded-3 border border-1 border-primary">
+<table class="table ">
   <thead>
     <tr>
 
