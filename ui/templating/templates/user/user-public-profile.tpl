@@ -906,13 +906,13 @@ STILL OKKKK?
 </table>
 </div>
 {/if}
-
-{/if}
 </div>
+{/if}
 
-<div class="mt-2 p-4 rounded-3 bg-body">
+IS IT OKAY ////3
+
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-
+    <div class="mt-2 p-4 rounded-3 bg-body">
 <div class="table-responsive">
 <table border="0">
     <tr valign="top">
