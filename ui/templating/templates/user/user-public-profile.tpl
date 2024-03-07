@@ -39,7 +39,7 @@
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary border-bottom border-primaryDark border-4'>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary border-bottom-4 border-primaryDark '>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
