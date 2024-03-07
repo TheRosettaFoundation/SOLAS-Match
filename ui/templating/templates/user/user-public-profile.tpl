@@ -1242,9 +1242,9 @@ If a language is to be removed from this list, the community will be informed be
     
     {/if}
 
-  <div class="mt-4 rounded-3 p-2 bg-body">
+
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-  
+    <div class="mt-4 rounded-3 p-2 bg-body">
     <div class="d-flex justify-content-between">
         <h4>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary">
@@ -1269,9 +1269,9 @@ If a language is to be removed from this list, the community will be informed be
             {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
         {/if}
     </p>
-
+    </div>
 {/if}
-</div>
+
 
 
 <div class="mt-4 rounded-3 p-2 bg-primary">
@@ -1298,6 +1298,7 @@ If a language is to be removed from this list, the community will be informed be
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
 {/if}
+
 </div>
 
 {if isset($user_orgs)}
@@ -1353,7 +1354,7 @@ If a language is to be removed from this list, the community will be informed be
                     </p>
                 </div>
             </div>
-            <p style="margin-bottom:20px;"/>
+
             <hr class="bg-light-subtle"/>
         {/foreach}
         
@@ -1377,8 +1378,7 @@ If a language is to be removed from this list, the community will be informed be
         {foreach $archivedJobs as $job}
             {include file="task/task.profile-display.tpl" task=$job}
         {/foreach}
-        <p style="margin-bottom:50px;"/>
-    {/if}
+    
     </div>
 {/if}
 {/if}
@@ -1391,6 +1391,6 @@ If a language is to be removed from this list, the community will be informed be
    
 {/if}
 
-
+</div>
 
 {include file='footer2.tpl'}
