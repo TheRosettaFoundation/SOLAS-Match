@@ -526,7 +526,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
 
- <div class="mt-3 p-4 rounded-2 bg-body" >
+ <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
 
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
