@@ -690,7 +690,6 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 </div>
 
-<div>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
