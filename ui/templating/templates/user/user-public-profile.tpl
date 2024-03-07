@@ -39,7 +39,7 @@
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary border-bottom border-primaryDark border-4'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
@@ -82,7 +82,7 @@
 
         <div class="bg-body rounded-3 p-4 me-4 flex-grow-1">
    
-         <span class="d-none">    ###########second flowing row</span>
+       
         <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?" class="d-none">
         <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
@@ -314,7 +314,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <td style="padding-bottom: 10px" />
                             </div>
                           
-                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-2">
                                         <input type="submit" class="btn btn-primary" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
