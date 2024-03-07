@@ -864,8 +864,9 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 </div>
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 <div class="mt-2 p-4 rounded-3 bg-body">
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
@@ -903,11 +904,13 @@ If a language is to be removed from this list, the community will be informed be
 </table>
 </div>
 {/if}
-</div>
-{/if}
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{/if}
+</div>
+
 <div class="mt-2 p-4 rounded-3 bg-body">
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+
 <div class="table-responsive">
 <table border="0">
     <tr valign="top">
@@ -946,6 +949,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 </table>
 </div>
+
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 <div class="table-responsive">
@@ -1177,9 +1181,9 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 {/if}
 <hr class="bg-light-subtle" />
-
-{/if}
 </div>
+{/if}
+
 
 
 <div class="mt-4 rounded-3 p-4 bg-body">
