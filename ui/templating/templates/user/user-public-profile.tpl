@@ -795,6 +795,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 
+STILL OK
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 
@@ -861,13 +862,13 @@ If a language is to be removed from this list, the community will be informed be
 </div>
     
 
-
-{/if}
 </div>
+{/if}
 
-<div class="mt-2 p-4 rounded-3 bg-body">
+STILL OKKKK?
+
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-
+    <div class="mt-2 p-4 rounded-3 bg-body">
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
