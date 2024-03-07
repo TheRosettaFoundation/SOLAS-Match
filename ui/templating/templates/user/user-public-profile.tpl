@@ -1270,9 +1270,10 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 </div>
+</div>
 
 
-<div class="mt-4 rounded-3 p-2 bg-body">
+<div class="mt-4 rounded-3 p-2 bg-primary">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
