@@ -1251,7 +1251,7 @@ IS IT OKAY ////3
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     <div class="mt-4 rounded-3 p-2 bg-body">
     <div class="d-flex justify-content-between">
-        <h4>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
+        <h4 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary">
                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
             </a>
@@ -1278,11 +1278,7 @@ IS IT OKAY ////3
 {/if}
 
 
-
-
-
-{if isset($user_tags) && count($user_tags) > 0}
-    <div class="mt-4 rounded-3 p-2 bg-body">
+<div class="mt-4 rounded-3 p-2 bg-body">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
@@ -1290,6 +1286,10 @@ IS IT OKAY ////3
         </a>
    
 </div>
+
+
+{if isset($user_tags) && count($user_tags) > 0}
+
     {foreach $user_tags as $tag}
         <p>
             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
@@ -1303,9 +1303,9 @@ IS IT OKAY ////3
     <p class="alert alert-info mt-2">
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
-    </div>
+   
 {/if}
-
+</div>
 
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
