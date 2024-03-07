@@ -1270,7 +1270,6 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 </div>
-</div>
 
 
 <div class="mt-4 rounded-3 p-2 bg-primary">
