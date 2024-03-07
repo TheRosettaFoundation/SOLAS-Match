@@ -1202,10 +1202,11 @@ If a language is to be removed from this list, the community will be informed be
    
 {/if}
 </div>
+<div class="mt-4 rounded-3 p-4 bg-body">
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     {if !empty($badges)}
         <div class='d-flex justify-content-between'>
-            <h4>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small></h4>
+            <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
                 </a>
@@ -1230,20 +1231,21 @@ If a language is to be removed from this list, the community will be informed be
                         {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-            <p style="margin-bottom:20px;"/>
+    
         {/foreach}
         
     
     {/if}
 </div>
 
+<div class="mt-4 rounded-3 p-4 bg-body">
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-    <div class="page-header">
-        <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
+    <div class="d-flex justify-content-between">
+        <h4>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
             </a>
-        </h1>
+      
     </div>
     <p>
         {if isset($interval)}
@@ -1262,8 +1264,9 @@ If a language is to be removed from this list, the community will be informed be
             {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
         {/if}
     </p>
-    <p style="margin-bottom:50px;"/>
+
 {/if}
+</div>
 
 <div class="page-header">
     <h1>{Localisation::getTranslation('common_tags')}<small> {Localisation::getTranslation('user_public_profile_8')}</small>
