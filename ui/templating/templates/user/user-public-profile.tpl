@@ -831,10 +831,9 @@ If a language is to be removed from this list, the community will be informed be
 
     </table>
 </div>
+</div>
 
-<hr class="bg-light-subtle"/>
-
-<div class="<div class="mt-2 p-4 rounded-3 bg-body">">
+<div class="<div class="mt-2 p-4 rounded-3 bg-body">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
@@ -865,7 +864,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-<div class="page-header">
+<div class="mt-2 p-4 rounded-3 bg-body">
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
@@ -873,6 +872,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 {/if}
 {if !empty($sent_contracts)}
+<div class="table-responsive">
 <table style="width:100%">
     <thead>
         <tr>
@@ -900,11 +900,14 @@ If a language is to be removed from this list, the community will be informed be
         </tr>
     {/foreach}
 </table>
+</div>
 {/if}
 </div>
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+<div class="mt-2 p-4 rounded-3 bg-body">
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
@@ -921,12 +924,14 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
+</div>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
-        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" /></td>
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" class="form-control" /></td>
+        <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" class="form-control" /></td>
         <td style="width: 18%"></td>
         <td style="width: 18%"></td>
         <td style="width: 12%"></td>
@@ -939,9 +944,10 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"></td>
     </tr>
 </table>
+</div>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-
+<div class="table-responsive">
 <table border="0">
     {if !empty($admin_comments_average)}
     <tr valign="top">
@@ -968,8 +974,10 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
+</div>
 
 <hr class="bg-light-subtle"/>
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3></td>
@@ -986,12 +994,14 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
+</div>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
-        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" class="form-control" /></td>
+        <td style="width: 22%"><input type='text' value="" name="points" id="points" class="form-control" /></td>
         <td style="width: 18%"></td>
         <td style="width: 18%"></td>
         <td style="width: 12%"></td>
@@ -1004,9 +1014,10 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"></td>
     </tr>
 </table>
+</div>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-
+<div class="table-responsive">
 <table border="0">
 {foreach $adjust_points as $adjust_point}
     <tr valign="top">
@@ -1024,8 +1035,10 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
+</div>
 <hr class="bg-light-subtle"/>
 
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Strategic languages)</h3></td>
@@ -1042,8 +1055,10 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
+</div>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
@@ -1060,9 +1075,12 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 12%"></td>
     </tr>
 </table>
+</div>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 
+
+<div class="table-responsive">
 <table border="0">
 {foreach $adjust_points_strategic as $adjust_point}
     <tr valign="top">
@@ -1080,9 +1098,12 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
 {/foreach}
 </table>
+</div>
 <hr class="bg-light-subtle" />
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
@@ -1109,11 +1130,13 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 25%"></td>
     </tr>
 </table>
+</div>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 <hr class="bg-light-subtle" />
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
+<div class="table-responsive">
 <table border="0">
     <tr valign="top">
         <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
@@ -1147,6 +1170,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
     {/if}
 </table>
+</div>
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
@@ -1154,27 +1178,30 @@ If a language is to be removed from this list, the community will be informed be
 <hr class="bg-light-subtle" />
 
 {/if}
+</div>
 
-<p style="margin-bottom:50px;"/>
+
+<div class="mt-4 rounded-3 p-4">
 {if $private_access}
-    <div class="page-header">
-        <h1>
+    <div class="d-flex justify-content-between">
+        <h3 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
-            <small>{Localisation::getTranslation('user_public_profile_16')}</small>
+            <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right"> 
                 <i class="icon-list-alt icon-white" style="position:relative; right:-30px; top:12px;"></i>
                 <input type="submit" class="btn btn-primary" name="referenceRequest" 
                     value="    {Localisation::getTranslation('user_public_profile_request_reference')}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        </h1>            
+           
     </div>
     <p>{Localisation::getTranslation('user_public_profile_15')}</p>
     {if isset($requestSuccess)}
         <p class="alert alert-success">{Localisation::getTranslation('user_public_profile_reference_request_success')}</p>
     {/if}
-    <p style="margin-bottom:50px;"/>
+   
 {/if}
+</div>
 
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     {if !empty($badges)}
