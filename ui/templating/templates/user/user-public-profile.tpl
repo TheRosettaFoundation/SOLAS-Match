@@ -1267,9 +1267,10 @@ If a language is to be removed from this list, the community will be informed be
             {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
         {/if}
     </p>
-
-{/if}
 </div>
+{/if}
+
+
 <div class="mt-4 rounded-3 p-4 bg-body">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
@@ -1290,7 +1291,7 @@ If a language is to be removed from this list, the community will be informed be
         </p>
     {/foreach}
 {else}
-    <p class="alert alert-info">
+    <p class="alert alert-info mt-2">
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
 {/if}
