@@ -833,7 +833,7 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 </div>
 
-<div class="<div class="mt-2 p-4 rounded-3 bg-body">
+<div class="mt-2 p-4 rounded-3 bg-body">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
@@ -1181,7 +1181,7 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 
-<div class="mt-4 rounded-3 p-4">
+<div class="mt-4 rounded-3 p-4 bg-body">
 {if $private_access}
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">
@@ -1202,15 +1202,14 @@ If a language is to be removed from this list, the community will be informed be
    
 {/if}
 </div>
-
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     {if !empty($badges)}
-        <div class='page-header'>
-            <h1>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small>
+        <div class='d-flex justify-content-between'>
+            <h4>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small></h4>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
                 </a>
-            </h1>
+           
         </div>
 
         {foreach $badges as $badge}
@@ -1234,8 +1233,9 @@ If a language is to be removed from this list, the community will be informed be
             <p style="margin-bottom:20px;"/>
         {/foreach}
         
-        <p style="margin-bottom:50px;"/>
+    
     {/if}
+</div>
 
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     <div class="page-header">
