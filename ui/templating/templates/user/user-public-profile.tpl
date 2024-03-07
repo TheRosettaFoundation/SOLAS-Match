@@ -551,7 +551,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="w-50">
 <div class="border border-1 border-primaryDark rounded-3 ">
 
-   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2" >
+   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 flex-wrap" >
 
       <div class="fw-bold me-4">Points</div>
       <div class="fw-bold flex-grow-1" >Reward</div>
