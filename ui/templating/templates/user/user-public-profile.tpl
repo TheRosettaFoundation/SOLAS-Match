@@ -546,12 +546,12 @@ will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between flex-wrap ">
 
 <div class="w-50">
 <div class="border border-1 border-primaryDark rounded-3 ">
 
-   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 flex-wrap" >
+   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
 
       <div class="fw-bold me-4">Points</div>
       <div class="fw-bold flex-grow-1" >Reward</div>
