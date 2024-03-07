@@ -1186,7 +1186,7 @@ IS IT OKAY ////3
 </div>
 {/if}
 
-
+THIS IN THE LAST HERE ..
 
 <div class="mt-4 rounded-3 p-4 bg-body">
 {if $private_access}
