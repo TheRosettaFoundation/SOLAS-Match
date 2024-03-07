@@ -793,9 +793,13 @@ If a language is to be removed from this list, the community will be informed be
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 
 {/if}
-<div>
+
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+
+
+
+<div class="mt-2 p-4 rounded-3 bg-body">
 
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
@@ -807,7 +811,6 @@ If a language is to be removed from this list, the community will be informed be
  
 
 {/if}
-</div>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 mb-4 ">
     <input type="submit" class="btn btn-primary" name="PrintRequest" value="Request Certification of Volunteer Activity" />
@@ -831,7 +834,7 @@ If a language is to be removed from this list, the community will be informed be
 
 <hr class="bg-light-subtle"/>
 
-<div class="mt-4">
+<div class="<div class="mt-2 p-4 rounded-3 bg-body">">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
