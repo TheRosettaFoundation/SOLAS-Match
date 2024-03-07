@@ -690,6 +690,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 </div>
 
+<div>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
@@ -858,12 +859,14 @@ If a language is to be removed from this list, the community will be informed be
     </table>
 </div>
     
-</div>
+
 
 {/if}
+</div>
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 <div class="mt-2 p-4 rounded-3 bg-body">
+
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
     <input type="submit" class="btn btn-primary" name="send_contract" value="Send Contract to Linguist" />
