@@ -1202,8 +1202,9 @@ If a language is to be removed from this list, the community will be informed be
    
 {/if}
 </div>
-<div class="mt-4 rounded-3 p-4 bg-body">
+
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+<div class="mt-4 rounded-3 p-4 bg-body">
     {if !empty($badges)}
         <div class='d-flex justify-content-between'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
@@ -1233,13 +1234,15 @@ If a language is to be removed from this list, the community will be informed be
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
     
         {/foreach}
-        
+
+ </div>
+       
     
     {/if}
-</div>
 
-<div class="mt-4 rounded-3 p-4 bg-body">
+
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+    <div class="mt-4 rounded-3 p-4 bg-body">
     <div class="d-flex justify-content-between">
         <h4>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
@@ -1267,13 +1270,13 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 </div>
-
-<div class="page-header">
-    <h1>{Localisation::getTranslation('common_tags')}<small> {Localisation::getTranslation('user_public_profile_8')}</small>
+<div class="mt-4 rounded-3 p-4 bg-body">
+<div class="d-flex justify-content-between">
+    <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
             <i class="icon-search icon-white"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
-    </h1>
+   
 </div>
 
 {if isset($user_tags) && count($user_tags) > 0}
@@ -1291,17 +1294,18 @@ If a language is to be removed from this list, the community will be informed be
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
 {/if}
-<p style="margin-bottom:50px;"/>
+</div>
 
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
-        <div class='page-header'>
-            <h1>
-                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small>
+    <div class="mt-4 rounded-3 p-4 bg-body">
+        <div class='d-flex justify-content-betwen'>
+            <h3>
+                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</span> </h3>
                 <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
                     <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
-            </h1>
+       
         </div>
 
         {foreach $user_orgs as $org}
@@ -1349,20 +1353,21 @@ If a language is to be removed from this list, the community will be informed be
             <hr class="bg-light-subtle"/>
         {/foreach}
         
-        <p style="margin-bottom:50px;"/>
+  </div>
     {/if}
 {/if}
 
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
-        <div class='page-header'>
-            <h1>{Localisation::getTranslation('common_archived_tasks')} <small>{Localisation::getTranslation('user_public_profile_14')}</small>
+    <div class="mt-4 rounded-3 p-4 bg-body">
+        <div class='d-flex'>
+            <h3 class="fw-bold">{Localisation::getTranslation('common_archived_tasks')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_14')}</span></h3>
                 {if $private_access}
                     <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
                         <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
                     </a>
                 {/if}
-            </h1>
+      
         </div>
 
         {foreach $archivedJobs as $job}
@@ -1370,6 +1375,7 @@ If a language is to be removed from this list, the community will be informed be
         {/foreach}
         <p style="margin-bottom:50px;"/>
     {/if}
+    </div>
 {/if}
 {/if}
 
