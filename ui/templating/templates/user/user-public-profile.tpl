@@ -691,7 +691,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </div>
 
 <div>
- IS THIS OK
+
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <p style="margin-bottom:20px;" />
 <p>Our Community Recognition Program also includes monetary rewards for some marginalized languages.
@@ -787,8 +787,9 @@ If a language is to be removed from this list, the community will be informed be
 </table>
 </div>
 {/if}
-{/if}
 </div>
+{/if}
+
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 
