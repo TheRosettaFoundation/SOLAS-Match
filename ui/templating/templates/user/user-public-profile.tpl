@@ -1186,10 +1186,10 @@ IS IT OKAY ////3
 </div>
 {/if}
 
-THIS IN THE LAST HERE ..
 
-<div class="mt-4 rounded-3 p-4 bg-body">
+
 {if $private_access}
+    <div class="mt-4 rounded-3 p-4 bg-body">
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
@@ -1206,9 +1206,9 @@ THIS IN THE LAST HERE ..
     {if isset($requestSuccess)}
         <p class="alert alert-success">{Localisation::getTranslation('user_public_profile_reference_request_success')}</p>
     {/if}
-   
+    </div>  
 {/if}
-</div>
+
 
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="mt-4 rounded-3 p-4 bg-body">
@@ -1247,9 +1247,9 @@ THIS IN THE LAST HERE ..
     
     {/if}
 
-  <div class="mt-4 rounded-3 p-2 bg-body">
+
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-  
+    <div class="mt-4 rounded-3 p-2 bg-body">
     <div class="d-flex justify-content-between">
         <h4>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h4>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary">
@@ -1274,12 +1274,15 @@ THIS IN THE LAST HERE ..
             {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
         {/if}
     </p>
-
+    </div>
 {/if}
-</div>
 
 
-<div class="mt-4 rounded-3 p-2 bg-primary">
+
+
+
+{if isset($user_tags) && count($user_tags) > 0}
+    <div class="mt-4 rounded-3 p-2 bg-body">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary">
@@ -1287,8 +1290,6 @@ THIS IN THE LAST HERE ..
         </a>
    
 </div>
-
-{if isset($user_tags) && count($user_tags) > 0}
     {foreach $user_tags as $tag}
         <p>
             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
@@ -1302,8 +1303,9 @@ THIS IN THE LAST HERE ..
     <p class="alert alert-info mt-2">
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
+    </div>
 {/if}
-</div>
+
 
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
@@ -1362,8 +1364,8 @@ THIS IN THE LAST HERE ..
             <hr class="bg-light-subtle"/>
         {/foreach}
         
-  </div>
-    {/if}
+        </div>
+    {/if} 
 {/if}
 
 {if isset($archivedJobs)}
