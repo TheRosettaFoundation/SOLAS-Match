@@ -510,7 +510,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal"  data-toggle="modal" href="#ponummodal" role="button">
+            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
                  Set Purchase Order #
             </a>
 
