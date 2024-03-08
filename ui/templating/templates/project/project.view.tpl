@@ -559,7 +559,7 @@
                 <a class="dropdown-item" href="#">
 
                   <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle w-full" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                    <a  onclick="$('#tasks_settled').submit();"  role="button">
+                    <a  onclick="$('#tasks_settled').submit();"  role="button" class="w-100 text-center">
                          Set tasks to Settled
                     </a>
                 <input type="hidden" name="tasks_settled" value="" />
