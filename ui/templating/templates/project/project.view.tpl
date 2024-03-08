@@ -99,7 +99,7 @@
 
         </thead>
         <tbody class="fs-4">
-            <tr ">
+            <tr >
                 <td >
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
@@ -857,9 +857,10 @@
                                             {else}
                                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
+                                               
                                                 <a class="  btn btn-sm btn-grayish"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
-                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}">
+                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}"> <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="retrieve" > </a>
                                                    
                                                 {/if}
                                             {/if}
