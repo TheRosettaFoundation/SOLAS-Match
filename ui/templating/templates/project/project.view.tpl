@@ -558,7 +558,7 @@
                <li>
                 <a class="dropdown-item" href="#">
 
-                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle p-2" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle p-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                     <a  onclick="$('#tasks_settled').submit();"  role="button" >
                          Set tasks to Settled
                     </a>
