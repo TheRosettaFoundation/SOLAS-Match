@@ -20,39 +20,39 @@
      </div>
 
 
-     <div class="d-flex align-items-center ">
+     <div class="d-flex align-items-center flex-wrap ">
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary text-white">
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 text-white">
                                 <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success"
+                                <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success me-2"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
-                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-sm btn-primary text-white'>
+                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-sm btn-primary text-white me-2'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm btn-primary text-white border-bottom-4 border-primaryDark '>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm me-2 btn-primary text-white border-bottom-4 border-primaryDark '>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
                         {/if}
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white" name="mark_reviewed" value="Mark New User as Reviewed" />
+                                <input type="submit" class="btn btn-sm btn-primary text-white me-2" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
                         {if $show_create_memsource_user}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
+                                <input type="submit" class="btn btn-sm btn-primary text-white me-2" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
