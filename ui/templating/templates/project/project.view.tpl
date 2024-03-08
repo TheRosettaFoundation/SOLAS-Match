@@ -771,7 +771,7 @@
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
-                                                <i class="icon-check icon-white"></i> Yes
+                                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
                                             <input type="hidden" name="cancelled" value="0" />
