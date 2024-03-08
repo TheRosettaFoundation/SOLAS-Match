@@ -52,7 +52,7 @@
                 </select>
             </div>
               <div class=" d-grid mt-3 mb-5  ">
-            <button class="btn btn-primary" type="submit">
+            <button class="btn btn-primary text-white" type="submit">
                <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">{Localisation::getTranslation('index_filter_task_stream')}
             </button>
             </div>
@@ -196,7 +196,7 @@
                                     </a>
                                 {/if}
                                 {if $status_id == 3 && $type_id == 4}
-                                    <a href="{$siteLocation}task/{$task_id}/desegmentation" class="btn btn-small btn-primary">
+                                    <a href="{$siteLocation}task/{$task_id}/desegmentation" class="btn btn-small btn-primary text-white">
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
                                 {/if}
@@ -207,7 +207,7 @@
                                     </a>
                                 {/if}
 
-                                <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary">
+                                <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary text-white">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>
                                 {if $status_id == 3 && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
