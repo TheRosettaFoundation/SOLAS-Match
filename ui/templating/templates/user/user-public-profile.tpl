@@ -358,7 +358,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
 
                              <div class="d-flex align-items-center">
-                               <span id="badgecopy" class="text-break w-md-50 link-primary m4-2" >
+                               <span id="badgecopy" class="text-break w-50 link-primary m4-2" >
                                    <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
                                 <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
