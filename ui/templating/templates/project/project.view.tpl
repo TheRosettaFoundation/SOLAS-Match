@@ -546,7 +546,7 @@
                       Set tasks to Pending Documentation
                     </a>
                     <input type="hidden" name="pending_documentation" value="" />
-                    <input type="hidden" name="ready_payment_status" value="Pending documentation" />
+                    <input type="hidden" name="ready_payment_status" value="Pending documentation" /> 
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
 
@@ -558,7 +558,7 @@
                <li>
                 <a class="dropdown-item" href="#">
 
-                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle w-full" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                     <a  onclick="$('#tasks_settled').submit();"  role="button">
                          Set tasks to Settled
                     </a>
