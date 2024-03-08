@@ -713,7 +713,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 </div>
 
-
+<div>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
 <div class="bg-body mt-2 rounded-3 p-2">    
