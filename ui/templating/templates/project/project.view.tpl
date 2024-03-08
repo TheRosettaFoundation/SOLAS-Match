@@ -559,7 +559,7 @@
                 <a class="dropdown-item" href="#">
 
                   <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle " method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                    <a  onclick="$('#tasks_settled').submit();"  role="button" class="p-2">
+                    <a  onclick="$('#tasks_settled').submit();"  role="button" class="p-2 text-decoration-none">
                          Set tasks to Settled
                     </a>
                 <input type="hidden" name="tasks_settled" value="" />
@@ -1007,7 +1007,7 @@
 </div>
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
+  <div class="modal-header mt-2">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Set Purchase Order #</h3>
   </div>
