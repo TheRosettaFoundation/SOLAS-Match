@@ -773,7 +773,7 @@
                                    
                                        
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                                            <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                            <a class=" btngray cancel"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
@@ -783,7 +783,7 @@
                                         </button>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
-                                            <a class="btn btn-small cancel" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" style="color:#000000;"  href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <a class="btngray cancel" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
