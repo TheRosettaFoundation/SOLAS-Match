@@ -137,7 +137,7 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
-                                         <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
+                                         <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
@@ -767,7 +767,27 @@
                                     </td>
                                     {/if}
                                     <td>
+
                                     {if $task->get_cancelled()}
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                       
+                                         <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                                            <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
+                                            </a>
+                                            <input type="hidden" name="cancel" value="" />
+                                            <input type="hidden" name="cancelled" value="0" />
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                          </form>
+                                        </button>
+                                    {else}
+                                        <span data-toggle="tooltip" data-placement="right" title="Cancel" >
+                                            <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
+                                            </a>
+                                        </span>
+                                    {/if}
+                                    {* {if $task->get_cancelled()}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
@@ -784,7 +804,8 @@
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if}
+                                    {/if} *}
+                                    </form>
                                     </td>
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
@@ -818,12 +839,12 @@
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
                                                 <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
+                                                      <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
                                                 </a>
                                                 </span>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
+                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
                                                 <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
