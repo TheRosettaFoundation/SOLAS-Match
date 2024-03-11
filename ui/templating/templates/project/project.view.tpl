@@ -1074,9 +1074,9 @@
 
 
 
-
+   <script>
+   $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
+</script>
 {include file="footer2.tpl"}
-        <script>
-            $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
-        </script>
+      
 
