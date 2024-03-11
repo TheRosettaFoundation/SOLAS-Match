@@ -1,57 +1,92 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
-<span class="hidden">
-    <!-- Parameters... -->
-    <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
-</span>
 
-    <h1 class="page-header">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
-            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
-            <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
-        </span>
-        {assign var="project_id" value=$project->getId()}
-        <div class="pull-right">
-            <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
-                    <input type="hidden" name="copyChunks" value="1" />
-                    <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
-                        <i class="icon-upload icon-white"></i> Sync Phrase TMS
-                    </a>
-                    <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                        <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
-                    </a>
-                {/if}
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
-                    <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-primary">
-                        <i class="icon-wrench icon-white"></i> Add Shell Tasks
-                    </a>
-                {/if}
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
-                        <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
-                    </a> 
-                {/if}
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+<div class="container-fluid ">
+
+ 
+ <div class=" container py-4" >
+
+                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" />
+        
+                    <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
+                           
+               
+                </div>
+
+
+<section class=" bg-light-subtle"> 
+
+        <div class="container py-5 ">
+
+
+            <div class="d-flex flex-wrap justify-content-between">
+
+               <div class="fw-bold primaryDark fs-3">
+
+                        <span class="d-none">
+                    <!-- Parameters... -->
+                        <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+                    </span>
+
+                    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+                     {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
+                    <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
+                    </span>
+
+                </div>
+
+
+            {assign var="project_id" value=$project->getId()}
+             <div class=" ">
+               
+                    <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
+                        <input type="hidden" name="copyChunks" value="1" />
+                        <a class="btn btn-sm btn-success mt-2 mt-md-0" onclick="$('#copyChunksProjectForm').submit();" >
+                            <i class="icon-upload icon-white"></i> Sync Phrase TMS
+                        </a>
+                        <a href="{$matecat_analyze_url}" class="btn btn-sm btn-primary mt-2 mt-md-0 " target="_blank">
+                            {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
+                        </a>
+                    {/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm btn-primary mt-2 mt-md-0">
+                             Add Shell Tasks
+                        </a>
+                    {/if}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm btn-primary mt-2 mt-md-0 fixMargin'>
+                             {Localisation::getTranslation('common_edit_project')}
+                        </a> 
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+               
+                
+            </div>
+
+       
+
         </div>
-    </h1>
 
-{if isset($flash['success'])}
-    <p class="alert alert-success">
-        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
-    </p>
-{/if}
+        {if isset($flash['success'])}
+            <p class="alert alert-success mt-2">
+                {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+            </p>
+        {/if}
 
-{if isset($flash['error'])}
-    <p class="alert alert-error">
-        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
-    </p>
-{/if}
+        {if isset($flash['error'])}
+            <p class="alert alert-warning mt-2">
+                {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+            </p>
+        {/if}
 
-    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>            
+    
+        <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+            <div class="table-responsive mt-4  ">   
+        <table class="table table-borderless">
+        <thead class="fs-5 align-middle">            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
             <th>{Localisation::getTranslation('common_reference')}</th>
@@ -63,12 +98,12 @@
             {/if}
 
         </thead>
-        <tbody>
-            <tr style="overflow-wrap: break-word;">
-                <td style="text-align: left; overflow-wrap: break-word;">
+        <tbody class="fs-4">
+            <tr >
+                <td >
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
-                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="custom-link">{$org->getName()|escape:'html':'UTF-8'}</a>
                     {/if}
                 </td>
                 <td>
@@ -82,7 +117,7 @@
                     {/if}
                 </td>
                 <td>
-                    <span class="hidden">
+                    <span class="d-none">
                         <div id="siteLocationURL">{Settings::get("site.location")}</div>
                         <div id="project_id_for_updated_wordcount">{$project_id}</div>
                     </span>
@@ -101,15 +136,15 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <a class="btn btn-small btn-inverse" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-remove-circle icon-white"></i> {Localisation::getTranslation('project_view_untrack_project')}
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                         <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <a class="btn btn-small" onclick="$('#trackedProjectForm').submit();" >
-                                        <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_project')}
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                         <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_project')}
                                     </a>
                                 </p>
                             {/if}
@@ -121,20 +156,26 @@
             <tr>
             </tr> 
         </tbody>
-    </table>            
+    </table>    
+    </div>  
+    </div>
+
+
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
-    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>
+    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+    <div class="table-responsive mt-4  ">
+    <table class="table table-borderless" >
+        <thead class="fs-5">
             <th>Deal ID</th>
             <th>Allocated Budget</th>
             <th>Project Cost</th>
             <th>Remaining Budget</th>
             <th>Waived Tasks (In-kind, In-house, waived)</th>
         </thead>
-        <tbody>
+        <tbody class="fs-4">
             <tr style="overflow-wrap: break-word;">
-                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" class="custom-link" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
                 <td>${round($total_expected_cost, 2)}</td>
                 <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
@@ -142,17 +183,20 @@
             </tr>
         </tbody>
     </table>
+    </div>
+    </div>
     {/if}
 
-    <div class="well">
-        <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
-            <thead>
-            <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
-            <th></th>
-            <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
+       <div class="d-flex justify-content-between flex-wrap">
+     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-md-2">
+        <div class="table-responsive mt-4  ">   
+        <table class="table table-borderless ">
+            <thead class="fs-5">
+            <th >{Localisation::getTranslation('common_description')}</th>
+            <th></th>   
             </thead>
-            <tbody>
-                <tr valign="top">
+            <tbody class="fs-4 ">
+                <tr >
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
@@ -163,22 +207,84 @@
                         </i>
                     </td>
                     <td></td>
-                    <td style = "text-align:center;">
+                    
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                
+                 <tr>
+                    <td colspan="2">
+                        <strong>{Localisation::getTranslation('common_impact')}</strong>
+                    </td>
+                </tr>
+                <tr>                
+                    <td  colspan="2">
+                        <i>
+	                        {if $project->getImpact() != ''}
+                              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
+	                        {else}
+	                            {Localisation::getTranslation('No impact has been listed')}
+	                        {/if}  
+                        </i> 
+                    </td>                
+                </tr>
+                <tr>
+                    <td colspan="2"> </td>
+                </tr>
+                
+                {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
+                <tr>
+                    <td colspan="2" style="padding-bottom: 40px"></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="2">
+                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td >
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank"> Discuss</a>
+                    </td>
+                </tr>
+                {/if}
+            </tbody>
+        </table>
+    </div>   
+    </div>
+
+
+
+  <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 ms-md-2">
+    <div class="table-responsive mt-4  ">
+        <table class="table table-borderless">
+            <thead class="fs-5">
+        
+            <th >{Localisation::getTranslation('common_project_image')}</th>
+            </thead>
+            <tbody class="fs-4">
+                <tr class="p-4" >
+
+                    <td >
                     	{if $project->getImageUploaded()}
                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+                              <div>
+                            
+	                        	<img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
+		            					<img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> {Localisation::getTranslation('project_view_image_approve')}</a>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				</form>
+                             </div>
+
 		            			{else}   
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class="image-approve-btn btn btn-inverse" onclick="$('#projectImageApproveForm').submit();"">
-		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
+		            					<img src="{urlFor name='home'}ui/img/cancel.svg" class="disapprove" />{Localisation::getTranslation('project_view_image_disapprove')}</a>
                              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				 </form>
 		                        {/if}
@@ -195,31 +301,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
-                </tr>
-                
-                 <tr valign="top">
-                    <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
-                    </td>
-                </tr>
-                <tr>                
-                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
-                        <i>
-	                        {if $project->getImpact() != ''}
-                              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
-	                        {else}
-	                            {Localisation::getTranslation('No impact has been listed')}
-	                        {/if}  
-                        </i> 
-                    </td>                
-                </tr>
-                <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
-                </tr>
-                <tr valign="top">
-                    <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_tags')}</strong><hr/>
+                    <td >
+                        <strong>{Localisation::getTranslation('common_tags')}</strong>
                     </td>
                 </tr>
                 <tr>                
@@ -228,202 +311,318 @@
                         {foreach $project_tags as $ptag}
                             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
                             {assign var="tagId" value=$ptag->getId()}
-                            <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
+                            <a class=" btngray me-2" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                         {/foreach}
                     {else}
                         <i>{Localisation::getTranslation('common_there_are_no_tags_associated_with_this_project')}</i>                    
                     {/if}
                     </td>                
                 </tr>
-                {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
-                <tr>
-                    <td colspan="3" style="padding-bottom: 40px"></td>
-                </tr>
-                <tr valign="top">
-                    <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong><hr/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
-                    </td>
-                </tr>
-                {/if}
+
             </tbody>
         </table>
-    </div>            
-                
-    <p style="margin-bottom:40px;"/>
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-    <hr />    
-    <h1 class="page-header" style="margin-bottom: 60px">
-        {Localisation::getTranslation('project_view_tasks')}
-        <small>{Localisation::getTranslation('project_view_0')}</small>
+    </div>   
+    </div>
 
-        {if !empty($memsource_project)}
-        <span class="" style="margin-left:480px;">
-            <select name="task_options" id="task_options">
-                <option value="">-- Choose --</option>
-                <option value="all_tasks">Select all Tasks</option>
-                <option value="all_translation_tasks">Select all Translation Tasks</option>
-                <option value="all_revision_tasks">Select all Revision Tasks</option>
-                <option value="all_revtrans_tasks">Select all Translation and Revision</option>
-                <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
-                <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
-                {/if}
-                <option value="delesect_all">Deselect all</option>
-            </select>
-        </span>
 
-        <div class="pull-right">
-        <div class="dropdown"  style="margin-top: -65px;">
-            <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </a>
-            <ul id="menu3" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+    
+    </div> 
 
+
+
+
+
+    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+
+
+        <div class="d-flex justify-content-between mt-4">
+
+            <h3 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+                <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
+            </h3>
+
+         
+                {if !empty($memsource_project)}
+                <div class="d-flex ">
+                    <select name="task_options" id="task_options" class="form-control">
+                        <option value="">-- Choose --</option>
+                        <option value="all_tasks">Select all Tasks</option>
+                        <option value="all_translation_tasks">Select all Translation Tasks</option>
+                        <option value="all_revision_tasks">Select all Revision Tasks</option>
+                        <option value="all_revtrans_tasks">Select all Translation and Revision</option>
+                        <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                        <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
+                        <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
+                        {/if}
+                        <option value="delesect_all">Deselect all</option>
+                    </select>
+              
+
+
+     
+
+        <div class="dropdown">
+        <button class="dropdown-toggle btn  btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+           ...
+        </button>
+        <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#publish_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
-                    <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
+            <li><a class="dropdown-item" >    
+            <form id="publish_selected_tasks" class="btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
+                <a  onclick="$('#publish_selected_tasks').submit();" >
+                     Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="unpublish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#unpublish_selected_tasks').submit();"   style="color:#000000;margin-right:52px;">
-                    <i class="icon-remove-circle icon-black" style="margin-left:-2px;"></i> Unpublish Selected Tasks
+            </a> 
+            </li>
+
+             <li><a class="dropdown-item" href="#">
+             <form  class="btn btn-sm btn-dark-subtle border border-dark-subtle" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a   onclick="$('#unpublish_selected_tasks').submit();"  >
+                     Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        {/if}
+             </a></li>
 
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <form id="tasks_as_paid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_paid').submit();" style="color:#000000;margin-right:42px;">
-                    <i class="fa fa-usd" style="font-size: 15px !important;padding:0 !important;width:5px !important;" aria-hidden="true"></i> Mark Selected Tasks as Paid
+           
+         {/if}
+
+         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+          <li>
+                <a class="dropdown-item" href="#">
+                       <form id="tasks_as_paid"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#tasks_as_paid').submit();" >
+                     Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="tasks_as_unpaid" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#tasks_as_unpaid').submit();" style="color:#000000;margin-right:22px;">
-                    <i class="fa fa-strikethrough" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Mark Selected Tasks as Unpaid
+
+                </a>  
+        </li>
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                <form  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#tasks_as_unpaid').submit();">
+                   Mark Selected Tasks as Unpaid
                 </a>
                 <input type="hidden" name="all_as_paid1" value="1" />
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        
 
-            <form id="status_as_unclaimed" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#status_as_unclaimed').submit();" >
-                    <i class="fa fa-unlock" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Unclaimed
+                
+            
+                </a>  
+        </li>
+
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                <form id="status_as_unclaimed" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#status_as_unclaimed').submit();" >
+                   Set Status of Selected to Unclaimed
                 </a>
                 <input type="hidden" name="status_as_unclaimed" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="status_as_waiting" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#status_as_waiting').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="fa fa-pause" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Waiting
+                
+            
+                </a>  
+        </li>
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                 <form id="status_as_waiting" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#status_as_waiting').submit();" >
+                     Set Status of Selected to Waiting
                 </a>
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="complete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-check icon-black"></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
+
+
+                </a>  
+        </li>
+
+
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                 <form id="complete_selected_tasks"    method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_selected_tasks').submit();" >
+                     Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
-                    <i class="icon-remove-circle icon-black"></i> Set Shell Tasks Status In Progress
+                
+            
+                </a>  
+        </li>
+
+
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                 <form id="uncomplete_selected_tasks"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a  onclick="$('#uncomplete_selected_tasks').submit();" >
+                    Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
-                <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
+            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2"  data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+                 Set Selected Tasks to Cancelled
             </a>
-            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
-                <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
+
+                
+            
+                </a>  
+        </li>
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                 <form id="cancel" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a  onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
+                Set Selected Tasks to Uncancelled
             </a>
                 <input type="hidden" name="cancel" value="" />
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" btn btn-small open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
-                <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-65px;" aria-hidden="true"></i>  Set Purchase Order #
+            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
+                 Set Purchase Order #
             </a>
-            <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set tasks to Ready for Payment
-            </a>
-                <input type="hidden" name="ready_payment" value="" />
-                <input type="hidden" name="ready_payment_status" value="Ready for payment" />
+
+                
+            
+                </a>  
+        </li>
+
+
+          <li>
+                <a class="dropdown-item" href="#">
+
+                <form id="ready_payment" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                    <a  onclick="$('#ready_payment').submit();" role="button">
+                        Set tasks to Ready for Payment
+                    </a>
+                    <input type="hidden" name="ready_payment" value="" />
+                    <input type="hidden" name="ready_payment_status" value="Ready for payment" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-            <form id="pending_documentation" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
-            </a>
-                <input type="hidden" name="pending_documentation" value="" />
-                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-            <form id="tasks_settled" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class=" btn btn-small" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-70px;" aria-hidden="true"></i> Set tasks to Settled
-            </a>
+                 </form>
+
+                
+            
+                </a>  
+        </li>
+
+           <li>
+                <a class="dropdown-item" href="#">
+
+                <form id="pending_documentation" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                
+                    <a  onclick="$('#pending_documentation').submit();" role="button">
+                      Set tasks to Pending Documentation
+                    </a>
+                    <input type="hidden" name="pending_documentation" value="" />
+                    <input type="hidden" name="ready_payment_status" value="Pending documentation" /> 
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+
+                
+            
+                </a>  
+             </li>
+
+               <li>
+                <a class="dropdown-item" href="#">
+
+                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                    <a  onclick="$('#tasks_settled').submit();"  role="button" >
+                         Set tasks to Settled
+                    </a>
                 <input type="hidden" name="tasks_settled" value="" />
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+
+                
+            
+                </a>  
+        </li>
+
         {/if}
-            </ul>
+           
+         
+        </ul>
+        
+   
+
+
+
+
+     
+       
+          </div>
+
          </div>
-         </div>
+
+
+     
+
         {/if}
 
-    </h1> 
-            
+    </div>
+
+    <hr> </hr>
+ 
+
+
     {if isset($flash['taskSuccess'])}
-        <div class="alert alert-success">
-            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}
+        <div class="alert alert-success alert-dismissible fade show mt-2">
+            <span>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}</span>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {else if isset($flash['taskError'])}
-        <div class="alert alert-error">
-            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}
+        <div class="alert alert-warning alert-dismissible fade show mt-2">
+            <span>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}</span>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    {/if}        
+    {/if}      
 
-    <div>
+
+        <div>
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
-                <br/><br/>
-                <div style="background-color:#fef9f2;padding:3px;">
-                    <div>
-                    
-                    <span style="display: inline-block; overflow-wrap: break-word; font-weight: bold; font-size: large; max-width: 70%" class="language_name">
+                     <div class="mt-4">
+                <div class="d-flex">
+                    <span class="me-4">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
-                        <select name="language_options[]" id="language_options" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
+                        <select name="language_options[]" id="language_options" class="form-control" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
                             <option value="">-- Choose --</option>
                             <option value="all_tasks_{$languageCountry|replace:',':'_'}">Select all Tasks</option>
                             <option value="all_translation_tasks_{$languageCountry|replace:',':'_'}">Select all Translation Tasks</option>
@@ -433,11 +632,14 @@
                             <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
                     </span>
-                    </div>                
-                    <hr />  
- 
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
+                    </div>                             
+                  
+                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+         
+                    <div class="table-responsive mt-4 ">
+
+                    <table class="table " >
+                        <thead class="fs-5">
                             <tr>
                                 
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
@@ -455,14 +657,14 @@
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-4 bg-primary">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
-                                <tr style="overflow-wrap: break-word;">
-                                <td> <input type="checkbox" name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
-                                    <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                <tr class="align-middle">
+                                <td> <input type="checkbox"  name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
+                                    <td >
+                                        <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
                                         <br/>
@@ -482,12 +684,12 @@
                                                 {Localisation::getTranslation('common_in_progress')}<br />
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i> <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
-                                                        <a class="btn btn-small" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top"data-bs-custom-class="custom-tooltip" data-bs-title="Set Status Complete">
                                                             <i class="icon-check icon-black"></i>
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -508,7 +710,7 @@
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
-                                                        <a class="btn btn-small" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                                                             <i class="icon-check icon-black"></i>
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -528,7 +730,7 @@
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i>   <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -565,12 +767,16 @@
                                     </td>
                                     {/if}
                                     <td>
-                                    {if $task->get_cancelled()}
-                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+
+                                    {* {if $task->get_cancelled()} *}
+                                        {* <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                                               Cancel
+                                        </button>
                                        
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
-                                                <i class="icon-check icon-white"></i> Yes
+                                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
                                             <input type="hidden" name="cancelled" value="0" />
@@ -580,10 +786,29 @@
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
                                             <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
-                                                <i class="icon-remove-circle icon-black"></i> No
+                                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
+                                            </a>
+                                        </span>
+                                    {/if} *}
+                                    {if $task->get_cancelled()}
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                         <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                                            <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
+                                            </a>
+                                            <input type="hidden" name="cancel" value="" />
+                                            <input type="hidden" name="cancelled" value="0" />
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                          </form>
+                                        </span>
+                                    {else}
+                                        <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
+                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                                 <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
                                     {/if}
+                                    
                                     </td>
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
@@ -592,15 +817,20 @@
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $task->getPublished() == 1}
-                                                <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
-                                                    <i class="icon-check icon-white"></i>
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}">
+                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                      <img src="{urlFor name='home'}ui/img/publish-project.svg" alt="unpublish" >
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
+                                                </span>
                                             {else}
                                                 <input type="hidden" name="publishedTask" value="1" />
-                                                <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_publish')}" >
-                                                    <i class="icon-remove-circle icon-black"></i>
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
+                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
+                                                    <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
+
                                                 </a>
+                                                </spam>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
@@ -610,46 +840,52 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
-                                                <a class="btn btn-small btn-inverse" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_untrack_task')}">
-                                                    <i class="icon-inbox icon-white"></i>
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                      <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
                                                 </a>
+                                                </span>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
-                                                <a class="btn btn-small" onclick="$('#trackedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_track_task')}" >
-                                                    <i class="icon-envelope icon-black"></i>
+                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
+                                                <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                     <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
+                                                </span>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
                                     <td>
-                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btn btn-small" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_edit_task')}">
-                                            <i class="icon-pencil icon-black"></i>
+                                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
+                                        <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
+                                            <img src="{urlFor name='home'}ui/img/project-edit.svg" alt="Edit" >
                                         </a>
+                                        </span>
                                     </td>
                                     <td>
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse" 
+                                                <a class=" btn btn-sm btn-grayish" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
-                                                        $('#archiveDeleteForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_delete')}" >
-                                                    <i class="icon-trash icon-white"></i>
+                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
+                                                     <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <div class="tooltip-wrapper" style="display: inline-block;margin: 5px;" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn btn-small btn-inverse" disabled >
-                                                    <i class="icon-trash icon-white"></i>
+                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class=" btn btn-sm btn-grayish" disabled >
+                                                     <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" >
                                                  </button> 
                                                 </div>
                                             {else}
                                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
-                                                <a class="btn btn-small btn-inverse"
+                                               
+                                                <a class="  btn btn-sm btn-grayish"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
-                                                        $('#archiveDeleteForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_archive')}">
-                                                    <i class="icon-fire icon-white"></i>
-                                                </a>
+                                                        $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}"> <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="retrieve" > </a>
+                                                   
                                                 {/if}
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -659,6 +895,7 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
                 </div>
                 {/foreach}
             {else}
@@ -668,34 +905,38 @@
                 </div>
             {/if}
         </div>
-    </div>
-        
-{else}
-    {if isset($projectTasks)}
-    <p class="alert alert-info">
-        {Localisation::getTranslation('project_view_6')}
-    </p>
+    </div>  
+
+    {else}
+
+        {if isset($projectTasks)}
+        <p class="alert alert-info">
+            {Localisation::getTranslation('project_view_6')}
+        </p>
+        {/if}
+  
+
+
     {/if}
-{/if}
 
 
 
-{if !empty($volunteerTaskLanguageMap)}
+    {if !empty($volunteerTaskLanguageMap)}
     <hr />
-    <h1 class="page-header" style="margin-bottom: 60px">
+    <h3 >
         {Localisation::getTranslation('project_view_tasks')}
         <small>{Localisation::getTranslation('project_view_0')}</small>
-    </h1>
+    </h3>
                 {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
 
-                    <div style="display: inline-block; overflow-wrap: break-word;
-                                    font-weight: bold; font-size: large; max-width: 70%">
+                    <div class="fs-5 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>
                     <hr />
-
-                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
-                        <thead>
+                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+                    <div class="table-responsive mt-4  ">       
+                    <table class="table table-borderless" >
+                        <thead class="fs-5">
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
                                 <th>{Localisation::getTranslation('common_status')}</th>
@@ -703,13 +944,13 @@
                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fs-4 ">
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task['task_id']}
-                                <tr style="overflow-wrap: break-word;">
+                                <tr >
                                     <td width="24%">
-                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
+                                        <a  class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
                                         <br/>
@@ -731,7 +972,7 @@
                                     <td>
                                         <strong>
                                             <small>
-                                                {assign var="type_id" value=$task['type_id']}
+                                            {assign var="type_id" value=$task['type_id']}
                                                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                                                     {if $type_id == $task_type}
                                                         <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
@@ -747,20 +988,30 @@
                             {/foreach}
                         </tbody>
                     </table>
+                    </div>
+                    </div>
                 {/foreach}
-{/if}
-<!-- Cancel Modal -->
-<div id="cancelmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Cancel Task</h3>
-    <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
+    {/if}
+
+  
+
+
+    <!-- Cancel Modal -->
+<div id="cancelmodal" class="modal hide fade" tabindex="-1" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
+    <h3 class="fs-5" id="myModalLabel">Cancel Task</h3>
+  
+
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
   <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
-  <select name="cancel_task" id="cancel_task" style="width:450px;">
+  <select name="cancel_task" id="cancel_task" class="form-select">
     <option value="">--Select--</option>
     <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
     <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
@@ -777,14 +1028,17 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn" data-bs-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
+
   </form>
+  </div>
+  </div>
 </div>
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
+  <div class="modal-header mt-2">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Set Purchase Order #</h3>
   </div>
@@ -802,7 +1056,28 @@
   </form>
 </div>
 
-{include file="footer_no_end.tpl"}
+    
+
+
+
+
+
+
+
+    </div>
+
+
+
+</section>
+
+</div>
+
+   </div> 
+
+
+
+
+{include file="footer2.tpl"}
         <script>
             $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
         </script>
