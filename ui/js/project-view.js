@@ -428,6 +428,7 @@ function select() {
     //Cancel Task
     $(document).on('change', 'select[name="cancel_task"]', function() {
         var valueSelected = this.value;
+        console.log(valueSelected);
         if (valueSelected == "other" || !parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             $("[name=reason]").show();
             $("[name=reason_text]").show();
