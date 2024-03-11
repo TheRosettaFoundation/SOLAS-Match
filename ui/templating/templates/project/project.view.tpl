@@ -828,7 +828,7 @@
                                                     <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
 
                                                 </a>
-                                                </spam>
+                                                </span>
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
