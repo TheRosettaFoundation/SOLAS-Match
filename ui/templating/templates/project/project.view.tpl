@@ -490,7 +490,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2"  data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2"  data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                  Set Selected Tasks to Cancelled
             </a>
 
@@ -510,7 +510,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-bs-toggle="modal" href="#ponummodal" role="button">
+            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
                  Set Purchase Order #
             </a>
 
@@ -684,7 +684,7 @@
                                                 {Localisation::getTranslation('common_in_progress')}<br />
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class="icon-user icon-black"></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-toggle="tooltip" data-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
@@ -710,7 +710,7 @@
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
-                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
+                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
                                                             <i class="icon-check icon-black"></i>
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -750,7 +750,7 @@
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > </span>
+                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" > </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
                                           <span data-bs-toggle="tooltip" data-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
@@ -789,7 +789,7 @@
                                         </span>
                                     {/if}
                                     {* {if $task->get_cancelled()}
-                                        <button data-bs-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
@@ -1075,7 +1075,7 @@
 
 
    <script>
-   $("[data-bs-toggle='tooltip']").tooltip(); // Initialize Tooltip
+   $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
 </script>
 {include file="footer2.tpl"}
       
