@@ -1001,15 +1001,17 @@
 <div class="modal-dialog">
 <div class="modal-content">
     <div class="modal-header">
+    <div class="d-flex justify-content-between">
     <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
     <h3 class="modal-title fs-5" id="exampleModalLabel">Cancel Task</h3>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
   <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
-  <select name="cancel_task" id="cancel_task" style="width:450px;">
+  <select name="cancel_task" id="cancel_task" class="form-select">
     <option value="">--Select--</option>
     <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
     <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
@@ -1026,7 +1028,7 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn" data-bs-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
 
