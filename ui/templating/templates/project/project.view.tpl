@@ -769,7 +769,7 @@
                                     <td>
 
                                     {if $task->get_cancelled()}
-                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                        {* <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                                Cancel
                                         </button>
@@ -789,8 +789,8 @@
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if}
-                                    {* {if $task->get_cancelled()}
+                                    {/if} *}
+                                    {if $task->get_cancelled()}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
@@ -803,12 +803,12 @@
                                         </span>
                                     {else}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
-                                            <a class="btngray" data-toggle="modal"  id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
                                     {/if}
-                                     *}
+                                    
                                     </td>
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
