@@ -768,8 +768,8 @@
                                     {/if}
                                     <td>
 
-                                    {* {if $task->get_cancelled()} *}
-                                        {* <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
+                                     {if $task->get_cancelled()} 
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                                Cancel
                                         </button>
@@ -789,8 +789,8 @@
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if} *}
-                                    {if $task->get_cancelled()}
+                                    {/if}
+                                    {* {if $task->get_cancelled()}
                                         <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
@@ -807,7 +807,7 @@
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if}
+                                    {/if} *}
                                     
                                     </td>
                                     <td>
