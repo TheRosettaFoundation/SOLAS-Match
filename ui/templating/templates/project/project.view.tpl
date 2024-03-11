@@ -724,8 +724,8 @@
                                             </a>
                                             {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                             <br />
-                                            <a class="btn btn-primary" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-toggle="tooltip" data-placement="bottom" data-original-title="Download Output File">
-                                                <i class="icon-download-alt icon-white"></i>
+                                            <a class="btn btn-primary" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-placement="bottom" data-original-title="Download Output File">
+                                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download" >
                                             </a>
                                             {/if}
                                             <br />
