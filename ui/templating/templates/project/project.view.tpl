@@ -803,7 +803,7 @@
                                         </span>
                                     {else}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
-                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" type="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" href="#cancelmodal" type="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
