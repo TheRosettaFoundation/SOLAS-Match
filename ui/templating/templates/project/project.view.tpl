@@ -689,7 +689,7 @@
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
-                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top"data-bs-custom-class="custom-tooltip" data-bs-title="Set Status Complete">
+                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Set Status Complete">
                                                             <i class="icon-check icon-black"></i>
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -750,7 +750,7 @@
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" > </span>
+                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
                                           <span data-bs-toggle="tooltip" data-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
