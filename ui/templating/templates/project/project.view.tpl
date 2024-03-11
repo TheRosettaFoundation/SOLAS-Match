@@ -817,7 +817,7 @@
                                             {if $task->getPublished() == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}">
                                                 <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                      <img src="{urlFor name='home'}ui/img/check.svg"  alt="unpublish" >
+                                                      <img src="{urlFor name='home'}ui/img/publish-project.svg"  alt="unpublish" >
                                                 </a>
                                                 <input type="hidden" name="publishedTask" value="0" />
                                                 </span>
@@ -825,7 +825,7 @@
                                                 <input type="hidden" name="publishedTask" value="1" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                                 <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <img src="{urlFor name='home'}ui/img/publish-project.svg" alt="publish" >
+                                                    <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
 
                                                 </a>
                                                 </span>
