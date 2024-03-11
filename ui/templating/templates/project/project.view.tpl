@@ -1001,11 +1001,11 @@
 <div class="modal-dialog">
 <div class="modal-content">
     <div class="modal-header">
-    <div class="d-flex justify-content-between">
-    <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
-    <h3 class="modal-title fs-5" id="exampleModalLabel">Cancel Task</h3>
+    
+    <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
+    <h3 class="modal-title fs-5" id="cancelModalLabel">Cancel Task</h3>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
+
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
