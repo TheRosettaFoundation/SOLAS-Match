@@ -122,28 +122,7 @@
             </tr> 
         </tbody>
     </table>            
-
-    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
-    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
-        <thead>
-            <th>Deal ID</th>
-            <th>Allocated Budget</th>
-            <th>Project Cost</th>
-            <th>Remaining Budget</th>
-            <th>Waived Tasks (In-kind, In-house, waived)</th>
-        </thead>
-        <tbody>
-            <tr style="overflow-wrap: break-word;">
-                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
-                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
-                <td>${round($total_expected_cost, 2)}</td>
-                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
-                <td>${round($total_expected_cost_waived, 2)}</td>
-            </tr>
-        </tbody>
-    </table>
-    {/if}
-
+            
     <div class="well">
         <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
@@ -542,7 +521,6 @@
                                                 {/foreach}
                                             </small>
                                         </strong>
-                                        {if $get_payment_status_for_project[$task_id]['total_words']}<br />{round($get_payment_status_for_project[$task_id]['total_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}{/if}
                                     </td>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                     <td>                                    
@@ -558,7 +536,6 @@
                                           {else}
                                           PO#: {$get_payment_status_for_project[$task_id]['purchase_order']}<br />{$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
-                                         <br />${round($get_payment_status_for_project[$task_id]['total_expected_cost'], 2)}
                                      {else}
                                          <span>-</span>
                                      {/if}
@@ -566,8 +543,7 @@
                                     {/if}
                                     <td>
                                     {if $task->get_cancelled()}
-                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
-                                       
+                                        <span data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class=" btn btn-small btn-inverse cancel"  style="color:#FFFFFF;"  data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                                 <i class="icon-check icon-white"></i> Yes
@@ -576,7 +552,7 @@
                                             <input type="hidden" name="cancelled" value="0" />
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                           </form>
-                                        </button>
+                                        </span>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
                                             <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
@@ -677,8 +653,6 @@
     </p>
     {/if}
 {/if}
-
-
 
 {if !empty($volunteerTaskLanguageMap)}
     <hr />
