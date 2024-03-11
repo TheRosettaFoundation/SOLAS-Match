@@ -768,7 +768,7 @@
                                     {/if}
                                     <td>
 
-                                    {if $task->get_cancelled()}
+                                    {* {if $task->get_cancelled()}
                                         <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                        
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -786,8 +786,8 @@
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if}
-                                    {* {if $task->get_cancelled()}
+                                    {/if} *}
+                                    {if $task->get_cancelled()}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
@@ -804,8 +804,8 @@
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
-                                    {/if} *}
-                                    </form>
+                                    {/if}
+                                    
                                     </td>
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
