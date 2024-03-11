@@ -997,11 +997,13 @@
 
 
     <!-- Cancel Modal -->
-<div id="cancelmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Cancel Task</h3>
+<div id="cancelmodal" class="modal hide fade" tabindex="-1" tabindex="-1" aria-labelledby="#cancelModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
     <strong id="taskmsg" class="btn btn-danger">No task has been selected</strong>
+    <h3 class="modal-title fs-5" id="exampleModalLabel">Cancel Task</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
@@ -1027,7 +1029,10 @@
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
+
   </form>
+  </div>
+  </div>
 </div>
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
