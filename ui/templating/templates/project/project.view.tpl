@@ -785,7 +785,7 @@
                                         </button>
                                     {else}
                                         <span data-toggle="tooltip" data-placement="right" title="Cancel" >
-                                            <a class="btn btn-small cancel" data-toggle="modal" style="color:#000000;" id="cancel" href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <a class="btn btn-small cancel" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" style="color:#000000;" " href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
