@@ -803,7 +803,7 @@
                                         </span>
                                     {else}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
-                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
+                                            <a class="btngray" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel" type="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                                  <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
                                             </a>
                                         </span>
@@ -1001,10 +1001,10 @@
 <div class="modal-dialog">
 <div class="modal-content">
     <div class="modal-header">
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <h3 class="modal-title fs-5 me-4" id="myModalLabel">Cancel Task</h3>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">×</button>
     <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
-    <h3 class="fs-5" id="myModalLabel">Cancel Task</h3>
-  
+
 
   </div>
   <div class="modal-body">
