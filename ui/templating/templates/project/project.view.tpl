@@ -1079,5 +1079,4 @@
         <script>
             $("[data-toggle='tooltip']").tooltip(); // Initialize Tooltip
         </script>
-    </body>
-</html>
+
