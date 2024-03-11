@@ -1009,7 +1009,7 @@
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
   <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
-  <select name="cancel_task" id="cancel_task" class="form-select">
+  <select name="cancel_task" id="cancel_task" >
     <option value="">--Select--</option>
     <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
     <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
