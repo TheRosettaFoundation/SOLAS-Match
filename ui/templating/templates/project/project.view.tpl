@@ -768,7 +768,7 @@
                                     {/if}
                                     <td>
 
-                                    {if $task->get_cancelled()}
+                                    {* {if $task->get_cancelled()} *}
                                         {* <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                                Cancel
@@ -791,7 +791,7 @@
                                         </span>
                                     {/if} *}
                                     {if $task->get_cancelled()}
-                                        <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
+                                        <button data-toggle="tooltip" data-placement="right" title="Uncancel" >
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class="btngray"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                             <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
