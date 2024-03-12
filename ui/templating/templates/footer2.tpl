@@ -200,16 +200,33 @@
 
                      const badgeCopy= document.querySelector('#badgecopy') ;
 
+                     const badgeCopy_2 = document.querySelector("#badgecopy_2")
+
 
                   
                     const buttonCopy = document.querySelector('#copy-button') ;
                     const buttonBadge = document.querySelector('#badge-button') ;
+                    const buttonBagde_2 = document.querySelector('#badge-button_2')
+
+
                     if(buttonCopy){
                         buttonCopy.addEventListener("click" , async()=>{
                           let linkText = linkCopy.textContent ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
                             console.log('Link copied successfully') ;
                             buttonCopy.textContent = "Copied"
+                        })
+                    })
+
+                    }
+
+                      
+                    if(buttonBagde_2){
+                        buttonBagde_2.addEventListener("click" , async()=>{
+                          let linkText = badgeCopy_2.textContent ;
+                        await navigator.clipboard.writeText(linkText).then(()=>{
+                            console.log('Link copied successfully') ;
+                            buttonBagde_2.textContent = "Copied"
                         })
                     })
 

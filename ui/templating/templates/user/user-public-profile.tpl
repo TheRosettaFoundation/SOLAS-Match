@@ -408,7 +408,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
                                    <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
-                                <button id="badge-butto_1" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="badge-button_2" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                        
@@ -460,7 +460,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
                            {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-2">
                                     <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this certificate?')" />
                                     <input type="hidden" name="certification_id" value="{$certification['id']}" />
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -475,7 +475,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="custom-link">Upload a new file for this user</a>
                         {/if}
 
                         <hr  class="bg-light-subtle"/>
