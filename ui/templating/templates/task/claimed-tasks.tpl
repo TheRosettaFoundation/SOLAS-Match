@@ -207,40 +207,40 @@
                                     </a>
                                 {/if}
 
-                                <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary text-white">
+                                <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary mt-2 mt-md-0 text-white">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>
                                 {if $status_id == 3 && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-                                    <a href="{$siteLocation}task/{$task_id}/user-feedback" class="btn btn-small btn-danger">
+                                    <a href="{$siteLocation}task/{$task_id}/user-feedback" class="btn btn-small btn-danger mt-2 mt-md-0">
                                         {Localisation::getTranslation('claimed_tasks_unclaim_task')}
                                     </a>
                                 {/if}
                                 {if $type_id == 2}
                                     {if $proofreadTaskIds[$task_id]}
                                         {if $allow_downloads[$task_id]}
-                                        <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info mt-2 mt-md-0">
                                             {Localisation::getTranslation('claimed_tasks_download_proofread_task')}
                                         </a>
                                         {/if}
                                     {/if}
                                 {/if}
                                 {if $parentTaskIds[$task_id]}
-                                    <a href="{$siteLocation}task/{$parentTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                    <a href="{$siteLocation}task/{$parentTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small mt-2 mt-md-0 btn-info">
                                         Download Complete Revised Version
                                     </a>
                                 {/if}
                                 {if $show_memsource_revision[$task_id]}
-                                    <a href="{$siteLocation}task/{$show_memsource_revision[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                    <a href="{$siteLocation}task/{$show_memsource_revision[$task_id]}/download-task-latest-file/" class="btn btn-small mt-2 mt-md-0 btn-info">
                                         Download Complete Revised Version
                                     </a>
                                 {/if}
                                 {if $show_memsource_approval[$task_id]}
-                                    <a href="{$siteLocation}task/{$show_memsource_approval[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                    <a href="{$siteLocation}task/{$show_memsource_approval[$task_id]}/download-task-latest-file/" class="btn btn-small mt-2 mt-md-0 btn-info">
                                         Download Complete Proofread Version
                                     </a>
                                 {/if}
                                 {if false && ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2)}
-                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary" target="_blank">
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary mt-2 mt-md-0" target="_blank">
                                         TWB Pre-Delivery Checklist
                                     </a>
                                 {/if}
