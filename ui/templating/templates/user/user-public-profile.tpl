@@ -482,7 +482,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellowish text-uppercase text-primary">  <img src="{urlFor name='home'}ui/img/upload.svg" class="mb-5" />Upload a new file for this user</a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellowish text-uppercase text-primary d-flex">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" />Upload a new file for this user</a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
