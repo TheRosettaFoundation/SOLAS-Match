@@ -743,7 +743,78 @@ We hope that the rewards included in our Community Recognition Program may help 
 If a language is to be removed from this list, the community will be informed beforehand.</p>
 
 
+<div class="border border-1 border-primaryDark rounded-3 ">
 
+   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
+
+      <div class="fw-bold me-4">Points in strategic languages</div>
+      <div class="fw-bold me-4" >Status</div>
+      <div class="fw-bold flex-grow-1 text-end" >Recognition reward</div>
+    </div>
+
+       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+
+       <div class=" w-50 me-2"> 5,000</div>
+       <div class=" me-4" > TWB New Community Member</div>
+        <div class="flex-grow-1" > 10 USD phone top-up or online voucher </div>
+    </div>
+    
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 25,000</div>
+        <div class=" me-4" > TWB Traveler</div>
+         <div class="flex-grow-1" > 100 USD bank transfer</div>
+        </div>
+    
+       
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 50,000</div>
+        <div class=" me-4" > TWB Pathfinder</div>
+         <div class="flex-grow-1" > 150 USD bank transfer</div>
+        </div>
+
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 100,000</div>
+        <div class=" me-4" > TWB Explorer</div>
+         <div class="flex-grow-1" > 400 USD bank transfer</div>
+        </div>
+    
+
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 200,000</div>
+        <div class=" me-4" > TWB Navigator</div>
+         <div class="flex-grow-1" > 750 USD bank transfer</div>
+        </div>
+
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 200,000</div>
+        <div class=" me-4" > TWB Navigator</div>
+         <div class="flex-grow-1" > 750 USD bank transfer</div>
+        </div>
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 300,000</div>
+        <div class=" me-4" > TWB Voyager</div>
+         <div class="flex-grow-1" > 750 USD bank transfer</div>
+        </div>
+
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+        <div class=" w-50 me-2"> 400,000</div>
+        <div class=" me-4" > TWB Trailblazer</div>
+         <div class="flex-grow-1" > 750 USD bank transfer</div>
+        </div>
+       
+       
+    
+       
+
+
+</div>
 
 
 <div class="table-responsive">
