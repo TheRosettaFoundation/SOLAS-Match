@@ -745,14 +745,14 @@ If a language is to be removed from this list, the community will be informed be
 
 <div class="border border-1 border-primaryDark rounded-3 w-75 w-md-5">
 
-   <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
+   <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
 
       <div class="fw-bold me-4">Points in strategic languages</div>
       <div class="fw-bold me-4" >Status</div>
       <div class="fw-bold flex-grow-1 text-end" >Recognition reward</div>
     </div>
 
-       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+       <div class=" d-flex  border-bottom border-primaryDark justify-content-between  p-2" >
 
        <div class="  me-4"> 5,000</div>
        <div class=" me-4" > TWB New Community Member</div>
