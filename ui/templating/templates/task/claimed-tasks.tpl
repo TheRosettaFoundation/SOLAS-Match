@@ -202,7 +202,7 @@
                                 {/if}
 
                                {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
-                                    <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                    <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success mt-2 mt-md-0">
                                         Work using this URL
                                     </a>
                                 {/if}
@@ -247,7 +247,7 @@
 
 
                                     {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                                    <a class="btn btn-grayish "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Discuss</a>
+                                    <a class="btn btn-grayish mt-2 mt-md-0 "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Discuss</a>
                                     {/if}
                                 
                             </p>
