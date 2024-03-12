@@ -15,7 +15,7 @@
 
 
      {if isset($user)}
-            <h5 class="fw-bold mt-5 mb-2">{Localisation::getTranslation('index_filter_available_tasks')}
+            <h5 class="fw-bold mt-5 mb-4">{Localisation::getTranslation('index_filter_available_tasks')}
             
             </h5>
          
@@ -124,7 +124,7 @@
                                         {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
                                          </p>
 
-                                         <p class="task_details text-muted "><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
+                                         <p class="task_details  "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                                           
                                            {if !empty($completed_timestamps[$task_id])}
                                             <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
@@ -270,7 +270,7 @@
 
                            {* pagination begins here *}
               {assign var="url_name" value="claimed-tasks-paged"}
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-start">
                 <div class="d-flex">
                     {if $currentScrollPage > 1}
                         <div>
