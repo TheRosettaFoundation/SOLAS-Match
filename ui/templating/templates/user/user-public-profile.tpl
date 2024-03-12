@@ -9,14 +9,14 @@
 
      <img class="rounded-circle" src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
-                    <div class="fw-bold">
+                    <span class="fw-bold">
                     {if $this_user->getDisplayName() != ''}
                       {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
                     {else}
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
                     {if !isset($no_header)}<small class="text-muted">{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
-                    </div>
+                    </span>
 
      
      </div>
@@ -252,7 +252,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
 
-                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>;
+                                        <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>;
                                             ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
