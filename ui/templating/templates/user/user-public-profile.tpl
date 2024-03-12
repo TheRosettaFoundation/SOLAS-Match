@@ -112,9 +112,9 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div class="mb-3 d-flex align-items-center">
                                 
-                                    <div class="text-decoration-none" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish text-uppercase mt-3'>
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish text-uppercase mt-3 text-primary'>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
