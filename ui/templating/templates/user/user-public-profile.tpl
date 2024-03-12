@@ -61,7 +61,7 @@
      
      </div>
          {else} 
-       <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
+       <div class='fw-bold'><h1>{Localisation::getTranslation('common_user_profile')} </h1> <small class="text-muted">{Localisation::getTranslation('user_public_profile_2')}</small></div>
 {/if}
 
 {if isset($flash['error'])}
@@ -80,7 +80,7 @@
   
        <div class="d-flex justify-content-between fs-4  "> 
 
-        <div class="bg-body rounded-3 p-4 me-4 ">
+        <div class="bg-body text-dark rounded-3 p-4 me-4 ">
    
        
         <span class="d-none">
@@ -108,12 +108,12 @@
                         {/if}
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div class="mb-3">
+                            <div class="mb-3 d-flex">
                                 
-                                    <div >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div class="custom-link me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a class="custom-link" href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-grayish mt-3'>
-                                            <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish mt-3'>
+                                        <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
                                
@@ -124,14 +124,14 @@
                             {if !empty($uuid)}
                             <div class="mb-3">
                                
-                                    <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class='pull-right btn btn-primary text-white'>
+                                    <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' btn btn-primary text-white'>
                                         <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
                                     </a>
                                
                             </div>
                             {/if}
 
-                               <div>
+                               <div class="mb-3">
                                 
                                     Joined: {substr($this_user->getCreatedTime(), 0, 10)}
                                </div>     
@@ -163,7 +163,7 @@
                         {/if}
 
                         {foreach from=$url_list item=url}
-                            {if $url['state']}<tr><td><a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                            {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
                         {/foreach}
 
                         {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
@@ -213,7 +213,7 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                          
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/ ><span class="bg-light-subtle rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1"> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -250,7 +250,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
 
-                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1"> {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;</span>;
                                             ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
@@ -261,8 +261,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <div class="mb-3 fw-bold">
                                 
-                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='pull-right btn btn-primary text-white'>
-                                        <i class="icon-list icon-white"></i> Edit Linguist Unit Rate Exceptions
+                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class=' btn btn-primary text-white'>
+                                    <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
                                     </a>
                                 
                             </div>
@@ -303,18 +303,18 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 
                             </div>
                             <div>
-                               <span id="linkcopy">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="d-none"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                               <span id="linkcopy d-flex">
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="w-50 me-4"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <div>
-                                <td style="padding-bottom: 10px" />
+                              
                             </div>
                           
-                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-2">
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4">
                                         <input type="submit" class="btn btn-primary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
