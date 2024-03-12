@@ -110,7 +110,7 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div class="mb-3 d-flex align-items-center">
                                 
-                                    <div class="link-primary me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div class=" me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish mt-3'>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
@@ -170,7 +170,7 @@
                         {if !empty($bio)}
                        
                             
-                                <h4 class="mt-3">About Me</h4>
+                                <h4 class="mt-3 mb-3">About Me</h4>
                             
                       
                         <div class="mb-3" >
@@ -250,7 +250,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
 
-                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1"> {$user_rate_pair['selection_target']}&nbsp;&nbsp;&nbsp;&nbsp;</span>;
+                                            {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>;
                                             ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
