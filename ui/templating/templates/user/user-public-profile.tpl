@@ -80,7 +80,7 @@
   
        <div class="d-flex justify-content-between fs-4  "> 
 
-        <div class="bg-body t rounded-3 p-4 me-4 ">
+        <div class="bg-body t rounded-3 p-4 me-4  w-50">
    
        
         <span class="d-none">
@@ -170,7 +170,7 @@
                         {if !empty($bio)}
                        
                             
-                                <h4>About Me</h4>
+                                <h4 class="mt-3">About Me</h4>
                             
                       
                         <div class="mb-3" >
