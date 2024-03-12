@@ -1000,7 +1000,7 @@
 <div class="modal-content">
     <div class="modal-header">
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Cancel Task</h3>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+    {* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button> *}
     <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
 
 
