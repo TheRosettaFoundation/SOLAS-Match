@@ -82,7 +82,7 @@
   
        <div class="d-flex justify-content-between fs-5  "> 
 
-        <div class="bg-body t rounded-3 p-4 me-4  w-50">
+        <div class="bg-body  rounded-3 p-4 me-4  w-50">
    
        
         <span class="d-none">
@@ -112,9 +112,9 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div class="mb-3 d-flex align-items-center">
                                 
-                                    <div class=" me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div class="text-decoration-none" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish mt-3'>
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish text-uppercase mt-3'>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -131,11 +131,12 @@
                                     </a>
                                
                             </div>
+                            <hr  class="bg-light-subtle"/>
                             {/if}
 
-                               <div class="mb-3">
+                               <div class="mb-3 mt-3">
                                 
-                                    Joined: {substr($this_user->getCreatedTime(), 0, 10)}
+                                    Joined: <strong> {substr($this_user->getCreatedTime(), 0, 10)}</strong>
                                </div>     
                                 
                         {/if}
@@ -161,7 +162,9 @@
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
                                
                             </div>
+                            
                         {/if}
+                        <hr  class="bg-light-subtle"/>
                         {/if}
 
                         {foreach from=$url_list item=url}
@@ -242,10 +245,12 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {/foreach}
                                 
                             </div>
+                            <hr  class="bg-light-subtle"/>
                         {/if}
+                        <div class="d-flex justify-content-between">
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            
-                                    <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
+                            <div >
+                            <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                              
                             <div>
                                 
@@ -258,7 +263,8 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {/foreach}
                                
                             </div>
-                            <hr class="bg-light-subtle"/>
+                            </div>
+                           
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <div class="mb-3 fw-bold">
@@ -268,8 +274,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     </a>
                                 
                             </div>
-                               <hr class="bg-light-subtle"/>
+                             
                         {/if}
+                        </div>
 
                            
                                     <h4 class="mb-3 fw-bold">Services</h4>
@@ -308,7 +315,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="linkcopy d-flex">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 word-break " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
-                                <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -363,7 +370,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="badgecopy" class="text-break w-50 link-primary me-4" >
                                    <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank" class="custom-link"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
-                                <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                     
@@ -408,7 +415,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
                                    <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
-                                <button id="badge-button_2" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                        
@@ -475,7 +482,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="custom-link">Upload a new file for this user</a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellow text-">Upload a new file for this user</a>
                         {/if}
 
                         <hr  class="bg-light-subtle"/>
