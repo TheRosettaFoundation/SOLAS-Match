@@ -4,7 +4,7 @@
  <div class="container-fluid bg-light-subtle">
    <div class="container px-4  py-4 pt-5">
 
-     <div class=" d-flex justify-content-between py-4 align-items-center px-2">
+     <div class=" d-flex justify-content-between py-4 align-items-center px-2 flex-wrap">
      <div >
 
      <img class="rounded-circle" src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
@@ -80,7 +80,7 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-md-flex justify-content-between fs-5   "> 
+       <div class="d-md-flex justify-content-between fs-5 flex-wrap  "> 
 
         <div class="bg-body rounded-3 p-4 me-4 w-100  w-md-50">
    
@@ -334,7 +334,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body">
+        <div class="bg-body p-4 rounded-3 text-body w-100 w-md-50">
 
 
             
