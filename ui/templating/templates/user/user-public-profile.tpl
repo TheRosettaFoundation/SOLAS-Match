@@ -162,9 +162,9 @@
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
                                
                             </div>
-                            
+                            <hr  class="bg-light-subtle"/>   
                         {/if}
-                        <hr  class="bg-light-subtle"/>
+                    
                         {/if}
 
                         {foreach from=$url_list item=url}
@@ -258,7 +258,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                         <p>
 
                                         <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>
-                                            ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
+                                            ({$user_rate_pair['task_type_text']}): <span class="fw-bold"> ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})</span>
                                         </p>
                                     {/foreach}
                                
@@ -267,9 +267,9 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                            
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div class="mb-3 fw-bold">
+                            <div class="mb-3 fw-bold ">
                                 
-                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class=' btn btn-primary text-white'>
+                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class=' btn  btn-sm btn-primary text-white text-sm'>
                                     <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
                                     </a>
                                 
@@ -342,7 +342,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
                                 <div class="text-muted">WORDS DONATED</div>
@@ -351,7 +351,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                             <div class="">
 
-                            <img src="{urlFor name='home'}ui/img/profile_badge"  />
+                            <img src="{urlFor name='home'}ui/img/profile_badge"   />
 
                             </div>                           
 
@@ -386,7 +386,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['hours_donated']}</span><br/> </h2>
                                 <div class="text-muted">HOURS DONATED</div>
@@ -461,7 +461,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <input type="submit" class="btn btn-primary text-white " name="mark_certification_reviewed" value="Mark Reviewed" />
                                 <input type="hidden" name="certification_id" value="{$certification['id']}" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
+                                <a href="{urlFor name="user-download" class="custom-link" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
                             </form>
                            {else}
                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
@@ -482,10 +482,11 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellow text-">Upload a new file for this user</a>
-                        {/if}
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellowish text-uppercase">Upload a new file for this user</a>
+                     <hr  class="bg-light-subtle"/>  
+                    {/if}
 
-                        <hr  class="bg-light-subtle"/>
+                    
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
