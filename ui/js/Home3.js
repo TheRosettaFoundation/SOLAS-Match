@@ -148,11 +148,10 @@ function renderTaskDetails() {
             " %s".replace(
                 "%s",
                 "<div class='d-flex'>" +
-                    "<div> Complted</div>" +
+                    "<div class='me-2'> Completed</div>" +
                     "<div>" +
                     completed.getFullYear() +
                     "</div>" +
-                    "Completed" +
                     "-" +
                     m +
                     "-" +
