@@ -46,17 +46,17 @@
                         <a class="btn btn-sm btn-success mt-2 mt-md-0" onclick="$('#copyChunksProjectForm').submit();" >
                             <i class="icon-upload icon-white"></i> Sync Phrase TMS
                         </a>
-                        <a href="{$matecat_analyze_url}" class="btn btn-sm tn-primary text-white mt-2 mt-md-0 " target="_blank">
+                        <a href="{$matecat_analyze_url}" class="btn btn-sm btn-primary text-white mt-2 mt-md-0 " target="_blank">
                             {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                         </a>
                     {/if}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
-                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm tn-primary text-white mt-2 mt-md-0">
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btn btn-sm btn-primary text-white mt-2 mt-md-0">
                              Add Shell Tasks
                         </a>
                     {/if}
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm tn-primary text-white mt-2 mt-md-0 fixMargin'>
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-sm btn-primary text-white mt-2 mt-md-0 fixMargin'>
                              {Localisation::getTranslation('common_edit_project')}
                         </a> 
                     {/if}
@@ -364,7 +364,7 @@
      
 
         <div class="dropdown">
-        <button class="dropdown-toggle btn  tn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
            ...
         </button>
         <ul class="dropdown-menu">
@@ -724,7 +724,7 @@
                                             </a>
                                             {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                             <br />
-                                            <a class="btn tn-primary text-white" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-placement="bottom" data-original-title="Download Output File">
+                                            <a class="btn btn-primary text-white" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-placement="bottom" data-original-title="Download Output File">
                                             <img src="{urlFor name='home'}ui/img/download.svg" alt="download" >
                                             </a>
                                             {/if}
