@@ -9,7 +9,7 @@
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
-            <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
+            <small class="text-muted">{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
         <div class="pull-right">
