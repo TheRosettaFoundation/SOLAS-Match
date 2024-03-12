@@ -24,13 +24,13 @@
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 text-white">
-                                <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+                            <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                 <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success me-2"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
-                                    <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
+                                   <img src="{urlFor name='home'}ui/img/create.svg"> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
@@ -40,7 +40,7 @@
                             </a>
                           {else}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm me-2 btn-primary text-white border-bottom-4 border-primaryDark '>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
+                            <img src="{urlFor name='home'}ui/img/edit_profile.svg"> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
                         {/if}
@@ -80,7 +80,7 @@
   
        <div class="d-flex justify-content-between fs-4  "> 
 
-        <div class="bg-body text-dark rounded-3 p-4 me-4 ">
+        <div class="bg-body t rounded-3 p-4 me-4 ">
    
        
         <span class="d-none">
@@ -108,9 +108,9 @@
                         {/if}
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div class="mb-3 d-flex">
+                            <div class="mb-3 d-flex align-items-center">
                                 
-                                    <div class="custom-link me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                    <div class="link-primary me-2" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish mt-3'>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
