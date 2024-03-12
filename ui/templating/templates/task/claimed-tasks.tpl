@@ -274,7 +274,7 @@
                 <div class="d-flex">
                     {if $currentScrollPage > 1}
                         <div>
-                            <a class="custom-link me-2" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
+                            <a class="custom-link me-4" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
                         </div>
                         <div class="ts-previous me-2 text-white">
                             {assign var="previous" value=($currentScrollPage - 1)}
@@ -287,7 +287,7 @@
                     {if $currentScrollPage < $lastScrollPage}
                         <div class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a   class=" custom-link me-2" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
+                            <a   class=" custom-link me-4" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Next" >&gt;</a>
                         </div>
                         <div>
                             <a  class="custom-link" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Last">&gt;&gt;</a>
