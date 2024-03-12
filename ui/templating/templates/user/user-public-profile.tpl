@@ -252,7 +252,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
 
-                                        <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>;
+                                        <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_source']} {* &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; *} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > <span class="bg-light-subtle rounded-2 p-1 me-4"> {$user_rate_pair['selection_target']}</span>
                                             ({$user_rate_pair['task_type_text']}): ${$user_rate_pair['unit_rate']} ({$user_rate_pair['pricing_and_recognition_unit_text_hours']})
                                         </p>
                                     {/foreach}
@@ -306,7 +306,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             <div>
                                <span id="linkcopy d-flex">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="w-50 me-4 custom-link" style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
