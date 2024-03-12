@@ -276,7 +276,7 @@
                         <div>
                             <a class="custom-link me-4" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
                         </div>
-                        <div class="ts-previous">
+                        <div class="ts-previous me-4 text-white">
                             {assign var="previous" value=($currentScrollPage - 1)}
                             <a  class="custom-link me-4" href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="Previous">&lt;</a>
                         </div>
