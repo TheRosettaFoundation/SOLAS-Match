@@ -282,7 +282,7 @@
                         </div>
                     {/if}
                     <div>
-                        <a href="" class="custom-link me-2">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                        <a href="" class="custom-link mx-4">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
                     </div>
                     {if $currentScrollPage < $lastScrollPage}
                         <div class="ts-next">
