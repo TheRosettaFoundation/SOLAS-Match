@@ -25,36 +25,36 @@
      <div class="d-flex align-items-center flex-wrap ">
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 text-white">
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 mt-2 mt-md-0 text-white">
                             <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success me-2"
+                                <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success me-2 mt-2 mt-md-0"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                    <img src="{urlFor name='home'}ui/img/create.svg"> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
-                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-sm btn-primary text-white me-2'>
+                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-sm btn-primary text-white me-2 mt-2 mt-md-0'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm me-2 btn-primary text-white border-bottom-4 border-primaryDark '>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm me-2 btn-primary text-white border-bottom-4 border-primaryDark mt-2 mt-md-0 '>
                             <img src="{urlFor name='home'}ui/img/edit_profile.svg"> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
                         {/if}
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white me-2" name="mark_reviewed" value="Mark New User as Reviewed" />
+                                <input type="submit" class="btn btn-sm btn-primary text-white me-2 mt-2 mt-md-0" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
                         {if $show_create_memsource_user}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white me-2" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
+                                <input type="submit" class="btn btn-sm btn-primary text-white me-2 mt-2 mt-md-0" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
@@ -82,7 +82,7 @@
   
        <div class="d-flex justify-content-between fs-5 flex-wrap  "> 
 
-        <div class="bg-body rounded-3 p-4 me-4  w-50">
+        <div class="bg-body rounded-3 p-4 me-4  w-md-50">
    
        
         <span class="d-none">
