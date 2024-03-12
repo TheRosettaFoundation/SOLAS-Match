@@ -7,14 +7,16 @@
      <div class=" d-flex justify-content-between py-4 align-items-center px-2">
      <div >
 
-     <img  src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+     <img class="rounded-circle" src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
+                    <div class="fw-bold">
                     {if $this_user->getDisplayName() != ''}
-                        {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
+                      {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
                     {else}
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
-                    {if !isset($no_header)}<small>{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
+                    {if !isset($no_header)}<small class="text-muted">{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
+                    </div>
 
      
      </div>
@@ -78,7 +80,7 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-flex justify-content-between fs-4  "> 
+       <div class="d-flex justify-content-between fs-5  "> 
 
         <div class="bg-body t rounded-3 p-4 me-4  w-50">
    
@@ -304,7 +306,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             <div>
                                <span id="linkcopy d-flex">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="w-50 me-4"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class="w-50 me-4 custom-link" style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
@@ -333,7 +335,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo1.svg" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
                                 <div class="text-muted">WORDS DONATED</div>
@@ -359,7 +361,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                              <div class="d-flex align-items-center">
                                <span id="badgecopy" class="text-break w-50 link-primary me-4" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank" class="custom-link"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
                                 <button id="badge-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
@@ -373,11 +375,11 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
 
                         
-                            <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 mb-3  p-2">
+                            <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 mb-3 mt-3  p-2">
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo1.svg" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['hours_donated']}</span><br/> </h2>
                                 <div class="text-muted">HOURS DONATED</div>
@@ -404,7 +406,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                             <div class="d-flex align-items-center">
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
+                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
                                </span>
                                 <button id="badge-butto_1" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
@@ -416,7 +418,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                         {/if}
                  
                        
-                                <h4 class="mb-3 fw-bold">Supported Organizations</h4>
+                                <h4 class="mb-3 mt-3 fw-bold">Supported Organizations</h4>
                        
                        
                             <ul>
