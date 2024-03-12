@@ -127,7 +127,7 @@
                                          <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                                           
                                            {if !empty($completed_timestamps[$task_id])}
-                                            <p><div class="process_completed_utc " style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                                            <p><div class="process_completed_utc" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
                                             {/if}
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
