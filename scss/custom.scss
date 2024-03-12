@@ -159,6 +159,12 @@ a {
     word-wrap: break-word;
 }
 
+a[href^="mailto:"] {
+    color: black;
+    display: inline-block;
+    margin-left: 4px;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
