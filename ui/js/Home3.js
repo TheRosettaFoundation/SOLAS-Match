@@ -147,7 +147,7 @@ function renderTaskDetails() {
         $(this).html(
             " %s".replace(
                 "%s",
-                "<div class='d-flex'>" +
+                "<div class='d-flex align-items-center'>" +
                     "<div class='me-2'> Completed</div>" +
                     "<div>" +
                     completed.getFullYear() +
