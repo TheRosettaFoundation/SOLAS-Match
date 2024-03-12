@@ -80,9 +80,9 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-flex justify-content-between fs-5  "> 
+       <div class="d-flex justify-content-between fs-5 flex-wrap  "> 
 
-        <div class="bg-body  rounded-3 p-4 me-4  w-50">
+        <div class="bg-body rounded-3 p-4 me-4  w-50">
    
        
         <span class="d-none">
@@ -252,7 +252,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             <div >
                             <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                              
-                            <div>
+                            <div class="mt-3">
                                 
                                     {foreach from=$user_rate_pairs item=user_rate_pair}
                                         <p>
@@ -276,6 +276,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                              
                         {/if}
+                        <hr class="bg-light-subtle"/>
                         </div>
 
                            
