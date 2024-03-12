@@ -570,19 +570,19 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 As part of our Community Recognition Program, you can receive rewards depending on your level of contribution.
 Deliver tasks on the TWB platform to build up points.
 Once you reach the point thresholds described in the chart below, please request the respective reward by sending an email at
-<a href="mailto:recognition@translatorswithoutborders.org?subject=Request reward" target="_blank">recognition@translatorswithoutborders.org</a>.
+<a  class="custom-link" href="mailto:recognition@translatorswithoutborders.org?subject=Request reward" target="_blank">recognition@translatorswithoutborders.org</a>.
 Our staff will process your request and get back to you within 2 business days.
 The points are cumulative and never reset to zero, so you keep accruing points even if you claim any rewards.</p>
 <p>Please remember that the quality of the work we submit is of utmost importance,
 as it can influence the lives of people affected by humanitarian crises.
-Only work that meets our minimum quality standards (as described in <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB’s Code of Conduct</a>)
+Only work that meets our minimum quality standards (as described in <a  class="custom-link" href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB’s Code of Conduct</a>)
 will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
-<a href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
+<a  class="custom-link" href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
 <div class="d-flex justify-content-between flex-wrap ">
 
-<div class="w-50">
+<div class=" w-100 w-md-50">
 <div class="border border-1 border-primaryDark rounded-3 ">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
@@ -741,6 +741,11 @@ We hope that the rewards included in our Community Recognition Program may help 
 <p>Currently, the languages for which we can offer monetary rewards are Amharic; Bengali; Bengali, India; Bura-Pabir; Burmese; Chadian Arabic; Chadian Arabic Latin; Chittagonian; Dari; Fulah; Haitian; Hausa; Kanuri; Kibaku; Kurdish Bahdini; Kurdish Kurmanji; Kurdish Sorani; Lingala; Ganda; Wandala (formerly Mandara); Marghi Central; Mongo; Nande; Ngombe; Oromo; Pushto; Pushto, Pakistan; Rohingya Bengali; Rohingya Latin; Romani; Shi; Somali; Somali, Ethiopia; Swahili; Swahili, Congo; Tigrinya; Ukrainian; Lamang (formerly Waha).</p>
 <p>This list may change over time, depending on our strategic needs and budgetary constraints related to our crisis response work and international programs.
 If a language is to be removed from this list, the community will be informed beforehand.</p>
+
+
+
+
+
 <div class="table-responsive">
 <table border="0">
     <tr valign="top">
