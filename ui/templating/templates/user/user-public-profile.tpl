@@ -306,7 +306,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             <div>
                                <span id="linkcopy d-flex">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 word-break " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-yellowish text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
@@ -335,7 +335,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/TWB_Logo1.svg" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
                                 <div class="text-muted">WORDS DONATED</div>
@@ -379,7 +379,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                 
 
                             <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/TWB_Logo1.svg" class="mb-5" />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['hours_donated']}</span><br/> </h2>
                                 <div class="text-muted">HOURS DONATED</div>
