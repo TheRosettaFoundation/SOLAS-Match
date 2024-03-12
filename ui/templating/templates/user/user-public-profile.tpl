@@ -9,7 +9,7 @@
 
      <img class="rounded-circle" src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
-                    <span class="fw-bold">
+                    <span class="fw-bold me-4">
                     {if $this_user->getDisplayName() != ''}
                       {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
                     {else}
