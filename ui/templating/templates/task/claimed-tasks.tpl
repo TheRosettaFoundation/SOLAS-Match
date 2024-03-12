@@ -136,6 +136,7 @@
                                                 <span class=" ">
                                                     Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
+                                                </div>
                                         {/if}
                                             <span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
@@ -143,12 +144,12 @@
                                          
                                         
                                             
-                                            </div>
+                                           
                                             <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
-                             </div>
-                           
+                                        </div>
+                                    </div>
                             
-                            </div>
+                         
                            
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             {/if}
