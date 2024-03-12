@@ -464,7 +464,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 <a href="{urlFor name="user-download" class="custom-link" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
                             </form>
                            {else}
-                           <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
+                           <a href="{urlFor name="user-download" options="id.{$certification['id']}"}" class="custom-link">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
                            {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-2">
