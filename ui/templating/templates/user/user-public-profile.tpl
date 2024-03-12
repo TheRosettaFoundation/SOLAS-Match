@@ -247,7 +247,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             <hr  class="bg-light-subtle"/>
                         {/if}
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between flex-wrap">
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div >
                             <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
