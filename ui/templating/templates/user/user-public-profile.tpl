@@ -583,7 +583,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div class="d-flex justify-content-between flex-wrap ">
 
 <div class="w-50">
-<div class="border border-1 border-primaryDark rounded-3 ">
+<div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
 
@@ -615,7 +615,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" border border-1 border-primaryDark rounded-3 mt-4 ">
+<div class=" border border-1 border-primaryDark rounded-3 mt-4 w-100 ">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2 px-2" >
 
