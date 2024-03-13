@@ -1057,12 +1057,10 @@ If a language is to be removed from this list, the community will be informed be
           <div class="flex-grow-1 text-end" > <strong>20 USD bank transfer</strong></div>
          </div>
 
-       
- 
- 
- 
  
  </div>   
+
+{/if}
 
 
 
