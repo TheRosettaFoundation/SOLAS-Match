@@ -1161,7 +1161,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 <div class="mt-2 p-4 rounded-3 bg-body">
-
+<div class="d-flex justify-content-between">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
   
@@ -1173,11 +1173,11 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 mb-4 ">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
     <input type="submit" class="btn btn-primary text-white" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-
+</div>
 <div class="table-responsive">
 <table id="printrequest" class="display" style="width:100%">
         <thead>
