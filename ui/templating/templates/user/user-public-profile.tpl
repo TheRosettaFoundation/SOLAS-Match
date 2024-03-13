@@ -808,7 +808,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class=" me-4" > TWB Trailblazer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
-
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
         <div class=" w-50 me-2"> 500,000</div>
         <div class=" me-4" > TWB Pioneer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
@@ -839,219 +839,265 @@ If a language is to be removed from this list, the community will be informed be
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 2,500 points</div>
-         <div class=" me-4" > TWB Traveler</div>
-          <div class="flex-grow-1 text-end" > 100 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
      
         
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 5000 points</div>
-         <div class=" me-4" > TWB Pathfinder</div>
-          <div class="flex-grow-1 text-end" > 150 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
  
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 7,500 points</div>
-         <div class=" me-4" > TWB Explorer</div>
-          <div class="flex-grow-1 text-end" > 400 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
      
  
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> <strong>10,000 points</strong></div>
-         <div class=" me-4" > TWB Navigator</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
  
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 12,500 points</div>
-         <div class=" me-4" > TWB Navigator</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 15,000 points</div>
-         <div class=" me-4" > TWB Voyager</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
  
          <div class=" d-flex  border-bottom border-primaryDark  p-2" >
      
          <div class=" w-50 me-2"> 17,500 points</div>
-         <div class=" me-4" > TWB Trailblazer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
- 
+
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 20,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 22,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >10 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> <strong>25,000 points</strong></div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > TWB Traveller</div>
+          <div class="flex-grow-1 text-end" > 10 USD bank transfer</div>
          </div>
-
+        
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 27,500 points</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" ></div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
-
+         
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 30,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
+         </div>
+         
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+
+        <div class=" w-50 me-2"> 32,500</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
-         <div class=" w-50 me-2"> 32,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
-         </div>
-
+         
          <div class=" w-50 me-2"> 35,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
          <div class=" w-50 me-2"> 37,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
  
          <div class=" w-50 me-2"> 40,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
          <div class=" w-50 me-2"> 42,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
          <div class=" w-50 me-2"> 45,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
          <div class=" w-50 me-2"> 47,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
+<div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
+<div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"><strong>50,000 points</strong></div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > TWB Pathfinder</div>
+          <div class="flex-grow-1 text-end" > 15 USD bank transfer</div>
          </div>
 
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 52,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
         
-
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 55,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
-
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 57,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > /div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
-
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 60,000</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
-
-         <div class=" w-50 me-2"> /div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
+         <div class=" w-50 me-2"> 62,500</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
+    <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 65,000<</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 720 USD bank transfer</div>
          </div>
+
+    <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 67,500</div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
+
+    <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 70,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
+    <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 72,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
+    <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
          <div class=" w-50 me-2"> 75,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
-
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 77,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 80,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 82,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >20 USD bank transfer</div>
          </div>
-
+        
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 85,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 87,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 90,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 92,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 95,000 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" >720 USD bank transfer</div>
          </div>
-
+        
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> 97,500 </div>
-         <div class=" me-4" > TWB Pioneer</div>
-          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+         <div class=" me-4" > </div>
+          <div class="flex-grow-1 text-end" > 20 USD bank transfer</div>
          </div>
 
+         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+     
          <div class=" w-50 me-2"> <strong>100,000 points</strong> </div>
          <div class=" me-4" ><strong>TWB Explorer</strong></div>
           <div class="flex-grow-1 text-end" > <strong>20 USD bank transfer</strong></div>
@@ -1178,7 +1224,7 @@ If a language is to be removed from this list, the community will be informed be
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 </div>
-<div class="table-responsive">
+<div class="table-responsive fs-5">
 <table id="printrequest" class="display" style="width:100%">
         <thead>
             <tr>
