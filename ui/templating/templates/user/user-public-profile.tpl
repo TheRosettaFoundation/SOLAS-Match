@@ -1161,7 +1161,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 <div class="mt-2 p-4 rounded-3 bg-body">
-<div class="d-flex justify-content-betwee mb-4  flex-wrap">
+<div class="d-flex justify-content-between mb-4  flex-wrap">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
   
