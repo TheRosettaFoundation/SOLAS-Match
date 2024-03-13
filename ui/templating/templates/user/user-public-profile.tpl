@@ -1161,12 +1161,12 @@ If a language is to be removed from this list, the community will be informed be
 
 
 <div class="mt-2 p-4 rounded-3 bg-body">
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-betwee mb-4  flex-wrap">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
   
 
-    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success" target="_blank" ">
+    <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success " target="_blank" ">
         <i class="icon-print icon-white"></i> Generate Certificate
     </a>
  
@@ -1174,7 +1174,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
-    <input type="submit" class="btn btn-primary text-white" name="PrintRequest" value="Request Certification of Volunteer Activity" />
+    <input type="submit" class="btn btn-primary text-white mt-2 mt-md-0" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 </div>
