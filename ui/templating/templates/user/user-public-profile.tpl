@@ -615,7 +615,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" border border-1 border-primaryDark rounded-3 mt-4 w-100 ">
+<div class=" border border-1 border-primaryDark rounded-3 mt-4 w-100 items-center ">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2 px-2" >
 
