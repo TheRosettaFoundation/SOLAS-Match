@@ -696,7 +696,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" ms-6">
+<div class=" ms-6 flex-grow">
 
       <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
                 
