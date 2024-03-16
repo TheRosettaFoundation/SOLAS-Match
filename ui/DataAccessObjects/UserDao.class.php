@@ -545,6 +545,7 @@ error_log("claimTask_shell($userId, $taskId)");
                 $task->set_cancelled(0);
                 $status = [1 => 'NEW', 2 => 'NEW', 3 => 'ACCEPTED', 4 => 'COMPLETED', 10 => 'ACCEPTED'][$task->getTaskStatus()];
                 $word_count = $task->get_word_count_original();
+                $task->set_word_count_partner_weighted($word_count);
                 if ($word_count < 1) $word_count = 1;
                 $task->setWordCount($word_count);
                 $taskDao->updateTask($task);
@@ -585,6 +586,7 @@ error_log("claimTask_shell($userId, $taskId)");
                             if (!empty($job_counts['jobPartUid']) && $job_counts['jobPartUid'] == $memsource_task['memsource_task_uid']) {
                                 if (isset($job_counts['counts']['confirmedWordsCount'])) {
                                     $word_count = $job_counts['counts']['confirmedWordsCount'];
+                                    $task->set_word_count_partner_weighted($word_count);
                                     if ($word_count < 1) $word_count = 1;
                                     $task->setWordCount($word_count);
                                     $task->set_cancelled(2);

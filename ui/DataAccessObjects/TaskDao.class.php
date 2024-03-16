@@ -132,6 +132,7 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_word_count_partner_weighted()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_source_quantity()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
@@ -172,6 +173,7 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->get_word_count_partner_weighted()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_word_count_original()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_source_quantity()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .

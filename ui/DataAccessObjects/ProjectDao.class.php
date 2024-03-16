@@ -989,6 +989,7 @@ if (empty($job['wordsCount']) || $job['wordsCount'] == -1) error_log('BAD job[wo
                 return "Memsource not ready for job ID: {$job['innerId']}, wait a bit and click Sync Memsource again";
             }
             $task->setWordCount($job['wordsCount']);
+            $task->set_word_count_partner_weighted($job['wordsCount']);
             $task->set_word_count_original($job['wordsCount']);
             $task->set_source_quantity($job['wordsCount']);
             $this->queue_asana_project($project_id);

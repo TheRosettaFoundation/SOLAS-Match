@@ -9,6 +9,7 @@ class Task
   public $comment;
   public $deadline;
   public $wordCount;
+  public $word_count_partner_weighted;
   public $word_count_original;
   public $source_quantity;
   public $createdTime;
@@ -26,6 +27,7 @@ class Task
     $this->comment = '';
     $this->deadline = '';
     $this->wordCount = null;
+    $this->word_count_partner_weighted = 0;
     $this->word_count_original = 0;
     $this->source_quantity = 0;
     $this->createdTime = '';
@@ -95,6 +97,14 @@ class Task
 
   public function setWordCount($wordCount) {
     $this->wordCount = $wordCount;
+  }
+
+  public function get_word_count_partner_weighted() {
+    return $this->word_count_partner_weighted;
+  }
+
+  public function set_word_count_partner_weighted($word_count_partner_weighted) {
+    $this->word_count_partner_weighted = $word_count_partner_weighted;
   }
 
   public function get_word_count_original() {
