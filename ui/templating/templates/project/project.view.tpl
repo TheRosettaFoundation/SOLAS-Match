@@ -586,7 +586,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class="flex-grow-1  text-body text-decoration-none" onclick="$('#publish_selected_tasks').submit();" >
+            <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#publish_selected_tasks').submit();" >
                 <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
             </a>
             <input type="hidden" name="publish_selected_tasks" value="1" />
