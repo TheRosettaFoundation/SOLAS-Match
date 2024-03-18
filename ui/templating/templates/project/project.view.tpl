@@ -472,7 +472,7 @@
         </form>
 
 
-        <form id="uncomplete_selected_tasks"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+        <form id="uncomplete_selected_tasks"  class=" btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#uncomplete_selected_tasks').submit();">
 
@@ -481,13 +481,7 @@
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
      
-        
-
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
-                 Set Selected Tasks to Cancelled
-            </a>
-
-                
+      
             
                 </a>  
         </li>
@@ -495,17 +489,15 @@
     
 
         <li class="flex-fill">
-        <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+        <a class="  open-cancel-modal mt-2" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
         Set Selected Tasks to Cancelled
         </a>
         </li>
 
         
-        <form id="cancel" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+        <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
-               
-
-                 
+            
             <a  onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 Set Selected Tasks to Uncancelled
             </a>
@@ -513,15 +505,19 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
+            {* <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
                  Set Purchase Order #
-            </a>
+            </a> *}
 
                 
             
               
         </li>
         </form>
+
+        <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-ponum-modal mt-2"  data-toggle="modal" href="#ponummodal" role="button">
+        Set Purchase Order #
+        </a>
 
         <form id="ready_payment" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
