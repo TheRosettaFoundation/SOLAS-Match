@@ -383,7 +383,7 @@
             </li>
             </form>
 
-             <li><a class="dropdown-item"  onclick="$('#unpublish_selected_tasks').submit();" >
+             <li class="flex-fill"><a class="dropdown-item"  onclick="$('#unpublish_selected_tasks').submit();" >
              <form  class="btn btn-sm btn-dark-subtle border border-dark-subtle" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
               
                      Unpublish Selected Tasks
@@ -397,7 +397,7 @@
          {/if}
 
          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#tasks_as_paid').submit();">
                        <form id="tasks_as_paid"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                
@@ -411,7 +411,7 @@
                 </a>  
         </li>
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#tasks_as_unpaid').submit();">
 
                 <form  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -429,7 +429,7 @@
         </li>
 
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#status_as_unclaimed').submit();">
 
                 <form id="status_as_unclaimed" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -445,7 +445,7 @@
                 </a>  
         </li>
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#status_as_waiting').submit();">
 
                  <form id="status_as_waiting" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -463,7 +463,7 @@
 
 
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#complete_selected_tasks').submit();">
 
                  <form id="complete_selected_tasks"    method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -481,7 +481,7 @@
 
 
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#uncomplete_selected_tasks').submit();">
 
                  <form id="uncomplete_selected_tasks"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -502,7 +502,7 @@
                 </a>  
         </li>
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" href="#">
 
                  <form id="cancel" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -523,7 +523,7 @@
         </li>
 
 
-          <li>
+          <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#ready_payment').submit();" role="button">
 
                 <form id="ready_payment" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -540,7 +540,7 @@
                 </a>  
         </li>
 
-           <li>
+           <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#pending_documentation').submit();" role="button">
 
                 <form id="pending_documentation" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -558,7 +558,7 @@
                 </a>  
              </li>
 
-               <li>
+               <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#tasks_settled').submit();"  role="button">
 
                   <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
