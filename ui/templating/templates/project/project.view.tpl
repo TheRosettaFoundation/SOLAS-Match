@@ -387,7 +387,7 @@
              <li class="flex-fill"><a class="dropdown-item"  onclick="$('#unpublish_selected_tasks').submit();" >
              <form  class="btn btn-sm btn-dark-subtle border border-dark-subtle" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
               
-                     Unpublish Selected Tasks
+                     <span>Unpublish Selected Tasks</span>
               
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -402,7 +402,7 @@
                 <a class="dropdown-item" onclick="$('#tasks_as_paid').submit();">
                        <form id="tasks_as_paid"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                
-                     Mark Selected Tasks as Paid
+                    <span> Mark Selected Tasks as Paid </span>
               
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
