@@ -669,6 +669,7 @@ a:hover{
                                             <span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
+                                            </div>
                                          {/if}
 
                                          <div class="mb-3  text-muted">
@@ -682,7 +683,7 @@ a:hover{
                                          
                                         
                                             
-                                            </div>
+                                          
                                             <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                            
