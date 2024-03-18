@@ -400,69 +400,62 @@
          {/if}
 
          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+            <form id="tasks_as_paid"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >  
           <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#tasks_as_paid').submit();">
-                       <form id="tasks_as_paid"  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                      
                
                     <span> Mark Selected Tasks as Paid </span>
               
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-
                 </a>  
         </li>
-
+        </form>
+        
+        <form  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#tasks_as_unpaid').submit();">
 
-                <form  class="  btn btn-sm btn-dark-subtle border border-dark-subtle" id="tasks_as_unpaid" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                
                    Mark Selected Tasks as Unpaid
              
                 <input type="hidden" name="all_as_paid1" value="1" />
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-                
-            
+ 
                 </a>  
         </li>
+        </form>
 
-
+        <form id="status_as_unclaimed" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#status_as_unclaimed').submit();">
 
-                <form id="status_as_unclaimed" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                
                    Set Status of Selected to Unclaimed
           
                 <input type="hidden" name="status_as_unclaimed" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
 
-                
-            
                 </a>  
         </li>
+        </form>
 
+        
+        <form id="status_as_waiting" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#status_as_waiting').submit();">
-
-                 <form id="status_as_waiting" class="  btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                
-                     Set Status of Selected to Waiting
+                    Set Status of Selected to Waiting
          
                 <input type="hidden" name="status_as_waiting" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+       
 
 
 
                 </a>  
         </li>
+        </form>
 
 
 
