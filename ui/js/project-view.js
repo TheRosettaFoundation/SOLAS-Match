@@ -479,7 +479,7 @@ function select() {
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
     });
 
-    $('#ponummodal').on('shown', function () {
+    $('#ponummodal').on('shown.bs.modal', function () {
         $("#ponumbtn").prop('disabled', true);
         $("[name=po]").on("focus", function(){
             $(this).on("change paste keyup", function() {
