@@ -665,8 +665,8 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" btn btn-small open-ponum-modal" style="color:#000000;" data-toggle="modal" href="#ponummodal" role="button">
-                <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-65px;" aria-hidden="true"></i>  Set Purchase Order #
+            <a class=" btn btn-small open-ponum-modal" style="color:#000000;" data-bs-toggle="modal" href="#ponummodal" role="button">
+                <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
             <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btn btn-small" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
