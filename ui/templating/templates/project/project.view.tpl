@@ -370,11 +370,11 @@
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
-            <li><a class="dropdown-item" >    
+            <li><a class="dropdown-item"  onclick="$('#publish_selected_tasks').submit();">    
            
-                <a  onclick="$('#publish_selected_tasks').submit();" >
+              
                      Publish Selected Tasks
-                </a>
+             
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         
