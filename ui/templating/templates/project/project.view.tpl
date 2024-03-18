@@ -1156,7 +1156,7 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> Close</button>
+  <button type="button"  data-bs-dismiss="modal" aria-label="Close"> Close</button>
     {* <button class="btn" data-bs-dismiss="modal" aria-hidden="true">Close</button> *}
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
@@ -1191,7 +1191,7 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
+  <button type="button"  data-bs-dismiss="modal" aria-label="Close">Close</button>
    
     <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
   </div>
