@@ -880,7 +880,7 @@
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > </span>
+                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="icon-remove" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
                                           <span data-bs-toggle="tooltip" data-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
@@ -1130,9 +1130,7 @@
 <div class="modal-content">
     <div class="modal-header">
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Cancel Task</h3>
-    {* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *}
     <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
-
 
   </div>
   <div class="modal-body">
@@ -1157,7 +1155,6 @@
   </div>
   <div class="modal-footer">
   <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close"> Close</button>
-    {* <button class="btn" data-bs-dismiss="modal" aria-hidden="true">Close</button> *}
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
 
