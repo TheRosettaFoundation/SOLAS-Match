@@ -1130,7 +1130,7 @@
 <div class="modal-content">
     <div class="modal-header">
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Cancel Task</h3>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    {* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *}
     <strong id="taskmsg" class="btn btn-danger me-4">No task has been selected</strong>
 
 
@@ -1156,7 +1156,7 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-  <button type="button" class="btn-secondary"  data-bs-dismiss="modal" aria-label="Close"> Close</button>
+  <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" aria-label="Close"> Close</button>
     {* <button class="btn" data-bs-dismiss="modal" aria-hidden="true">Close</button> *}
     <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
   </div>
@@ -1191,7 +1191,7 @@
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </div>
   <div class="modal-footer">
-  <button type="button" class="btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+  <button type="button" class=" btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
    
     <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
   </div>
