@@ -605,8 +605,8 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <form id="tasks_as_paid" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none"" onclick="$('#tasks_as_paid').submit();" >
-                    <i class="fa fa-usd"  aria-hidden="true"></i> Mark Selected Tasks as Paid
+                <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
+                    <i class="fa fa-usd me-2"  aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
