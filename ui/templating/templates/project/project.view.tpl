@@ -711,7 +711,7 @@
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
                                                         <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="Set Status Complete">
-                                                            <i class="icon-check icon-black"></i>
+                                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                     </form>
@@ -756,7 +756,7 @@
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
                                           <span data-bs-toggle="tooltip" data-placement="bottom" title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" ></span>
+                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/check.svg" alt="check" ></span>
                                           {else}
                                           PO#: {$get_payment_status_for_project[$task_id]['purchase_order']}<br />{$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
