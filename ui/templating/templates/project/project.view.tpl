@@ -367,7 +367,8 @@
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
            ...
         </button>
-        <ul class="dropdown-menu d-flex flex-column">
+        <ul class="dropdown-menu ">
+         <div class="d-flex flex-column">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
             <li class="flex-fill"> <a class="dropdown-item "  onclick="$('#publish_selected_tasks').submit();" >    
@@ -577,7 +578,7 @@
 
         {/if}
            
-         
+        </div>
         </ul>
         
    
