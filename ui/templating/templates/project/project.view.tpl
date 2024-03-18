@@ -468,7 +468,7 @@
 
                  <form id="complete_selected_tasks"    method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 
-                     Set Shell Tasks Status&nbsp;&nbsp;Complete
+                     Set Shell Tasks Status Complete
          
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
