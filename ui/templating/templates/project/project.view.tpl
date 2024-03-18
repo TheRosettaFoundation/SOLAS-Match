@@ -665,7 +665,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
-            <a class=" btn btn-small  flex-grow-1  text-body fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
+            <a class="  flex-grow-1  text-body fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
                 <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
             <form id="ready_payment" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
@@ -676,16 +676,16 @@
                 <input type="hidden" name="ready_payment_status" value="Ready for payment" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            <form id="pending_documentation" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
+            <form id="pending_documentation" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class=" flex-grow-1  text-body fs-6 text-decoration-none"" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set tasks to Pending Documentation
             </a>
                 <input type="hidden" name="pending_documentation" value="" />
                 <input type="hidden" name="ready_payment_status" value="Pending documentation" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            <form id="tasks_settled" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class=" btn btn-small" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
+            <form id="tasks_settled" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class=" flex-grow-1  text-body fs-6 text-decoration-none" " onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set tasks to Settled
             </a>
                 <input type="hidden" name="tasks_settled" value="" />
