@@ -585,7 +585,7 @@
        
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <form id="publish_selected_tasks"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="publish_selected_tasks" class=" btn btn-small"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="" onclick="$('#publish_selected_tasks').submit();" style="color:#000000;margin-right:65px;">
                     <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
                 </a>
@@ -653,7 +653,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+            <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
             <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
