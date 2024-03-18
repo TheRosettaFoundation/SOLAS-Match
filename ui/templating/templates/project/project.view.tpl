@@ -594,7 +594,7 @@
         </form>
 
         <form id="unpublish_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class="flex-grow-1  text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();"   ">
+            <a class="flex-grow-1  text-body fs-6 text-decoration-none"" onclick="$('#unpublish_selected_tasks').submit();"   ">
                 <i class="icon-remove-circle icon-black" style="margin-left:-2px;"></i> Unpublish Selected Tasks
             </a>
             <input type="hidden" name="unpublish_selected_tasks" value="" />
@@ -605,7 +605,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <form id="tasks_as_paid" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none"" onclick="$('#tasks_as_paid').submit();" >
                     <i class="fa fa-usd"  aria-hidden="true"></i> Mark Selected Tasks as Paid
                 </a>
                 <input type="hidden" name="tasks_as_paid" value="" />
@@ -613,7 +613,7 @@
             </form>
 
             <form id="tasks_as_unpaid" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1 text-decoration-none" onclick="$('#tasks_as_unpaid').submit();" style="color:#000000;margin-right:22px;">
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none"" onclick="$('#tasks_as_unpaid').submit();" >
                     <i class="fa fa-strikethrough" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Mark Selected Tasks as Unpaid
                 </a>
                 <input type="hidden" name="all_as_paid1" value="1" />
@@ -623,7 +623,7 @@
         
 
             <form id="status_as_unclaimed" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
                     <i class="fa fa-unlock" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Unclaimed
                 </a>
                 <input type="hidden" name="status_as_unclaimed" value="" />
@@ -631,7 +631,7 @@
             </form>
 
             <form id="status_as_waiting" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1 text-decoration-none" onclick="$('#status_as_waiting').submit();" style="color:#000000;margin-right:15px;">
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#status_as_waiting').submit();">
                     <i class="fa fa-pause" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set Status of Selected to Waiting
                 </a>
                 <input type="hidden" name="status_as_waiting" value="" />
@@ -639,15 +639,15 @@
             </form>
 
             <form id="complete_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="flex-grow-1 text-decoration-none" onclick="$('#complete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
                     <i class="icon-check icon-black"></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="uncomplete_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                <a class="" onclick="$('#uncomplete_selected_tasks').submit();" style="color:#000000;margin-right:15px;">
+            <form id="uncomplete_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
                     <i class="icon-remove-circle icon-black"></i> Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
@@ -657,8 +657,8 @@
             <a class=" btn btn-small open-cancel-modal" style="color:#000000;" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
-            <form id="cancel" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#cancel').submit();" style="color:#000000;"  data-id="0" role="button" data-cancelled="0">
+            <form id="cancel" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
                 <input type="hidden" name="cancel" value="" />
@@ -668,8 +668,8 @@
             <a class=" btn btn-small open-ponum-modal" style="color:#000000;" data-bs-toggle="modal" href="#ponummodal" role="button">
                 <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
-            <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class=" btn btn-small" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
+            <form id="ready_payment" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <a class=" flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important" aria-hidden="true"></i> Set tasks to Ready for Payment
             </a>
                 <input type="hidden" name="ready_payment" value="" />
