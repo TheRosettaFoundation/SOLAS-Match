@@ -124,7 +124,7 @@
                                         {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
                                          </p>
 
-                                         <p class="task_details  "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
+                                         <p class="task_details "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                                           
                                            {if !empty($completed_timestamps[$task_id])}
                                             <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
@@ -143,6 +143,18 @@
                                             </span>
                                             </div>
                                         {/if}
+
+                                        <div class="mb-3  text-muted">
+                                        <span class=" ">
+                                            Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
+                                        </span>
+                                       
+                            
+                                    <span>
+                                    <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                    </span>
+
+                                        
                                         
                                             
                                            
