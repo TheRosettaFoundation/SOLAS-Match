@@ -544,23 +544,23 @@
                 </a>  
              </li>
              </form>
-
+                
+               
+             <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#tasks_settled').submit();"  role="button">
 
-                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+               
                  
                          Set tasks to Settled
                    
                 <input type="hidden" name="tasks_settled" value="" />
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
-                
-            
+     
                 </a>  
         </li>
+        </form>
 
         {/if}
            
