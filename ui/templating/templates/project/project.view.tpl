@@ -880,13 +880,13 @@
                                     <td>                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="icon-remove" ></i> </span>
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="icon-remove" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
-                                          <span data-bs-toggle="tooltip" data-placement="bottom" title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <img src="{urlFor name='home'}ui/img/check.svg" alt="check" ></span>
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span> </span>
                                           {else}
                                           PO#: {$get_payment_status_for_project[$task_id]['purchase_order']}<br />{$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
