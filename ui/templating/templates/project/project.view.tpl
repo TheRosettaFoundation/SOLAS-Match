@@ -483,7 +483,7 @@
      
           
 
-            <a class=" btn btn-sm btn-dark-subtle border border-dark-subtle open-cancel-modal mt-2" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+            <a class=" mt-2" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                  Set Selected Tasks to Cancelled
             </a>
 
