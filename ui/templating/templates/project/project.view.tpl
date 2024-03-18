@@ -665,9 +665,14 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
+            <div class="d-flex flex-column">
+
             <a class="  flex-grow-1  text-body p-2 fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
-                <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
+            <i class="fa fa-credit-card" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
+            
+            </div>
+
             <form id="ready_payment" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important" aria-hidden="true"></i> Set tasks to Ready for Payment
