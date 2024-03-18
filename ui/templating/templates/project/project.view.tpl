@@ -383,16 +383,18 @@
             </a> 
             </li>
             </form>
-
+            <form  class="btn btn-sm btn-dark-subtle border border-dark-subtle" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+              
              <li class="flex-fill"><a class="dropdown-item"  onclick="$('#unpublish_selected_tasks').submit();" >
-             <form  class="btn btn-sm btn-dark-subtle border border-dark-subtle" id="unpublish_selected_tasks" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            
               
                      <span>Unpublish Selected Tasks</span>
               
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+          
              </a></li>
+             </form>
 
            
          {/if}
