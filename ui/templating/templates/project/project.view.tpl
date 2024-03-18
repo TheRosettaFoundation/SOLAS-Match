@@ -518,7 +518,8 @@
         <form id="ready_payment" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#ready_payment').submit();" role="button">
-      
+
+           
                         Set tasks to Ready for Payment
             
                     <input type="hidden" name="ready_payment" value="" />
@@ -528,40 +529,41 @@
                 </a>  
         </li>
         </form>
-        
 
-        <form id="pending_documentation" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
            <li class="flex-fill">
                 <a class="dropdown-item" onclick="$('#pending_documentation').submit();" role="button">
-      
+
+                <form id="pending_documentation" class="  btn btn-sm btn-dark-subtle border border-dark-subtle" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                
+                    
                       Set tasks to Pending Documentation
                    
                     <input type="hidden" name="pending_documentation" value="" />
                     <input type="hidden" name="ready_payment_status" value="Pending documentation" /> 
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
 
+                
             
                 </a>  
              </li>
-             </form>
-                
-               
-             <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+
                <li class="flex-fill">
                 <a class="dropdown-item"  onclick="$('#tasks_settled').submit();"  role="button">
 
-               
+                  <form id="tasks_settled" class="  btn btn-sm btn-dark-subtle border border-dark-subtle px-4" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                  
                          Set tasks to Settled
                    
                 <input type="hidden" name="tasks_settled" value="" />
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
- 
+            </form>
+
+                
             
                 </a>  
         </li>
-        </form>
 
         {/if}
            
