@@ -146,14 +146,12 @@
 
                                         <div class="mb-3  text-muted">
                                         <span class=" ">
-                                            Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
+                                            Language:
                                         </span>
-                                       
-                            
-                                    <span>
-                                    <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
-                                    </span>
-
+                                        <span>
+                                        <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                        </span>
+                                        </div>
                                         
                                         
                                             
