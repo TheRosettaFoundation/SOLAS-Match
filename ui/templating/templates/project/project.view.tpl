@@ -670,7 +670,7 @@
             </a>
             <form id="ready_payment" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btn btn-small" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important;margin-left:-15px;" aria-hidden="true"></i> Set tasks to Ready for Payment
+                <i class="fa fa-money" style="font-size: 15px !important;padding:2px !important;width:12px !important" aria-hidden="true"></i> Set tasks to Ready for Payment
             </a>
                 <input type="hidden" name="ready_payment" value="" />
                 <input type="hidden" name="ready_payment_status" value="Ready for payment" />
@@ -678,7 +678,7 @@
             </form>
             <form id="pending_documentation" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" btn btn-small" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:12px;" aria-hidden="true"></i> Set tasks to Pending Documentation
+                <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set tasks to Pending Documentation
             </a>
                 <input type="hidden" name="pending_documentation" value="" />
                 <input type="hidden" name="ready_payment_status" value="Pending documentation" />
