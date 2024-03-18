@@ -367,13 +367,13 @@
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
            ...
         </button>
-        <ul class="dropdown-menu align-items-center">
+        <ul class="dropdown-menu ">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
-            <li  onclick="$('#publish_selected_tasks').submit();"  > <a class="dropdown-item w-100 fw-bold"  >    
+            <li  onclick="$('#publish_selected_tasks').submit();"  > <a class="dropdown-item w-100 fw-bold d-flex "  >    
            
               
-                     Publish Selected Tasks
+                    <div class="flex-grow-1 fw-bold"> Publish Selected Tasks </div>
              
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
