@@ -582,7 +582,7 @@
            
         </div> *}
 
-        <ul id="menu3" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="drop5">
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
