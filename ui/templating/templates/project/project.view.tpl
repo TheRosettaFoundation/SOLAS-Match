@@ -370,7 +370,7 @@
         <ul class="dropdown-menu">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="btn btn-sm btn-dark-subtle border border-dark-subtle"  method="post" action="{urlFor name="project-view"  options="project_id.$project_id"}" >
-            <li  onclick="$('#publish_selected_tasks').submit();" > <a class="dropdown-item"  >    
+            <li  onclick="$('#publish_selected_tasks').submit();" class="w-100 fw-bold" > <a class="dropdown-item"  >    
            
               
                      Publish Selected Tasks
