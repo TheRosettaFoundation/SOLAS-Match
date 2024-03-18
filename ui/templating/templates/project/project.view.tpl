@@ -594,7 +594,7 @@
         </form>
 
         <form id="unpublish_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none"" onclick="$('#unpublish_selected_tasks').submit();"   ">
+            <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();"   ">
                 <i class="icon-remove-circle icon-black" style="margin-left:-2px;"></i> Unpublish Selected Tasks
             </a>
             <input type="hidden" name="unpublish_selected_tasks" value="" />
@@ -654,13 +654,13 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
              
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column btn btn-small">
             <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none open-cancel-modal" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban me-2"  aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
             </div>
 
-            <form id="cancel" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <form id="cancel" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
@@ -669,7 +669,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
 
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column btn btn-small">
 
             <a class="  flex-grow-1  text-body p-2 fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
             <i class="fa fa-credit-card me-2" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
@@ -677,7 +677,7 @@
             
             </div>
 
-            <form id="ready_payment" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <form id="ready_payment" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-money me-2" aria-hidden="true"></i> Set tasks to Ready for Payment
             </a>
@@ -685,7 +685,7 @@
                 <input type="hidden" name="ready_payment_status" value="Ready for payment" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            <form id="pending_documentation" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <form id="pending_documentation" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-book me-2"  aria-hidden="true"></i> Set tasks to Pending Documentation
             </a>
@@ -693,7 +693,7 @@
                 <input type="hidden" name="ready_payment_status" value="Pending documentation" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            <form id="tasks_settled" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="tasks_settled" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
                 <i class="fa fa-check-circle-o me-2"  aria-hidden="true"></i> Set tasks to Settled
             </a>
