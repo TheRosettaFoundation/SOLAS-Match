@@ -686,7 +686,7 @@
             </form>
             <form id="tasks_settled" class="" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             <a class=" btn btn-small" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-70px;" aria-hidden="true"></i> Set tasks to Settled
+                <i class="fa fa-check-circle-o" style="font-size: 15px !important;padding:0 !important;width:12px !important;" aria-hidden="true"></i> Set tasks to Settled
             </a>
                 <input type="hidden" name="tasks_settled" value="" />
                 <input type="hidden" name="ready_payment_status" value="Settled" />
