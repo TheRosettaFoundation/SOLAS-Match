@@ -671,7 +671,7 @@
 
             <div class="d-flex flex-column btn btn-small">
 
-            <a class="  flex-grow-1  text-body p-2 fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
+            <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
             <i class="fa fa-credit-card me-2" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i>  Set Purchase Order #
             </a>
             
@@ -1166,10 +1166,22 @@
 </div>
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header mt-2">
+
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Cancel Task</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <strong id="taskmsg" class="btn btn-danger me-4">Set Purchase Order #</strong>
+
+
+  </div>
+
+{* <div class="modal-header mt-2">
+
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Set Purchase Order #</h3>
-  </div>
+  </div> *}
   <div class="modal-body">
   <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
   PO #: <input type="text" name="po" value="" />
@@ -1182,6 +1194,8 @@
     <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
   </div>
   </form>
+  </div>
+  </div>
 </div>
 
     
