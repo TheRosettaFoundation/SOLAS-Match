@@ -653,10 +653,13 @@
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-
-            <a class=" btn btn-small flex-grow-1  text-body p-2 fs-6 text-decoration-none open-cancel-modal" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+             
+            <div class="d-flex flex-column">
+            <a class=" flex-grow-1  text-body p-2 fs-6 text-decoration-none open-cancel-modal" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban me-2"  aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
+            </div>
+
             <form id="cancel" class="d-flex flex-column" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class="flex-grow-1  text-body p-2 fs-6 text-decoration-none" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set Selected Tasks to Uncancelled
@@ -665,6 +668,7 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
+
             <div class="d-flex flex-column">
 
             <a class="  flex-grow-1  text-body p-2 fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
