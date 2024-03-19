@@ -962,13 +962,13 @@
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
                                         <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
-                                            <i class="icon-check icon-white"></i>
+                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="track" >
                                         </a>
                                         <input type="hidden" name="publishedTask" value="0" />
                                     {else}
                                         <input type="hidden" name="publishedTask" value="1" />
                                         <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_publish')}" >
-                                            <i class="icon-remove-circle icon-black"></i>
+                                        <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
                                         </a>
                                     {/if}
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
