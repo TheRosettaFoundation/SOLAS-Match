@@ -373,7 +373,7 @@
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#publish_selected_tasks').submit();" >
-                    <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
+                    <i class="fa-check fa-solid" style="margin-left:-2px;"></i> Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="1" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -381,7 +381,7 @@
 
             <form id="unpublish_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
-                    <i class="icon-remove-circle icon-black" ></i> Unpublish Selected Tasks
+                    <i class="fa-solid fa-xmark" ></i> Unpublish Selected Tasks
                 </a>
                 <input type="hidden" name="unpublish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
