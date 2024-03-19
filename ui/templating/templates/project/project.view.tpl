@@ -600,7 +600,7 @@
             </form>
         {/if}
 
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        {* {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#publish_selected_tasks').submit();" >
                 <i class="icon-check icon-black" style="margin-left:-2px;"></i> Publish Selected Tasks
@@ -616,7 +616,7 @@
             <input type="hidden" name="unpublish_selected_tasks" value="" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
-        {/if}
+        {/if} *}
 
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
