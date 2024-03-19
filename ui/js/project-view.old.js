@@ -428,8 +428,6 @@ function select() {
     //Cancel Task
     $(document).on('change', 'select[name="cancel_task"]', function() {
         var valueSelected = this.value;
-        console.log('test')
-        console.log(valueSelected)
         if (valueSelected == "other" || !parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             $("[name=reason]").show();
             $("[name=reason_text]").show();
@@ -456,7 +454,7 @@ function select() {
     });
 
     //Validation - Hide btn if task is not selected
-    $('#cancelmodal').on('shown.bs.modal', function () {
+    $('#cancelmodal').on('shown', function () {
         $("#taskmsg").hide();
         if($("[name=cancel]").val().length == 0) {
             $("#cancelbtn").prop('disabled', true);
@@ -479,7 +477,7 @@ function select() {
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
     });
 
-    $('#ponummodal').on('shown.bs.modal', function () {
+    $('#ponummodal').on('shown', function () {
         $("#ponumbtn").prop('disabled', true);
         $("[name=po]").on("focus", function(){
             $(this).on("change paste keyup", function() {
