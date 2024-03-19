@@ -967,6 +967,7 @@ class TaskRouteHandler
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
+                    $task->set_word_count_partner_weighted($post['word_count']);
                     $projectDao->queue_asana_project($task->getProjectId());
                 } elseif (isset($post['word_count']) && $post['word_count'] != "") {
                     $word_count_err = Lib\Localisation::getTranslation('task_alter_6');

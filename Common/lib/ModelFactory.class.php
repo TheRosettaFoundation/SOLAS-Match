@@ -573,6 +573,9 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
+        if (isset($modelData['word_count_partner_weighted'])) {
+            $ret->set_word_count_partner_weighted($modelData['word_count_partner_weighted']);
+        }
         if (isset($modelData['word_count_original'])) {
             $ret->set_word_count_original($modelData['word_count_original']);
         }
