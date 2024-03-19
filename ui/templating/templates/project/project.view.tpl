@@ -970,7 +970,7 @@
                                     {else}
                                         <input type="hidden" name="publishedTask" value="1" />
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}">
-                                        <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();"  >
+                                        <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();"  >
                                         <img src="{urlFor name='home'}ui/img/cancel.svg" alt="unpublish" >
                                         </a>
                                         </span>
