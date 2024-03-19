@@ -602,7 +602,7 @@
                                                 {Localisation::getTranslation('common_in_progress')}<br />
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
