@@ -958,26 +958,21 @@
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
                                     <td>
-                                        <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
-                                            <input type="hidden" name="task_id" value="{$task_id}" />
-                                            {if $task->getPublished() == 1}
-                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_publish')}">
-                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                      <img src="{urlFor name='home'}ui/img/publish-project.svg"  alt="unpublish" >
-                                                </a>
-                                                <input type="hidden" name="publishedTask" value="0" />
-                                                </span>
-                                            {else}
-                                                <input type="hidden" name="publishedTask" value="1" />
-                                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
-                                                <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
-                                                    <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
-
-                                                </a>
-                                                </span>
-                                            {/if}
-                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                        </form>
+                                    <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
+                                    <input type="hidden" name="task_id" value="{$task_id}" />
+                                    {if $task->getPublished() == 1}
+                                        <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_unpublish')}">
+                                            <i class="icon-check icon-white"></i>
+                                        </a>
+                                        <input type="hidden" name="publishedTask" value="0" />
+                                    {else}
+                                        <input type="hidden" name="publishedTask" value="1" />
+                                        <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" data-toggle="tooltip" data-placement="bottom" title="{Localisation::getTranslation('common_publish')}" >
+                                            <i class="icon-remove-circle icon-black"></i>
+                                        </a>
+                                    {/if}
+                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                </form>
                                     </td>
                                     <td>
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
