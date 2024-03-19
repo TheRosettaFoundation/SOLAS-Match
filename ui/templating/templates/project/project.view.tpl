@@ -937,18 +937,12 @@
 <div class="modal-dialog">
 <div class="modal-content">
     <div class="modal-header">
-    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Cancel Task</h3>
+    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Purchase Order #</h3>
     
-    <strong id="taskmsg" class="btn btn-danger me-4">Set Purchase Order #</strong>
-
 
   </div>
 
-{* <div class="modal-header mt-2">
 
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Set Purchase Order #</h3>
-  </div> *}
   <div class="modal-body">
   <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
   PO #: <input type="text" name="po" value="" />
