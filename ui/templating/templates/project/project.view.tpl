@@ -7,7 +7,7 @@
  
  <div class=" container py-4" >
 
-                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right"> </i>
+                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
         
                     <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
                            
