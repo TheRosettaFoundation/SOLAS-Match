@@ -981,14 +981,14 @@
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
                                                 <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                      <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
+                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
                                                 </a>
                                                 </span>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                  <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
                                                 <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                     <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
+                                                     <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
                                                 </a>
                                                 </span>
                                             {/if}
