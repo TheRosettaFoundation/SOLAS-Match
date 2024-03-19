@@ -7,7 +7,7 @@
  
  <div class=" container py-4" >
 
-                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <img src="{urlFor name='home'}ui/img/bread.svg" alt="arrow" id="next" class="mx-1" />
+                    <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right"> </i>
         
                     <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
                            
