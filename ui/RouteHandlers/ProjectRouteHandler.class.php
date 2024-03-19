@@ -705,6 +705,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
+        var_dump($template_data);
 
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
