@@ -961,15 +961,19 @@
                                     <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
-                                        <a class="btn btn-small btn-inverse" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
-                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="track" >
+                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
+                                        <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
+                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
                                         </a>
+                                        </span>
                                         <input type="hidden" name="publishedTask" value="0" />
                                     {else}
                                         <input type="hidden" name="publishedTask" value="1" />
-                                        <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}" >
-                                        <img src="{urlFor name='home'}ui/img/no.svg" alt="track" >
+                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}">
+                                        <a class="btn btn-small" onclick="$('#publishedForm{$task_id}').submit();"  >
+                                        <img src="{urlFor name='home'}ui/img/cancel.svg" alt="unpublish" >
                                         </a>
+                                        </span>
                                     {/if}
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
