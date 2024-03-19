@@ -623,13 +623,13 @@
                                           {/if}
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                             <i class="icon-user icon-black"></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                             <i class=" fa-solid fa-user "></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
                                                         <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
-                                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
+                                                        <i class=" fa-solid fa-check "></i> 
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                     </form>
@@ -643,12 +643,12 @@
                                             {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                             <br />
                                             <a class="btn btn-primary text-white" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="Download Output File">
-                                            <img src="{urlFor name='home'}ui/img/download.svg" alt="download" >
+                                            <<i class=" fa-solid fa-download "></i> 
                                             </a>
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class="icon-user icon-black"></i>   <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-original-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -692,7 +692,7 @@
                                        
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                             <a class=" btngray cancel"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
-                                            <img src="{urlFor name='home'}ui/img/check.svg" alt="cancel" >Yes
+                                            <i class="fa-regular fa-circle-check "></i>Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
                                             <input type="hidden" name="cancelled" value="0" />
@@ -702,7 +702,7 @@
                                     {else}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" title="Cancel" >
                                             <a class="btngray cancel" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
-                                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" > No
+                                            <i class="fa-regular fa-circle-xmark "></i> No
                                             </a>
                                         </span>
                                     {/if}
