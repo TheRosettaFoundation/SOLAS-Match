@@ -746,7 +746,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </h2>
 
-{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
+{if !empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
 <div class="border border-1 border-primaryDark rounded-3 w-75 w-md-5">
 
    <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
@@ -795,16 +795,13 @@ If a language is to be removed from this list, the community will be informed be
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 200,000</div>
-        <div class=" me-4" > TWB Navigator</div>
-         <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
-        </div>
-        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-    
         <div class=" w-50 me-2"> 300,000</div>
         <div class=" me-4" > TWB Voyager</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
+        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
+    
+
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
@@ -819,6 +816,7 @@ If a language is to be removed from this list, the community will be informed be
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
 
+        {else}
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
         <div class=" w-50 me-2 fw-bold"> Threshold</div>
         <div class=" me-4 fw-bold" > Status</div>
@@ -1074,8 +1072,8 @@ If a language is to be removed from this list, the community will be informed be
 
 
 </div>
-
-{else}
+{* 
+        {/if}
 
 
     <div class="border border-1 border-primaryDark rounded-3 w-75 w-md-5">
@@ -1362,7 +1360,7 @@ If a language is to be removed from this list, the community will be informed be
          </div>
 
  
- </div>   
+ </div>    *}
 
 {/if}
 
