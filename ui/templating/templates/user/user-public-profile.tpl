@@ -746,7 +746,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </h2>
 
-{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
+{if !empty($user_has_strategic_languages) || !$user_has_strategic_languages[0]['nigeria'] == 0}
 <div class="border border-1 border-primaryDark rounded-3 w-50 w-md-5 fs-5">
 
    <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
