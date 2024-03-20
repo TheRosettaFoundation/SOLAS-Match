@@ -817,6 +817,8 @@ If a language is to be removed from this list, the community will be informed be
         </div>
 
         {else}
+
+        <div class="border border-1 border-primaryDark rounded-3 w-75 w-md-5">
         
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
         <div class=" w-50 me-2 fw-bold"> Threshold</div>
@@ -1069,8 +1071,6 @@ If a language is to be removed from this list, the community will be informed be
         <div class=" me-4 fw-bold  " > TWB Explorer</div>
          <div class="flex-grow-1  text-end fw-bold" > 20 USD bank transfer</div>
         </div>
-
-
 
 </div>
 {* 
