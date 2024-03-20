@@ -618,7 +618,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2 px-2" >
 
-      <div class="fw-bold w-50 me-2">Type of task</div>
+      <div class="fw-bold w-25 me-2">Type of task</div>
       <div class="fw-bold me-6" >Unit</div>
          <div class="fw-bold flex-grow-1 " >Points accrued per unit </div>
 
@@ -626,7 +626,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
        <div class=" d-flex  border-bottom border-primaryDark p-2" >
 
-         <div class=" w-50 me-2">Translation</div>
+         <div class=" w-25 me-2">Translation</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 1 </div>
 
@@ -644,7 +644,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
      <div class=" d-flex p-2 border-bottom border-primaryDark" >
 
-       <div class=" w-50 me-2"> Proofreading/Approval</div>
+       <div class=" w-25 me-2"> Proofreading/Approval</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 0.25 </div>
 
@@ -652,14 +652,14 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
      <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
-       <div class=" w-50 me-2"> Transcription</div>
+       <div class=" w-25 me-2"> Transcription</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 0.5 </div>
 
     </div>
       <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
-       <div class=" w-50 me-2"> Voice Recording</div>
+       <div class=" w-25 me-2"> Voice Recording</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 1 </div>
 
@@ -667,7 +667,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
      <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
-       <div class=" w-50 me-2"> Translation of subtitles</div>
+       <div class=" w-25 me-2"> Translation of subtitles</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 1 </div>
 
@@ -675,7 +675,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
        <div class=" d-flex p-2 border-bottom border-primaryDark" >
 
-       <div class=" w-50 me-2"> Revision of subtitles</div>
+       <div class=" w-25 me-2"> Revision of subtitles</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1" > 0.5 </div>
 
@@ -683,7 +683,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
       <div class=" d-flex p-2 " >
 
-       <div class=" w-50 me-2"> Terminology</div>
+       <div class=" w-25 me-2"> Terminology</div>
         <div class=" me-4" > 1 term</div>
          <div class="flex-grow-1" >10 </div>
 
@@ -758,14 +758,14 @@ If a language is to be removed from this list, the community will be informed be
 
        <div class="d-flex  border-bottom border-primaryDark  p-2" >
 
-       <div class=" w-50 me-2"> 5,000</div>
+       <div class=" w-25 me-2"> 5,000</div>
        <div class=" me-4" > TWB New Community Member</div>
         <div class="flex-grow-1 text-end" > 10 USD phone top-up or online voucher </div>
     </div>
     
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 25,000</div>
+        <div class=" w-25 me-2"> 25,000</div>
         <div class=" me-4" > TWB Traveler</div>
          <div class="flex-grow-1 text-end" > 100 USD bank transfer</div>
         </div>
@@ -773,14 +773,14 @@ If a language is to be removed from this list, the community will be informed be
        
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 50,000</div>
+        <div class=" w-25 me-2"> 50,000</div>
         <div class=" me-4" > TWB Pathfinder</div>
          <div class="flex-grow-1 text-end" > 150 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 100,000</div>
+        <div class=" w-25 me-2"> 100,000</div>
         <div class=" me-4" > TWB Explorer</div>
          <div class="flex-grow-1 text-end" > 400 USD bank transfer</div>
         </div>
@@ -788,14 +788,14 @@ If a language is to be removed from this list, the community will be informed be
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 200,000</div>
+        <div class=" w-25 me-2"> 200,000</div>
         <div class=" me-4" > TWB Navigator</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 300,000</div>
+        <div class=" w-25 me-2"> 300,000</div>
         <div class=" me-4" > TWB Voyager</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
@@ -804,13 +804,13 @@ If a language is to be removed from this list, the community will be informed be
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 400,000</div>
+        <div class=" w-25 me-2"> 400,000</div>
         <div class=" me-4" > TWB Trailblazer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2"> 500,000</div>
+        <div class=" w-25 me-2"> 500,000</div>
         <div class=" me-4" > TWB Pioneer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
@@ -821,258 +821,264 @@ If a language is to be removed from this list, the community will be informed be
         <div class="border border-1 border-primaryDark rounded-3 w-75 w-md-5">
         
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold"> Threshold</div>
+        <div class=" w-25 me-2 fw-bold"> Threshold</div>
         <div class=" me-4 fw-bold" > Status</div>
          <div class="flex-grow-1 fw-bold text-end" > Recignition reward</div>
         </div>
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold"> First task delivered</div>
+        <div class=" w-25 me-2 fw-bold"> First task delivered</div>
         <div class=" me-4 fw-bold" > TWB Translator</div>
          <div class="flex-grow-1 fw-bold text-end" > 5 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 "> 2,500 Points</div>
+        <div class=" w-25 me-2 "> 2,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1 text-end" > 5 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 "> 5,000 Points</div>
+        <div class=" w-25 me-2 "> 5,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  7,500 Points</div>
+        <div class=" w-25 me-2 ">  7,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold"> 10,000 Points</div>
+        <div class=" w-25 me-2 fw-bold"> 10,000 Points</div>
         <div class=" me-4 fw-bold" > TWB Translator</div>
          <div class="flex-grow-1 fw-bold text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  12,500 Points</div>
+        <div class=" w-25 me-2 ">  12,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  15,000 Points</div>
+        <div class=" w-25 me-2 ">  15,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  17,500 Points</div>
+        <div class=" w-25 me-2 ">  17,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  20,000 Points</div>
+        <div class=" w-25 me-2 ">  20,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  22,500 Points</div>
+        <div class=" w-25 me-2 ">  22,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 10 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold"> 25,500 Points</div>
+        <div class=" w-25 me-2 fw-bold"> 25,500 Points</div>
         <div class=" me-4 fw-bold" > TWB Traveler</div>
          <div class="flex-grow-1 fw-bold text-end" > 10 USD bank transfer</div>
         </div>
 
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  27,500 Points</div>
+        <div class=" w-25 me-2 ">  27,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  30,000 Points</div>
+        <div class=" w-25 me-2 ">  30,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  32,500 Points</div>
+        <div class=" w-25 me-2 ">  32,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  35,000 Points</div>
+        <div class=" w-25 me-2 ">  35,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  37,500 Points</div>
+        <div class=" w-25 me-2 ">  37,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  40,000 Points</div>
+        <div class=" w-25 me-2 ">  40,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  42,500 Points</div>
+        <div class=" w-25 me-2 ">  42,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  45,000 Points</div>
+        <div class=" w-25 me-2 ">  45,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  47,500 Points</div>
+        <div class=" w-25 me-2 ">  47,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold"> 50,000 Points</div>
+        <div class=" w-25 me-2 fw-bold"> 50,000 Points</div>
         <div class=" me-4 fw-bold" > TWB Pathfinder</div>
          <div class="flex-grow-1 fw-bold text-end" > 15 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  52,500 Points</div>
+        <div class=" w-25 me-2 ">  52,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  55,500 Points</div>
+        <div class=" w-25 me-2 ">  55,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" >20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  57,500 Points</div>
+        <div class=" w-25 me-2 ">  57,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  60,000 Points</div>
+        <div class=" w-25 me-2 ">  60,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  62,500 Points</div>
+        <div class=" w-25 me-2 ">  62,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  65,000 Points</div>
+        <div class=" w-25 me-2 ">  65,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  67,500 Points</div>
+        <div class=" w-25 me-2 ">  67,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  70,000 Points</div>
+        <div class=" w-25 me-2 ">  70,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  72,500 Points</div>
+        <div class=" w-25 me-2 ">  72,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  75,000 Points</div>
+        <div class=" w-25 me-2 ">  75,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  77,500 Points</div>
+        <div class=" w-25 me-2 ">  77,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  80,000 Points</div>
+        <div class=" w-25 me-2 ">  80,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  82,500 Points</div>
+        <div class=" w-25 me-2 ">  82,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  85,000 Points</div>
+        <div class=" w-25 me-2 ">  85,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  87,500 Points</div>
+        <div class=" w-25 me-2 ">  87,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  90,000 Points</div>
+        <div class=" w-25 me-2 ">  90,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  92,500 Points</div>
+        <div class=" w-25 me-2 ">  92,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  95,000 Points</div>
+        <div class=" w-25 me-2 ">  95,000 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 ">  97,500 Points</div>
+        <div class=" w-25 me-2 ">  97,500 Points</div>
         <div class=" me-4 " > </div>
          <div class="flex-grow-1  text-end" > 20 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2 fw-bold ">  100,000 Points</div>
+        <div class=" w-25 me-2 fw-bold ">  100,000 Points</div>
         <div class=" me-4 fw-bold  " > TWB Explorer</div>
          <div class="flex-grow-1  text-end fw-bold" > 20 USD bank transfer</div>
         </div>
 
 </div>
+
+
+{/if}
+
+
+
 
 {/if}
 </div>
