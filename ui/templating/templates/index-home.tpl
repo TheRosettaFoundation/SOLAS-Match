@@ -670,7 +670,7 @@ a:hover{
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
                                             </div>
-                                         {/if}
+                                         {else}
 
                                          <div class="mb-3  text-muted">
                                                 <span class=" ">
@@ -680,6 +680,7 @@ a:hover{
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
                                             </div>
+                                         {/if}
                                          
                                         
                                             
