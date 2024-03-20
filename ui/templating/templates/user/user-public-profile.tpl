@@ -587,26 +587,26 @@ If you work on a revision task or a proofreading/approval task and notice that t
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
 
       <div class="fw-bold me-4">Points</div>
-      <div class="fw-bold flex-grow-1" >Reward</div>
+      <div class="fw-bold flex-grow-1 text-end" >Reward</div>
     </div>
 
        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
       <div class="  me-4 ">5,000</div>
-      <div class=" flex-grow-1" >Certification of volunteer activity</div>
+      <div class=" flex-grow-1 text-end" >Certification of volunteer activity</div>
     </div>
 
       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
       <div class=" me-4">15,000</div>
-      <div class=" flex-grow-1" >Reference Letter</div>
+      <div class=" flex-grow-1 text-end" >Reference Letter</div>
     </div>
 
 
      <div class=" d-flex   p-2" >
 
       <div class="  me-4">30,000</div>
-      <div class=" flex-grow-1 " >Recommendation on professional platforms</div>
+      <div class=" flex-grow-1 text-end " >Recommendation on professional platforms</div>
     </div>
 
 
@@ -626,7 +626,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
        <div class=" d-flex  border-bottom border-primaryDark p-2" >
 
-         <div class=" w-50 me-2">Translation</div>
+         <div class=" w-25 me-2">Translation</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1 text-end" > 1 </div>
 
@@ -634,7 +634,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
-        <div class="w-50 me-2">Revision</div>
+        <div class="w-25 me-2">Revision</div>
         <div class=" me-4" > 1 word</div>
          <div class="flex-grow-1 text-end" > 0.5 </div>
 
