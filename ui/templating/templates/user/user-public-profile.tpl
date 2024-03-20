@@ -1102,7 +1102,7 @@ If a language is to be removed from this list, the community will be informed be
   
 
     <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btn btn-success " target="_blank" ">
-        <i class="icon-print icon-white"></i> Generate Certificate
+        <i class=" fa-solid fa-print "></i> Generate Certificate
     </a>
  
 
@@ -1130,13 +1130,14 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 <div class="mt-2 p-4 rounded-3 bg-body">
+<div class="d-flex justify-content-between mb-4 ">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
-        <i class="icon-print icon-white"></i> Generate Letter
+        <i class=" fa-solid fa-print icon-white"></i> Generate Letter
     </a>
 {/if}
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="mt-4 mb-4 "">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="mt-2 mb-4 ">
     <input type="submit" class="btn btn-primary text-white" name="PrintRequestLetter" value="Request Reference Letter" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
@@ -1156,8 +1157,10 @@ If a language is to be removed from this list, the community will be informed be
 </div>
     
 
-</div>
+
 {/if}
+</div>
+</div>
 
 
 
