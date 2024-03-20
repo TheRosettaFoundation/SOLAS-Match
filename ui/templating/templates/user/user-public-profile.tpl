@@ -1215,17 +1215,17 @@ If a language is to be removed from this list, the community will be informed be
 <table>
     <tr valign="top">
         <td><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
-        <td ></td>
-        <td ></td>
-        <td ></td>
-        <td ></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
     <tr valign="top">
-        <td ><strong>Comment</strong></td>
-        <td ><strong>Willingness to work again score (1 to 5)</strong></td>
-        <td ><strong>Created</strong></td>
-        <td ><strong>Created by</strong></td>
-        <td ><strong></strong></td>
+        <td style="width: 30%"><strong>Comment</strong></td>
+        <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
 </div>
