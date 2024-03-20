@@ -148,7 +148,7 @@
     {/if}
 
 
-<div class=" row  p-y">
+<div class=" row  py-2">
 
     <div class=" col-12 col-md-6 py-4"> 
 
