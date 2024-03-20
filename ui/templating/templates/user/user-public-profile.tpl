@@ -1133,7 +1133,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="d-flex justify-content-between mb-4 ">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
-    <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="pull-right btn btn-success" target="_blank" style="margin-top: -5px;">
+    <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="btn btn-success" target="_blank" ">
         <i class=" fa-solid fa-print icon-white"></i> Generate Letter
     </a>
 {/if}
