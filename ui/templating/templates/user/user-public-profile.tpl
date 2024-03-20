@@ -1234,8 +1234,8 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive">
 <table border="0">
     <tr valign="top">
-        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
-        <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" class="form-control-sm" /></td>
+        <td style="width: 30%" class="me-5"><input type='text' value="" name="comment" id="comment" class="form-control" /></td>
+        <td style="width: 22%" class="ms-6"><input type='text' value="" name="work_again" id="work_again" class="form-control" /></td>
         <td style="width: 18%"></td>
         <td style="width: 18%"></td>
         <td style="width: 12%"></td>
