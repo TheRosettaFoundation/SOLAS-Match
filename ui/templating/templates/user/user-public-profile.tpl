@@ -756,9 +756,9 @@ If a language is to be removed from this list, the community will be informed be
       <div class="fw-bold " >Recognition reward</div>
     </div>
 
-       <div class=" d-flex  border-bottom border-primaryDark justify-content-between  p-2" >
+       <div class="d-flex  border-bottom border-primaryDark  p-2" >
 
-       <div class="  me-4"> 5,000</div>
+       <div class=" w-50 me-2"> 5,000</div>
        <div class=" me-4" > TWB New Community Member</div>
         <div class="flex-grow-1 text-end" > 10 USD phone top-up or online voucher </div>
     </div>
