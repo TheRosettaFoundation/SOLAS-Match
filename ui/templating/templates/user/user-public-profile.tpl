@@ -758,45 +758,45 @@ If a language is to be removed from this list, the community will be informed be
 
        <div class="d-flex  border-bottom border-primaryDark  p-2" >
 
-       <div class=" w-50 me-2"> 5,000</div>
-       <div class=" me-4" > TWB New Community Member</div>
+       <div class="  me-2"> 5,000</div>
+       <div class=" w-50 me-4" > TWB New Community Member</div>
         <div class="flex-grow-1 text-end" > 10 USD phone top-up or online voucher </div>
     </div>
     
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 25,000</div>
-        <div class=" me-4" > TWB Traveler</div>
+        <div class=" me-2"> 25,000</div>
+        <div class=" w-50 me-4" > TWB Traveler</div>
          <div class="flex-grow-1 text-end" > 100 USD bank transfer</div>
         </div>
     
        
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 50,000</div>
-        <div class=" me-4" > TWB Pathfinder</div>
+        <div class="  me-2"> 50,000</div>
+        <div class=" w-50 me-4" > TWB Pathfinder</div>
          <div class="flex-grow-1 text-end" > 150 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 100,000</div>
-        <div class=" me-4" > TWB Explorer</div>
+        <div class="  me-2"> 100,000</div>
+        <div class=" w-50 me-4" > TWB Explorer</div>
          <div class="flex-grow-1 text-end" > 400 USD bank transfer</div>
         </div>
     
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 200,000</div>
-        <div class=" me-4" > TWB Navigator</div>
+        <div class=" me-2"> 200,000</div>
+        <div class=" w-50 me-4" > TWB Navigator</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 300,000</div>
-        <div class=" me-4" > TWB Voyager</div>
+        <div class="  me-2"> 300,000</div>
+        <div class="  w-50 me-4" > TWB Voyager</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
     
@@ -804,14 +804,14 @@ If a language is to be removed from this list, the community will be informed be
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class=" w-50 me-2"> 400,000</div>
-        <div class=" me-4" > TWB Trailblazer</div>
+        <div class="  me-2"> 400,000</div>
+        <div class=" w-50 me-4" > TWB Trailblazer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
-        <div class=" w-50 me-2"> 500,000</div>
-        <div class=" me-4" > TWB Pioneer</div>
+        <div class=" me-2"> 500,000</div>
+        <div class=" w-50 me-4" > TWB Pioneer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
         </div>
