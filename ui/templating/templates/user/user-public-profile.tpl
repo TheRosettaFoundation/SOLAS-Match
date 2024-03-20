@@ -1141,6 +1141,7 @@ If a language is to be removed from this list, the community will be informed be
     <input type="submit" class="btn btn-primary text-white" name="PrintRequestLetter" value="Request Reference Letter" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+</div>
 <div class="table-responsive">
 <table id="printrequestletter" class="display" style="width:100%">
         <thead>
@@ -1159,7 +1160,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {/if}
-</div>
+
 </div>
 
 
