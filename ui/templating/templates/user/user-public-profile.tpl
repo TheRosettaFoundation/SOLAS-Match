@@ -765,8 +765,8 @@ If a language is to be removed from this list, the community will be informed be
     
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
-        <div class="  w-50 me-2"> 25,000</div>
-        <div class="  me-4" > TWB Traveler</div>
+        <div class="  w-50 "> 25,000</div>
+        <div class="  " > TWB Traveler</div>
          <div class="flex-grow-1 text-end" > 100 USD bank transfer</div>
         </div>
     
