@@ -1212,20 +1212,20 @@ If a language is to be removed from this list, the community will be informed be
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
 <div class="table-responsive">
-<table border="0">
+<table>
     <tr valign="top">
-        <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
-        <td style="width: 22%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
+        <td><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
+        <td ></td>
+        <td ></td>
+        <td ></td>
+        <td ></td>
     </tr>
     <tr valign="top">
-        <td style="width: 30%"><strong>Comment</strong></td>
-        <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
-        <td style="width: 18%"><strong>Created</strong></td>
-        <td style="width: 18%"><strong>Created by</strong></td>
-        <td style="width: 12%"><strong></strong></td>
+        <td ><strong>Comment</strong></td>
+        <td ><strong>Willingness to work again score (1 to 5)</strong></td>
+        <td ><strong>Created</strong></td>
+        <td ><strong>Created by</strong></td>
+        <td ><strong></strong></td>
     </tr>
 </table>
 </div>
