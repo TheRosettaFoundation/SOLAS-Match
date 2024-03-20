@@ -799,7 +799,6 @@ If a language is to be removed from this list, the community will be informed be
         <div class=" me-4" > TWB Voyager</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
-        <div class=" d-flex  border-bottom border-primaryDark  p-2" >
     
 
 
@@ -814,6 +813,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class=" w-50 me-2"> 500,000</div>
         <div class=" me-4" > TWB Pioneer</div>
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
+        </div>
         </div>
 
         {else}
