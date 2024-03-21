@@ -910,13 +910,11 @@ error_log("createTaskDirectly: $args");
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[1]) . ',';
 
                 $matches = [];
-                if (preg_match('#^(\d{1,2})/(\d{2})/(\d{4})$#', $row[4], $matches)) {
-                    if (strlen($matches[1]) == 1) $matches[1] = "0{$matches[1]}";
-                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[3]}-{$matches[2]}-{$matches[1]} 00:00:00") . ',';
+                if (preg_match('#^(\d{4})-(\d{2})-(\d{2})$#', $row[4], $matches)) {
+                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[1]}-{$matches[2]}-{$matches[3]} 00:00:00") . ',';
                 } else $args .= 'NULL,';
-                if (preg_match('#^(\d{1,2})/(\d{2})/(\d{4})$#', $row[5], $matches)) {
-                    if (strlen($matches[1]) == 1) $matches[1] = "0{$matches[1]}";
-                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[3]}-{$matches[2]}-{$matches[1]} 23:59:59") . ',';
+                if (preg_match('#^(\d{4})-(\d{2})-(\d{2})$#', $row[5], $matches)) {
+                    $args .= LibAPI\PDOWrapper::cleanseWrapStr("{$matches[1]}-{$matches[2]}-{$matches[3]} 23:59:59") . ',';
                 } else $args .= 'NULL,';
 
                 if (empty($row[6])) $row[6] = '0.0';
