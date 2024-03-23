@@ -646,13 +646,13 @@
                                             </a>
                                             {if !TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                             <br />
-                                            <a class="btn btn-primary text-white" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Output File">
-                                            <<i class=" fa-solid fa-download "></i> 
+                                            <a class="btn btn-primary text-white" target="_blank" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Download Output File">
+                                            <i class=" fa-solid fa-download "></i> 
                                             </a>
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" tdata-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
