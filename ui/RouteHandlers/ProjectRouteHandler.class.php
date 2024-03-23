@@ -1037,6 +1037,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         $total_expected_cost = 0;
+        $total_expected_price = 0;
         $total_expected_cost_waived = 0;
         $one_paid = 0;
         $payment_status_for_project = [];
@@ -1092,6 +1093,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $sort = [];
             foreach ($get_payment_status_for_project as $t_id => $payment_status) {
                 $total_expected_cost += $payment_status['total_expected_cost'];
+                $total_expected_price += $payment_status['total_expected_price'];
                 if (in_array($payment_status['payment_status'], ['In-kind', 'In-house', 'Waived'])) $total_expected_cost_waived += $payment_status['total_expected_cost'];
                 if ($payment_status['payment_status']) $one_paid = 1;
                 $sort[$payment_status['target_codes'] . $payment_status['type_enum'] . $t_id] = $t_id;
@@ -1142,6 +1144,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'users_who_claimed' => $projectDao->get_users_who_claimed($project_id),
                 'project_complete_date'        => $taskDao->get_project_complete_date($project_id),
                 'total_expected_cost'          => $total_expected_cost,
+                'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
         ));

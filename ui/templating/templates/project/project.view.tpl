@@ -93,6 +93,7 @@
             <th>{Localisation::getTranslation('common_word_count')}</th>
             <th>{Localisation::getTranslation('common_created')}</th>
             <th>{Localisation::getTranslation('project_view_project_deadline')}</th>
+            <th>Project Price</th>
             {if isset($userSubscribedToProject)}
                 <th>{Localisation::getTranslation('common_tracking')}</th>
             {/if}
@@ -128,6 +129,9 @@
                 </td>  
                 <td>
                     <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$project->getDeadline()}</div>
+                </td>
+                <td>
+                <div >${round($total_expected_price, 2)}</div>
                 </td>
                 {if isset($userSubscribedToProject)}
                     <td>

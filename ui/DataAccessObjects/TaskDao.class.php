@@ -721,6 +721,7 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($paid_status['purchase_order']) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($paid_status['payment_status']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['unit_rate']) . ',' .
+            LibAPI\PDOWrapper::cleanse($paid_status['unit_rate_pricing']) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($paid_status['status_changed']));
     }
 

@@ -377,6 +377,7 @@
             <th>Purchase Order</th>
             <th>Payment Status</th>
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            <th>Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Total Expected Cost</th>
           {else}
@@ -464,6 +465,14 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
+            <td>
+            <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+            <input type='text' value="{$paid_status['unit_rate_pricing']}" name="unit_rate_pricing" id="unit_rate_pricing" />
+            <input type="submit" class="btngray-sm mt-2" name="unit_rate_pricing_submit" value="Submit" />
+            <input type="hidden" name="mark_unit_rate_pricing" value="1" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+             </td>   
+        </form>
             <td>
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {if $type_id == $task_type}

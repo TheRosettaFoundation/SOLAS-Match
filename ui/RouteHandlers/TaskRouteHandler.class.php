@@ -1328,6 +1328,13 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
                 } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_unit_rate_pricing'])) {
+                if (is_numeric($post['unit_rate_pricing'])) {
+                    $paid_status['unit_rate_pricing'] = $post['unit_rate_pricing'];
+                    $taskDao->update_paid_status($paid_status);
+                    UserRouteHandler::flashNow('success', 'Unit Rate Price updated.');
+                } else UserRouteHandler::flashNow('error', 'Unit Rate Price must be a number.');
+            }
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_source_quantity'])) {
                 if ((int)$post['source_quantity'] > 0) {
                     $task->set_source_quantity((int)$post['source_quantity']);
