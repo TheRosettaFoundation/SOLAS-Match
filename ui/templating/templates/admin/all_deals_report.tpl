@@ -34,7 +34,7 @@
             <th width="20%">Company</th>
             <th width="10%">Deal Number</th>
             <th width="16%">Deal Name</th>
-            <th width="6%">Start Date<br />-<br />End Date</th>
+            <th width="6%">Start Date<br />&nbsp;&nbsp;&nbsp;-<br />End Date</th>
             <th width="6%">Deal Amount</th>
             <th width="6%">LS Supplements</th>
             <th width="6%">Add-ons</th>
@@ -50,7 +50,7 @@
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal['company_name'])}</td>
                 <td><a href="{urlFor name="deal_id_report" options="deal_id.{$deal['deal_id']}"}" target="_blank">{$deal['deal_id']}</a></td>
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal['deal_name'])}</td>
-                <td>{substr($deal['start_date'], 0, 10)}<br />-<br />{substr($deal['expiration_date'], 0, 10)}</td>
+                <td>{substr($deal['start_date'], 0, 10)}<br />&nbsp;&nbsp;&nbsp;-<br />{substr($deal['expiration_date'], 0, 10)}</td>
                 <td>${round($deal['deal_total'], 2)}</td>
                 <td>${round($deal['deal_partnership'], 2)}</td>
                 <td>${round($deal['deal_supplements'], 2)}</td>
