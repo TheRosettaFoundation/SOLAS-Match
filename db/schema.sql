@@ -11062,6 +11062,7 @@ BEGIN
         END AS task_status,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
+        IF(ttd.divide_rate_by_60, t.word_count_partner_weighted*tp.unit_rate_pricing/60, t.word_count_partner_weighted*tp.unit_rate_pricing) AS total_expected_price,
         t.source_quantity,
         t.`created-time`,
         t.deadline,
@@ -11108,6 +11109,7 @@ BEGIN
         hd.deal_partnership,
         hd.deal_supplements,
         hd.link_to_contract,
+        SUM(IF(tp.payment_status IS NOT NULL                                                           , IF(ttd.divide_rate_by_60, t.word_count_partner_weighted*tp.unit_rate_pricing/60, t.word_count_partner_weighted*tp.unit_rate_pricing), 0)) AS total_expected_price,
         SUM(IF(tp.payment_status IS NOT NULL                                                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost,
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_waived
     FROM      hubspot_deals           hd

@@ -34,11 +34,11 @@
             <th width="20%">Company</th>
             <th width="10%">Deal Number</th>
             <th width="16%">Deal Name</th>
-            <th width="6%">Contract Start Date</th>
-            <th width="6%">Contract End Date</th>
+            <th width="6%">Start Date<br />-<br />End Date</th>
             <th width="6%">Deal Amount</th>
             <th width="6%">LS Supplements</th>
             <th width="6%">Add-ons</th>
+            <th width="6%">Expected price</th>
             <th width="6%">Allocated budget</th>
             <th width="6%">Expected cost</th>
             <th width="6%">Remaining</th>
@@ -50,11 +50,11 @@
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal['company_name'])}</td>
                 <td><a href="{urlFor name="deal_id_report" options="deal_id.{$deal['deal_id']}"}" target="_blank">{$deal['deal_id']}</a></td>
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal['deal_name'])}</td>
-                <td>{substr($deal['start_date'], 0, 10)}</td>
-                <td>{substr($deal['expiration_date'], 0, 10)}</td>
+                <td>{substr($deal['start_date'], 0, 10)}<br />-<br />{substr($deal['expiration_date'], 0, 10)}</td>
                 <td>${round($deal['deal_total'], 2)}</td>
                 <td>${round($deal['deal_partnership'], 2)}</td>
                 <td>${round($deal['deal_supplements'], 2)}</td>
+                <td>${total_expected_price'], 2)}</td>
                 <td>{if !empty($deal['allocated_budget'])}${round($deal['allocated_budget'], 2)}{/if}</td>
                 <td>{if !empty($deal['total_expected_cost'])}${round($deal['total_expected_cost'], 2)}{/if}</td>
                 <td>{if !empty($deal['allocated_budget']) && !empty($deal['total_expected_cost'])}${round($deal['allocated_budget'] - $deal['total_expected_cost'], 2)}{/if}</td>
