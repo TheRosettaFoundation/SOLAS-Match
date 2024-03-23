@@ -93,7 +93,6 @@
             <th>{Localisation::getTranslation('common_word_count')}</th>
             <th>{Localisation::getTranslation('common_created')}</th>
             <th>{Localisation::getTranslation('project_view_project_deadline')}</th>
-            <th>Project Price</th>
             {if isset($userSubscribedToProject)}
                 <th>{Localisation::getTranslation('common_tracking')}</th>
             {/if}
@@ -130,9 +129,7 @@
                 <td>
                     <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$project->getDeadline()}</div>
                 </td>
-                <td>
-                <div >${round($total_expected_price, 2)}</div>
-                </td>
+                
                 {if isset($userSubscribedToProject)}
                     <td>
 
@@ -172,6 +169,7 @@
     <table class="table table-borderless" >
         <thead class="fs-5">
             <th>Deal ID</th>
+            <th>Project Price</th>
             <th>Allocated Budget</th>
             <th>Project Cost</th>
             <th>Remaining Budget</th>
@@ -180,6 +178,7 @@
         <tbody class="fs-4">
             <tr style="overflow-wrap: break-word;">
                 <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" class="custom-link" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td><div >${round($total_expected_price, 2)}</div></td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
                 <td>${round($total_expected_cost, 2)}</td>
                 <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
