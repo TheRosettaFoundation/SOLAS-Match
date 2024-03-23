@@ -40,6 +40,15 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 16.0
+
+- New Responsive UI added to Linguist facing parts of the system.
+- Expanded "task_type_details" table to include: "unit_rate_pricing_default" (Default Pricing Unit Rate).
+- Expanded "TaskPaids" table to include: "unit_rate_pricing", this can be updated in the Task View, but it is initially set to "unit_rate_pricing_default".
+- Upgraded "Task" table for "word_count_partner_weighted" field. This is initially set to the standard word count but it can be overridden in Task Alter. It will eventually come from Phrase.
+Existing reports have been upgraded to have pricing based on "unit_rate_pricing" and "word_count_partner_weighted".
+- A new Partner specific report for pricing has been added.
+
 ## Version 15.2
 
 - Allow contracts to be sent to Linguists for Paid Work using Docusign.
