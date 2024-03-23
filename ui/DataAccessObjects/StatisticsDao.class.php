@@ -361,12 +361,14 @@ class StatisticsDao extends BaseDao
         else {
             $allocated_budget = [];
             $result[0]['total_total_expected_cost'] = 0;
+            $result[0]['total_total_expected_price'] = 0;
             $result[0]['total_paid_words_only_words'] = 0;
             $result[0]['total_paid_words_only_hours'] = 0;
             $result[0]['total_paid_words_only_terms'] = 0;
             foreach ($result as $r) {
                 $allocated_budget[$r['project_id']] = $r['allocated_budget'];
                 $result[0]['total_total_expected_cost'] += $r['total_expected_cost'];
+                $result[0]['total_total_expected_price'] += $r['total_expected_price'];
                 if ($r['pricing_and_recognition_unit_text_hours'] == 'Words')       $result[0]['total_paid_words_only_words'] += $r['total_paid_words'];
                 if ($r['pricing_and_recognition_unit_text_hours'] == 'Labor hours') $result[0]['total_paid_words_only_hours'] += $r['total_paid_words'];
                 if ($r['pricing_and_recognition_unit_text_hours'] == 'Terms')       $result[0]['total_paid_words_only_terms'] += $r['total_paid_words'];

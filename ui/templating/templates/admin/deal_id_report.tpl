@@ -54,6 +54,7 @@
 
 <table id="myTable1" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
+        <th>Total Price</th>
         <th>Total Allocated Budget for Projects</th>
         <th>Total Expected Cost (from Total below)</th>
         <th>Total Words</th>
@@ -62,6 +63,7 @@
     </thead>
     <tbody>
         <tr>
+            <td>${round($pos[0]['total_total_expected_price'], 2)}</td>
             <td>${round($pos[0]['total_allocated_budget'], 2)}</td>
             <td>${round($pos[0]['total_total_expected_cost'], 2)}</td>
             <td>{round($pos[0]['total_paid_words_only_words'], 2)}</td>
