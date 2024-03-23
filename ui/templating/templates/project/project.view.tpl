@@ -606,7 +606,7 @@
                                                 {Localisation::getTranslation('common_in_progress')}<br />
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class=" fa-solid fa-user "></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
@@ -627,12 +627,12 @@
                                           {/if}
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                             <i class=" fa-solid fa-user "></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                             <i class=" fa-solid fa-user "></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
-                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
+                                                        <a class="  btn btn-sm btn-dark-subtle border border-dark-subtle" onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Set Status Complete">
                                                         <i class=" fa-solid fa-check "></i> 
                                                         </a>
                                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -652,7 +652,7 @@
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" tdata-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
