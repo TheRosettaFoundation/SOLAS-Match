@@ -1396,13 +1396,6 @@ If a language is to be removed from this list, the community will be informed be
  
 
 
-
-<hr/>
-
-
-
-
-
 <hr class="bg-light-subtle" />
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
@@ -1571,7 +1564,7 @@ If a language is to be removed from this list, the community will be informed be
             {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
         {/if}
     </p>
-    </div>
+    
     </div>
 {/if}
 
