@@ -1292,32 +1292,22 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="table-responsive">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1  ">
-       <ul>
-        {foreach $adjust_points as $adjust_point}
-          <div class="">
-            <li class="mb-4 px-4 w-25">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
-            <div class="text-center w-25  mb-4 px-4">{$adjust_point['points']}</div>
-            <div class="mb-4 px-4 w-25">{$adjust_point['created']}</div>
-            <div class="d-flex mb-2 w-25 items-center ">
-            <div class="me-2">{$adjust_point['admin_email']}</div>
-
-        
-                <div class="px-4">
-                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                    </div>
-            </div>
-
-            </div>
-                
-        {/foreach}
-    </ul>
-
-    </div>
+<table border="0">
+<tr valign="top">
+    <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Strategic languages)</h3></td>
+    <td style="width: 22%"></td>
+    <td style="width: 18%"></td>
+    <td style="width: 18%"></td>
+    <td style="width: 12%"></td>
+</tr>
+<tr valign="top">
+    <td style="width: 30%"><strong>Comment</strong></td>
+    <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
+    <td style="width: 18%"><strong>Created</strong></td>
+    <td style="width: 18%"><strong>Created by</strong></td>
+    <td style="width: 12%"><strong></strong></td>
+</tr>
+</table>
 
  
 
