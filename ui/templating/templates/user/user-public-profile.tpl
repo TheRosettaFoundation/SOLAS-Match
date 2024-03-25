@@ -1348,7 +1348,7 @@ If a language is to be removed from this list, the community will be informed be
 
     {foreach $adjust_points as $adjust_point}
       
-           <div class="d-flex  ">
+           <div class="d-flex mb-2 ">
             <div class="me-2">{$adjust_point['admin_email']}</div>
 
         
