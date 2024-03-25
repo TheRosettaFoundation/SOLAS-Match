@@ -1292,7 +1292,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="table-responsive">
 
-<table border="0">
+<table class="table">
 {foreach $adjust_points_strategic as $adjust_point}
     <tr valign="top">
         <td style="width: 30%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
