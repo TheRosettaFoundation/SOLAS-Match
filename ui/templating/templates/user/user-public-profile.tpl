@@ -1311,7 +1311,7 @@ If a language is to be removed from this list, the community will be informed be
        <ul>
         {foreach $adjust_points as $adjust_point}
         
-            <li class="mb-3 px-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+            <li class="mb-4 px-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
                 
         {/foreach}
     </ul>
@@ -1322,7 +1322,7 @@ If a language is to be removed from this list, the community will be informed be
 
     {foreach $adjust_points as $adjust_point}
         
-       <div class="text-center mb-3 px-4">{$adjust_point['points']}</div>
+       <div class="text-center mb-4 px-4">{$adjust_point['points']}</div>
             
     {/foreach}
  
@@ -1337,7 +1337,7 @@ If a language is to be removed from this list, the community will be informed be
     {foreach $adjust_points as $adjust_point}
         
           
-            <div class="mb-3 px-4">{$adjust_point['created']}</div>
+            <div class="mb-4 px-4">{$adjust_point['created']}</div>
             
     {/foreach}
  
