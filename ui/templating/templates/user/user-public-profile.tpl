@@ -1363,8 +1363,8 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="d-flex justify-content-between">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1  ">
-       <ul>
+    <div class="d-flex flex-column mt-4  ">
+      
         {foreach $adjust_points_strategic as $adjust_point}
           <div class="d-flex justify-content-between">
             <li class="mb-4 px-4 w-25">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
@@ -1386,7 +1386,7 @@ If a language is to be removed from this list, the community will be informed be
             </div>
                 
         {/foreach}
-    </ul>
+   
 
     </div>
 
