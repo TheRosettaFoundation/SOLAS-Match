@@ -1355,10 +1355,10 @@ If a language is to be removed from this list, the community will be informed be
        <ul>
         {foreach $adjust_points_strategic as $adjust_point}
           <div class="row">
-            <li class="mb-4 px-4 col-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
-            <div class="text-center col-4  mb-4 px-4">{$adjust_point['points']}</div>
-            <div class="mb-4 px-4 col-4">{$adjust_point['created']}</div>
-            <div class="d-flex mb-2 col-4  ">
+            <li class="mb-4 px-4 col-3">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+            <div class="text-center col-3  mb-4 px-4">{$adjust_point['points']}</div>
+            <div class="mb-4 px-4 col-3">{$adjust_point['created']}</div>
+            <div class="d-flex mb-2 col-3  ">
             <div >{$adjust_point['admin_email']}</div>
 
         
