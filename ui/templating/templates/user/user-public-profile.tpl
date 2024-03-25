@@ -1228,33 +1228,34 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 </form>
-<div class="d-flex justify-content-between">
+<div class="table-responsive">
 
-    <div class="d-flex flex-column mt-4   ">
-      
-        {foreach $admin_comments as $admin_comment}
-         <div class="d-flex justify-content-between ">
-            <li class="mb-4 px-4 w-25">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
-            <div class="text-center mb-4 px-4 w-25">{$admin_comment['work_again']}</div>
-            <div class="mb-4 px-4 w-25">{$admin_comment['created']}</div>
-            <div class="w-25 d-flex items-center">
-            <div class="me-2">{$admin_comment['admin_email']}</div>
-
-        
-            <div class="px-4">
-                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                    <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
-                    <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                </div>
-            </div>
-        </div>
-                
-        {/foreach}
-  
-
-    </div>
+<table class="table" border="0">
+{if !empty($admin_comments_average)}
+<tr valign="top">
+    <td style="width: 30%"></td>
+    <td style="width: 22%"><strong>Average: {$admin_comments_average}</strong></td>
+    <td style="width: 18%"></td>
+    <td style="width: 18%"></td>
+    <td style="width: 12%"></td>
+</tr>
+{/if}
+{foreach $admin_comments as $admin_comment}
+<tr valign="top">
+    <td style="width: 30%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+    <td style="width: 22%">{$admin_comment['work_again']}</td>
+    <td style="width: 18%">{$admin_comment['created']}</td>
+    <td style="width: 18%">{$admin_comment['admin_email']}</td>
+    <td style="width: 12%">
+        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+            <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
+            <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+    </td>
+</tr>
+{/foreach}
+</table>
 
   
 
