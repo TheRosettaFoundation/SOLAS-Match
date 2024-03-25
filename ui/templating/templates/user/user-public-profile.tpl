@@ -1287,10 +1287,10 @@ If a language is to be removed from this list, the community will be informed be
 
 <h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
 <div class="d-flex justify-content-between">
-<div class="w-1/4">Comment</div>
-<div class="w-1/4">Recognition points adjustement</div>
-<div class="w-1/4">Created</div>
-<div class="w-1/4">Created by</div>
+<div class="w-25">Comment</div>
+<div class="w-25">Recognition points adjustement</div>
+<div class="w-25">Created</div>
+<div class="w-25">Created by</div>
 
 </div>
 
@@ -1311,7 +1311,7 @@ If a language is to be removed from this list, the community will be informed be
     
     </div>
 </div>
-<div class="d-flex justify-content-between  w-1/4">
+<div class="d-flex justify-content-between  w-25">
     <div class="d-flex flex-column mt-2">
        <ul>
         {foreach $adjust_points as $adjust_point}
