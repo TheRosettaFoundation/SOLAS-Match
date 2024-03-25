@@ -1290,17 +1290,17 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 </form>
-<div class="d-flex justify-content-between">
+<div class="d-flex ">
 
     <div class="d-flex flex-column mt-4 flex-grow-1  ">
        <ul>
         {foreach $adjust_points as $adjust_point}
-          <div class="d-flex justify-content-between">
-            <li class="mb-4 px-4 w-25">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
-            <div class="text-center w-25  mb-4 px-4">{$adjust_point['points']}</div>
-            <div class="mb-4 px-4 w-25">{$adjust_point['created']}</div>
-            <div class="d-flex mb-2 w-25 items-center ">
-            <div class="me-2">{$adjust_point['admin_email']}</div>
+          <div class="row">
+            <li class="mb-4 px-4 col-3">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+            <div class="text-center col-3  mb-4 px-4">{$adjust_point['points']}</div>
+            <div class="mb-4 px-4 col-3">{$adjust_point['created']}</div>
+            <div class="d-flex mb-2 col-3 items-center ">
+            <div class="text-break">{$adjust_point['admin_email']}</div>
 
         
                 <div class="px-4">
