@@ -1306,7 +1306,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 <div class="d-flex justify-content-between ">
- <div class="w-50">
+
     <div class="d-flex flex-column mt-4 ">
        <ul>
         {foreach $adjust_points as $adjust_point}
@@ -1328,9 +1328,9 @@ If a language is to be removed from this list, the community will be informed be
  
  
     </div>
-  </div>
+ 
 
-  <div class="w-50">
+
 
     <div class="d-flex flex-column mt-4 ">
 
@@ -1367,12 +1367,6 @@ If a language is to be removed from this list, the community will be informed be
 
     </div>
  
- 
-    </div>
-
-    
-
-
 
 </div>
 <hr/>
