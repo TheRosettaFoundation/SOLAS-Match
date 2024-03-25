@@ -81,7 +81,7 @@
   
        <div class="d-md-flex justify-content-between fs-5  "> 
 
-        <div class="bg-body rounded-3 p-4 me-4 w-100  w-md-50">
+        <div class="bg-body rounded-3 p-4 me-4   w-50">
    
        
         <span class="d-none">
@@ -567,7 +567,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between flex-wrap ">
 
-<div class=" w-100 w-md-50">
+<div class=" w-xs-100 w-md-50">
 <div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
