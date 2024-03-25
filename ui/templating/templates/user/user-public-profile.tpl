@@ -1295,7 +1295,7 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 
-<div class="d-flex mt-2 mb-2 ">
+<div class="d-flex mt-2 mb-2 w-50 justify-content-between">
     <div class="">
     <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     </div>
@@ -1304,12 +1304,6 @@ If a language is to be removed from this list, the community will be informed be
     <td ><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
     </div>
 
-    <div  >
-    
-    </div>
-    <div >
-    
-    </div>
 </div>
 <div class="d-flex justify-content-between  w-25">
     <div class="d-flex flex-column mt-2">
