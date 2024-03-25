@@ -1242,7 +1242,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="d-flex justify-content-between">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1  ">
+    <div class="d-flex flex-column mt-4   ">
       
         {foreach $admin_comments as $admin_comment}
          <div class="d-flex justify-content-between ">
@@ -1304,7 +1304,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="d-flex justify-content-between">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
+    <div class="d-flex flex-column mt-4 flex-grow-1  ">
        <ul>
         {foreach $adjust_points as $adjust_point}
           <div class="d-flex justify-content-between">
@@ -1363,7 +1363,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="d-flex justify-content-between">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
+    <div class="d-flex flex-column mt-4 flex-grow-1  ">
        <ul>
         {foreach $adjust_points_strategic as $adjust_point}
           <div class="d-flex justify-content-between">
