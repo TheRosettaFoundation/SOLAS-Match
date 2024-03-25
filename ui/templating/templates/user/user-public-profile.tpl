@@ -1294,34 +1294,34 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 <div class="d-flex justify-content-between">
-    <div>
-    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    <div class="me-6">
+    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm " /></td>
     </div>
-    <div>
-    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    <div class="ms-6">
+    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm " /></td>
     </div>
 </div>
 
-<div class="d-flex justify-content-between">
-    <div>
+<div class="d-flex justify-content-between ">
+    <div class="me-6">
     <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     </div>
-    <div>
+    <div class="s-5">
     <td><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
-    <td style="width: 22%"><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
+    <td ><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
     </div>
 </div>
 <div class="d-flex justify-content-between">
     <div class="d-flex flex-column">
-
+       <ul>
         {foreach $adjust_points as $adjust_point}
         
-            <ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul>
+            <li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
                 
         {/foreach}
+    </ul>
 
-
-    <div>
+    </div>
 
     <div class="d-flex flex-column">
 
@@ -1332,32 +1332,32 @@ If a language is to be removed from this list, the community will be informed be
     {/foreach}
  
  
-    <div>
+    </div>
 
     <div class="d-flex flex-column">
 
     {foreach $adjust_points as $adjust_point}
-        <tr valign="top">
+        
           
-            <div >{$adjust_point['created']}</div>
+            <div>{$adjust_point['created']}</div>
             
     {/foreach}
  
  
-    <div>
+    </div>
 
     <div class="d-flex flex-column">
 
     {foreach $adjust_points as $adjust_point}
       
            
-            <div >{$adjust_point['admin_email']}</td>
+            <div>{$adjust_point['admin_email']}</div>
             
         
     {/foreach}
  
  
-    <div>
+    </div>
 
     <div class="d-flex flex-column">
 
@@ -1371,7 +1371,7 @@ If a language is to be removed from this list, the community will be informed be
             </div>
     {/foreach}
  
-    <div>
+    </div>
 
 
 
