@@ -1339,7 +1339,7 @@ If a language is to be removed from this list, the community will be informed be
 
     </div>
 
-  
+  </div>
 
 
 
