@@ -1322,7 +1322,7 @@ If a language is to be removed from this list, the community will be informed be
 
     {foreach $adjust_points as $adjust_point}
         
-       <div class="mt-2 text-center px-4">{$adjust_point['points']}</div>
+       <div class="mt-4 text-center px-4">{$adjust_point['points']}</div>
             
     {/foreach}
  
@@ -1337,7 +1337,7 @@ If a language is to be removed from this list, the community will be informed be
     {foreach $adjust_points as $adjust_point}
         
           
-            <div class="mt-2 px-4">{$adjust_point['created']}</div>
+            <div class="mt-4 px-4">{$adjust_point['created']}</div>
             
     {/foreach}
  
