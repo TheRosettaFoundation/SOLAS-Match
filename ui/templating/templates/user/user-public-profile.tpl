@@ -1295,11 +1295,11 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 
-<div class="d-flex mt-2 mb-2 w-50 justify-content-around">
-    <div class="">
+<div class="d-flex mt-2 mb-2 w-50 ">
+    <div class="flex-grow-1 w-50">
     <input type='text' value="" name="comment" id="comment" class="form-control-sm" />
     </div>
-    <div class="d-flex flex-column ">
+    <div class="d-flex flex-column flex-grow-1 w-50">
     <input type='text' value="" name="comment" id="comment" class="form-control-sm" />
     <input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" />
     </div>
