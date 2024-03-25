@@ -1311,7 +1311,7 @@ If a language is to be removed from this list, the community will be informed be
        <ul>
         {foreach $adjust_points as $adjust_point}
         
-            <li class="mt-2 px-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+            <li class="mt-4 px-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
                 
         {/foreach}
     </ul>
@@ -1348,7 +1348,7 @@ If a language is to be removed from this list, the community will be informed be
 
     {foreach $adjust_points as $adjust_point}
       
-           <div class="d-flex ">
+           <div class="d-flex mt-4 ">
             <div class="me-2">{$adjust_point['admin_email']}</div>
 
         
