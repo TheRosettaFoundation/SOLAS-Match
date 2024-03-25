@@ -1316,7 +1316,7 @@ If a language is to be removed from this list, the community will be informed be
 
     <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
        <ul>
-        {foreach foreach $admin_comments as $admin_comment}
+        {foreach $admin_comments as $admin_comment}
         
             <li class="mb-4 px-4">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
                 
@@ -1327,7 +1327,7 @@ If a language is to be removed from this list, the community will be informed be
 
     <div class="d-flex flex-column flex-grow-1 mt-4 w-25">
 
-    {foreach foreach $admin_comments as $admin_comment}
+    {foreach  $admin_comments as $admin_comment}
         
        <div class="text-center mb-4 px-4">{$admin_comment['work_again']}</div>
             
@@ -1341,7 +1341,7 @@ If a language is to be removed from this list, the community will be informed be
 
     <div class="d-flex flex-column flex-grow-1  mt-4 w-25  ">
 
-    {foreach foreach $admin_comments as $admin_comment}
+    {foreach  $admin_comments as $admin_comment}
         
           
             <div class="mb-4 px-4">{$admin_comment['created']}</div>
@@ -1353,7 +1353,7 @@ If a language is to be removed from this list, the community will be informed be
 
     <div class="d-flex flex-column w-1/4 flex-grow-1 mt-4  w-25">
 
-    {foreach foreach $admin_comments as $admin_comment}
+    {foreach  $admin_comments as $admin_comment}
       
            <div class="d-flex mb-2 ">
             <div class="me-2">{$admin_comment['admin_email']}</div>
