@@ -1284,6 +1284,99 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 <hr class="bg-light-subtle"/>
+
+<h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
+<div class="d-flex justify-content-between">
+<div>Comment</div>
+<div>Recognition points adjustement</div>
+<div>Created</div>
+<div>Created by</div>
+
+</div>
+<div class="d-flex justify-content-between">
+    <div>
+    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    </div>
+    <div>
+    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <div>
+    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    </div>
+    <div>
+    <td><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
+    <td style="width: 22%"><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
+    </div>
+</div>
+<div class="d-flex justify-content-between">
+    <div class="d-flex flex-column">
+
+        {foreach $adjust_points as $adjust_point}
+        
+            <ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul>
+                
+        {/foreach}
+
+
+    <div>
+
+    <div class="d-flex flex-column">
+
+    {foreach $adjust_points as $adjust_point}
+        
+       <div>{$adjust_point['points']}</div>
+            
+    {/foreach}
+ 
+ 
+    <div>
+
+    <div class="d-flex flex-column">
+
+    {foreach $adjust_points as $adjust_point}
+        <tr valign="top">
+          
+            <div >{$adjust_point['created']}</div>
+            
+    {/foreach}
+ 
+ 
+    <div>
+
+    <div class="d-flex flex-column">
+
+    {foreach $adjust_points as $adjust_point}
+      
+           
+            <div >{$adjust_point['admin_email']}</td>
+            
+        
+    {/foreach}
+ 
+ 
+    <div>
+
+    <div class="d-flex flex-column">
+
+    {foreach $adjust_points as $adjust_point}
+        <div>
+                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                    <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                    <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </div>
+    {/foreach}
+ 
+    <div>
+
+
+
+</div>
+<hr/>
 <div class="table-responsive">
 <table border="0">
     <tr valign="top">
