@@ -1376,9 +1376,9 @@ If a language is to be removed from this list, the community will be informed be
         
                 <div class="px-4">
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            <input class="form-control" type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                            <input class="form-control" type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                            {if isset($sesskey)}<input  class="form-control" type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
                     </div>
             </div>
@@ -1415,13 +1415,13 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
     </tr>
     <tr valign="top">
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
+        <td style="width: 25%"><input  class="form-control" type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
+        <td style="width: 25%"><input  class="form-control" type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
+        <td style="width: 25%"><input  class="form-control" type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
+        <td style="width: 25%"><input  class="form-control" type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
     </tr>
     <tr valign="top">
-        <td style="width: 25%"><input type="submit" class="btn btn-primary text-white" name="mark_user_task_limitation" value="Submit" /></td>
+        <td style="width: 25%"><input class="form-control" type="submit" class="btn btn-primary text-white" name="mark_user_task_limitation" value="Submit" /></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
@@ -1457,7 +1457,7 @@ If a language is to be removed from this list, the community will be informed be
                 {/foreach}
             </select>
         </td>
-        <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+        <td style="width: 34%"><input  type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
@@ -1516,10 +1516,10 @@ If a language is to be removed from this list, the community will be informed be
                     {if $private_access}
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
-                            <input type="hidden" name="badge_id" value="{$badge->getId()}" />
-                            <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
+                            <input class="form-control" type="hidden" name="badge_id" value="{$badge->getId()}" />
+                            <input class="form-control" type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
                            onclick="return confirm('{Localisation::getTranslation('user_public_profile_5')}')"/>
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            {if isset($sesskey)}<input class="form-control" type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>   
                     {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
