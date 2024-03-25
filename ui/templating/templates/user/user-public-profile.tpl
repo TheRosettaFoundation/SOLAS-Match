@@ -1284,14 +1284,14 @@ If a language is to be removed from this list, the community will be informed be
 
 <h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
 <div class="d-flex justify-content-between">
-<div class="w-25">Comment</div>
-<div class="w-25">Recognition points adjustement</div>
-<div class="w-25">Created</div>
-<div class="w-25">Created by</div>
+<div class="w-25 fw-bold">Comment</div>
+<div class="w-25 fw-bold">Recognition points adjustement</div>
+<div class="w-25 fw-bold">Created</div>
+<div class="w-25 fw-bold">Created by</div>
 
 </div>
 
-
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <div class="d-flex mt-2 mb-2 w-50 ">
     <div class="flex-grow-1 w-50 ">
     <input type='text' value="" name="comment" id="comment" class="form-control" />
@@ -1302,6 +1302,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
 
 </div>
+</form>
 <div class="d-flex justify-content-between">
 
     <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
