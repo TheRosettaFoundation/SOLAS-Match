@@ -1302,17 +1302,17 @@ If a language is to be removed from this list, the community will be informed be
     </div>
 </div>
 
-<div class="d-flex justify-content-between ">
-    <div class="me-6">
+<div class="d-flex mt-2 mb-2 ">
+    <div class="me">
     <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     </div>
-    <div class="s-5">
+    <div class="ms-5 ">
     <td><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     <td ><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
     </div>
 </div>
 <div class="d-flex justify-content-between">
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-2">
        <ul>
         {foreach $adjust_points as $adjust_point}
         
@@ -1323,7 +1323,7 @@ If a language is to be removed from this list, the community will be informed be
 
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-2">
 
     {foreach $adjust_points as $adjust_point}
         
@@ -1334,7 +1334,7 @@ If a language is to be removed from this list, the community will be informed be
  
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-2">
 
     {foreach $adjust_points as $adjust_point}
         
@@ -1346,12 +1346,23 @@ If a language is to be removed from this list, the community will be informed be
  
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-2">
 
     {foreach $adjust_points as $adjust_point}
       
-           
+           <div class="d-flex justify-content-between">
             <div>{$adjust_point['admin_email']}</div>
+
+        
+                <div>
+                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                            <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    </div>
+            </div>
+        
             
         
     {/foreach}
@@ -1359,19 +1370,7 @@ If a language is to be removed from this list, the community will be informed be
  
     </div>
 
-    <div class="d-flex flex-column">
-
-    {foreach $adjust_points as $adjust_point}
-        <div>
-                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                    <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                    <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-            </div>
-    {/foreach}
- 
-    </div>
+    
 
 
 
