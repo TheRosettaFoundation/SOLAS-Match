@@ -1070,8 +1070,8 @@ If a language is to be removed from this list, the community will be informed be
 
 {/if}
 </div>
-</div>
 {/if}
+</div>
 
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
