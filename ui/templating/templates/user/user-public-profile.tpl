@@ -1354,7 +1354,7 @@ If a language is to be removed from this list, the community will be informed be
         
                 <div class="px-2">
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                            <input type="submit" class="btn btn-sm btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
                             <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
