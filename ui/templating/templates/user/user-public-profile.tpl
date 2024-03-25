@@ -566,8 +566,8 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <a  class="custom-link" href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
 <div class="d-flex justify-content-between flex-wrap ">
-
-<div class=" w-xs-100 w-md-50">
+<div class="row">
+<div class=" col-12 col-md-6">
 <div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
@@ -681,7 +681,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class=" ms-6 flex-grow-1">
+<div class="col-12 col-md-12">
 
       <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 w-100  p-2">
                 
@@ -702,6 +702,8 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
                             
                         </div>
+
+</div>
 
 </div>
 
