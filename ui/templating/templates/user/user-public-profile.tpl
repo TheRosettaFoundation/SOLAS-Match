@@ -1332,7 +1332,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 
-    <div class="d-flex flex-column w-1/4 mt-4 ">
+    <div class="d-flex flex-column flex-grow-1 w-1/4 mt-4 ">
 
     {foreach $adjust_points as $adjust_point}
         
@@ -1344,7 +1344,7 @@ If a language is to be removed from this list, the community will be informed be
  
     </div>
 
-    <div class="d-flex flex-column w-1/4 mt-4">
+    <div class="d-flex flex-column w-1/4 flex-grow-1 mt-4">
 
     {foreach $adjust_points as $adjust_point}
       
