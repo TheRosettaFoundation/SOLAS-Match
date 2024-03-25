@@ -1321,7 +1321,7 @@ If a language is to be removed from this list, the community will be informed be
             <li class="mb-4 px-4 w-25">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
             <div class="text-center mb-4 px-4 w-25">{$admin_comment['work_again']}</div>
             <div class="mb-4 px-4 w-25">{$admin_comment['created']}</div>
-            <div class="w-25">
+            <div class="w-25 d-flex">
             <div class="me-2">{$admin_comment['admin_email']}</div>
 
         
