@@ -1317,7 +1317,7 @@ If a language is to be removed from this list, the community will be informed be
 
     </div>
 
-    <div class="d-flex flex-column mt-4">
+    <div class="d-flex flex-column mt-4 ms-4">
 
     {foreach $adjust_points as $adjust_point}
         
