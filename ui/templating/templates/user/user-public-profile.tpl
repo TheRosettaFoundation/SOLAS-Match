@@ -527,20 +527,6 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                              
 
 
-                             
-
-          
-
-                            {*
-                               <table>
-                                   <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
-                                   <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
-                                   <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
-                                   <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
-                                   <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
-                                   <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
-                               </table>
-                            *}
                      
                         {/if}
               
@@ -581,7 +567,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between flex-wrap ">
 
-<div class="  w-50">
+<div class=" w-100 w-md-50">
 <div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
@@ -747,7 +733,7 @@ If a language is to be removed from this list, the community will be informed be
 </h2>
 
 {if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
-<div class="border border-1 border-primaryDark rounded-3 w-50 w-md-5 fs-5">
+<div class="border border-1 border-primaryDark rounded-3 w-100 w-md-50 w-md-5 fs-5">
 
    <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
 
