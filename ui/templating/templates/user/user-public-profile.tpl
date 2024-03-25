@@ -733,7 +733,7 @@ If a language is to be removed from this list, the community will be informed be
 </h2>
 
 {if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
-<div class="border border-1 border-primaryDark rounded-3 w-100 w-md-50 w-md-5 fs-5">
+<div class="border border-1 border-primaryDark rounded-3 w-100 w-sm-50 w-md-5 fs-5">
 
    <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
 
@@ -1356,7 +1356,7 @@ If a language is to be removed from this list, the community will be informed be
             <li class="mb-4 px-4 w-25">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
             <div class="text-center w-25  mb-4 px-4">{$adjust_point['points']}</div>
             <div class="mb-4 px-4 w-25">{$adjust_point['created']}</div>
-            <div class="d-flex mb-2 w-25 items-center ">
+            <div class="d-flex mb-2 w-25 items-center flex-wrap ">
             <div class="me-2">{$adjust_point['admin_email']}</div>
 
         
