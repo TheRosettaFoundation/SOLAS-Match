@@ -731,9 +731,9 @@ If a language is to be removed from this list, the community will be informed be
 <span style="color: #9e6100;">Rewards offered for work in strategic languages</span>
 
 </h2>
-<div class="row">
-{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
 
+{if empty($user_has_strategic_languages) || $user_has_strategic_languages[0]['nigeria'] == 0}
+<div class="row">
 <div class="border border-1 border-primaryDark rounded-3 col-xs-12 col-md-12 fs-5">
 
    <div class=" d-flex  border-bottom border-primaryDark  justify-content-between p-2  px-2 " >
@@ -1064,14 +1064,13 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {/if}
+</div>
 
 
-
-
-{/if}
 </div>
 {/if}
-</div>
+
+{/if}
 
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
