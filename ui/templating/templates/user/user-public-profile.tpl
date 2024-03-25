@@ -1336,7 +1336,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
  
 
-</div>
+
 <hr/>
 
 
@@ -1401,69 +1401,8 @@ If a language is to be removed from this list, the community will be informed be
 
 
 
-<hr class="bg-light-subtle"/>
-
-<div class="table-responsive">
-<table border="0">
-    <tr valign="top">
-        <td style="width: 30%"><h3>Recognition Program Points Adjustment (for Strategic languages)</h3></td>
-        <td style="width: 22%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 30%"><strong>Comment</strong></td>
-        <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
-        <td style="width: 18%"><strong>Created</strong></td>
-        <td style="width: 18%"><strong>Created by</strong></td>
-        <td style="width: 12%"><strong></strong></td>
-    </tr>
-</table>
-</div>
-
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-<div class="table-responsive">
-<table border="0">
-    <tr valign="top">
-        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 30%"></td>
-        <td style="width: 22%"><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points_strategic" value="Submit" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-</table>
-</div>
-{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-</form>
 
 
-<div class="table-responsive">
-<table border="0">
-{foreach $adjust_points_strategic as $adjust_point}
-    <tr valign="top">
-        <td style="width: 30%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
-        <td style="width: 22%">{$adjust_point['points']}</td>
-        <td style="width: 18%">{$adjust_point['created']}</td>
-        <td style="width: 18%">{$adjust_point['admin_email']}</td>
-        <td style="width: 12%">
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                <input type="submit" class="btn btn-danger" name="mark_points_delete_strategic" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-        </td>
-    </tr>
-{/foreach}
-</table>
-</div>
 <hr class="bg-light-subtle" />
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
@@ -1544,7 +1483,7 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 {/if}
 
-
+</div>
 
 {if $private_access}
     <div class="mt-4 rounded-3 p-4 bg-body">
@@ -1754,7 +1693,7 @@ If a language is to be removed from this list, the community will be informed be
    </div>
    </div>
    </div>
-   </div>
+  
    
 {/if}
 
