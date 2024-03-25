@@ -567,7 +567,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 </p>
 <div class="d-flex justify-content-between flex-wrap ">
 <div class="row">
-<div class=" col-12 col-md-6">
+<div class=" col-xs-12 col-md-6">
 <div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
@@ -681,7 +681,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 
 
-<div class="col-12 col-md-12">
+<div class="col-xs-12 col-md-6">
 
       <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 w-100  p-2">
                 
