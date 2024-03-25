@@ -1331,52 +1331,7 @@ If a language is to be removed from this list, the community will be informed be
 
     </div>
 
-    <div class="d-flex flex-column flex-grow-1 mt-4 w-25">
-
-    {foreach $adjust_points as $adjust_point}
-        
-       <div class="text-center mb-4 px-4">{$adjust_point['points']}</div>
-            
-    {/foreach}
  
- 
-    </div>
- 
-
-
-
-    <div class="d-flex flex-column flex-grow-1  mt-4 w-25  ">
-
-    {foreach $adjust_points as $adjust_point}
-        
-          
-            <div class="mb-4 px-4">{$adjust_point['created']}</div>
-            
-    {/foreach}
- 
- 
-    </div>
-
-    <div class="d-flex flex-column w-1/4 flex-grow-1 mt-4  w-25">
-
-    {foreach $adjust_points as $adjust_point}
-      
-           <div class="d-flex mb-2 ">
-            <div class="me-2">{$adjust_point['admin_email']}</div>
-
-        
-                <div class="px-4">
-                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                    </div>
-            </div>
-        
-            
-        
-    {/foreach}
 
     </div>
  
