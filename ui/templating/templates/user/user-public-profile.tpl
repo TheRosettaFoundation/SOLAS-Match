@@ -1305,7 +1305,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
 
 </div>
-<div class="d-flex  ">
+<div class="d-flex justify-content-between">
 
     <div class="d-flex flex-column mt-4  w-1/4">
        <ul>
