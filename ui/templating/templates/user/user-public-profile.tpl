@@ -565,9 +565,9 @@ will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a  class="custom-link" href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
 </p>
-<div class="d-flex justify-content-between flex-wrap ">
+
 <div class="row">
-<div class=" col-xs-12 col-md-6">
+<div class="col-xs-12 col-md-6">
 <div class="border border-1 border-primaryDark rounded-3 w-100">
 
    <div class=" d-flex  border-bottom border-primaryDark  p-2  px-2 " >
@@ -702,8 +702,6 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
                             
                         </div>
-
-</div>
 
 </div>
 
