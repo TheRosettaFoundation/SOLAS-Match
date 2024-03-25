@@ -1287,31 +1287,31 @@ If a language is to be removed from this list, the community will be informed be
 
 <h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
 <div class="d-flex justify-content-between">
-<div>Comment</div>
-<div>Recognition points adjustement</div>
-<div>Created</div>
-<div>Created by</div>
+<div class="w-1/4">Comment</div>
+<div class="w-1/4">Recognition points adjustement</div>
+<div class="w-1/4">Created</div>
+<div class="w-1/4">Created by</div>
 
 </div>
-<div class="d-flex justify-content-between">
-    <div class="me-6">
-    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm " /></td>
-    </div>
-    <div class="ms-6">
-    <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm " /></td>
-    </div>
-</div>
+
 
 <div class="d-flex mt-2 mb-2 ">
-    <div class="me">
+    <div class="">
     <td ><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     </div>
-    <div class="ms-5 ">
+    <div class=" ">
     <td><input type='text' value="" name="comment" id="comment" class="form-control-sm" /></td>
     <td ><input type="submit" class="btn btn-primary text-white" name="mark_adjust_points" value="Submit" /></td>
     </div>
+
+    <div  >
+    
+    </div>
+    <div >
+    
+    </div>
 </div>
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between  w-1/4">
     <div class="d-flex flex-column mt-2">
        <ul>
         {foreach $adjust_points as $adjust_point}
@@ -1350,8 +1350,8 @@ If a language is to be removed from this list, the community will be informed be
 
     {foreach $adjust_points as $adjust_point}
       
-           <div class="d-flex justify-content-between">
-            <div>{$adjust_point['admin_email']}</div>
+           <div class="d-flex ">
+            <div class="me-4">{$adjust_point['admin_email']}</div>
 
         
                 <div>
