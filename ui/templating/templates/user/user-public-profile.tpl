@@ -1317,8 +1317,21 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
        <ul>
         {foreach $admin_comments as $admin_comment}
-        
+         <div class="d-flex ">
             <li class="mb-4 px-4">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
+            <div class="text-center mb-4 px-4">{$admin_comment['work_again']}</div>
+            <div class="mb-4 px-4">{$admin_comment['created']}</div>
+            <div class="me-2">{$admin_comment['admin_email']}</div>
+
+        
+            <div class="px-4">
+                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                        <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                        <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </div>
+        </div>
                 
         {/foreach}
     </ul>
