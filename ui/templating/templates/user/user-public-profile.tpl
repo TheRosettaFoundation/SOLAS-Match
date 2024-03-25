@@ -1283,6 +1283,102 @@ If a language is to be removed from this list, the community will be informed be
 </table>
 </div>
 
+
+
+<h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3>
+<div class="d-flex justify-content-between">
+<div class="w-25 fw-bold">Comment</div>
+<div class="w-25 fw-bold">Willingness to work again score(1 to 5)</div>
+<div class="w-25 fw-bold">Created</div>
+<div class="w-25 fw-bold">Created by</div>
+
+</div>
+
+
+<div class="d-flex mt-2 mb-2 w-50 ">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+    <div class="flex-grow-1 w-50 ">
+    <input type='text' value="" name="comment" id="comment" class="form-control" />
+    </div>
+    <div class="d-flex flex-column flex-grow-1 w-50">
+
+    <input type='text' value="" name="comment" id="comment" class="form-control" />
+    <input type="submit" class="btn btn-primary text-white mt-2" name="mark_adjust_points" value="Submit" />
+    {if !empty($admin_comments_average)}
+    <strong class="mt-2">
+    Average: {$admin_comments_average}</strong>
+    {/if}
+    </div>
+</form>
+
+</div>
+<div class="d-flex justify-content-between">
+
+    <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
+       <ul>
+        {foreach foreach $admin_comments as $admin_comment}
+        
+            <li class="mb-4 px-4">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
+                
+        {/foreach}
+    </ul>
+
+    </div>
+
+    <div class="d-flex flex-column flex-grow-1 mt-4 w-25">
+
+    {foreach foreach $admin_comments as $admin_comment}
+        
+       <div class="text-center mb-4 px-4">{$admin_comment['work_again']}</div>
+            
+    {/foreach}
+ 
+ 
+    </div>
+ 
+
+
+
+    <div class="d-flex flex-column flex-grow-1  mt-4 w-25  ">
+
+    {foreach foreach $admin_comments as $admin_comment}
+        
+          
+            <div class="mb-4 px-4">{$admin_comment['created']}</div>
+            
+    {/foreach}
+ 
+ 
+    </div>
+
+    <div class="d-flex flex-column w-1/4 flex-grow-1 mt-4  w-25">
+
+    {foreach foreach $admin_comments as $admin_comment}
+      
+           <div class="d-flex mb-2 ">
+            <div class="me-2">{$admin_comment['admin_email']}</div>
+
+        
+                <div class="px-4">
+                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    </div>
+            </div>
+        
+            
+        
+    {/foreach}
+
+    </div>
+ 
+
+</div>
+<hr/>
+
+
 <hr class="bg-light-subtle"/>
 
 <h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
