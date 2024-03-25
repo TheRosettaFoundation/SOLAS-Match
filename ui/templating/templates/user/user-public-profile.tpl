@@ -1213,78 +1213,6 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
-<div class="table-responsive">
-<table>
-    <tr valign="top">
-        <td><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
-        <td style="width: 22%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 30%"><strong>Comment</strong></td>
-        <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
-        <td style="width: 18%"><strong>Created</strong></td>
-        <td style="width: 18%"><strong>Created by</strong></td>
-        <td style="width: 12%"><strong></strong></td>
-    </tr>
-</table>
-</div>
-
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-<div class="table-responsive">
-<table border="0">
-    <tr valign="top">
-        <td style="width: 30%" class="me-5"><input type='text' value="" name="comment" id="comment" class="form-control" /></td>
-        <td style="width: 22%" class="ms-6"><input type='text' value="" name="work_again" id="work_again" class="form-control" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-    <tr valign="top">
-        <td style="width: 30%"></td>
-        <td style="width: 22%"><input type="submit" class="btn btn-primary text-white" name="admin_comment" value="Submit" /></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-</table>
-</div>
-
-{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-</form>
-<div class="table-responsive">
-<table border="0">
-    {if !empty($admin_comments_average)}
-    <tr valign="top">
-        <td style="width: 30%"></td>
-        <td style="width: 22%"><strong>Average: {$admin_comments_average}</strong></td>
-        <td style="width: 18%"></td>
-        <td style="width: 18%"></td>
-        <td style="width: 12%"></td>
-    </tr>
-    {/if}
-{foreach $admin_comments as $admin_comment}
-    <tr valign="top">
-        <td style="width: 30%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
-        <td style="width: 22%">{$admin_comment['work_again']}</td>
-        <td style="width: 18%">{$admin_comment['created']}</td>
-        <td style="width: 18%">{$admin_comment['admin_email']}</td>
-        <td style="width: 12%">
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
-                <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-        </td>
-    </tr>
-{/foreach}
-</table>
-</div>
-
-
-
 <h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3>
 <div class="d-flex justify-content-between">
 <div class="w-25 fw-bold">Comment</div>
@@ -1321,15 +1249,15 @@ If a language is to be removed from this list, the community will be informed be
             <li class="mb-4 px-4 w-25">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
             <div class="text-center mb-4 px-4 w-25">{$admin_comment['work_again']}</div>
             <div class="mb-4 px-4 w-25">{$admin_comment['created']}</div>
-            <div class="w-25 d-flex">
+            <div class="w-25 d-flex items-center">
             <div class="me-2">{$admin_comment['admin_email']}</div>
 
         
             <div class="px-4">
                     <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                        <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                        <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
+                    <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 </div>
             </div>
@@ -1379,8 +1307,24 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex flex-column mt-4 flex-grow-1 w-25 ">
        <ul>
         {foreach $adjust_points as $adjust_point}
+          <div class="d-flex justify-content-between">
+            <li class="mb-4 px-4 w-25">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+            <div class="text-center w-25  mb-4 px-4">{$adjust_point['points']}</div>
+            <div class="mb-4 px-4 w-25">{$adjust_point['created']}</div>
+            <div class="d-flex mb-2 w-25 ">
+            <div class="me-2">{$adjust_point['admin_email']}</div>
+
         
-            <li class="mb-4 px-4">{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li>
+                <div class="px-4">
+                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                            <input type="submit" class="btn btn-danger mt-1" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                            <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    </div>
+            </div>
+
+            </div>
                 
         {/foreach}
     </ul>
