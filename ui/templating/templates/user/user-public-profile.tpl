@@ -1349,7 +1349,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 </form>
-<div class="d-flex justify-content-between">
+<div class="d-flex ">
 
     <div class="d-flex flex-column mt-4  ">
        <ul>
@@ -1359,7 +1359,7 @@ If a language is to be removed from this list, the community will be informed be
             <div class="text-center col-4  mb-4 px-4">{$adjust_point['points']}</div>
             <div class="mb-4 px-4 col-4">{$adjust_point['created']}</div>
             <div class="d-flex mb-2 col-4  ">
-            <div class="me-2">{$adjust_point['admin_email']}</div>
+            <div >{$adjust_point['admin_email']}</div>
 
         
                 <div class="px-4">
