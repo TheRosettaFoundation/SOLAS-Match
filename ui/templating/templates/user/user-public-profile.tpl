@@ -1277,7 +1277,6 @@ If a language is to be removed from this list, the community will be informed be
  
 
 </div>
-<hr/>
 
 
 <hr class="bg-light-subtle"/>
@@ -1396,7 +1395,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
  
 
-</div>
+
 
 <hr/>
 
@@ -1752,6 +1751,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 
+   </div>
    </div>
    </div>
    </div>
