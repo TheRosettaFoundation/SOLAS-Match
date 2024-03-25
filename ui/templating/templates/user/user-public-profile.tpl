@@ -1296,7 +1296,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 <div class="d-flex mt-2 mb-2 w-50 ">
-    <div class="flex-grow-1 w-50 me-3">
+    <div class="flex-grow-1 w-50 ">
     <input type='text' value="" name="comment" id="comment" class="form-control" />
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
@@ -1306,7 +1306,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 <div class="d-flex justify-content-between ">
- <div>
+ <div class="w-50">
     <div class="d-flex flex-column mt-4 ">
        <ul>
         {foreach $adjust_points as $adjust_point}
@@ -1330,9 +1330,9 @@ If a language is to be removed from this list, the community will be informed be
     </div>
   </div>
 
-  <div>
+  <div class="w-50">
 
-    <div class="d-flex flex-column mt-4 md:ms-6">
+    <div class="d-flex flex-column mt-4 ">
 
     {foreach $adjust_points as $adjust_point}
         
