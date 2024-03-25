@@ -1314,15 +1314,15 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 <div class="d-flex justify-content-between">
 
-    <div class="d-flex flex-column mt-4 flex-grow-1   ">
+    <div class="d-flex flex-column mt-4 flex-grow-1  ">
       
         {foreach $admin_comments as $admin_comment}
          <div class="d-flex justify-content-between ">
-            <li class="mb-4 px-4 w-25">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
+            <li class="mb-4 px-4 ">{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li>
             <div class="text-center mb-4 px-4">{$admin_comment['work_again']}</div>
             <div class="mb-4 px-4">{$admin_comment['created']}</div>
             <div>
-            <div class="me-2 px-4 w-25">{$admin_comment['admin_email']}</div>
+            <div class="me-2 px-4 ">{$admin_comment['admin_email']}</div>
 
         
             <div class="px-4">
