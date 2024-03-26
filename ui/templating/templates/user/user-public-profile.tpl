@@ -1580,7 +1580,7 @@ If a language is to be removed from this list, the community will be informed be
                 <div class="span8">
                     <h3>
                         <i class="fa-solid fa-briefcase me-3"></i>
-                        <a href="{urlFor name="org-public-profile" class="link-primaryDark fw-bold" options="org_id.$org_id"}">{$org->getName()}</a>
+                        <a href="{urlFor name="org-public-profile" class="custom-link fw-bold" options="org_id.$org_id"}">{$org->getName()}</a>
                     </h3>
                 </div>
                 <div class="row">
