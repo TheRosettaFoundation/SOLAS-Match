@@ -76,10 +76,10 @@
     </p>
 {/if}
 
-<div class="row">  
+
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       
+        <div class="row">    
 
         <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-xs-12 col-md-8">
    
