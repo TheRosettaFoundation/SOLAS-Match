@@ -81,7 +81,7 @@
   
         <div class="row">    
 
-        <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-12 col-md-8">
+        <div class="bg-body rounded-3 p-4  col-12 col-md-8">
    
        
         <span class="d-none">
