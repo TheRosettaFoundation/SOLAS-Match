@@ -1568,7 +1568,7 @@ If a language is to be removed from this list, the community will be informed be
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</span> </h3>
                 <a href="{urlFor name='org-search'}" >
-                    <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
+                    <i class="fa-solid fa-search"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
        
         </div>
