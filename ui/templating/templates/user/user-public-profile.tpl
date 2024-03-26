@@ -79,9 +79,9 @@
       
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="d-md-flex justify-content-between fs-5  "> 
+       <div class="row "> 
 
-        <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50">
+        <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-xs-12 col-md-8">
    
        
         <span class="d-none">
@@ -113,7 +113,7 @@
                                 
                                     <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-1">
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-2 rounded-1">
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -122,67 +122,67 @@
                         {/if}
 
                              {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            {if !empty($uuid)}
-                            <div class="mb-3">
-                               
-                                    <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' btn btn-primary text-white'>
-                                        <i class="icon-list icon-white"></i> Link emailed to User for Password Reset
-                                    </a>
-                               
-                            </div>
-                            <hr  class="bg-light-subtle"/>
+                                {if !empty($uuid)}
+                                <div class="mb-3">
+                                
+                                        <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-2 rounded-1'>
+                                            Link emailed to User for Password Reset
+                                        </a>
+                                
+                                </div>
+                                <hr  class="bg-light-subtle"/>
+                                {/if}
+
+                                    <div class="mb-3 mt-3">
+                                        
+                                            Joined: <strong> {substr($this_user->getCreatedTime(), 0, 10)}</strong>
+                                    </div>     
+                                
                             {/if}
 
-                               <div class="mb-3 mt-3">
+                            {if isset($userPersonalInfo)}
+                            {if !empty($userPersonalInfo->getMobileNumber())}
+                                <div class="mb-3"  >
                                 
-                                    Joined: <strong> {substr($this_user->getCreatedTime(), 0, 10)}</strong>
-                               </div>     
+                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
                                 
-                        {/if}
+                                </div>
+                            {/if}
+                            {if !empty($userPersonalInfo->getCity())}
+                                <div class="mb-3" >
+                            
+                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
+                                
+                                </div>
+                            {/if}
+                            {if !empty($userPersonalInfo->getCountry())}
+                                <div class="mb-3" >
+                                
+                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                                
+                                </div>
+                                <hr  class="bg-light-subtle"/>   
+                            {/if}
+                        
+                            {/if}
 
-                        {if isset($userPersonalInfo)}
-                        {if !empty($userPersonalInfo->getMobileNumber())}
-                            <div class="mb-3"  >
-                               
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
-                               
-                            </div>
-                        {/if}
-                        {if !empty($userPersonalInfo->getCity())}
+                            {foreach from=$url_list item=url}
+                                {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                            {/foreach}
+
+                            {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
+                            {if !empty($bio)}
+                        
+                                
+                                    <h4 class="mt-3 mb-3">About Me</h4>
+                                
+                        
                             <div class="mb-3" >
-                          
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
-                               
+                                
+                                    {$bio}
+                                
                             </div>
-                        {/if}
-                        {if !empty($userPersonalInfo->getCountry())}
-                            <div class="mb-3" >
-                            
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
-                               
-                            </div>
-                            <hr  class="bg-light-subtle"/>   
-                        {/if}
-                    
-                        {/if}
-
-                        {foreach from=$url_list item=url}
-                            {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
-                        {/foreach}
-
-                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
-                        {if !empty($bio)}
-                       
-                            
-                                <h4 class="mt-3 mb-3">About Me</h4>
-                            
-                      
-                        <div class="mb-3" >
-                            
-                                {$bio}
-                            
-                        </div>
-                        {/if}
+                            {/if}
 
                         {assign var="native_language_code" value=""}
                         {if $this_user->getNativeLocale() != null}
@@ -333,7 +333,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body w-100 w-md-50">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-4">
 
 
             
