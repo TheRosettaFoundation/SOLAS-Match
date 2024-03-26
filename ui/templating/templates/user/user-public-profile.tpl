@@ -1329,7 +1329,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
    <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-  <input type="submit" class="btn btn-primary text-white" name="mark_adjust_points_strategic" value="Submit" />
+  <input type="submit" class="btn btn-primary text-white mt-2" name="mark_adjust_points_strategic" value="Submit" />
     </div>
 
 </div>
