@@ -1628,7 +1628,7 @@ If a language is to be removed from this list, the community will be informed be
                     </p>
                 </div>
             </div>
-            <p style="margin-bottom:20px;"/>
+            <p style="margin-bottom:20px;">
             <hr class="bg-light-subtle"/>
         {/foreach}
         
@@ -1652,7 +1652,7 @@ If a language is to be removed from this list, the community will be informed be
         {foreach $archivedJobs as $job}
             {include file="task/task.profile-display.tpl" task=$job}
         {/foreach}
-        <p style="margin-bottom:50px;"/>
+        <p style="margin-bottom:50px;">
     </div>
     {/if}
    
