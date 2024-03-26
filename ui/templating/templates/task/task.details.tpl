@@ -294,13 +294,13 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btn btn-sm btn-light " disabled>
+                    <a href="#" class="btngray opacity-50" disabled>
                        Yes
                     </a>
                    
                 {else}
                      
-                        <a href="#" class="btn btn-sm btn-light " disabled>
+                        <a href="#" class="btngray opacity-50" disabled>
                              No
                         </a>
                    
