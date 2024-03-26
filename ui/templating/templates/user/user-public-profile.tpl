@@ -76,10 +76,10 @@
     </p>
 {/if}
 
-      
+<div class="row">  
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-       <div class="row "> 
+       
 
         <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-xs-12 col-md-8">
    
@@ -106,149 +106,150 @@
                                      {/if}
                                  
                              </div>
-                        {/if}
+                    {/if}
 
-                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div class="mb-3 d-flex align-items-center">
-                                
-                                    <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
-                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-2 rounded-1">
-                                        <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
-                                        </a>
-                                    {/if}
-                               
-                            </div>
-                        {/if}
-
-                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                {if !empty($uuid)}
-                                <div class="mb-3">
-                                
-                                        <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-2 rounded-1'>
-                                            Link emailed to User for Password Reset
-                                        </a>
-                                
-                                </div>
-                                <hr  class="bg-light-subtle"/>
-                                {/if}
-
-                                    <div class="mb-3 mt-3">
-                                        
-                                            Joined: <strong> {substr($this_user->getCreatedTime(), 0, 10)}</strong>
-                                    </div>     
-                                
-                            {/if}
-
-                            {if isset($userPersonalInfo)}
-                            {if !empty($userPersonalInfo->getMobileNumber())}
-                                <div class="mb-3"  >
-                                
-                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
-                                
-                                </div>
-                            {/if}
-                            {if !empty($userPersonalInfo->getCity())}
-                                <div class="mb-3" >
+                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                        <div class="mb-3 d-flex align-items-center">
                             
-                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
-                                
-                                </div>
-                            {/if}
-                            {if !empty($userPersonalInfo->getCountry())}
-                                <div class="mb-3" >
-                                
-                                        {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
-                                
-                                </div>
-                                <hr  class="bg-light-subtle"/>   
-                            {/if}
-                        
-                            {/if}
+                                <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                    <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-2 rounded-1">
+                                    <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
+                                    </a>
+                                {/if}
+                            
+                        </div>
+                    {/if}
 
-                            {foreach from=$url_list item=url}
-                                {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
-                            {/foreach}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                    {if !empty($uuid)}
+                    <div class="mb-3">
+                    
+                            <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-2 rounded-1'>
+                                Link emailed to User for Password Reset
+                            </a>
+                    
+                    </div>
+                    <hr  class="bg-light-subtle"/>
+                    {/if}
 
-                            {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
-                            {if !empty($bio)}
-                        
-                                
-                                    <h4 class="mt-3 mb-3">About Me</h4>
-                                
-                        
-                            <div class="mb-3" >
-                                
-                                    {$bio}
-                                
-                            </div>
-                            {/if}
+                        <div class="mb-3 mt-3">
+                            
+                                Joined: <strong> {substr($this_user->getCreatedTime(), 0, 10)}</strong>
+                        </div>     
+                    
+                    {/if}
 
-                        {assign var="native_language_code" value=""}
-                        {if $this_user->getNativeLocale() != null}
-                        {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
+                    {if isset($userPersonalInfo)}
+                    {if !empty($userPersonalInfo->getMobileNumber())}
+                        <div class="mb-3"  >
+                        
+                                {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
+                        
+                        </div>
+                    {/if}
+                    {if !empty($userPersonalInfo->getCity())}
+                        <div class="mb-3" >
+                    
+                                {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
+                        
+                        </div>
+                    {/if}
+                    {if !empty($userPersonalInfo->getCountry())}
+                        <div class="mb-3" >
+                        
+                                {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                        
+                        </div>
+                        <hr  class="bg-light-subtle"/>   
+                    {/if}
+                
+                    {/if}
+
+                    {foreach from=$url_list item=url}
+                        {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                    {/foreach}
+
+                    {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
+                    {if !empty($bio)}
+                
+                        
+                            <h4 class="mt-3 mb-3">About Me</h4>
+                        
+                
+                    <div class="mb-3" >
+                        
+                            {$bio}
+                        
+                    </div>
+                    {/if}
+
+                    {assign var="native_language_code" value=""}
+                    {if $this_user->getNativeLocale() != null}
+                    {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
+                    <div class="mb-3">
+                        
+                            Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
+                        
+                    </div>
+                    {/if}
+                    <hr class="bg-light-subtle"/>
+                    {if !empty($userQualifiedPairs)}
+                    
+                        
+                            
+                                <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
+                        
                         <div class="mb-3">
                             
-                                Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
-                          
-                        </div>
-                        {/if}
-                        <hr class="bg-light-subtle"/>
-                        {if !empty($userQualifiedPairs)}
-                       
-                         
-                               
-                                    <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
-                          
-                            <div class="mb-3">
-                                
-                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                        {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                        {$button_count.$pair=0}
-                                    {/foreach}
+                                {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                    {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                    {$button_count.$pair=0}
+                                {/foreach}
 
-                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                    {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                    {if $userQualifiedPair['qualification_level'] > 1}
+                                        {$button_count.$pair=1}
+                                    {/if}
+                                {/foreach}
+
+                                {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                    <p>
+                                        
+                                        {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
+                                        <strong>
+                                        {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
+                                        {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
+                                        {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
+                                        </strong>
+
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                        {if $userQualifiedPair['qualification_level'] > 1}
+                                        {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) && $button_count.$pair == 0}
                                             {$button_count.$pair=1}
-                                        {/if}
-                                    {/foreach}
-
-                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                        <p>
-                                         
-                                            {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
-                                            <strong>
-                                            {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
-                                            {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
-                                            {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
-                                            </strong>
-
-                                            {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                            {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) && $button_count.$pair == 0}
-                                                {$button_count.$pair=1}
-                                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                                <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
-                                                <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
-                                                {if empty($testing_center_projects_by_code[$pair]) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                                                    <input type="submit" class="add_click_handler btn btn-primary text-white" name="btnSubmit" value="Get Verified" />
-                                                {else}
-                                                    <input type="submit" class="btn btn-primary text-white" name="btnSubmit" value="Get Verified" onclick="
-alert('You have already requested to take a test in order to become a TWB Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
-                                                    return false;" />
-                                                {/if}
-                                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                            </form>
+                                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                            <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
+                                            <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
+                                            {if empty($testing_center_projects_by_code[$pair]) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                                                <input type="submit" class="add_click_handler btn btn-primary text-white" name="btnSubmit" value="Get Verified" />
+                                            {else}
+                                                <input type="submit" class="btn btn-primary text-white" name="btnSubmit" value="Get Verified" onclick="
+    alert('You have already requested to take a test in order to become a TWB Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
+                                                return false;" />
                                             {/if}
-                                        </p>
-                                    {/foreach}
-                                
-                            </div>
-                            <hr  class="bg-light-subtle"/>
-                        {/if}
-                        <div class="d-flex justify-content-between flex-wrap">
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                        {/if}
+                                    </p>
+                                {/foreach}
+                            
+                        </div>
+                        <hr  class="bg-light-subtle"/>
+                    {/if}
+                        
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div >
+                            <div class="d-flex justify-content-between flex-wrap">
+                            <div>
                             <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                              
                             <div class="mt-3">
@@ -273,11 +274,11 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                     </a>
                                 
                             </div>
-                             
+                            </div>
+    
                         {/if}
                         <hr class="bg-light-subtle"/>
-                        </div>
-
+                        
                            
                                     <h4 class="mb-3 fw-bold">Services</h4>
                             
@@ -319,9 +320,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div>
-                              
-                            </div>
+                           
                           
                                     <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4">
                                         <input type="submit" class="btn btn-primary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
@@ -526,15 +525,15 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                              
 
-
+                                
                      
                         {/if}
               
 
-
+            </div>
      
  
-     </div>
+     
      </div>
      
  
