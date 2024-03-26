@@ -739,11 +739,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
-                    UserRouteHandler::flashNow("success", "Published task ");
+                    UserRouteHandler::flashNow("success", " Task published  ");
 
                 } else {
                     $task->setPublished(false);
-                    UserRouteHandler::flashNow("success", "Unpublished task");
+                    UserRouteHandler::flashNow("success", "Task unpublished");
 
                 }
                 error_log('projectView setPublished(' . $post['publishedTask'] . ') ' . $post['task_id'] . " by $user_id");
