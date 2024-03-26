@@ -93,7 +93,9 @@
                     {$ui['source_and_target']},
                 {/foreach}
             ];
-
+            
+            console.log('source and target');
+            console.log(source_and_target) ;
     
 
             var colours = ["",
