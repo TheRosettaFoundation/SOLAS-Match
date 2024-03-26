@@ -113,7 +113,7 @@
                                 
                                     <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='btn btn-yellowish text-uppercase mt-3 text-primary'>
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish '>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -1567,9 +1567,11 @@ If a language is to be removed from this list, the community will be informed be
         <div class='d-flex justify-content-betwen'>
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
-                <a href="{urlFor name='org-search'}" class="btn btn-primary" >
+                <div>
+                <a href="{urlFor name='org-search'}" class="btn btn-primary text-white" >
                     <i class="fa-solid fa-search"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
+                </div>
        
         </div>
 
