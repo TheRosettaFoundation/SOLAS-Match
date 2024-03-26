@@ -555,9 +555,10 @@
 
 
 
-     <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
+     
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-       
+    
+        <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
 
     <h3 class="fw-bold mb-3">Community Recognition Program <span class="text-muted fs-4">Contribute to our mission and obtain rewards</span></h3>
 
@@ -1447,9 +1448,10 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 <hr class="bg-light-subtle" />
 </div>
+</div>
 {/if}
 
-</div>
+
 
 {if $private_access}
     <div class="mt-4 rounded-3 p-4 bg-body">
