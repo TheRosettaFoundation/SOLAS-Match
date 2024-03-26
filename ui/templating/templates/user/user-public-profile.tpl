@@ -81,7 +81,7 @@
   
         <div class="row d-flex justify-content-between">    
 
-        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7 flex-grow-1 me-2>
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-6 flex-grow-1 me-2>
    
        
         <span class="d-none">
@@ -342,7 +342,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-12 ms-2 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-2 col-md-5">
 
 
             
@@ -555,9 +555,9 @@
 
 
 
-
+     <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-        <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
+       
 
     <h3 class="fw-bold mb-3">Community Recognition Program <span class="text-muted fs-4">Contribute to our mission and obtain rewards</span></h3>
 
