@@ -113,7 +113,7 @@
                                 
                                     <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish  text-primary text-uppercase'>
+                                        <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish  text-primary text-uppercase p-1'>
                                         <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -482,7 +482,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="btn btn-yellowish text-uppercase text-primary d-flex w-50g ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase p-1 text-primary d-flex  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
