@@ -81,7 +81,7 @@
   
         <div class="row">    
 
-        <div class="bg-body rounded-3 p-4  col-12 col-md-8 me-2">
+        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-6 me-2">
    
        
         <span class="d-none">
@@ -335,7 +335,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-4">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-5">
 
 
             
