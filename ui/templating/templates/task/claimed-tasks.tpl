@@ -138,9 +138,10 @@
                                                     Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
                                                
-                                                <span>  TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target'] </span>
+                                              
                                           
                                             <span>
+                                            <span>  {TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']} </span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
                                             </div>
