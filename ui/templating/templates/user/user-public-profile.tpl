@@ -113,8 +113,8 @@
 
                         {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-1 rounded-1'>
-                                            <i class="fa-solid fa-list"></i> {Localisation::getTranslation('common_change_email')}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1'>
+                                            <i class="fa-solid fa-list ms-2"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
 
@@ -183,11 +183,11 @@
                             <h4 class="mt-3 mb-3">About Me</h4>
                         
                 
-                    <div class="mb-3" >
-                        
-                            {$bio}
-                        
-                    </div>
+                            <div class="mb-3" >
+                                
+                                    {$bio}
+                                
+                            </div>
                     {/if}
 
                     {assign var="native_language_code" value=""}
@@ -198,13 +198,15 @@
                             Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                         
                     </div>
-                    {/if}
+
                     <hr class="bg-light-subtle"/>
+                    {/if}
+                  
                     {if !empty($userQualifiedPairs)}
                     
                         
                             
-                                <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
+                        <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
                         
                         <div class="mb-3">
                             
@@ -252,9 +254,9 @@
                         </div>
                         <hr  class="bg-light-subtle"/>
                     {/if}
-                        
+                    <div class="d-flex justify-content-between flex-wrap">
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                            <div class="d-flex justify-content-between flex-wrap">
+                           
                             <div>
                             <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                              
@@ -270,6 +272,7 @@
                                
                             </div>
                             </div>
+                            
                            
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -280,13 +283,14 @@
                                     </a>
                                 
                             </div>
-                            </div>
-    
+                            
+                            <hr class="bg-light-subtle"/>
                         {/if}
-                        <hr class="bg-light-subtle"/>
+                        </div>
+                        
                         
                            
-                                    <h4 class="mb-3 fw-bold">Services</h4>
+                            <h4 class="mb-3 fw-bold">Services</h4>
                             
                             <div>
                                
