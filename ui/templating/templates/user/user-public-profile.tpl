@@ -81,7 +81,7 @@
   
         <div class="row d-flex justify-content-between">    
 
-        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-6 me-2 flex-grow-1">
+        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-6 me-2">
    
        
         <span class="d-none">
@@ -110,13 +110,16 @@
 
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                         <div class="mb-3 d-flex align-items-center">
+
+                        {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
+                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-1 rounded-1'>
+                                            <i class="fa-solid fa-list"></i> {Localisation::getTranslation('common_change_email')}
+                                        </a>
+                                    {/if}
+
                             
-                                <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-1 rounded-1">
-                                    <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
-                                    </a>
-                                {/if}
+                                
                             
                         </div>
                     {/if}
@@ -126,7 +129,7 @@
                     <div class="mb-3">
                     
                             <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1'>
-                                Link emailed to User for Password Reset
+                            <i class="fa-solid fa-list"></i> Link emailed to User for Password Reset
                             </a>
                     
                     </div>
