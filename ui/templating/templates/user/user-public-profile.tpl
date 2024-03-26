@@ -1512,9 +1512,9 @@ If a language is to be removed from this list, the community will be informed be
     
     {/if}
 
-
-{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     <div class="mt-4 rounded-3 p-2 bg-body">
+{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+    
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary text-white">
@@ -1540,15 +1540,15 @@ If a language is to be removed from this list, the community will be informed be
         {/if}
     </p>
     
-    </div>
+   
 {/if}
-
+</div>
 
 <div class="mt-4 rounded-3 p-4 bg-body">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary text-white">
-            <i class="icon-search icon-white"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
+            <i class="fa-solid fa-search"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
    
 </div>
