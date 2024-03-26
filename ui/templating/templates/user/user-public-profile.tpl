@@ -1378,10 +1378,10 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 25%"><strong>Restrict volunteer from editing native language, language pairs and task stream (1 => restrict, 0 => none)</strong></td>
     </tr>
     <tr valign="top">
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
-        <td style="width: 25%"><input type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
+        <td style="width: 25%"><input class="form-control form-control-sm" type='text' value="{$user_task_limitation['max_not_comlete_tasks']}" name="max_not_comlete_tasks" id="max_not_comlete_tasks" /></td>
+        <td style="width: 25%"><input class="form-control form-control-sm" type='text' value="{$user_task_limitation['allowed_types']}"         name="allowed_types"         id="allowed_types" /></td>
+        <td style="width: 25%"><input class="form-control form-control-sm" type='text' value="{$user_task_limitation['excluded_orgs']}"         name="excluded_orgs"         id="excluded_orgs" /></td>
+        <td style="width: 25%"><input class="form-control form-control-sm" type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
     </tr>
     <tr valign="top">
         <td style="width: 25%"><input type="submit" class="btn btn-primary text-white" name="mark_user_task_limitation" value="Submit" /></td>
@@ -1411,7 +1411,7 @@ If a language is to be removed from this list, the community will be informed be
     <tr valign="top">
         <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
         <td style="width: 33%">
-            <select name="country_id" id="country">
+            <select class="form-select form-select-sm" name="country_id" id="country">
                 <option value="">--Select--</option>
                 {foreach $countries as $country}
                     {if $country->getCode() != 'LATN' && $country->getCode() != 'CYRL' && $country->getCode() != '419' && $country->getCode() != 'HANS' && $country->getCode() != 'HANT' && $country->getCode() != 'ARAB' && $country->getCode() != 'BENG' && $country->getCode() != 'ROHG'}
@@ -1420,7 +1420,7 @@ If a language is to be removed from this list, the community will be informed be
                 {/foreach}
             </select>
         </td>
-        <td style="width: 34%"><input type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+        <td style="width: 34%"><input class="form-control form-control-sm" type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
