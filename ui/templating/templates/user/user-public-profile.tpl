@@ -1566,8 +1566,8 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-betwen'>
             <h3 class="fw-bold">
-                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</span> </h3>
-                <a href="{urlFor name='org-search'}" >
+                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
+                <a href="{urlFor name='org-search'}" class="btn btn-primary" >
                     <i class="fa-solid fa-search"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
        
@@ -1579,7 +1579,7 @@ If a language is to be removed from this list, the community will be informed be
                 {assign var="user_id" value=$this_user->getId()}
                 <div class="span8">
                     <h3>
-                        <i class="fa-solid fa-briefcase"></i>
+                        <i class="fa-solid fa-briefcase me-3"></i>
                         <a href="{urlFor name="org-public-profile" class="link-primaryDark fw-bold" options="org_id.$org_id"}">{$org->getName()}</a>
                     </h3>
                 </div>
