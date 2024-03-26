@@ -1653,8 +1653,9 @@ If a language is to be removed from this list, the community will be informed be
             {include file="task/task.profile-display.tpl" task=$job}
         {/foreach}
         <p style="margin-bottom:50px;"/>
-    {/if}
     </div>
+    {/if}
+   
 {/if}
 {/if}
 
