@@ -1364,7 +1364,7 @@ If a language is to be removed from this list, the community will be informed be
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 
 <div class="table-responsive">
-<table border="0">
+<table class="table" >
     <tr valign="top">
         <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
         <td style="width: 25%"></td>
@@ -1397,7 +1397,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
 <div class="table-responsive">
-<table border="0">
+<table class="table" >
     <tr valign="top">
         <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
         <td style="width: 33%"></td>
@@ -1548,7 +1548,7 @@ If a language is to be removed from this list, the community will be informed be
         <p>
             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
             {assign var="tagId" value=$tag->getId()}
-            <a class="tag" href="{urlFor name="tag-details" options="id.$tagId"}">
+            <a class="custom-link" class="tag" href="{urlFor name="tag-details" options="id.$tagId"}">
                 <span class="label">{$tag_label}</span>
             </a>
         </p>
@@ -1565,9 +1565,9 @@ If a language is to be removed from this list, the community will be informed be
     {if count($user_orgs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-betwen'>
-            <h3>
+            <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</span> </h3>
-                <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary text-white">
+                <a href="{urlFor name='org-search'}" >
                     <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
        
@@ -1579,8 +1579,8 @@ If a language is to be removed from this list, the community will be informed be
                 {assign var="user_id" value=$this_user->getId()}
                 <div class="span8">
                     <h3>
-                        <i class="icon-briefcase"></i>
-                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                        <i class="fa-solid fa-briefcase"></i>
+                        <a href="{urlFor name="org-public-profile" class="link-primaryDark fw-bold" options="org_id.$org_id"}">{$org->getName()}</a>
                     </h3>
                 </div>
                 <div class="row">
