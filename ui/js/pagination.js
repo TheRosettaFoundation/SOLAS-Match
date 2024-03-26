@@ -536,6 +536,24 @@ if (isPagination) {
     
             `;
 
+            const language = `<div class='mt-3 mb-3'>
+            <span class='mb-1  text-muted'>
+                            Language:<span class='fw-bold'>  ${item.sourceLocale.languageName} </span> 
+                        </span>
+            </div>
+    
+            <div class='text-muted d-flex me-2' > <div> Due by </div>
+            <strong class='d-flex align-items-center'> <div class='mx-2 '> ${date} </div>
+             <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#f89406' class='bi bi-clock' viewBox='0 0 16 16' class='mx-1'>
+                <path d='M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z'/>
+                <path d='M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0'/>
+                </svg>  <div class='mx-2'> ${hour}:${min}:${sec} </div>  </strong>
+                <div class='ms-2 fw-bold'> ${timezone}</div>
+    
+             </div>
+    
+            `;
+
             if (image) {
                 imageHtml = document
                     .createRange()
@@ -545,6 +563,10 @@ if (isPagination) {
             const langHtml = document
                 .createRange()
                 .createContextualFragment(languages);
+
+            const lnHtml = document
+                .createRange()
+                .createContextualFragment(language);
             const projectItem = projects ? projects[item.id] : "";
 
             const parser = new DOMParser();
@@ -576,6 +598,8 @@ if (isPagination) {
             itemSubFlex.appendChild(badgeContainer);
             if (source_and_target[item.taskType] > 0) {
                 itemSubFlex.appendChild(langHtml);
+            } else {
+                itemSubFlex.appendChild(lnHtml);
             }
 
             if (imageHtml) {
