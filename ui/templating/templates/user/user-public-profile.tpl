@@ -1655,6 +1655,9 @@ If a language is to be removed from this list, the community will be informed be
         <p style="margin-bottom:50px;">
     </div>
     </div>
+
+    {/if}
+   
 {/if}
 {/if}
 
