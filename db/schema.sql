@@ -1284,6 +1284,7 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
   purchase_order    INT UNSIGNED NOT NULL DEFAULT 0,
   payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unsettled',
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
+  unit_rate_pricing FLOAT NOT NULL DEFAULT 0.0,
   status_changed    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
   UNIQUE KEY FK_TaskPaid (task_id),
   CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1399,6 +1400,7 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   pricing_and_recognition_unit_text_hours VARCHAR(50) NOT NULL, # e.g. "Words", "Labor hours",
   source_unit_for_later_stats       VARCHAR(50)  NOT NULL, # e.g. Words Terms Pages Minutes
   unit_rate                         FLOAT        NOT NULL, # Default Unit Rate ($ Rate for Display in Task View)
+  unit_rate_pricing_default         FLOAT        NOT NULL DEFAULT 30., # Default Pricing Unit Rate ($ Rate for Display in Task View)
   rate_for_recognition              FLOAT        NOT NULL,
   convert_to_words                  FLOAT        NOT NULL DEFAULT 0,
   convert_to_hours                  FLOAT        NOT NULL DEFAULT 0.0166667,
@@ -10263,16 +10265,26 @@ DROP PROCEDURE IF EXISTS `set_paid_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_paid_status`(IN tID BIGINT)
 BEGIN
-    INSERT INTO TaskPaids (task_id, level, unit_rate,                                                                                              status_changed)
-                   VALUES (tID,         1, (SELECT ttd.unit_rate FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID), NOW());
+    INSERT INTO TaskPaids (
+        task_id,
+        level,
+        unit_rate,
+        unit_rate_pricing,
+        status_changed)
+     VALUES (
+         tID,
+         1,
+         (SELECT ttd.unit_rate                 FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID),
+         (SELECT ttd.unit_rate_pricing_default FROM Tasks t JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum WHERE t.id=tID),
+         NOW());
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_paid_status`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po INT, IN status VARCHAR(30), IN rate FLOAT, IN changed DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po INT, IN status VARCHAR(30), IN rate FLOAT, IN rate_pricing FLOAT, IN changed DATETIME)
 BEGIN
-    UPDATE TaskPaids SET purchase_order=po, payment_status=status, unit_rate=rate, status_changed=changed
+    UPDATE TaskPaids SET purchase_order=po, payment_status=status, unit_rate=rate, unit_rate_pricing=rate_pricing, status_changed=changed
     WHERE task_id=tID;
 END//
 DELIMITER ;
@@ -10847,6 +10859,7 @@ BEGIN
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`/60, t.`word-count`), 0) AS total_words,
         IF(tp.payment_status IS NOT NULL, tp.payment_status, 0) AS payment_status,
         IF(tp.payment_status IS NOT NULL                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost,
+        IF(tp.payment_status IS NOT NULL                           , IF(ttd.divide_rate_by_60, t.word_count_partner_weighted*tp.unit_rate_pricing/60, t.word_count_partner_weighted*tp.unit_rate_pricing), 0) AS total_expected_price,
         IF(tp.payment_status IS NOT NULL AND tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0) AS total_expected_cost_claimed,
         IF(tp.payment_status IS NOT NULL                           , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0), 0) AS total_paid_words,
         IF(tp.payment_status IS NOT NULL AND t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0), 0) AS total_paid_words_complete,
