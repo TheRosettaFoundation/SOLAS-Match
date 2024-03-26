@@ -113,7 +113,7 @@
 
                         {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1'>
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
                                             <i class="fa-solid fa-list ms-2"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
@@ -128,7 +128,7 @@
                     {if !empty($uuid)}
                     <div class="mb-3">
                     
-                            <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1'>
+                            <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1 fs-5'>
                             <i class="fa-solid fa-list"></i> Link emailed to User for Password Reset
                             </a>
                     
