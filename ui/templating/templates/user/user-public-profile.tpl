@@ -81,7 +81,7 @@
   
         <div class="row">    
 
-        <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-xs-12 col-md-8">
+        <div class="bg-body rounded-3 p-4 me-4 w-100 w-md-50 col-12 col-md-8">
    
        
         <span class="d-none">
@@ -113,7 +113,7 @@
                             
                                 <div class="text-decoration-none me-4 align-middle" >{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-2 rounded-1">
+                                    <a  href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-uppercase p-1 rounded-1">
                                     <img src="{urlFor name='home'}ui/img/email.svg" alt="email_icon" class="mx-1" >  {Localisation::getTranslation('common_change_email')}
                                     </a>
                                 {/if}
@@ -125,13 +125,16 @@
                     {if !empty($uuid)}
                     <div class="mb-3">
                     
-                            <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-2 rounded-1'>
+                            <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1'>
                                 Link emailed to User for Password Reset
                             </a>
                     
                     </div>
+
                     <hr  class="bg-light-subtle"/>
+                  
                     {/if}
+
 
                         <div class="mb-3 mt-3">
                             
