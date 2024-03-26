@@ -1654,14 +1654,13 @@ If a language is to be removed from this list, the community will be informed be
         {/foreach}
         <p style="margin-bottom:50px;">
     </div>
-    {/if}
-   
+    </div>
 {/if}
 {/if}
 
 
 
-   </div>
+  
    </div>
    </div>
    </div>
