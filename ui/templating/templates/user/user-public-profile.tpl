@@ -111,7 +111,7 @@
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                     
                         <div class="d-flex justify-content-between flex-wrap">
-                        <div class="">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
+                        <div class="text-body">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
@@ -613,7 +613,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
    <div class=" d-flex  border-bottom border-primaryDark  p-2 px-2" >
 
       <div class="fw-bold w-25 me-2">Type of task</div>
-      <div class="fw-bold me-6" >Unit</div>
+      <div class="fw-bold w-25 me-4" >Unit</div>
          <div class="fw-bold flex-grow-1 text-end" >Points accrued per unit </div>
 
     </div>
@@ -621,7 +621,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
        <div class=" d-flex  border-bottom border-primaryDark p-2" >
 
          <div class=" w-25 me-2">Translation</div>
-        <div class=" me-4" > 1 word</div>
+        <div class=" w-50 me-4" > 1 word</div>
          <div class="flex-grow-1 text-end" > 1 </div>
 
         </div>
