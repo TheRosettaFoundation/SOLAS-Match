@@ -40,7 +40,7 @@
                                 <i class="fa-solid fa-screwdriver-wrench  "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
-                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-sm me-2 btn-primary text-white border-bottom-4 border-primaryDark mt-2 mt-md-0 '>
+                            <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn rounded-3 border-bottom-2 border-primaryBorder  me-2 btn-primary text-white border-bottom-4 border-primaryDark mt-2 mt-md-0 '>
                             <i class="fa-solid fa-screwdriver-wrench  "></i>{Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {/if}
