@@ -1280,7 +1280,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
     <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-    <input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" class="btn btn-sm btn-primary text-white mt-1" /> 
+    <input type="submit"  name="mark_adjust_points" value="Submit" class="btn btn-sm btn-primary text-white mt-1" /> 
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </div>
 
@@ -1330,8 +1330,9 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
    <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-  <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="mark_adjust_points_strategic" value="Submit" />
-    </div>
+  <input type="submit"  name="mark_adjust_points_strategic" value="Submit" class="btn btn-sm btn-primary  text-white mt-1" name="mark_adjust_points_strategic"  />
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}  
+  </div>
 
 </div>
 </form>
