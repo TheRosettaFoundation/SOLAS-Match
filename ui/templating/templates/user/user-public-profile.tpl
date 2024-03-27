@@ -25,19 +25,19 @@
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btnPrimary me-2 text-white mt-2 mt-md-0">
-                            <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+                            <img src="{urlFor name='home'}ui/img/claimed.svg" class="me-2"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                 <a href="{urlFor name="create-org"}" class="btnSuccess me-2 text-white mt-2 mt-md-0"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
-                                   <img src="{urlFor name='home'}ui/img/create.svg"> {Localisation::getTranslation('common_create_organisation')}
+                                   <img src="{urlFor name='home'}ui/img/create.svg" class="me-2"> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
                             <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btnPrimary me-2 text-white mt-2 mt-md-0'>
-                                <i class="fa-solid fa-screwdriver-wrench  "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
+                                <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btnPrimary me-2 text-white mt-2 mt-md-0 '>
