@@ -107,12 +107,12 @@
                                  
                              </div>
                     {/if}
-                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                   
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                       
+                        <div class="mb-3 d-flex align-items-center justify-content-between">
 
                         <div class="">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
-                            <div>
+                         
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
                                             <i class="fa-solid fa-envelope ms-2"></i> {Localisation::getTranslation('common_change_email')}
@@ -138,7 +138,7 @@
                      </div>
                   
                     {/if}
-                    </div>
+                   
 
 
                         <div class="mb-3 mt-3">
