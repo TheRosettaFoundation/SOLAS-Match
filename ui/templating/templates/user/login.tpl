@@ -194,7 +194,7 @@
             <label for="password" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" class="form-control"/>
             </div>
-            <div>
+            
                 <button type="submit" name="login" class="btn btn-primary">
   				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
@@ -202,7 +202,7 @@
 				<button type="submit" class="btn btn-inverse" name="password_reset">
   				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
 				</button>
-            </div>
+            
         </form>
 
 
