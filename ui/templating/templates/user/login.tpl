@@ -182,7 +182,7 @@
                         </div>
             </fieldset>
         </form>
-         <div class="fw-bold"> or </div>
+         <div class="fw-bol d-flex items-center justify-content-between "><hr /> <div>OR CONTINUE WITH</div> <hr/> </div>
 
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
