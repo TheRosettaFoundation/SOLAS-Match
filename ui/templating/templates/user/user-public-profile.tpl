@@ -1513,7 +1513,7 @@ If a language is to be removed from this list, the community will be informed be
 
         *}
     
-    {/if}
+    {* {/if} *}
 
 
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
