@@ -1230,7 +1230,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex flex-column flex-grow-1 w-50">
 
     <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
-    <input type="submit" class="btn btn-primary text-white mt-2" name="mark_adjust_points" value="Submit" />
+    <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="mark_adjust_points" value="Submit" />
     {if !empty($admin_comments_average)}
     <strong class="mt-2">
     Average: {$admin_comments_average}</strong>
@@ -1242,15 +1242,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5">
 
 <table class="table" border="0">
-{if !empty($admin_comments_average)}
-<tr valign="top">
-    <td style="width: 30%"></td>
-    <td style="width: 22%"><strong>Average: {$admin_comments_average}</strong></td>
-    <td style="width: 18%"></td>
-    <td style="width: 18%"></td>
-    <td style="width: 12%"></td>
-</tr>
-{/if}
+
 {foreach $admin_comments as $admin_comment}
 <tr valign="top">
     <td style="width: 30%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
@@ -1291,7 +1283,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
     <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
-    <input type="submit" class="btn btn-primary text-white mt-2" name="mark_adjust_points" value="Submit" />
+    <input type="submit" class="btn btn-sm btn-primary text-white mt-1" name="mark_adjust_points" value="Submit" />
     </div>
 
 </div>
@@ -1340,7 +1332,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
    <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-  <input type="submit" class="btn btn-primary text-white mt-2" name="mark_adjust_points_strategic" value="Submit" />
+  <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="mark_adjust_points_strategic" value="Submit" />
     </div>
 
 </div>
