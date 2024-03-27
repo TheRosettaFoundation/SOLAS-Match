@@ -3,7 +3,7 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Merriweather:wght@300&family=Montserrat:wght@500;600&family=Mukta:wght@200;300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap");
 
 // @import "../node_modules/bootstrap/scss/variables-dark";
 
@@ -38,6 +38,7 @@ $custom-colors: (
     "greenBorder": #0d5520,
     "quartBorder": #116fa5,
     "primaryDark": #e8991c,
+    "primaryBorder": #ba7b1a,
     "grayish": #364f67,
     "gray": #e4e4e4,
     "light": #f8f8f8,
