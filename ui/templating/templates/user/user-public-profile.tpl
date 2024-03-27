@@ -1221,9 +1221,9 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-<div class="d-flex mt-2 mb-2 w-50 ">
 
+<div class="d-flex mt-2 mb-2 w-50 ">
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
     <div class="flex-grow-1 w-50 ">
     <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
     </div>
@@ -1231,6 +1231,9 @@ If a language is to be removed from this list, the community will be informed be
 
     <input type='text' value="" name="work_again" id="work_again" class=" form-control form-control-sm" />
     <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="admin_comment" value="Submit"  />
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>  
+   
     {if !empty($admin_comments_average)}
     <strong class="mt-2">
     Average: {$admin_comments_average}</strong>
@@ -1238,7 +1241,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
 
 </div>
-</form>
+
 <div class="table-responsive fs-5">
 
 <table class="table" border="0">
