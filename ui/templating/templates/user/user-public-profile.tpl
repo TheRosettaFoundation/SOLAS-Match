@@ -1455,7 +1455,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {if $private_access}
     <div class="mt-4 rounded-3 p-4 bg-body">
-    TEST
+  
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
@@ -1478,7 +1478,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 <div class="mt-4 rounded-3 p-4 bg-body">
-    TEST
+
     {if !empty($badges)}
         <div class='d-flex justify-content-between'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
@@ -1509,6 +1509,7 @@ If a language is to be removed from this list, the community will be informed be
     
         {/foreach}
 
+ </div>
  </div>
        
     
