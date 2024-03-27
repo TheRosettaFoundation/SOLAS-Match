@@ -629,7 +629,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <div class=" d-flex  border-bottom border-primaryDark  p-2" >
 
         <div class="w-25 me-2">Revision</div>
-        <div class=" me-4" > 1 word</div>
+        <div class="  w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 0.5 </div>
 
      
@@ -639,7 +639,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
      <div class=" d-flex p-2 border-bottom border-primaryDark" >
 
        <div class=" w-25 me-2"> Proofreading/Approval</div>
-        <div class=" me-4" > 1 word</div>
+        <div class="  w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 0.25 </div>
 
     </div>
@@ -647,14 +647,14 @@ If you work on a revision task or a proofreading/approval task and notice that t
      <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-25 me-2"> Transcription</div>
-        <div class=" me-4" > 1 word</div>
+        <div class=" w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 0.5 </div>
 
     </div>
       <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-25 me-2"> Voice Recording</div>
-        <div class=" me-4" > 1 word</div>
+        <div class="  w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 1 </div>
 
     </div>
@@ -662,7 +662,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
      <div class=" d-flex p-2 border-bottom border-primaryDark " >
 
        <div class=" w-25 me-2"> Translation of subtitles</div>
-        <div class=" me-4" > 1 word</div>
+        <div class="  w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 1 </div>
 
     </div>
@@ -670,7 +670,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
        <div class=" d-flex p-2 border-bottom border-primaryDark" >
 
        <div class=" w-25 me-2"> Revision of subtitles</div>
-        <div class=" me-4" > 1 word</div>
+        <div class=" w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 0.5 </div>
 
     </div>
@@ -678,7 +678,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <div class=" d-flex p-2 " >
 
        <div class=" w-25 me-2"> Terminology</div>
-        <div class=" me-4" > 1 term</div>
+        <div class="  w-25 me-4 text-end" > 1 term</div>
          <div class="flex-grow-1 text-end" >10 </div>
 
     </div>
