@@ -109,7 +109,7 @@
                     {/if}
                    
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                        <div class="mb-3 d-flex align-items-center justify-content-between">
+                    
 
                         <div class="">{mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}</div>
                          
@@ -135,9 +135,10 @@
                     
                     </div>
 
-                     </div>
+                   
                   
                     {/if}
+                   
                    
 
 
