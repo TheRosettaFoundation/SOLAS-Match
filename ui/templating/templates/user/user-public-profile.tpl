@@ -621,7 +621,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
        <div class=" d-flex  border-bottom border-primaryDark p-2" >
 
          <div class=" w-25 me-2">Translation</div>
-        <div class=" w-50 me-4 text-end" > 1 word</div>
+        <div class=" w-25 me-4 text-end" > 1 word</div>
          <div class="flex-grow-1 text-end" > 1 </div>
 
         </div>
