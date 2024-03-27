@@ -153,6 +153,23 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     cursor: pointer;
 }
 
+.btnSuccess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: $green;
+    border-bottom: #0d5520 solid;
+    border-width: 2px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
 .custom-tooltip {
     --bs-tooltip-b: $indigo;
 }

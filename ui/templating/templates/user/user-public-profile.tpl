@@ -24,19 +24,19 @@
      <div class="d-flex align-items-center flex-wrap ">
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn  btn-primary rounded-2 me-2 mt-2 mt-md-0 text-white  border-bottom border-primaryBorder">
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btnPrimary me-2 text-white mt-2 mt-md-0">
                             <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btn rounded-2 btn-success me-2 mt-2 mt-md-0"
+                                <a href="{urlFor name="create-org"}" class="btnSuccess me-2 text-white mt-2 mt-md-0"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                    <img src="{urlFor name='home'}ui/img/create.svg"> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
-                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-primary rounded-2 text-white me-2 mt-2 mt-md-0'>
+                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btnPrimary me-2 text-white mt-2 mt-md-0'>
                                 <i class="fa-solid fa-screwdriver-wrench  "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
@@ -47,13 +47,13 @@
                         {/if}
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white me-2 mt-2 mt-md-0" name="mark_reviewed" value="Mark New User as Reviewed" />
+                                <input type="submit" class="btnPrimary me-2 text-white mt-2 mt-md-0" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
                         {if $show_create_memsource_user}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <input type="submit" class="btn btn-sm btn-primary text-white me-2 mt-2 mt-md-0" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
+                                <input type="submit" class="btnPrimary me-2 text-white mt-2 mt-md-0" name="mark_create_memsource_user" value="Create Matching Phrase TMS User" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
