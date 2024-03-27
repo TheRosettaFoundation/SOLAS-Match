@@ -1286,8 +1286,9 @@ If a language is to be removed from this list, the community will be informed be
     <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
-    <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
-    <input type="submit" class="btn btn-sm btn-primary text-white mt-1" name="mark_adjust_points" value="Submit" />
+    <input type='text' value="" name="points" id="points" class=" form-control form-control-sm" />
+    <input type="submit" class="btn btn-sm btn-primary text-white mt-1" name="mark_adjust_points" value="Submit" /> 
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </div>
 
 </div>
