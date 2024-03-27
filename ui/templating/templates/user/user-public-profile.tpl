@@ -1477,7 +1477,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-<div class="mt-4 rounded-3 p-4 bg-body">
+{* <div class="mt-4 rounded-3 p-4 bg-body">
 
     {if !empty($badges)}
         <div class='d-flex justify-content-between'>
@@ -1511,7 +1511,7 @@ If a language is to be removed from this list, the community will be informed be
 
  </div>
 
-       
+        *}
     
     {/if}
 
