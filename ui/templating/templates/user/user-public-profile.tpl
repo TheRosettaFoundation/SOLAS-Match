@@ -24,7 +24,7 @@
      <div class="d-flex align-items-center flex-wrap ">
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 mt-2 mt-md-0 text-white   border-bottom-3 border-primaryBorder">
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 mt-2 mt-md-0 text-white  border-bottom border-primaryBorder">
                             <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
