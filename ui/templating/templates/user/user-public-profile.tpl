@@ -107,7 +107,7 @@
                                  
                              </div>
                     {/if}
-                    <div class="mb-3 d-flex align-items-center">
+                    <div class="mb-3 d-flex align-items-center flex-wrap">
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
 
@@ -329,7 +329,7 @@
                                <span id="linkcopy" class="d-flex">
                                     <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 text-break " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
                                </span>
-                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -494,7 +494,7 @@
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase p-1 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
