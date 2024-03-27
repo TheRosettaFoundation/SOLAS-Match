@@ -1,5 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
-{include file='header.tpl'}
+{include file='new_header.tpl'}
 
 <span class="hidden">
 
@@ -296,4 +296,4 @@ If you have any questions or can't upload the certificate, please email <a href=
     </form>
 </div>
 
-{include file='footer.tpl'}
+{include file='footer2.tpl'}
