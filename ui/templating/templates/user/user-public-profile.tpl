@@ -111,7 +111,7 @@
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                     
                         <div class="d-flex justify-content-between flex-wrap">
-                         <a href="mailto: {$this_user->getEmail()}" class="text-decoration-none"> {$this_user->getEmail()}</a>
+                         <a href="mailto: {$this_user->getEmail()}" class="text-decoration-none text-body"> {$this_user->getEmail()}</a>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
