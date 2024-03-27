@@ -24,7 +24,7 @@
      <div class="d-flex align-items-center flex-wrap ">
 
                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-sm btn-primary me-2 mt-2 mt-md-0 text-white  border-bottom border-primaryBorder">
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn  btn-primary rounded-2 me-2 mt-2 mt-md-0 text-white  border-bottom border-primaryBorder">
                             <img src="{urlFor name='home'}ui/img/claimed.svg"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
@@ -36,7 +36,7 @@
                         {/if} 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
-                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-sm btn-primary text-white me-2 mt-2 mt-md-0'>
+                            <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btn  btn-primary rounded-2 text-white me-2 mt-2 mt-md-0'>
                                 <i class="fa-solid fa-screwdriver-wrench  "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                           {else}
