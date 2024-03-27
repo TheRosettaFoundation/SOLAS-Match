@@ -1229,8 +1229,8 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
 
-    <input type='text' value="" name="comment" id="comment" class=" form-control form-control-sm" />
-    <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="mark_adjust_points" value="Submit" />
+    <input type='text' value="" name="work_again" id="work_again" class=" form-control form-control-sm" />
+    <input type="submit" class="btn btn-primary btn-sm text-white mt-1" name="admin_comment" value="Submit"  />
     {if !empty($admin_comments_average)}
     <strong class="mt-2">
     Average: {$admin_comments_average}</strong>
