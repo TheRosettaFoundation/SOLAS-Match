@@ -157,10 +157,9 @@
             <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
     </div>
 
-          
-        <form action="{urlFor name='login'}" method="post">
+        <form action="{urlFor name='login'}" method="post" class=""w-100>
             <input type="hidden" name="action" value="verify" />
-            <fieldset>
+            <fieldset class="w-100">
                 <legend><strong> sign-in via Google</strong></legend>
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
@@ -176,13 +175,14 @@
                               data-theme="outline"
                               data-text="signin_with"
                               data-size="large"
-                              data-width=219
+                              data-width=100%
                               data-logo_alignment="left">
                           </div>
                         </div>
             </fieldset>
         </form>
-         <div class="fw-bol d-flex items-center justify-content-between "><hr /> <div>OR CONTINUE WITH</div> <hr/> </div>
+
+         <div class=" text-muted  d-flex items-center justify-content-between "><hr class="bg-light-subtle" /> <div>OR CONTINUE WITH</div> <hr class="bg-light-subtle"/> </div>
 
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
