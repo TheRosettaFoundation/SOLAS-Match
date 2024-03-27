@@ -161,9 +161,9 @@ a {
 }
 
 a[href^="mailto:"] {
-    color: black;
     display: inline-block;
     margin-left: 4px;
+    text-decoration: none;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
