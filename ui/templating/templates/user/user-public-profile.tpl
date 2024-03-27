@@ -29,7 +29,7 @@
                             </a>
                         {/if}
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btn btn-sm btn-success me-2 mt-2 mt-md-0"
+                                <a href="{urlFor name="create-org"}" class="btn rounded-2 btn-success me-2 mt-2 mt-md-0"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                                    <img src="{urlFor name='home'}ui/img/create.svg"> {Localisation::getTranslation('common_create_organisation')}
                                 </a>
