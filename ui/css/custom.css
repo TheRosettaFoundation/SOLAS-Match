@@ -57,6 +57,23 @@
   cursor: pointer;
 }
 
+.btnPrimary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #f89406;
+  border-bottom: #ba7b1a solid;
+  border-width: 2px;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 .custom-tooltip {
   --bs-tooltip-b: $indigo;
 }
