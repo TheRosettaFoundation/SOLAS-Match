@@ -1296,11 +1296,11 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 18%">{$adjust_point['created']}</td>
         <td style="width: 18%">{$adjust_point['admin_email']}</td>
         <td style="width: 12%">
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                <input type="submit" class="btn btn-danger" name="mark_points_delete_strategic" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
-                <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+        <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+        <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
         </td>
     </tr>
 {/foreach}
@@ -1346,11 +1346,12 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 18%">{$adjust_point['created']}</td>
         <td style="width: 18%">{$adjust_point['admin_email']}</td>
         <td style="width: 12%">
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_points_delete_strategic" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
                 <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+            
         </td>
     </tr>
 {/foreach}
