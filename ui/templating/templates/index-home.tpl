@@ -544,6 +544,8 @@ a:hover{
 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
+    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+
         <form  method="post" action="{urlFor name="org-search"}" accept-charset="utf-8" class="needs-validation" novalidate> 
          
             <div class="d-flex mb-4 ">
@@ -557,7 +559,7 @@ a:hover{
             </div>
 
          </form>
-
+    {/if}
 
      {if isset($user)}
             <h5 class="fw-bold mt-5">{Localisation::getTranslation('index_filter_available_tasks')}
