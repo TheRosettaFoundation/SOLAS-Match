@@ -134,7 +134,7 @@
                     
                     </div>
 
-                    <hr  class="bg-light-subtle"/>
+                  
                   
                     {/if}
 
@@ -167,10 +167,11 @@
                                 {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
                         
                         </div>
-                        <hr  class="bg-light-subtle"/>   
+                      
                     {/if}
                 
                     {/if}
+                    <hr class="bg-light-subtle"/>
 
                     {foreach from=$url_list item=url}
                         {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
@@ -180,7 +181,7 @@
                     {if !empty($bio)}
                 
                         
-                            <h4 class="mt-3 mb-3">About Me</h4>
+                            <h4 class="mt-3 mb-3 fw-bold">About Me</h4>
                         
                 
                             <div class="mb-3" >
