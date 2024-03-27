@@ -1477,9 +1477,10 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-{* <div class="mt-4 rounded-3 p-4 bg-body">
+
 
     {if !empty($badges)}
+        <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-between'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary text-white'>
@@ -1511,13 +1512,13 @@ If a language is to be removed from this list, the community will be informed be
 
  </div>
 
-        *}
+  
     
-    {* {/if} *}
+  {/if}
 
 
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-    {* <div class="mt-4 rounded-3 p-4 bg-body">
+ <div class="mt-4 rounded-3 p-4 bg-body">
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary text-white">
@@ -1543,11 +1544,11 @@ If a language is to be removed from this list, the community will be informed be
         {/if}
     </p>
     
-    </div> *}
+    </div> 
 {/if}
 
 
-{* <div class="mt-4 rounded-3 p-4 bg-body">
+ <div class="mt-4 rounded-3 p-4 bg-body">
 <div class="d-flex justify-content-between">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="pull-right btn btn-primary text-white">
@@ -1574,7 +1575,7 @@ If a language is to be removed from this list, the community will be informed be
     </p>
    
 {/if}
-</div> *}
+</div> 
 
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
