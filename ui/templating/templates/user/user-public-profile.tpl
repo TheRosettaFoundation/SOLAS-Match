@@ -115,7 +115,7 @@
                             <div>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
-                                            <i class="fa-solid fa-list ms-2"></i> {Localisation::getTranslation('common_change_email')}
+                                            <i class="fa-solid fa-envelope ms-2"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
 
@@ -130,7 +130,7 @@
                     <div class="mt-1">
                     
                             <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1 fs-5'>
-                            <i class="fa-solid fa-list"></i> Link emailed to User for Password Reset
+                            <i class="fa-solid fa-link"></i> Link emailed to User for Password Reset
                             </a>
                     
                     </div>
