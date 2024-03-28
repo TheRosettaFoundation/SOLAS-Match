@@ -208,7 +208,7 @@
                 <button type="submit" name="login" class="btn btn-grayish w-full text-center">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
-                <button type="submit"  name="password_reset btn btn-light">
+                <button type="submit"  name="password_reset" class="btn btn-light">
                 <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
                 </button>
                 </div>
