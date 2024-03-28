@@ -407,7 +407,7 @@
                                 <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['hours_donated']}</span><br/> </h2>
-                                <div class="text-muted">HOURS DONATED</div>
+                                <div class="opacity-75">HOURS DONATED</div>
                               {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
                             </div>
 
