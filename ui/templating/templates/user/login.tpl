@@ -122,9 +122,9 @@
         
 
 
-<div class=""container-fluid>
+<div class="container-fluid">
 
-<div class="container">
+<div class="container d-flex flex-column  items-center">
 
  {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -148,7 +148,7 @@
     {/if}
 
 
-<div class=" row  py-2">
+<div class=" row py-2">
 
     <div class=" col-12 col-md-6 py-4"> 
 
