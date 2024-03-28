@@ -124,7 +124,7 @@
 
 
 
-<div class="container flex-grow-1 bg-success">
+<div class="flex-grow-1 bg-success">
 
  {if isset($flash['error'])}
         <div class="alert alert-error">
