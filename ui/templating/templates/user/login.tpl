@@ -124,7 +124,7 @@
 
 <div class="container-fluid">
 
-<div class="container d-flex flex-column  items-center justify-content-center">
+<div class="container d-flex flex-column  align-items-center justify-content-center">
 
  {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -152,7 +152,7 @@
 
     <div class=" col-12 col-md-6 py-4"> 
 
-    <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
+    <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
 
 
     <div class="mb-4">
