@@ -20,7 +20,7 @@
         <div class="container py-5 ">
 
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between flex-wrap">
 
                <div class="fw-bold primaryDark fs-3">
 
@@ -31,7 +31,7 @@
 
                     <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
                      {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
-                    <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
+                    <small class="text-light">{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
                     </span>
 
                 </div>
@@ -40,7 +40,7 @@
             {assign var="project_id" value=$project->getId()}
              <div class="  ">
                
-                    <form id="copyChunksProjectForm" class="d-flex "method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    <form id="copyChunksProjectForm" class="d-flex flex-grow-1 "method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
                         <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
