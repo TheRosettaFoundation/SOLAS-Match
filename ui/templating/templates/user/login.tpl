@@ -122,7 +122,7 @@
         
 
 
-<div class="container-fluid">
+
 
 <div class="container">
 
@@ -147,8 +147,8 @@
         </div>
     {/if}
 
-
-<div class=" row py-2  d-flex flex-column  align-items-center">
+<div class="d-flex flex-column  align-items-center justify-content-center bg-primary">
+<div class=" row py-2  d-flex ">
 
     <div class=" col-12 col-md-6 py-4 h-full"> 
 
@@ -229,7 +229,9 @@
 
 </div>
 
-</div>    
+</div>
+
+
 
 </body>
 
