@@ -100,11 +100,7 @@
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
-                        {if $taskImages[$task_id]}
-                        <div  id="task_{$task_id}">
-                        {else}
-                        <div  id="task_{$task_id}">
-                        {/if}
+                       
                             <div class="d-flex justify-content-start mb-2 flex-wrap">
                                 <div class="">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
