@@ -291,6 +291,8 @@
                                
                             </div>
                             </div>
+
+                            <hr class="bg-light-subtle" />
                             
                            
                         {/if}
