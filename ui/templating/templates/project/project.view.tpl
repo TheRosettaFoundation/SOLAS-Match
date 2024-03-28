@@ -40,7 +40,7 @@
             {assign var="project_id" value=$project->getId()}
              <div class="  ">
                
-                    <form id="copyChunksProjectForm" class="d-flex w-75 flex-wrap "method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    <form id="copyChunksProjectForm" class="d-flex w-75  "method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
                         <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
