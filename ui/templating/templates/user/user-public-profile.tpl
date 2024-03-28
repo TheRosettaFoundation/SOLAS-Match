@@ -269,7 +269,7 @@
                                     <div class="mb-3  ">
                                         
                                             <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-4 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
-                                            <i class="fa-solid fa-edit"></i> Edit Linguist Unit Rate Exceptions
+                                            <i class="fa-solid fa-edit me-1"></i> Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
                                     </div>
@@ -363,7 +363,7 @@
                                 <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="text-muted">WORDS DONATED</div>
+                                <div class="opacity-75">WORDS DONATED</div>
                               {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
                             </div>
 
@@ -703,7 +703,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
                                 <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="text-muted">WORDS DONATED</div>
+                                <div class="opacity-75">WORDS DONATED</div>
                               {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
                             </div>
 
