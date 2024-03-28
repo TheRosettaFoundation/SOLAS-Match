@@ -1345,7 +1345,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 </form>
-<div class="table-responsive fs-5">
+<div class="table-responsive fs-5 mb-3">
 
 <table class="table" border="0">
 {foreach $adjust_points_strategic as $adjust_point}
@@ -1371,11 +1371,11 @@ If a language is to be removed from this list, the community will be informed be
  
 
 
-<hr class="bg-light-subtle" />
 
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 
-<div class="table-responsive fs-5">
+<form method="post"  action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+
+<div class="table-responsive fs-5 ">
 <table class="table" >
     <tr valign="top">
         <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
@@ -1405,7 +1405,7 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
-<hr class="bg-light-subtle" />
+
 
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
 <div class="table-responsive fs-5">
@@ -1447,7 +1447,7 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 {/if}
-<hr class="bg-light-subtle" />
+
 </div>
 </div>
 {/if}
