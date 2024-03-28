@@ -151,11 +151,11 @@
 
     <div class=" col-12 col-md-6 py-4"> 
 
-    <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5" />
+    <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
 
     <div class="mb-4">
-            <h1>{Localisation::getTranslation('login_log_in_to')} {Settings::get('site.name')}</h1>
+            <h1>Create an account with TWB</h1>
     </div>
 
         <form action="{urlFor name='login'}" method="post" class=""w-100>
