@@ -212,7 +212,7 @@
     </div>
 
 
-    <div class="col-12 col-md-6 py-4 flex-grow-1 text-center"> 
+    <div class="col-12 col-md-6 py-4 flex-grow-1 d-flex flex-column justify-content-between align-items-center"> 
 
 
     <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class="img-fluid" />
