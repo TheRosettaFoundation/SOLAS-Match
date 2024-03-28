@@ -1,8 +1,8 @@
 {include file='new_header.tpl'}
 
 {if isset($this_user)}
- <div class="container-fluid bg-light-subtle">
-   <div class="container px-4  py-7">
+ <div class="container-fluid bg-light-subtle py-4">
+   <div class="container px-4  py-4">
 
      <div class=" d-flex justify-content-between py-4 align-items-center px-2 flex-wrap">
      <div >
