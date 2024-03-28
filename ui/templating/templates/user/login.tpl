@@ -124,7 +124,7 @@
 
 
 
-<div class="container bg-primary flex-grow-1">
+<div class="container  flex-grow-1">
 
  {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -147,7 +147,7 @@
         </div>
     {/if}
 
-<div class=" row py-2 d-flex justify-content-between   ">
+<div class=" row py-2 d-flex justify-content-between bg-primary ">
 
     <div class=" col-12 col-md-6 py-4"> 
 
