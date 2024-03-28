@@ -1583,7 +1583,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-between flex-wrap'>
             <h3 class="fw-bold">
-                {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
+                {Localisation::getTranslation('common_organisations')} <small class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
                 <div>
                 <a href="{urlFor name='org-search'}" class="btnPrimary text-white" >
                     <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('common_search_for_organisations')}
