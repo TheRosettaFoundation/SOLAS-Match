@@ -205,7 +205,7 @@
 
             </div>
   
-                <button type="submit" name="login" class="btn btn-grayisj">
+                <button type="submit" name="login" class="btn btn-grayish">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
 				
