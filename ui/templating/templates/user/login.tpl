@@ -148,7 +148,7 @@
     {/if}
 
 
-<div class=" row py-2">
+<div class=" row py-2 flex-grow-1 bg-primary">
 
     <div class=" col-12 col-md-6 py-4"> 
 
