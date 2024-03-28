@@ -20,7 +20,7 @@
         <div class="container py-5 ">
 
 
-            <div class="d-flex flex-wrap justify-content-between">
+            <div class="d-flex justify-content-between">
 
                <div class="fw-bold primaryDark fs-3">
 
