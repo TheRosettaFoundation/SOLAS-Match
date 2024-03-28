@@ -268,8 +268,8 @@
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <div class="mb-3 fw-bold ">
                                         
-                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-2 text-primary costum-link text-uppercase rounded-2'>
-                                            <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-2 text-primary  text-decoration-none text-uppercase rounded-2'>
+                                            <i class="fa-solid fa-edit"></i> Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
                                     </div>
