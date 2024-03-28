@@ -1479,7 +1479,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-between'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
-                <a href='{urlFor name="badge-list"}' class='pull-right btnPrimary text-white'>
+                <a href='{urlFor name="badge-list"}' class=' btnPrimary text-white'>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
                 </a>
            
@@ -1580,7 +1580,7 @@ If a language is to be removed from this list, the community will be informed be
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
                 <div>
-                <a href="{urlFor name='org-search'}" class="btn btnPrimary text-white" >
+                <a href="{urlFor name='org-search'}" class="btnPrimary text-white" >
                     <i class="fa-solid fa-search"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
                 </div>
@@ -1642,7 +1642,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class='d-flex'>
             <h3 class="fw-bold">{Localisation::getTranslation('common_archived_tasks')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_14')}</span></h3>
                 {if $private_access}
-                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right  btnPrimary text-white'>
+                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class=' btnPrimary text-white'>
                         <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
                     </a>
                 {/if}
