@@ -261,8 +261,23 @@
                   
                         {if !empty($user_rate_pairs) && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                            
+
                             <div>
-                            <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
+                            <div class="d-flex justify-content-between">
+                                <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                    <div class="mb-3 fw-bold ">
+                                        
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class=' btnPrimary text-white text-sm'>
+                                            <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
+                                            </a>
+                                        
+                                    </div>
+                                    
+                                 
+                                {/if}
+
+                            </div>
                              
                             <div class="mt-3">
                                 
@@ -279,17 +294,7 @@
                             
                            
                         {/if}
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                            <div class="mb-3 fw-bold ">
-                                
-                                    <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class=' btn  btn-sm btn-primary text-white text-sm'>
-                                    <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
-                                    </a>
-                                
-                            </div>
-                            
-                            <hr class="bg-light-subtle"/>
-                        {/if}
+                     
                      
                         
                         
@@ -1092,13 +1097,13 @@ If a language is to be removed from this list, the community will be informed be
 
 
 <div class="mt-2 p-4 rounded-3 bg-body">
-<div class="d-flex justify-content-between mb-4 ">
+<div class="d-flex justify-content-between mb-4 flex-wrap ">
 {if !empty($valid_key_certificate)}
     {assign var="valid_key" value=$valid_key_certificate[0]}
   
 
     <a href='{urlFor name="user-print-certificate" options="valid_key.$valid_key"}' class=" btnSuccess " target="_blank" >
-        <i class=" fa-solid fa-print "></i> Generate Certificate
+        <i class=" fa-solid fa-print me-2"></i> Generate Certificate
     </a>
  
 
@@ -1126,11 +1131,11 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 
 <div class="mt-2 p-4 rounded-3 bg-body">
-<div class="d-flex justify-content-between mb-4 items-centers ">
+<div class="d-flex justify-content-between mb-4 items-center flex-wrap ">
 {if !empty($valid_key_reference_letter)}
     {assign var="valid_key" value=$valid_key_reference_letter[0]}
     <a href='{urlFor name="downloadletter" options="valid_key.$valid_key"}' class="btnSuccess" target="_blank" ">
-        <i class=" fa-solid fa-print icon-white"></i> Generate Letter
+        <i class=" fa-solid fa-print icon-white me-2"></i> Generate Letter
     </a>
 {/if}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
@@ -1452,14 +1457,14 @@ If a language is to be removed from this list, the community will be informed be
 {if $private_access}
     <div class="mt-4 rounded-3 p-4 bg-body">
   
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
             <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right"> 
-                <i class="icon-list-alt icon-white" style="position:relative; right:-30px; top:12px;"></i>
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"> 
+                <i class="fa-solid fa-list" ></i>
                 <input type="submit" class="btnPrimary text-white" name="referenceRequest" 
-                    value="    {Localisation::getTranslation('user_public_profile_request_reference')}" />
+                    value=" {Localisation::getTranslation('user_public_profile_request_reference')}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
            
@@ -1477,7 +1482,7 @@ If a language is to be removed from this list, the community will be informed be
 
     {if !empty($badges)}
         <div class="mt-4 rounded-3 p-4 bg-body">
-        <div class='d-flex justify-content-between'>
+        <div class='d-flex justify-content-between flex-wrap'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
                 <a href='{urlFor name="badge-list"}' class=' btnPrimary text-white'>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
@@ -1491,7 +1496,7 @@ If a language is to be removed from this list, the community will be informed be
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="badge_id" value="{$badge->getId()}" />
-                            <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
+                            <input type="submit" class='btnPrimary' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
                            onclick="return confirm('{Localisation::getTranslation('user_public_profile_5')}')"/>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>   
@@ -1518,7 +1523,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btnPrimary text-white">
-                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
+                <i class="fa-solid fa-screwdriver-wrench me-2"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
             </a>
       
     </div>
@@ -1545,9 +1550,9 @@ If a language is to be removed from this list, the community will be informed be
 
 
  <div class="mt-4 rounded-3 p-4 bg-body">
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between flex-wrap">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
-        <a href='{urlFor name='tags-list'}' class="pull-right btn btnPrimary text-white">
+        <a href='{urlFor name='tags-list'}' class=" btnPrimary text-white">
             <i class="fa-solid fa-search"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
    
@@ -1576,7 +1581,7 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body">
-        <div class='d-flex justify-content-between'>
+        <div class='d-flex justify-content-between flex-wrap'>
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
                 <div>
@@ -1602,7 +1607,7 @@ If a language is to be removed from this list, the community will be informed be
                         {if $private_access}
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="org_id" value="{$org_id}" />
-                            <input type="submit" class='btn btn-inverse' name="revoke" value="    {Localisation::getTranslation('user_public_profile_leave_organisation')}" 
+                            <input type="submit" class='btnPrimary' name="revoke" value="    {Localisation::getTranslation('user_public_profile_leave_organisation')}" 
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_11')}')"/>
                         {/if}                      
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -1638,12 +1643,12 @@ If a language is to be removed from this list, the community will be informed be
 
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
-    <div class="mt-4 rounded-3 p-4 bg-body">
-        <div class='d-flex'>
+    <div class="mt-4 rounded-3 p-4 bg-body ">
+        <div class='d-flex flex-wrap'>
             <h3 class="fw-bold">{Localisation::getTranslation('common_archived_tasks')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_14')}</span></h3>
                 {if $private_access}
                     <a href='{urlFor name="archived-tasks" options="page_no.1"}' class=' btnPrimary text-white'>
-                        <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
+                        <i class=" fa-solid fa-list me-2"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
                     </a>
                 {/if}
       
