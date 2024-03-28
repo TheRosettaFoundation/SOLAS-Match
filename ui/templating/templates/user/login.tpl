@@ -117,7 +117,7 @@
      
     </head>
 
-<body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center h-full bg-grayish" >
+<body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 bg-grayish" >
      
         
 
