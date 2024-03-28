@@ -145,7 +145,7 @@
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
 
-                                            <span>  {TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']} </span>
+                                          
                                             </div>
                                         {else}
 
