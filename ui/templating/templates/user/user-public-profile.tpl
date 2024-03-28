@@ -2,7 +2,7 @@
 
 {if isset($this_user)}
  <div class="container-fluid bg-light-subtle">
-   <div class="container px-4  py-4 pt-5">
+   <div class="container px-4  py-7">
 
      <div class=" d-flex justify-content-between py-4 align-items-center px-2 flex-wrap">
      <div >
@@ -1467,7 +1467,7 @@ If a language is to be removed from this list, the community will be informed be
                
                 <input type="submit" class="btnPrimary text-white" name="referenceRequest" 
                     value=" {Localisation::getTranslation('user_public_profile_request_reference')}" />
-                    
+
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
            
@@ -1676,7 +1676,7 @@ If a language is to be removed from this list, the community will be informed be
 
    </div>
    </div>
-   </div>
+   
   
    
 {/if}
