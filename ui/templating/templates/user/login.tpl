@@ -147,7 +147,7 @@
         </div>
     {/if}
 
-<div class=" row py-2 d-flex justify-content-between  ">
+<div class=" row py-2 d-flex justify-content-between h-75 ">
 
     <div class=" col-12 col-md-6 py-4"> 
 
