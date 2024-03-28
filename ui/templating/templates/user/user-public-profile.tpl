@@ -358,7 +358,7 @@
 
             
 
-                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2">
+                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2 mt-2 md:mt-0">
                 
 
                             <div class="d-flex flex-column">
@@ -1464,9 +1464,10 @@ If a language is to be removed from this list, the community will be informed be
             {Localisation::getTranslation('user_public_profile_reference_email')} 
             <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"> 
-                <i class="fa-solid fa-list" ></i>
+               
                 <input type="submit" class="btnPrimary text-white" name="referenceRequest" 
                     value=" {Localisation::getTranslation('user_public_profile_request_reference')}" />
+                    
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
            
