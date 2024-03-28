@@ -266,9 +266,9 @@
                             <div class="d-flex justify-content-between">
                                 <h4 class="mb-3 fw-bold">Language Rate Pairs</h4>
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                    <div class="mb-3 fw-bold ">
+                                    <div class="mb-3  ">
                                         
-                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-4 costum-link text-primary  text-decoration-none text-uppercase rounded-2'>
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-4 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
                                             <i class="fa-solid fa-edit"></i> Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
