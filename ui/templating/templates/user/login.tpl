@@ -147,7 +147,7 @@
         </div>
     {/if}
 
-<div class=" row py-2 d-flex justify-content-between bg-primary ">
+<div class=" row py-2 d-flex justify-content-between  ">
 
     <div class=" col-12 col-md-6 py-4"> 
 
@@ -215,7 +215,7 @@
     <div class="col-12 col-md-6 py-4 flex-grow-1"> 
 
 
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-fit" />
+    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-auto" />
          
         
 
