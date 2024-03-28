@@ -199,15 +199,18 @@
             {* <button type="submit"  name="password_reset">
             <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
             </button> *}
-              <input type="submit"  name="password_reset">
+              {* <input type="submit"  name="password_reset">
             <span class=" fw-bold"></i> Forget password ? </span>
-            </input>
+            </input> *}
 
             </div>
   
-                <button type="submit" name="login" class="btn btn-grayish">
+                <button type="submit" name="login" class="btn btn-grayish w-full text-center">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
+                   <button type="submit"  name="password_reset">
+            <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
+            </button>
 				
 			
         </form>
