@@ -204,13 +204,15 @@
             </input> *}
 
             </div>
-  
+              <div class="d-grid gap-2">
                 <button type="submit" name="login" class="btn btn-grayish w-full text-center">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
-                   <button type="submit"  name="password_reset">
-            <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
-            </button>
+                <button type="submit"  name="password_reset">
+                <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
+                </button>
+                </div>
+           
 				
 			
         </form>
