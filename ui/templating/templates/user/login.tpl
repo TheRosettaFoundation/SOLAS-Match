@@ -154,8 +154,8 @@
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
 
-    <div class="mb-4">
-            <h1>Create an account with TWB</h1>
+    <div class="mb-4 mt-2">
+            <h3 class="fw-bold">Create an account with TWB</h3>
     </div>
 
         <form action="{urlFor name='login'}" method="post" class=""w-100>
