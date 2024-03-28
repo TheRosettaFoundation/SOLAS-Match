@@ -852,7 +852,7 @@ If a language is to be removed from this list, the community will be informed be
 
         <div class=" d-flex  border-bottom border-primaryDark  p-2" >
         <div class=" w-25 me-2 fw-bold"> 10,000 Points</div>
-        <div class=" me-4 fw-bold" > TWB Translator</div>
+        <div class=" me-4 fw-bold" > </div>
          <div class="flex-grow-1 fw-bold text-end" > 10 USD bank transfer</div>
         </div>
 
