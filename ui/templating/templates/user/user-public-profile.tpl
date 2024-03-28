@@ -268,7 +268,7 @@
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <div class="mb-3 fw-bold ">
                                         
-                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-2 rounded-2'>
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-2 text-primary costum-link text-uppercase rounded-2'>
                                             <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit_icon" class="mx-1" > Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
@@ -1553,7 +1553,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="d-flex justify-content-between flex-wrap">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class=" btnPrimary text-white">
-            <i class="fa-solid fa-search"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
+            <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
    
 </div>
@@ -1586,7 +1586,7 @@ If a language is to be removed from this list, the community will be informed be
                 {Localisation::getTranslation('common_organisations')} <small>{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
                 <div>
                 <a href="{urlFor name='org-search'}" class="btnPrimary text-white" >
-                    <i class="fa-solid fa-search"></i> {Localisation::getTranslation('common_search_for_organisations')}
+                    <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
                 </div>
        
