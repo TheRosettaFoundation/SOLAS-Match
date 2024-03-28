@@ -196,10 +196,14 @@
             <input type="password" name="password" id="password" class="form-control"/>
             </div>
             <div class="text-end">
-            <button type="submit"  name="password_reset">
+            {* <button type="submit"  name="password_reset">
             <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
-            </button>
-            <div>
+            </button> *}
+              <input type="submit"  name="password_reset">
+            <span class=" fw-bold"></i> Forget password ? </span>
+            </input>
+
+            </div>
   
                 <button type="submit" name="login" class="btn btn-grayisj">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
@@ -214,7 +218,7 @@
     </div>
 
 
-    <div class="col-12 col-md-6 py-4 flex-grow-1 d-flex flex-column justify-content-between align-items-center"> 
+    <div class="col-12 col-md-6 py-4 flex-grow-1 "> 
 
 
     <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class="img-fluid" />
