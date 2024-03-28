@@ -215,7 +215,7 @@
     <div class="col-12 col-md-6 py-4 h-full"> 
 
 
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-75" />
+    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class=" text-center w-fit" />
          
         
 
