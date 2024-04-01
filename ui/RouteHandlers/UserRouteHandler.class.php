@@ -3156,7 +3156,7 @@ EOF;
         header('Pragma: no-cache');
         header('Cache-control: no-cache, must-revalidate, no-transform');
 
-        $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/TWB_Community_members_badge_BG-01.png');
+        $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/badge.png');
         $size = 60;
         $angle = 0;
         $left = 950;
@@ -3164,7 +3164,7 @@ EOF;
         $color = imagecolorallocate($logo, 232, 153, 28);
         $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_quantity);
-        $left = 750;
+        $left = 20;
         $top = 840;
         $color = imagecolorallocate($logo, 87, 110, 130);
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_title);
