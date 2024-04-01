@@ -17,7 +17,7 @@
   color: red;
 }
 .center {
-  margin: 0;ui/templating/templates/user/register.tpl
+  margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
