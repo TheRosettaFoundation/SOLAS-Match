@@ -78,45 +78,8 @@
 
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
 
-     
-    
-<style>
-  #registerform label {
-  color:#143878 !important;
-}
-  #registerform .check {
-  color:#333 !important;
-}
-#registerform label.error {
-  width: auto;
-}
-#registerform .error{
-    color:#F00 !important;
-}
-.required:after {
-  content:" *";
-  color: red;
-}
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-.register_header1 {
-  text-align:right;
-  color:#143878 !important;
-}
-.register_header2 {
-  text-align:left;
-  color:#e8991c !important;
-}
-.span {
-  text-align:center;
-}
-</style>
+
+
 </head>
 
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 " >
@@ -200,7 +163,7 @@
                                 data-client_id="{Settings::get('googlePlus.client_id')}"
                                 data-context="signin"div>
                                 </div>
-                                {include file="footer.tpl"} *} *}
+                               
                                 
                                 data-ux_mode="popup"
                                 data-login_uri="{Settings::get('site.location')}login/"
