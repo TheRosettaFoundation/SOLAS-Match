@@ -85,7 +85,7 @@
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 " >
      
 
-  <div class="container  flex-grow-1">
+  <div class="container-fluid  flex-grow-1">
   {include file="handle-flash-messages.tpl"}
 {if isset($error)}
     <div class="alert alert-error">
