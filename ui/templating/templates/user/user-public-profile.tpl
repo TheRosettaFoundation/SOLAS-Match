@@ -403,40 +403,15 @@
 
                         
                             <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 mb-3 mt-3  p-2">
-                              
+                
 
-
-                            {if empty($user_badges['strategic_points'])}
-                                <div class="d-flex flex-column">
-                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <h5 class="recognition">
-                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
-                                    <span class="recognition_desc">RECOGNITION POINTS</span>
-                                </h5>
-                                </div>
-                            {else}
-                                <div class="d-flex flex-column">
-                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <p class="strategic">
-                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
-                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
-                                    <span class="strategic_desc2"> of which
-                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
-                                        POINTS
-                                    </span><br />
-                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
-                                </p>
-                                </div>
-                                
-                            {/if}
-
-                            {* <div class="d-flex flex-column"> *}
-                                {* <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
+                            <div class="d-flex flex-column">
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h2 class="mb-3 fw-bold"><span class="">{$user_badges['hours_donated']}</span><br/> </h2>
-                                <div class="opacity-75">HOURS DONATED</div> *}
+                                <div class="opacity-75">HOURS DONATED</div>
                               {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
-                            {* </div> *}
+                            </div>
 
                             <div class="">
 
@@ -726,13 +701,34 @@ If you work on a revision task or a proofreading/approval task and notice that t
       <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 w-100  p-2">
                 
 
-                            <div class="d-flex flex-column">
-                                <img src="{urlFor name='home'}ui/img/profile_logo" class="mb-5" />
-                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
-                                <h2 class="mb-3 fw-bold"><span class="">{$user_badges['words_donated']}</span><br/> </h2>
-                                <div class="opacity-75">WORDS DONATED</div>
-                              {*<div class="d-flex "><img src="{urlFor name='home'}ui/img/TWB_Community_members_badge_BG-01.png" class="w-50 h-50" /></div>*}
-                            </div>
+                           
+
+                            {if empty($user_badges['strategic_points'])}
+                                
+                                <div class="d-flex flex-column">
+                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <h5 class="recognition">
+                                    <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="recognition_desc">RECOGNITION POINTS</span>
+                                </h5>
+                                </div>
+                            {else}
+                                <div class="d-flex flex-column">
+                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
+                                <p class="strategic">
+                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
+                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
+                                    <span class="strategic_desc2"> of which
+                                        <span class="strategic_number2">{$user_badges['strategic_points']}</span>
+                                        POINTS
+                                    </span><br />
+                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
+                                </p>
+                                </div>
+                                
+                            {/if}
+
+                         
 
                             <div class="">
 
@@ -1660,7 +1656,8 @@ If a language is to be removed from this list, the community will be informed be
                     {/if}
                     </p>
                 </div>
-          
+            </div>
+            <p style="margin-bottom:20px;">
             <hr class="bg-light-subtle"/>
         {/foreach}
         
