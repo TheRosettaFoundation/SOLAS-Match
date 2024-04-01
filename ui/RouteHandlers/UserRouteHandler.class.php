@@ -2590,7 +2590,7 @@ error_log("result: $result");//(**)
                     $org = $orgDao->getOrganisation($badge->getOwnerId());
                     $orgList[$badge->getOwnerId()] = $org;
                 } else {
-                    unset($badges[$index]);badge_shared_with_key
+                    unset($badges[$index]);
                 }
             }
         }
@@ -3178,7 +3178,28 @@ EOF;
         imagedestroy($logo);
         die;
 
-        
+
+        // $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/TWB_Community_members_badge_BG-01.png');
+        // $size = 60;
+        // $angle = 0;
+        // $left = 950;
+        // $top = 740;
+        // $color = imagecolorallocate($logo, 232, 153, 28);
+        // $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
+        // imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_quantity);
+        // $left = 750;
+        // $top = 840;
+        // $color = imagecolorallocate($logo, 87, 110, 130);
+        // imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_title);
+        // $size = 70;
+        // $left = 595;
+        // $top = 522;
+        // $color = imagecolorallocate($logo, 0, 0, 0);
+        // imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, mb_strtoupper(wordwrap($user_badges['name'], 20, "\n")));
+
+        // imagepng($logo);
+        // imagedestroy($logo);
+        // die;
     }
 
     public function editTaskStreamNotification(Request $request, Response $response, $args)
