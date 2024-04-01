@@ -438,7 +438,7 @@ class UserRouteHandler
             'user_id' => $user_id,
             'org_admin' => $org_admin,
             'page_count' => $pages,
-            'roles' => !empty($user_id) ? $adminDao->get_roles($user_id) :
+            'roles' => !empty($user_id) ? $adminDao->get_roles($user_id) : 0,
             
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
