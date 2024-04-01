@@ -197,7 +197,7 @@
             <span class=" fw-bold"></i> Forget password ? </span>
             </input> *}
 
-              <input type="submit"  name="password_reset">
+              <input type="submit"  name="password_reset" class="d-none">
             <span class=" fw-bold"></i> Forget password ? </span>
             </input>
 
