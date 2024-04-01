@@ -3165,12 +3165,12 @@ EOF;
         $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_quantity);
         $left = 50;
-        $top = 540;
+        $top = 840;
         $color = imagecolorallocate($logo, 0, 0, 0);
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_title);
         $size = 70;
         $left = 50;
-        $top = 800;
+        $top = 522;
         $color = imagecolorallocate($logo, 0, 0, 0);
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, mb_strtoupper(wordwrap($user_badges['name'], 20, "\n")));
 
