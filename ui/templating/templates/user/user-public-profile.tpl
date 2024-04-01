@@ -708,10 +708,10 @@ If you work on a revision task or a proofreading/approval task and notice that t
                                 <div class="d-flex flex-column">
                                 <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
 
-                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
+                                <h4 class="fw-bold mb-3 fs-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h5 class="mb-3">
-                                    <span class="fw-bold">{$user_badges['recognition_points']}</span><br />
-                                    <span class="recognition_desc">RECOGNITION POINTS</span>
+                                    <span class="fw-bold fs-3">{$user_badges['recognition_points']}</span><br />
+                                    <span >RECOGNITION POINTS</span>
                                 </h5>
                                 </div>
                             {else}
@@ -719,13 +719,13 @@ If you work on a revision task or a proofreading/approval task and notice that t
                                 <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
                                 <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <p class=" mb-3">
-                                    <span class="fw-bold">{$user_badges['recognition_points']}</span>
-                                    <span class="strategic_desc">RECOGNITION POINTS</span>
-                                    <span class="strategic_desc2"> of which
-                                        <span class="fw-bold">{$user_badges['strategic_points']}</span>
+                                    <span class="fw-bold fs-3">{$user_badges['recognition_points']}</span>
+                                    <span >RECOGNITION POINTS</span>
+                                    <span > of which
+                                        <span class="fw-bold fs-3">{$user_badges['strategic_points']}</span>
                                         POINTS
                                     </span><br />
-                                    <span class="strategic_desc">IN STRATEGIC LANGUAGES</span>
+                                    <span >IN STRATEGIC LANGUAGES</span>
                                 </p>
                                 </div>
                                 
