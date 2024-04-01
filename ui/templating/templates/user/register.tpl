@@ -64,42 +64,6 @@
          
 </script>
 
-<script>
-            var task_types = [0,
-            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                {$ui['type_enum']},
-            {/foreach}
-            ]; 
-
-
-
-            var source_and_target = [
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    {$ui['source_and_target']},
-                {/foreach}
-            ];
-
-    
-
-            var colours = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['colour']}",
-                {/foreach}
-            ];
-            var unit_count_text_shorts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['unit_count_text_short']}",
-                {/foreach}
-            ];
-
-             var type_texts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['type_text']}",
-                {/foreach}
-            ];
-        
-        
-</script>
 
 
 
@@ -187,24 +151,35 @@
 
       {if (empty($disabled))}
         <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
-              <label for="first_name" class="required "><strong>First name</strong></label>
-              <input type="text" name="first_name" id="first_name" placeholder="First name" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
-              <label for="last_name" class="required"><strong>Last name</strong></label>
-              <input type="text" name="last_name" id="last_name" placeholder="Last name" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
+             <div class="d-flex justify-content-between">
+                <div>
+                <label for="first_name" class="required "><strong>First name</strong></label>
+                <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
+                </div>
+                <div >
+
+                <label for="last_name" class="required"><strong>Last name</strong></label>
+              <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
+                
+                </div>
+             
+             </div>
+             
+             
               <label for="email" class="required"><strong>Email</strong></label>
-              <input type="text" name="email" id="email" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
+              <input type="text" name="email" id="email" class="form-control" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
               <label for="password" class="required"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-              <input type="password" name="password" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
+              <input type="password" name="password"  class="form-control" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
               <label for="password" class="required"><strong>Confirm Password</strong></label>
-              <input type="password" name="confirm_password" id="confirm_password" placeholder="Please confirm your password"/>
+              <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Please confirm your password"/>
               <label class="checkbox required check">
-              <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
+              <input name="age_consent" id="age_consent" class="form-control" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
               </label>
               <label class="checkbox required check">
-              <input name="conduct_consent" id="conduct_consent" type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" target="_blank">TWB Privacy Policy</a>
+              <input name="conduct_consent" id="conduct_consent" class="form-control" type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" target="_blank">TWB Privacy Policy</a>
               </label>
               <label class="checkbox check">
-              <input name="newsletter_consent" id="newsletter_consent"  type="checkbox"> Subscribe to the TWB email newsletter.
+              <input name="newsletter_consent" id="newsletter_consent" class="form-control" type="checkbox"> Subscribe to the TWB email newsletter.
               <small>You can unsubscribe at any time</small>
               </label>
               <input type="hidden" name="g-recaptcha-response" id="g_response">
@@ -223,7 +198,10 @@
                       <div id="gSignInWrapper" style="margin-bottom: 10px;">
                             <div id="g_id_onload"
                                 data-client_id="{Settings::get('googlePlus.client_id')}"
-                                data-context="signin"
+                                data-context="signin"div>
+                                </div>
+                                {include file="footer.tpl"} *} *}
+                                
                                 data-ux_mode="popup"
                                 data-login_uri="{Settings::get('site.location')}login/"
                                 data-auto_prompt="false">
