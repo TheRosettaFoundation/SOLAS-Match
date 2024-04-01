@@ -111,7 +111,7 @@
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                     
                         <div class="d-flex justify-content-between flex-wrap">
-                         <a href="mailto: {$this_user->getEmail()}" class="text-decoration-none text-body"> {$this_user->getEmail()}</a>
+                         <a href="mailto:{$this_user->getEmail()}" class="text-decoration-none text-body"> {$this_user->getEmail()}</a>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
@@ -706,18 +706,21 @@ If you work on a revision task or a proofreading/approval task and notice that t
                             {if empty($user_badges['strategic_points'])}
                                 
                                 <div class="d-flex flex-column">
-                                <h4 class="recognition_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <h5 class="recognition">
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
+
+                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
+                                <h5 class="fw-bold mb-3">
                                     <span class="recognition_number">{$user_badges['recognition_points']}</span><br />
                                     <span class="recognition_desc">RECOGNITION POINTS</span>
                                 </h5>
                                 </div>
                             {else}
                                 <div class="d-flex flex-column">
-                                <h4 class="strategic_name">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><br /><br />
-                                <p class="strategic">
-                                    <span class="strategic_number">{$user_badges['recognition_points']}</span><br />
-                                    <span class="strategic_desc">RECOGNITION POINTS</span><br /><br />
+                                <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-5 w-75" />
+                                <h4 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4><
+                                <p class="fw-bold mb-3">
+                                    <span class="strategic_number">{$user_badges['recognition_points']}</span>
+                                    <span class="strategic_desc">RECOGNITION POINTS</span>
                                     <span class="strategic_desc2"> of which
                                         <span class="strategic_number2">{$user_badges['strategic_points']}</span>
                                         POINTS
