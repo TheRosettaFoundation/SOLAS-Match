@@ -446,11 +446,11 @@
 </div>
 {include file="footer.tpl"} *}
 
-                              data-logo_alignment="left">
+                              {* data-logo_alignment="left">
                           </div>
                     </div>
     {/if}
     </div>
   </div>
 </div>
-{include file="footer.tpl"} *}
+{include file="footer.tpl"} *} *}
