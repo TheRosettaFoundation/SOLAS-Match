@@ -197,6 +197,10 @@
             <span class=" fw-bold"></i> Forget password ? </span>
             </input> *}
 
+              <input type="submit"  name="password_reset">
+            <span class=" fw-bold"></i> Forget password ? </span>
+            </input>
+
             </div>
               <div class="d-grid gap-2">
                 <button type="submit" name="login" class="btn btn-grayish w-full text-center">
