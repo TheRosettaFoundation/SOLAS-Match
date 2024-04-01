@@ -614,7 +614,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
 </div>
 
-<h2><span style="color: #9e6100;">How do I earn points?</span></h2>
+<h2 class="mt-3"><span style="color: #9e6100;">How do I earn points?</span></h2>
 <p>The points are calculated as follows:</p>
 
 <div class=" border border-1 border-primaryDark rounded-3 mt-4 w-100 items-center ">
