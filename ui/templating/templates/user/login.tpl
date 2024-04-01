@@ -179,11 +179,7 @@
             </fieldset>
         </form>
 
-         <div class=" text-muted  d-flex items-center justify-content-between "><hr class="bg-light-subtle" /> <div>   <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center">
-         <span style="font-size: 14px; background-color: #F3F5F6; padding: 0 10px;">
-           OR <!--Padding is optional-->
-         </span>
-         </div><br/><br/></div>
+         <div class=" text-muted  d-flex items-center justify-content-between "><hr class="bg-light-subtle" /> <div>OR CONTINUE WITH</div> <hr class="bg-light-subtle"/> </div>
 
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
