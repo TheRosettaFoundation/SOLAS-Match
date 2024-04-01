@@ -45,7 +45,7 @@
                             </a>
                           {/if}
                         {/if}
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
+                        {if false && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <input type="submit" class="btnPrimary me-2 text-white mt-2 mt-md-0" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -176,7 +176,7 @@
                     
 
                     {foreach from=$url_list item=url}
-                        {if $url['state']}<div class="mb-3 d-flex"><div><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></div></div>{/if}
+                        {if $url['state']}<a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}</a>{/if}
                     {/foreach}
 
                     <hr class="bg-light-subtle"/>

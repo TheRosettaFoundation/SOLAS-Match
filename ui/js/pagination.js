@@ -538,7 +538,7 @@ if (isPagination) {
 
             const language = `<div class='mt-3 mb-3'>
             <span class='mb-1  text-muted'>
-                            Language:<span class='fw-bold'>  ${item.sourceLocale.languageName} </span> 
+                            Language:<span class='fw-bold'>  ${item.targetLocale.languageName} </span> 
                         </span>
             </div>
     
