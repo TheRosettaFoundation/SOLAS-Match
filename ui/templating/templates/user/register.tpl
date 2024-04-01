@@ -158,27 +158,24 @@
           OR <!--Padding is optional-->
         </span>
         </div><br/><br/>
-                      <div id="gSignInWrapper" style="margin-bottom: 10px;">
-                            <div id="g_id_onload"
-                                data-client_id="{Settings::get('googlePlus.client_id')}"
-                                data-context="signin"div>
-                                </div>
-                               
-                                
-                                data-ux_mode="popup"
-                                data-login_uri="{Settings::get('site.location')}login/"
-                                data-auto_prompt="false">
-                            </div>
-                            <div class="g_id_signin"
-                                data-type="standard"
-                                data-shape="rectangular"
-                                data-theme="outline"
-                                data-text="signin_with"
-                                data-size="large"
-                                data-width=219
-                                data-logo_alignment="left">
-                            </div>
-                      </div>
+        <div id="gSignInWrapper" style="margin-bottom: 10px;">
+        <div id="g_id_onload"
+            data-client_id="{Settings::get('googlePlus.client_id')}"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-login_uri="{Settings::get('site.location')}login/"
+            data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-width=219
+            data-logo_alignment="left">
+        </div>
+  </div>
       {/if}
   
           
