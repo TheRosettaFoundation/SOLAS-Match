@@ -85,7 +85,7 @@
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 " >
      
 
-  <div class="container-fluid  flex-grow-1">
+  <div class="container-fluid px-4 flex-grow-1">
   {include file="handle-flash-messages.tpl"}
 {if isset($error)}
     <div class="alert alert-error">
@@ -139,8 +139,8 @@
 
       {if (empty($disabled))}
         <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
-             <div class="d-flex justify-content-between">
-                <div>
+             <div class="d-flex">
+                <div class="me-5">
                 <label for="first_name" class="required "><strong>First name</strong></label>
                 <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
                 </div>

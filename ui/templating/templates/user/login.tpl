@@ -120,7 +120,7 @@
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 " >
      
 
-<div class="container-fluid  flex-grow-1">
+<div class="container-fluid px-4  flex-grow-1">
 
  {if isset($flash['error'])}
         <div class="alert alert-error">
