@@ -3161,7 +3161,7 @@ EOF;
         $angle = 0;
         $left = 50;
         $top = 740;
-        $color = imagecolorallocate($logo, 0, 0, 0);
+        $color = imagecolorallocate($logo, 232, 153, 28);
         $font_path = '/repo/SOLAS-Match/ui/img/font.ttf';
         imagettftext($logo, $size, $angle, $left, $top, $color, $font_path, $badge_quantity);
         $left = 50;
