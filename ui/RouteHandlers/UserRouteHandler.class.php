@@ -3156,7 +3156,7 @@ EOF;
         header('Pragma: no-cache');
         header('Cache-control: no-cache, must-revalidate, no-transform');
 
-        $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/profile_badge.svg');
+        $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/TWB_badge.png');
         $size = 60;
         $angle = 0;
         $left = 950;
