@@ -232,10 +232,10 @@ function select() {
     });
 
     var forms = [
-        "tasks_as_paid",
-        "tasks_as_unpaid",
         "publish_selected_tasks",
         "unpublish_selected_tasks",
+        "tasks_as_paid",
+        "tasks_as_unpaid",
         "status_as_unclaimed",
         "status_as_waiting",
         "complete_selected_tasks",
