@@ -1662,7 +1662,7 @@ If a language is to be removed from this list, the community will be informed be
                     </p>
                 </div>
             </div>
-            <p style="margin-bottom:20px;">
+           
             <hr class="bg-light-subtle"/>
         {/foreach}
         
