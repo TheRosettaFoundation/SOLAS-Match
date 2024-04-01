@@ -449,4 +449,4 @@
     </div>
   </div>
 </div>
-{include file="footer.tpl"} *} *}
+{include file="footer.tpl"} *} 
