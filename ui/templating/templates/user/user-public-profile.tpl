@@ -176,7 +176,7 @@
                     
 
                     {foreach from=$url_list item=url}
-                        {if $url['state']}<tr class="mb-3"><td><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                        {if $url['state']}<div class="mb-3"><div><a href="{$url['state']}" target="_blank" class="custom-link">{$url['state']|escape:'html':'UTF-8'}</a></div></div>{/if}
                     {/foreach}
 
                     <hr class="bg-light-subtle"/>
