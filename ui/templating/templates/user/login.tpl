@@ -105,7 +105,7 @@
                               data-login_uri="{Settings::get('site.location')}login/"
                               data-auto_prompt="false">
                           </div>
-                          <div class="g_id_signin w-full border-1 border-dark-subtle"
+                          <div class="g_id_signin"
                               data-type="standard"
                               data-shape="rectangular"
                               data-theme="outline"
