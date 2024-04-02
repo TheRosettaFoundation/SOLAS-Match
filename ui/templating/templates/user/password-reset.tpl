@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
 <div class="d-flex flex-column align-items-center justify-content-center">
 <div class="">
     <h1 class="page-header"}>
@@ -46,4 +46,4 @@
 
     </div>
     </div>
-{include file="footer.tpl"}
+{include file="footer2.tpl"}
