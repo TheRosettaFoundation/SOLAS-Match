@@ -155,13 +155,7 @@
             <input type="password" name="password" id="password" class="form-control"/>
             </div>
             <div class="text-end">
-            {* <button type="submit"  name="password_reset">
-            <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
-            </button> *}
-              {* <input type="submit"  name="password_reset">
-            <span class=" fw-bold"></i> Forget password ? </span>
-            </input> *}
-
+          
             <button class=" fw-bold  border border-0 cursor-pointer mb-2 bg-transparent"> Forget password ? </button>
           
 
@@ -172,7 +166,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="text-decoration-none text-dark opacity-50"> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="text-decoration-none text-dark text-muted"> I don't have an account</a> </div>
            
 				
 			
