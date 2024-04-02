@@ -103,6 +103,10 @@
                     "{$ui['colour']}",
                 {/foreach}
             ];
+
+            console.log('colours');
+            console.log(colours) ;
+
             var unit_count_text_shorts = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['unit_count_text_short']}",
