@@ -123,8 +123,8 @@
             <input type="hidden" name="action" value="verify" />
             <fieldset class="w-100">
                 
-                        <div id="gSignInWrapper" style="margin-bottom: 10px;">
-                          <div id="g_id_onload"
+                        <div id="gSignInWrapper" class="w-full border-1 border-dark-subtle">
+                          <div id="g_id_onload "
                               data-client_id="{Settings::get('googlePlus.client_id')}"
                               data-context="signin"
                               data-ux_mode="popup"
