@@ -166,7 +166,7 @@
             data-logo_alignment="left">
         </div>
   </div>
-  <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center">
+  <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center ; margin-top: 8px; margin-bottom:8px;">
         <span style="font-size: 14px; background-color: #F3F5F6; padding: 0 10px;">
           OR <!--Padding is optional-->
         </span>
