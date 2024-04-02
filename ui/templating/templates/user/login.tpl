@@ -9,31 +9,11 @@
         <title>{Settings::get('site.title')}</title>
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
-        
-        <!-- Open Graph data (Facebook and Google+) -->
-        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>
-        <meta property="og:type" content="{Settings::get('openGraph.type')}" />
-        <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
-        <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
-        <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
-
-        <!-- Twitter Card data -->
-        <meta name="twitter:card" content="{Settings::get('twitter.card')}"/>
-        <meta name="twitter:site" content="{Settings::get('twitter.site')}"/>
-        <meta name="twitter:title" content="{Settings::get('twitter.title')}"/>
-        <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
-        <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
-       
+    
+ 
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
       <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
-        <!-- 
-        <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="apple-touch-icon" sizes="180x180" href="{urlFor name="home"}ui/img/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{urlFor name="home"}ui/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{urlFor name="home"}ui/img/favicon/favicon-16x16.png">
-        <link rel="manifest" href="{urlFor name="home"}ui/img/favicon/site.webmanifest"> 
-        -->
+      
 		
         <!-- extra styles-->
         {if isset($extra_styles)}
@@ -65,18 +45,12 @@
 </script>
 
 
-
-
-
-
-
-        <!-- extra Scripts -->
-        {if isset($extra_scripts)}
-            {$extra_scripts}
-        {/if}
+<!-- extra Scripts -->
+{if isset($extra_scripts)}
+    {$extra_scripts}
+{/if}
        
-
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
 
      
     </head>
