@@ -7,7 +7,7 @@
 
 <header class="">
 
-    <div class="container py-2">
+    <div class="container py-2 ">
 
             <div class="py-2" >
                   <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
@@ -26,7 +26,7 @@
 
 </header>
 
-<div class="bg-light-subtle py-4">
+<div class="bg-light-subtle py-4 mb-4">
 
 <div class="container-fluid  mb-2">
 
@@ -173,7 +173,7 @@
 
  </main>
 
- </div>
+
 
  
 
