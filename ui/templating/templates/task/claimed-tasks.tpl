@@ -13,7 +13,6 @@
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
 
-
      {if isset($user)}
             <h5 class="fw-bold mt-5 mb-4">{Localisation::getTranslation('index_filter_available_tasks')}
             

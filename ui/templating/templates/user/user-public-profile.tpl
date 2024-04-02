@@ -1138,7 +1138,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
-    <input type="submit" class="btnPrimary text-white mt-2 mt-md-0" name="PrintRequest" value="Request Certification of Volunteer Activity" />
+    <input type="submit" class="btnPrimary text-white mt-2 mt-md-0 border-0" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 </div>
