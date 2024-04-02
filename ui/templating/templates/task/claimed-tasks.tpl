@@ -13,6 +13,7 @@
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
 
+
      {if isset($user)}
             <h5 class="fw-bold mt-5 mb-4">{Localisation::getTranslation('index_filter_available_tasks')}
             
@@ -161,9 +162,8 @@
                                     </div>
                             
                          
-                              </div>
                            
-                                    {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             {/if}
                             
                             <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
@@ -327,7 +327,7 @@
     </div> 
 </div>
 </div>
-
+</div>
 
 
 
