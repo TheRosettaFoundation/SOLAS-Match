@@ -166,7 +166,7 @@
             data-logo_alignment="left">
         </div>
   </div>
-  <div class="d-flex align-items-center"><div class="flex-fill border-top border-2 border-dark-subtle " ></div><div class=" text-center mx-4">OR CONTINUE WITH </div><div class=" flex-fill border-top border-2 border-dark-subtle " ></div> </div>
+  <div class="d-flex align-items-center"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle " ></div> </div>
 
       {if (empty($disabled))}
         <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
