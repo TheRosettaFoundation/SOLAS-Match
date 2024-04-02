@@ -186,7 +186,7 @@
              
              
               <label for="email" class="required form-label mb-1"><strong>Email</strong></label>
-              <input type="text" name="email" id="email" class="form-control mb-1" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
+              <input type="text" name="email" id="email" class="form-control mb-2" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
               <label for="password" class="required form-label mb-1"><strong>{Localisation::getTranslation('common_password')}</strong></label>
               <input type="password" name="password"  class="form-control mb-1" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
               <label for="password" class="required form-label  mb-1"><strong>Confirm Password</strong></label>
