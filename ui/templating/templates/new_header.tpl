@@ -94,8 +94,7 @@
                 {/foreach}
             ];
             
-            console.log('source and target');
-            console.log(source_and_target) ;
+       
     
 
             var colours = ["",
@@ -104,8 +103,6 @@
                 {/foreach}
             ];
 
-            console.log('colours');
-            console.log(colours) ;
 
             var unit_count_text_shorts = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
