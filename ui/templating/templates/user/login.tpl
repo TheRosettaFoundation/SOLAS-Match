@@ -162,7 +162,7 @@
             <span class=" fw-bold"></i> Forget password ? </span>
             </input> *}
 
-            <button class=" fw-bold  border border-0 cursor-pointer mb-2"> Forget password ? </button>
+            <button class=" fw-bold  border border-0 cursor-pointer mb-2 bg-white"> Forget password ? </button>
           
 
             </div>
