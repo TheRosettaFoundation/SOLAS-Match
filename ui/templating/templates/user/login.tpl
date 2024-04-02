@@ -87,22 +87,22 @@
 <div class="container-fluid px-4  flex-grow-1">
 
  {if isset($flash['error'])}
-        <div class="alert alert-error">
-            <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
+        <div class="alert alert-danger">
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
             <p>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info">
-            <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
             <p><strong>{Localisation::getTranslation('common_note')}: </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
@@ -117,7 +117,7 @@
 
       <h3 class="fw-bold mt-4 mb-3"> Login to TWB kato</h3>
 
-        <form action="{urlFor name='login'}" method="post" class=""w-100>
+        <form action="{urlFor name='login'}" method="post" >
             <input type="hidden" name="action" value="verify" />
             <fieldset class="w-100">
                 
@@ -129,7 +129,7 @@
                               data-login_uri="{Settings::get('site.location')}login/"
                               data-auto_prompt="false">
                           </div>
-                          <div class="g_id_signin"
+                          <div class="g_id_signin w-full border-1 border-dark-subtle"
                               data-type="standard"
                               data-shape="rectangular"
                               data-theme="outline"
@@ -156,7 +156,7 @@
             </div>
             <div class="text-end">
           
-            <button class=" fw-bold  border border-0 cursor-pointer mb-2 bg-transparent"> Forget password ? </button>
+            <button class="fw-bold  border border-0 cursor-pointer mb-2 bg-transparent" name="password_reset"> {Localisation::getTranslation('login_reset_password')} </button>
           
 
             </div>
