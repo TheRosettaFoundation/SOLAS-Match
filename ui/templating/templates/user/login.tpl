@@ -172,7 +172,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center"> <a href='{urlFor name="register"}'> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-2"> <a href='{urlFor name="register"}' class="text-decoration-none"> I don't have an account</a> </div>
            
 				
 			
