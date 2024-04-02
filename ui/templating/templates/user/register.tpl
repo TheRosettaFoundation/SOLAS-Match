@@ -170,7 +170,7 @@
 
       {if (empty($disabled))}
         <form method="post" id="registerform" action="{urlFor name="register"}" class="wel mt-3" accept-charset="utf-8">
-             <div class="d-flex">
+             <div class="d-flex mb-2">
                 <div class="me-5">
                 <label for="first_name" class="required  mb-1 "><strong>First name</strong></label>
                 <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
@@ -186,11 +186,11 @@
              
              
               <label for="email" class="required form-label mb-1"><strong>Email</strong></label>
-              <input type="text" name="email" id="email" class="form-control" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
+              <input type="text" name="email" id="email" class="form-control mb-1" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
               <label for="password" class="required form-label mb-1"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-              <input type="password" name="password"  class="form-control" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
+              <input type="password" name="password"  class="form-control mb-1" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
               <label for="password" class="required form-label  mb-1"><strong>Confirm Password</strong></label>
-              <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Please confirm your password"/>
+              <input type="password" name="confirm_password" id="confirm_password" class="form-control mb-1" placeholder="Please confirm your password"/>
               <label class="checkbox required check form-check-label">
               <input name="age_consent" id="age_consent" class="form-check-input my-3"  type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
               </label>
