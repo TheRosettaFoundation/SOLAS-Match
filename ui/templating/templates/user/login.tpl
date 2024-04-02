@@ -115,12 +115,12 @@
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
 
-      <h2 class="fw-bold"> Login to TWB kato</h2>
+      <h3 class="fw-bold"> Login to TWB kato</h3>
 
         <form action="{urlFor name='login'}" method="post" class=""w-100>
             <input type="hidden" name="action" value="verify" />
             <fieldset class="w-100">
-                <legend><strong> sign-in via Google</strong></legend>
+                
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
