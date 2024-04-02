@@ -142,7 +142,7 @@
             </fieldset>
         </form>
 
-         <div class="d-flex align-items-center"><div class="flex-fill border-top border-2 border-light " ></div><div class=" text-center mx-4">OR CONTINUE WITH </div><div class=" flex-fill border-top border-2 border-light " ></div> </div>
+         <div class="d-flex align-items-center"><div class="flex-fill border-top border-2 border-dark-subtle " ></div><div class=" text-center mx-4">OR CONTINUE WITH </div><div class=" flex-fill border-top border-2 border-dark-subtle" ></div> </div>
 
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
