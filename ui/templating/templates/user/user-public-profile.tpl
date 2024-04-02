@@ -1506,7 +1506,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
-{* {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))} *}
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
 
     {if !empty($badges)}
@@ -1522,10 +1522,10 @@ If a language is to be removed from this list, the community will be informed be
         {foreach $badges as $badge}
                 {assign var="user_id" value=$this_user->getId()} 
                     {if $private_access}
-                        <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
-                            <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
+                        <form method="post" class="mt-2" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
+                           
                             <input type="hidden" name="badge_id" value="{$badge->getId()}" />
-                            <input type="submit" class='btnPrimary' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
+                            <input type="submit" class='btn btn-primary' name="revokeBadge" value="{Localisation::getTranslation('user_public_profile_remove_badge')}" 
                            onclick="return confirm('{Localisation::getTranslation('user_public_profile_5')}')"/>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>   
@@ -1544,7 +1544,7 @@ If a language is to be removed from this list, the community will be informed be
 
   
     
-  {* {/if} *}
+  {/if}
 
 
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
