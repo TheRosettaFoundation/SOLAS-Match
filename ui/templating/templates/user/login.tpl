@@ -115,7 +115,7 @@
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
 
-      <h3 class="fw-bold mt-4"> Login to TWB kato</h3>
+      <h3 class="fw-bold mt-4 mb-3"> Login to TWB kato</h3>
 
         <form action="{urlFor name='login'}" method="post" class=""w-100>
             <input type="hidden" name="action" value="verify" />
