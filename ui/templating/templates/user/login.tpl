@@ -64,42 +64,6 @@
          
 </script>
 
-<script>
-            var task_types = [0,
-            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                {$ui['type_enum']},
-            {/foreach}
-            ]; 
-
-
-
-            var source_and_target = [
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    {$ui['source_and_target']},
-                {/foreach}
-            ];
-
-    
-
-            var colours = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['colour']}",
-                {/foreach}
-            ];
-            var unit_count_text_shorts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['unit_count_text_short']}",
-                {/foreach}
-            ];
-
-             var type_texts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['type_text']}",
-                {/foreach}
-            ];
-        
-        
-</script>
 
 
 
@@ -151,7 +115,7 @@
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
 
-    
+      <h2 class="fw-bold"> Login to TWB kato</h2>
 
         <form action="{urlFor name='login'}" method="post" class=""w-100>
             <input type="hidden" name="action" value="verify" />
@@ -207,10 +171,9 @@
                 <button type="submit" name="login" class="btn btn-grayish w-full text-center">
   				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
 				</button>
-                <button type="submit"  name="password_reset" class="btn btn-light">
-                <i class="fa-exclamation-sign fa-solid"></i> {Localisation::getTranslation('login_reset_password')}
-                </button>
+                
                 </div>
+                <div class="fs-5 text-muted text-center"> <a href='{urlFor name="register"}'> I don't have an account</a> </div>
            
 				
 			
