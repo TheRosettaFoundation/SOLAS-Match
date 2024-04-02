@@ -145,7 +145,8 @@
 
 <div class=" row py-2 d-flex justify-content-between  ">
 
-    <div class=" col-12 col-md-6 py-4"> 
+    <div class=" col-12 col-md-6 py-4 d-flex flex-column items-center "> 
+    <div >
 
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
 
@@ -214,6 +215,8 @@
 				
 			
         </form>
+
+        </div>
 
 
         
