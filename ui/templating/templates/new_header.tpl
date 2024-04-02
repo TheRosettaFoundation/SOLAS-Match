@@ -88,7 +88,7 @@
 
 
 
-            var source_and_target = [
+            var source_and_target = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {$ui['source_and_target']},
                 {/foreach}
