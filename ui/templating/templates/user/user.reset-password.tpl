@@ -10,21 +10,9 @@
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
         
-        <!-- Open Graph data (Facebook and Google+) -->
-        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>
-        <meta property="og:type" content="{Settings::get('openGraph.type')}" />
-        <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
-        <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
-        <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
+ 
 
-        <!-- Twitter Card data -->
-        <meta name="twitter:card" content="{Settings::get('twitter.card')}"/>
-        <meta name="twitter:site" content="{Settings::get('twitter.site')}"/>
-        <meta name="twitter:title" content="{Settings::get('twitter.title')}"/>
-        <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
-        <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
-
-        
+ 
         
         
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
@@ -79,45 +67,6 @@
 
 
 
-<script>
-            var task_types = [0,
-            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                {$ui['type_enum']},
-            {/foreach}
-            ]; 
-
-
-
-            var source_and_target = [0,
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    {$ui['source_and_target']},
-                {/foreach}
-            ];
-            
-       
-    
-
-            var colours = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['colour']}",
-                {/foreach}
-            ];
-
-
-            var unit_count_text_shorts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['unit_count_text_short']}",
-                {/foreach}
-            ];
-
-             var type_texts = ["",
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    "{$ui['type_text']}",
-                {/foreach}
-            ];
-        
-        
-</script>
 
 
 
