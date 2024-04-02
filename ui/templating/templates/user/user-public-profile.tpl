@@ -344,7 +344,7 @@
                            
                           
                                     <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 bg-transparent border-0">
-                                        <input type="submit" class="btnPrimary text-white border-0" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                        <input type="submit" class="btnPrimary text-white " name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
                              {/if}
