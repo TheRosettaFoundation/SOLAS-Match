@@ -1,7 +1,7 @@
 {include file="new_header.tpl"}
 <div class="container">
 
-<div class="row  d-flex align-items-center justify-content-center">
+<div class="row d-flex flex-column align-items-center justify-content-center">
 
 {include file="handle-flash-messages.tpl"}
   
