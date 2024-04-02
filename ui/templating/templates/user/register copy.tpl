@@ -96,7 +96,7 @@
             </p>
       </form>
 
-      <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center">
+      <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center ; margin-top:12px;">
       <span style="font-size: 14px; background-color: #F3F5F6; padding: 0 10px;">
         OR <!--Padding is optional-->
       </span>

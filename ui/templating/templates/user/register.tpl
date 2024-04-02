@@ -26,6 +26,43 @@
        
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
       <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
+      <style>
+  #registerform label {
+  color:#143878 !important;
+}
+  #registerform .check {
+  color:#333 !important;
+}
+#registerform label.error {
+  width: auto;
+}
+#registerform .error{
+    color:#F00 !important;
+}
+.required:after {
+  content:" *";
+  color: red;
+}
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.register_header1 {
+  text-align:right;
+  color:#143878 !important;
+}
+.register_header2 {
+  text-align:left;
+  color:#e8991c !important;
+}
+.span {
+  text-align:center;
+}
+</style>
         <!-- 
         <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
         <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
@@ -139,12 +176,12 @@
         <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
              <div class="d-flex">
                 <div class="me-5">
-                <label for="first_name" class="required "><strong>First name</strong></label>
+                <label for="first_name" class="required  mb-2 "><strong>First name</strong></label>
                 <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
                 </div>
                 <div >
 
-                <label for="last_name" class="required"><strong>Last name</strong></label>
+                <label for="last_name" class="required  mb-2"><strong>Last name</strong></label>
               <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
                 
                 </div>
@@ -152,11 +189,11 @@
              </div>
              
              
-              <label for="email" class="required" class="form-label"><strong>Email</strong></label>
+              <label for="email" class="required" class="form-label mb-2"><strong>Email</strong></label>
               <input type="text" name="email" id="email" class="form-control" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
-              <label for="password" class="required" class="form-label"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+              <label for="password" class="required" class="form-label  mb-2"><strong>{Localisation::getTranslation('common_password')}</strong></label>
               <input type="password" name="password"  class="form-control" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
-              <label for="password" class="required" class="form-label"><strong>Confirm Password</strong></label>
+              <label for="password" class="required" class="form-label  mb-2"><strong>Confirm Password</strong></label>
               <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Please confirm your password"/>
               <label class="checkbox required check" class="form-check-label">
               <input name="age_consent" id="age_consent" class="form-check-input"  type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
