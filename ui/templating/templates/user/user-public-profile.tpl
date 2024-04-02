@@ -343,8 +343,8 @@
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                            
                           
-                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4">
-                                        <input type="submit" class="btnPrimary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 bg-transparent border-0">
+                                        <input type="submit" class="btnPrimary text-white border-0" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
                              {/if}
@@ -1138,7 +1138,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
-    <input type="submit" class="btnPrimary text-white mt-2 mt-md-0 border-0" name="PrintRequest" value="Request Certification of Volunteer Activity" />
+    <input type="submit" class="btnPrimary text-white border-0 border-0 mt-2 mt-md-0 border-0" name="PrintRequest" value="Request Certification of Volunteer Activity" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 </div>
@@ -1167,7 +1167,7 @@ If a language is to be removed from this list, the community will be informed be
     </a>
 {/if}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" >
-    <input type="submit" class="btnPrimary text-white" name="PrintRequestLetter" value="Request Reference Letter" />
+    <input type="submit" class="btnPrimary text-white border-0 border-0" name="PrintRequestLetter" value="Request Reference Letter" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 </div>
@@ -1198,7 +1198,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-2 p-4 rounded-3 bg-body">
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
-    <input type="submit" class="btnPrimary text-white" name="send_contract" value="Send Contract to Linguist" />
+    <input type="submit" class="btnPrimary text-white border-0 border-0" name="send_contract" value="Send Contract to Linguist" />
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 {/if}
@@ -1260,7 +1260,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex flex-column flex-grow-1 w-50">
 
     <input type='text' value="" name="work_again" id="work_again" class=" form-control form-control-sm" />
-    <input type="submit" class="btnPrimary text-white mt-1" name="admin_comment" value="Submit"  />
+    <input type="submit" class="btnPrimary text-white border-0 border-0 mt-1" name="admin_comment" value="Submit"  />
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     
    
@@ -1317,7 +1317,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
     <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-    <input type="submit"  name="mark_adjust_points" value="Submit" class="btnPrimary text-white mt-1" /> 
+    <input type="submit"  name="mark_adjust_points" value="Submit" class="btnPrimary text-white border-0 border-0 mt-1" /> 
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </div>
 
@@ -1367,7 +1367,7 @@ If a language is to be removed from this list, the community will be informed be
     </div>
     <div class="d-flex flex-column flex-grow-1 w-50">
    <input type='text' value="" name="points" id="points" class="form-control form-control-sm" />
-  <input type="submit"  name="mark_adjust_points_strategic" value="Submit" class="btnPrimary text-white mt-1" name="mark_adjust_points_strategic"  />
+  <input type="submit"  name="mark_adjust_points_strategic" value="Submit" class="btnPrimary text-white border-0 border-0 mt-1" name="mark_adjust_points_strategic"  />
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}  
   </div>
 
@@ -1424,7 +1424,7 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 25%"><input class="form-control form-control-sm" type='text' value="{$user_task_limitation['limit_profile_changes']}" name="limit_profile_changes" id="limit_profile_changes" /></td>
     </tr>
     <tr valign="top">
-        <td style="width: 25%"><input type="submit" class="btnPrimary text-white" name="mark_user_task_limitation" value="Submit" /></td>
+        <td style="width: 25%"><input type="submit" class="btnPrimary text-white border-0 border-0" name="mark_user_task_limitation" value="Submit" /></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
@@ -1464,7 +1464,7 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
-        <td style="width: 33%"><input type="submit" class="btnPrimary text-white" name="mark_linguist_payment_information" value="Submit" /></td>
+        <td style="width: 33%"><input type="submit" class="btnPrimary text-white border-0 border-0" name="mark_linguist_payment_information" value="Submit" /></td>
         <td style="width: 33%"></td>
         <td style="width: 34%"></td>
     </tr>
@@ -1491,7 +1491,7 @@ If a language is to be removed from this list, the community will be informed be
             <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"> 
                
-                <input type="submit" class="btnPrimary text-white" name="referenceRequest" 
+                <input type="submit" class="btnPrimary text-white border-0 border-0" name="referenceRequest" 
                     value=" {Localisation::getTranslation('user_public_profile_request_reference')}" />
 
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -1513,7 +1513,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class="mt-4 rounded-3 p-4 bg-body">
         <div class='d-flex justify-content-between flex-wrap'>
             <h4 class="fw-bold">{Localisation::getTranslation('common_badges')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_4')}</span></h4>
-                <a href='{urlFor name="badge-list"}' class=' btnPrimary text-white'>
+                <a href='{urlFor name="badge-list"}' class=' btnPrimary text-white border-0 border-0'>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
                 </a>
            
@@ -1551,7 +1551,7 @@ If a language is to be removed from this list, the community will be informed be
  <div class="mt-4 rounded-3 p-4 bg-body">
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>
-            <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btnPrimary text-white">
+            <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btnPrimary text-white border-0 border-0">
                 <i class="fa-solid fa-screwdriver-wrench me-2"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
             </a>
       
@@ -1581,7 +1581,7 @@ If a language is to be removed from this list, the community will be informed be
  <div class="mt-4 rounded-3 p-4 bg-body">
 <div class="d-flex justify-content-between flex-wrap">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
-        <a href='{urlFor name='tags-list'}' class=" btnPrimary text-white">
+        <a href='{urlFor name='tags-list'}' class=" btnPrimary text-white border-0 border-0">
             <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
    
@@ -1614,7 +1614,7 @@ If a language is to be removed from this list, the community will be informed be
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
                 <div>
-                <a href="{urlFor name='org-search'}" class="btnPrimary text-white" >
+                <a href="{urlFor name='org-search'}" class="btnPrimary text-white border-0 border-0" >
                     <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('common_search_for_organisations')}
                 </a>
                 </div>
@@ -1676,7 +1676,7 @@ If a language is to be removed from this list, the community will be informed be
         <div class='d-flex flex-wrap'>
             <h3 class="fw-bold">{Localisation::getTranslation('common_archived_tasks')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_14')}</span></h3>
                 {if $private_access}
-                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class=' btnPrimary text-white'>
+                    <a href='{urlFor name="archived-tasks" options="page_no.1"}' class=' btnPrimary text-white border-0 border-0'>
                         <i class=" fa-solid fa-list me-2"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
                     </a>
                 {/if}
