@@ -93,21 +93,21 @@
     <div class=" col-12 col-md-6 py-4 d-flex flex-column align-items-center justify-content-center"> 
     {if isset($flash['error'])}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}"></a>
             <p>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
         </div>
     {/if}
 
     {if isset($flash['info'])}
         <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}"></a>
             <p><strong>{Localisation::getTranslation('common_note')}: </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
         </div>
     {/if}
 
     {if isset($flash['success'])}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}">×</a>
+            <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}"></a>
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
