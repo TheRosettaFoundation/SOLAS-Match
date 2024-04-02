@@ -26,7 +26,7 @@
 
 </header>
 
-<div class="bg-light-subtle py-4 mb-4">
+<div class="bg-light-subtle py-4 ">
 
 <div class="container-fluid  mb-2">
 
@@ -48,7 +48,7 @@
 
                 </div>
 
-             <div class="mt-2 mt-md-0 ">
+             <div class="mt-2 mt-md-0  mb-4">
 
                               {if $taskType == TaskTypeEnum::PROOFREADING }
            
