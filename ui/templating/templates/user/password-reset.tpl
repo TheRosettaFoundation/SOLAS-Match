@@ -1,6 +1,5 @@
-{include file="new_header.tpl"}
-<div class="d-flex flex-column align-items-center justify-content-center">
-<div class="">
+{include file="header.tpl"}
+
     <h1 class="page-header"}>
         {Localisation::getTranslation('password_reset_password_reset')}
         <small>
@@ -43,7 +42,5 @@
         </div>
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
-
-    </div>
-    </div>
-{include file="footer2.tpl"}
+    
+{include file="footer.tpl"}

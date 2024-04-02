@@ -1,12 +1,7 @@
-{include file="new_header.tpl"}
-<div class="container">
-
-<div class="row justify-content-center">
+{include file="header.tpl"}
 
 {include file="handle-flash-messages.tpl"}
-  
 
-   <div class="col-md-6">
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
     </div>
@@ -32,10 +27,5 @@
 
             
     </form>
-    </div>
 
-  </div>  
-
-    <div>
-
-{include file="footer2.tpl"}
+{include file="footer.tpl"}
