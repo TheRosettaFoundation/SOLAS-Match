@@ -100,8 +100,8 @@
                         {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
                        
-                            <div class="d-flex justify-content-start mb-2 flex-wrap">
-                                <div class="">
+                            <div class=" mb-2">
+                                
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                              <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a> 
