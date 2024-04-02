@@ -184,13 +184,21 @@
              
              </div>
              
-             
+              <div>
               <label for="email" class="required form-label mb-1"><strong>Email</strong></label>
-              <input type="text" name="email" id="email" class="form-control mb-2" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
-              <label for="password" class="required form-label mb-1"><strong>{Localisation::getTranslation('common_password')}</strong></label>
-              <input type="password" name="password"  class="form-control mb-1" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
-              <label for="password" class="required form-label  mb-1"><strong>Confirm Password</strong></label>
-              <input type="password" name="confirm_password" id="confirm_password" class="form-control mb-1" placeholder="Please confirm your password"/>
+            <input type="text" name="email" id="email" class="form-control mb-2" placeholder="Your email" {if isset($email)}value="{$email|escape:'html':'UTF-8'}"{/if} />
+              </div>
+             <div>
+             <label for="password" class="required form-label mb-1"><strong>{Localisation::getTranslation('common_password')}</strong></label>
+             <input type="password" name="password"  class="form-control mb-1" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
+             </div>
+             
+             <div>
+             <label for="password" class="required form-label  mb-1"><strong>Confirm Password</strong></label>
+             <input type="password" name="confirm_password" id="confirm_password" class="form-control mb-1" placeholder="Please confirm your password"/>
+             
+             </div>
+             
               <label class="checkbox required check form-check-label mt-2">
               <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-bs-toggle="tooltip" data-bs-title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
               </label>
