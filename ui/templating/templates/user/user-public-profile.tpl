@@ -1,7 +1,7 @@
 {include file='new_header.tpl'}
 
 {if isset($this_user)}
- <div class="container-fluid bg-light-subtle py-4">
+ <div class="container-fluid bg-light-subtle py-2">
    <div class="container px-4  py-4">
 
      <div class=" d-flex justify-content-between py-4 align-items-center px-2 flex-wrap">
@@ -429,7 +429,7 @@
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
-                            <h4>Use the link below to embed the above badge in another system:</h4>
+                            <h4 class="fw-bold">Use the link below to embed the above badge in another system:</h4>
 
                             <div class="d-flex align-items-center">
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
