@@ -28,7 +28,7 @@
 
 <div class="bg-light-subtle py-4">
 
-<div class="container-fluid   mb-2">
+<div class="container-fluid  mb-2">
 
           <div class="container d-flex py-4  flex-wrap justify-content-between align-items-center">
 
@@ -172,6 +172,8 @@
 
 
  </main>
+
+ </div>
 
  
 
