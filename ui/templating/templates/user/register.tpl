@@ -206,11 +206,14 @@
               <small>You can unsubscribe at any time</small>
               </label>
               <input type="hidden" name="g-recaptcha-response" id="g_response">
-              <p class="reg_btn ">
-                  <button type="submit" class="btn btn-primary" name="submit">
+              
+              <div class="d-grid gap-2 reg_btn mt-3">
+                  <button type="submit" class="btn bth-grayish" name="submit">
                        {Localisation::getTranslation('common_register')}
                   </button>
-              </p>
+              </div>
+              <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="login"}' class="text-decoration-none text-dark text-muted cursor-pointer"> I already have an account</a> </div>
+              
         </form>
   
         

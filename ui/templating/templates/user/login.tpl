@@ -162,7 +162,7 @@
             </div>
               <div class="d-grid gap-2">
                 <button type="submit" name="login" class="btn btn-grayish w-full text-center">
-  				    <i class="fa-share fa-solid"></i> {Localisation::getTranslation('common_log_in')}
+  				     {Localisation::getTranslation('common_log_in')}
 				</button>
                 
                 </div>
