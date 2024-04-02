@@ -1,12 +1,12 @@
 {include file="new_header.tpl"}
 <div class="container">
 
-<div class="row d-flex flex-column align-items-center justify-content-center">
+<div class=" d-flex flex-column align-items-center justify-content-center">
 
 {include file="handle-flash-messages.tpl"}
   
 
-   <div class="col-md-6">
+   <div class="">
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
     </div>
