@@ -65,10 +65,10 @@
 <div class=" row py-2 d-flex justify-content-between  ">
 
 
-    <div class=" col-12 col-md-6 py-4 d-flex flex-column align-items-center justify-content-center"> 
+    <div class=" col-12 col-md-6 py-4 d-flex flex-column  justify-content-center"> 
 
     <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
-    
+
     {if isset($flash['error'])}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <a class="btn-close" type="button" data-bs-dismiss="alert" href="{urlFor name='login'}"></a>
