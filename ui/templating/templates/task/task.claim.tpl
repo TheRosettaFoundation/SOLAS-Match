@@ -48,7 +48,7 @@
 
                 </div>
 
-             <div class="mt-2 mt-md-0  mb-4">
+             <div class="mt-2 mt-md-0 pb-4">
 
                               {if $taskType == TaskTypeEnum::PROOFREADING }
            
