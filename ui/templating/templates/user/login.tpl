@@ -150,7 +150,7 @@
             </div>
             <div class="text-end">
           
-            <button class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" name="password_reset"> {Localisation::getTranslation('login_reset_password')} </button>
+            <button class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" name="password_reset"> Forgot password ? </button>
           
 
             </div>
