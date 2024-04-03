@@ -219,7 +219,7 @@
                        {Localisation::getTranslation('common_register')}
                   </button>
               </div>
-              <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
+              <div class="fs-5 text-muted text-center mt-3 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
               
         </form>
   

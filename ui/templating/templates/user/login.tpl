@@ -150,7 +150,7 @@
             </div>
             <div class="text-end">
           
-            <button class="fw-bold  border border-0 cursor-pointer mb-1 bg-transparent opacity-75 " name="password_reset"> {Localisation::getTranslation('login_reset_password')} </button>
+            <button class="fw-bold tex-grayish  border border-0 cursor-pointer mb-1 bg-transparent " name="password_reset"> {Localisation::getTranslation('login_reset_password')} </button>
           
 
             </div>
@@ -160,7 +160,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-3 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
            
 				
 			
