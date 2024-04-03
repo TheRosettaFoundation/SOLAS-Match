@@ -143,7 +143,7 @@
       </div>
 
       
-        <div id="gSignInWrapper" style="margin-bottom: 10px;">
+        <div id="gSignInWrapper"  class="mt-4 mb-4">
         <div id="g_id_onload"
             data-client_id="{Settings::get('googlePlus.client_id')}"
             data-context="signin"
