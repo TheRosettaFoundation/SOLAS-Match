@@ -145,7 +145,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="register"}' class="link-offset-2 link-offset-3-hover link-underline-opacity-0 link-underline-opacity-75-hover "> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="register"}' class=" link-grayish link-offset-2 link-offset-3-hover link-underline-opacity-0 link-underline-opacity-75-hover "> I don't have an account</a> </div>
            
 				
 			
