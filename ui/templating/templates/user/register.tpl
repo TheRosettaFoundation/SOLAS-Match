@@ -122,7 +122,7 @@
 
       <div class="w-75">
   
-      <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
+      <a class="navbar-brand" href={urlFor name='home'}> <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" /> </a>
 
       {include file="handle-flash-messages.tpl"}
       {if isset($error)}

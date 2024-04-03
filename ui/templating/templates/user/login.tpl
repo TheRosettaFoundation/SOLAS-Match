@@ -86,7 +86,7 @@
     <div class="w-75" >
 
    
-    <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
+    <a class="navbar-brand" href={urlFor name='home'}> <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" /> </a>
 
     {if isset($flash['error'])}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
