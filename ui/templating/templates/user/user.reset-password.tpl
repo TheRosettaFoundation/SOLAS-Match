@@ -110,17 +110,18 @@
                 <p>
                     {Localisation::getTranslation('user_reset_password_1')}
                 </p>
-                <label for="email">
+                <label for="email" class="form-label">
                     <h2>
                         {Localisation::getTranslation('common_email')}
                     </h2>
                 </label>
-                <p><input type="text" name="email_address" id="email_address" /></p>
+                <p><input type="text"  class="form-control" name="email_address" id="email_address" /></p>
                 
-                
-                <button type="submit" name="password_reset" class="btn btn-primary">
-                    <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('user_reset_password_send_request')}
+                <div class="d-grid gap-2">
+                <button type="submit" name="password_reset" class="btn btn-grayish">
+                    <i class="fa-share-alt fa-solid"></i> {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
+                </div>
 
                     
             </form>
