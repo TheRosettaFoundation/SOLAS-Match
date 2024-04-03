@@ -119,7 +119,7 @@
                 
                 <div class="d-grid gap-2">
                 <button type="submit" name="password_reset" class="btngray-lg">
-                    <i class="fa-share-alt fa-solid"></i> {Localisation::getTranslation('user_reset_password_send_request')}
+                     {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
                 </div>
 
