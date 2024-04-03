@@ -93,7 +93,7 @@
 
         <main class="flex-grow-1 d-flex flex-column align-items-center bg-primary ">
 
-        <div>
+        <div class="bg-grayish">
 
         {include file="handle-flash-messages.tpl"}
   
