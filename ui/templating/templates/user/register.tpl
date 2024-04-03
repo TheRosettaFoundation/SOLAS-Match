@@ -194,19 +194,19 @@
              <input type="password" name="confirm_password" id="confirm_password" class="form-control mb-1" placeholder="Please confirm your password"/>
              
              </div>
-              <div>
+              <div class="mb-1">
               <label class="checkbox required check form-check-label mt-2">
               <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> I confirm I am over the age of 18 <i class="fa-solid fa-circle-question" id="tool" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
 
               </label>
               </div>
-              <div>
+              <div class="mb-1">
               <label class="checkbox required check form-check-label">
               <input name="conduct_consent" id="conduct_consent" class="form-check-input " type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a>
              
               </label>
               </div>
-              <div>
+              <div class="mb-1">
               <label class="checkbox check form-check-label">
               <input name="newsletter_consent" id="newsletter_consent" class="form-check-input mb-3" type="checkbox"> Subscribe to the TWB email newsletter.
               <small>You can unsubscribe at any time</small>
