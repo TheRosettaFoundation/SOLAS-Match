@@ -31,7 +31,7 @@
      
      <style>
   #registerform label {
-  color:#143878 !important;
+  color:#364f67 !important;
 }
   #registerform .check {
   color:#333 !important;
