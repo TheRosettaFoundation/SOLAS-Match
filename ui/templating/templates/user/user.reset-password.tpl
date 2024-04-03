@@ -91,7 +91,7 @@
         </div>
         </nav>
 
-        <main class="flex-grow-1 d-flex flex-column align-items-center bg-primary ">
+        <main class="flex-grow-1 d-flex flex-column align-items-center bg-primary justify-content-center">
 
         <div class="bg-grayish">
 
