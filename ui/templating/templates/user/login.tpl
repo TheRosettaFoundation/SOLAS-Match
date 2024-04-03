@@ -9,6 +9,20 @@
         <title>{Settings::get('site.title')}</title>
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
+
+         <!-- Open Graph data (Facebook and Google+) -->
+         <meta property="og:title" content="{Settings::get('openGraph.title')}"/>
+         <meta property="og:type" content="{Settings::get('openGraph.type')}" />
+         <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
+         <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
+         <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
+ 
+         <!-- Twitter Card data -->
+         <meta name="twitter:card" content="{Settings::get('twitter.card')}"/>
+         <meta name="twitter:site" content="{Settings::get('twitter.site')}"/>
+         <meta name="twitter:title" content="{Settings::get('twitter.title')}"/>
+         <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
+         <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
     
  
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
@@ -45,17 +59,17 @@
 </script>
 
 
-                                                                <!-- extra Scripts -->
-                                                                {if isset($extra_scripts)}
-                                                                    {$extra_scripts}
-                                                                {/if}
+<!-- extra Scripts -->
+{if isset($extra_scripts)}
+    {$extra_scripts}
+{/if}
        
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
 
      
     </head>
 
-<body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100 " >
+<body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100" >
      
 
 <div class="container-fluid px-4  flex-grow-1">
@@ -94,7 +108,7 @@
         </div>
     {/if}
 
-      <h3 class="fw-bold mt-4 mb-3"> Login to TWB kato</h3>
+      <h2 class="fw-bold mt-4 mb-3"> Login to TWB kato</h2>
 
         <form action="{urlFor name='login'}" method="post" >
             <input type="hidden" name="action" value="verify" />
@@ -145,7 +159,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="register"}' class=" link-grayish link-offset-2 link-offset-3-hover link-underline-opacity-0 link-underline-opacity-75-hover "> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
            
 				
 			

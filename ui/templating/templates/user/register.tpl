@@ -63,14 +63,7 @@
   text-align:center;
 }
 </style>
-        <!-- 
-        <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="apple-touch-icon" sizes="180x180" href="{urlFor name="home"}ui/img/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{urlFor name="home"}ui/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{urlFor name="home"}ui/img/favicon/favicon-16x16.png">
-        <link rel="manifest" href="{urlFor name="home"}ui/img/favicon/site.webmanifest"> 
-        -->
+      
 		
         <!-- extra styles-->
         {if isset($extra_styles)}
@@ -119,21 +112,8 @@
      
 
   <div class="container-fluid px-4 flex-grow-1">
-  {include file="handle-flash-messages.tpl"}
-{if isset($error)}
-    <div class="alert alert-error">
-        <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
-    </div>
-{/if}
+ 
 
-{if isset($warning)}
-    <div class="alert">
-        <strong>{Localisation::getTranslation("common_warning")}:</strong> {$warning}
-    </div>
-{/if}
-  
-
-  
   <div class=" row py-2 d-flex justify-content-between  ">
   
       <div class=" col-12 col-md-6 py-4 d-flex flex-column align-items-center justify-content-center"> 
@@ -141,6 +121,19 @@
       <div class="w-75">
   
       <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" />
+
+      {include file="handle-flash-messages.tpl"}
+      {if isset($error)}
+          <div class="alert alert-error">
+              <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
+          </div>
+      {/if}
+      
+      {if isset($warning)}
+          <div class="alert">
+              <strong>{Localisation::getTranslation("common_warning")}:</strong> {$warning}
+          </div>
+      {/if}
   
   
       <div class="mb-4 mt-2">
@@ -175,7 +168,8 @@
                 <label for="first_name" class="required  mb-1 "><strong>First name</strong></label>
                 <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
                 </div>
-                <div >
+                
+                <div>
 
                 <label for="last_name" class="required  mb-1"><strong>Last name</strong></label>
               <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
@@ -223,7 +217,7 @@
                        {Localisation::getTranslation('common_register')}
                   </button>
               </div>
-              <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
+              <div class="fs-5 text-muted text-center mt-4 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
               
         </form>
   
