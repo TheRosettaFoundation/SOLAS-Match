@@ -109,9 +109,9 @@
         </div>
     {/if}
 
-      <h2 class="fw-bold mt-4 mb-3"> Login to TWB kato</h2>
+      <h2 class="fw-bold mt-4 mb-4"> Login to TWB kato</h2>
 
-        <form action="{urlFor name='login'}" method="post" class="mt-4" >
+        <form action="{urlFor name='login'}" method="post" class="mt-4 mb-4" >
             <input type="hidden" name="action" value="verify" />
             <fieldset class="w-100">
                 
@@ -136,7 +136,7 @@
             </fieldset>
         </form>
 
-         <div class="d-flex align-items-center mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
+         <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
 
           <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
            <div class="mb-2"> 
