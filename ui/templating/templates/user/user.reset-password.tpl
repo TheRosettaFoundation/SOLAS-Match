@@ -78,7 +78,7 @@
  </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} >
-        <div class="d-flex flex-column min-vh-100 ">
+        <div class="d-flex flex-column min-vh-100  bg-secondary">
         
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
@@ -91,17 +91,17 @@
         </div>
         </nav>
 
-        <main class="flex-grow-1 d-flex flex-column align-items-center">
+        <main class="flex-grow-1 d-flex flex-column align-items-center bg-primary ">
 
- 
+        <div>
 
         {include file="handle-flash-messages.tpl"}
   
 
-
-        <div class="page-header">
-            <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
-        </div>
+        
+            <div class="page-header">
+                <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
+            </div>
 
             <form class="well" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
                 <p>
@@ -124,7 +124,7 @@
 
                     
             </form>
-
+    </div>
     </main>
     
 
