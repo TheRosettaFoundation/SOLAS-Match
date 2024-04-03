@@ -202,7 +202,7 @@
               </div>
               <div>
               <label class="checkbox required check form-check-label">
-              <input name="conduct_consent" id="conduct_consent" class="form-check-input mb-3" type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a>
+              <input name="conduct_consent" id="conduct_consent" class="form-check-input " type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a>
              
               </label>
               </div>
