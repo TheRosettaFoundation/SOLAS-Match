@@ -26,8 +26,10 @@
        
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
       <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-      <style>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+     
+     
+     <style>
   #registerform label {
   color:#143878 !important;
 }
