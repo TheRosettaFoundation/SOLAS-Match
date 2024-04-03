@@ -215,7 +215,7 @@
               <input type="hidden" name="g-recaptcha-response" id="g_response">
               
               <div class="d-grid gap-2 reg_btn mt-3">
-                  <button type="submit" class="btn btn-grayish w-full text-center" name="submit">
+                  <button type="submit" class="btngray-lg w-full text-center" name="submit">
                        {Localisation::getTranslation('common_register')}
                   </button>
               </div>
