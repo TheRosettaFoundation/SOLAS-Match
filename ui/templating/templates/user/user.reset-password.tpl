@@ -78,7 +78,7 @@
  </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} >
-        <div class="d-flex flex-column min-vh-100  bg-secondary">
+        <div class="d-flex flex-column min-vh-100 ">
         
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
@@ -91,9 +91,9 @@
         </div>
         </nav>
 
-        <main class="flex-grow-1 d-flex flex-column align-items-center bg-primary justify-content-center">
+        <main class="flex-grow-1 d-flex flex-column align-items-center  justify-content-center">
 
-        <div class="bg-grayish">
+        <div class="">
 
         {include file="handle-flash-messages.tpl"}
   
