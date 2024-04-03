@@ -138,8 +138,8 @@
       {/if}
   
   
-      <div class="mb-4 mt-2">
-              <h3 class="fw-bold">Create an account with TWB</h3>
+      <div class="mb-4 mt-4">
+              <h2 class="fw-bold">Create an account with TWB</h2>
       </div>
 
       
