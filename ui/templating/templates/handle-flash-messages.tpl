@@ -1,5 +1,5 @@
 {if isset($flash['error'])}
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
         <p><strong>{Localisation::getTranslation('common_error')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
 {/if}

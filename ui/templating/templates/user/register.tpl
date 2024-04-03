@@ -124,7 +124,7 @@
 
       {include file="handle-flash-messages.tpl"}
       {if isset($error)}
-          <div class="alert alert-error">
+          <div class="alert alert-danger">
               <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
           </div>
       {/if}
