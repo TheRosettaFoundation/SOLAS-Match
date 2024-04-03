@@ -66,23 +66,16 @@
 </script>
 
 
+<!-- extra Scripts -->
+{if isset($extra_scripts)}
+    {$extra_scripts}
+{/if}
 
 
-
-
-
-
-
-        <!-- extra Scripts -->
-        {if isset($extra_scripts)}
-            {$extra_scripts}
-        {/if}
-       
-
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      
-    </head>
+ </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} >
         <div class="d-flex flex-column min-vh-100 ">
@@ -97,47 +90,47 @@
       
         </div>
         </nav>
-        <main class="flex-grow-1">
 
-    
-<div class="container">
+        <main class="flex-grow-1 d-flex flex-column align-items-center">
 
-<div class=" d-flex flex-column align-items-center justify-content-center">
+ 
 
-{include file="handle-flash-messages.tpl"}
+        {include file="handle-flash-messages.tpl"}
   
 
-   <div class="">
-    <div class="page-header">
-        <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
-    </div>
 
-    <form class="well" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
-        <p>
-            {Localisation::getTranslation('user_reset_password_0')}
-        </p>
-        <p>
-            {Localisation::getTranslation('user_reset_password_1')}
-        </p>
-        <label for="email">
-            <h2>
-                {Localisation::getTranslation('common_email')}
-            </h2>
-        </label>
-        <p><input type="text" name="email_address" id="email_address" /></p>
-        
-        
-        <button type="submit" name="password_reset" class="btn btn-primary">
-  	        <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('user_reset_password_send_request')}
-		</button>
+        <div class="page-header">
+            <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
+        </div>
 
-            
-    </form>
-    </div>
+            <form class="well" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
+                <p>
+                    {Localisation::getTranslation('user_reset_password_0')}
+                </p>
+                <p>
+                    {Localisation::getTranslation('user_reset_password_1')}
+                </p>
+                <label for="email">
+                    <h2>
+                        {Localisation::getTranslation('common_email')}
+                    </h2>
+                </label>
+                <p><input type="text" name="email_address" id="email_address" /></p>
+                
+                
+                <button type="submit" name="password_reset" class="btn btn-primary">
+                    <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('user_reset_password_send_request')}
+                </button>
+
+                    
+            </form>
+
+    </main>
+    
 
   </div>  
 
-    <div>
-
 
 </body>
+
+</html>
