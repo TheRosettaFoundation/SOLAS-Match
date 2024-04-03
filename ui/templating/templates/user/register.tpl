@@ -56,7 +56,7 @@
 }
 .register_header1 {
   text-align:right;
-  color:#143878 !important;
+  color:#364f67 !important;
 }
 .register_header2 {
   text-align:left;
