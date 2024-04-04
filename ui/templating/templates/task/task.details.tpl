@@ -397,7 +397,7 @@
         
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
+                    <input style="width:40px;" type='text' value="{$paid_status['purchase_order']}" name="purchase_order" id="purchase_order" />
                     <input type="submit" class="btngray-sm mt-2" name="purchase_order_submit" value="Submit" />
                     <input type="hidden" name="mark_purchase_order" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
