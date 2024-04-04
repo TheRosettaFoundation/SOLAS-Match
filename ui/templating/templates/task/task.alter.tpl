@@ -65,7 +65,7 @@
 
             <div>
 
-                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-primary text-white'>
+                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btnPrimary text-white'>
                 {Localisation::getTranslation('task_alter_view_task_details')}
                 </a>
             
