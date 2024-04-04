@@ -65,7 +65,7 @@
 
             <div>
 
-                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-primary'>
+                <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-primary text-white'>
                 {Localisation::getTranslation('task_alter_view_task_details')}
                 </a>
             
@@ -100,7 +100,7 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="form-control" class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px ;  background-color:aliceblue;" />
+                            <input class="form-control" class="hasDatePicker" type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px ;  background-color:aliceblue;" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
@@ -271,7 +271,7 @@
 
             <div class="d-flex justify-content-center mt-4 flex-wrap">
                 <div>
-                    <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger'>
+                    <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger text-white'>
                         <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}
                     </a>
                    
@@ -279,7 +279,7 @@
                 <div class="ms-4">
                    
                     <p>
-                        <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary">
+                        <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary text-white">
                             <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
                         </button>
                     </p>    
