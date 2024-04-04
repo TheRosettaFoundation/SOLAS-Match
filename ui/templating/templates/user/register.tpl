@@ -161,8 +161,7 @@
             data-logo_alignment="left">
         </div>
   </div>
-  <div class="d-flex align-items-center mb-4"><div class="flex-fill border-top border-1 border-dark-subtle mb-4" ></div><div class=" text-center text-muted mx-4">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle " ></div> </div>
-
+  <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
       {if (empty($disabled))}
         <form method="post" id="registerform" action="{urlFor name="register"}" class="wel mt-3" accept-charset="utf-8">
              <div class="d-flex mb-2">
@@ -215,7 +214,7 @@
               <input type="hidden" name="g-recaptcha-response" id="g_response">
               
               <div class="d-grid gap-2 reg_btn mt-3">
-                  <button type="submit" class="btngray-lg w-full text-center" name="submit">
+                  <button type="submit" class="btngray-lg w-full text-center cursor-pointer" name="submit">
                        {Localisation::getTranslation('common_register')}
                   </button>
               </div>
