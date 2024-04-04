@@ -63,7 +63,7 @@
              <div class="d-flex mt-2 mt-md-0">
                
                   {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
-                    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primaryDark shadow text-white me-2'">
+                    <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btnPrimary text-white me-2'>
 
                        <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit-icon" >{Localisation::getTranslation('task_view_edit_task_details')}
                     </a>
@@ -72,7 +72,7 @@
                 {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
                         
-                        <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primaryDark shadow text-white">
+                        <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btnPrimary  text-white">
                         <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" >
                         {Localisation::getTranslation('task_view_download_task')}  </a>
                     {/if}
