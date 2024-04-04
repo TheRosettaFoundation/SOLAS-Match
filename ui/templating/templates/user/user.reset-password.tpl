@@ -118,7 +118,7 @@
                 <p><input type="text"  class="form-control" name="email_address" id="email_address" /></p>
                 
                 <div class="d-grid gap-2">
-                <button type="submit" name="password_reset" class="btngray-lg">
+                <button type="submit" name="password_reset" class="btngray-lg py-1">
                      {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
                 </div>
