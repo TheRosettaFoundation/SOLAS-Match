@@ -111,9 +111,9 @@
                     {Localisation::getTranslation('user_reset_password_1')}
                 </p>
                 <label for="email" class="form-label">
-                    <h2>
+                    <h4>
                         {Localisation::getTranslation('common_email')}
-                    </h2>
+                    </h4>
                 </label>
                 <p><input type="text"  class="form-control" name="email_address" id="email_address" /></p>
                 
