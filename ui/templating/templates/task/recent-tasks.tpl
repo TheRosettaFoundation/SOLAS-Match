@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='new_header.tpl'}
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -154,5 +154,5 @@
 </div>
 <br/>
 <div style="float:left">
-    {include file='footer.tpl'}
+    {include file='footer2.tpl'}
 </div>
