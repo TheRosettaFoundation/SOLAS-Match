@@ -1,5 +1,7 @@
 {include file='new_header.tpl'}
 
+<div class="container">
+
 <span class="hidden">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
@@ -156,3 +158,5 @@
 <div style="float:left">
     {include file='footer2.tpl'}
 </div>
+</div>
+
