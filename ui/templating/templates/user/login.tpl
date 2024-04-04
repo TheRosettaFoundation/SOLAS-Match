@@ -155,7 +155,7 @@
 
             </div>
               <div class="d-grid gap-2">
-                <button type="submit" name="login" class="btngray-lg w-full text-center">
+                <button type="submit" name="login" class="btngray-lg w-full text-center cursor-pointer">
   				     {Localisation::getTranslation('common_log_in')}
 				</button>
                 
