@@ -46,37 +46,76 @@
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
-                        <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
-                            <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
-                                <span class="label label-info" style="background-color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                {if $task->getWordCount()}
-                                    <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</span>
-                                {/if}
-                            </h2>
-                            <p>
-                              {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
-                                &nbsp;|&nbsp;
-                              {/if}
-                            	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
-                            	&nbsp;|&nbsp;
-                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$status_id]}</span>
-								&nbsp;|&nbsp;
-								<span class="process_deadline_utc" style="display: inline-block">{$deadline_timestamps[$task_id]}</span>
-                            </p>
-                            
-                            
-                            <p>
 
-                                {if !empty($taskTags) && !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
-                                    {foreach $taskTags[$task_id] as $tag}
-                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
-                                    {/foreach}
+                        <div class="d-flex justify-content-start mb-2 flex-wrap">
+                                <div class="">
+                                        <div class="fw-bold fs-3  d-flex align-items-center ">
+                                            <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
+                                             <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a> 
+                                        </div>
+
+                                        <div class="d-flex mt-2 mb-3 ">
+                                            <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
+                                                {if $task->getWordCount()}
+                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} </span>
+                                                {/if}
+
+                                        </div>
+
+                                        <p class="text-muted">
+                                        {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                                         </p>
+
+                                         <p class="task_details "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
+                                          
+                                           {if !empty($completed_timestamps[$task_id])}
+                                            <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                                            {/if}
+
+                                         {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                                         
+                                            <div class="mb-3  text-muted">
+                                                
+                                                <span class=" ">
+                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
+                                                </span>
+                                               
+                                              
+                                          
+                                            <span>
+                                           
+                                            <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                            </span>
+
+                                          
+                                            </div>
+                                        {else}
+
+                                        <div class="mb-3  text-muted">
+                                        <span class=" ">
+                                            Language:
+                                        </span>
+                                        <span>
+                                        <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                        </span>
+                                        </div>
+                                        {/if}
+                                        
+                                            
+                                           
+                                            <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                                        </div>
+                                </div>
+                                {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                                 {/if}
-                            </p>
-                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
-                        </div>
+                                
+                                <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
+                                    
+                                </div>
+                            
+                         
+
+                        
                     </div>
                 {/for}
             </div>
