@@ -93,7 +93,7 @@
 
         <main class="flex-grow-1 d-flex flex-column align-items-center  justify-content-center">
 
-        <div class=" w-50l">
+        <div class=" w-50">
 
         {include file="handle-flash-messages.tpl"}
   
@@ -103,7 +103,7 @@
                 <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
             </div>
 
-            <form class="well" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
+            <form style="width:30%" action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
                 <p>
                     {Localisation::getTranslation('user_reset_password_0')}
                 </p>
