@@ -100,7 +100,7 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="form-control" class="hasDatePicker" type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px ;  background-color:aliceblue;" />
+                            <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px ;  background-color:aliceblue;" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
