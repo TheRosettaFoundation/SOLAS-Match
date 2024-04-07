@@ -76,7 +76,7 @@
         </div>
 
 
-            <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="well" accept-charset="utf-8">
+            <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}"  accept-charset="utf-8">
         <div class="table-responsive">    
         <table class="w-100 ">
            <tbody class="mx-4">
@@ -94,13 +94,13 @@
                     <div>
                         <label for="deadline" ><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
-                            <div class="alert alert-error">
+                            <div class="alert alert-danger">
                                 {$deadline_error}
                             </div>
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px ;  background-color:aliceblue;" />
+                            <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
@@ -155,17 +155,20 @@
                     {/if}
                     </p>
                     {/if}
-                    <p />
+                    </p>
 
                     {if !is_null($word_count_err)}
-                        <div class="alert alert-error">
+                        <div class="alert alert-danger">
                             {$word_count_err}
                         </div>
                     {/if} 
-                    <p />
+                    </p>
 
                     <label for="word_count" class="form-label"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
                     <input class="form-control" type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
+                    
+                    <label for="word_count_partner_weighted" class="form-label mt-2"><strong>Partner weighted {TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
+                    <input class="form-control" type="text" name="word_count_partner_weighted" id="word_count_partner_weighted" maxlength="6" value="{$task->get_word_count_partner_weighted()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
 
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>

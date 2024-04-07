@@ -66,7 +66,7 @@
                                     {/if}
                               
                                    
-                                    <div class="class="mb-sm-2"">
+                                    <div class="mb-2 md:mb-0">
                                         
                                         <button type="submit" class="btn  btn-primary fs-6 fw-bold text-white me-2 py-1">
                                             <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1 fw-bold text-white" /> {Localisation::getTranslation('task_claim_proofreading_5')}

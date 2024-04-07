@@ -167,13 +167,13 @@
              <div class="d-flex mb-2">
                 <div class="me-5">
                 <label for="first_name" class="required  mb-1 "><strong>First name</strong></label>
-                <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
+                <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control mb-2" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
                 </div>
                 
                 <div>
 
                 <label for="last_name" class="required  mb-1"><strong>Last name</strong></label>
-              <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
+              <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control mb-2" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
                 
                 </div>
              
@@ -195,20 +195,20 @@
              </div>
               <div class="mb-1">
               <label class="checkbox required check form-check-label mt-2">
-              <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> I confirm I am over the age of 18 <i class="fa-solid fa-circle-question" id="tool" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
-
+              <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> I confirm I am over the age of 18 
               </label>
+              <i class="fa-solid fa-circle-question" id="tool" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
               </div>
               <div class="mb-1">
-              <label class="checkbox required check form-check-label">
-              <input name="conduct_consent" id="conduct_consent" class="form-check-input " type="checkbox"> I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a>
+               <label class="checkbox  check form-check-label d-flex  ">
+              <input name="conduct_consent" id="conduct_consent" class="form-check-input " type="checkbox"> <span class="ms-1 required">I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a> </span>
              
               </label>
               </div>
               <div class="mb-1">
-              <label class="checkbox check form-check-label">
-              <input name="newsletter_consent" id="newsletter_consent" class="form-check-input mb-3" type="checkbox"> Subscribe to the TWB email newsletter.
-              <small>You can unsubscribe at any time</small>
+              <label class="checkbox check form-check-label d-flex ">
+              <input name="newsletter_consent" id="newsletter_consent" class="form-check-input " type="checkbox"> <span class="ms-1"> Subscribe to the TWB email newsletter.
+              <small >You can unsubscribe at any time</small></span>
               </label>
               </div>
               <input type="hidden" name="g-recaptcha-response" id="g_response">
@@ -218,7 +218,7 @@
                        {Localisation::getTranslation('common_register')}
                   </button>
               </div>
-              <div class="fs-5 text-muted text-center mt-3 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
+              <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="login"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover "> I already have an account</a> </div>
               
         </form>
   

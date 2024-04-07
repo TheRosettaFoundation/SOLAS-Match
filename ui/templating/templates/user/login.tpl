@@ -109,7 +109,7 @@
         </div>
     {/if}
 
-      <h2 class="fw-bold mt-4 mb-4"> Login to TWB kato</h2>
+      <h2 class="fw-bold mt-4 mb-4"> Login to TWB Platform</h2>
 
         <form action="{urlFor name='login'}" method="post" class="mt-4 mb-4" >
             <input type="hidden" name="action" value="verify" />
@@ -160,7 +160,7 @@
 				</button>
                 
                 </div>
-                <div class="fs-5 text-muted text-center mt-3 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
+                <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
            
 				
 			
