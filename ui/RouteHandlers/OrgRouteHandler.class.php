@@ -46,6 +46,12 @@ class OrgRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('org-public-profile');
 
+        $app->map(['GET'],
+            '/org/{org_id}/partner_deals[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:partner_deals')
+            ->add('\SolasMatch\UI\Lib\Middleware:auth_admin_any_or_ngo_admin')
+            ->setName('partner_deals');
+
         $app->map(['GET', 'POST'],
             '/org/{org_id}/manage/{badge_id}[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgManageBadge')
@@ -1705,6 +1711,15 @@ class OrgRouteHandler
         ));
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);
+    }
+
+    public function partner_deals(Request $request, Response $response, $args)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['deals'] = $statsDao->partner_deals($args['org_id']);
+        return UserRouteHandler::render('admin/partner_deals.tpl', $response);
     }
 
     public function orgManageBadge(Request $request, Response $response, $args)

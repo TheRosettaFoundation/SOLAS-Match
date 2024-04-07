@@ -397,4 +397,30 @@ class StatisticsDao extends BaseDao
         }
         return $deals;
     }
+
+    public function partner_deals($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('partner_deals', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        $deals = [];
+        $deal_id = null;
+        foreach ($result as $r) {
+            if (empty($deals) || $r['deal_id'] != $deal_id) {
+                $deal_id = $r['deal_id']; // Start a new deal
+                $deals[$deal_id][] = $r;
+                $deals[$deal_id][0]['total_expected_price'] = 0;
+                $deals[$deal_id][0]['total_words'] = 0;
+                $deals[$deal_id][0]['total_hours'] = 0;
+                $deals[$deal_id][0]['total_terms'] = 0;
+
+            } else {
+                $deals[$deal_id][] = $r;
+            }
+            $deals[$deal_id][0]['total_expected_price'] += $r['expected_price'];
+            $deals[$deal_id][0]['total_words'] += $r['words'];
+            $deals[$deal_id][0]['total_hours'] += $r['hours'];
+            $deals[$deal_id][0]['total_terms'] += $r['terms'];
+        }
+        return $deals;
+    }
 }

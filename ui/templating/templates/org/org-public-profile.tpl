@@ -530,6 +530,20 @@
                                         {/if}
                                     </td>  
                                 </tr>
+
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>Work Report</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        <a href="{urlFor name="partner_deals" options="org_id.$org_id"}" target="_blank">Work Report</a>
+                                    </td>
+                                </tr>
+                                {/if}
+
                             </tbody>
                         </table>
                     </div>

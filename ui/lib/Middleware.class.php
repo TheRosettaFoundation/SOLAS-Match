@@ -314,6 +314,21 @@ class Middleware
         return $this->authUserForOrg($request, $handler, COMMUNITY_OFFICER);
     }
 
+    public function auth_admin_any_or_ngo_admin(Request $request, RequestHandler $handler)
+    {
+        global $app;
+
+        $routeContext = RouteContext::fromRequest($request);
+        $route = $routeContext->getRoute();
+        $org_id = $route->getArgument('org_id');
+        if (!empty($_SESSION['user_id']) && !empty($org_id)) {
+            $adminDao = new DAO\AdminDao();
+            if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) return $handler->handle($request);
+        }
+        \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
+        return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+    }
+
     /*
      *  Middleware for ensuring the current user belongs to the Org that uploaded the associated Task
      *  Used for altering task details
