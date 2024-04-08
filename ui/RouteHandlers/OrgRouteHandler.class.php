@@ -67,7 +67,7 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             '/org/search[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgSearch')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('org-search');
         
         $app->map(['GET', 'POST'],
