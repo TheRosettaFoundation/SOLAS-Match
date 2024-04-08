@@ -26,6 +26,12 @@
             {assign var="org_id" value=$org->getId()}
             {if isset($user)}
                 <div class="pull-right">
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                            <a href="{urlFor name="org-projects" options="org_id.$org_id"}" class='btn btn-primary'>
+                                <i class="icon-briefcase icon-white"></i> Organization Dashboard
+                            </a>
+                            {/if}
+
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
