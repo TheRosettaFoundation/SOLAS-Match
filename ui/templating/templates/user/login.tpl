@@ -109,7 +109,7 @@
         </div>
     {/if}
 
-      <h2 class="fw-bold mt-4 mb-4"> Login to TWB kato</h2>
+      <h2 class="fw-bold mt-4 mb-4"> Login to TWB Platform</h2>
 
         <form action="{urlFor name='login'}" method="post" class="mt-4 mb-4" >
             <input type="hidden" name="action" value="verify" />
