@@ -200,7 +200,7 @@
               <i class="fa-solid fa-circle-question" id="tool" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
               </div>
               <div class="mb-1">
-               <label class="checkbox required check form-check-label d-flex  ">
+               <label class="checkbox  check form-check-label d-flex  ">
               <input name="conduct_consent" id="conduct_consent" class="form-check-input " type="checkbox"> <span class="ms-1 required">I agree to the <a href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a> </span>
              
               </label>
