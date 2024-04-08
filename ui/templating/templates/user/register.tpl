@@ -206,8 +206,8 @@
               </label>
               </div>
               <div class="mb-1">
-              <label class="checkbox check form-check-label">
-              <input name="newsletter_consent" id="newsletter_consent" class="form-check-input mb-3" type="checkbox"> Subscribe to the TWB email newsletter.
+              <label class="checkbox check form-check-label d-flex">
+              <input name="newsletter_consent" id="newsletter_consent" class="form-check-input " type="checkbox"> Subscribe to the TWB email newsletter.
               <small>You can unsubscribe at any time</small>
               </label>
               </div>
