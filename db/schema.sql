@@ -11140,6 +11140,43 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `partner_deals`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `partner_deals`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT
+        o.name,
+        hd.deal_id,
+        hd.deal_name,
+        hd.start_date,
+        hd.expiration_date,
+        hd.deal_total,
+        IF(tp.unit_rate_pricing IS NOT NULL, IF(ttd.divide_rate_by_60, t.word_count_partner_weighted*tp.unit_rate_pricing/60, t.word_count_partner_weighted*tp.unit_rate_pricing), 0) AS expected_price,
+        IF(ttd.divide_rate_by_60=0 AND ttd.type_enum!=7, t.word_count_partner_weighted,    0) AS words,
+        IF(ttd.divide_rate_by_60=1,                      t.word_count_partner_weighted/60, 0) AS hours,
+        IF(ttd.type_enum=7,                              t.word_count_partner_weighted,    0) AS terms,
+        p.title AS project_title,
+        p.id AS project_id,
+        t.title AS task_title,
+        t.id AS task_id,
+        ttd.type_text,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair
+    FROM      Tasks                    t
+    JOIN      Projects                 p ON t.project_id=p.id
+    JOIN      Organisations            o ON p.organisation_id=o.id
+    JOIN      task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN      Languages               l1 ON t.`language_id-source`=l1.id
+    JOIN      Languages               l2 ON t.`language_id-target`=l2.id
+    JOIN      Countries               c1 ON t.`country_id-source`=c1.id
+    JOIN      Countries               c2 ON t.`country_id-target`=c2.id
+    JOIN      project_complete_dates pcd ON p.id=pcd.project_id
+    LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
+    LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
+    WHERE p.organisation_id=oID
+    ORDER BY hd.deal_name, hd.deal_id, p.title, t.project_id, CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code), t.title, t.`task-type_id`, t.id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_deals_report`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_deals_report`()

@@ -43,7 +43,7 @@
             <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal[0]['deal_name'])}</td>
             <td>{$deal[0]['start_date']}</td>
             <td>{$deal[0]['expiration_date']}</td>
-            <td>${$deal[0]['deal_total']}</td>
+            <td>{if !empty($deal[0]['deal_total'])}${$deal[0]['deal_total']}{/if}</td>
         </tr>
     </tbody>
 </table>

@@ -530,6 +530,9 @@
                                         {/if}
                                     </td>  
                                 </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
 
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                                 <tr valign="top">
