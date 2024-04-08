@@ -473,13 +473,13 @@
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </td>   
         </form>
-            <td>
+            {* <td>
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {if $type_id == $task_type}
                         {$ui['unit_rate']}
                     {/if}
                 {/foreach}
-            </td>
+            </td> *}
             <td>
                 ${round($total_expected_cost, 2)}
             </td>
