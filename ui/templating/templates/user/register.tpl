@@ -206,9 +206,9 @@
               </label>
               </div>
               <div class="mb-1">
-              <label class="checkbox check form-check-label ">
+              <label class="checkbox check form-check-label d-flex ">
               <input name="newsletter_consent" id="newsletter_consent" class="form-check-input " type="checkbox"> Subscribe to the TWB email newsletter.
-              <small>You can unsubscribe at any time</small>
+              <small class="ms-1">You can unsubscribe at any time</small>
               </label>
               </div>
               <input type="hidden" name="g-recaptcha-response" id="g_response">
