@@ -378,13 +378,13 @@
             <th>Payment Status</th>
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
-            <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            {* <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th> *}
             <th>Total Expected Cost</th>
           {else}
             <th class="d-none"></th>
             <th class="d-none"></th>
             <th class="d-none"></th>
-            <th class="d-none"></th>
+            {* <th class="d-none"></th> *}
             <th class="d-none"></th>
           {/if}
           <th>Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
@@ -459,7 +459,7 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input style="width:40px;" type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
+                    <input style="width:40px;" type='text' value="{TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}" name="unit_rate" id="unit_rate" />
                     <input type="submit" class="btngray-sm mt-2" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -467,7 +467,7 @@
             </td>
             <td>
             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-            <input style="width:40px;" type='text' value="{$paid_status['unit_rate_pricing']}" name="unit_rate_pricing" id="unit_rate_pricing" />
+            <input style="width:40px;" type='text' value="{TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}" name="unit_rate_pricing" id="unit_rate_pricing" />
             <input type="submit" class="btngray-sm mt-2" name="unit_rate_pricing_submit" value="Submit" />
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
