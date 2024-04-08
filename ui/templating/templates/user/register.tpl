@@ -167,13 +167,13 @@
              <div class="d-flex mb-2">
                 <div class="me-5">
                 <label for="first_name" class="required  mb-1 "><strong>First name</strong></label>
-                <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
+                <input type="text" name="first_name" id="first_name" placeholder="First name" class="form-control mb-2" {if isset($first_name)}value="{$first_name|escape:'html':'UTF-8'}"{/if} required/>
                 </div>
                 
                 <div>
 
                 <label for="last_name" class="required  mb-1"><strong>Last name</strong></label>
-              <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
+              <input type="text" name="last_name" id="last_name" placeholder="Last name" class="form-control mb-2" {if isset($last_name)}value="{$last_name|escape:'html':'UTF-8'}"{/if} required/>
                 
                 </div>
              
