@@ -3,6 +3,13 @@
     <div class="page-header">
         <h1>
             {Localisation::getTranslation('org_dashboard_organisation_dashboard')} <small>{Localisation::getTranslation('org_dashboard_0')}</small>
+            <div class="pull-right">
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                    <a href="{urlFor name="create-org"}" class="btn btn-success" onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
+                        <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
+                    </a>
+                {/if}
+            </div>
         </h1>
     </div>
 
