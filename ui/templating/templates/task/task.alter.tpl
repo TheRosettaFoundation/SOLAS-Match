@@ -167,8 +167,8 @@
                     <label for="word_count" class="form-label"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
                     <input class="form-control" type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
                     
-                    <label for="word_count_partner_weighted" class="form-label"><strong>Partner weighted {TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
-                    <input class="form-control" type="text" name="word_count_partner_weighted" id="word_count_partner_weighted" maxlength="6" value="{$task->get_word_count_partner_weighted())}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
+                    <label for="word_count_partner_weighted" class="form-label mt-2"><strong>Partner weighted {TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
+                    <input class="form-control" type="text" name="word_count_partner_weighted" id="word_count_partner_weighted" maxlength="6" value="{$task->get_word_count_partner_weighted()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
 
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>
