@@ -9,7 +9,7 @@
 
 {if isset($flash['error'])}
     <br>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
         <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
@@ -37,7 +37,7 @@
     <p>{Localisation::getTranslation('common_loading')}</p>
 </div>
 
-<div style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
+<div class="w-75 text-center">
    {if isset($recentTasks) && count($recentTasks) > 0}
         <div id="recent-tasks">
             <div class="ts">
