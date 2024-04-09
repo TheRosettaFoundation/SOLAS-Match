@@ -71,8 +71,7 @@
         <th>Project</th>
         <th>Task Name</th>
         <th>Service Type</th>
-        <th>Amount</th>
-        <th>Total????</th>
+        <th>Task Total</th>
         <th>Language Pair</th>
     </thead>    
     <tbody>
@@ -82,7 +81,6 @@
             <td><a href="{urlFor name="task-view" options="task_id.{$task['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['task_title'])}</a></td>
             <td>{$task['type_text']}</td>
             <td>${round($task['expected_price'], 2)}</td>
-            <th>????</th>
             <td>{$task['language_pair']}</td>
         </tr>
         {/foreach}
