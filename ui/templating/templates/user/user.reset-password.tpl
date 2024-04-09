@@ -93,7 +93,7 @@
 
         <main class="flex-grow-1 d-flex flex-column align-items-center  justify-content-center">
 
-        <div style="width:30%" >
+        <div class="w-75 md:w-50" >
 
         {include file="handle-flash-messages.tpl"}
   
