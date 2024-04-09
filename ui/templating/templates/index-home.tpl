@@ -693,7 +693,7 @@ a:hover{
 
                                 <div>
                                         {if $taskImages[$task_id]}
-                                        <div id="img_{$task_id}"  >
+                                        <div class="mt-2 md:mt-0" id="img_{$task_id}"  >
                                             <img src="{$taskImages[$task_id]}" style ="width:100px ; height:100px">
                                         </div>
                                         {else}
