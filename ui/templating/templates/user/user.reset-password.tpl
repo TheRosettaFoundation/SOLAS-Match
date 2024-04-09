@@ -93,7 +93,7 @@
 
         <main class="flex-grow-1 d-flex flex-column ">
 
-        <div class="row flex-grow-1 bg-primary  d-flex flex-column align-items-center  justify-content-center" >
+        <div class="row flex-grow-1  d-flex flex-column align-items-center  justify-content-center" >
 
         {include file="handle-flash-messages.tpl"}
   
