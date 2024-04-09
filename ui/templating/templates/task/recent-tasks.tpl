@@ -39,13 +39,13 @@
 
 <div class="row ">
    {if isset($recentTasks) && count($recentTasks) > 0}
-        <div id="recent-tasks"  class="col-12 col-md-4">
+        <div id="recent-tasks"  class="col-12 col-md-6">
             <div class="ts">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
                     <div class="ts-task">
                     <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
-                    <div class=" w-100">
+                    <div>
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
