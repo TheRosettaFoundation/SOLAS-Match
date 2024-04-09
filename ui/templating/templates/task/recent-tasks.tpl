@@ -2,7 +2,7 @@
 
 <div class="container">
 
-<span class="hidden">
+<span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
@@ -39,7 +39,7 @@
 <div id="loading_warning">
     <p>{Localisation::getTranslation('common_loading')}</p>
 </div>
-<
+
 <div class="row ">
    {if isset($recentTasks) && count($recentTasks) > 0}
         <div id="recent-tasks"  class="col-12 col-md-6">
