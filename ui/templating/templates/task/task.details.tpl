@@ -464,10 +464,11 @@
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
-                <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
-                <td> 000</td>
-                <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
-                <td> 000</td>
+                <div>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
+                <hr/>
+                <div> 000</div>
+                <div>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
+                <div> 000</div>
 
             </td>
             <td>
