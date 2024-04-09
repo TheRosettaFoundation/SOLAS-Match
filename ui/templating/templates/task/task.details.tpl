@@ -464,11 +464,17 @@
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
-                <div>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
+                <div class="mt-2 fw-bold">Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
                 <hr/>
-                <div> 000</div>
-                <div>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
-                <div> 000</div>
+                <div>   
+                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    {if $type_id == $task_type}
+                        {$ui['unit_rate']}
+                    {/if}
+                {/foreach}
+                </div>
+                <div class="mt-2 fw-bold">Total Expected Cost</div>
+                <div> ${round($total_expected_cost, 2)}</div>
 
             </td>
             <td>
