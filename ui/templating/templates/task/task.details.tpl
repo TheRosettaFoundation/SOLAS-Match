@@ -464,6 +464,11 @@
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
+                <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+                <td> 000</td>
+                <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+                <td> 000</td>
+
             </td>
             <td>
             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
