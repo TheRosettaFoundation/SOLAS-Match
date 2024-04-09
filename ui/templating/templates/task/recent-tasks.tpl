@@ -16,7 +16,9 @@
 {/if}
 
 <div class="page-header">
-    <h3>
+    <h3 class="d-flex justify-content-between">
+        
+        <div>
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
                 {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
@@ -26,6 +28,7 @@
         {else}
             {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
         {/if}
+        </div>
         <a href="{urlFor name="home"}" class="btn btn-primary pull-right" role="button">
             <i class="icon-arrow-left icon-white"></i> {Localisation::getTranslation('common_task_stream')}
         </a>
