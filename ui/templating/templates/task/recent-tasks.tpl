@@ -37,9 +37,9 @@
     <p>{Localisation::getTranslation('common_loading')}</p>
 </div>
 
-<div class="w-75 text-center">
+<div class="row ">
    {if isset($recentTasks) && count($recentTasks) > 0}
-        <div id="recent-tasks">
+        <div id="recent-tasks"  class="col-12 col-md-4">
             <div class="ts">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
