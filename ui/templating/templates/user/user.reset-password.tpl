@@ -97,7 +97,7 @@
 
         {include file="handle-flash-messages.tpl"}
   
-         <div class="col-sm-12 col-md-4 ">
+         <div class="col-sm-10 col-md-4 ">
         
             <div class="page-header">
                 <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
