@@ -483,6 +483,10 @@
             <input type="submit" class="btngray-sm mt-2" name="unit_rate_pricing_submit" value="Submit" />
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+
+                <div class="fs-5 fw-bold">Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</div>
+                <hr/>
+                <div class="fs-5 fw-bold">Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</div>
              </td>   
         </form>
             <td>
