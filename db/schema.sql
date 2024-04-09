@@ -11175,7 +11175,7 @@ BEGIN
     LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
     LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
     WHERE p.organisation_id=oID
-    ORDER BY hd.deal_name, hd.deal_id, p.title, t.project_id, CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code), t.title, t.`task-type_id`, t.id;
+    ORDER BY IFNULL(hd.deal_id, 18446744073709551615) DESC, p.title, t.project_id, CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code), t.title, t.`task-type_id`, t.id;
 END//
 DELIMITER ;
 
