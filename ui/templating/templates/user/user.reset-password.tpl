@@ -93,11 +93,11 @@
 
         <main class="flex-grow-1 d-flex flex-column align-items-center  justify-content-center">
 
-        <div class="w-auto mx-auto" >
+        <div class="row" >
 
         {include file="handle-flash-messages.tpl"}
   
-
+         <div class="col-sm-9 col-md-3">
         
             <div class="page-header">
                 <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
@@ -125,6 +125,8 @@
 
                     
             </form>
+
+      </div>      
     </div>
     </main>
     
