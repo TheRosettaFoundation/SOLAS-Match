@@ -378,17 +378,15 @@
             <th>Payment Status</th>
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
-            <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
-            <th>Total Expected Cost</th>
+           
           {else}
             <th class="d-none"></th>
             <th class="d-none"></th>
             <th class="d-none"></th>
             <th class="d-none"></th>
-            <th class="d-none"></th>
+            
           {/if}
-          <th>Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
-            <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
+        
         </tr>
         </thead>
         <tbody class="fs-4">
@@ -489,41 +487,22 @@
                  {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}
                 <div class="fs-5 fw-bold mt-2">Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</div>
                 <div> <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                <input style="width:40px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                <input type="submit" class="btngray-sm fs-4 mt-2" name="source_quantity_submit" value="Submit" />
-                <input type="hidden" name="mark_source_quantity" value="1" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form></div>
+                    <input style="width:40px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
+                    <input type="submit" class="btngray-sm fs-4 mt-2" name="source_quantity_submit" value="Submit" />
+                    <input type="hidden" name="mark_source_quantity" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form></div>
              </td>   
         </form>
-            <td>
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    {if $type_id == $task_type}
-                        {$ui['unit_rate']}
-                    {/if}
-                {/foreach}
-            </td>
-            <td>
-                ${round($total_expected_cost, 2)}
-            </td>
+            
           {else}
             <td class="d-none"></td>
             <td class="d-none"></td>
             <td class="d-none"></td>
             <td class="d-none"></td>
-            <td class="d-none"></td>
+            
           {/if}
-          <td>
-        {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}
-        </td>
-            <td>
-                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input style="width:40px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                    <input type="submit" class="btngray-sm fs-4 mt-2" name="source_quantity_submit" value="Submit" />
-                    <input type="hidden" name="mark_source_quantity" value="1" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-            </td>
+        
         </tr>
        </tbody>
     </table>
