@@ -964,7 +964,7 @@ class TaskRouteHandler
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
-                if (isset($post['word_count']) && ctype_digit($post['word_count']) && $post['word_count_partner_weighted']) && ctype_digit($post['word_count_partner_weighted']) {
+                if (isset($post['word_count']) && ctype_digit($post['word_count']) && $post['word_count_partner_weighted'] && ctype_digit($post['word_count_partner_weighted'])) {
                     $task->setWordCount($post['word_count']);
                     $task->set_word_count_partner_weighted($post['word_count_partner_weighted']);
                     $projectDao->queue_asana_project($task->getProjectId());
