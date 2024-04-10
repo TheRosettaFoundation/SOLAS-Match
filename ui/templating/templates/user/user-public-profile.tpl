@@ -435,7 +435,7 @@
 
                             <div class="d-flex align-items-center">
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
+                                   <a class="btn btn-yellowish text-uppercase text-primary" href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;"> <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview </span></a>
                                </span>
                                 <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
