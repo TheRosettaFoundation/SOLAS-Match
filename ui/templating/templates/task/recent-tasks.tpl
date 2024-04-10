@@ -151,10 +151,10 @@
                     {if $currentScrollPage < $lastScrollPage}
                         <div class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" class="custom-link me-4" options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
+                            <a class="custom-link me-4" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
                         </div>
                         <div>
-                            <a href="{urlFor name="$url_name" class="custom-link" options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
+                            <a class="custom-link me-4" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
                         </div>
                     {/if}
                 </div>
