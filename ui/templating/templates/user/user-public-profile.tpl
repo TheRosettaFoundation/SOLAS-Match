@@ -708,7 +708,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
                                 <h4 class="fw-bold mb-3 fs-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h5 class="mb-3">
-                                    <span class="fw-bold fs-3">{$user_badges['recognition_points']}</span><br />
+                                    <span class="fw-bold fs-3 mb-2">{$user_badges['recognition_points']}</span><br />
                                     <span >RECOGNITION POINTS</span>
                                 </h5>
                                 </div>
