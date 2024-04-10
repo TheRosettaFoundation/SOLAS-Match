@@ -456,7 +456,7 @@
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input style="width:60px;" type='text' value="{TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}" name="unit_rate" id="unit_rate" />
+                    <input style="width:60px;" type='text' value="{$ui['unit_rate']}" name="unit_rate" id="unit_rate" />
                     <input type="submit" class="btngray-sm mt-2" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -466,7 +466,7 @@
                 <div>   
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {if $type_id == $task_type}
-                        {TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}
+                        {$ui['unit_rate']}
                     {/if}
                 {/foreach}
                 </div>
