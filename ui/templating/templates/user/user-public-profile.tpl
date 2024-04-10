@@ -507,26 +507,25 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="fw-bold"> Average scores in reviews </div>
-                                    <div class="fw-bold">Average score out of 5</div>
+                                    <div class="fw-bold"> Average scores in reviews out of 5 </div>
                                 </div>
 
 
                                 <div class="text-sm mb-4">This information is only visible to you</div>
 
-                                <div class="d-flex justify-content-between mt-2"> 
-                                     <div>
+                                <div class="d-flex  mt-2"> 
+                                     <ul class="me-4">
 
-                                        <div class="mb-2">Accuracy</div>
-                                        <div class="mb-2">Fluency</div>
-                                        <div class="mb-2">Terminology</div>
-                                        <div class="mb-2">Style</div>
-                                        <div class="mb-2">Design</div>
+                                        <li class="mb-2">Accuracy</li>
+                                        <li class="mb-2">Fluency</li>
+                                        <li class="mb-2">Terminology</li>
+                                        <li class="mb-2">Style</li>
+                                        <li class="mb-2">Design</li>
 
                                      
                                      
                                      </div>
-                                     <div>
+                                     <div class="ms-4">
 
                                          <div class="mb-2">{$quality_score['accuracy']}</div>
                                           <div class="mb-2">{$quality_score['fluency']}</div>
