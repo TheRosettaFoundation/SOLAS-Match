@@ -334,9 +334,9 @@
                             </div>
                             <div class="d-flex">
                                <span  class="d-flex me-2">
-                                    <a class ="btn btn-yellowish text-uppercase text-primary fs-7" id="linkcopy"  href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" > <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" />  Preview</span></a>
+                                    <a class="btn btn-yellowish text-uppercase text-primary fs-7" id="linkcopy"  href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" > <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" />  Preview</span></a>
                                </span>
-                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2 fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2 fs-7">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
