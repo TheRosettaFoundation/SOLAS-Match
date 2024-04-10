@@ -524,8 +524,8 @@
 
                                      
                                      
-                                     </div>
-                                     <div >
+                                     </ul>
+                                     <div>
 
                                          <div class="mb-2">{$quality_score['accuracy']}</div>
                                           <div class="mb-2">{$quality_score['fluency']}</div>
