@@ -40,7 +40,7 @@
     <p>{Localisation::getTranslation('common_loading')}</p>
 </div>
 
-<div class="row d-flex flex-column justify-content-between align-items-between">
+<div class="row">
    {if isset($recentTasks) && count($recentTasks) > 0}
         <div id="recent-tasks"  class="col-12 col-md-6 col-lg-4 ">
             <div class="ts px-4">
