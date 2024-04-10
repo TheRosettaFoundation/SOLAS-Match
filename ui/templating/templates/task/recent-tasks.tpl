@@ -175,10 +175,6 @@
         <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
     {/if}
 </div>
-<br/>
-<div>
-    
-</div>
-</div>
+
 {include file='footer2.tpl'}
 
