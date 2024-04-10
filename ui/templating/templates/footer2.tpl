@@ -34,7 +34,7 @@
 
                       <div class="bg-primary d-flex justify-content-between  flex-wrap text-white  mt-4 ">
 
-                        <div class="mx-5  mt-2 d-flex align-items-center flex-wrap py-2 py-md-5"> 
+                        <div class="mx-5  mt-2 d-flex align-items-center flex-wrap py-2 "> 
                            <div class =" text-white"> Follow Us :</div>
                            <div class ="  mx-2  mt-md-0"> <a href="https://facebook.com/translatorswithoutborders" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/facebook.svg" /> </a></div>
                            <div class =" mx-2  mt-md-0">  <a href="https://twitter.com/CLEARGlobalOrg" target ="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" /> </a></div>
@@ -45,7 +45,7 @@
                         
                         </div>
 
-                        <div class= "mx-5  mt-2 py-2 py-md-5">
+                        <div class= "mx-5  mt-2 py-2 ">
                             <a href="mailto:%69%6e%66%6f@%74%72%61%6e%73%6c%61%74%6f%72%73%77%69%74%68%6f%75%74%62%6f%72%64%65%72%73.%6f%72%67" class="text-decoration-none text-white" target="_blank">Contact Us</a>
                              | 
                             <a href="/static/terms/" class="text-decoration-none text-white" target="_blank" >
