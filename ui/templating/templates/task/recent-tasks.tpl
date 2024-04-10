@@ -169,7 +169,7 @@
                         </div>
                     {/if}
                 </div>
-            </ul>
+            </div>
         </div>
     {else}
         <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
