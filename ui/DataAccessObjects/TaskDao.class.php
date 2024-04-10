@@ -716,13 +716,16 @@ error_log("createTaskDirectly: $args");
 
     public function update_paid_status($paid_status)
     {
-        LibAPI\PDOWrapper::call('update_paid_status',
+        $result=LibAPI\PDOWrapper::call('update_paid_status',
             LibAPI\PDOWrapper::cleanse($paid_status['task_id']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['purchase_order']) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($paid_status['payment_status']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['unit_rate']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['unit_rate_pricing']) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($paid_status['status_changed']));
+        
+        if (empty($result)) return 0;
+        return $result[0];
     }
 
     public function clear_paid_status($task_id)
