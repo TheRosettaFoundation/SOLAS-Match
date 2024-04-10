@@ -460,7 +460,7 @@
                     <input type="submit" class="btngray-sm mt-2" name="unit_rate_submit" value="Submit" />
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
+               
                 <div class="mt-4 fw-bold fs-5">Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
                 <hr/>
                 <div>   
@@ -473,7 +473,7 @@
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
                 <div> ${round($total_expected_cost, 2)}</div>
-
+                </form>
             </td>
             <td>
             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
