@@ -208,7 +208,7 @@
                             </div>
                         {/if}
 
-                        <p  />
+                    
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                         <div class="well">

@@ -1,5 +1,5 @@
 <!-- Editor Hint: ¿áéíóú -->
-<div class="p-2 border-secondary rounded-3 ">
+<div class="p-4 border-secondary rounded-3 ">
 <div class="table-responsive ">
 <table class="table ">
     <thead >
@@ -80,7 +80,7 @@
 </div>
 
 <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
-<div class="table-responsive mt-4  ">
+<div class="table-responsive ">
     <table class="table table-borderless ">
        <tr class="">
             <thead class="fs-5">
