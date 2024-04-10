@@ -128,9 +128,9 @@
                             </p>
                             
 
-                            {* <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
+                            <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
                                 
-                            </div> *}
+                            </div>
                             
                          
 
