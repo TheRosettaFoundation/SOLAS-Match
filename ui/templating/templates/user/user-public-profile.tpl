@@ -136,8 +136,7 @@
                     
                     </div>
 
-                    <hr class="bg-light-subtle"/>
-                  
+                 
                     {/if}
 
 
@@ -179,7 +178,7 @@
                         {if $url['state']}<a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}</a>{/if}
                     {/foreach}
 
-                    <hr class="bg-light-subtle"/>
+                 
                     {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
                     {if !empty($bio)}
                 
@@ -381,7 +380,7 @@
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
-                            <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
+                            <h4 class="mb-3 fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                              <div class="d-flex align-items-center">
                                <span id="badgecopy" class="text-break w-50 link-primary me-4" >
@@ -421,10 +420,7 @@
                             
                         </div>    
 
-
-                        <hr class="bg-light-subtle"/>
- 
-                      
+        
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
