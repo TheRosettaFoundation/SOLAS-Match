@@ -332,11 +332,11 @@
                                     <h4 class="mb-3 fw-bold" >Share this link with anyone you wish to see your profile:</h4>
                                 
                             </div>
-                            <div>
-                               <span id="linkcopy" class="d-flex">
-                                    <a class ="btn btn-yellowish text-uppercase text-primary fs-5" href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" >Preview</span></a>
+                            <div class="d-flex">
+                               <span id="linkcopy" class="d-flex me-2">
+                                    <a class ="btn btn-yellowish text-uppercase text-primary fs-7" href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" >Preview</span></a>
                                </span>
-                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2 fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
