@@ -96,7 +96,7 @@
          <div class="col-sm-8 mx-4 md:mx-0 col-md-4 col-lg-3">
         
             <div class="page-header">
-                <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
+                <h3>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h3>
             </div>
 
             <form  action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
