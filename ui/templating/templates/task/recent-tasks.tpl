@@ -178,7 +178,8 @@
 </div>
 <br/>
 <div>
-    {include file='footer2.tpl'}
+    
 </div>
 </div>
+{include file='footer2.tpl'}
 
