@@ -424,7 +424,7 @@
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
-                            <h4 class="fw-bold">Use the link below to embed the above badge in another system:</h4>
+                            <h4 class="fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                             <div class="d-flex align-items-center">
                                <span  class="text-break w-50 link-primary me-4" >
