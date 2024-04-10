@@ -79,7 +79,7 @@
 </div>
 </div>
 
-<div class="bg-body p-2 border-secondary rounded-3 mt-4">
+<div class="bg-body p-2 border-secondary rounded-3 mt-2">
 <div class="table-responsive  ">
     <table class="table table-borderless ">
        <tr class="">
