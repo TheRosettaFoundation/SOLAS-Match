@@ -1605,6 +1605,9 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body">
+
+    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+
         <div class='d-flex justify-content-between flex-wrap'>
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
@@ -1615,6 +1618,7 @@ If a language is to be removed from this list, the community will be informed be
                 </div>
        
         </div>
+    {/if}
 
         {foreach $user_orgs as $org}
             <div class="row">
