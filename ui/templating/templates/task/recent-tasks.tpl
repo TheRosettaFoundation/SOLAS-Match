@@ -15,8 +15,8 @@
     </div>
 {/if}
 
-<div class="page-header mb-2">
-    <h3 class="d-flex  py-4">
+<div class="page-header mb-2 py-4">
+    <h3 class="d-flex  align-items-center">
         
         <div class="me-4">
         {if isset($thisUser)}
@@ -30,7 +30,7 @@
         {/if}
         </div>
         <a href="{urlFor name="home"}" class="btn btn-primary ms-4" role="button">
-            <i class="icon-arrow-left icon-white"></i> {Localisation::getTranslation('common_task_stream')}
+            <i class=" fa-solid fa-arrow-left"></i> {Localisation::getTranslation('common_task_stream')}
         </a>
     </h3>
     <hr />
