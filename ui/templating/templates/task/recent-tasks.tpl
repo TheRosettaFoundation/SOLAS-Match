@@ -116,6 +116,7 @@
                                 </div>
                                 {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                                 {/if}
+                                
 
                                 <p>
 
@@ -128,7 +129,7 @@
                             
 
                                 
-                                <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
+                                <div class="d-flex text-body flex-wrap text-muted "> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                     
                                 </div>
                             
