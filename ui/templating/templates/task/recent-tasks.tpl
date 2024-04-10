@@ -134,7 +134,7 @@
 
             {* pagination begins here *}
             {assign var="url_name" value="recent-tasks-paged"}
-            <ul class="pager pull-left">
+            <ul class="d-flex">
                 <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <li>
