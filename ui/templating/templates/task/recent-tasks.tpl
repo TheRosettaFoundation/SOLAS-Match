@@ -43,7 +43,7 @@
 <div class="row ">
    {if isset($recentTasks) && count($recentTasks) > 0}
         <div id="recent-tasks"  class="col-12 ">
-            <div class="ts">
+            <div class="ts px-4">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
                     <div class="ts-task">
