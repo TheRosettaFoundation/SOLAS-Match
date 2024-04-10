@@ -134,27 +134,27 @@
 
             {* pagination begins here *}
             {assign var="url_name" value="recent-tasks-paged"}
-            <ul class="d-flex">
-                <div class="pagination-centered" id="ias-pagination">
+            <div class="d-flex justify-content-start">
+                <div class="pagination-centered d-flex" id="ias-pagination">
                     {if $currentScrollPage > 1}
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
-                        </li>
-                        <li class="ts-previous">
+                        <div>
+                            <a href="{urlFor name="$url_name" class="custom-link me-4" options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
+                        </div>
+                        <div class="ts-previous me-2 text-white">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
-                        </li>
+                            <a href="{urlFor name="$url_name" class="custom-link" options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
+                        </div>
                     {/if}
-                    <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
-                    </li>
+                    <div>
+                        <a href="" class="custom-link mx-4">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </div>
                     {if $currentScrollPage < $lastScrollPage}
                         <li class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
+                            <a href="{urlFor name="$url_name" class="custom-link me-4" options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
                         </li>
                         <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
+                            <a href="{urlFor name="$url_name" class="custom-link" options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
                         </li>
                     {/if}
                 </div>
