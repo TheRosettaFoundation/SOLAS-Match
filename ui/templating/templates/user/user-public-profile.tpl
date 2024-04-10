@@ -335,7 +335,7 @@
                             </div>
                             <div>
                                <span id="linkcopy" class="d-flex">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 text-break " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
+                                    <a class ="btn btn-yellowish text-uppercase text-primary fs-5" href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" >Preview</span></a>
                                </span>
                                 <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
@@ -378,9 +378,6 @@
                             
                         </div>
 
-                        <hr class="bg-light-subtle"/>
-                 
-                  
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
@@ -388,11 +385,11 @@
 
                              <div class="d-flex align-items-center">
                                <span id="badgecopy" class="text-break w-50 link-primary me-4" >
-                               <a class="btn btn-yellowish text-uppercase text-primary" href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview</a>
+                               <a class="btn btn-yellowish text-uppercase text-primary fs-5" href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview</a>
 
                              
                                </span>
-                                <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary fs-5">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                     
@@ -435,9 +432,9 @@
 
                             <div class="d-flex align-items-center">
                                <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
-                                   <a class="btn btn-yellowish text-uppercase text-primary" href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;"> <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview </span></a>
+                                   <a class="btn btn-yellowish text-uppercase text-primary fs-5" href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"   target="_blank"><img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview </a>
                                </span>
-                                <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary fs-5">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                        
@@ -445,6 +442,7 @@
                        
                         {/if}
                         {/if}
+                        <hr class="bg-light-subtle"/>
                  
                        
                                 <h4 class="mb-3 mt-3 fw-bold">Supported Organizations</h4>
