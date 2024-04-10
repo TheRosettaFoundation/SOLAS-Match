@@ -99,7 +99,7 @@
                                             </div>
                                         {else}
 
-                                        <div class="mb-3  text-muted">
+                                        <div class="text-muted">
                                         <span class=" ">
                                             Language:
                                         </span>
