@@ -149,13 +149,13 @@
                         <a href="" class="custom-link mx-4">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
                     </div>
                     {if $currentScrollPage < $lastScrollPage}
-                        <li class="ts-next">
+                        <div class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
                             <a href="{urlFor name="$url_name" class="custom-link me-4" options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
-                        </li>
-                        <li>
+                        </div>
+                        <div>
                             <a href="{urlFor name="$url_name" class="custom-link" options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
-                        </li>
+                        </div>
                     {/if}
                 </div>
             </ul>
