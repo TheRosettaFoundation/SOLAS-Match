@@ -118,7 +118,6 @@ a {
 a[href^="mailto:"] {
   display: inline-block;
   margin-left: 4px;
-  text-decoration: none;
 }
 
 /*!
