@@ -33,7 +33,7 @@
              {Localisation::getTranslation('common_task_stream')} <i class=" fa-solid fa-arrow-right"></i>
         </a>
     </h3>
-    <hr />
+    <hr class="bg-light-subtle"/>
         
 </div>
 
