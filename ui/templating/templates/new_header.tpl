@@ -32,7 +32,24 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
       
-   
+        <script>
+        const projects = document.querySelectorAll(".project");
+
+        if(projects){
+
+        for (let i = 0; i < projects.length; i++) {
+                const firstLink = projects[i].children[0];
+                const secondLink = projects[i].children[1];
+                firstLink.classList.add("custom-link");
+                secondLink.classList.add("custom-link");
+            }
+
+
+        }
+
+          
+        
+        </script>
         
         
 		

@@ -37,9 +37,9 @@
         
 </div>
 
-<div id="loading_warning">
+{* <div id="loading_warning">
     <p>{Localisation::getTranslation('common_loading')}</p>
-</div>
+</div> *}
 
 <div class="row">
    {if isset($recentTasks) && count($recentTasks) > 0}
