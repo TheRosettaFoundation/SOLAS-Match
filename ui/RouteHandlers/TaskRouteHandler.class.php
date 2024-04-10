@@ -1325,7 +1325,9 @@ class TaskRouteHandler
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_unit_rate'])) {
                 if (is_numeric($post['unit_rate'])) {
                     $paid_status['unit_rate'] = $post['unit_rate'];
-                    $taskDao->update_paid_status($paid_status);
+                    var_dump($paid_status);
+                    $updated=$taskDao->update_paid_status($paid_status);
+                    var_dump($updated);
                     UserRouteHandler::flashNow('success', 'Unit Rate updated.');
                 } else UserRouteHandler::flashNow('error', 'Unit Rate must be a number.');
             }
