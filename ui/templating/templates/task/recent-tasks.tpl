@@ -116,6 +116,17 @@
                                 </div>
                                 {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                                 {/if}
+
+                                <p>
+
+                                {if !empty($taskTags) && !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
+                                    {foreach $taskTags[$task_id] as $tag}
+                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
+                                    {/foreach}
+                                {/if}
+                            </p>
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
+
                                 
                                 <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
                                     
