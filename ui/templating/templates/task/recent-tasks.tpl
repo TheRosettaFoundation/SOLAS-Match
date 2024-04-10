@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='new_header.tpl'}
 
 <div class="container">
 
@@ -30,7 +30,7 @@
         {/if}
         </div>
         <a href="{urlFor name="home"}" class="btn btn-primary ms-4 text-white" role="button">
-            <i class=" fa-solid fa-arrow-left"></i> {Localisation::getTranslation('common_task_stream')}
+             {Localisation::getTranslation('common_task_stream')} <i class=" fa-solid fa-arrow-right"></i>
         </a>
     </h3>
     <hr />
