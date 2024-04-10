@@ -213,7 +213,7 @@
                         buttonCopy.addEventListener("click" , async()=>{
                           let linkText = linkCopy.href ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
-                            console.log('Link copied successfully') ;
+                            
                             buttonCopy.textContent = "Copied"
                         })
                     })
@@ -225,7 +225,7 @@
                         buttonBagde_2.addEventListener("click" , async()=>{
                           let linkText = badgeCopy_2.href ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
-                            console.log('Link copied successfully') ;
+                          
                             buttonBagde_2.textContent = "Copied"
                         })
                     })
@@ -237,7 +237,7 @@
                     buttonBadge.addEventListener("click" , async()=>{
                           let linkText = badgeCopy.href ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
-                            console.log('Link copied successfully') ;
+                          
                             buttonBadge.textContent = "Copied"
                         })
                     })
