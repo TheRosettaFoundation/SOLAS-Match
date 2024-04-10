@@ -125,7 +125,7 @@
                                     {/foreach}
                                 {/if}
                             </p>
-                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
+                            
 
                                 
                                 <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
