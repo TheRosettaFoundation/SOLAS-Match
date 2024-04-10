@@ -42,7 +42,7 @@
 
 <div class="row d-flex flex-column justify-content-between align-items-between">
    {if isset($recentTasks) && count($recentTasks) > 0}
-        <div id="recent-tasks"  class="col-12 col-md-6 col-lg-4 d-flex">
+        <div id="recent-tasks"  class="col-12 col-md-6 col-lg-4 ">
             <div class="ts px-4">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
