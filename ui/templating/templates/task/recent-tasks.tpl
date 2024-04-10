@@ -138,11 +138,11 @@
                 <div class="pagination-centered d-flex" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <div>
-                            <a href="{urlFor name="$url_name" class="custom-link me-4" options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
+                            <a class="custom-link me-4"  href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
                         </div>
                         <div class="ts-previous me-2 text-white">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" class="custom-link" options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
+                            <a  class="custom-link" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
                         </div>
                     {/if}
                     <div>
