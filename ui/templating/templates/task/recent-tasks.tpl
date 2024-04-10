@@ -1,4 +1,4 @@
-{include file='new_header.tpl'}
+{include file='header.tpl'}
 
 <div class="container">
 
@@ -29,7 +29,7 @@
             {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
         {/if}
         </div>
-        <a href="{urlFor name="home"}" class="btn btn-primary ms-4" role="button">
+        <a href="{urlFor name="home"}" class="btn btn-primary ms-4 text-white" role="button">
             <i class=" fa-solid fa-arrow-left"></i> {Localisation::getTranslation('common_task_stream')}
         </a>
     </h3>
