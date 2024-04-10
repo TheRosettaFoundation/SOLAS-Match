@@ -15,7 +15,7 @@
     </div>
 {/if}
 
-<div class="page-header mb-2 py-4">
+<div class="page-header  py-4">
     <h3 class="d-flex  align-items-center justify-content-between flex-wrap ">
         
         <div class="me-4 mb-2 md:mb-0">
@@ -29,7 +29,7 @@
             {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
         {/if}
         </div>
-        <a href="{urlFor name="home"}" class="btn btn-primary ms-4 text-white" role="button">
+        <a href="{urlFor name="home"}" class="btn btn-primary  text-white" role="button">
              {Localisation::getTranslation('common_task_stream')} <i class=" fa-solid fa-arrow-right"></i>
         </a>
     </h3>
