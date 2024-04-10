@@ -121,6 +121,9 @@
                 <button type="submit" name="password_reset" class="btngray-lg py-1">
                      {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
+                <div class="bg-white p-2 rounded 2 ">  <img src="{urlFor name='home'}ui/img/reset.svg" alt="reset" >
+                </div>
+                <div>or Press Enter</div>
                 </div>
 
                     
