@@ -1,4 +1,4 @@
-{include file='new_header.tpl'}
+{include file='header.tpl'}
 
 <div class="container">
 
@@ -15,8 +15,8 @@
     </div>
 {/if}
 
-<div class="page-header">
-    <h3 class="d-flex justify-content-between">
+<div class="page-header mb-2">
+    <h3 class="d-flex justify-content-between py-4">
         
         <div>
         {if isset($thisUser)}
@@ -43,7 +43,7 @@
 <div class="row">
    {if isset($recentTasks) && count($recentTasks) > 0}
         <div id="recent-tasks"  class="col-12 col-md-6  ">
-            <div class="ts px-4">
+            <div class="ts">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
                     <div class="ts-task">
