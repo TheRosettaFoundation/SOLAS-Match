@@ -18,7 +18,7 @@
 <div class="page-header  py-4">
     <h3 class="d-flex  align-items-center justify-content-between flex-wrap ">
         
-        <div class="me-4 mb-2 md:mb-0">
+        <div class="me-4 mb-2 md:mb-0 ">
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
                 {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
