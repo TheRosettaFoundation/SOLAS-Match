@@ -352,7 +352,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-0 md:ms-2 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-0 md:ms-2 mt-2 md:mt-0 col-md-5">
 
 
             
