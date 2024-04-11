@@ -62,6 +62,100 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+        <script> 
+
+        // Variables for  the theme of the site
+
+        let navi = document.getElementById("nav");
+
+                            let imgL = document.getElementById("light");
+                            let imgN = document.getElementById("night");
+
+                            let light = true;
+
+                            let theme = document.getElementById("theme");
+
+                            let logo = document.querySelector('.logo')
+
+                            let savedTheme = localStorage.getItem('theme');
+
+                            let next= document.querySelector("#next") ;
+                            let next1 = document.querySelector("#next2");
+
+                            const downloadFile = document.querySelector("#download-file");
+
+
+                            let print  = document.querySelector("#print");
+                            let downimg = document.querySelector("#downing");
+
+                            if (savedTheme == 'dark') {
+
+                                imgL.classList.add("d-none");
+                                imgN.classList.remove("d-none");
+                                document.documentElement.setAttribute('data-bs-theme', 'dark')
+                                navi.setAttribute('data-bs-theme', 'dark')
+                                logo.src = "/ui/img/TWB_Logo1.svg" ;
+                                localStorage.setItem('theme', 'dark');
+                                if(next && next1){
+                                        next.src = "/ui/img/bread.svg" 
+                                        next1.src = "/ui/img/bread.svg"
+
+                                }
+                                if(print){
+                                    print.src="/ui/img/print.svg" 
+                                    downing.src="/ui/img/download.svg"
+
+
+                                }
+                                
+                                
+                            } 
+
+                            if(theme){
+                            theme.addEventListener("click" , function(e) {
+                            
+                            light = !light ;       
+
+                            if(light){
+                                imgL.classList.remove("d-none");
+                                imgN.classList.add("d-none");
+                                document.documentElement.setAttribute('data-bs-theme', 'light')
+                                navi.setAttribute('data-bs-theme', 'light')
+                                logo.src = "/ui/img/TWB_Logo.svg" ;
+                                localStorage.setItem('theme', 'light');
+                                if(next && next1){
+
+                                    next.src = "/ui/img/bread.svg"
+                                    next1.src = "/ui/img/bread.svg"
+
+                                }
+                            
+
+                                
+                            }
+                            else{
+                                imgL.classList.add("d-none");
+                                imgN.classList.remove("d-none");
+                                document.documentElement.setAttribute('data-bs-theme', 'dark')
+                                navi.setAttribute('data-bs-theme', 'dark')
+                                logo.src = "/ui/img/TWB_Logo1.svg" ;
+                                
+                                    if(next && next1){
+
+                                        next.src = "/ui/img/next-white.svg"
+                                        next1.src = "/ui/img/next-white.svg"
+                                        
+                                    }
+
+                                localStorage.setItem('theme', 'dark');
+                            }
+
+                            
+                            })
+                            }
+
+        
+        </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
