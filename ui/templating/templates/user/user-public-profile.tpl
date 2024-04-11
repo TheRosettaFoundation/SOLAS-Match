@@ -357,7 +357,7 @@
 
             
 
-                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2 mt-2 md:mt-0">
+                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 mb-3  p-2 mt-2 md:mt-0">
                 
 
                             <div class="d-flex flex-column">
