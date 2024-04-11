@@ -508,7 +508,7 @@
                                 </div>
 
 
-                                <div class="text-sm mb-4 fw-bold">This information is only visible to you</div>
+                                <div class="text-sm mb-4 fw-bold fs-7">This information is only visible to you</div>
 
                                 <div class="d-flex  mt-2"> 
                                      <ul class="me-4">
