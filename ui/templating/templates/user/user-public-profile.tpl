@@ -383,11 +383,9 @@
                             <h4 class="mb-3 fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                              <div class="d-flex align-items-center">
-                               <span  class="text-break w-50 link-primary me-4" >
+                              
                                <a class="btn btn-yellowish text-uppercase text-primary fs-7" id="badgecopy" href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview</a>
 
-                             
-                               </span>
                                 <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
@@ -427,9 +425,8 @@
                             <h4 class="fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                             <div class="d-flex align-items-center">
-                               <span  class="text-break w-50 link-primary me-4" >
                                    <a class="btn btn-yellowish text-uppercase text-primary fs-7" id="badgecopy_2" href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"   target="_blank"><img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview </a>
-                               </span>
+                              
                                 <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
@@ -498,7 +495,7 @@
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-3 rounded-2 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
