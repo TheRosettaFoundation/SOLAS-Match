@@ -115,7 +115,7 @@
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                         <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
-                                            <i class="fa-solid fa-envelope ms-2"></i> {Localisation::getTranslation('common_change_email')}
+                                            <i class="fa-solid fa-envelope ms-2 mt-3 md:mt-0"></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
                         </div>
