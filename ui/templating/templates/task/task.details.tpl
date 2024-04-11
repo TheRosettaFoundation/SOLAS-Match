@@ -79,7 +79,7 @@
 </div>
 </div>
 
-<div class="bg-body p-2 border-secondary rounded-3 mt-2">
+<div class="bg-body p-2 border-secondary rounded-3 mt-2 mb-2">
 <div class="table-responsive  ">
     <table class="table table-borderless ">
        <tr class="">
@@ -229,8 +229,12 @@
         </div>
  
 
+
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
+
+    <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">ADMIN</div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
+
 <div class="bg-body p-2 border-secondary rounded-3 mt-4">
   <div class=" table table-responsive mt-4">
     <table class="table  ">
