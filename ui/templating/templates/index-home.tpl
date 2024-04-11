@@ -624,7 +624,7 @@ a:hover{
                 
                      <div>
 
-                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}" target="_blank" class="btn btn-primary text-white">
+                        <a href="{urlFor name="recent-tasks" options="user_id.$user_id"}"  class="btn btn-primary text-white">
 	                        {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
 	                    </a>
                                     

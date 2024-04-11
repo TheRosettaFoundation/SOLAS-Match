@@ -2,7 +2,7 @@
 
 <div class="container">
 
-<span class="hidden">
+<span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
@@ -15,8 +15,10 @@
     </div>
 {/if}
 
-<div class="page-header">
-    <h3>
+<div class="page-header  py-4">
+    <h3 class="d-flex  align-items-center justify-content-between flex-wrap ">
+        
+        <div class="me-4 mb-2 md:mb-0 ">
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
                 {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
@@ -26,26 +28,28 @@
         {else}
             {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
         {/if}
-        <a href="{urlFor name="home"}" class="btn btn-primary pull-right" role="button">
-            <i class="icon-arrow-left icon-white"></i> {Localisation::getTranslation('common_task_stream')}
+        </div>
+        <a href="{urlFor name="home"}" class="btn btn-primary  text-white" role="button">
+             {Localisation::getTranslation('common_task_stream')} <i class=" fa-solid fa-arrow-right"></i>
         </a>
     </h3>
+    <hr class="bg-light-subtle"/>
         
 </div>
 
-<div id="loading_warning">
+{* <div id="loading_warning">
     <p>{Localisation::getTranslation('common_loading')}</p>
-</div>
+</div> *}
 
-<div class="w-75 text-center">
+<div class="row">
    {if isset($recentTasks) && count($recentTasks) > 0}
-        <div id="recent-tasks">
+        <div id="recent-tasks"  class="col-12 col-sm-8 col-md-6  ">
             <div class="ts">
                 {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$recentTasks[$count]}
                     <div class="ts-task">
-                    <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
-                    <div class=" w-100">
+                    <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3 align-items-center"  >
+                    <div>
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
@@ -95,7 +99,7 @@
                                             </div>
                                         {else}
 
-                                        <div class="mb-3  text-muted">
+                                        <div class="text-muted">
                                         <span class=" ">
                                             Language:
                                         </span>
@@ -112,10 +116,18 @@
                                 </div>
                                 {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                                 {/if}
-                                
+                          
+
                                 <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
-                                    
+                                
                                 </div>
+
+
+                               
+                            
+                            
+
+                            
                             
                          
 
@@ -130,39 +142,36 @@
 
             {* pagination begins here *}
             {assign var="url_name" value="recent-tasks-paged"}
-            <ul class="pager pull-left">
-                <div class="pagination-centered" id="ias-pagination">
+            <div class="d-flex justify-content-start">
+                <div class="pagination-centered d-flex" id="ias-pagination">
                     {if $currentScrollPage > 1}
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
-                        </li>
-                        <li class="ts-previous">
+                        <div>
+                            <a class="custom-link me-4"  href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.1"}" title="First">&lt;&lt;</a>
+                        </div>
+                        <div class="ts-previous me-2 text-white">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
-                        </li>
+                            <a  class="custom-link" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$previous"}" title="Previous">&lt;</a>
+                        </div>
                     {/if}
-                    <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
-                    </li>
+                    <div>
+                        <a href="" class="custom-link mx-4">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
+                    </div>
                     {if $currentScrollPage < $lastScrollPage}
-                        <li class="ts-next">
+                        <div class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
-                        </li>
-                        <li>
-                            <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
-                        </li>
+                            <a class="custom-link me-4" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$next"}" title="Next" >&gt;</a>
+                        </div>
+                        <div>
+                            <a class="custom-link me-4" href="{urlFor name="$url_name"  options="user_id.$user_id|page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
+                        </div>
                     {/if}
                 </div>
-            </ul>
+            </div>
         </div>
     {else}
         <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
     {/if}
 </div>
-<br/>
-<div style="float:left">
-    {include file='footer2.tpl'}
-</div>
-</div>
+
+{include file='footer2.tpl'}
 

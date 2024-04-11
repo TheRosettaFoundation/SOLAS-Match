@@ -15,12 +15,6 @@
         
                     <a  href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a>       
                     
-                    {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
-                        <i class="fa-solid fa-chevron-right mx-1"> </i>
-                    <a class=" text-decoration-none text-body fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
-                    {/if}
-                     {/if}
                
                 </div>
 
@@ -58,9 +52,8 @@
 
 
             <h3 >
-            <span class="font-bold">{Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}<span>
-            <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
-        
+            <span class="fw-bold">{Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}<span>
+            
             </h3>
 
             <div>
@@ -83,24 +76,25 @@
 
                 <tr class="d-flex justify-content-between flex-wrap " >
                 <td class="" >
-                    <div>
+                    <div class="mb-3">
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
                         <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    <div >
+                    <div class="mb-3" >
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
                         <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    <div>
-                        <label for="deadline" ><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
+                    
+                    <div class="mb-3">
+                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
-                            <div class="alert alert-danger">
+                            <div class="alert alert-error">
                                 {$deadline_error}
                             </div>
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />
+                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
@@ -115,7 +109,7 @@
                     </div>
                     {/if}
                 </td>
-                <td class=" ms-4">
+                <td class="ms-0 md:ms-4">
                     <div>
                         <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
@@ -164,7 +158,7 @@
                     {/if} 
                     </p>
 
-                    <label for="word_count" class="form-label"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
+                    <label for="word_count" class="form-label mb-3"><strong>{TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
                     <input class="form-control" type="text" name="word_count" id="word_count" maxlength="6" value="{$task->getWordCount()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
                     
                     <label for="word_count_partner_weighted" class="form-label mt-2"><strong>Partner weighted {TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>

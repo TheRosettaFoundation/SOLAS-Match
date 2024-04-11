@@ -65,7 +65,7 @@
                   {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                     <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btnPrimary text-white me-2'>
 
-                       <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit-icon" >{Localisation::getTranslation('task_view_edit_task_details')}
+                       <img src="{urlFor name='home'}ui/img/edit.svg" alt="edit-icon"  class="me-2">{Localisation::getTranslation('task_view_edit_task_details')}
                     </a>
                 {/if}
            
@@ -73,7 +73,7 @@
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
                         
                         <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btnPrimary  text-white">
-                        <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" >
+                        <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" class=""me-2 >
                         {Localisation::getTranslation('task_view_download_task')}  </a>
                     {/if}
                 {/if}
@@ -132,7 +132,6 @@
 
 
        </div>
-
 
         <div class="container">
      
@@ -208,7 +207,7 @@
                             </div>
                         {/if}
 
-                        <p  />
+                    
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                         <div class="well">
@@ -389,8 +388,4 @@
  </div>
       
 
-  
-
-       
-   
 {include file="footer2.tpl"}

@@ -118,7 +118,15 @@ a {
 a[href^="mailto:"] {
   display: inline-block;
   margin-left: 4px;
-  text-decoration: none;
+}
+
+.ui-datepicker {
+  top: -10px;
+  background-color: rgba(250, 247, 243, 0.9803921569);
+  z-index: 100;
+  color: rgb(92, 89, 89);
+  padding: 8px;
+  border-radius: 4px;
 }
 
 /*!

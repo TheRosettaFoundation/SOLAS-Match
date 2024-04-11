@@ -28,12 +28,7 @@
                             <img src="{urlFor name='home'}ui/img/claimed.svg" class="me-2"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                <a href="{urlFor name="create-org"}" class="btnSuccess me-2 text-white mt-2 mt-md-0"
-                                   onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
-                                   <img src="{urlFor name='home'}ui/img/create.svg" class="me-2"> {Localisation::getTranslation('common_create_organisation')}
-                                </a>
-                        {/if} 
+                 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                           {if $admin_role}
                             <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btnPrimary me-2 text-white mt-2 mt-md-0'>
@@ -99,7 +94,7 @@
                     {if isset($userPersonalInfo)}
                             <div class="mb-3 ">
                           
-                                      {if !empty($userPersonalInfo->getFirstName())}<h3 class="fw-bold">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                      {if !empty($userPersonalInfo->getFirstName())}<h3 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
                                      <div> {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                      {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
                                      {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
@@ -110,12 +105,12 @@
                    
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                     
-                        <div class="d-flex justify-content-between flex-wrap">
-                         <a href="mailto:{$this_user->getEmail()}" class="text-decoration-none text-body"> {$this_user->getEmail()}</a>
+                        <div class="d-flex justify-content-between flex-wrap mb-3">
+                         <a href="mailto:{$this_user->getEmail()}" class=" text-body"> {$this_user->getEmail()}</a>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-1 fs-5'>
-                                            <i class="fa-solid fa-envelope ms-2"></i> {Localisation::getTranslation('common_change_email')}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-2 fs-5  mt-3 md:mt-0'>
+                                            <i class="fa-solid fa-envelope ms-2 "></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
                         </div>
@@ -131,13 +126,12 @@
                     <div class="mt-3">
                     
                             <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1 fs-5'>
-                            <i class="fa-solid fa-link"></i> Link emailed to User for Password Reset
+                            <i class="fa-solid fa-link me-2"></i> Link emailed to User for Password Reset
                             </a>
                     
                     </div>
 
-                    <hr class="bg-light-subtle"/>
-                  
+                 
                     {/if}
 
 
@@ -179,7 +173,7 @@
                         {if $url['state']}<a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}</a>{/if}
                     {/foreach}
 
-                    <hr class="bg-light-subtle"/>
+                 
                     {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
                     {if !empty($bio)}
                 
@@ -268,7 +262,7 @@
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <div class="mb-3  ">
                                         
-                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-4 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-5 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
                                             <i class="fa-solid fa-edit me-1"></i> Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
@@ -333,17 +327,17 @@
                                     <h4 class="mb-3 fw-bold" >Share this link with anyone you wish to see your profile:</h4>
                                 
                             </div>
-                            <div>
-                               <span id="linkcopy" class="d-flex">
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" class=" custom-link w-50 me-4 text-break " style="font-size: xx-small;"><span >{substr(Settings::get('site.location'), 0, -1)}{urlFor name="shared_with_key" options="key.{$key}"}</span></a>
-                               </span>
-                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary mt-2">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                            <div class="d-flex">
+                               
+                                    <a class="btn btn-yellowish text-uppercase text-primary fs-7 me-2" id="linkcopy"  href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank" > <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" />  Preview</span></a>
+                               
+                                <button id="copy-button" class="btn btn-yellowish text-uppercase text-primary fs-7">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                             {/if}
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                            
                           
-                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 b">
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 ">
                                         <input type="submit" class="btn btn-primary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
@@ -353,12 +347,12 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-2 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-0 md:ms-2 mt-2 md:mt-0 col-md-5">
 
 
             
 
-                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3  p-2 mt-2 md:mt-0">
+                        <div class="bg-yellowish  text-dark d-flex justify-content-between rounded-3 mb-3  p-2 mt-2 md:mt-0">
                 
 
                             <div class="d-flex flex-column">
@@ -378,19 +372,16 @@
                             
                         </div>
 
-                        <hr class="bg-light-subtle"/>
-                 
-                  
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                        
-                            <h4 class="mb-3 fw-bold">Use the link below to embed the above badge in another system:</h4>
+                            <h4 class="mb-3 fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                              <div class="d-flex align-items-center">
-                               <span id="badgecopy" class="text-break w-50 link-primary me-4" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank" class="custom-link"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$bkey}"}</span></a>
-                               </span>
-                                <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                              
+                               <a class="btn btn-yellowish text-uppercase text-primary fs-7 me-2" id="badgecopy" href="{urlFor name="badge_shared_with_key" options="key.{$bkey}"}" target="_blank">  <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview</a>
+
+                                <button id="badge-button" class="btn btn-yellowish text-uppercase text-primary fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                     
@@ -422,20 +413,16 @@
                             
                         </div>    
 
-
-                        <hr class="bg-light-subtle"/>
- 
-                      
+        
 
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                  
-                            <h4 class="fw-bold">Use the link below to embed the above badge in another system:</h4>
+                            <h4 class="fw-bold mt-2">Use the link below to embed the above badge in another system:</h4>
 
                             <div class="d-flex align-items-center">
-                               <span id="badgecopy_2" class="text-break w-50 link-primary me-4" >
-                                   <a href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"  class="custom-link" target="_blank"><span style="font-size: xx-small;">{substr(Settings::get('site.location'), 0, -1)}{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}</span></a>
-                               </span>
-                                <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
+                                   <a class="btn btn-yellowish text-uppercase text-primary fs-7 me-2" id="badgecopy_2" href="{urlFor name="badge_shared_with_key" options="key.{$hourkey}"}"   target="_blank"><img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Preview </a>
+                              
+                                <button id="badge-button_2" class="btn btn-yellowish text-uppercase text-primary fs-7">    <img src="{urlFor name='home'}ui/img/copy_url" class="me-1" /> Copy</button>
                             </div>
                         
                        
@@ -443,6 +430,7 @@
                        
                         {/if}
                         {/if}
+                        <hr class="bg-light-subtle"/>
                  
                        
                                 <h4 class="mb-3 mt-3 fw-bold">Supported Organizations</h4>
@@ -502,7 +490,7 @@
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 rounded-2 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
@@ -511,32 +499,31 @@
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 
                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="fw-bold"> Average scores in reviews </div>
-                                    <div class="fw-bold">Average score out of 5</div>
+                                    <div class="fw-bold"> Average scores in reviews out of 5 </div>
                                 </div>
 
 
-                                <div class="text-sm mb-4">This information is only visible to you</div>
+                                <div class="text-sm mb-4 fw-bold fs-7">This information is only visible to you</div>
 
-                                <div class="d-flex justify-content-between mt-2"> 
-                                     <div>
+                                <div class="d-flex  mt-2"> 
+                                     <ul class="me-4">
 
-                                        <div class="mb-2">Accuracy</div>
-                                        <div class="mb-2">Fluency</div>
-                                        <div class="mb-2">Terminology</div>
-                                        <div class="mb-2">Style</div>
-                                        <div class="mb-2">Design</div>
+                                        <li class="mb-2">Accuracy</li>
+                                        <li class="mb-2">Fluency</li>
+                                        <li class="mb-2">Terminology</li>
+                                        <li class="mb-2">Style</li>
+                                        <li class="mb-2">Design</li>
 
                                      
                                      
-                                     </div>
-                                     <div>
+                                     </ul>
+                                     <div class="ms-4">
 
-                                         <div class="mb-2">{$quality_score['accuracy']}</div>
-                                          <div class="mb-2">{$quality_score['fluency']}</div>
-                                           <div class="mb-2">{$quality_score['terminology']}</div>
-                                            <div class="mb-2">{$quality_score['style']}</div>
-                                             <div class="mb-2">{$quality_score['design']}</div>
+                                         <div class="mb-2 fw-bold ">{$quality_score['accuracy']}</div>
+                                          <div class="mb-2 fw-bold">{$quality_score['fluency']}</div>
+                                           <div class="mb-2 fw-bold">{$quality_score['terminology']}</div>
+                                            <div class="mb-2 fw-bold">{$quality_score['style']}</div>
+                                             <div class="mb-2 fw-bold">{$quality_score['design']}</div>
                                        
                                      
                                      </div>
@@ -712,7 +699,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 
                                 <h4 class="fw-bold mb-3 fs-3">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_badge_name)}</h4>
                                 <h5 class="mb-3">
-                                    <span class="fw-bold fs-3">{$user_badges['recognition_points']}</span><br />
+                                    <span class="fw-bold fs-3 mb-2">{$user_badges['recognition_points']}</span><br />
                                     <span >RECOGNITION POINTS</span>
                                 </h5>
                                 </div>
@@ -1610,6 +1597,9 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body">
+
+    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+
         <div class='d-flex justify-content-between flex-wrap'>
             <h3 class="fw-bold">
                 {Localisation::getTranslation('common_organisations')} <small class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_10')}</small> </h3>
@@ -1620,6 +1610,7 @@ If a language is to be removed from this list, the community will be informed be
                 </div>
        
         </div>
+    {/if}
 
         {foreach $user_orgs as $org}
             <div class="row">

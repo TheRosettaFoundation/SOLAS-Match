@@ -20,10 +20,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
       
-   
-        
-        
-		
+
         
         
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
@@ -73,7 +70,6 @@
 
 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      
  </head>
 
@@ -100,7 +96,7 @@
          <div class="col-sm-8 mx-4 md:mx-0 col-md-4 col-lg-3">
         
             <div class="page-header">
-                <h1>{Localisation::getTranslation('user_reset_password_reset_user_password')}</h1>
+                <h2 class="fw-bold">{Localisation::getTranslation('user_reset_password_reset_user_password')}</h2>
             </div>
 
             <form  action="{urlFor name="password-reset-request"}" method="post" accept-charset="utf-8">
@@ -117,10 +113,13 @@
                 </label>
                 <p><input type="text"  class="form-control" name="email_address" id="email_address" /></p>
                 
-                <div class="d-grid gap-2">
-                <button type="submit" name="password_reset" class="btngray-lg py-1">
+                <div class="d-flex gap-2">
+                <button type="submit" name="password_reset" class="btngray-lg py-1 me-2">
                      {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
+                <div class="bg-white p-2 rounded me-2">  <img src="{urlFor name='home'}ui/img/reset.svg" alt="reset" >
+                </div>
+                <div>or Press Enter</div>
                 </div>
 
                     

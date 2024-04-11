@@ -52,8 +52,8 @@
                 </select>
             </div>
               <div class=" d-grid mt-3 mb-5  ">
-            <button class="btn btn-primary text-white" type="submit">
-               <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-1">{Localisation::getTranslation('index_filter_task_stream')}
+            <button class="btn btn-primary text-white align-middle" type="submit">
+               <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-2">{Localisation::getTranslation('index_filter_task_stream')}
             </button>
             </div>
         </form>
