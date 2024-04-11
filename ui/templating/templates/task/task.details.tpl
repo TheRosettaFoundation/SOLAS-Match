@@ -120,9 +120,9 @@
         </tbody>
     </table>
    </div>  
-   </div> 
+   
 
-<div class="bg-body p-2 border-secondary  ">
+
     <div class="table-responsive">
     <table class="table table-borderless ">
         <thead class="fs-5">        
@@ -162,11 +162,11 @@
        </table>
     
        </div> 
-       </div>
+       
 
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
-           <div class="bg-body p-2 border-secondary rounded-3"> 
+        
            <div class="table-responsive">
             <table class="table table-borderless">
 
@@ -197,12 +197,12 @@
             </tbody>
           </table>
           </div>
-          </div>
+         
          
             {/if}
 
             {if !empty($required_qualification_for_details)}
-            <div class="bg-body p-2 border-secondary rounded-3 ">
+           
             <div class="table-responsive mt-4">
             <table class="table table-borderless">
               <thead class="fs-5">
@@ -224,8 +224,9 @@
                  </tbody>
             </table>
          </div>  
-        </div> 
+     
             {/if}
+        </div>
  
 
 {assign var="task_id" value=$task->getId()}
