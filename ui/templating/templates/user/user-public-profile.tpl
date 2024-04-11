@@ -342,7 +342,7 @@
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                            
                           
-                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 b">
+                                    <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 ">
                                         <input type="submit" class="btnPrimary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
