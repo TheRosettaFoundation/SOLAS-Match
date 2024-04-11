@@ -131,7 +131,7 @@
                     <div class="mt-3">
                     
                             <a href='{urlFor name="password-reset" options="uuid.$uuid"}' class=' bg-yellowish custom-link text-uppercase p-1 rounded-1 fs-5'>
-                            <i class="fa-solid fa-link"></i> Link emailed to User for Password Reset
+                            <i class="fa-solid fa-link me-2"></i> Link emailed to User for Password Reset
                             </a>
                     
                     </div>
@@ -267,7 +267,7 @@
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <div class="mb-3  ">
                                         
-                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-4 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
+                                            <a href='{urlFor name="user_rate_pairs" options="user_id.$user_id"}' class='bg-yellowish p-1 fs-5 custom-link text-primary  text-decoration-none text-uppercase rounded-2'>
                                             <i class="fa-solid fa-edit me-1"></i> Edit Linguist Unit Rate Exceptions
                                             </a>
                                         
