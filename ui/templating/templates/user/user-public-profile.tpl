@@ -343,7 +343,7 @@
                            
                           
                                     <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="mt-4 b">
-                                        <input type="submit" class="btn btn-primary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
+                                        <input type="submit" class="btnPrimary text-white" name="requestDocuments" value="Request Documents (paid projects linguist)" />
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form>
                              {/if}
@@ -508,7 +508,7 @@
                                 </div>
 
 
-                                <div class="text-sm mb-4">This information is only visible to you</div>
+                                <div class="text-sm mb-4 fw-bold">This information is only visible to you</div>
 
                                 <div class="d-flex  mt-2"> 
                                      <ul class="me-4">
@@ -524,11 +524,11 @@
                                      </ul>
                                      <div class="ms-4">
 
-                                         <div class="mb-2">{$quality_score['accuracy']}</div>
-                                          <div class="mb-2">{$quality_score['fluency']}</div>
-                                           <div class="mb-2">{$quality_score['terminology']}</div>
-                                            <div class="mb-2">{$quality_score['style']}</div>
-                                             <div class="mb-2">{$quality_score['design']}</div>
+                                         <div class="mb-2 fw-bold ">{$quality_score['accuracy']}</div>
+                                          <div class="mb-2 fw-bold">{$quality_score['fluency']}</div>
+                                           <div class="mb-2 fw-bold">{$quality_score['terminology']}</div>
+                                            <div class="mb-2 fw-bold">{$quality_score['style']}</div>
+                                             <div class="mb-2 fw-bold">{$quality_score['design']}</div>
                                        
                                      
                                      </div>
