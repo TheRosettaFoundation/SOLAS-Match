@@ -110,7 +110,7 @@
                    
                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                     
-                        <div class="d-flex justify-content-between flex-wrap">
+                        <div class="d-flex justify-content-between flex-wrap mb-2">
                          <a href="mailto:{$this_user->getEmail()}" class="text-decoration-none text-body"> {$this_user->getEmail()}</a>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
