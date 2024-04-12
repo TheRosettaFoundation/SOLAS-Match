@@ -382,6 +382,7 @@
             <th>Payment Status</th>
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
            
           {else}
             <th class="d-none"></th>
@@ -495,21 +496,27 @@
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
-                <div class="fs-5 fw-bold mt-4">Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</div>
+                <div class="fs-5 fw-bold mt-4">Default: </div>
                 <hr/>
-                 {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}
-                <div class="fs-5 fw-bold mt-4">Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</div>
+                     ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}
+                <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
-                <div> <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                    <input style="width:60px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-                    <input type="submit" class="btngray-sm fs-5" name="source_quantity_submit" value="Submit" />
-                    <input type="hidden" name="mark_source_quantity" value="1" />
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
+                <div>
+                {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
                 </div>
+               
             </form> 
 
              </td>   
+             <td>
+
+             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+             <input style="width:60px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
+             <input type="submit" class="btngray-sm fs-5" name="source_quantity_submit" value="Submit" />
+             <input type="hidden" name="mark_source_quantity" value="1" />
+             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+         </form>
+             </td>
        
             
           {else}
