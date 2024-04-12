@@ -481,7 +481,7 @@
 
                     {if $task->getWordCount() != '' && $task->getWordCount() > 1}
                     {$task->getWordCount()}
-                    {else} - {if}
+                    {else} - {/if}
                     {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
            
 
