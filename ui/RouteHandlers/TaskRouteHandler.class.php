@@ -885,7 +885,7 @@ class TaskRouteHandler
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
        
-        var_dump($post['']) 
+    
 
         $task = $taskDao->getTask($task_id);
 
