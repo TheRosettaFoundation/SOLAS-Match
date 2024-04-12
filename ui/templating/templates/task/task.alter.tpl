@@ -15,12 +15,6 @@
         
                     <a  href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a>       
                     
-                    {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
-                        <i class="fa-solid fa-chevron-right mx-1"> </i>
-                    <a class=" text-decoration-none text-body fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
-                    {/if}
-                     {/if}
                
                 </div>
 
