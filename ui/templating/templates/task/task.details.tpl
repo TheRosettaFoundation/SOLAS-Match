@@ -491,13 +491,13 @@
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
-                <div class="fs-5 fw-bold mt-4">Default Unit Price for Words: </div>
+                <div class="fs-5 fw-bold mt-4">Default:  </div>
                 <hr/>
                      ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
                 <div>
-                  ----
+                  ---- {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} ${round($total_expected_price, 2)}{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
                 </div>
                
             </form> 

@@ -1413,9 +1413,13 @@ class TaskRouteHandler
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
         $total_expected_cost = 0;
+        $total_expected_price = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_cost /= 60;
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk9dddkedf\" defer ></script>";
+
+        if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_price = $task->getWordCount()*$paid_status['unit_rate_pricing'];
+        if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_price /= 60;
 
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
@@ -1434,6 +1438,7 @@ class TaskRouteHandler
                 'matecat_url' => !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task'] ? $taskDao->get_matecat_url_regardless($task, $memsource_task) : $taskDao->get_task_url($task_id),
                 'paid_status' => $paid_status,
                 'total_expected_cost' => $total_expected_cost,
+                'total_expected_price' => $total_expected_price,
                 'taskStatusTexts' => $taskStatusTexts,
                 'list_qualified_translators' => $list_qualified_translators,
                 'details_claimed_date' => $details_claimed_date,
