@@ -479,12 +479,7 @@
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
                 <div> 
-
-                    {if $task->getWordCount() != '' && $task->getWordCount() > 1}
-                    {$task->getWordCount()}
-                    {else} - {/if}
-                    {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
-           
+            ${round($total_expected_cost, 2)} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
 
                 </div>
                 </form>
@@ -496,13 +491,13 @@
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
-                <div class="fs-5 fw-bold mt-4">Default: </div>
+                <div class="fs-5 fw-bold mt-4">Default Unit Price for Words: </div>
                 <hr/>
                      ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
                 <div>
-                {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+                ${round($total_expected_cost, 2)} for {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
                 </div>
                
             </form> 
