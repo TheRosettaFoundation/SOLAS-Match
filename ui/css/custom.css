@@ -122,10 +122,11 @@ a[href^="mailto:"] {
 
 .ui-datepicker {
   top: -10px;
-  background-color: rgba(204, 143, 57, 0.937254902);
+  background-color: rgba(252, 239, 220, 0.9803921569);
   z-index: 100;
-  color: white;
+  color: rgb(39, 38, 38);
   padding: 8px;
+  border-radius: 4px;
 }
 
 /*!

@@ -201,10 +201,11 @@ a[href^="mailto:"] {
 
 .ui-datepicker {
     top: -10px;
-    background-color: #cc8f39ef;
+    background-color: #fcefdcfa;
     z-index: 100;
-    color: white;
+    color: rgb(39, 38, 38);
     padding: 8px;
+    border-radius: 4px;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
