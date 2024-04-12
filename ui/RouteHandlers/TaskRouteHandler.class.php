@@ -880,10 +880,12 @@ class TaskRouteHandler
         $word_count_err = null;
         $deadlineError = "";
 
-        // $extra_scripts = "
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
+        $extra_scripts = "
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
+       
+        var_dump($post['']) 
 
         $task = $taskDao->getTask($task_id);
 

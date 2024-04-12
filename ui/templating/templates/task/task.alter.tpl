@@ -91,7 +91,7 @@
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
                         <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    <div>
+                    {* <div>
                         <label for="deadline" ><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-danger">
@@ -103,8 +103,8 @@
                             <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
-                    </div>
-                    {* <div style="margin-bottom:20px;">
+                    </div> *}
+                    <div style="margin-bottom:20px;">
                         <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
@@ -116,7 +116,7 @@
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
-                    </div> *}
+                    </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
