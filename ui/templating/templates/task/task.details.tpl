@@ -472,7 +472,7 @@
                 <div>   
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {if $type_id == $task_type}
-                       {TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}
+                       ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}
                     {/if}
                 {/foreach}
                 </div>
