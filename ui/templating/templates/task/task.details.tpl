@@ -497,9 +497,12 @@
                     <input type="submit" class="btngray-sm fs-5" name="source_quantity_submit" value="Submit" />
                     <input type="hidden" name="mark_source_quantity" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form></div>
+                </form>
+                </div>
+            </form> 
+
              </td>   
-        </form>
+       
             
           {else}
             <td class="d-none"></td>
