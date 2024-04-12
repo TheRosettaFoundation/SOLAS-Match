@@ -120,6 +120,12 @@ a[href^="mailto:"] {
   margin-left: 4px;
 }
 
+.ui-datepicker-calendar {
+  z-index: 100;
+  background-color: #de8e16;
+  color: white;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

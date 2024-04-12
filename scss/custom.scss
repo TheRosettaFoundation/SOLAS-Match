@@ -199,6 +199,12 @@ a[href^="mailto:"] {
     margin-left: 4px;
 }
 
+.ui-datepicker-calendar {
+    z-index: 100;
+    background-color: #de8e16;
+    color: white;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
