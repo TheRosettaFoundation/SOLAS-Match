@@ -497,7 +497,7 @@
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
                 <div>
-                {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+                  ----
                 </div>
                
             </form> 
