@@ -44,7 +44,7 @@ function initDeadlinePicker() {
         stepMinute: 10,
         beforeShow: function (input, inst) {
             setTimeout(function () {
-                inst.dpDiv.css({ top: position.top + 100 });
+                inst.dpDiv.css({ top: position.top + 30 });
             }, 0);
         },
     });
