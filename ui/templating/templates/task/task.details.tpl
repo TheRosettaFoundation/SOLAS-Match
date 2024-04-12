@@ -507,7 +507,7 @@
 
              <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
              <input style="width:60px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
-             <input type="submit" class="btngray-sm fs-5" name="source_quantity_submit" value="Submit" />
+             <input type="submit" class="btngray-sm fs-5 mt-2 md:mt-0" name="source_quantity_submit" value="Submit" />
              <input type="hidden" name="mark_source_quantity" value="1" />
              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
          </form>
