@@ -121,8 +121,8 @@ a[href^="mailto:"] {
 }
 
 .ui-datepicker {
+  top: -20px;
   z-index: 100;
-  background-color: #de8e16;
   color: white;
   padding: 8px;
 }
