@@ -120,7 +120,7 @@ a[href^="mailto:"] {
   margin-left: 4px;
 }
 
-.ui-datepicker-calendar {
+.ui-datepicker {
   z-index: 100;
   background-color: #de8e16;
   color: white;
