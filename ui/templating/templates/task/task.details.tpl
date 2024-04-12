@@ -233,7 +233,7 @@
 {assign var="task_id" value=$task->getId()}
 {if isset($show_actions)}
 
-    <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted fw-bold">Admin</div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
+    <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-body-subtle " ></div><div class=" text-center mx-4 text-muted fw-bold">Admin</div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
 
 <div class="bg-body p-2 border-secondary rounded-3 mt-4">
   <div class=" table table-responsive mt-4">
@@ -477,7 +477,15 @@
                 </div>
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
-                <div> ${round($total_expected_cost, 2)}</div>
+                <div> 
+
+                    {if $task->getWordCount() != '' && $task->getWordCount() > 1}
+                    {$task->getWordCount()}
+                    {else} - {if}
+                    {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+           
+
+                </div>
                 </form>
             </td>
             <td>
