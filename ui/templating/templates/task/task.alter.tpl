@@ -91,19 +91,7 @@
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
                         <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    {* <div>
-                        <label for="deadline" ><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
-                        {if $deadline_error != ''}
-                            <div class="alert alert-danger">
-                                {$deadline_error}
-                            </div>
-                        {/if}
-                        <p>
-                            {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="form-control"  type="date" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />
-                            <input type="hidden" name="deadline" id="deadline" />
-                        </p>
-                    </div> *}
+                    
                     <div style="margin-bottom:20px;">
                         <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
@@ -128,7 +116,7 @@
                     </div>
                     {/if}
                 </td>
-                <td class=" ms-4">
+                <td class="ms-0 md:ms-4">
                     <div>
                         <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
