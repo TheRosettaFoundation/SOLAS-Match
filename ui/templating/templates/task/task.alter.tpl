@@ -59,8 +59,7 @@
 
             <h3 >
             <span class="font-bold">{Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}<span>
-            <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
-        
+            
             </h3>
 
             <div>
