@@ -109,8 +109,8 @@
                          <a href="mailto:{$this_user->getEmail()}" class=" text-body"> {$this_user->getEmail()}</a>
                          
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-2 fs-5 align-middle'>
-                                            <i class="fa-solid fa-envelope ms-2 mt-3 md:mt-0"></i> {Localisation::getTranslation('common_change_email')}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='bg-yellowish custom-link text-primary text-uppercase p-1 rounded-2 fs-5  mt-3 md:mt-0'>
+                                            <i class="fa-solid fa-envelope ms-2 "></i> {Localisation::getTranslation('common_change_email')}
                                         </a>
                                     {/if}
                         </div>
