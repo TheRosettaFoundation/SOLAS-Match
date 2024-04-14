@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  class="d-flex flex-column justify-content-between">
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
@@ -135,9 +135,9 @@
      
     </head>
 
-        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} >
+        <body  class="flex-grow-1">
         <div class="d-flex flex-column min-vh-100 ">
-        
+      
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
        
@@ -251,6 +251,23 @@
             </div>
         </div>
         </nav>
+        {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
+		    <div id="banner-container">
+		    <a href = "{Settings::get('banner.link')}" target = "_blank">
+		    	<div id="banner-container-blocks">
+			    	<div id="banner-left">
+              <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-mid">
+              <img src="{urlFor name='home'}ui/img/banner/banner-mid-en2.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-right">
+              <img src="{urlFor name='home'}ui/img/banner/banner-right-en2.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+		    	</div>
+		    </a>
+		    </div>
+		{/if}
         <main class="flex-grow-1">
 
 

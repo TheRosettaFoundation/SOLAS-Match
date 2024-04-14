@@ -38,9 +38,9 @@
 
 
             {assign var="project_id" value=$project->getId()}
-             <div class="  ">
+             <div class="">
                
-                    <form id="copyChunksProjectForm" class="d-flex w-75  "method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
                         <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
@@ -339,15 +339,15 @@
     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
 
-        <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-between mt-4 flex-wrap">
 
-            <h3 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+            <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
             </h3>
 
          
                 {if !empty($memsource_project)}
-                <div class="d-flex ">
+                <div class="d-flex">
                     <select name="task_options" id="task_options" class="form-control">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
@@ -363,14 +363,11 @@
                     </select>
               
 
-
-     
-
-        <div class="dropdown">
-        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="dropdown ">
+        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
            ...
         </button>
-        <ul class="dropdown-menu ">
+        <ul class="dropdown-menu dropdown-menu-end">
          
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -433,7 +430,7 @@
 
             <form id="complete_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
-                    <i class="icon-check icon-black me-2"></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
+                <img src="{urlFor name='home'}ui/img/video-tick.svg" class="me-2" alt="shell" /> Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -441,7 +438,7 @@
 
             <form id="uncomplete_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
-                    <i class="icon-remove-circle icon-black me-2"></i> Set Shell Tasks Status In Progress
+                    <img src="{urlFor name='home'}ui/img/timer-pause.svg" class="me-2"alt="shell" /> Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -488,7 +485,7 @@
             </form>
             <form id="tasks_settled" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
             <a class=" flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-check-circle-o me-2"  aria-hidden="true"></i> Set tasks to Settled
+                <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set tasks to Settled
             </a>
                 <input type="hidden" name="tasks_settled" value="" />
                 <input type="hidden" name="ready_payment_status" value="Settled" />

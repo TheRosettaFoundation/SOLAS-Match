@@ -74,9 +74,9 @@
 
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-        <div class="row d-flex justify-content-between">    
+        <div class="row gy-4  gx-2">    
 
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-6 flex-grow-1 me-2>
+        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
    
        
         <span class="d-none">
@@ -348,7 +348,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 ms-0 md:ms-2 mt-2 md:mt-0 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-12  col-md-5">
 
 
             
@@ -491,7 +491,7 @@
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 rounded-2 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 rounded-2 custom-link text-decoration-none  align-middle">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
