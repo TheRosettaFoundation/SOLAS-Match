@@ -1615,13 +1615,15 @@ If a language is to be removed from this list, the community will be informed be
 
         {foreach $user_orgs as $org}
             <div class="row">
-                {assign var="org_id" value=$org->getId()}
+                {assign var="org_id" value=$org['id']}
                 {assign var="user_id" value=$this_user->getId()}
                 <div class="span8">
                     <h3>
                         <i class="fa-solid fa-briefcase me-3"></i>
-                        <a href="{urlFor name="org-public-profile" class="custom-link fw-bold" options="org_id.$org_id"}" class="custom-link fw-bold">{$org->getName()}</a>
+                        <a href="{urlFor name="org-public-profile" class="custom-link fw-bold" options="org_id.$org_id"}" class="custom-link fw-bold">{$org['name']}</a>
                     </h3>
+                    {if $org['roles']&$NGO_ADMIN}NGO ADMIN{if $org['roles']&$NGO_PROJECT_OFFICER},{/if}{/if} {if $org['roles']&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
+                    {if $org['roles']&$NGO_LINGUIST}NGO LINGUIST{if !($org['roles']&$LINGUIST)} (exclusive){/if}{/if}
                 </div>
                 <div class="row">
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
@@ -1638,16 +1640,16 @@ If a language is to be removed from this list, the community will be informed be
                     <p>
                         <strong>About Me</strong><br/>
                         
-                        {if $org->getBiography() == ''}
+                        {if $org['biography'] == ''}
                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                         {else}                            
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org['biography'])}
                         {/if}
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomepage() != "https://"}
-                        <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
+                    {if $org['homepage'] != "https://"}
+                        <a target="_blank" href="{$org['homepage']}">{$org['homepage']}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                     {/if}

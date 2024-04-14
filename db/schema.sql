@@ -2402,6 +2402,7 @@ BEGIN
     SET @LINGUIST=            1;
 
     SELECT
+      a.roles,
       o.id,
       o.name,
       o.biography,
