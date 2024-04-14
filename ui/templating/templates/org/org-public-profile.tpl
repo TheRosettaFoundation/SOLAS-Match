@@ -666,7 +666,7 @@
                                 {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                     <span class="marker org-member-marker">PROJECT OFFICER</span>
                                 {else}
-                                    <span class="marker org-member-marker">LINGUIST</span>
+                                    <span class="marker org-member-marker">LINGUIST{if !($member['roles'] & $LINGUIST)} (exclusive){/if}</span>
                                 {/if}
                             </td>
                             <td>
