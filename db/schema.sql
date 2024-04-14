@@ -12258,6 +12258,29 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`(IN uID INT UNSIGNED)
+BEGIN
+    SET @SITE_ADMIN=         64;
+    SET @PROJECT_OFFICER=    32;
+    SET @COMMUNITY_OFFICER=  16;
+    SET @NGO_ADMIN=           8;
+    SET @NGO_PROJECT_OFFICER= 4;
+    SET @NGO_LINGUIST=        2;
+    SET @LINGUIST=            1;
+
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST;
+
+    SELECT BIT_OR(roles) AS roles
+    FROM Admins
+    WHERE
+        user_id=uID AND
+        (roles & @admin_roles)>0
+    GROUP BY user_id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `create_empty_role`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_empty_role`(IN uID INT UNSIGNED)
