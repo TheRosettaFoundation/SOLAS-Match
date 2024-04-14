@@ -2772,7 +2772,7 @@ error_log("result: $result");//(**)
             'uuid' => $uuid,
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
-            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id),
+            'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org($user_id),
             'user_task_limitation' => $taskDao->get_user_task_limitation($user_id),
             'linguist_payment_information' => $taskDao->get_linguist_payment_information($user_id),
             'countries' => $countryDao->getCountries(),

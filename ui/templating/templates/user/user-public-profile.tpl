@@ -30,7 +30,7 @@
                         {/if}
                  
                         {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                          {if $admin_role}
+                          {if $admin_role&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                             <a href='{urlFor name="user-code-of-conduct" options="user_id.$user_id"}' class='btnPrimary me-2 text-white mt-2 mt-md-0'>
                                 <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
@@ -98,6 +98,7 @@
                                      <div> {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                      {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
                                      {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
+                                     {if $admin_role&$NGO_LINGUIST}NGO LINGUIST{if !($admin_role&$LINGUIST)} (exclusive){/if}{/if}
                                      {/if}</div>
                                  
                              </div>
