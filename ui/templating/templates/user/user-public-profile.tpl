@@ -347,7 +347,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-12 xs:mt-2 ms:mt-0 xs:ms-0 ms:ms-4 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-12 xs:mt-2 ms:mt-0 xs:ms-0 md:ms-4 col-md-5">
 
 
             
