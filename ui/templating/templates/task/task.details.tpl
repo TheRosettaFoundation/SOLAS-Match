@@ -467,15 +467,9 @@
                     <input type="hidden" name="mark_unit_rate" value="1" />
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                
-                <div class="mt-4 fw-bold fs-5">Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</div>
+                <div class="mt-4 fw-bold fs-5">Default :  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
                 <hr/>
-                <div>   
-                {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                    {if $type_id == $task_type}
-                       ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}
-                    {/if}
-                {/foreach}
-                </div>
+             
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
                 <div> 
@@ -491,9 +485,9 @@
             <input type="hidden" name="mark_unit_rate_pricing" value="1" />
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 
-                <div class="fs-5 fw-bold mt-4">Default Unit Price for Words  </div>
+                <div class="fs-5 fw-bold mt-4">Default Unit :  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}   </div>
                 <hr/>
-                     ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}
+                    
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
                 <div>
