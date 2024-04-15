@@ -347,8 +347,8 @@
 
          
                 {if !empty($memsource_project)}
-                <div class="d-flex align-items-center flex-wrap ">
-                    <select name="task_options" id="task_options" class="form-control flex-grow-1">
+                <div class=" ">
+                    <select name="task_options" id="task_options" class="form-control">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
                         <option value="all_translation_tasks">Select all Translation Tasks</option>
