@@ -383,12 +383,12 @@
             <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
-           
+{*            
           {else}
             <th class="d-none"></th>
             <th class="d-none"></th>
             <th class="d-none"></th>
-            <th class="d-none"></th>
+            <th class="d-none"></th> *}
             
           {/if}
         
@@ -507,12 +507,12 @@
          </form>
              </td>
        
-            
+{*             
           {else}
             <td class="d-none"></td>
             <td class="d-none"></td>
             <td class="d-none"></td>
-            <td class="d-none"></td>
+            <td class="d-none"></td> *}
             
           {/if}
         
