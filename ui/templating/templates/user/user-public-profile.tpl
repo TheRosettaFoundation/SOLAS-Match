@@ -76,7 +76,7 @@
   
         <div class="row d-flex justify-content-between">    
 
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-6 flex-grow-1 xs:me-0 md:me-4>
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-6 flex-grow-1 xs:me-0 me-4>
    
        
         <span class="d-none">
