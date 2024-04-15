@@ -341,13 +341,13 @@
 
         <div class="d-flex justify-content-between mt-4 flex-wrap">
 
-            <h3 class="fw-bold">{Localisation::getTranslation('project_view_tasks')}
+            <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
             </h3>
 
          
                 {if !empty($memsource_project)}
-                <div class="flex-grow-1">
+                <div class=" d-flex">
                     <select name="task_options" id="task_options" class="form-control">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
