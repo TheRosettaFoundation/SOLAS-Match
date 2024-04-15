@@ -347,7 +347,7 @@
 
          
                 {if !empty($memsource_project)}
-                <div class=" ">
+                <div class="d-flex">
                     <select name="task_options" id="task_options" class="form-control">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
@@ -370,7 +370,7 @@
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
            ...
         </button>
-        <ul class="dropdown-menu ">
+        <ul class="dropdown-menu w-50 ">
          
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
