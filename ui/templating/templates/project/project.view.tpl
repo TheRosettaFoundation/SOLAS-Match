@@ -366,7 +366,7 @@
 
      
 
-        <div class="dropdown relative">
+        <div class="dropdown ">
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
            ...
         </button>
@@ -433,7 +433,7 @@
 
             <form id="complete_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
-                    <i class="icon-check icon-black me-2"></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
+                <img src="{urlFor name='home'}ui/img/video-tick.svg" alt="shell" /> Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -441,7 +441,7 @@
 
             <form id="uncomplete_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
-                    <i class="icon-remove-circle icon-black me-2"></i> Set Shell Tasks Status In Progress
+                    <img src="{urlFor name='home'}ui/img/timer-pause.svg" alt="shell" /> Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
