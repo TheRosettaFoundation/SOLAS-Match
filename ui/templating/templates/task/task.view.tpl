@@ -73,7 +73,7 @@
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
                         
                         <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btnPrimary  text-white">
-                        <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" class=""me-2 >
+                        <img src="{urlFor name='home'}ui/img/alarm.svg" alt="alarm-icon" class="me-2" >
                         {Localisation::getTranslation('task_view_download_task')}  </a>
                     {/if}
                 {/if}
