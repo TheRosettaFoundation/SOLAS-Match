@@ -113,13 +113,13 @@
                 </label>
                 <p><input type="text"  class="form-control" name="email_address" id="email_address" /></p>
                 
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 align-items-center">
                 <button type="submit" name="password_reset" class="btngray-lg py-1 me-2">
                      {Localisation::getTranslation('user_reset_password_send_request')}
                 </button>
                 <div class="bg-white p-2 rounded me-2 ">  <img src="{urlFor name='home'}ui/img/reset.svg" alt="reset" >
                 </div>
-                <div class="align-middle">or Press Enter</div>
+                <div >or Press Enter</div>
                 </div>
 
                     
