@@ -490,7 +490,7 @@
                        
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 rounded-2 custom-link text-decoration-none  ">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
+                     <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank" class="bg-yellowish text-uppercase fs-5 p-1 rounded-2 custom-link text-decoration-none  align-middle">  <img src="{urlFor name='home'}ui/img/upload.svg" class="me-2" /> <span>Upload a new file for this user </span></a>
                      <hr  class="bg-light-subtle"/>  
                     {/if}
 
