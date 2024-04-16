@@ -74,7 +74,7 @@
 
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-        <div class="row d-flex justify-content-between">    
+        <div class="row d-flex gx-4 justify-content-between">    
 
         <div class="bg-body p-4 rounded-3 text-body col-xs-12 col-md-6 flex-grow-1 >
    
@@ -347,7 +347,7 @@
   
         </div>
       
-        <div class="bg-body p-4 rounded-3 text-body col-xs-12 mt-2 ms:mt-0 ms-4  ms:0 col-md-5">
+        <div class="bg-body p-4 rounded-3 text-body col-xs-12  col-md-5">
 
 
             
