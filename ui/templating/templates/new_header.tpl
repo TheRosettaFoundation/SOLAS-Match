@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light" >
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  class="d-flex flex-column">
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
@@ -135,7 +135,7 @@
      
     </head>
 
-        <body  class="vh-100">
+        <body  class="flex-grow-1">
         <div class="d-flex flex-column min-vh-100 ">
       
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
