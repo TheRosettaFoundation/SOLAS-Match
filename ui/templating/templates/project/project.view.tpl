@@ -364,7 +364,7 @@
               
 
         <div class="dropdown ">
-        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
            ...
         </button>
         <ul class="dropdown-menu  ">
