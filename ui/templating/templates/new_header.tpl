@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light" style="height:100vh ; background-color: red ;">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light" style="height:100vh ; background-color: red">
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
@@ -135,8 +135,8 @@
      
     </head>
 
-        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}  class="d-flex flex-column h-100">
-        <div class=" flex-grow-1 ">
+        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} >
+        <div class="d-flex flex-column min-vh-100 ">
         
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
@@ -251,7 +251,7 @@
             </div>
         </div>
         </nav>
-        <main >
+        <main class="flex-grow-1">
 
 
    
