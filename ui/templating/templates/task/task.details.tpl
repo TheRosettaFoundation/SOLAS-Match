@@ -230,7 +230,7 @@
  
 
 
-{assign var="task_id" value=$task->getId()}
+{assign var="task_id" value=$task->getId()} 
 {if isset($show_actions)}
 
     <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-body-subtle " ></div><div class=" text-center mx-4 text-muted fw-bold">Admin</div><div class=" flex-fill border-top border-1 border-body-subtle" ></div> </div>
@@ -368,11 +368,11 @@
        </tbody>
     </table>
     </div>
-</div>
+
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-<div class="bg-primary p-2 border-secondary rounded-3 mt-2 flex align-items-center justify-content-center ">
+
     <div class="table-responsive mt-4">
     <table class="table  ">
         <thead>
