@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  class="d-flex flex-column">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  class="d-flex flex-column justify-content-between">
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
