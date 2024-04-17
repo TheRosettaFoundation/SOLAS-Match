@@ -367,7 +367,7 @@
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
            ...
         </button>
-        <ul class="dropdown-menu  ">
+        <ul class="dropdown-menu dropdown-menu-end">
          
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
