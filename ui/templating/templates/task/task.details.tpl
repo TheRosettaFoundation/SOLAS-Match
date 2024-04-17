@@ -493,7 +493,7 @@
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
                 <hr />
                 <div>
-                   ${round($total_expected_price, 2)} for {$task-> get_word_count_partner_weighted()}{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+                   ${round($total_expected_price, 2)} for {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
                 </div>
                
             </form> 
