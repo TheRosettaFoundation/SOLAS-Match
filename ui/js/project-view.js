@@ -244,9 +244,9 @@ function select() {
 
     // Validation if user clicks on action without doing a selection
     jQuery.each(forms, function(index, item) {
-        // console.log(item);
+       
         $(document).on("submit","#"+item, function () {
-            // console.log($("[name='"+item+"']").val());
+           
             if ($("[name='"+item+"']").val() == "") {
                 alert("No selection done");
                 return false;
@@ -428,8 +428,7 @@ function select() {
     //Cancel Task
     $(document).on('change', 'select[name="cancel_task"]', function() {
         var valueSelected = this.value;
-        console.log('test')
-        console.log(valueSelected)
+
         if (valueSelected == "other" || !parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             $("[name=reason]").show();
             $("[name=reason_text]").show();
