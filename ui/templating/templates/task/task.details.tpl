@@ -468,7 +468,7 @@
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                  <hr />
                
-                <div class="mt-4  fs-5">  <span class="fw-bold" >Default : </span>  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
+                <div class="mt-4  fs-5">  <span class="fw-bold" >Default: </span>  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
                 <hr/>
              
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
@@ -487,7 +487,7 @@
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 <hr />
 
-                <div class="fs-5 mt-4"> <span class="fw-bold">Default Unit : </span> ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}   </div>
+                <div class="fs-5 mt-4"> <span class="fw-bold">Default: </span> ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}   </div>
                 <hr/>
                     
                 <div class="fs-5 fw-bold mt-4">Total Expected Price</div>
