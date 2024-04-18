@@ -8589,6 +8589,96 @@ BEGIN
 END//
 DELIMITER ;
 
+
+CREATE TABLE IF NOT EXISTS `user_paid_eligible_pairs` (
+  user_id            INT UNSIGNED NOT NULL,
+  language_id_source INT UNSIGNED NOT NULL,
+  country_id_source  INT UNSIGNED NOT NULL,
+  language_id_target INT UNSIGNED NOT NULL,
+  country_id_target  INT UNSIGNED NOT NULL,
+  eligible_level     INT UNSIGNED NOT NULL,
+  KEY FK_user_paid_eligible_pairs_user (user_id),
+  CONSTRAINT FK_user_paid_eligible_pairs_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_user_paid_eligible_pairs_language_id_source FOREIGN KEY (language_id_source) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_paid_eligible_pairs_country_id_source  FOREIGN KEY (country_id_source)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_paid_eligible_pairs_language_id_target FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_paid_eligible_pairs_country_id_target  FOREIGN KEY (country_id_target)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `create_user_paid_eligible_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_user_paid_eligible_pair`(IN userID INT UNSIGNED, IN lID_source INT UNSIGNED, IN cID_source INT UNSIGNED, IN lID_target INT UNSIGNED, IN cID_target INT UNSIGNED, IN eligible INT UNSIGNED)
+BEGIN
+  if NOT EXISTS (
+    SELECT 1
+    FROM user_paid_eligible_pairs
+    WHERE
+        user_id=userID AND
+        language_id_source=lID_source AND
+        country_id_source=cID_source AND
+        language_id_target=lID_target AND
+        country_id_target=cID_target
+  )
+  THEN
+    INSERT INTO user_paid_eligible_pairs (
+        user_id,
+        language_id_source,
+        country_id_source,
+        language_id_target,
+        country_id_target,
+        eligible_level
+    ) VALUES (
+        userID,
+        lID_source,
+        cID_source,
+        lID_target,
+        cID_target,
+        eligible
+    );
+  ELSE
+    UPDATE user_paid_eligible_pairs SET eligible_level=eligible
+    WHERE
+        user_id=userID AND
+        language_id_source=lID_source AND
+        country_id_source=cID_source AND
+        language_id_target=lID_target AND
+        country_id_target=cID_target;
+  END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_paid_eligible_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_paid_eligible_pair`(IN userID INT UNSIGNED, IN lID_source INT UNSIGNED, IN cID_source INT UNSIGNED, IN lID_target INT UNSIGNED, IN cID_target INT UNSIGNED)
+BEGIN
+    DELETE FROM user_paid_eligible_pairs
+    WHERE
+        user_id=userID AND
+        language_id_source=lID_source AND
+        country_id_source=cID_source AND
+        language_id_target=lID_target AND
+        country_id_target=cID_target;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_paid_eligible_pairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_paid_eligible_pairs`(IN taskID BIGINT, IN no_source INT, IN not_strict INT)
+BEGIN
+    SELECT
+      user_id,
+      MAX(upep.eligible_level) AS eligible_level
+    FROM Tasks                       t
+    JOIN user_paid_eligible_pairs upep ON
+        (no_source>0 OR t.`language_id-source`=upep.language_id_source) AND
+        t.`language_id-target`=upep.language_id_target AND
+        (not_strict>0 OR t.`country_id-target`=upep.country_id_target)
+    WHERE t.id=taskID
+    GROUP BY user_id;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `getOrgIDMatchingNeon`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgIDMatchingNeon`(IN orgIDNeon INT)
