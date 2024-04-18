@@ -695,6 +695,18 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('insert_task_invite_sent_to_users', LibAPI\PDOWrapper::cleanseWrapStr($insert));
     }
 
+    public function get_user_paid_eligible_pairs($task_id, $no_source, $not_strict)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_paid_eligible_pairs', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($no_source), LibAPI\PDOWrapper::cleanse($not_strict));
+        if (empty($result)) $result = [];
+
+        $eligible = [];
+        foreach ($result as $row) {
+            $eligible[$row['user_id']] = $row['eligible_level'];
+        }
+        return $eligible;
+    }
+
     public function getVolunteerProjectTasks($project_id, $user_id)
     {
         $result = LibAPI\PDOWrapper::call('getVolunteerProjectTasks', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
