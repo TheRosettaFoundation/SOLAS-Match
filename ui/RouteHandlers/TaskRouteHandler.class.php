@@ -1575,6 +1575,7 @@ class TaskRouteHandler
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,
+            'eligible'        => $taskDao->get_user_paid_eligible_pairs($task_id, $any_country == 3 || $any_country == 2 ? 1 : 0, $any_country == 3 || $any_country == 1 ? 1 : 0),
             'any_country'     => $any_country,
             'paid_status'     => $paid_status,
             'total_expected_cost' => $total_expected_cost,
