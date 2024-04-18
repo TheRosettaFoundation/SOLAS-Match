@@ -2315,6 +2315,9 @@ BEGIN
         DELETE FROM UserQualifiedPairs
         WHERE user_id=userId;
 
+        DELETE FROM user_paid_eligible_pairs
+        WHERE user_id=userId;
+
         DELETE FROM UserURLs
         WHERE user_id=userId;
 
