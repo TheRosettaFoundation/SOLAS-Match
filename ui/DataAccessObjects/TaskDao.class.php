@@ -707,6 +707,29 @@ error_log("createTaskDirectly: $args");
         return $eligible;
     }
 
+    public function create_user_paid_eligible_pair($user_id, $language_id_source, $country_id_source, $language_id_target, $country_id_target, $eligible_level)
+    {
+        LibAPI\PDOWrapper::call('create_user_paid_eligible_pair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($eligible_level));
+            error_log("create_user_paid_eligible_pair($user_id, $language_id_source, $country_id_source, $language_id_target, $country_id_target, $eligible_level)");
+    }
+
+    public function remove_user_paid_eligible_pair($user_id, $language_id_source, $country_id_source, $language_id_target, $country_id_target)
+    {
+        LibAPI\PDOWrapper::call('remove_user_paid_eligible_pair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target));
+            error_log("remove_user_paid_eligible_pair($user_id, $language_id_source, $country_id_source, $language_id_target, $country_id_target)");
+    }
+
     public function getVolunteerProjectTasks($project_id, $user_id)
     {
         $result = LibAPI\PDOWrapper::call('getVolunteerProjectTasks', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
