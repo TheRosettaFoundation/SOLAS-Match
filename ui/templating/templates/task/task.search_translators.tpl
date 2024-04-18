@@ -112,10 +112,10 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="6%">Send Invite?</th>
-    <th width="13%">Display Name</th>
-    <th width="17%">Email</th>
     <th width="17%">Name</th>
+    <th width="17%">Email</th>
     <th width="10%">Qualification Level</th>
+    <th width="13%">Eligible Paid</th>
     <th width="13%">Native Language</th>
     <th width="10%">Country</th>
     <th width="8%">Words Delivered (last 3 months)</th>
@@ -126,10 +126,10 @@
   {foreach $all_users as $user_row}
     <tr>
       <td><input type="checkbox" class="translator_invite not_sent" id="{$user_row['user_id']}" email="{$user_row['email']}" /></td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
       <td>{$user_row['email']}</td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td>{$user_row['level']}</td>
+      <td>{if !empty($eligible['user_id'])}{if $eligible['user_id'] == 2}Translation and Revision{else}Translation{/if}</td>
       <td>{$user_row['language_name_native']}</td>
       <td>{$user_row['country_name_native']}</td>
       <td>{$user_row['words_delivered']} ({$user_row['words_delivered_last_3_months']})</td>
