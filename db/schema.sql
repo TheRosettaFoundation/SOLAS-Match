@@ -8516,8 +8516,8 @@ BEGIN
     JOIN Countries c2 ON uqp.country_id_target=c2.id
     LEFT JOIN user_paid_eligible_pairs upep ON
         uqp.user_id=upep.user_id AND
-        uqp.language_id_source=upep.language_id AND
-        uqp.country_id_source=upep.country_id AND
+        uqp.language_id_source=upep.language_id_source AND
+        uqp.country_id_source=upep.country_id_source AND
         uqp.language_id_target=upep.language_id_target AND
         uqp.country_id_target=upep.country_id_target
     WHERE uqp.user_id=userID
