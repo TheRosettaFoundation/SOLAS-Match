@@ -704,6 +704,7 @@ error_log("createTaskDirectly: $args");
         foreach ($result as $row) {
             $eligible[$row['user_id']] = $row['eligible_level'];
         }
+error_log(print_r($eligible, 1));
         return $eligible;
     }
 
