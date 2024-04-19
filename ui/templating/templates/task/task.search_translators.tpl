@@ -129,7 +129,7 @@
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{$user_row['level']}</td>
-      <td>{if !empty($eligible[$user_row['user_id']])}{if $eligible[$user_row['user_id']] == 2}Translation and Revision{else}Translation{/if}{/if}</td>
+      <td>{if !empty($eligible[$user_row['user_id']])}{if $eligible[$user_row['user_id']] == 2}Translation & Revision{else}Translation{/if}{/if}</td>
       <td>{$user_row['language_name_native']}</td>
       <td>{$user_row['country_name_native']}</td>
       <td>{$user_row['words_delivered']} ({$user_row['words_delivered_last_3_months']})</td>
