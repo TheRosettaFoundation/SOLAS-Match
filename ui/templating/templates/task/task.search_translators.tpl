@@ -115,7 +115,7 @@
     <th width="17%">Name</th>
     <th width="17%">Email</th>
     <th width="10%">Qualification Level</th>
-    <th width="13%">Eligible Paid</th>
+    <th width="13%">Paid Project Eligibility</th>
     <th width="13%">Native Language</th>
     <th width="10%">Country</th>
     <th width="8%">Words Delivered (last 3 months)</th>
