@@ -697,7 +697,7 @@ error_log("createTaskDirectly: $args");
 
     public function get_user_paid_eligible_pairs($task_id, $no_source, $not_strict)
     {
-        $result = LibAPI\PDOWrapper::call('get_user_paid_eligible_pairs', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($no_source), LibAPI\PDOWrapper::cleanse($not_strict));
+        $result = LibAPI\PDOWrapper::call('get_user_paid_eligible_pairs', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($no_source) . ',' . LibAPI\PDOWrapper::cleanse($not_strict));
         if (empty($result)) $result = [];
 
         $eligible = [];
