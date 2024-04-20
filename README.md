@@ -48,6 +48,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 - Upgraded "Task" table for "word_count_partner_weighted" field. This is initially set to the standard word count but it can be overridden in Task Alter. It will eventually come from Phrase.
 Existing reports have been upgraded to have pricing based on "unit_rate_pricing" and "word_count_partner_weighted".
 - A new Partner specific report for pricing has been added.
+- A new table "user_paid_eligible_pairs" has been added to indicate who is eligible for paid tasks for a specific language pair. It is displayed in the Search Translators page.
 - Security fix (low priority): phpseclib a large prime can cause a denial of service
 - Security fix (low priority): phpseclib does not properly limit the ASN1 OID length
 
