@@ -92,6 +92,12 @@ class UserRouteHandler
             ->setName('badge_shared_with_key');
 
         $app->map(['GET', 'POST'],
+            '/set_paid_eligible_pair/{user_id}/sl/{sl}/sc/{sc}/tl/{tl}/tc/{tc}/eligible/{eligible}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_paid_eligible_pair')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_COMMUNITY')
+            ->setName('set_paid_eligible_pair');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/privateProfile[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
