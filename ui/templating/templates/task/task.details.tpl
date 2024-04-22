@@ -515,7 +515,7 @@
        
           
           {else}
-            < <td>
+             <td>
             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                 <input style="width:60px;" type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
                 <input type="submit" class="btngray-sm mt-2" name="unit_rate_submit" value="Submit" />
