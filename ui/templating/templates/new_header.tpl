@@ -252,9 +252,9 @@
         </div>
         </nav>
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
-		    <div id="banner-container" class="container d-flex justify-content-center">
+		    <div id="banner-container" class="container">
 		    <a href = "{Settings::get('banner.link')}" target = "_blank">
-		    	<div id="banner-container-blocks">
+		    	<div id="banner-container-blocks" class="d-flex justify-content-center">
 			    	<div id="banner-left">
               <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
