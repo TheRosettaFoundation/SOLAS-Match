@@ -41,8 +41,8 @@
         <tr>
             <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal[0]['name'])}</td>
             <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($deal[0]['deal_name'])}</td>
-            <td>{substr($deal[0]['start_date'], 0, 10)}</td>
-            <td>{substr($deal[0]['expiration_date'], 0, 10)}</td>
+            <td>{$deal[0]['start_date']}</td>
+            <td>{$deal[0]['expiration_date']}</td>
             <td>{if !empty($deal[0]['deal_total'])}${$deal[0]['deal_total']}{/if}</td>
         </tr>
     </tbody>
