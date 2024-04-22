@@ -1,7 +1,6 @@
 const isPagination = !!document.querySelector(".pagination");
 
 const projects = document.querySelectorAll(".project");
-console.log(projects);
 
 for (let i = 0; i < projects.length; i++) {
     const firstLink = projects[i].children[0];
