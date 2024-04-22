@@ -528,8 +528,8 @@
          
             <div class="mt-4 fw-bold fs-5"> Total Expected Cost</div>
             <hr />
-            <div> 
-        ${{math equation="x*y" x=${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']} y={TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}}} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+       
+            ${math equation=" x * y" x=${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']} y={TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
 
             </div>
             </form>
