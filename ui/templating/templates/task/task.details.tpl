@@ -551,7 +551,7 @@
        </tbody>
     </table>
     </div>
+{/if}
 {if isset($show_actions)}
 </div>
-{/if}
 {/if}
