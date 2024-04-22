@@ -233,7 +233,11 @@
 {assign var="task_id" value=$task->getId()} 
 {if isset($show_actions)}
 
-<div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-body-subtle " ></div><div class=" text-center mx-4 text-muted fw-bold">Admin</div><div class=" flex-fill border-top border-1 border-body-subtle" ></div> </div>
+<div class="d-flex align-items-center mt-4 mb-4">
+<div class="flex-fill border-top border-1 border-body-subtle " ></div>
+<div class=" text-center mx-4 text-muted fw-bold">Admin</div>
+<div class=" flex-fill border-top border-1 border-body-subtle" ></div> 
+</div>
 <div class="bg-body p-2 border-secondary rounded-3 mt-4">
   <div class=" table table-responsive mt-4">
     <table class="table  ">
@@ -471,7 +475,7 @@
                 <div class="mt-4  fs-5">  <span class="fw-bold" >Default: </span>  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
                 <hr/>
              
-                <div class="mt-4 fw-bold fs-5">Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</div>
+                <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
                 <div> 
             ${round($total_expected_cost, 2)} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
@@ -490,7 +494,7 @@
                 <div class="fs-5 mt-4"> <span class="fw-bold">Default: </span> ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}   </div>
                 <hr/>
                     
-                <div class="fs-5 fw-bold mt-4">Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</div>
+                <div class="fs-5 fw-bold mt-4"> Total Expected Price</div>
                 <hr />
                 <div>
                    ${round($total_expected_price, 2)} for {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
@@ -558,5 +562,7 @@
        </tbody>
     </table>
     </div>
+{if isset($show_actions)}
 </div>
+{/if}
 {/if}
