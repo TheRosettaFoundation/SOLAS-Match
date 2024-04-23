@@ -245,9 +245,9 @@
                                 </p>
                             {* {/if} *}
 
-                            <h2 class="page-header">
+                            <h2 class="page-header mt-3">
                                 {Localisation::getTranslation('org_task_review_review_this_file')}
-                                <small>{Localisation::getTranslation('org_task_review_1')}</small>
+                                <div class="text-muted text-small">{Localisation::getTranslation('org_task_review_1')}</div>
                             </h2>
 
                             <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
