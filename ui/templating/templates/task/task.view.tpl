@@ -221,7 +221,7 @@
                                         {Localisation::getTranslation('task_org_feedback_2')}
                                     </button>
                                 </span>
-                                <span class="mt-1 sm:mt-0" >
+                                <span class="" >
                                     <button type="submit" value="Submit" name="submit" class="btngray-sm me-2">
                                          {Localisation::getTranslation('common_submit_feedback')}
                                     </button>
