@@ -234,15 +234,15 @@
                         </div>
                         {/if}
 
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-                            {if !empty($memsource_task)}
+                        {* {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+                            {if !empty($memsource_task)} *}
                                 <p class="mt-2">{Localisation::getTranslation('org_task_review_0')}</p>
                                 <p>
                                 <a class="btngray-sm" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
                                     {Localisation::getTranslation('org_task_review_download_output_file')}
                                 </a>
                                 </p>
-                            {/if}
+                            {* {/if} *}
 
                             <h2 class="page-header">
                                 {Localisation::getTranslation('org_task_review_review_this_file')}
@@ -258,7 +258,7 @@
                                    {Localisation::getTranslation('org_task_complete_view_reviews')}
                                 </a>
                             </p>
-                        {/if}
+                        {* {/if} *}
        
                 </div>
 
