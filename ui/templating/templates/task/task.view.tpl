@@ -215,7 +215,7 @@
                             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
                                 <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
                                 
-                                <div class="d-flex justify-content-between mt-2 ">
+                                <div class="d-flex justify-content-between mt-2 flex-wrap ">
                                 <span>
                                     <button type="submit" value="1" name="revokeTask" class="btngray-sm">
                                         {Localisation::getTranslation('task_org_feedback_2')}
