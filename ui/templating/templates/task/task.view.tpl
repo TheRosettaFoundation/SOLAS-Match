@@ -247,7 +247,7 @@
 
                             <h2 class="page-header mt-5">
                                 {Localisation::getTranslation('org_task_review_review_this_file')}
-                                <span class=" fs-5 text-muted ">{Localisation::getTranslation('org_task_review_1')}</span>
+                                <span class=" fs-4 text-muted ">{Localisation::getTranslation('org_task_review_1')}</span>
                             </h2>
 
                             <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
