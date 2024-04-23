@@ -214,21 +214,22 @@
                             <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr/>
                             <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
                                 <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
-                                <p style="margin-bottom:30px;" />
-
-                                <span style="float: left; position: relative;">
+                                
+                                <div class="d-flex justify-content-between mt-2">
+                                <span>
                                     <button type="submit" value="1" name="revokeTask" class="btngray-sm">
                                         {Localisation::getTranslation('task_org_feedback_2')}
                                     </button>
                                 </span>
-                                <span style="float: right; position: relative;">
-                                    <button type="submit" value="Submit" name="submit" class="btngray-sm">
+                                <span >
+                                    <button type="submit" value="Submit" name="submit" class="btngray-sm me-2">
                                          {Localisation::getTranslation('common_submit_feedback')}
                                     </button>
                                     <button type="reset" value="Reset" name="reset" class="btngray-sm">
                                         {Localisation::getTranslation('common_reset')}
                                     </button>
                                 </span>
+                                </div>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         </div>
