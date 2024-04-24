@@ -257,7 +257,7 @@
 		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
 			   
 			    	<div id="banner-mid">
-              <img src="{urlFor name='home'}ui/img/banner-1.svg" class="img-fluid" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 			 
 		  
