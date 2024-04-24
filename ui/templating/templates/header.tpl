@@ -317,9 +317,9 @@
         {assign var="home_page" value="{urlFor name="home"}"}
         
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
-		    <div  >
+		    <div id="banner-container" >
 		    <a href = "#" target = "_blank">
-		    	<div id="banner-container-blocks">
+		    	<div>
 			  
 			    	<div id="banner-mid">
               <img src="{urlFor name='home'}ui/img/banner-1.svg" alt="{Settings::get('banner.info')}">
