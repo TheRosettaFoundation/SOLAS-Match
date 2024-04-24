@@ -254,7 +254,7 @@
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
 		    <div  class="container">
 		      <div class="d-flex justify-content-center">
-              <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner-1.svg" alt="{Settings::get('banner.info')}">
               </div>
 		    	</div>
 		    </a>
