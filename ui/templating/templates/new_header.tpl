@@ -254,7 +254,7 @@
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
 		    <div id="banner-container" class="container">
 		   
-		    	<div id="banner-container-blocks" >
+		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
 			   
 			    	<div id="banner-mid">
               <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
