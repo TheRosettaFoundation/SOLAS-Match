@@ -4061,6 +4061,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_to_discard_for_search`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_to_discard_for_search`(IN taskType INT, IN org_id INT UNSIGNED)
+BEGIN
+    SELECT
+        utl.user_id
+    FROM
+        user_task_limitations utl
+    WHERE
+        FIND_IN_SET(org_id, utl.excluded_orgs)>0
+            OR
+        (utl.allowed_types!='' AND FIND_IN_SET(taskType, utl.allowed_types)=0)
+            OR
+        utl.max_not_comlete_tasks != 0
+            AND
+        EXISTS (SELECT 1 FROM  TaskClaims WHERE TaskClaims.user_id=utl.user_id  AND ( SELECT COUNT(*) FROM TaskClaims WHERE utl.max_not_comlete_tasks) )   
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN `tID` INT)
