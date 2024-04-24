@@ -480,7 +480,8 @@ a:hover{
 </div>
 
 
-
+   
+{/if}
 
 {if isset($user)}
 
