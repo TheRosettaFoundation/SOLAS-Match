@@ -252,7 +252,7 @@
         </div>
         </nav>
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) ))}
-		    <div  class="container">
+		    <div id="banner-container" class="container">
 		   
 		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
 			   
