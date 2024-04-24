@@ -322,7 +322,7 @@
 		    	<div style="display:flex; justify-content:center;  align-items:center;">
 			  
 			    	
-              <img src="{urlFor name='home'}ui/img/banner-1.svg" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner.png" style="max-width:100% ; height:auto;" alt="{Settings::get('banner.info')}">
 			    	
 			    
 		    	</div>
