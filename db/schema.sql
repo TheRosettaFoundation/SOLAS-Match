@@ -4269,6 +4269,27 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_number_of_chunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_number_of_chunks`(IN task_id_1 BIGINT, IN task_id_2 BIGINT, IN task_id_3 BIGINT, IN task_id_4 BIGINT, IN task_id_5 BIGINT, IN task_id_6 BIGINT)
+BEGIN
+    SELECT
+        COUNT(*) AS number_of_chunks,
+        ts.id AS task_id,
+        ts.project_id,
+        ms.memsource_task_uid,
+        SUBSTRING_INDEX(ms.internalId, '.', 1) AS top_level,
+        SUBSTRING_INDEX(ms.internalId, '.', -1 ) AS low_level,
+        ms.workflowlevel
+    FROM       Tasks          ts
+    INNER JOIN MemsourceTasks ms ON ts.id=ms.task_id AND LOCATE('.', ms.internalId)!=0
+    INNER JOIN Tasks          t2 ON t2.project_id=ts.project_id
+    INNER JOIN MemsourceTasks m2 ON t2.id=m2.task_id AND m2.workflowlevel=ms.workflowlevel AND m2.internalId!=0 AND SUBSTRING_INDEX(m2.internalId, '.', 1)=SUBSTRING_INDEX(ms.internalId, '.', 1)
+    WHERE ts.id IN (task_id_1, task_id_2, task_id_3, task_id_4, task_id_5, task_id_6)
+    GROUP BY ts.id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `taskStatus` INT, IN `orderBy` INT)
