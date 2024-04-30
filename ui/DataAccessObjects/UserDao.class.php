@@ -203,6 +203,7 @@ class UserDao extends BaseDao
     
     public function getUserTaskChunks($task_id_1, $task_id_2, $task_id_3, $task_id_4, $task_id_5, $task_id_6)
     {
+        print_r($task_id_1);
         $args  = LibAPI\PDOWrapper::cleanseNull($task_id_1) . ',' .
                  LibAPI\PDOWrapper::cleanseNull($task_id_2) . ',' .
                  LibAPI\PDOWrapper::cleanseNull($task_id_3) . ',' .
