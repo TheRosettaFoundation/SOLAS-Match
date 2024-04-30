@@ -642,7 +642,7 @@ a:hover{
                                                 <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} </span>
                                                 {/if}
                                                 {if $chunks[$task_id]}
-                                                    <span type="button" class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['top_level'] }</span> / <span>  {$chunks[$task_id]['number_of_chunks'] } </span></span>
+                                                    <span type="button" class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['low_level'] }</span> / <span>  {$chunks[$task_id]['number_of_chunks'] } </span></span>
                                                 {/if}
 
                                         </div>
