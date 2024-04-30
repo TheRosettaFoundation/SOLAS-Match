@@ -372,6 +372,13 @@ if (isPagination) {
         req.send();
     };
 
+    function bagde([...classList], textContent) {
+        const badge = document.createElement("span");
+        badge.classList.add(classList);
+        badge.textContent(textContent);
+        return badge;
+    }
+
     function displayTasks(pages) {
         let parsed;
         let images;
@@ -404,6 +411,8 @@ if (isPagination) {
             let imageId;
             let image;
             let imageHtml;
+
+            console.log(item);
 
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
@@ -469,6 +478,23 @@ if (isPagination) {
             badgeContainer.appendChild(badge);
 
             const badgeW = document.createElement("span");
+            const badgeC = badge(
+                [
+                    "ms-1",
+                    "badge",
+                    "rounded-pill",
+                    "bg-quinary",
+                    "border",
+                    "border-2",
+                    "border-quartBorder",
+                    "border-opacity-50",
+                    "text-white",
+                    "fs-7",
+                    "font-bold",
+                ],
+                "text"
+            );
+
             badgeW.classList.add(
                 "ms-1",
                 "badge",
@@ -503,6 +529,9 @@ if (isPagination) {
     
             `
                         : "<div> </div>";
+            }
+
+            if (chunks) {
             }
 
             const { deadline } = item;
