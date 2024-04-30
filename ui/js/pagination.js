@@ -478,28 +478,27 @@ if (isPagination) {
             badgeContainer.appendChild(badge);
 
             const badgeW = document.createElement("span");
-            const badgeC = badge(
-                [
-                    "ms-1",
-                    "badge",
-                    "rounded-pill",
-                    "bg-quinary",
-                    "border",
-                    "border-2",
-                    "border-quartBorder",
-                    "border-opacity-50",
-                    "text-white",
-                    "fs-7",
-                    "font-bold",
-                ],
-                "text"
-            );
+            const badgeC = document.createElement("span");
 
             badgeW.classList.add(
                 "ms-1",
                 "badge",
                 "rounded-pill",
                 "bg-quartenary",
+                "border",
+                "border-2",
+                "border-quartBorder",
+                "border-opacity-50",
+                "text-white",
+                "fs-7",
+                "font-bold"
+            );
+
+            badgeW.classList.add(
+                "ms-1",
+                "badge",
+                "rounded-pill",
+                "bg-quinary",
                 "border",
                 "border-2",
                 "border-quartBorder",
@@ -533,23 +532,9 @@ if (isPagination) {
 
             if (chunks) {
                 let chunkId = chunks[item.id];
-                let chunkBadge = badge(
-                    [
-                        "ms-1",
-                        "badge",
-                        "rounded-pill",
-                        "bg-quinary",
-                        "border",
-                        "border-2",
-                        "border-quartBorder",
-                        "border-opacity-50",
-                        "text-white",
-                        "fs-7",
-                        "font-bold",
-                    ],
-                    " 1 of 5"
+                badgeC.textContent(
+                    `Part ${chunks[chunkId]["top_level"]} / ${chunks[chunkId]["number_of_chunks"]} `
                 );
-                console.log("chunk badge");
                 console.log(chunkBadge);
 
                 badgeContainer.appendChild(chunkBadge);
