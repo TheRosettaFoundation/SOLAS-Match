@@ -4269,9 +4269,9 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_number_of_chunks`;
+DROP PROCEDURE IF EXISTS `getNumberOfChunks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_number_of_chunks`(IN task_id_1 BIGINT, IN task_id_2 BIGINT, IN task_id_3 BIGINT, IN task_id_4 BIGINT, IN task_id_5 BIGINT, IN task_id_6 BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getNumberOfChunks`(IN task_id_1 BIGINT, IN task_id_2 BIGINT, IN task_id_3 BIGINT, IN task_id_4 BIGINT, IN task_id_5 BIGINT, IN task_id_6 BIGINT)
 BEGIN
     SELECT
         COUNT(*) AS number_of_chunks,
