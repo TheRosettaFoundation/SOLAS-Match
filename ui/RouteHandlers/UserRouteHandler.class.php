@@ -437,11 +437,10 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
-        print_r($tasksIds);   
+
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
         $chunks_test = $userDao->getUserTaskChunks('0','0','0','0','0','33219');
-        print_r($chunks);
-        print_r($chunks_test);
+      
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
