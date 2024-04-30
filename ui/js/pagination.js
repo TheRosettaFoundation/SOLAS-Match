@@ -532,6 +532,25 @@ if (isPagination) {
             }
 
             if (chunks) {
+                let chunkId = chunks[item.id];
+                let chunkBadge = badge(
+                    [
+                        "ms-1",
+                        "badge",
+                        "rounded-pill",
+                        "bg-quinary",
+                        "border",
+                        "border-2",
+                        "border-quartBorder",
+                        "border-opacity-50",
+                        "text-white",
+                        "fs-7",
+                        "font-bold",
+                    ],
+                    " 1 of 5"
+                );
+
+                badgeContainer.appendChild(chunkBadge);
             }
 
             const { deadline } = item;
