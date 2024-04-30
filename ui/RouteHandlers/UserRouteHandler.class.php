@@ -438,11 +438,11 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
-        // print_r($tasksIds);   
+
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
-        $chunks_test =  $userDao->getUserTaskChunks(0,0,0,0,0,31832) ;
+        // $chunks_test =  $userDao->getUserTaskChunks(0,0,0,0,0,31832) ;
         print_r($chunks);
-        print_r($chunks_test);
+        // print_r($chunks_test);
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
@@ -451,6 +451,7 @@ class UserRouteHandler
             'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
             'selectedTargetLanguageCode' => 0,
             'topTasks' => $topTasks,
+            'chunks' => $chunks,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,        
