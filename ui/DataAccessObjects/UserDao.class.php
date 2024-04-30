@@ -213,7 +213,7 @@ class UserDao extends BaseDao
         $result =  LibAPI\PDOWrapper::call('getNumberOfChunks', $args);
 
     
-        if(empty($result)) return [] ;
+        if(empty($result)) return [];
 
         $chunks=[];
         foreach($result as $row) {
