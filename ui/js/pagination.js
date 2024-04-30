@@ -649,6 +649,8 @@ if (isPagination) {
         const newDataString = newData.outerHTML;
 
         tasksContainer.innerHTML = newDataString;
+
+        window.scrollTo({ top: 0, behavior: smooth });
     }
 
     function reqListner() {
