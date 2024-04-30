@@ -535,9 +535,7 @@ if (isPagination) {
                 if (chunk) {
                     console.log("chunk");
                     console.log(chunk["number_of_chunks"]);
-                    badgeC.textContent(
-                        `Part of ${chunk["low_level"]} / ${chunk["number_of_chunks"]}`
-                    );
+                    badgeC.textContent = `Part  ${chunk["low_level"]}/${chunk["number_of_chunks"]}`;
                     badgeContainer.appendChild(badgeC);
                 }
             }
