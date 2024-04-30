@@ -440,7 +440,7 @@ class UserRouteHandler
 
         print_r($tasksIds);   
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
-        $chunks_test =  $userDao->getUserTaskChunks(0,0,0,0,0,32832) ;
+        $chunks_test =  $userDao->getUserTaskChunks(0,0,0,0,0,32033) ;
         print_r($chunks);
         print_r($chunks_test);
 
