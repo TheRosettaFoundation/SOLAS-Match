@@ -532,10 +532,12 @@ if (isPagination) {
 
             if (chunks) {
                 let chunkId = chunks[item.id];
-                badgeC.textContent(
-                    `Part ${chunks[chunkId]["top_level"]} / ${chunks[chunkId]["number_of_chunks"]} `
-                );
-                console.log(chunkBadge);
+                console.log(chunkId);
+                if (chunkId) {
+                    badgeC.textContent(
+                        `Part ${chunks[chunkId]["top_level"]} / ${chunks[chunkId]["number_of_chunks"]} `
+                    );
+                }
 
                 badgeContainer.appendChild(chunkBadge);
             }
