@@ -244,6 +244,7 @@ if (isPagination) {
         next.classList.remove("bg-gray", "text-body", "opacity-50");
 
         requestPage(url);
+        window.scrollTo({ top: 0, behavior: smooth });
     });
 
     const selectedLanguage = document.querySelector("#sourceLanguage");
@@ -649,8 +650,6 @@ if (isPagination) {
         const newDataString = newData.outerHTML;
 
         tasksContainer.innerHTML = newDataString;
-
-        window.scrollTo({ top: 0, behavior: smooth });
     }
 
     function reqListner() {
