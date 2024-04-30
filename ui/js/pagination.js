@@ -494,7 +494,7 @@ if (isPagination) {
                 "font-bold"
             );
 
-            badgeW.classList.add(
+            badgeC.classList.add(
                 "ms-1",
                 "badge",
                 "rounded-pill",
@@ -535,6 +535,10 @@ if (isPagination) {
                 if (chunk) {
                     console.log("chunk");
                     console.log(chunk["number_of_chunks"]);
+                    badgeC.textContent(
+                        `Part of ${chunk["low_level"]} / ${chunk["number_of_chunks"]}`
+                    );
+                    badgeContainer.appendChild(badgeC);
                 }
             }
 
