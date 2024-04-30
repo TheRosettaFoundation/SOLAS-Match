@@ -385,7 +385,7 @@ class UserRouteHandler
         $deadline_timestamps = array();
         $projectAndOrgs = array();
         $taskImages = array();
-        $taskIds = array()
+        $taskIds = array();
        
         $pages = ceil($topTasksCount/6);
             foreach ($topTasks as $topTask) {
