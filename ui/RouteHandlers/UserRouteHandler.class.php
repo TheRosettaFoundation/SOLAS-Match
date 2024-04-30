@@ -391,7 +391,7 @@ class UserRouteHandler
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 array_push($tasksIds,$taskId);
-                print_r($taksIds);
+            
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
@@ -421,6 +421,7 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
+            print_r($tasksIds);    
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487469ej4\" async></script>";
