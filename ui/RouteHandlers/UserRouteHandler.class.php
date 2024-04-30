@@ -440,7 +440,9 @@ class UserRouteHandler
 
         print_r($tasksIds);   
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
+        $chunks_test =  $userDao->getUserTaskChunks(0,0,0,0,0,32832) ;
         print_r($chunks);
+        print_r($chunks_test);
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
