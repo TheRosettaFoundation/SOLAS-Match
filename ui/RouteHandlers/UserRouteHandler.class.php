@@ -421,7 +421,7 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-            print_r($tasksIds);    
+         
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487469ej4\" async></script>";
@@ -432,6 +432,10 @@ class UserRouteHandler
         if (empty($topTasks) && !empty($user_id)) {
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
+
+        print_r($tasksIds);   
+        $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
+        print_r($chunks);
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
