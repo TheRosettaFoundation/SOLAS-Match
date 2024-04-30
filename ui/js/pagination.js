@@ -549,6 +549,8 @@ if (isPagination) {
                     ],
                     " 1 of 5"
                 );
+                console.log("chunk badge");
+                console.log(chunkBadge);
 
                 badgeContainer.appendChild(chunkBadge);
             }
