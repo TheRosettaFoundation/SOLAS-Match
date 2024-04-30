@@ -244,7 +244,6 @@ if (isPagination) {
         next.classList.remove("bg-gray", "text-body", "opacity-50");
 
         requestPage(url);
-        window.scrollTo({ top: 0, behavior: smooth });
     });
 
     const selectedLanguage = document.querySelector("#sourceLanguage");
@@ -529,6 +528,11 @@ if (isPagination) {
     
             `
                         : "<div> </div>";
+            }
+
+            if (chunks) {
+                let chunkId = chunks[item.id] !== "" ? chunks[item.id] : "";
+                console.log(chunkId);
             }
 
             const { deadline } = item;
