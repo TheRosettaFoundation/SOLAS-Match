@@ -309,9 +309,6 @@ class UserRouteHandler
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
         }
-
-
-   
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
     
         
