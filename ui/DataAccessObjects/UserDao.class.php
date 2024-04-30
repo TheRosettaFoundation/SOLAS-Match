@@ -201,7 +201,7 @@ class UserDao extends BaseDao
         return 0;
     }
     
-    public function getUserTaskChunks($task_id_1, $task_id_2,$task_id_3, $task_id_4, $task_id_5, $task_id_6)
+    public function getUserTaskChunks($task_id_1, $task_id_2, $task_id_3, $task_id_4, $task_id_5, $task_id_6)
     {
         $args  = LibAPI\PDOWrapper::cleanseNull($task_id_1) . ',' .
                  LibAPI\PDOWrapper::cleanseNull($task_id_2) . ',' .
@@ -214,10 +214,10 @@ class UserDao extends BaseDao
 
         $chunks=[];
         foreach($result as $row) {
-            $chunks[$row['task_id']] = $row ;
+            $chunks[$row['task_id']] = $row;
         }
         
-        return $chunks ;
+        return $chunks;
 
     }
 
