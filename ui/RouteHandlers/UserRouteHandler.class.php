@@ -385,11 +385,13 @@ class UserRouteHandler
         $deadline_timestamps = array();
         $projectAndOrgs = array();
         $taskImages = array();
+        $taskIds = array()
        
         $pages = ceil($topTasksCount/6);
             foreach ($topTasks as $topTask) {
-                var_dump($topTasks);
                 $taskId = $topTask->getId();
+                array_push($tasksIds,$taskId);
+                print_r($taksIds);
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
