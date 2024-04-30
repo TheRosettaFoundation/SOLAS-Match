@@ -285,7 +285,6 @@ class UserRouteHandler
             $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
             $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
             $topTask->getTargetLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getTargetLocale()));
-
             $taskId = $topTask->getId();
             array_push($tasksIds,$taskId);
             $project = $projectDao->getProject($topTask->getProjectId());
@@ -311,8 +310,9 @@ class UserRouteHandler
         }
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
     
-        
-        $results = json_encode(['tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks]);
+        $arr_results = array('tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks);
+        $results = json_encode($arr_results) ;
+        // $results = json_encode(['tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks]);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
