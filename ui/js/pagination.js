@@ -532,7 +532,9 @@ if (isPagination) {
 
             if (chunks) {
                 let chunkId = chunks[item.id] !== "" ? chunks[item.id] : "";
-                console.log(chunkId);
+                if (chunkId) {
+                    console.log(chunkId);
+                }
             }
 
             const { deadline } = item;
