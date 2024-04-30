@@ -388,7 +388,7 @@ class UserRouteHandler
        
         $pages = ceil($topTasksCount/6);
             foreach ($topTasks as $topTask) {
-                var_dump($topTasks);``
+                var_dump($topTasks);
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
