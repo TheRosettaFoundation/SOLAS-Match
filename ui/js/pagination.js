@@ -538,8 +538,6 @@ if (isPagination) {
                         `Part ${chunks[chunkId]["top_level"]} / ${chunks[chunkId]["number_of_chunks"]} `
                     );
                 }
-
-                badgeContainer.appendChild(chunkBadge);
             }
 
             const { deadline } = item;
