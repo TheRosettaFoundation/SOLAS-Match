@@ -622,6 +622,7 @@ if (isPagination) {
 
     function reqListner() {
         const pages = this.response;
+        console.log(pages);
 
         try {
             displayTasks(pages);
