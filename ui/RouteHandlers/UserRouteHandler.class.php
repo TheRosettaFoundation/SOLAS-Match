@@ -395,7 +395,6 @@ class UserRouteHandler
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
-
                 $deadline = $topTask->getDeadline();
                 $selected_year   = (int)substr($deadline,  0, 4);
                 $selected_month  = (int)substr($deadline,  5, 2);
