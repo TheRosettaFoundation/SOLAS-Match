@@ -310,9 +310,10 @@ class UserRouteHandler
         }
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
     
-        $arr_results = array('tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks);
-        $results = json_encode($arr_results) ;
-        // $results = json_encode(['tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks]);
+        // $arr_results = array('tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks);
+        // $results = json_encode($arr_results) ;
+        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
+     
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -435,7 +436,7 @@ class UserRouteHandler
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
 
-        print_r($tasksIds);
+ 
         if(!empty($user_id)){
             $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
 
