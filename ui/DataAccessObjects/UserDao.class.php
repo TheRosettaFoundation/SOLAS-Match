@@ -200,6 +200,26 @@ class UserDao extends BaseDao
         if ($result) return $result[0]['result'];
         return 0;
     }
+    
+    publick function getUserTaskChunks($task_id_1, $task_id_2,$task_id_3, $task_id_4, $task_id_5, $task_id_6)
+    [
+        $args  = LibAPI\PDOWrapper::cleanseNull($task_id_1) . ',' .
+                 LibAPI\PDOWrapper::cleanseNull($task_id_2) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($task_id_3) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($task_id_4) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($task_id_5) . ', ' .
+                 LibAPI\PDOWrapper::cleanseNull($task_id_6) . ', ' .;
+        $result =  LibAPI\PDOWrapper::call('get_number_of_chunks', $args);
+        if(empty($result)) return [] ;
+
+        $chunks=[];
+        foreach($result as $row) {
+            $chunks[$row['task_id']] = $row:
+        }
+        
+        return $chunks ;
+
+    ]
 
     public function getFilteredUserClaimedTasks($userId, $selectedOrdering, $limit, $offset, $selectedTaskType, $selectedTaskStatus)
     {
