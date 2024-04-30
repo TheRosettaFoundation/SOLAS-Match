@@ -280,12 +280,14 @@ class UserRouteHandler
 
         $projectAndOrgs = [];
         $taskImages = [];
+        $tasksIds = array();
         foreach ($topTasks as $topTask) {
             $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
             $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
             $topTask->getTargetLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getTargetLocale()));
 
             $taskId = $topTask->getId();
+            array_push($tasksIds,$taskId);
             $project = $projectDao->getProject($topTask->getProjectId());
             $org_id = $project->getOrganisationId();
             $org = $orgDao->getOrganisation($org_id);
@@ -308,7 +310,11 @@ class UserRouteHandler
             }
         }
 
-        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
+
+   
+        $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
+   
+        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs, 'chunks' => $chunks]) ;
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -391,7 +397,6 @@ class UserRouteHandler
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 array_push($tasksIds,$taskId);
-            
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
@@ -434,7 +439,9 @@ class UserRouteHandler
 
         print_r($tasksIds);   
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
+        $chunks_test = $userDao->getUserTaskChunks(0,0,0,0,0,33219);
         print_r($chunks);
+        print_r($chunks_test);
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
