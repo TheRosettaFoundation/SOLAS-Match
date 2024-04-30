@@ -530,15 +530,16 @@ if (isPagination) {
                         : "<div> </div>";
             }
 
-            if (chunks) {
-                let chunkId = chunks[item.id];
-                console.log("chunkId");
-                console.log(chunkId);
-                if (chunkId) {
-                    badgeC.textContent(
-                        `Part ${chunks[chunkId][id]["top_level"]} / ${chunks[chunkId][id]["number_of_chunks"]} `
-                    );
-                }
+            if (chunks.length > 0) {
+                console.log(item);
+                // let chunkId = chunks[item.id];
+                // console.log("chunkId");
+                // console.log(chunkId);
+                // if (chunkId) {
+                //     badgeC.textContent(
+                //         `Part ${chunks[chunkId][id]["top_level"]} / ${chunks[chunkId][id]["number_of_chunks"]} `
+                //     );
+                // }
             }
 
             const { deadline } = item;
