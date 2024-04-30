@@ -309,11 +309,8 @@ class UserRouteHandler
             }
         }
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
-    
-        // $arr_results = array('tasks'=> $topTasks , 'images'=> $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks);
-        // $results = json_encode($arr_results) ;
-        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs]);
-     
+ 
+        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs], 'chunks'=>$chunks);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
