@@ -436,7 +436,7 @@ class UserRouteHandler
         }
 
         print_r($tasksIds);
-        if(!empty($taskIds)){
+        if(!empty($user_id)){
             $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
 
         }   
