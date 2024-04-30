@@ -376,6 +376,7 @@ if (isPagination) {
         let parsed;
         let images;
         let projects;
+        let chunks;
 
         try {
             parsed = typeof pages === "string" ? JSON.parse(pages) : pages;
@@ -389,6 +390,11 @@ if (isPagination) {
 
         if (parsed.hasOwnProperty("projects")) {
             projects = parsed.projects;
+        }
+
+        if (parsed.hasOwnProperty("chunks")) {
+            chunks = parsed.chunks;
+            console.log(chunks);
         }
 
         const newData = document.createElement("div");
