@@ -401,7 +401,6 @@ if (isPagination) {
 
         if (parsed.hasOwnProperty("chunks")) {
             chunks = parsed.chunks;
-            console.log(chunks);
         }
 
         const newData = document.createElement("div");
@@ -411,8 +410,6 @@ if (isPagination) {
             let imageId;
             let image;
             let imageHtml;
-
-            console.log(item);
 
             const innerDiv = document.createElement("div");
             const itemElement = document.createElement("div");
@@ -533,8 +530,6 @@ if (isPagination) {
             if (chunks) {
                 let chunk = chunks[item.id];
                 if (chunk) {
-                    console.log("chunk");
-                    console.log(chunk["number_of_chunks"]);
                     badgeC.textContent = `Part  ${chunk["low_level"]}/${chunk["number_of_chunks"]}`;
                     badgeContainer.appendChild(badgeC);
                 }
