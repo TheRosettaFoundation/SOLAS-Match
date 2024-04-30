@@ -205,12 +205,12 @@ class UserDao extends BaseDao
     {
         print_r($task_id_1);
         print_r($task_id_6);
-        $args  = LibAPI\PDOWrapper::cleanseNull($task_id_1) . ',' .
-                 LibAPI\PDOWrapper::cleanseNull($task_id_2) . ',' .
-                 LibAPI\PDOWrapper::cleanseNull($task_id_3) . ',' .
-                 LibAPI\PDOWrapper::cleanseNull($task_id_4) . ',' .
-                 LibAPI\PDOWrapper::cleanseNull($task_id_5) . ',' .
-                 LibAPI\PDOWrapper::cleanseNull($task_id_6);
+        $args  = LibAPI\PDOWrapper::cleanse($task_id_1) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($task_id_2) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($task_id_3) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($task_id_4) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($task_id_5) . ',0,' .
+                 LibAPI\PDOWrapper::cleanse($task_id_6);
         $result =  LibAPI\PDOWrapper::call('getNumberOfChunks', $args);
         print_r($result);
         if(empty($result)) return [] ;
