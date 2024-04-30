@@ -280,7 +280,7 @@ class UserRouteHandler
 
         $projectAndOrgs = [];
         $taskImages = [];
-        $tasksIds = array();
+        $tasksIds = [];
         foreach ($topTasks as $topTask) {
             $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
             $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
@@ -308,7 +308,7 @@ class UserRouteHandler
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
         }
-        $chunks =  $userDao->getUserTaskChunks(...$tasksIds) ;
+        $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
  
         $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=>$chunks]);
         $response->getBody()->write($results);
@@ -435,7 +435,6 @@ class UserRouteHandler
 
         if(!empty($user_id)){
             $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
-
         }   
 
         $template_data = array_merge($template_data, array(
