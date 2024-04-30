@@ -531,10 +531,10 @@ if (isPagination) {
             }
 
             if (chunks) {
-                let chunk = chunks[item.id] !== "" ? chunks[item.id] : "";
+                let chunk = chunks[item.id];
                 if (chunk) {
                     console.log("chunk");
-                    console.log(chunk);
+                    console.log(chunk["number_of_chunks"]);
                 }
             }
 
