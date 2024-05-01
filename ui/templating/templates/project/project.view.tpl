@@ -430,7 +430,7 @@
 
             <form id="complete_selected_tasks" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
-                <img src="{urlFor name='home'}ui/img/video-tick.svg" class="me-2" alt="shell" /> Set Shell Tasks Status&nbsp;&nbsp;Complete
+                <i class="fa-solid fa-check me-2 "></i> Set Shell Tasks Status&nbsp;&nbsp;Complete
                 </a>
                 <input type="hidden" name="complete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -438,7 +438,7 @@
 
             <form id="uncomplete_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
-                    <img src="{urlFor name='home'}ui/img/timer-pause.svg" class="me-2"alt="shell" /> Set Shell Tasks Status In Progress
+                <i class="fa-solid fa-pause me-2 "></i>Set Shell Tasks Status In Progress
                 </a>
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
