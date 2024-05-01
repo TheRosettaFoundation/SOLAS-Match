@@ -76,7 +76,7 @@
   
         <div class="row g-4 ">    
 
-        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-6  >
+        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
    
        
         <span class="d-none">
