@@ -74,9 +74,9 @@
 
     {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
   
-        <div class="row gy-4 d-flex  gx-2">    
+        <div class="row gy-4 d-flex  md:gx-2">    
 
-        <div class="bg-body p-4 rounded-3 text-body flex-grow-1 me-2 >
+        <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
    
        
         <span class="d-none">
