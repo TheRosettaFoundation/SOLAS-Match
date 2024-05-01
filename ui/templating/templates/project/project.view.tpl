@@ -57,7 +57,7 @@
                     {/if}
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
-                             {Localisation::getTranslation('common_edit_project')}
+                        <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
                         </a> 
                     {/if}
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
