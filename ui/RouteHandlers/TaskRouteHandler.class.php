@@ -414,7 +414,7 @@ class TaskRouteHandler
             'selectedTaskStatus' => $selectedTaskStatus,
             'selectedOrdering' => $selectedOrdering,
             'topTasks' => $topTasks,
-            'chunks' => $chunks
+            'chunks' => $chunks,
             'taskStatusTexts' => $taskStatusTexts,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,

@@ -432,6 +432,7 @@ class UserRouteHandler
         if (empty($topTasks) && !empty($user_id)) {
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
+        
 
         if(!empty($user_id)){
             $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
