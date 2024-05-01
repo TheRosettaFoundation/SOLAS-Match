@@ -1394,7 +1394,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5 ">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 25%"><h3>Volunteer Restrictions</h3></td>
+        <td style="width: 25%"><h5>Volunteer Restrictions</h5></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
@@ -1427,7 +1427,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 33%"><h3>Linguist Payment Information</h3></td>
+        <td style="width: 33%"><h5>Linguist Payment Information</h5></td>
         <td style="width: 33%"></td>
         <td style="width: 34%"></td>
     </tr>
@@ -1474,9 +1474,9 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-4 rounded-3 p-4 bg-body fs-5">
   
     <div class="d-flex justify-content-between flex-wrap">
-        <h3 class="fw-bold">
+        <h5 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
-            <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
+            <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h5>
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"> 
                
                 <input type="submit" class="btn btn-primary text-white border-0" name="referenceRequest" 
@@ -1520,10 +1520,10 @@ If a language is to be removed from this list, the community will be informed be
                     {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
                 {assign var="org" value=$orgList[$org_id]}
-                <h3>
+                <h5>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                         {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
-                </h3>
+                </h5>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
     
         {/foreach}
@@ -1538,7 +1538,7 @@ If a language is to be removed from this list, the community will be informed be
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
  <div class="mt-4 rounded-3 p-4 bg-body fs-5">
     <div class="d-flex justify-content-between flex-wrap">
-        <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>
+        <h5 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h5>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class=" btn btn-primary text-white ">
                 <i class="fa-solid fa-screwdriver-wrench me-2"></i> {Localisation::getTranslation('user_public_profile_edit_notifications')}
             </a>
