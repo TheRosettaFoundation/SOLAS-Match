@@ -288,11 +288,13 @@ class TaskRouteHandler
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
         $memsource_tasks = [];
+        $tasksIds  = [];
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
+                array_push($tasksIds,$taskId);
                 $project = $projectDao->getProject($topTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
@@ -340,6 +342,7 @@ class TaskRouteHandler
 
                 $memsource_task = $projectDao->get_memsource_task($taskId);
                 $memsource_tasks[$taskId] = $memsource_task;
+                $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
                 if (!$memsource_task || $projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
                 else                                                                                               $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 if (Common\Enums\TaskTypeEnum::$enum_to_UI[$topTask->getTaskType()]['shell_task'] && ($shell_task_url = $taskDao->get_task_url($taskId))) $shell_task_urls[$taskId] = $shell_task_url;
@@ -411,6 +414,7 @@ class TaskRouteHandler
             'selectedTaskStatus' => $selectedTaskStatus,
             'selectedOrdering' => $selectedOrdering,
             'topTasks' => $topTasks,
+            'chunks' => $chunks
             'taskStatusTexts' => $taskStatusTexts,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
@@ -431,6 +435,7 @@ class TaskRouteHandler
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
+            
         ));
         return UserRouteHandler::render('task/claimed-tasks.tpl', $response);
     }
@@ -482,11 +487,13 @@ class TaskRouteHandler
         $deadline_timestamps = array();
         $projectAndOrgs = array();
         $proofreadTaskIds = array();
+        $tasksIds = array();
 
         $lastScrollPage = ceil($recentTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
             foreach ($recentTasks as $recentTask) {
                 $taskId = $recentTask->getId();
+                array_push($tasksIds,$taskId);
                 $project = $projectDao->getProject($recentTask->getProjectId());
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
@@ -522,7 +529,7 @@ class TaskRouteHandler
                 );
             }
         }
-
+        $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
         if ($currentScrollPage == $lastScrollPage && ($recentTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $recentTasksCount % $itemsPerScrollPage;
         }
@@ -538,6 +545,7 @@ class TaskRouteHandler
             'user_id' => $user_id,
             'siteLocation' => $siteLocation,
             'recentTasks' => $recentTasks,
+            'chunks' => $chunks,
             'taskStatusTexts' => $taskStatusTexts,
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
