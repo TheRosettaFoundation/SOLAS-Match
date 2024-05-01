@@ -1191,7 +1191,7 @@ If a language is to be removed from this list, the community will be informed be
 </form>
 {/if}
 {if !empty($sent_contracts)}
-<div class="table-responsive fs-5">
+<div class="table-responsive fs-5 mt-2">
 <table style="width:100%">
     <thead>
         <tr>
@@ -1230,8 +1230,8 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
-<h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3>
-<div class="d-flex justify-content-between">
+<h5>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h5>
+<div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Willingness to work again score(1 to 5)</div>
 <div class="w-25 fw-bold">Created</div>
@@ -1289,8 +1289,8 @@ If a language is to be removed from this list, the community will be informed be
 
 <hr class="bg-light-subtle"/>
 
-<h3>Recognition Program Points Adjustment (for Non Strategic languages)</h3>
-<div class="d-flex justify-content-between">
+<h5>Recognition Program Points Adjustment (for Non Strategic languages)</h5>
+<div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
 <div class="w-25 fw-bold">Created</div>
@@ -1339,8 +1339,8 @@ If a language is to be removed from this list, the community will be informed be
 <hr/>
 
 
-<h3>Recognition Program Points Adjustment (for  Strategic languages)</h3>
-<div class="d-flex justify-content-between">
+<h5>Recognition Program Points Adjustment (for  Strategic languages)</h5>
+<div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
 <div class="w-25 fw-bold">Created</div>
@@ -1471,7 +1471,7 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {if $private_access}
-    <div class="mt-4 rounded-3 p-4 bg-body">
+    <div class="mt-4 rounded-3 p-4 bg-body fs-5">
   
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">
