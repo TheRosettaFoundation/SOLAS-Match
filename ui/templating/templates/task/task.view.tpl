@@ -59,7 +59,7 @@
                  </small>  
                  
                  {if isset($chunks[$task_id])}
-                   - <span class="text-quinary fs-5"> [Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] }]</span>
+                   - <span class="text-quinary fs-5"> [Part {$chunks[$task_id]['low_level'] }</span>/<span class="text-quinary fs-5" >{$chunks[$task_id]['number_of_chunks'] }]</span>
                 {/if}
               
 
