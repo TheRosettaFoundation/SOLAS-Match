@@ -129,11 +129,6 @@ a[href^="mailto:"] {
   border-radius: 4px;
 }
 
-.dropdown-menu-upward {
-  position: absolute;
-  transform: translate3d(0px, -100%, 0px);
-}
-
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

@@ -208,11 +208,6 @@ a[href^="mailto:"] {
     border-radius: 4px;
 }
 
-.dropdown-menu {
-    max-height: 200px; /* Adjust the height as needed */
-    overflow-y: auto;
-}
-
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
