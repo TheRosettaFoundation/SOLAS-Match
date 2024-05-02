@@ -291,7 +291,6 @@ if (isPagination) {
 
         const find = url.indexOf("tt/");
         const findN = url.indexOf("/sl");
-
         const firstL = url.slice(0, find);
         const firstR = url.slice(findN);
         const newUrl = `${firstL}tt/${selectTask}${firstR}`;
@@ -433,7 +432,6 @@ if (isPagination) {
             title.classList.add("custom-link", "fw-bold", "fs-3");
             title.href = `/task/${item.id}/view`;
             title.innerHTML = `<span>${item.title}</span>`;
-
             const spanTitle = document.createElement("div");
             const spanImg = document.createElement("img");
             spanImg.src = "/ui/img/question.svg";
@@ -459,7 +457,6 @@ if (isPagination) {
             badge.classList.add(
                 "badge",
                 "rounded-pill",
-
                 "border",
                 "border-2",
                 "border-greenBorder",
@@ -604,7 +601,6 @@ if (isPagination) {
                 .createRange()
                 .createContextualFragment(language);
             const projectItem = projects ? projects[item.id] : "";
-
             const parser = new DOMParser();
             const doc = parser.parseFromString(projectItem, "text/html");
             const anchorTags = doc.querySelectorAll("a");
@@ -642,17 +638,13 @@ if (isPagination) {
                 itemFlexContainer.appendChild(imageHtml);
             }
             itemNameElement.appendChild(itemFlexContainer);
-
             itemElement.appendChild(itemNameElement);
             itemElement.appendChild(viewHtml);
-
             innerDiv.appendChild(itemElement);
-
             newData.appendChild(innerDiv);
         }
 
         const newDataString = newData.outerHTML;
-
         tasksContainer.innerHTML = newDataString;
     }
 

@@ -1230,7 +1230,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
-<h5>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h5>
+<h5 class="fw-bold">Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h5>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Willingness to work again score(1 to 5)</div>
@@ -1289,7 +1289,7 @@ If a language is to be removed from this list, the community will be informed be
 
 <hr class="bg-light-subtle"/>
 
-<h5>Recognition Program Points Adjustment (for Non Strategic languages)</h5>
+<h5 class="fw-bold">Recognition Program Points Adjustment (for Non Strategic languages)</h5>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
@@ -1339,7 +1339,7 @@ If a language is to be removed from this list, the community will be informed be
 <hr/>
 
 
-<h5>Recognition Program Points Adjustment (for  Strategic languages)</h5>
+<h5 class="fw-bold">Recognition Program Points Adjustment (for  Strategic languages)</h5>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
@@ -1476,7 +1476,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">
             {Localisation::getTranslation('user_public_profile_reference_email')} 
-            <span class="fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
+            <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_16')}</span> </h3>
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}"> 
                
                 <input type="submit" class="btn btn-primary text-white border-0" name="referenceRequest" 
