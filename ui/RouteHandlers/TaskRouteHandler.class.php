@@ -1428,7 +1428,7 @@ class TaskRouteHandler
             return $element->id;
         },$alsoViewedTasks) ;
 
-      
+        print_r(gettype($viewedTaskIds));
         print_r(gettype($alsoViewedTasks));
         
 
