@@ -208,9 +208,9 @@ a[href^="mailto:"] {
     border-radius: 4px;
 }
 
-.dropdown-menu-upward {
-    position: absolute;
-    transform: translate3d(0px, -100%, 0px);
+.dropdown-menu {
+    max-height: 200px; /* Adjust the height as needed */
+    overflow-y: auto;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
