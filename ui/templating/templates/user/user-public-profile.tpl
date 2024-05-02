@@ -1230,7 +1230,7 @@ If a language is to be removed from this list, the community will be informed be
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
-<h5 class="fw-bold">Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h5>
+<h4 class="fw-bold">Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h4>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Willingness to work again score(1 to 5)</div>
@@ -1289,7 +1289,7 @@ If a language is to be removed from this list, the community will be informed be
 
 <hr class="bg-light-subtle"/>
 
-<h5 class="fw-bold">Recognition Program Points Adjustment (for Non Strategic languages)</h5>
+<h4 class="fw-bold">Recognition Program Points Adjustment (for Non Strategic languages)</h4>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
@@ -1339,7 +1339,7 @@ If a language is to be removed from this list, the community will be informed be
 <hr/>
 
 
-<h5 class="fw-bold">Recognition Program Points Adjustment (for  Strategic languages)</h5>
+<h4 class="fw-bold">Recognition Program Points Adjustment (for  Strategic languages)</h4>
 <div class="d-flex justify-content-between fs-5">
 <div class="w-25 fw-bold">Comment</div>
 <div class="w-25 fw-bold">Recognition points adjustement</div>
@@ -1394,7 +1394,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5 ">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 25%"><h5>Volunteer Restrictions</h5></td>
+        <td style="width: 25%"><h4 class="fw-bold">Volunteer Restrictions</h4></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
         <td style="width: 25%"></td>
@@ -1427,7 +1427,7 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 33%"><h5>Linguist Payment Information</h5></td>
+        <td style="width: 33%"><h4 class="fw-bold">Linguist Payment Information</h4></td>
         <td style="width: 33%"></td>
         <td style="width: 34%"></td>
     </tr>
