@@ -51,6 +51,8 @@ Existing reports have been upgraded to have pricing based on "unit_rate_pricing"
 - A new table "user_paid_eligible_pairs" has been added to indicate who is eligible for paid tasks for a specific language pair. It is displayed in the Search Translators page.
 - Security fix (low priority): phpseclib a large prime can cause a denial of service
 - Security fix (low priority): phpseclib does not properly limit the ASN1 OID length
+- Security fix (medium priority): Follow Redirects improperly handles URLs in the url.parse() function
+- Security fix (medium priority): follow-redirects' Proxy-Authorization header kept across hosts
 
 ## Version 15.2
 
