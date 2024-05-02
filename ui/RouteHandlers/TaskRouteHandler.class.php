@@ -1423,8 +1423,8 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
         $chunks =  $userDao->getUserTaskChunks($task_id);
-        print_r($alsoViewedTasks);
-   
+        $chunksAlsoViews =  $userDao->getUserTaskChunks($alsoViewedTasks);
+        
 
         $total_expected_cost = 0;
         $total_expected_price = 0;
@@ -1442,6 +1442,7 @@ class TaskRouteHandler
                 "project" => $project,
                 'task' => $task,
                 'chunks' => $chunks,
+                'chunksViews' => $chunksAlsoViews,
                 'taskMetaData' => $taskMetaData,
                 'roles'        => $roles,
                 'alsoViewedTasks' => $alsoViewedTasks,
