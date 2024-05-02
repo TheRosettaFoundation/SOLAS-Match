@@ -1423,6 +1423,7 @@ class TaskRouteHandler
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
         $chunks =  $userDao->getUserTaskChunks($task_id);
+        print_r($alsoViewedTasks);
    
 
         $total_expected_cost = 0;
