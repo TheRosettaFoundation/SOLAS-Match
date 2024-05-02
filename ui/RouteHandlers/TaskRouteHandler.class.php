@@ -1424,7 +1424,7 @@ class TaskRouteHandler
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
         $chunks =  $userDao->getUserTaskChunks($task_id);       
         $viewedTaskIds = array_map(function($element){return $element -> id; },$alsoViewedTasks) ;
-        $chunksAlsoViews =$userDao->getUserTaskChunks(...$viewedTaskIds);;
+        $chunksAlsoViews =$userDao->getUserTaskChunks(...$viewedTaskIds);
 
 
         $total_expected_cost = 0;
