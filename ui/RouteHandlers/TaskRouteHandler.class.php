@@ -1409,6 +1409,7 @@ class TaskRouteHandler
                     );
                 }
             }
+
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER));
         }
 
@@ -1421,6 +1422,8 @@ class TaskRouteHandler
         $taskStatusTexts[10] = 'Claimed';
         $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
+        $chunks =  $userDao->getUserTaskChunks([$task_id]);
+        print_r($chunks) ;
 
         $total_expected_cost = 0;
         $total_expected_price = 0;
