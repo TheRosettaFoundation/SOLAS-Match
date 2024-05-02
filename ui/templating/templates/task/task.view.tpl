@@ -45,7 +45,7 @@
                 {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
                 {/if}
-
+              
                 <small>
                 <strong>
                      -
@@ -57,6 +57,10 @@
                     {/foreach}
                 </strong>
                  </small>  
+                 {if isset $chunks[task_id]}
+                    <span> [ Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] } ]</span>
+                {/if}
+              
 
                 </div>
 
