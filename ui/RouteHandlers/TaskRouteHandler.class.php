@@ -1425,9 +1425,7 @@ class TaskRouteHandler
         $chunks =  $userDao->getUserTaskChunks($task_id);       
         $viewedTaskIds = array_map(function($element){return $element -> id; },$alsoViewedTasks) ;
         $chunksAlsoViews =$userDao->getUserTaskChunks(...$viewedTaskIds);;
-       
-        print_r($chunksAlsoViews);
-        
+
 
         $total_expected_cost = 0;
         $total_expected_price = 0;
