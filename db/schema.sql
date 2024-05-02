@@ -9085,6 +9085,39 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_to_discard_for_search`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_to_discard_for_search`(IN taskType INT, IN org_id INT UNSIGNED)
+BEGIN
+    SELECT
+        utl.user_id
+    FROM
+        user_task_limitations utl
+    WHERE
+        FIND_IN_SET(org_id, utl.excluded_orgs)>0
+            OR
+        (utl.allowed_types!='' AND FIND_IN_SET(taskType, utl.allowed_types)=0)
+            OR
+        (
+        utl.max_not_comlete_tasks!=0
+            AND
+        EXISTS (
+            SELECT claims.number
+            FROM (
+                SELECT COUNT(*) AS number
+                FROM Tasks       t
+                JOIN TaskClaims tc ON t.id=tc.task_id AND tc.user_id=utl.user_id
+                WHERE
+                  t.`task-status_id`<4
+                GROUP BY user_id
+            ) AS claims
+            WHERE
+                claims.number>=utl.max_not_comlete_tasks
+        )
+        );
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `terms_accepted`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `terms_accepted`(IN userID INT)

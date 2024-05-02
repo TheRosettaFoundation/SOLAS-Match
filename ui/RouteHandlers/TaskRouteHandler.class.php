@@ -342,9 +342,8 @@ class TaskRouteHandler
 
                 $memsource_task = $projectDao->get_memsource_task($taskId);
                 $memsource_tasks[$taskId] = $memsource_task;
-                if(!empty($user_id)){
-                    $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
-                }   
+                $chunks = $userDao->getUserTaskChunks(...$tasksIds);
+
                 if (!$memsource_task || $projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
                 else                                                                                               $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 if (Common\Enums\TaskTypeEnum::$enum_to_UI[$topTask->getTaskType()]['shell_task'] && ($shell_task_url = $taskDao->get_task_url($taskId))) $shell_task_urls[$taskId] = $shell_task_url;
@@ -404,8 +403,8 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk9ddjjdf\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
 
         $template_data = array_merge($template_data, array(
             'current_page' => 'claimed-tasks',
@@ -537,8 +536,8 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk9ddjjdf\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
 
 
         $template_data = array_merge($template_data, array(
@@ -892,7 +891,7 @@ class TaskRouteHandler
 
         $extra_scripts = "
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>";
 
        
     
@@ -1427,14 +1426,13 @@ class TaskRouteHandler
         if(is_array($alsoViewedTasks)) $viewedTaskIds = array_map(function($element){return $element->id; },$alsoViewedTasks);
         $chunksAlsoViews =$userDao->getUserTaskChunks(...$viewedTaskIds);
 
-
         $total_expected_cost = 0;
         $total_expected_price = 0;
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_cost = $task->getWordCount()*$paid_status['unit_rate'];
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_cost /= 60;        
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_price = $task->get_word_count_partner_weighted()*$paid_status['unit_rate_pricing'];
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_price /= 60;
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk9dddkedf\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
 
 
         $template_data = array_merge($template_data, array(

@@ -424,19 +424,19 @@ class UserRouteHandler
          
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js?v=1487469ej4\" async></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js?v=jdkdk\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home.js\" async></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
  
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
             $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
         }
-        
 
-        if(!empty($user_id)){
-            $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
-        }   
+        $chunks = [];
+        if (!empty($user_id)) {
+            $chunks = $userDao->getUserTaskChunks(...$tasksIds);
+        }
 
         $template_data = array_merge($template_data, array(
             'siteLocation' => $siteLocation,
@@ -455,7 +455,6 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'page_count' => $pages,
             'roles' => !empty($user_id) ? $adminDao->get_roles($user_id) : 0,
-            
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
