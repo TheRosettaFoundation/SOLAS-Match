@@ -310,10 +310,10 @@
                                                   
                                                         <div class="my-2 d-flex align-items-center">                                                                
                                 
-                                                                    <span type="button" class=" ms-1 rounded-pill badge  border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7" style="background-color:{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
+                                                                    <span  class=" ms-1 rounded-pill badge  border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7" style="background-color:{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
                                                                     {if $alsoViewedTask->getWordCount()}
-                                                                        <span type="button" class="ms-1 rounded-pill badge  border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 bg-quartenary"  ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
+                                                                        <span  class="ms-1 rounded-pill badge  border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7 bg-quartenary"  ">{$alsoViewedTask->getWordCount()} {TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['unit_count_text_short']}</span>
                                                                     {/if}
                                                                     {if isset($chunksViews[$also_viewed_task_id])}
                                                                         <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span > Part {$chunksViews[$also_viewed_task_id]['low_level'] }</span>/<span>{$chunksViews[$also_viewed_task_id]['number_of_chunks'] } </span></span>
