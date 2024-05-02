@@ -1,6 +1,6 @@
     
     </main>
-                <footer class="mt-4">
+                <footer class="mt-4 relative">
 
 
                             <div class="container d-flex flex-wrap mb-4 justify-content-center">
