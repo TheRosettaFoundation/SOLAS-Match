@@ -208,6 +208,11 @@ a[href^="mailto:"] {
     border-radius: 4px;
 }
 
+.dropdown-menu-upward {
+    position: absolute;
+    transform: translate3d(0px, -100%, 0px);
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
