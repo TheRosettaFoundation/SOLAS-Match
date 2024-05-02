@@ -698,7 +698,7 @@ a:hover{
 
                             
                             <div class ="d-flex justify-content-between align-items-center flex-wrap  ">
-                                    <div class="d-flex text-body flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
+                                    <div class="d-flex  flex-wrap"> <span  class="project" >{$projectAndOrgs[$task_id]}</span> 
                                          
                                     </div>
                                      <div class="d-flex justify-content-end flex-wrap mt-2 mt-sm-4 mt-md-0 ">
