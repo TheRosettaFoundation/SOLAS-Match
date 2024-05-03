@@ -173,7 +173,7 @@
             <thead class="fs-5">
              <tr class="align-middle">
                 <th class="w-50">
-                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong>{/if}
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}</strong>{/if}
                 </th>
              
                 <th class="w-50" >
