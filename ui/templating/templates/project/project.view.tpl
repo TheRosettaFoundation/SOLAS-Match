@@ -247,7 +247,7 @@
                 </tr>
                 <tr>
                     <td >
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank"> Discuss</a>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank">Contact Us</a>
                     </td>
                 </tr>
                 {/if}

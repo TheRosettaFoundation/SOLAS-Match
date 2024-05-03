@@ -184,7 +184,7 @@
             <tbody class="fs-4">
             <tr>
                 <td class="w-50 d-flex">
-                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank"> Discuss </a>{/if}</div>
+                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Contact Us</a>{/if}</div>
                 </td>
               
                 <td class="w-50 ">
