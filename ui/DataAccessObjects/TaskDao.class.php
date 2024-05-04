@@ -683,6 +683,13 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
+    public function users_to_discard_for_search($task_type, $org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('users_to_discard_for_search', LibAPI\PDOWrapper::cleanse($task_type) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function list_task_invites_sent($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_sent', LibAPI\PDOWrapper::cleanse($task_id));

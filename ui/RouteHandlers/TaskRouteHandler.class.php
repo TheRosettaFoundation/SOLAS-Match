@@ -893,9 +893,6 @@ class TaskRouteHandler
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>";
 
-       
-    
-
         $task = $taskDao->getTask($task_id);
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
@@ -1503,6 +1500,8 @@ class TaskRouteHandler
 
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
 
+        $users_to_discard_for_search = $taskDao->users_to_discard_for_search($task->getTaskType(), $project->getOrganisationId());
+
         if     ($any_country == 3) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source($task_id, $roles);
         elseif ($any_country == 2) $invites_not_sent = $taskDao->list_task_invites_not_sent_no_source_strict($task_id, $roles);
         elseif ($any_country == 1) $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id, $roles);
@@ -1539,7 +1538,7 @@ class TaskRouteHandler
                 } else {
                     $user['unit_rate'] = '';
                 }
-                $all_users[] = $user;
+                if (!in_array($user['user_id'], $users_to_discard_for_search)) $all_users[] = $user;
             }
         }
 
@@ -1553,7 +1552,7 @@ class TaskRouteHandler
                 } else {
                     $user['unit_rate'] = '';
                 }
-                $all_users[] = $user;
+                if (!in_array($user['user_id'], $users_to_discard_for_search)) $all_users[] = $user;
             }
         }
 
