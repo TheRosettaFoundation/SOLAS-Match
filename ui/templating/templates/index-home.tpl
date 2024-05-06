@@ -399,7 +399,7 @@ a:hover{
 
   
 
-        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between">
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center">
               <div>
                     <img src="{urlFor name='home'}ui/img/homepage/learn.png" style="width:150px ; height:150px" alt="Con">
                   
@@ -420,7 +420,7 @@ a:hover{
         </div>
 
 
-        <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
+        <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column align-items-center" >
            
            <div>
                   <img src="{urlFor name='home'}ui/img/homepage/grow.png" style="width:150px ; height:150px" alt="Con">
@@ -445,7 +445,7 @@ a:hover{
 
 
 
-         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" id="learnmore">
+         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center" id="learnmore">
            
            <div>
 
