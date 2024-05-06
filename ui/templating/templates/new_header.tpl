@@ -255,7 +255,7 @@
 		    <div id="banner-container" class="container">
 		   
 		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
-			    <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing">
+			    <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing" >
 			    	<div id="banner-mid">
               <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
 			    	</div>
