@@ -386,7 +386,7 @@ a:hover{
 
                 <h2 >Connect</h2>
        
-            <div class="mt-2">
+            <div class="mt-2 text-center">
            
                 Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff
                 Learn about the nonprofits that work with TWB and why they come to us.
@@ -409,7 +409,7 @@ a:hover{
               <h2>Learn</h2>
  
               
-              <div>
+              <div class="text-center mt-2">
 
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.
@@ -431,7 +431,7 @@ a:hover{
 
           
             
-            <div>
+            <div class="text-center mt-2">
 
          
              Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.
@@ -457,7 +457,7 @@ a:hover{
            <h2 >Impact</h2>
          
              
-             <div>
+             <div class="text-center mt-2">
             
              
                 Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.
