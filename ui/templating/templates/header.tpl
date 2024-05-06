@@ -320,10 +320,12 @@
 		    <div id="banner-container" >
 		    
 		    	<div style="display:flex; justify-content:center;  align-items:center;">
+
+            <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing">
 			  
 			    	
               <img src="{urlFor name='home'}ui/img/banner.png"  alt="{Settings::get('banner.info')}">
-			    	
+			</a>	
 			    
 		    	</div>
             </div>
