@@ -224,7 +224,8 @@
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                     <div class="d-flex">
                                     <p>
-                                        <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h3>
+                                        <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h4>
+                                        <div>
                                         
                                         {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
                                         <strong>
@@ -249,17 +250,25 @@
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                         {/if}
+
+                                        </div>
+
                                     </p>
-                                    <p>
-                                    <h4 class="mb-3 fw-bold">Eligible for Paid Task</h3>
-                                    <select class="form-select border border-primary " aria-label="Default select example">
-                                        <option selected>None</option>
-                                        <option value="1">Translation</option>
-                                        <option value="2">Translation and Revision</option>
-                                  
-                                    </select>
                                     
+                                    <p>
+
+                                    <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
+                                    <div>
+                                    <form>
+                                        <select class="form-select border border-primary " aria-label="Default select example">
+                                            <option selected>None</option>
+                                            <option value="1">Translation</option>
+                                            <option value="2">Translation and Revision</option>                                  
+                                        </select>
+                                    </form>
+                                    <div>
                                     </p>
+                                 
                                     </div>
                                 {/foreach}
                             
