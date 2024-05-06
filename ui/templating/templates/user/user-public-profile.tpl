@@ -267,7 +267,7 @@
                                         </form>
                                         {/if}
 
-
+                                      pair : {$pair}
                                     </p>
                                     
                                     <p>
