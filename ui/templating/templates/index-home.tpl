@@ -379,12 +379,12 @@ a:hover{
   <div class="container">  
     <div class="row bg-primary">
 
-        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center " >
                 <div>
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" style="width:150px ; height:150px" alt="Con">
                 </div>
 
-                <h2  >Connect</h2>
+                <h2 class="mt-4">Connect</h2>
        
             <div class="text-center">
            
@@ -406,7 +406,7 @@ a:hover{
               
               </div>
 
-              <h2>Learn</h2>
+              <h2 class="mt-4">Learn</h2>
  
               
               <div class="text-center ">
@@ -427,7 +427,7 @@ a:hover{
                          
            </div>
 
-           <h2>Grow</h2>    
+           <h2 class="mt-4">Grow</h2>    
 
           
             
@@ -454,7 +454,7 @@ a:hover{
            
            </div>
 
-           <h2 >Impact</h2>
+           <h2 class="mt-4" >Impact</h2>
          
              
              <div class="text-center">
