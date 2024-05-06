@@ -204,8 +204,16 @@
                     {if !empty($userQualifiedPairs)}
                      
                             {foreach from=$userQualifiedPairs item=item key=k}
-                                <li>{$item} (index: {$k})</li>
+                                <li>{$item[key]} (index: {$k})</li>
                             {/foreach}
+
+                            {if $this_user->getNativeLocale() }
+
+                                {$this_user->getNativeLocale() }
+                            
+                            {/if}
+                            ---------------------------------------
+                            {$this_user->getNativeLocale()->getLanguageCode()}
 
                         <div class="mb-3">
 
