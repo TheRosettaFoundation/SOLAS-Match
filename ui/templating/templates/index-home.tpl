@@ -377,7 +377,7 @@ a:hover{
 
 
   <div class="container">  
-    <div class="row bg-primary">
+    <div class="row ">
 
         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center " >
                 <div>
