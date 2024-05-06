@@ -379,8 +379,8 @@ a:hover{
   <div class="container">  
     <div class="row">
 
-        <div class="col-12 col-md-6 col-lg-3" >
-                <div class="text-center">
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column items-center" >
+                <div>
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
                  <h2 >Connect</h2>
                 </div>
@@ -398,8 +398,8 @@ a:hover{
 
   
 
-        <div class="col-12 col-md-6 col-lg-3">
-              <div class="text-center">
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column items-center">
+              <div>
                     <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
                     <h2>Learn</h2>
               
@@ -417,9 +417,9 @@ a:hover{
         </div>
 
 
-        <div  class="col-12  col-md-6 col-lg-3" >
+        <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column items-center" >
            
-           <div class="text-center">
+           <div>
                   <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
                     <h2>Grow</h2>          
            </div>
@@ -440,9 +440,9 @@ a:hover{
 
 
 
-         <div class="col-12 col-md-6 col-lg-3" id="learnmore">
+         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column items-center" id="learnmore">
            
-           <div class="text-center">
+           <div>
 
                    <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
                    <h2 >Impact</h2>
