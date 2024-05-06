@@ -212,7 +212,7 @@
 
                                 <div class="d-flex justify-content-between">
 
-                                <h4 class="mb-3 fw-bold">{Localisation::getTranslation('common_secondary_languages')}</h4>
+                                <h4 class="mb-3 fw-bold w-75">{Localisation::getTranslation('common_secondary_languages')}</h4>
                                 <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
                                 
                                 </div>
@@ -232,7 +232,7 @@
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                     <div class="d-flex justify-content-between ">
-                                    <p class="w-50">
+                                    <p class="w-75">
                               
                                         {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
                                         <strong>
