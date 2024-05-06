@@ -379,14 +379,14 @@ a:hover{
   <div class="container">  
     <div class="row bg-primary">
 
-        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center" >
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
                 <div>
                 <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
                 </div>
 
-                <h2 class="mt-2" >Connect</h2>
+                <h2  >Connect</h2>
        
-            <div class="mt-2 text-center">
+            <div class="text-center">
            
                 Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff
                 Learn about the nonprofits that work with TWB and why they come to us.
@@ -399,7 +399,7 @@ a:hover{
 
   
 
-        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center">
+        <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between">
               <div>
                     <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
                   
@@ -409,7 +409,7 @@ a:hover{
               <h2>Learn</h2>
  
               
-              <div class="text-center mt-2">
+              <div class="text-center ">
 
                         Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion.
                         Get free access to Phrase TMS, our translation tool and hone your translation skills through practice.
@@ -420,7 +420,7 @@ a:hover{
         </div>
 
 
-        <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column align-items-center" >
+        <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
            
            <div>
                   <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
@@ -431,7 +431,7 @@ a:hover{
 
           
             
-            <div class="text-center mt-2">
+            <div class="text-center ">
 
          
              Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.
@@ -445,7 +445,7 @@ a:hover{
 
 
 
-         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center" id="learnmore">
+         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" id="learnmore">
            
            <div>
 
@@ -457,7 +457,7 @@ a:hover{
            <h2 >Impact</h2>
          
              
-             <div class="text-center mt-2">
+             <div class="text-center">
             
              
                 Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.
