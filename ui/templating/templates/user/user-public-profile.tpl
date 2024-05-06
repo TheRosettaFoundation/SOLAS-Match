@@ -550,7 +550,7 @@
      
     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     
-        <div class="mt-3 p-4 rounded-2 bg-body fs-5" >
+        <div class="mt-3 p-4 rounded-2 bg-body fs-4" >
 
     <h3 class="fw-bold mb-3">Community Recognition Program <span class="text-muted fs-4">Contribute to our mission and obtain rewards</span></h3>
 
@@ -741,7 +741,7 @@ If you work on a revision task or a proofreading/approval task and notice that t
 <div>
 
 {if !empty($user_has_strategic_languages) || !empty($user_badges['strategic_points'])}
-<div class="bg-body mt-2 rounded-3 p-4">    
+<div class="bg-body mt-2 rounded-3 p-4 fs-4">    
 
 <p>Our Community Recognition Program also includes monetary rewards for some marginalized languages.
 Speakers of marginalized languages often face high connectivity costs when offering their online support.
