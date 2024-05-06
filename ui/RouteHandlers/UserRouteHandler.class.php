@@ -3133,6 +3133,7 @@ EOF;
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+        print_r($userQualifiedPairs);
 
         $template_data = array_merge($template_data, array(
             'current_page' => 'user-profile',
