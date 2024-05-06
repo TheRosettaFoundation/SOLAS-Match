@@ -324,7 +324,7 @@
 		    
 		    	<div style="display:flex; justify-content:center;  align-items:center;">
             
-              <img src="{urlFor name='home'}ui/img/banner_.png"  alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner.png"  alt="{Settings::get('banner.info')}">
 		    
 		    	</div>
             </a>
