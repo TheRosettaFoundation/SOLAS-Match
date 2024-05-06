@@ -203,7 +203,9 @@
                   
                     {if !empty($userQualifiedPairs)}
                      
-                            {$userQualifiedPairs}
+                            {foreach from=$userQualifiedPairs item=item key=k}
+                                <li>{$item} (index: {$k})</li>
+                            {/foreach}
 
                         <div class="mb-3">
 
