@@ -381,7 +381,7 @@ a:hover{
 
         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
                 <div>
-                <img src="{urlFor name='home'}ui/img/homepage/connect.png" alt="Con">
+                <img src="{urlFor name='home'}ui/img/homepage/connect.png" style="width:150px ; height:150px" alt="Con">
                 </div>
 
                 <h2  >Connect</h2>
@@ -401,7 +401,7 @@ a:hover{
 
         <div class="col-12 col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between">
               <div>
-                    <img src="{urlFor name='home'}ui/img/homepage/learn.png" alt="Con">
+                    <img src="{urlFor name='home'}ui/img/homepage/learn.png" style="width:150px ; height:150px" alt="Con">
                   
               
               </div>
@@ -423,7 +423,7 @@ a:hover{
         <div  class="col-12  col-md-6 col-lg-3 d-flex flex-column align-items-center justify-content-between" >
            
            <div>
-                  <img src="{urlFor name='home'}ui/img/homepage/grow.png" alt="Con">
+                  <img src="{urlFor name='home'}ui/img/homepage/grow.png" style="width:150px ; height:150px" alt="Con">
                          
            </div>
 
@@ -449,7 +449,7 @@ a:hover{
            
            <div>
 
-                   <img src="{urlFor name='home'}ui/img/homepage/impact.png" alt="Impact">
+                   <img src="{urlFor name='home'}ui/img/homepage/impact.png" style="width:150px ; height:150px" alt="Impact">
                
            
            </div>
