@@ -202,11 +202,9 @@
                     {/if}
                   
                     {if !empty($userQualifiedPairs)}
-                    
-                        
-                            
-                       
-                        
+                     
+                            {$userQualifiedPairs}
+
                         <div class="mb-3">
 
 
