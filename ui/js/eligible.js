@@ -1,11 +1,16 @@
 const selectEligibles = document.querySelectorAll("form .eligible");
 
-async function setEligibility({ sc, sl, tc, tl, el, user }) {
+async function setEligibility({ sc, sl, tc, tl, el, user, key }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        method: POST,
+        body: {
+            sesskey: key,
+        },
+    });
 
     console.log(response);
 }
