@@ -262,7 +262,7 @@
 ￼
 
                                     <p>
-                                    <form class="eligible">
+                                    <form>
                                                  
                                             {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
@@ -282,7 +282,7 @@
                                        
                                      
 
-                                            <select class="form-select border border-primary" name="el"  aria-label="Default select example">
+                                            <select class="form-select border border-primary eligible"   aria-label="Default select example">
                                                 <option selected value="0">None</option>
                                                 <option value="1">Translation</option>
                                                 <option value="2">Translation and Revision</option>                                  
