@@ -1108,7 +1108,9 @@ class UserRouteHandler
     public function set_paid_eligible_pair(Request $request, Response $response, $args)
     {
         $taskDao = new DAO\TaskDao();
-
+       
+        error_log("request" , $request);
+        error_log("psot" , $_POST["sesskey"]);
        
       
         $result = 1;
