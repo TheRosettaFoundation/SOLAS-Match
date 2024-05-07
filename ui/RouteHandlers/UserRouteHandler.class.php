@@ -2700,6 +2700,9 @@ error_log("result: $result");//(**)
             $langPrefName = '';
         }
 
+        print_r($userQualifiedPairs);
+        print_r($user);
+
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
             "badges" => $badges,

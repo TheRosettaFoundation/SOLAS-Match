@@ -242,7 +242,7 @@
                                     <p class="w-75">
                               
                                         {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
-                                    
+                                            <div> $userQualifiedPair['country_source'] </div>
                                         <strong>
                                         {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                         {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
