@@ -6,7 +6,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, key }) {
     console.log(url);
 
     const response = await fetch(url, {
-        method: POST,
+        method: "POST",
         body: {
             sesskey: key,
         },
