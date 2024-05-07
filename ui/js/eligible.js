@@ -1,5 +1,12 @@
 const selectEligibles = document.querySelectorAll("form .eligible");
 
+async function setEligibility({ sc, sl, tc, tl, el }) {
+    let url = `/set_paid_eligible_pair/{user_id}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}[/`;
+
+    console.log(url);
+    // const response = await fetch();
+}
+
 selectEligibles.forEach(function (curr, index, arr) {
     let codes = {};
     curr.addEventListener("change", function (e) {
@@ -21,5 +28,6 @@ selectEligibles.forEach(function (curr, index, arr) {
         };
 
         console.log(codes);
+        setEligibility(codes);
     });
 });
