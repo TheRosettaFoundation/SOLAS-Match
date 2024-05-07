@@ -2,16 +2,18 @@ console.log("testing if it is working");
 
 const selectEligibles = document.querySelectorAll(".eligible");
 
-console.log(selectEligibles);
+const selectEL = selectEligibles.querySelectorAll("select");
 
-selectEligibles.forEach(function (curr, index, arr) {
-    console.log(curr);
+console.log(selectEL);
 
-    let sc = curr.querySelector(".eligible_codes");
+// selectEligibles.forEach(function (curr, index, arr) {
+//     console.log(curr);
 
-    console.log(sc);
+//     let sc = curr.querySelector(".eligible_codes");
 
-    curr.addEventListener("change", function () {
-        console.log("current");
-    });
-});
+//     console.log(sc);
+
+//     curr.addEventListener("change", function () {
+//         console.log("current");
+//     });
+// });
