@@ -49,13 +49,15 @@ selectEligibles.forEach(function (curr, index, arr) {
     curr.addEventListener("change", function (e) {
         e.preventDefault();
         let previousSibli = curr.parentElement.previousElementSibling;
+        console.log(curr);
+        console.log(previousSibli);
 
-        let sc = previousSibli.querySelector(".sc").textContent;
-        let sl = previousSibli.querySelector(".sl").textContent;
-        let tl = previousSibli.querySelector(".tl").textContent;
-        let tc = previousSibli.querySelector(".tc").textContent;
-        let user = previousSibli.querySelector(".user").textContent;
-        let key = previousSibli.querySelector(".key").textContent;
+        // let sc = previousSibli.querySelector(".sc").textContent;
+        // let sl = previousSibli.querySelector(".sl").textContent;
+        // let tl = previousSibli.querySelector(".tl").textContent;
+        // let tc = previousSibli.querySelector(".tc").textContent;
+        // let user = previousSibli.querySelector(".user").textContent;
+        // let key = previousSibli.querySelector(".key").textContent;
         console.log(key);
         let el = curr.value;
 
