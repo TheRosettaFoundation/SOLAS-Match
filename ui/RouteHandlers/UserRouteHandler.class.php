@@ -1109,7 +1109,9 @@ class UserRouteHandler
     {
         $taskDao = new DAO\TaskDao();
        
-        error_log("Retrieved user: " . print_r("test", true), 0); 
+        $test = $request->getParsedBody();
+        
+        error_log("$request Leave Organisation $test ");
        
       
         $result = 1;
