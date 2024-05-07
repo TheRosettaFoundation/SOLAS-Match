@@ -48,7 +48,7 @@ selectEligibles.forEach(function (curr, index, arr) {
     let codes = {};
     curr.addEventListener("change", function (e) {
         e.preventDefault();
-        let previousSibli = curr.parentElement.previousElementSibling;
+        let previousSibli = curr.parentElement;
         console.log(curr);
         console.log(previousSibli);
 
