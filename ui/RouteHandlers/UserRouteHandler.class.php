@@ -1109,7 +1109,7 @@ class UserRouteHandler
     {
         $taskDao = new DAO\TaskDao();
 
-
+       
       
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
@@ -1119,7 +1119,7 @@ class UserRouteHandler
         }
         // $results = json_encode(['result'=> $result]);
         // $response->getBody()->write($results);
-         $results = json_encode(['result'=> $request]);
+         $results = json_encode(['result'=> $_POST["sesskey"]]);
          $response->getBody()->write($results);
         // $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
