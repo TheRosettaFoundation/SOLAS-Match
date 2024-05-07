@@ -1112,7 +1112,7 @@ class UserRouteHandler
        
       
         $result = 1;
-        // if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
         if ($result) {
             if ($args['eligible'] > 0) $taskDao->create_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc'], $args['eligible']);
             else                       $taskDao->remove_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc']);
@@ -2615,6 +2615,8 @@ error_log("result: $result");//(**)
         $user_orgs = $userDao->find_all_orgs_for_user($user_id);
         $badges = $userDao->getUserBadges($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+
+        print_r($userQualifiedPairs);
 
         $orgList = array();
         if ($badges) {
