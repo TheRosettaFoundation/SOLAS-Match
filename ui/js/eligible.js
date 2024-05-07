@@ -8,7 +8,7 @@ forms.forEach(function (curr, index, arr) {
     console.log(selectElement);
     selectElement.addEventListener("change", function (e) {
         e.preventDefault();
-        console.log("change");
+        curr.submit();
     });
 });
 
