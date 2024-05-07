@@ -1,5 +1,3 @@
-const { combineReducers } = require("redux");
-
 console.log("testing if it is working");
 
 const selectEligibles = document.querySelectorAll("form .eligible");
