@@ -1111,7 +1111,7 @@ class UserRouteHandler
        
         $test = $request->getParsedBody();
         
-        error_log("$request Leave Organisation $test ");
+        error_log( $test );
        
       
         $result = 1;
