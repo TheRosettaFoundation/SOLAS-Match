@@ -22,12 +22,6 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
 
     let data = {
         sesskey,
-        sc,
-        sl,
-        tc,
-        tl,
-        user_id: user,
-        eligible: el,
     };
 
     console.log(data);
