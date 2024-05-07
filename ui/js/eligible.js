@@ -5,7 +5,7 @@ const selectEligibles = document.querySelectorAll(".eligible");
 selectEligibles.forEach(function (curr, index, arr) {
     console.log(curr);
 
-    curr.addEventListener("change", function (e) {
+    curr.addEventListener("click", function (e) {
         e.preventDefault();
         console.log("changed");
         let previousSibli = curr.previousElementSibling;
