@@ -2701,7 +2701,6 @@ error_log("result: $result");//(**)
             $langPrefName = '';
         }
 
-        print_r($userQualifiedPairs);
   
 
         $template_data = array_merge($template_data, array(
