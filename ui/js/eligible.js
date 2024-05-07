@@ -8,8 +8,6 @@ selectEligibles.forEach(function (curr, index, arr) {
     console.log(select);
 });
 
-console.log(selectEL);
-
 // selectEligibles.forEach(function (curr, index, arr) {
 //     console.log(curr);
 
