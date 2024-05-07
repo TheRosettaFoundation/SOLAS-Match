@@ -7,17 +7,11 @@ console.log(selectEligibles);
 selectEligibles.forEach(function (curr, index, arr) {
     console.log(curr);
 
-    let sc = curr.firstChild;
+    let sc = curr.querySelector(".eligible_codes");
 
     console.log(sc);
 
     curr.addEventListener("change", function () {
-        let eligibleCodes = curr.previousElementSibling("eligible_codes");
-
-        console.log(eligibleCodes);
-
-        let sc = eligibleCodes.querySelector(".sc");
-        console.log("sc in on change");
-        console.log(sc);
+        console.log("current");
     });
 });
