@@ -271,7 +271,7 @@
                                             <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
                                             <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/> *}
                                             
-                                            <span class="key">{$sesskey}</span >
+                                            <span class="sesskey">{$sesskey}</span >
                                             <span class="user">{$user_id}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
                                 

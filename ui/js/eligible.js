@@ -15,14 +15,14 @@ const selectEligibles = document.querySelectorAll("form .eligible");
 //     });
 // });
 
-async function setEligibility({ sc, sl, tc, tl, el, user, key }) {
+async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
     console.log(key);
 
     let data = {
-        sesskey: key,
+        sesskey,
         sc,
         sl,
         tc,
@@ -52,12 +52,12 @@ selectEligibles.forEach(function (curr, index, arr) {
         console.log(curr);
         console.log(previousSibli);
 
-        // let sc = previousSibli.querySelector(".sc").textContent;
-        // let sl = previousSibli.querySelector(".sl").textContent;
-        // let tl = previousSibli.querySelector(".tl").textContent;
-        // let tc = previousSibli.querySelector(".tc").textContent;
-        // let user = previousSibli.querySelector(".user").textContent;
-        // let key = previousSibli.querySelector(".key").textContent;
+        let sc = previousSibli.querySelector(".sc").textContent;
+        let sl = previousSibli.querySelector(".sl").textContent;
+        let tl = previousSibli.querySelector(".tl").textContent;
+        let tc = previousSibli.querySelector(".tc").textContent;
+        let user = previousSibli.querySelector(".user").textContent;
+        let sesskeykey = previousSibli.querySelector(".sesskey").textContent;
         console.log(key);
         let el = curr.value;
 
@@ -68,7 +68,7 @@ selectEligibles.forEach(function (curr, index, arr) {
             tc,
             el,
             user,
-            key,
+            sesskey,
         };
 
         console.log(codes);
