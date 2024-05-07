@@ -262,7 +262,7 @@
                                     <p>
 
                                         <div class="d-none eligible_codes">
-                                        <span class="sc">{$userQualifiedPair['user_id']} </span >
+                                        <span class="user">{$userQualifiedPair['user_id']} </span >
                                             <span class="sc">{$userQualifiedPair['country_id_source']}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl">{$userQualifiedPair['language_id_target']}</span >
