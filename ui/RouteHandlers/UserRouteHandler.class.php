@@ -2627,6 +2627,7 @@ error_log("result: $result");//(**)
 
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+        $extra_scripts .= "ui/js/eligible.js\"></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
