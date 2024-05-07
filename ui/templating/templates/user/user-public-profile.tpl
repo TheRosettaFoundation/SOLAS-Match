@@ -260,16 +260,21 @@
 
                                
                                     <p>
-
-                                        <div class="d-none eligible_codes">            
-                                            <span class="key">{$sesskey}</span >
-                                            <span class="user">{$userQualifiedPair['user_id']}</span >
-                                            <span class="sc">{$userQualifiedPair['country_id_source']}</span >
+                                    <form class="select">
+                                                 
+                                            <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
+                                            <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
+                                            <input  type="hidden" class="sc" value={$userQualifiedPair['country_id_source']}  name="sc"/>
+                                            <input  type="hidden" class="sl" value={$userQualifiedPair['language_id_source']}  name="sl"/>
+                                            <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
+                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/>
+                                            
+                                            {* <span class="sc">{$userQualifiedPair['country_id_source']}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl">{$userQualifiedPair['language_id_target']}</span >
-                                            <span class="tc">{$userQualifiedPair['country_id_target']}</span>
-                                        </div>
-                                        <form>
+                                            <span class="tc">{$userQualifiedPair['country_id_target']}</span> *}
+                                       
+                                     
 
                                             <select class="form-select border border-primary eligible"   aria-label="Default select example">
                                                 <option selected value="0">None</option>
