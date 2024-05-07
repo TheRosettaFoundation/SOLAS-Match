@@ -1109,8 +1109,7 @@ class UserRouteHandler
     {
         $taskDao = new DAO\TaskDao();
        
-        error_log("request" , $request);
-        error_log("psot" , $_POST["sesskey"]);
+        error_log("Retrieved user: " . print_r($request, true), 0); 
        
       
         $result = 1;
