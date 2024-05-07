@@ -148,9 +148,9 @@
             <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" class="form-control"/>
             </div>
-            <div class="text-end">
+            <div class="text-end mb-2">
           
-            <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="password-reset" > Forgot password ? </a>
+            <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline cursor-pointer" href="/password-reset" > Forgot password ? </a>
           
 
             </div>
