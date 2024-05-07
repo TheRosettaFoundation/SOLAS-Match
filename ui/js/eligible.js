@@ -2,10 +2,10 @@ console.log("testing if it is working");
 
 const selectEligibles = document.querySelectorAll(".eligible");
 
-selectEligibles.forEach(function (curr, index, arr) {
-    let currentSelect = curr.querySelector("select");
+console.log(selectEligibles);
 
-    console.log(currentSelect);
+selectEligibles.forEach(function (curr, index, arr) {
+    console.log(current);
 
     let sc = curr.querySelector(".sc");
 
