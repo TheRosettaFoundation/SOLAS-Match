@@ -1,6 +1,6 @@
 console.log("testing if it is working");
 
-const selectEligibles = document.querySelectorAll(".eligible");
+const selectEligibles = document.querySelectorAll("form .eligible");
 console.log(selectEligibles);
 
 selectEligibles.forEach(function (curr, index, arr) {
