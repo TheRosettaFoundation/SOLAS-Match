@@ -4,7 +4,9 @@ async function setEligibility({ sc, sl, tc, tl, el, user }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
-    // const response = await fetch();
+    const response = await fetch(url);
+
+    console.log(response);
 }
 
 selectEligibles.forEach(function (curr, index, arr) {
@@ -30,6 +32,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         };
 
         console.log(codes);
+
         setEligibility(codes);
     });
 });
