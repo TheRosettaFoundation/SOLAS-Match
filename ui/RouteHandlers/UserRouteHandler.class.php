@@ -1110,16 +1110,18 @@ class UserRouteHandler
         $taskDao = new DAO\TaskDao();
 
 
-        error_log($request);
-
+      
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
         if ($result) {
             if ($args['eligible'] > 0) $taskDao->create_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc'], $args['eligible']);
             else                       $taskDao->remove_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc']);
         }
-        $results = json_encode(['result'=> $result]);
-        $response->getBody()->write($results);
+        // $results = json_encode(['result'=> $result]);
+        // $response->getBody()->write($results);
+         $results = json_encode(['result'=> $request]);
+         $response->getBody()->write($results);
+        // $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
 
