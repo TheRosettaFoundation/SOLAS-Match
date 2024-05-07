@@ -162,7 +162,7 @@
                 <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
                 <div class="text-end mb-2">
           
-            <a class="" href='/password/reset' > Forgot password ? </a>
+            {* <a class="" href='/password/reset' > Forgot password ? </a> *}
 
             </div>
 
