@@ -2,7 +2,11 @@ console.log("testing if it is working");
 
 const selectEligibles = document.querySelectorAll(".eligible");
 
-const selectEL = selectEligibles.querySelectorAll("select");
+selectEligibles.forEach(function (curr, index, arr) {
+    let select = curr.querySelector("select");
+
+    console.log(select);
+});
 
 console.log(selectEL);
 
