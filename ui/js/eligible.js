@@ -28,10 +28,10 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
 
     const response = await fetch(url, {
         method: "POST",
-        body: JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
     });
 
     console.log(response);
