@@ -150,7 +150,7 @@
             </div>
             <div class="text-end mb-2">
           
-            <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline cursor-pointer" href="/password-reset" > Forgot password ? </a>
+            <a class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover" href='{urlFor name="password-reset"}' > Forgot password ? </a>
           
 
             </div>
