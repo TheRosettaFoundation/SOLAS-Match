@@ -10,10 +10,10 @@ selectEligibles.forEach(function (curr, index, arr) {
         console.log("changed");
         let previousSibli = curr.parentElement.previousElementSibling;
 
-        let sc = previousSibli.querySelector(".sc");
-        let sl = previousSibli.querySelector(".sl");
-        let tl = previousSibli.querySelector(".tl");
-        let tc = previousSibli.querySelector(".tc");
+        let sc = previousSibli.querySelector(".sc").textContent;
+        let sl = previousSibli.querySelector(".sl").textContent;
+        let tl = previousSibli.querySelector(".tl").textContent;
+        let tc = previousSibli.querySelector(".tc").textContent;
 
         codes = {
             sc,
