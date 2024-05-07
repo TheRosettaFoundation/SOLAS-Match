@@ -5,7 +5,7 @@ const selectEligibles = document.querySelectorAll(".eligible");
 console.log(selectEligibles);
 
 selectEligibles.forEach(function (curr, index, arr) {
-    console.log(current);
+    console.log(curr);
 
     let sc = curr.querySelector(".sc");
 
