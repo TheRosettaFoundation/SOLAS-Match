@@ -261,13 +261,14 @@
 
                                
                                     <p>
-                                        <form>
-                                           <div class="d-none eligible">
+
+                                        <div class="d-none eligible">
                                             <span id="sc">{$userQualifiedPair['country_id_source']} </span >
                                             <span id="sl">{$userQualifiedPair['language_id_source']} </span >
                                             <span id="tl">{$userQualifiedPair['language_id_target']}</span >
                                             <span id="tc">{$userQualifiedPair['language_id_target']}</span>
                                            <div>
+                                        <form>
 
                                             <select class="form-select border border-primary " aria-label="Default select example">
                                                 <option selected>None</option>
