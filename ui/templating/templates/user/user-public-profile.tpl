@@ -263,10 +263,10 @@
                                     <p>
 
                                         <div class="d-none eligible">
-                                            <span id="sc">{$userQualifiedPair['country_id_source']} </span >
-                                            <span id="sl">{$userQualifiedPair['language_id_source']} </span >
-                                            <span id="tl">{$userQualifiedPair['language_id_target']}</span >
-                                            <span id="tc">{$userQualifiedPair['language_id_target']}</span>
+                                            <span class="sc">{$userQualifiedPair['country_id_source']} </span >
+                                            <span class="sl">{$userQualifiedPair['language_id_source']} </span >
+                                            <span class="tl">{$userQualifiedPair['language_id_target']}</span >
+                                            <span class="tc">{$userQualifiedPair['language_id_target']}</span>
                                            </div>
                                         <form>
 
