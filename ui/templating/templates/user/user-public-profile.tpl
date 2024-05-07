@@ -260,6 +260,12 @@
                                         {/if}
 
                                       pair : {$pair}
+
+                                      country_id source : {$userQualifiedPair['country_id_source']}
+                                      country_id source : {$userQualifiedPair['country_id_source']}
+                                      language_id target : {$userQualifiedPair['language_id_target']}
+                                      language_id source : {$userQualifiedPair['language_id_source']}
+                                      
                                     </p>
                                     
                                     <p>
