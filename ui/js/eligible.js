@@ -4,6 +4,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, key }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
+    console.log(key);
 
     const response = await fetch(url, {
         method: "POST",
