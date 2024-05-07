@@ -6,10 +6,10 @@ console.log(selectEligibles);
 selectEligibles.forEach(function (curr, index, arr) {
     console.log(curr);
 
-    curr.addEventListener("click", function (e) {
+    curr.addEventListener("change", function (e) {
         e.preventDefault();
         console.log("changed");
-        let previousSibli = curr.previousElementSibling;
+        let previousSibli = curr.previousElementSibling();
         console.log(previousSibli);
     });
 });
