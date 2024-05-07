@@ -4,7 +4,13 @@ const selectEligibles = document.querySelectorAll(".eligible");
 
 selectEligibles.forEach(function (curr, index, arr) {
     console.log(curr);
-    let select = curr.querySelector("select");
+
+    curr.addEventListener("change", function (e) {
+        e.preventDefault();
+        console.log("changed");
+        let previousSibli = curr.previousElementSibling;
+        console.log(previousSibli);
+    });
 
     console.log(select);
 });

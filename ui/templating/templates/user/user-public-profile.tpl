@@ -260,7 +260,7 @@
                                         {/if}
 
                                
-                                    <p class="eligible">
+                                    <p>
 
                                         <div class="d-none eligible_codes">
                                             <span class="sc">{$userQualifiedPair['country_id_source']} </span >
@@ -270,7 +270,7 @@
                                         </div>
                                         <form>
 
-                                            <select class="form-select border border-primary " aria-label="Default select example">
+                                            <select class="form-select border border-primary" class="eligible"  aria-label="Default select example">
                                                 <option selected>None</option>
                                                 <option value="1">Translation</option>
                                                 <option value="2">Translation and Revision</option>                                  
