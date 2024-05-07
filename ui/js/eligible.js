@@ -12,8 +12,6 @@ selectEligibles.forEach(function (curr, index, arr) {
         let previousSibli = curr.previousElementSibling;
         console.log(previousSibli);
     });
-
-    console.log(select);
 });
 
 // selectEligibles.forEach(function (curr, index, arr) {
