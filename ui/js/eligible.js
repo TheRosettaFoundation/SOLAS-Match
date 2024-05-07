@@ -9,7 +9,7 @@ selectEligibles.forEach(function (curr, index, arr) {
     curr.addEventListener("change", function (e) {
         e.preventDefault();
         console.log("changed");
-        let previousSibli = curr.previousElementSibling;
+        let previousSibli = curr.parentNode.previousSibling;
         console.log(previousSibli);
     });
 });
