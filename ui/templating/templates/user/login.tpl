@@ -142,18 +142,20 @@
            <div class="mb-2"> 
             <label for="email" class="form-label text-grayish "><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email" class="form-control"/>
-           
            </div>
+
              <div class="mb-3"> 
             <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" class="form-control"/>
             </div>
+
             <div class="text-end mb-2">
           
-            <a class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover" href='{urlFor name="password-reset"}' > Forgot password ? </a>
-          
+            <a class="" href='/password/reset' > Forgot password ? </a>
 
             </div>
+
+
               <div class="d-grid gap-2">
                 <button type="submit" name="login" class="btngray-lg w-full text-center cursor-pointer">
   				     {Localisation::getTranslation('common_log_in')}
