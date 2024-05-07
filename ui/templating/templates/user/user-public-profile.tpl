@@ -267,7 +267,7 @@
                                             <span class="sl">{$userQualifiedPair['language_id_source']} </span >
                                             <span class="tl">{$userQualifiedPair['language_id_target']}</span >
                                             <span class="tc">{$userQualifiedPair['language_id_target']}</span>
-                                           </div>
+                                        </div>
                                         <form>
 
                                             <select class="form-select border border-primary " aria-label="Default select example">
