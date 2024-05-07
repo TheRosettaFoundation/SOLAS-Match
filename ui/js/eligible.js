@@ -57,7 +57,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         let tc = previousSibli.querySelector(".tc").textContent;
         let user = previousSibli.querySelector(".user").textContent;
         let sesskeykey = previousSibli.querySelector(".sesskey").textContent;
-        console.log(key);
+
         let el = curr.value;
 
         codes = {
