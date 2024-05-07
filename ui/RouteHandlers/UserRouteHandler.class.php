@@ -1111,7 +1111,7 @@ class UserRouteHandler
        
         $test = $request->getParsedBody();
         
-        error_log( $test );
+        error_log( $_POST['sesskey'] );
        
       
         $result = 1;
