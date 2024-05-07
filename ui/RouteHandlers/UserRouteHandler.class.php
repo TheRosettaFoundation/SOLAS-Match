@@ -1110,7 +1110,7 @@ class UserRouteHandler
         $taskDao = new DAO\TaskDao();
 
 
-        print_r($request);
+        error_log($request);
 
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
