@@ -10,6 +10,10 @@ selectEligibles.forEach(function (curr, index, arr) {
         e.preventDefault();
         console.log("changed");
         let previousSibli = curr.parentElement.previousElementSibling;
+
+        let sc = previousSibli.querySelector(".sc");
+
+        console.log(sc.textContent);
         console.log(previousSibli);
     });
 });
