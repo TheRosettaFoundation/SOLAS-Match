@@ -260,7 +260,7 @@
 
                                
                                     <p>
-                                    <form class="eligible" method="post" action="{urlFor name="set_paid_eligible_pair" options="user_id.$user_id|sl.$userQualifiedPair['country_id_source']|sc.$userQualifiedPair['language_id_source']|tl.$userQualifiedPair['language_id_target']|tc.$userQualifiedPair['country_id_target']|eligible.0"}">
+                                    <form class="eligible" method="post" action="{urlFor name="set_paid_eligible_pair" options="user_id.$user_id|sl.$userQualifiedPair['country_id_source']|sc.$userQualifiedPair['language_id_source']|tl.$userQualifiedPair['language_id_target']|tc.$userQualifiedPair['country_id_target']|eligible.$el"}">
                                                  
                                             <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
@@ -276,7 +276,7 @@
                                        
                                      
 
-                                            <select class="form-select border border-primary"   aria-label="Default select example">
+                                            <select class="form-select border border-primary" name="el"  aria-label="Default select example">
                                                 <option selected value="0">None</option>
                                                 <option value="1">Translation</option>
                                                 <option value="2">Translation and Revision</option>                                  
