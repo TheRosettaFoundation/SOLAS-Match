@@ -1,7 +1,7 @@
 const selectEligibles = document.querySelectorAll("form .eligible");
 
-async function setEligibility({ sc, sl, tc, tl, el }) {
-    let url = `/set_paid_eligible_pair/{user_id}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}[/`;
+async function setEligibility({ sc, sl, tc, tl, el, user }) {
+    let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
     // const response = await fetch();
@@ -17,6 +17,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         let sl = previousSibli.querySelector(".sl").textContent;
         let tl = previousSibli.querySelector(".tl").textContent;
         let tc = previousSibli.querySelector(".tc").textContent;
+        let user = previousSibli.querySelector(".user_id").textContent;
         let el = curr.value;
 
         codes = {
@@ -25,6 +26,7 @@ selectEligibles.forEach(function (curr, index, arr) {
             tl,
             tc,
             el,
+            user,
         };
 
         console.log(codes);
