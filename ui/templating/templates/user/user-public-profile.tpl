@@ -259,20 +259,26 @@
                                         {/if}
 
                                
+￼
+
                                     <p>
-                                    <form class="eligible" method="post" action="{urlFor name="set_paid_eligible_pair" options="user_id.$user_id|sl.$sl|sc.$sc|tl.$tl|tc.$tc|eligible.$el"}">
+                                    <form class="eligible">
                                                  
-                                            <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
+                                            {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
                                             <input  type="hidden" class="sc" value={$userQualifiedPair['country_id_source']}  name="sc"/>
                                             <input  type="hidden" class="sl" value={$userQualifiedPair['language_id_source']}  name="sl"/>
                                             <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
-                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/>
+                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/> *}
                                             
-                                            {* <span class="sc">{$userQualifiedPair['country_id_source']}</span >
+                                            <span class="key">{$sesskey}</span >
+                                            <span class="key">{$user_id}</span >
+                                            <span class="sl">{$userQualifiedPair['language_id_source']}</span >
+                                
+                                            <span class="sc">{$userQualifiedPair['country_id_source']}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl">{$userQualifiedPair['language_id_target']}</span >
-                                            <span class="tc">{$userQualifiedPair['country_id_target']}</span> *}
+                                            <span class="tc">{$userQualifiedPair['country_id_target']}</span>
                                        
                                      
 
