@@ -1,20 +1,30 @@
+const { combineReducers } = require("redux");
+
 console.log("testing if it is working");
 
 const selectEligibles = document.querySelectorAll("form .eligible");
 console.log(selectEligibles);
 
 selectEligibles.forEach(function (curr, index, arr) {
-    console.log(curr);
-
+    let codes = {};
     curr.addEventListener("change", function (e) {
         e.preventDefault();
         console.log("changed");
         let previousSibli = curr.parentElement.previousElementSibling;
 
         let sc = previousSibli.querySelector(".sc");
+        let sl = previousSibli.querySelector(".sl");
+        let tl = previousSibli.querySelector(".tl");
+        let tc = previousSibli.querySelector(".tc");
 
-        console.log(sc.textContent);
-        console.log(previousSibli);
+        codes = {
+            sc,
+            sl,
+            tl,
+            tc,
+        };
+
+        console.log(codes);
     });
 });
 
