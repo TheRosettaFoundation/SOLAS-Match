@@ -260,7 +260,7 @@
 
                                
                                     <p>
-                                    <form class="eligible" method="post" action="{urlFor name="set_paid_eligible_pair" options="user_id.$user_id|sl.$userQualifiedPair['country_id_source']|sc.$userQualifiedPair['language_id_source']|tl.$userQualifiedPair['language_id_target']|tc.$userQualifiedPair['country_id_target']|eligible.$el"}">
+                                    <form class="eligible" method="post" action="{urlFor name="set_paid_eligible_pair" options="user_id.$user_id|sl.$sl|sc.$sc|tl.$tl|tc.$tc|eligible.$el"}">
                                                  
                                             <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
