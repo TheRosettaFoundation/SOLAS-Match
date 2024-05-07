@@ -8,6 +8,8 @@ async function setEligibility({ sc, sl, tc, tl, el, user, key }) {
 
     let data = { sesskey: key };
 
+    console.log(data);
+
     const response = await fetch(url, {
         method: "POST",
         body: JSON.stringify(data),
