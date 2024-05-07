@@ -203,9 +203,7 @@
                   
                     {if !empty($userQualifiedPairs)}
                      
-                            -----------------------
-                            {$this_user->getNativeLocale()->getLanguageCode()}
-
+                 
                         <div class="mb-3">
 
 
@@ -223,12 +221,7 @@
                                 {/foreach}
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                    <script>
-                              
-                                    console.log($userQualifiedPairs);
-                            
-                                    </script>
-                            ----------------
+                                  
                                     {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                     {if $userQualifiedPair['qualification_level'] > 1}
                                         {$button_count.$pair=1}
