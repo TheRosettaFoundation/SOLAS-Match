@@ -2621,7 +2621,6 @@ error_log("result: $result");//(**)
         $badges = $userDao->getUserBadges($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
-        print_r($userQualifiedPairs);
 
         $orgList = array();
         if ($badges) {

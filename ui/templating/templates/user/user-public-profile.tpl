@@ -243,7 +243,7 @@
 
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                         {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) && $button_count.$pair == 0}
-                                            {* {$button_count.$pair=1} *}
+                                            {$button_count.$pair=1}
                                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                             <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
                                             <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
@@ -258,7 +258,7 @@
                                         </form>
                                         {/if}
 
-                               
+                                   </p>
 ￼
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <p>
