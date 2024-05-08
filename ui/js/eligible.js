@@ -19,7 +19,7 @@ const selectEligibles = document.querySelectorAll("form .eligible");
 // });
 
 async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
-    let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}`;
+    let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
     console.log(url);
     console.log(sesskey);
