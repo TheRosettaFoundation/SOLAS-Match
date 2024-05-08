@@ -31,7 +31,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: data,
+            body: JSON.stringify(data),
         });
 
         if (!response.ok) {
