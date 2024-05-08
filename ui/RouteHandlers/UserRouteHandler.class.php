@@ -1111,7 +1111,7 @@ class UserRouteHandler
        
         $test = $request->getParsedBody();
         
-        error_log(var_dump($args));
+        error_log("testing");
        
       
         $result = 1;
