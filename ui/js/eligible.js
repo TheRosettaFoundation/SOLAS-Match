@@ -27,7 +27,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "multipart/form-data",
             },
             body: data,
         });
