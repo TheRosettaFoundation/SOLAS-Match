@@ -1,23 +1,5 @@
 const selectEligibles = document.querySelectorAll("form .eligible");
 
-// const forms = document.querySelectorAll(".eligible");
-// console.log(forms);
-
-// forms.forEach(function (curr, index, arr) {
-//     let selectElement = curr.querySelector("select");
-//     let sc = curr.querySelector(".sc").textContent;
-//     let sl = curr.querySelector(".sl").textContent;
-//     let tc = curr.querySelector(".tc").textContent;
-//     let tl = curr.querySelector(".tl").textContent;
-//     let user = curr.querySelector(".user").textContent;
-
-//     console.log(sc, sl, tc, tl, user);
-//     console.log(selectElement);
-//     selectElement.addEventListener("change", function (e) {
-//         e.preventDefault();
-//     });
-// });
-
 async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
@@ -43,16 +25,14 @@ selectEligibles.forEach(function (curr, index, arr) {
     let codes = {};
     curr.addEventListener("change", function (e) {
         e.preventDefault();
-        let previousSibli = curr.parentElement;
-        console.log(curr);
-        console.log(previousSibli);
+        let parent = curr.parentElement;
 
-        let sc = previousSibli.querySelector(".sc").textContent;
-        let sl = previousSibli.querySelector(".sl").textContent;
-        let tl = previousSibli.querySelector(".tl").textContent;
-        let tc = previousSibli.querySelector(".tc").textContent;
-        let user = previousSibli.querySelector(".user").textContent;
-        let sesskey = previousSibli.querySelector(".sesskey").textContent;
+        let sc = parent.querySelector(".sc").textContent;
+        let sl = parent.querySelector(".sl").textContent;
+        let tl = parent.querySelector(".tl").textContent;
+        let tc = parent.querySelector(".tc").textContent;
+        let user = parent.querySelector(".user").textContent;
+        let sesskey = parent.querySelector(".sesskey").textContent;
         console.log("sesskey", sesskey);
 
         let el = curr.value;
