@@ -1110,7 +1110,7 @@ class UserRouteHandler
         $taskDao = new DAO\TaskDao();
        
    
-       $sesskey = $request->getBody();
+       $sesskey = $request->getParsedBody();
        $test = (array) $sesskey;
 
         try {
