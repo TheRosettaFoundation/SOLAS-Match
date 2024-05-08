@@ -281,7 +281,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
                                             {/if}
-                                            {* {if $roles & ($PROJECT_OFFICER )} *}
+                                            {if $roles & ($PROJECT_OFFICER )}
                                                 {if $userQualifiedPair['eligible_level'] == null }
                                                     <div>None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
@@ -290,7 +290,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
                                                     <div>Translation and Revision</div> 
                                                 {/if}    
-                                            {* {/if}   *}
+                                            {/if}  
                                         </form>
                                     </p>
 
