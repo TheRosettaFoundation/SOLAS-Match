@@ -1110,9 +1110,9 @@ class UserRouteHandler
         $taskDao = new DAO\TaskDao();
        
    
-     
+       $sesskey = $request->getBody();
 
-        error_log(json_encode($args));
+        error_log(json_encode($sesskey));
         error_log(json_encode($request));
 
 
