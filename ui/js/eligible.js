@@ -5,13 +5,15 @@ console.log(forms);
 
 forms.forEach(function (curr, index, arr) {
     let selectElement = curr.querySelector("select");
+    let sc = curr.querySelector("sc");
+
+    console.log(sc);
     console.log(selectElement);
     selectElement.addEventListener("change", function (e) {
         e.preventDefault();
         curr.addEventListener("submit", function (e) {
             e.preventDefault();
         });
-        curr.submit();
     });
 });
 
