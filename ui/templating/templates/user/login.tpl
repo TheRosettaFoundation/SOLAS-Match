@@ -150,7 +150,7 @@
             </div>
             <div class="text-end">
           
-            <button class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" name="password_reset"> Forgot password ? </button>
+            <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="/password/reset"> Forgot password ? </button>
           
 
             </div>
