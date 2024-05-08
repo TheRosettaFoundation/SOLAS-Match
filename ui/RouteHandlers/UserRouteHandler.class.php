@@ -1113,7 +1113,6 @@ class UserRouteHandler
     //    $sesskey = $request->getParsedBody();
 
 
-     ===
     //     try {
     //         // $data = json_decode($sesskey,true);
     //         error_log(print_r($request));
@@ -1124,7 +1123,7 @@ class UserRouteHandler
 
 
         $result = 1;
-        if  (false && Common\Lib\UserSession::checkCSRFKey($request->getParsedBody() 'set_paid_eligible_pair')) $result = 0;
+        if  (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody() 'set_paid_eligible_pair')) $result = 0;
         if ($result) {
             if ($args['eligible'] > 0) $taskDao->create_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc'], $args['eligible']);
             else                       $taskDao->remove_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc']);
