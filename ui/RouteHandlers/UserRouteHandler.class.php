@@ -1112,8 +1112,8 @@ class UserRouteHandler
    
      
 
-        // error_log(json_encode($args));
-        // error_log(json_encode($request));
+        error_log(json_encode($args));
+        error_log(json_encode($request));
 
 
         $result = 1;
