@@ -260,8 +260,9 @@
 
                                
 ￼
-
+                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <p>
+                                  
                                     <form>
                                                  
                                             {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
@@ -288,6 +289,8 @@
                                             </select>
                                         </form>
                                     </p>
+
+                                    {/if}
                                  
                                     </div>
                                 {/foreach}
