@@ -264,14 +264,7 @@
                                     <p>
                                   
                                     <form>
-                                                 
-                                            {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
-                                            <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
-                                            <input  type="hidden" class="sc" value={$userQualifiedPair['country_id_source']}  name="sc"/>
-                                            <input  type="hidden" class="sl" value={$userQualifiedPair['language_id_source']}  name="sl"/>
-                                            <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
-                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/> *}
-                                            
+
                                             {if isset($sesskey)}
                                             <span class="sesskey d-none">{$sesskey}</span >
                                             {/if}
