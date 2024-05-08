@@ -1115,7 +1115,7 @@ class UserRouteHandler
 
         try {
             // $data = json_decode($sesskey,true);
-            error_log(print_r($test));
+            error_log(print_r($sesskey));
             } catch (Exception $e) {
 
             return $response->withStatus(400)->withJson(['error' => $e]) ;
