@@ -210,8 +210,9 @@
                                 <div class="d-flex">
 
                                 <h4 class="mb-3 fw-bold w-75">{Localisation::getTranslation('common_secondary_languages')}</h4>
-                                <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
-                                
+                                    {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
+                                    <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
+                                    {/if}
                                 </div>
 
          
