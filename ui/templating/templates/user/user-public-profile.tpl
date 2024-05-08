@@ -289,6 +289,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
 
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
                                                     <div>Translation and Revision</div> 
+                                                {/if}    
                                             {* {/if}   *}
                                         </form>
                                     </p>
