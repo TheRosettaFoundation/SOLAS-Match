@@ -118,7 +118,7 @@ class UserSession
 
         $is_a_post = false;
 
-        error_log($post['sesskey']);
+        error_log(print_r($post));
 
         if (is_array($post)) {
             if (!empty($post['sesskey'])) $postKey = $post['sesskey'];
