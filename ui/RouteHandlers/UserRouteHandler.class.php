@@ -1111,7 +1111,7 @@ class UserRouteHandler
        
    
      
-        error_log(print_r($request));
+        error_log(print_r($request['sesskey']));
         error_log(print_r($args));
 
 
