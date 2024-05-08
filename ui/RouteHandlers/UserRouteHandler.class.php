@@ -1110,7 +1110,7 @@ class UserRouteHandler
         $taskDao = new DAO\TaskDao();
        
    
-       $sesskey = $request;
+       $sesskey = $request->getParsedBody();
 
         try {
             // $data = json_decode($sesskey,true);
