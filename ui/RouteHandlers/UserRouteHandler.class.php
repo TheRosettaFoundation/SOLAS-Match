@@ -1109,16 +1109,10 @@ class UserRouteHandler
     {
         $taskDao = new DAO\TaskDao();
        
-        $test = $request->getParsedBody();
-
-        $testJ = json_encode($test);
-
-        $argsJ = json_encode($args);
-        
-        error_log($testJ);
-        error_log($argsJ);
-        error_log(print_r($test));
-        error_log(print_r($testJ));
+   
+     
+        error_log(print_r($request));
+        error_log(print_r($args));
 
 
         $result = 1;
