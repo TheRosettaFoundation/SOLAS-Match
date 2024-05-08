@@ -24,7 +24,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     console.log(url);
     console.log(sesskey);
 
-    let data = { sesskey: sesskey };
+    let data = sesskey;
     console.log("data");
     console.log(data);
 
@@ -34,7 +34,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: data,
+            body: sesskey,
         });
 
         if (!response.ok) {
