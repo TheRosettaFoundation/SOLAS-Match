@@ -263,7 +263,7 @@
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <p>
                                   
-                                    <form >
+                                    <form>
                                                  
                                             {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>

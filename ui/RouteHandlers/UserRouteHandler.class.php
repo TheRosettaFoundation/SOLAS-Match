@@ -1114,11 +1114,11 @@ class UserRouteHandler
 
         try {
             $data = json_decode($sesskey,true);
-        } catch (Exception $e) {
+            error_log($data);
+            } catch (Exception $e) {
 
             return $response->withStatus(400)->withJson(['error' => $e]) ;
-            
-        }
+         }
 
 
         $result = 1;
