@@ -73,7 +73,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         };
 
         console.log(codes);
-    });
 
-    setEligibility(codes);
+        setEligibility(codes);
+    });
 });
