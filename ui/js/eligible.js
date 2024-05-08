@@ -5,9 +5,10 @@ console.log(forms);
 
 forms.forEach(function (curr, index, arr) {
     let selectElement = curr.querySelector("select");
-    let sc = curr.querySelector("sc");
+    let sc = curr.querySelector(".sc");
+    let sl = curr.querySelector(".sl");
 
-    console.log(sc);
+    console.log(sc, sl);
     console.log(selectElement);
     selectElement.addEventListener("change", function (e) {
         e.preventDefault();
