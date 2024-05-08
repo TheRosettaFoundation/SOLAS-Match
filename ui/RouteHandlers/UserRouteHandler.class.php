@@ -1111,7 +1111,7 @@ class UserRouteHandler
        
         $test = $request->getParsedBody();
 
-        $testJ = json_encode($test)
+        $testJ = json_encode($test);
 
         $argsJ = json_encode($args);
         
