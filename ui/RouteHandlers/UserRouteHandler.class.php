@@ -1111,10 +1111,11 @@ class UserRouteHandler
        
    
        $sesskey = $request->getParsedBody;
+       $test = (array) $sesskey;
 
         try {
             // $data = json_decode($sesskey,true);
-            error_log(print_r($sesskey));
+            error_log(print_r($test));
             } catch (Exception $e) {
 
             return $response->withStatus(400)->withJson(['error' => $e]) ;
