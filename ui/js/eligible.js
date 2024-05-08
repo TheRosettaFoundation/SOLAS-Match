@@ -27,13 +27,21 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
 
     console.log(data);
 
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: data,
-    });
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: data,
+        });
+
+        if (!response.ok) {
+            throw new Error("error");
+        }
+    } catch (error) {
+        console.error(error);
+    }
 
     console.log(response);
 }
@@ -66,7 +74,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         };
 
         console.log(codes);
-
-        setEligibility(codes);
     });
+
+    setEligibility(codes);
 });
