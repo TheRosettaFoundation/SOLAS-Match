@@ -1111,8 +1111,8 @@ class UserRouteHandler
        
    
      
-        error_log(print_r($request['sesskey']));
-        error_log(print_r($args));
+
+        error_log(json_encode($args));
 
 
         $result = 1;
