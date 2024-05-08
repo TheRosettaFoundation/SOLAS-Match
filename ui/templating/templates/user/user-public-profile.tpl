@@ -281,13 +281,11 @@
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
-                                       
-                                     
 
-                                            <select class="form-select border border-primary eligible"   aria-label="Default select example">
-                                                <option selected value="0">None</option>
-                                                <option value="1">Translation</option>
-                                                <option value="2">Translation and Revision</option>                                  
+                                            <select class="form-select border border-primary eligible"   aria-label="select eligibility">
+                                                <option  {if $userQualifiedPair['eligible_level'] == '0' } selected  {/if} value="0">None</option>
+                                                <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
+                                                <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
                                         </form>
                                     </p>
