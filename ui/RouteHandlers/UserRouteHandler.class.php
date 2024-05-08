@@ -1108,19 +1108,6 @@ class UserRouteHandler
     public function set_paid_eligible_pair(Request $request, Response $response, $args)
     {
         $taskDao = new DAO\TaskDao();
-       
-   
-       $sesskey = $request->getParsedBody();
-       $test = (array) $sesskey;
-
-        try {
-            // $data = json_decode($sesskey,true);
-            error_log(print_r($request));
-            } catch (Exception $e) {
-
-            return $response->withStatus(400)->withJson(['error' => $e]) ;
-         }
-
 
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_paid_eligible_pair')) $result = 0;
