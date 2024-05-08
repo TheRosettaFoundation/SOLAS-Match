@@ -21,17 +21,12 @@ const selectEligibles = document.querySelectorAll("form .eligible");
 async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
-    const formData = new FormData();
-
-    formData.set("sesskey", sesskey);
+    const key = { sesskey };
 
     try {
         const response = await fetch(url, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: formData,
+            body: new URLSearchParams(key),
         });
 
         if (!response.ok) {
