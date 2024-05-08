@@ -9,7 +9,6 @@ forms.forEach(function (curr, index, arr) {
     let sl = curr.querySelector(".sl").textContent;
     let tc = curr.querySelector(".tc").textContent;
     let tl = curr.querySelector(".tl").textContent;
-    let sesskey = curr.querySelector(".sesskey").textContent;
     let user = curr.querySelector(".user").textContent;
 
     console.log(sc, sl, tc, tl, user);
