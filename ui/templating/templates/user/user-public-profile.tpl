@@ -263,7 +263,7 @@
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <p>
                                   
-                                    <form class="eligible">
+                                    <form class="eligible" method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id|sl.$_POST['sl']"}" >
                                                  
                                             <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
