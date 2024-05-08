@@ -540,7 +540,7 @@
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
 
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN*0)}
                                 <tr valign="top">
                                     <td colspan="1" >
                                         <strong>Work Report</strong><hr/>
