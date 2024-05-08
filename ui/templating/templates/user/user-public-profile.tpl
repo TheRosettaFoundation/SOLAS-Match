@@ -271,6 +271,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
+                                            <span class="tc d-none">{$userQualifiedPair['eligible_level']}</span>
 
                                             <select class="form-select border border-primary eligible"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == '0' } selected  {/if} value="0">None</option>
