@@ -1117,8 +1117,8 @@ class UserRouteHandler
         
         error_log($testJ);
         error_log($argsJ);
-        error_log(print_r($test))
-        error_log(print_r($testJ))
+        error_log(print_r($test));
+        error_log(print_r($testJ));
 
 
         $result = 1;
