@@ -274,7 +274,6 @@
                                             <span class="sesskey">{$sesskey}</span >
                                             <span class="user">{$user_id}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
-                                
                                             <span class="sc">{$userQualifiedPair['country_id_source']}</span >
                                             <span class="sl">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl">{$userQualifiedPair['language_id_target']}</span >
