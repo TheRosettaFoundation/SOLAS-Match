@@ -21,7 +21,9 @@ const selectEligibles = document.querySelectorAll("form .eligible");
 async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
-    let data = { sesskey: sesskey };
+    const formData = new FormData();
+
+    formData.set("sesskey", sesskey);
 
     try {
         const response = await fetch(url, {
@@ -29,7 +31,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `sesskey=${sesskey}`,
+            body: formData,
         });
 
         if (!response.ok) {
