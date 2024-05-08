@@ -21,10 +21,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     console.log(url);
     console.log(sesskey);
 
-    let data = JSON.stringify({
-        sesskey: sesskey,
-    });
-
+    let data = { sesskey: sesskey };
     console.log("data");
     console.log(data);
 
