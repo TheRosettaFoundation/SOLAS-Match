@@ -263,26 +263,26 @@
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                     <p>
                                   
-                                    <form>
+                                    <form class="eligible">
                                                  
-                                            {* <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
+                                            <input type="hidden" name="sesskey" value={$sesskey} class="key">{$sesskey}</span >
                                             <input  type="hidden" class="user" value={$userQualifiedPair['user_id']}  name="user "/>
                                             <input  type="hidden" class="sc" value={$userQualifiedPair['country_id_source']}  name="sc"/>
                                             <input  type="hidden" class="sl" value={$userQualifiedPair['language_id_source']}  name="sl"/>
                                             <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
-                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/> *}
+                                            <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/>
                                             
-                                            <span class="sesskey d-none">{$sesskey}</span >
+                                            {* <span class="sesskey d-none">{$sesskey}</span >
                                             <span class="user d-none">{$user_id}</span >
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="sc d-none">{$userQualifiedPair['country_id_source']}</span >
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
-                                            <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
+                                            <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span> *}
                                        
                                      
 
-                                            <select class="form-select border border-primary eligible"   aria-label="Default select example">
+                                            <select class="form-select border border-primary "   aria-label="Default select example">
                                                 <option selected value="0">None</option>
                                                 <option value="1">Translation</option>
                                                 <option value="2">Translation and Revision</option>                                  
