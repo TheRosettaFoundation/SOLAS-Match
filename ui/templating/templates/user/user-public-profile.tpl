@@ -272,7 +272,7 @@
                                             <input  type="hidden" class="tl" value={$userQualifiedPair['language_id_target']}  name="tl"/>
                                             <input  type="hidden" class="tc" value={$userQualifiedPair['country_id_target']}  name="tc"/> *}
                                             
-                                            {* <span class="sesskey d-none">{$sesskey}</span >
+                                            <span class="sesskey d-none">{$sesskey}</span >
                                             <span class="user d-none">{$user_id}</span >
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="sc d-none">{$userQualifiedPair['country_id_source']}</span >
@@ -280,7 +280,7 @@
                                             <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
                                        
-                                      *}
+                                     
 
                                             <select class="form-select border border-primary eligible"   aria-label="Default select example">
                                                 <option selected value="0">None</option>
