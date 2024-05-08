@@ -21,12 +21,7 @@ const selectEligibles = document.querySelectorAll("form .eligible");
 async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     let url = `/set_paid_eligible_pair/${user}/sl/${sl}/sc/${sc}/tl/${tl}/tc/${tc}/eligible/${el}/`;
 
-    console.log(url);
-    console.log(sesskey);
-
-    let data = sesskey;
-    console.log("data");
-    console.log(data);
+    let data = { sesskey: sesskey };
 
     try {
         const response = await fetch(url, {
@@ -34,7 +29,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: sesskey,
+            body: data,
         });
 
         if (!response.ok) {
@@ -74,8 +69,6 @@ selectEligibles.forEach(function (curr, index, arr) {
             user,
             sesskey,
         };
-
-        console.log(codes);
 
         setEligibility(codes);
     });
