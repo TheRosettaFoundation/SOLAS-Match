@@ -12,8 +12,6 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
         if (!response.ok) {
             throw new Error("error");
         }
-
-        console.log(response);
     } catch (error) {
         console.error(error);
     }
