@@ -135,7 +135,7 @@ class UserSession
             $expected = $_SESSION['SESSION_CSRF_KEY'];
             error_log("CSRF attempt identified!: $location, sesskey: $postKey ($expected)");
             if (is_array($post)) {
-                error_log('POST...');
+    
                 foreach ($post as $key => $item) {
                     error_log("$key => $item");
                 }
