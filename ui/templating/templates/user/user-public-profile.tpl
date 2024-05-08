@@ -258,7 +258,7 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                 {/if}
                             </p>
 
-                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                  
                                     <p>
                                   
                                         <form>
@@ -273,15 +273,27 @@ alert('You have already requested to take a test in order to become a TWB Verifi
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
                                             <span class="level d-none">{$userQualifiedPair['eligible_level']}</span>
 
+                                            {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
+
                                             <select class="form-select border border-primary eligible"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
+                                            {/if}
+                                            {* {if $roles & ($PROJECT_OFFICER )} *}
+                                                {if $userQualifiedPair['eligible_level'] == null }
+                                                    <div>None</div>
+                                                {elseif $userQualifiedPair['eligible_level'] == '1'}
+                                                    <div>Translation</div>
+
+                                                {elseif $userQualifiedPair['eligible_level'] == '2'}   
+                                                    <div>Translation and Revision</div> 
+                                            {* {/if}   *}
                                         </form>
                                     </p>
 
-                                    {/if}
+                                  
                                  
                                     </div>
                                 {/foreach}
