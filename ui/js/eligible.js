@@ -25,6 +25,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
         sesskey,
     });
 
+    console.log("data");
     console.log(data);
 
     try {
@@ -60,6 +61,7 @@ selectEligibles.forEach(function (curr, index, arr) {
         let tc = previousSibli.querySelector(".tc").textContent;
         let user = previousSibli.querySelector(".user").textContent;
         let sesskey = previousSibli.querySelector(".sesskey").textContent;
+        console.log("sesskey", sesskey);
 
         let el = curr.value;
 
