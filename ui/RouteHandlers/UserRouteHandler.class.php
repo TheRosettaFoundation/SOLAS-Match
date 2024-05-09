@@ -1117,7 +1117,6 @@ class UserRouteHandler
         }
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
-         
         return $response->withHeader('Content-Type', 'application/json');
     }
 
@@ -2614,7 +2613,6 @@ error_log("result: $result");//(**)
         $badges = $userDao->getUserBadges($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
-
         $orgList = array();
         if ($badges) {
             foreach ($badges as $index => $badge) {
@@ -2702,8 +2700,6 @@ error_log("result: $result");//(**)
         } else {
             $langPrefName = '';
         }
-
-  
 
         $template_data = array_merge($template_data, array(
             'sesskey' => $sesskey,
@@ -3138,7 +3134,7 @@ EOF;
         $user = $userDao->getUser($user_id);
         $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
-   
+
         $template_data = array_merge($template_data, array(
             'current_page' => 'user-profile',
             'this_user' => $user,
