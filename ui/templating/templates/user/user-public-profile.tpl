@@ -258,7 +258,6 @@
                                             <span class="user d-none">{$user_id}</span >
                                             <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="sc d-none">{$userQualifiedPair['country_id_source']}</span >
-                                            <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
                                             <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
                                             <span class="level d-none">{$userQualifiedPair['eligible_level']}</span>
