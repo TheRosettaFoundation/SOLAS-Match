@@ -202,31 +202,24 @@
                     {/if}
                   
                     {if !empty($userQualifiedPairs)}
-                                   
                         <div class="mb-3">
-
                                 <div class="d-flex">
-
                                     <h4 class="mb-3 fw-bold w-75">{Localisation::getTranslation('common_secondary_languages')}</h4>
                                     {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
                                     <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
                                     {/if}
-                                    
                                 </div>
 
-         
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                     {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                     {$button_count.$pair=0}
                                 {/foreach}
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                  
                                     {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                     {if $userQualifiedPair['qualification_level'] > 1}
                                         {$button_count.$pair=1}
                                     {/if}
-                                   
                                 {/foreach}
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
@@ -271,31 +264,26 @@
                                             <span class="level d-none">{$userQualifiedPair['eligible_level']}</span>
 
                                             {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-
                                             <select class="form-select border border-primary eligible"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
                                             {/if}
+
                                             {if $roles & ($PROJECT_OFFICER )}
                                                 {if $userQualifiedPair['eligible_level'] == null }
                                                     <div>None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
                                                     <div>Translation</div>
-
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
                                                     <div>Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
                                     </p>
-
-                                  
-                                 
                                     </div>
                                 {/foreach}
-                            
                         </div>
                         <hr  class="bg-light-subtle"/>
                     {/if}
