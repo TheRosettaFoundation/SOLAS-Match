@@ -19,7 +19,7 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
 
 const arr = [...selectEligibles];
 
-console.log(selectEligibles);
+console.log(arr);
 
 if (arr.length > 0) {
     arr.forEach(function (curr, index, arr) {
