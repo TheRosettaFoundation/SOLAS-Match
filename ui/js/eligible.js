@@ -17,6 +17,8 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     }
 }
 
+console.log(selectEligibles);
+
 selectEligibles.forEach(function (curr, index, arr) {
     let codes = {};
     curr.addEventListener("change", function (e) {
