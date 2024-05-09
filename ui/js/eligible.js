@@ -13,13 +13,11 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             throw new Error("error");
         }
     } catch (error) {
-        console.erro;
-        r(error);
+        console.error(error);
     }
-    return response;
 }
 
-for (let curr of selectEligibles) {
+selectEligibles.forEach(function (curr, index, arr) {
     let codes = {};
     curr.addEventListener("change", function (e) {
         e.preventDefault();
@@ -44,4 +42,4 @@ for (let curr of selectEligibles) {
 
         setEligibility(codes);
     });
-}
+});
