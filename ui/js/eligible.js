@@ -13,8 +13,10 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
             throw new Error("error");
         }
     } catch (error) {
-        console.error(error);
+        console.erro;
+        r(error);
     }
+    return response;
 }
 
 for (let curr of selectEligibles) {
