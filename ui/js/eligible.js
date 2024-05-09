@@ -17,31 +17,35 @@ async function setEligibility({ sc, sl, tc, tl, el, user, sesskey }) {
     }
 }
 
+const arr = [...selectEligibles];
+
 console.log(selectEligibles);
 
-selectEligibles.forEach(function (curr, index, arr) {
-    let codes = {};
-    curr.addEventListener("change", function (e) {
-        e.preventDefault();
-        let parent = curr.parentElement;
-        let sc = parent.querySelector(".sc").textContent;
-        let sl = parent.querySelector(".sl").textContent;
-        let tl = parent.querySelector(".tl").textContent;
-        let tc = parent.querySelector(".tc").textContent;
-        let user = parent.querySelector(".user").textContent;
-        let sesskey = parent.querySelector(".sesskey").textContent;
-        let el = curr.value;
+if (arr.length > 0) {
+    arr.forEach(function (curr, index, arr) {
+        let codes = {};
+        curr.addEventListener("change", function (e) {
+            e.preventDefault();
+            let parent = curr.parentElement;
+            let sc = parent.querySelector(".sc").textContent;
+            let sl = parent.querySelector(".sl").textContent;
+            let tl = parent.querySelector(".tl").textContent;
+            let tc = parent.querySelector(".tc").textContent;
+            let user = parent.querySelector(".user").textContent;
+            let sesskey = parent.querySelector(".sesskey").textContent;
+            let el = curr.value;
 
-        codes = {
-            sc,
-            sl,
-            tl,
-            tc,
-            el,
-            user,
-            sesskey,
-        };
+            codes = {
+                sc,
+                sl,
+                tl,
+                tc,
+                el,
+                user,
+                sesskey,
+            };
 
-        setEligibility(codes);
+            setEligibility(codes);
+        });
     });
-});
+}
