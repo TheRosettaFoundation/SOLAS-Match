@@ -283,7 +283,7 @@
                                            
                                             {else}
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div>None</div>
+                                                    <div>Translation and Revision</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
                                                     <div>Translation</div>
 
