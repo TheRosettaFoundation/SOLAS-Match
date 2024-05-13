@@ -280,7 +280,8 @@
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
                                            
-                                            {elseif  $roles & ($PROJECT_OFFICER) }
+                                            {* {elseif  $roles & ($PROJECT_OFFICER) } *}
+                                            {if  $roles & ($PROJECT_OFFICER) }
                                                 {if $userQualifiedPair['eligible_level'] == null }
                                                     <div class="text-wrap text-primary text-start">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
