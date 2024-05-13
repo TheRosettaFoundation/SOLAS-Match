@@ -275,7 +275,7 @@
 
                                             {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 
-                                            <select class="form-select border border-primary eligible"   aria-label="select eligibility">
+                                            <select class="form-select border border-primary eligible text-primary"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
@@ -283,12 +283,12 @@
                                            
                                             {else}
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div class="text-wrap">Translation and Revision</div>
+                                                    <div class="text-wrap text-primary">Translation and Revision</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div>Translation</div>
+                                                    <div class="text-wrap text-primary" >Translation</div>
 
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div class="text-wrap">Translation and Revision</div> 
+                                                    <div cclass="text-wrap text-primary">Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
