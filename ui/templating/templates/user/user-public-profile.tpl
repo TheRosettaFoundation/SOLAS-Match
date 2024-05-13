@@ -285,11 +285,11 @@
                                             {* {elseif  $roles & ($PROJECT_OFFICER) } *}
                                             {else }
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div class="text-wrap text-primary ">None</div>
+                                                    <div class="text-wrap text-primary text-end">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div class="text-wrap text-primary " >Translation</div>
+                                                    <div class="text-wrap text-primary text-end" >Translation</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div cclass="text-wrap text-primary r">Translation and Revision</div> 
+                                                    <div cclass="text-wrap text-primary text-end">Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
