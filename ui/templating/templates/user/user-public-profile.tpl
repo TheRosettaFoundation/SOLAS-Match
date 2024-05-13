@@ -205,7 +205,7 @@
                                    
                         <div class="mb-3">
 
-                                <div class="d-flex">
+                                <div class="d-flex justify-content-end">
 
                                     <h4 class="mb-3 fw-bold w-50">{Localisation::getTranslation('common_secondary_languages')}</h4>
                                     {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
@@ -259,7 +259,7 @@
                                     </p>
 
                                   
-                                    <p class="d-flex justify-content-center">
+                                    <p class="d-flex justify-content-end">
                                   
                                         <form class="d-flex flex-column align-items-end">
                                             {if isset($sesskey)}
