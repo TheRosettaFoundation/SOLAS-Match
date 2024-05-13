@@ -224,8 +224,7 @@
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                     <div class="d-flex justify-content-between ">
-                                    <p class="w-75">
-                                        
+                                    <p class="w-50">
                                         {if $userQualifiedPair['country_source'] == 'ANY'}<span class="bg-light-subtle p-1 rounded-2">{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} </span>  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1"/> <span class="bg-light-subtle rounded-2 p-1 me-2 "> {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}</span>
                                         <strong>
                                         {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
@@ -253,28 +252,28 @@
                                     <p>
                                         <form>
                                             {if isset($sesskey)}
-                                            <span class="sesskey d-none">{$sesskey}</span >
+                                            <span class="sesskey d-none">{$sesskey}</span>
                                             {/if}
-                                            <span class="user d-none">{$user_id}</span >
-                                            <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span >
-                                            <span class="sc d-none">{$userQualifiedPair['country_id_source']}</span >
-                                            <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span >
+                                            <span class="user d-none">{$user_id}</span>
+                                            <span class="sl d-none">{$userQualifiedPair['language_id_source']}</span>
+                                            <span class="sc d-none">{$userQualifiedPair['country_id_source']}</span>
+                                            <span class="tl d-none">{$userQualifiedPair['language_id_target']}</span>
                                             <span class="tc d-none">{$userQualifiedPair['country_id_target']}</span>
                                             <span class="level d-none">{$userQualifiedPair['eligible_level']}</span>
 
                                             {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-                                            <select class="form-select border border-primary eligible"   aria-label="select eligibility">
+                                            <select class="form-select border border-primary eligible text-primary"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
                                             {elseif $roles & ($PROJECT_OFFICER )}
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div>None</div>
+                                                    <div class="text-wrap text-primary text-start">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div>Translation</div>
+                                                    <div class="text-wrap text-primary text-start">Translation</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div>Translation and Revision</div> 
+                                                    <div class="text-wrap text-primary text-start">Translation and Revision</div>
                                                 {/if}    
                                             {/if}  
                                         </form>
