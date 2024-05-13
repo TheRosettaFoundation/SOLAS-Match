@@ -205,7 +205,7 @@
                                    
                         <div class="mb-3">
 
-                                <div class="d-flex  justify-content-end">
+                                <div>
 
                                     <h4 class="mb-3 fw-bold w-50 text-start">{Localisation::getTranslation('common_secondary_languages')}</h4>
                                     {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
