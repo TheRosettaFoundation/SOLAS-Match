@@ -273,7 +273,7 @@
                                             <span class="level d-none">{$userQualifiedPair['eligible_level']}</span>
 
                                             {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-                                            <div class="text-end">
+                                            <div class="text-end bg-secondary">
                                             <select class="form-select border border-primary eligible text-primary"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
