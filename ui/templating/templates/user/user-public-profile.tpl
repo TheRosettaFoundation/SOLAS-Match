@@ -283,12 +283,12 @@
                                            
                                             {else}
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div>Translation and Revision</div>
+                                                    <div class="text-wrap">Translation and Revision</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
                                                     <div>Translation</div>
 
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div>Translation and Revision</div> 
+                                                    <div class="text-wrap">Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
