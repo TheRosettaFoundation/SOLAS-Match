@@ -284,9 +284,9 @@
                                                 {if $userQualifiedPair['eligible_level'] == null }
                                                     <div class="text-wrap text-primary text-start">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div class="text-wrap text-primary" >Translation</div>
+                                                    <div class="text-wrap text-primary text-start" >Translation</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div cclass="text-wrap text-primary">Translation and Revision</div> 
+                                                    <div cclass="text-wrap text-primary text-start">Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
