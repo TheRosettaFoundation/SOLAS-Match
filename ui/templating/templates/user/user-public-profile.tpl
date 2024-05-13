@@ -259,7 +259,7 @@
                                     </p>
 
                                   
-                                    <p>
+                                    <p class="text-end">
                                   
                                         <form>
                                             {if isset($sesskey)}
@@ -274,7 +274,7 @@
 
                                             {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
 
-                                            <select class="form-select border border-primary eligible text-primary text-end"   aria-label="select eligibility">
+                                            <select class="form-select border border-primary eligible text-primary"   aria-label="select eligibility">
                                                 <option  {if $userQualifiedPair['eligible_level'] == null } selected  {/if} value="0">None</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
@@ -284,11 +284,11 @@
                                             {* {elseif  $roles & ($PROJECT_OFFICER) } *}
                                             {else }
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div class="text-wrap text-primary text-end">None</div>
+                                                    <div class="text-wrap text-primary text-center">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div class="text-wrap text-primary text-end" >Translation</div>
+                                                    <div class="text-wrap text-primary text-center" >Translation</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div cclass="text-wrap text-primary text-end">Translation and Revision</div> 
+                                                    <div cclass="text-wrap text-primary text-center">Translation and Revision</div> 
                                                 {/if}    
                                             {/if}  
                                         </form>
