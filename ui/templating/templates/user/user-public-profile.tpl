@@ -171,19 +171,31 @@
                     
 
                     {foreach from=$url_list item=url}
-                        {if $url['state']}
+                        <div class="d-flex ">
                         {if $url['state']|strstr:"facebook"}
                        
-                        <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img src="{urlFor name='home'}ui/img/facebook.svg" class="mb-5 w-75 bg-primary"/>
+                        <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img src="{urlFor name='home'}ui/img/facebook.svg" class="bg-primary"/>
                         </a>
                         {elseif $url['state']|strstr:"twitter" }
-                            <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img  src="{urlFor name='home'}ui/img/linkdin.svg" class="mb-5 w-75 bg-primary"/>
+                            <a href="{$url['state']}" target="_blank" class="custom-link me-2"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="bg-primary" /> 
                             </a>   
+                        {elseif $url['state']|strstr:"linkedin" }
+                            
+                        {elseif $url['state']|strstr:"instagram" }
+
+                            <a href="{$url['state']}" target="_blank" class="custom-link me-2"> <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" class="bg-primary" />  
+                            </a>
+
+                        {elseif $url['state']|strstr:"youtube" }
+
+                            <a href="{$url['state']}" target="_blank" class="custom-link me-2"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="bg-primary" />  
+                            </a>
                         {else}
                                <a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}
                         </a>
                             
-                        {/if}    
+                        {/if} 
+                        </div>   
 
                     {/if}
                     {/foreach}
