@@ -282,8 +282,8 @@
                                             </div>
                                         
                                            
-                                            {* {elseif  $roles & ($PROJECT_OFFICER) } *}
-                                            {else }
+                                             {elseif  $roles & ($PROJECT_OFFICER) } 
+                                         
                                                 {if $userQualifiedPair['eligible_level'] == null }
                                                     <div class="text-wrap text-primary">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
