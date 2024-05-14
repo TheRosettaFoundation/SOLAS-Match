@@ -191,7 +191,7 @@
                             <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="text-white bg-primary rounded-1 p-1 me-2" />  
                             </a>
                         {else}
-                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg" class="text-white bg-primary rounded-1 p-1 me-2" /> 
+                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg"  /> 
                         </a>
                             
                         {/if} 
