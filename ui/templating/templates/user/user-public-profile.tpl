@@ -174,25 +174,25 @@
                         <div class="d-flex ">
                         {if $url['state']|strstr:"facebook"}
                        
-                        <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img src="{urlFor name='home'}ui/img/facebook.svg" class="bg-primary me-2"/>
-                        </a>
+                        <div><a href="{$url['state']}" target="_blank" class="custom-link me-2"><img src="{urlFor name='home'}ui/img/facebook.svg" class="bg-primary me-2"/>
+                        </a></div>
                         {elseif $url['state']|strstr:"twitter" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="bg-primary me-2" /> 
-                            </a>   
+                            <div><a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="bg-primary me-2" /> 
+                            </a></div>
                         {elseif $url['state']|strstr:"linkedin" }
                             
                         {elseif $url['state']|strstr:"instagram" }
 
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" class="bg-primary me-2" />  
-                            </a>
+                            <div><a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" class="bg-primary me-2" />  
+                            </a></div>
 
                         {elseif $url['state']|strstr:"youtube" }
 
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="bg-primary me-2" />  
-                            </a>
+                            <div><a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="bg-primary me-2" />  
+                            </a></div>
                         {else}
-                               <a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}
-                        </a>
+                              <div> <a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}
+                        </a></div>
                             
                         {/if} 
                         </div>   
