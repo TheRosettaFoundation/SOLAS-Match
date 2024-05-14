@@ -192,8 +192,8 @@
 
                             <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="text-white bg-primary rounded-full  me-2" />  
                             </a>
-                        {else}
-                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg"  class="text-white bg-primary rounded-full  me-2"/>{$url['state']} </a>
+                        {elseif !($url['state']) }
+                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg" />{$url['state']} </a>
                             
                         {/if} 
                        
