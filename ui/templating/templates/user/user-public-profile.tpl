@@ -174,24 +174,24 @@
                        
                         {if $url['state']|strstr:"facebook"}
                        
-                       <a href="{$url['state']}" target="_blank"><img src="{urlFor name='home'}ui/img/facebook.svg" class="text-white bg-primary rounded-sm p-2 me-2"/>
+                       <a href="{$url['state']}" target="_blank"><img src="{urlFor name='home'}ui/img/facebook.svg" class="text-white bg-primary rounded-1 p-1 me-2"/>
                         </a>
                         {elseif $url['state']|strstr:"twitter" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="text-primary me-2" /> 
+                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="text-white bg-primary rounded-1 p-1 me-2" /> 
                             </a>
                         {elseif $url['state']|strstr:"linkedin" }
                             
                         {elseif $url['state']|strstr:"instagram" }
 
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" class="bg-primary me-2" />  
+                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/instagram.svg" class="text-white bg-primary rounded-1 p-1 me-2" />  
                             </a>
 
                         {elseif $url['state']|strstr:"youtube" }
 
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="bg-primary me-2" />  
+                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/youtube.svg" class="text-white bg-primary rounded-1 p-1 me-2" />  
                             </a>
                         {else}
-                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg" class="bg-primary me-2" /> 
+                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/globe.svg" class="text-white bg-primary rounded-1 p-1 me-2" /> 
                         </a>
                             
                         {/if} 
