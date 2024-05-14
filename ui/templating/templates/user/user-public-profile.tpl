@@ -181,7 +181,7 @@
                             <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2" /> </a>
                         {elseif $url['state']|strstr:"youtube" }
                             <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/urls/youtube.svg"  class="me-2" /></a>
-                        {else }
+                        {elseif  $url['state'] != "" }
                                <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/urls/globe.svg"  class="me-2"  /></a>                        
                         {/if} 
                     {/foreach}
