@@ -262,7 +262,7 @@
                                         {/if}
                                     </p>
                                     <p class="flex-grow-1" >
-                                        <form class="d-flex flex-column align-items-center justify-content-end">
+                                        <form class="d-flex flex-column  justify-content-center">
                                             {if isset($sesskey)}
                                             <span class="sesskey d-none">{$sesskey}</span>
                                             {/if}
