@@ -169,12 +169,12 @@
                 
                     {/if}
                     
-
+                    <div class="d-flex ">
                     {foreach from=$url_list item=url}
-                        <div class="d-flex ">
+                       
                         {if $url['state']|strstr:"facebook"}
                        
-                       <a href="{$url['state']}" target="_blank"><img src="{urlFor name='home'}ui/img/facebook.svg" class="text-primary me-2"/>
+                       <a href="{$url['state']}" target="_blank"><img src="{urlFor name='home'}ui/img/facebook.svg" class="text-white bg-primary rounded-sm p-2 me-2"/>
                         </a>
                         {elseif $url['state']|strstr:"twitter" }
                             <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/x.svg" class="text-primary me-2" /> 
@@ -195,10 +195,10 @@
                         </a>
                             
                         {/if} 
-                        </div>   
+                       
 
                     {/foreach}
-
+                    </div> 
                  
                     {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
                     {if !empty($bio)}
