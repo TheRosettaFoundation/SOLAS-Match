@@ -181,6 +181,8 @@
                                 <a href="{$url['state']}" target="_blank"><img alt="Instagram icon" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2"/></a>
                             {elseif $url['state']|strstr:"youtube"}
                                 <a href="{$url['state']}" target="_blank"><img alt="Youtube icon" src="{urlFor name='home'}ui/img/urls/youtube.svg"  class="me-2"/></a>
+                            {elseif $url['state']|strstr:"proz"}
+                                    <a href="{$url['state']}" target="_blank"><img alt="Proz icon" src="{urlFor name='home'}ui/img/urls/proz.svg"  class="me-2"/></a>    
                             {elseif  $url['state'] != ""}
                                 <a href="{$url['state']}" target="_blank"><img alt="Url icon " src="{urlFor name='home'}ui/img/urls/globe.svg"  class="me-2"/></a>                        
                             {/if} 
@@ -262,7 +264,7 @@
                                         {/if}
                                     </p>
                                     <p class="flex-grow-1" >
-                                        <form class="d-flex flex-column  justify-content-center">
+                                        <form class="d-flex flex-column align-items-center justify-content-center">
                                             {if isset($sesskey)}
                                             <span class="sesskey d-none">{$sesskey}</span>
                                             {/if}
