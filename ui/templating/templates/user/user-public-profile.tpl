@@ -179,7 +179,7 @@
                         {elseif $url['state']|strstr:"linkedin" }
                             <a href="{$url['state']}" target="_blank"><img alt="Linkedin icon" src="{urlFor name='home'}ui/urls/img/linkedin.svg" class="me-2"/></a>                             
                         {elseif $url['state']|strstr:"instagram" }
-                            <a href="{$url['state']}" target="_blank"><img alt="Instagram icon" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2"/> </a>
+                            <a href="{$url['state']}" target="_blank"><img alt="Instagram icon" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2"/></a>
                         {elseif $url['state']|strstr:"youtube" }
                             <a href="{$url['state']}" target="_blank"><img alt="Youtube icon" src="{urlFor name='home'}ui/img/urls/youtube.svg"  class="me-2"/></a>
                         {elseif  $url['state'] != "" }
