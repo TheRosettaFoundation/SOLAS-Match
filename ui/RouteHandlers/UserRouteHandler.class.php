@@ -2775,8 +2775,6 @@ error_log("result: $result");//(**)
         $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id, 0);
         $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id, 1);
 
-        print_r($userDao->getURLList($user_id));
-
         $template_data = array_merge($template_data, array(
             'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'roles'                  => $roles,
