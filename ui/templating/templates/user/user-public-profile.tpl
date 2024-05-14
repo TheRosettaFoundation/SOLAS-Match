@@ -217,9 +217,9 @@
                         <div class="mb-3">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="mb-3 fw-bold w-50">{Localisation::getTranslation('common_secondary_languages')}</h4>
-                                    {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
+                                    {* {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)} *}
                                     <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
-                                    {/if}
+                                    {* {/if} *}
                                 </div>
 
                                 {foreach from=$userQualifiedPairs item=userQualifiedPair}
@@ -279,13 +279,14 @@
                                                 <option  {if $userQualifiedPair['eligible_level'] == '1' } selected  {/if} value="1">Translation</option>
                                                 <option  {if $userQualifiedPair['eligible_level'] == '2' } selected  {/if} value="2">Translation and Revision</option>                                  
                                             </select>
-                                            {elseif $roles & ($PROJECT_OFFICER )}
+                                            {* {elseif $roles & ($PROJECT_OFFICER )} *}
+                                            {else}
                                                 {if $userQualifiedPair['eligible_level'] == null }
-                                                    <div class="text-wrap text-primary text-start">None</div>
+                                                    <div class="bg-yellowish p-1 fs-5  text-primary text-uppercase rounded-2">None</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '1'}
-                                                    <div class="text-wrap text-primary text-start">Translation</div>
+                                                    <div class="bg-yellowish p-1 fs-5  text-primary text-uppercase rounded-2">Translation</div>
                                                 {elseif $userQualifiedPair['eligible_level'] == '2'}   
-                                                    <div class="text-wrap text-primary text-start">Translation and Revision</div>
+                                                    <div class="bg-yellowish p-1 fs-5  text-primary text-uppercase rounded-2">Translation and Revision</div>
                                                 {/if}    
                                             {/if}  
                                         </form>
