@@ -171,7 +171,21 @@
                     
 
                     {foreach from=$url_list item=url}
-                        {if $url['state']}<a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}</a>{/if}
+                        {if $url['state']}
+                        {if $url | strstr:"facebook"}
+                       
+                        <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img src="{urlFor name='home'}ui/img/facebook.svg" class="mb-5 w-75 bg-primary"/>
+                        </a>
+                        {elseif$url | strstr:"twitter" }
+                            <a href="{$url['state']}" target="_blank" class="custom-link me-2"><img  src="{urlFor name='home'}ui/img/linkdin.svg" class="mb-5 w-75 bg-primary"/>
+                            </a>   
+                        {else}
+                               <a href="{$url['state']}" target="_blank" class="custom-link me-2">{$url['state']|escape:'html':'UTF-8'}
+                        </a>
+                            
+                        {/if}    
+
+                    {/if}
                     {/foreach}
 
                  
