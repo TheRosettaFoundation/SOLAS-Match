@@ -171,19 +171,21 @@
                     
                     <div class="d-flex ">
                     {foreach from=$url_list item=url}
-                    {if $url['state']|strstr:"facebook"}                    
-                       <a href="{$url['state']}" target="_blank"><img src="{urlFor name='home'}ui/img/urls/facebook.svg" class="me-2"/></a>
+
+                        {if $url['state']|strstr:"facebook"}                    
+                            <a href="{$url['state']}" target="_blank"><img alt="Facebook icon" src="{urlFor name='home'}ui/img/urls/facebook.svg" class="me-2"/></a>
                         {elseif $url['state']|strstr:"twitter" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/urls/img/x.svg" class="me-2" /></a>
+                            <a href="{$url['state']}" target="_blank"><img alt="Twitter icon" src="{urlFor name='home'}ui/urls/img/x.svg" class="me-2"/></a>
                         {elseif $url['state']|strstr:"linkedin" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/urls/img/linkedin.svg" class="me-2" /></a>                             
+                            <a href="{$url['state']}" target="_blank"><img alt="Linkedin icon" src="{urlFor name='home'}ui/urls/img/linkedin.svg" class="me-2"/></a>                             
                         {elseif $url['state']|strstr:"instagram" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2" /> </a>
+                            <a href="{$url['state']}" target="_blank"><img alt="Instagram icon" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2"/> </a>
                         {elseif $url['state']|strstr:"youtube" }
-                            <a href="{$url['state']}" target="_blank"> <img alt="" src="{urlFor name='home'}ui/img/urls/youtube.svg"  class="me-2" /></a>
+                            <a href="{$url['state']}" target="_blank"><img alt="Youtube icon" src="{urlFor name='home'}ui/img/urls/youtube.svg"  class="me-2"/></a>
                         {elseif  $url['state'] != "" }
-                               <a href="{$url['state']}" target="_blank"><img alt="" src="{urlFor name='home'}ui/img/urls/globe.svg"  class="me-2"  /></a>                        
+                               <a href="{$url['state']}" target="_blank"><img alt="Url icon " src="{urlFor name='home'}ui/img/urls/globe.svg"  class="me-2"/></a>                        
                         {/if} 
+
                     {/foreach}
                     </div> 
                  
