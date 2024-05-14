@@ -261,8 +261,8 @@
                                         </form>
                                         {/if}
                                     </p>
-                                    <p class="d-flex justify-content-end">
-                                        <form>
+                                    <p >
+                                        <form class="d-flex justify-content-end">
                                             {if isset($sesskey)}
                                             <span class="sesskey d-none">{$sesskey}</span>
                                             {/if}
