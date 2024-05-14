@@ -174,9 +174,9 @@
                             {if $url['state']|strstr:"facebook"}                    
                                 <a href="{$url['state']}" target="_blank"><img alt="Facebook icon" src="{urlFor name='home'}ui/img/urls/facebook.svg" class="me-2"/></a>
                             {elseif $url['state']|strstr:"twitter"}
-                                <a href="{$url['state']}" target="_blank"><img alt="Twitter icon" src="{urlFor name='home'}ui/urls/img/x.svg" class="me-2"/></a>
+                                <a href="{$url['state']}" target="_blank"><img alt="Twitter icon" src="{urlFor name='home'}ui/img/urls/x.svg" class="me-2"/></a>
                             {elseif $url['state']|strstr:"linkedin"}
-                                <a href="{$url['state']}" target="_blank"><img alt="Linkedin icon" src="{urlFor name='home'}ui/urls/img/linkedin.svg" class="me-2"/></a>                             
+                                <a href="{$url['state']}" target="_blank"><img alt="Linkedin icon" src="{urlFor name='home'}ui/img/urls/linkedin.svg" class="me-2"/></a>                             
                             {elseif $url['state']|strstr:"instagram"}
                                 <a href="{$url['state']}" target="_blank"><img alt="Instagram icon" src="{urlFor name='home'}ui/img/urls/instagram.svg" class="me-2"/></a>
                             {elseif $url['state']|strstr:"youtube"}
@@ -215,8 +215,8 @@
                   
                     {if !empty($userQualifiedPairs)}
                         <div class="mb-3">
-                                <div class="d-flex">
-                                    <h4 class="mb-3 fw-bold w-75">{Localisation::getTranslation('common_secondary_languages')}</h4>
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="mb-3 fw-bold w-50">{Localisation::getTranslation('common_secondary_languages')}</h4>
                                     {if $roles & ( $PROJECT_OFFICER + $SITE_ADMIN + $COMMUNITY_OFFICER)}
                                     <h4 class="mb-3 fw-bold">Eligible for Paid Task</h4>
                                     {/if}
