@@ -636,7 +636,7 @@ a:hover{
                         <div  id="task_{$task_id}">
                         {/if}
                             <div class="d-flex justify-content-between mb-2 flex-wrap">
-                                <div class="">
+                                <div class="w-75">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
                                             <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link w-75 text-wrap ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                              <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a> 
@@ -673,13 +673,14 @@ a:hover{
                                             <span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
+                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                             </div>
                                          {/if}
                                          
                                         
                                             
                                           
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                                            
                              </div>
                            
 
