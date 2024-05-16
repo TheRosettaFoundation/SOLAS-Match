@@ -468,12 +468,14 @@ class OrgRouteHandler
                 }
             }
         }
+        $create_non_phrase = [];
         if ($my_organisations) {
             $orgs = array();
             $templateData = array();
             foreach ($my_organisations as $org) {
                 $my_org_projects = $projectDao->getOrgProjects($org->getId(), 3);
                 $orgs[$org->getId()] = $org;
+                if (in_array($org->getId(), [773]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
 
                 $taskData = array();
                 if ($my_org_projects) {
@@ -501,6 +503,7 @@ class OrgRouteHandler
         $template_data = array_merge($template_data, array(
             'sesskey'       => $sesskey,
             'roles'         => $adminDao->get_roles($current_user_id),
+            'create_non_phrase' => $create_non_phrase,
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
@@ -522,6 +525,7 @@ class OrgRouteHandler
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
 
+        $create_non_phrase = [];
         if ($my_organisations) {
             foreach ($my_organisations as $index => $org) {
                 if ($org->getId() != $org_id) {
@@ -534,6 +538,7 @@ class OrgRouteHandler
             foreach ($my_organisations as $org) {
                 $my_org_projects = $projectDao->getOrgProjects($org->getId(), 500); // About 50 years
                 $orgs[$org->getId()] = $org;
+                if (in_array($org->getId(), [773]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
 
                 $taskData = array();
                 if ($my_org_projects) {
@@ -560,6 +565,7 @@ class OrgRouteHandler
         $template_data = array_merge($template_data, array(
             'sesskey'         => $sesskey,
             'roles'           => $adminDao->get_roles($current_user_id),
+            'create_non_phrase' => $create_non_phrase,
             'extra_scripts'   => $extra_scripts,
             'beyond_3_months' => 1,
             'current_page'    => 'org-dashboard'
