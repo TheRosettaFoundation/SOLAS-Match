@@ -475,7 +475,7 @@ class OrgRouteHandler
             foreach ($my_organisations as $org) {
                 $my_org_projects = $projectDao->getOrgProjects($org->getId(), 3);
                 $orgs[$org->getId()] = $org;
-                if (in_array($org->getId(), [773]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
+                if (in_array($org->getId(), [552]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
 
                 $taskData = array();
                 if ($my_org_projects) {
@@ -538,7 +538,7 @@ class OrgRouteHandler
             foreach ($my_organisations as $org) {
                 $my_org_projects = $projectDao->getOrgProjects($org->getId(), 500); // About 50 years
                 $orgs[$org->getId()] = $org;
-                if (in_array($org->getId(), [773]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
+                if (in_array($org->getId(), [552]) && ($adminDao->get_roles($current_user_id, $org->getId())&($NGO_ADMIN + $NGO_PROJECT_OFFICER))) $create_non_phrase[] = $org->getId();
 
                 $taskData = array();
                 if ($my_org_projects) {
