@@ -208,6 +208,12 @@ a[href^="mailto:"] {
     border-radius: 4px;
 }
 
+.dropdown-menu a:hover {
+    background-color: #eee;
+    color: #de8e16;
+    font-weight: 500;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
