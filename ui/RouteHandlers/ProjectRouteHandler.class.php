@@ -900,7 +900,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 $number = 0;
                 if (!empty($post['complete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['complete_selected_tasks']) as $task_id) {
@@ -924,7 +924,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     UserRouteHandler::flashNow('success', "$number completed shell tasks now marked as in progress.");
                 }
-
+            }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (!empty($post['tasks_as_paid'])) {
                     $task_ids = preg_split ("/\,/", $post['tasks_as_paid']);
                     foreach ($task_ids as $id) {
@@ -940,7 +941,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
                 }
-
+            }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 if (!empty($post['status_as_unclaimed'])) {
                     $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
                     foreach ($task_ids as $id) {
@@ -965,6 +967,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     error_log("Tasks potentially Marked WAITING_FOR_PREREQUISITES by $user_id, IDs: " . $post['status_as_waiting']);
                 }
+            }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 $updated = 0;
                 if (!empty($post['ready_payment'])) {
                     $task_ids = preg_split ("/\,/", $post['ready_payment']);
@@ -1024,7 +1028,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         UserRouteHandler::flashNow('success', "$updated tasks purchase order number set.");
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
                 }
-
+            }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
                     $task_id = $post['task_id'];
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);

@@ -50,7 +50,7 @@
                             {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                         </a>
                     {/if}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($memsource_project)}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
                         <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
                              Add Shell Tasks
                         </a>
@@ -410,8 +410,9 @@
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        
+        {/if}
 
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="status_as_unclaimed" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
                     <i class="fa fa-unlock me-2"  aria-hidden="true"></i> Set Status of Selected to Unclaimed
@@ -458,7 +459,9 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
+        {/if}
 
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <div class="d-flex flex-column btn btn-small">
 
             <a class=" flex-grow-1  text-body fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
@@ -605,7 +608,7 @@
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class=" fa-solid fa-user "></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
@@ -626,7 +629,7 @@
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
                                              <i class=" fa-solid fa-user "></i>   <a style="color:#000000;" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
