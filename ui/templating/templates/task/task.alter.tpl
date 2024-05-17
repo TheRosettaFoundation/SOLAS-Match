@@ -164,7 +164,7 @@
                     <label for="word_count_partner_weighted" class="form-label mt-2"><strong>Partner weighted {TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['unit_count_text']}</strong></label>
                     <input class="form-control" type="text" name="word_count_partner_weighted" id="word_count_partner_weighted" maxlength="6" value="{$task->get_word_count_partner_weighted()}" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} style="width: 400px" />
 
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                     <p style="margin-bottom:40px;"/>
                     <label for="shell_task_url" class="form-label"><strong>Shell Task Work URL</strong></label>
                     <input  type="text" name="shell_task_url" id="shell_task_url" value="{$shell_task_url}" class="form-control" />
