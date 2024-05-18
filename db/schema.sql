@@ -8824,7 +8824,7 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR (a.roles=@NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -8876,7 +8876,7 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR (a.roles=@NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -8976,7 +8976,7 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR (a.roles=@NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
@@ -9027,7 +9027,7 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR (a.roles=@NGO_LINGUIST AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
