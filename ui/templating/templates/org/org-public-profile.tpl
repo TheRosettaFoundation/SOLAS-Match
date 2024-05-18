@@ -44,7 +44,7 @@
                             </a>
                             {/if}
 
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                             <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> New non-Phrase Project
                             </a>

@@ -178,7 +178,7 @@
              
                 <th class="w-50" >
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong>
-                    {elseif in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<strong>URL for Task:</strong>{/if}
+                    {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<strong>URL for Task:</strong>{/if}
                 </th>
               </tr>  
             </thead>
@@ -192,7 +192,7 @@
                   <div class="d-flex">
                     <div class="pb-0 bg-dark rounded-2">
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>
-                        {elseif in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
+                        {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
                     </div>
                  <div>
                  </td>
@@ -248,7 +248,7 @@
         <thead>
          <tr class="fs-5 align-middle">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
             {/if}
             <th>Cancelled?</th>
@@ -286,7 +286,7 @@
                 </form>
                 
             </td>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <td>
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />

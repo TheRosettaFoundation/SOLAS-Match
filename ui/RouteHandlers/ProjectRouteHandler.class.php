@@ -900,7 +900,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 $number = 0;
                 if (!empty($post['complete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['complete_selected_tasks']) as $task_id) {
@@ -942,7 +942,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 if (!empty($post['status_as_unclaimed'])) {
                     $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
                     foreach ($task_ids as $id) {
@@ -1029,7 +1029,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
                     $task_id = $post['task_id'];
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);

@@ -1048,7 +1048,7 @@ class TaskRouteHandler
                 if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
-                if (($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), [552]) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($post['shell_task_url'])) {
+                if (($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($post['shell_task_url'])) {
                     $url = $post['shell_task_url'];
                     if (!preg_match('#^(http|https)://#i', $url)) $url = "https://$url";
                     if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);

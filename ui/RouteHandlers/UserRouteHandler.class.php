@@ -3408,6 +3408,7 @@ EOF;
         $smarty->assign('NGO_PROJECT_OFFICER', 4);
         $smarty->assign('NGO_LINGUIST',        2);
         $smarty->assign('LINGUIST',            1);
+        $smarty->assign('ORG_EXCEPTIONS', ORG_EXCEPTIONS);
 
         $smarty->assign('flash', array_merge($flash_messages['prev'], $flash_messages['now']));
 
