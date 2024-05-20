@@ -208,7 +208,7 @@ a[href^="mailto:"] {
     border-radius: 4px;
 }
 
-.dropdown-menu form:hover {
+.dropdown-menu a:hover {
     background-color: #eee;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
     color: #de8e16;
