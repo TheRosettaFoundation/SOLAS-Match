@@ -914,7 +914,7 @@
   <p>Reason to cancel selected task(s):</p>
   <select name="cancel_task" id="cancel_task" class="form-select">
     <option value="">--Select--</option>
-    <option   value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
+    <option class="w-75 text-break"  value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
     <option  class="w-75 text-break" value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
     <option class="w-75 text-break"  value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
     <option  class="w-75 text-break" value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
