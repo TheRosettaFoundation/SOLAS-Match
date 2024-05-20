@@ -912,13 +912,12 @@
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
   <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
-  <select name="cancel_task" id="cancel_task" class="form-select">
+  <select name="cancel_task" id="cancel_task" class="form-select text-wrap">
     <option value="">--Select--</option>
-    <option class="w-75 text-break"  value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
-    <option  class="w-75 text-break" value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
-    <option class="w-75 text-break"  value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
-    <option  class="w-75 text-break" value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
-    <option class="w-75 text-break"  value="other">Other</option>    
+    <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
+    <option value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
+    <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
+    <option value="other">Other</option>    
   </select>
   <br/>
   <p name="reason_text">Further details:</p>
