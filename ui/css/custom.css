@@ -129,6 +129,11 @@ a[href^="mailto:"] {
   border-radius: 4px;
 }
 
+.dropdown-menu form:hover {
+  background-color: #eee;
+  text-shadow: 0 0 2px black;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
