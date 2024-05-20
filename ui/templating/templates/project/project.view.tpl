@@ -446,13 +446,13 @@
             </form>
              
             <div class="d-flex flex-column btn btn-small">
-            <a class=" flex-grow-1  text-body fs-6 text-decoration-none open-cancel-modal" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
+            <a class=" flex-grow-1  text-body fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban me-2"  aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
             </div>
 
             <form id="cancel" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class="flex-grow-1  text-body fs-6 text-decoration-none" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
+            <a class="flex-grow-1  text-body fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
                 <input type="hidden" name="cancel" value="" />
