@@ -1600,6 +1600,7 @@ class AdminRouteHandler
 
     public function sow_report(Request $request, Response $response)
     {
+        global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
         $template_data['tasks'] = $statsDao->sow_report();
