@@ -915,9 +915,9 @@
   <select name="cancel_task" id="cancel_task" class="form-select text-wrap">
     <option value="">--Select--</option>
     <option value="Request withdrawn by Partner without cause">Request withdrawn by Partner without cause</option>
+    <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
     <option value="Request cancelled by TWB due to content eligibility concerns">Request cancelled by TWB due to content eligibility concerns</option>
     <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
-    <option value="Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)">Request withdrawn by Partner with cause (timeline issues, quality issues, etc.)</option>
     <option value="other">Other</option>    
   </select>
   <br/>
