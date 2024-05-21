@@ -283,6 +283,12 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_deals_report')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
             ->setName('all_deals_report');
+
+        $app->get(
+            '/sow_report[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_report')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('sow_report');
     }
 
     public function adminDashboard(Request $request, Response $response)
@@ -1590,6 +1596,14 @@ class AdminRouteHandler
 
         $template_data['all_deals'] = $statsDao->all_deals_report();
         return UserRouteHandler::render('admin/all_deals_report.tpl', $response);
+    }
+
+    public function sow_report(Request $request, Response $response)
+    {
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['tasks'] = $statsDao->sow_report();
+        return UserRouteHandler::render('admin/sow_report.tpl', $response);
     }
 }
 
