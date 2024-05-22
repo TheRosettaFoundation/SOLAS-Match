@@ -1271,12 +1271,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
-{if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="">
-    <input type="submit" class="btnPrimary text-white border-0 border-0" name="send_contract" value="Send Contract to Linguist" />
-    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-</form>
-{/if}
+
 {if !empty($user_invoices)}
 <div class="table-responsive fs-5 mt-2">
 <table style="width:100%">
@@ -1285,7 +1280,6 @@ If a language is to be removed from this list, the community will be informed be
             <td><strong>Invoice Number</strong></td>
             <td><strong>Invoice Date</strong></td>
             <td><strong>Invoice Amount</strong></td>
-            <td><strong>Update Date</strong></td>
             <td><strong>Contract Date</strong></td>
         </tr>
     </thead>
@@ -1294,7 +1288,7 @@ If a language is to be removed from this list, the community will be informed be
             <td>{$invoice['invoice_number']}</td>
             <td>{$invoice['invoice_date']}</td>
             <td>{$invoice['amount']}</td>
-            <td><a class="btn btn-primary" href=""></a></td>
+            <td><a class="btn btn-primary" href="">View contract</a></td>
           
         </tr>
     {/foreach}
