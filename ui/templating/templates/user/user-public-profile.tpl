@@ -1274,6 +1274,7 @@ If a language is to be removed from this list, the community will be informed be
 
 {if !empty($user_invoices)}
 <div class="table-responsive fs-5 mt-2">
+<h4 class="fw-bold">Invoices Section</h4>
 <table style="width:100%">
     <thead>
         <tr>
