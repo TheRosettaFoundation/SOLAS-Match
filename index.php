@@ -53,7 +53,7 @@ define('NGO_ADMIN',           8);
 define('NGO_PROJECT_OFFICER', 4);
 define('NGO_LINGUIST',        2);
 define('LINGUIST',            1);
-define('ORG_EXCEPTIONS',  [773]);
+define('ORG_EXCEPTIONS',  [552]);
 
 require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
