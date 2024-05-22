@@ -1406,7 +1406,9 @@ class TaskRouteHandler
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER));
+            $more = 0;
+            if (in_array($org_id, ORG_EXCEPTIONS)) $more = NGO_ADMIN | NGO_PROJECT_OFFICER;
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER | $more));
         }
 
         if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);
@@ -1499,6 +1501,9 @@ class TaskRouteHandler
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
+        if (!$roles && in_array($project->getOrganisationId(), ORG_EXCEPTIONS))
+            $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID(), $project->getOrganisationId()) & (NGO_ADMIN | NGO_PROJECT_OFFICER);
+        }
 
         $users_to_discard_for_search = $taskDao->users_to_discard_for_search($task->getTaskType(), $project->getOrganisationId());
 
