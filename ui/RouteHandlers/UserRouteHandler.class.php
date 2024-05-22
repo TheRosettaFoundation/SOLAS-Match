@@ -2625,6 +2625,9 @@ error_log("result: $result");//(**)
             }
         }
 
+        $profile_invoice = $userDao->getUserInvoices($user_id);
+        var_dump($profile_invoice);
+
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/eligible.js\" defer ></script>";
