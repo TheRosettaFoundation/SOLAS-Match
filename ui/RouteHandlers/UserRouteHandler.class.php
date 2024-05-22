@@ -3379,9 +3379,9 @@ EOF;
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
-        print_r($args['invoice_number']);
+        // print_r($args['invoice_number']);
         $invoice = $userDao->getInvoice($args['invoice_number']);
-        print_r($invoice);
+        // print_r($invoice);
     
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
