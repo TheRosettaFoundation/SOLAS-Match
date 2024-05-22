@@ -122,6 +122,12 @@ class UserRouteHandler
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
+        '/invoice/{invoice_number}[/]',
+        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
+        ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+        ->setName('getInvoice');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/user-uploads/{cert_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
@@ -192,6 +198,7 @@ class UserRouteHandler
             '/native_languages/{term}/search[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
             ->setName('native_languages');
+        
 
         $app->map(['GET', 'POST'],
             '/{user_id}/{request_type}/printrequest[/]',
@@ -2625,7 +2632,7 @@ error_log("result: $result");//(**)
             }
         }
 
-        $profile_invoice = $userDao->getUserInvoices($user_id);
+        $user_invoices = $userDao->getUserInvoices($user_id);
         var_dump($profile_invoice);
 
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
@@ -3364,6 +3371,14 @@ EOF;
         if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || (!empty($docusign_hook['data']['recipientId']) && $docusign_hook['data']['recipientId'] == 1)))
             $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
         die;
+    }
+
+    public function getInvoice(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+        $result = $userDao->getInvoice('1');
+        var_dump($args);
+
     }
 
     public static function flash($key, $value)
