@@ -3382,7 +3382,7 @@ EOF;
         print_r($args);
         $invoice = $userDao->getInvoice($args['invoice_number']);
         print_r($invoice);
-        
+    
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
@@ -3401,10 +3401,10 @@ EOF;
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-            require_once(dirname(__FILE__).'/lang/eng.php');
-            $pdf->setLanguageArray($l);
-        }
+        // if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+        //     require_once(dirname(__FILE__).'/lang/eng.php');
+        //     $pdf->setLanguageArray($l);
+        // }
 
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
