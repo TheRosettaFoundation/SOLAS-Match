@@ -2819,6 +2819,7 @@ error_log("result: $result");//(**)
             'countries' => $countryDao->getCountries(),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
+            'user_invoices'  => $user_invoices
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
