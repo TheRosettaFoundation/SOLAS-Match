@@ -113,9 +113,11 @@ class UserDao extends BaseDao
     public function getUserInvoices($user_id)
     {
         $ret = [];
+        print_r("testing");
+        print_r($user_id);
         $result = LibAPI\PDOWrapper::call('get_user_invoices', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) return [];
-    
+
         return $result;
     }
 
