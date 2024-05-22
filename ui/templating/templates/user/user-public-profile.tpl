@@ -1289,7 +1289,7 @@ If a language is to be removed from this list, the community will be informed be
             <td>{$invoice['invoice_number']}</td>
             <td>{$invoice['invoice_date']}</td>
             <td>{$invoice['amount']}</td>
-            <td><a class="btn btn-sm-primary text-white" href=""> Review Invoice</a></td>
+            <td><a class="btn btn-primary text-white" href=""> Review Invoice</a></td>
           
         </tr>
     {/foreach}
