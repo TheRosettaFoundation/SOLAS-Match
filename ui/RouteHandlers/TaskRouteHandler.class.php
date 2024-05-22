@@ -1501,7 +1501,7 @@ class TaskRouteHandler
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
-        if (!$roles && in_array($project->getOrganisationId(), ORG_EXCEPTIONS))
+        if (!$roles && in_array($project->getOrganisationId(), ORG_EXCEPTIONS)) {
             $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID(), $project->getOrganisationId()) & (NGO_ADMIN | NGO_PROJECT_OFFICER);
         }
 
