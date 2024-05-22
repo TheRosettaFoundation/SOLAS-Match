@@ -3379,7 +3379,7 @@ EOF;
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
-        print_r($args);
+        print_r($args['invoice_number']);
         $invoice = $userDao->getInvoice($args['invoice_number']);
         print_r($invoice);
     
