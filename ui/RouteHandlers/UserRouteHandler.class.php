@@ -125,7 +125,7 @@ class UserRouteHandler
         '/invoice/{invoice_number}[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
         ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-        ->setName('getInvoice');
+        ->setName('get-invoice');
 
         $app->map(['GET', 'POST'],
             '/{user_id}/user-uploads/{cert_id}[/]',
@@ -3376,10 +3376,101 @@ EOF;
 
     public function getInvoice(Request $request, Response $response, $args)
     {
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
+       
         $userDao = new DAO\UserDao();
-        $result = $userDao->getInvoice('1');
-        var_dump($args);
+        print_r($args);
+        // $invoice = $userDao->getInvoice($args['invoice_number']);
+        // print_r($invoice);
+        
 
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('TWB Platform');
+        $pdf->SetTitle("Invoice");
+        $pdf->SetSubject('Generate Certificate');
+        $pdf->SetKeywords('TWB Platform,Volunteer Certificate');
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, [0, 64, 255], [0, 64, 128]);
+        $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('dejavusans', '', 9, '', false);
+        $pdf->AddPage('L');
+        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
+        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
+
+$html = <<<EOF
+        <style>
+        div.test {
+            color: #000000;
+            font-size: 13pt;
+            border-style: solid solid solid solid;
+            border-width: 8px 8px 8px 8px;
+            border-color: #FFFFFF;
+            text-align: center;
+            margin: 50px auto;
+        }
+        .uppercase {
+            text-transform: uppercase;
+            font-weight:bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11pt;
+        }
+        .footer-main {
+            text-align:center;
+        }
+        </style>
+        <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="right" valign="middle"
+                    width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
+        </tr></table>
+        <div class="test">
+        <br /><br />This is to certify that
+        <br /><br /><br /><span class="uppercase"></span>
+        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since .
+        <br />  has contributed  providing language services for: .
+        <br />
+        <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
+        <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
+        </div>
+        <div class="footer-main">
+        <img  src="/ui/img/aimee_sign.png" />
+        </div>
+        <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
+        <div class="footer-main">
+        <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
+        </div>
+EOF;
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
+    $pdf->lastPage();
+
+    $file_name = 'Invoice_.pdf';
+    $pdf->Output($file_name, 'I');
+    exit;
     }
 
     public static function flash($key, $value)
