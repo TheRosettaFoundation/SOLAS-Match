@@ -1286,7 +1286,11 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
   unit_rate_pricing FLOAT NOT NULL DEFAULT 0.0,
   status_changed    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+  processed         INT NOT NULL DEFAULT 0,
+  invoice_number    INT NOT NULL DEFAULT 0
   UNIQUE KEY FK_TaskPaid (task_id),
+  KEY (processed),
+  KEY (invoice_number),
   CONSTRAINT FK_TaskPaid FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -12972,7 +12976,7 @@ BEGIN
     INNER JOIN Projects            p ON t.project_id=p.id
     INNER JOIN Organisations       o ON p.organisation_id=o.id
     INNER JOIN Users             usr ON i.linguist_id=usr.id
-    WHERE tp.invoice_number=iID;
+    WHERE i.invoice_number=iID;
 END//
 DELIMITER ;
 
