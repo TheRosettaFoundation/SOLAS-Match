@@ -12717,6 +12717,7 @@ CREATE TABLE IF NOT EXISTS `linguist_payment_informations` (
   admin_id          INT UNSIGNED NOT NULL,
   country_id        INT UNSIGNED NOT NULL,
   google_drive_link VARCHAR(255) NOT NULL,
+  linguist_name     VARCHAR(256) NOT NULL,
   PRIMARY KEY (user_id),
   KEY FK_linguist_payment_informations_country (country_id),
   CONSTRAINT FK_linguist_payment_informations_country FOREIGN KEY (country_id) REFERENCES Countries (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -12726,12 +12727,12 @@ CREATE TABLE IF NOT EXISTS `linguist_payment_informations` (
 
 DROP PROCEDURE IF EXISTS `insert_update_linguist_payment_information`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_linguist_payment_information`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN country INT UNSIGNED, IN link VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_linguist_payment_information`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN country INT UNSIGNED, IN link VARCHAR(255), IN name VARCHAR(256))
 BEGIN
     DELETE FROM linguist_payment_informations WHERE user_id=uID;
 
-    INSERT INTO linguist_payment_informations (user_id,   admin_id, country_id, google_drive_link)
-    VALUES                                    (    uID,        aID,    country,              link);
+    INSERT INTO linguist_payment_informations (user_id,   admin_id, country_id, google_drive_link, linguist_name)
+    VALUES                                    (    uID,        aID,    country,              link,          name);
 END//
 DELIMITER ;
 
