@@ -12972,6 +12972,74 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `invoices` (
+  invoice_number INT NOT NULL AUTO_INCREMENT,
+  status         INT DEFAULT 0,
+  revoked        INT DEFAULT 0,
+  invoice_date   DATETIME NOT NULL,
+  linguist_id    INT UNSIGNED NOT NULL,
+  linguist_name  VARCHAR(256) NOT NULL,
+  amount         FLOAT NOT NULL,
+  filename       VARCHAR(255),
+  PRIMARY KEY (invoice_number),
+  KEY (linguist_id),
+  CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_user_invoices`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_invoices`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT
+        invoice_number,
+        status,
+        invoice_date,
+        amount
+    FROM invoices
+    WHERE
+        linguist_id=uID AND
+        revoked=0
+    ORDER BY invoice_date DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_invoice`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_invoice`(IN iID INT UNSIGNED)
+BEGIN
+    SELECT
+        i.*,
+        tp.task_id,
+        tp.purchase_order,
+        t.title,
+        p.title AS project_title,
+        o.name,
+        ttd.type_text,
+        CONCAT(l1.code, '-', l2.code) AS language_pair,
+        CONCAT(l1.`en-name`, '-', l2.`en-name`) AS language_pair_name,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS quantity,
+        ttd.pricing_and_recognition_unit_text_hours,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS amount,
+        usr.email,
+        usr.id,
+        c.`en-name` AS country,
+        lpi.google_drive_link
+    FROM        invoices           i
+    INNER JOIN TaskPaids          tp ON i.invoice_number=tp.invoice_number
+    INNER JOIN Tasks               t ON tp.task_id=t.id
+    INNER JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
+    INNER JOIN Languages          l1 ON t.`language_id-source`=l1.id
+    INNER JOIN Languages          l2 ON t.`language_id-target`=l2.id
+    INNER JOIN linguist_payment_informations lpi ON i.linguist_id=lpi.user_id
+    INNER JOIN Countries           c ON lpi.country_id=c.id
+    INNER JOIN Projects            p ON t.project_id=p.id
+    INNER JOIN Organisations       o ON p.organisation_id=o.id
+    INNER JOIN Users             usr ON i.linguist_id=usr.id
+    WHERE tp.invoice_number=iID;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
