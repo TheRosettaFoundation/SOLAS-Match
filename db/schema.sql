@@ -12981,6 +12981,73 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `sow_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_report`()
+BEGIN
+    SELECT
+        tc.user_id,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        p.organisation_id,
+        o.name,
+        t.project_id,
+        p.title,
+        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
+        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
+        t.id AS task_id,
+        ttd.type_text,
+        CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
+        pcd.deal_id,
+        '2.9.2' AS budget_code,
+        tp.purchase_order,
+        pos.approver_mail,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
+        ttd.pricing_and_recognition_unit_text_hours,
+        tp.unit_rate,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
+        tcd.complete_date,
+        tp.processed,
+        i.status,
+        tp.invoice_number,
+        tp.payment_status
+    FROM TaskPaids                           tp
+    JOIN Tasks                                t ON tp.task_id=t.id
+    JOIN TaskClaims                          tc ON t.id=tc.task_id
+    JOIN TaskCompleteDates                  tcd ON t.id=tcd.task_id
+    JOIN UserPersonalInformation            upi ON tc.user_id=upi.user_id
+    JOIN Projects                             p ON t.project_id=p.id
+    JOIN Organisations                        o ON p.organisation_id=o.id
+    JOIN project_complete_dates             pcd ON p.id=pcd.project_id
+    JOIN MemsourceProjects                   mp ON p.id=mp.project_id
+    JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Languages                           l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                           l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                           c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN MemsourceUsers                 mu ON mp.owner_uid=memsource_user_uid
+    LEFT JOIN Users                           u ON mu.user_id=u.id
+    LEFT JOIN ProjectFiles                   pf ON mp.project_id=pf.project_id
+    LEFT JOIN Users                          u2 ON pf.user_id=u2.id
+    LEFT JOIN Users                          u3 ON mp.owner_uid=u3.id
+    LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
+    WHERE
+        pos.status IS NOT NULL AND
+        (pos.status='Completed' OR pos.status='Approved') AND
+        t.`task-status_id`=4
+    ORDER BY
+        tp.processed,
+        IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))),
+        IFNULL(i.status, -1),
+        o.name,
+        p.title,
+        IF(u.email IS NOT NULL AND u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)),
+        t.id;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

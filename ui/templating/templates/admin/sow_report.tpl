@@ -7,9 +7,17 @@
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"/>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var table = $('#myTable').DataTable({ "paging": false });
+        table.order([16, 'asc'], [17, 'desc'], [0, 'asc'], [18, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc'], [4, 'asc']).draw();
+      });
+    </script>
 
     <style>
         .container {
@@ -43,6 +51,10 @@
         <th>Total</th>
         <th>Completed Date</th>
         <th>Payment Status</th>
+        <th>Processed?</th>
+        <th>Invoice Date</th>
+        <th>Invoice Status</th>
+        <th>Payment Status</th>
     </thead>    
     <tbody>
         {foreach $tasks as $task}
@@ -63,6 +75,10 @@
             <td>${round($task['total_expected_cost'], 2)}</td>
             <td>{if !empty($task['complete_date'])}{substr($task['complete_date'], 0, 10)}{/if}</td>
             <td>{$task['payment_status']}</td>
+            <td>{if $task['processed'] > 0}Yes{/if}</td>
+            <td>{$task['invoice_date']}</td>
+            <td>{if $task['status'] == 0}0-Invoice{elseif $task['status'] == 1}1-Proforma{elseif $task['status'] == 2}2-Invoice Paid{elseif $task['status'] == 3}3-Proforma Paid{/if}</td>
+            <td>{if $task['invoice_number'] > 0}{$task['invoice_number']}{/if}</td>
         </tr>
         {/foreach}
     </tbody>
