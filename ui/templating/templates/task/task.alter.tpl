@@ -122,9 +122,7 @@
                     <label>24hr Date-Time:</label>
                     <div class="input-group date" id="id_1">
                         <input type="text" value="{$task->getDeadline()}" class="form-control" required/>
-                        <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        </span>
+                        
                     </div>
                 </p>
                     {* <div class="input-group date" id="id_1">
