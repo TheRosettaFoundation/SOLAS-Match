@@ -13048,6 +13048,50 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `sow_linguist_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_linguist_report`()
+BEGIN
+    SELECT
+        tc.user_id,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        c.`en-name` AS country,
+        lpi.google_drive_link,
+        IFNULL(i.amount, SUM(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0))) AS total_expected_cost,
+        i.status,
+        i.invoice_number,
+        i.filename,
+        MIN(tp.processed) AS processed,
+        i.invoice_date,
+        MAX(IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)) AS proforma
+    FROM TaskPaids                           tp
+    JOIN Tasks                                t ON tp.task_id=t.id
+    JOIN TaskClaims                          tc ON t.id=tc.task_id
+    JOIN TaskCompleteDates                  tcd ON t.id=tcd.task_id
+    JOIN UserPersonalInformation            upi ON tc.user_id=upi.user_id
+    JOIN Projects                             p ON t.project_id=p.id
+    JOIN Organisations                        o ON p.organisation_id=o.id
+    JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    LEFT JOIN Countries                       c ON lpi.country_id=c.id
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
+    WHERE
+        pos.status IS NOT NULL AND
+        (pos.status='Completed' OR pos.status='Approved') AND
+        t.`task-status_id`=4
+    GROUP BY
+        i.invoice_date,
+        tc.user_id,
+        tp.invoice_number,
+        IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)
+    ORDER BY
+        IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))),
+        IFNULL(i.status, -1);
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

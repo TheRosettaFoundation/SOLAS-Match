@@ -32,6 +32,8 @@
 
 <h2 style="text-align:center;">SoW Report</h2>
 <br />
+<a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report}</a>
+<br />
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
@@ -54,7 +56,7 @@
         <th>Processed?</th>
         <th>Invoice Date</th>
         <th>Invoice Status</th>
-        <th>Payment Status</th>
+        <th>Invoice Number</th>
     </thead>    
     <tbody>
         {foreach $tasks as $task}
@@ -76,15 +78,15 @@
             <td>{if !empty($task['complete_date'])}{substr($task['complete_date'], 0, 10)}{/if}</td>
             <td>{$task['payment_status']}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
-            <td>{$task['invoice_date']}</td>
+            <td>{if empty($task['invoice_date'])}$task['invoice_date']}{else}None{/if}</td>
             <td>{if $task['status'] == 0}0-Invoice{elseif $task['status'] == 1}1-Proforma{elseif $task['status'] == 2}2-Invoice Paid{elseif $task['status'] == 3}3-Proforma Paid{/if}</td>
-            <td>{if $task['invoice_number'] > 0}{$task['invoice_number']}{/if}</td>
+            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
         </tr>
         {/foreach}
     </tbody>
 </table>
 
-{else}<p class="alert alert-info">No un-invoiced Paid Tasks found</p>{/if}
+{else}<p class="alert alert-info">No Paid Tasks found</p>{/if}
 
 </body>
 </html>
