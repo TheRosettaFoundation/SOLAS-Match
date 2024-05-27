@@ -898,6 +898,8 @@ class TaskRouteHandler
         // ";
 
         $extra_scripts = "
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/jquery.min.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/popper.js\"></script>
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/moment-with-locales.min.js\"></script>
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/bootstrap-datetimepicker.min.js\"></script>
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/main.js\"></script>
