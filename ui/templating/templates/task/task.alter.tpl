@@ -100,7 +100,7 @@
                     </p> *}
 
                             <div class="input-group date"  id="id_1">
-                                <input type="text" class="form-control" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
+                                <input type="text" class="form-control" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" name="deadline"  />
                                 <div class="input-group-addon input-group-append bg-white">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
