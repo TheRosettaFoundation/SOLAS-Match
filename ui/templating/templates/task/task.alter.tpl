@@ -105,10 +105,10 @@
                             </div>  *}
 
                             <label for="id_start_datetime">24hr Date-Time:</label>
-                            <div class="input-group date" id="id_1">
+                            <div class="input-group date" class="d-flex " id="id_1">
                                 <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
                                 <div class="input-group-addon input-group-append">
-                                    <div class="input-group-text">
+                                    <div class="input-group-text h-full">
                                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                                     </div>
                                 </div>
