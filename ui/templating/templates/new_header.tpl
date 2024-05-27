@@ -138,7 +138,7 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
         <script src="{urlFor name="home"}ui/js/demo.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
      
      
      
