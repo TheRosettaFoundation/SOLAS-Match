@@ -92,11 +92,11 @@
                                 {$deadline_error}
                             </div>
                         {/if}
-                        {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
+                        {* {assign var="deadlineDateTime" value=$task->getDeadline()} *}
+                    {* <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
 
                         {* <p>
-                        {assign var="deadlineDateTime" value=$task->getDeadline()}
+                        
                         <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                         <input type="hidden" name="deadline" id="deadline" />
                     </p> *}
@@ -117,8 +117,9 @@
                         </div>
                        
                     </div>
+                    {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <div class="input-group date" id="id_1">
-                            <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                            <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
                             <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                             </span>
