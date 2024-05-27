@@ -889,7 +889,6 @@ class TaskRouteHandler
         $word_count_err = null;
         $deadlineError = "";
 
-        print_r($_POST['deadline']);
 
         // $extra_scripts = "
         // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>

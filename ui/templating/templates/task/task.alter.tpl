@@ -93,14 +93,14 @@
                             </div>
                         {/if}
 
-                        <p>
+                        {* <p>
                         {assign var="deadlineDateTime" value=$task->getDeadline()}
                         <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                         <input type="hidden" name="deadline" id="deadline" />
-                    </p>
+                    </p> *}
 
                             <div class="input-group date"  id="id_1">
-                                <input type="text" value="05/16/2018 11:31:00" class="form-control" name="deadline_field"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
+                                <input type="text" class="form-control" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
                                 <div class="input-group-addon input-group-append bg-white">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
