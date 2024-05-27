@@ -92,6 +92,14 @@
                                 {$deadline_error}
                             </div>
                         {/if}
+
+                        {assign var="deadlineDateTime" value=$task->getDeadline()}
+                    <div class="input-group date" id="id_1">
+                            <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            </span>
+                        </div>
                         {* {assign var="deadlineDateTime" value=$task->getDeadline()} *}
                     {* <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
 
@@ -101,29 +109,12 @@
                         <input type="hidden" name="deadline" id="deadline" />
                     </p> *}
 
-                            <div class="input-group date"  id="id_1">
-  
-                                <input class="form-control" type="text" name="deadline"  value="22jflldd"  /> 
-
-                                {* <input class="form-control" type="text" id="deadline_field"  name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> *}
-                                    <input type="hidden" name="deadline" id="deadline" />
-                                    <div class="input-group-addon">
-                                    <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
+                
 
                         </div>
                        
                     </div>
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <div class="input-group date" id="id_1">
-                            <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                            </span>
-                        </div>
+                    
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
