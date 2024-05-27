@@ -85,15 +85,15 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="id_0" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
+                    {* <div class="mb-3"> *}
+                        {* <label for="id_0" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
                             </div>
                         {/if}
                         {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
+                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
 
                         {* <p>
                         
@@ -114,8 +114,17 @@
                             
 
                        
-                    </div>
+                    {* </div> *}
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
+                    <p>
+                    <label>24hr Date-Time:</label>
+                    <div class="input-group date" id="id_1">
+                        <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        </span>
+                    </div>
+                </p>
                     <div class="input-group date" id="id_1">
                             <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
                             <span class="input-group-addon">
