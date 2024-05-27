@@ -303,7 +303,7 @@
 
 </div>
 
-<section class="ftco-section">
+{* <section class="ftco-section">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 mb-5 text-center">
@@ -333,7 +333,7 @@
         </div>
     </div>
 </div>
-</section>
+</section> *}
 
    
 
