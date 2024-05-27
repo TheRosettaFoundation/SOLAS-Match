@@ -69,7 +69,7 @@
         </div>
 
 
-        <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}" class="datepickers" accept-charset="utf-8">
+        <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}"  accept-charset="utf-8">
         <div class="table-responsive">    
         <table class="w-100 ">
            <tbody class="mx-4">
