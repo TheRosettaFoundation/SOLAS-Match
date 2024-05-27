@@ -103,8 +103,8 @@
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
                                
                                 {* <input type="text" class="form-control" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" name="deadline"  /> *}
-                                <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
-                                    <input type="hidden" name="deadline" id="deadline" />    
+                                <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
+                               
                                     <div class="input-group-addon input-group-append bg-white">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
