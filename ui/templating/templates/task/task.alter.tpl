@@ -99,8 +99,8 @@
 
                             <div class="form-group">
                                 <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                                <div >
-                                <input type="text" value="" class="form-control" class="input-group date" id="id_0" placeholder="MM/DD/YYYY hh:mm:ss" required/>
+                                <div class="input-group date" id="id_0">
+                                <input type="text" value="" class="form-control"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
                                 </div>
                             </div>
                         {* </p> *}
@@ -317,12 +317,12 @@
                 <form action="" method="post" class="datepickers">
                     <div class="form-group">
                         <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                        <div >
+                        <div class="input-group date" id="id_0">
                             <input
                                 type="text"
                                 value=""
                                 class="form-control"
-                                class="input-group date" id="id_0"
+                                
                                 placeholder="MM/DD/YYYY hh:mm:ss"
                                 required
                             />
