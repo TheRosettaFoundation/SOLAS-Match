@@ -101,9 +101,11 @@
 
                             <div class="input-group date"  id="id_1">
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                                <span>Deadline : {$task->getDeadline()} </span>
-                                <input type="text" class="form-control" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" name="deadline"  />
-                                <div class="input-group-addon input-group-append bg-white">
+                               
+                                {* <input type="text" class="form-control" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" name="deadline"  /> *}
+                                <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                                    <input type="hidden" name="deadline" id="deadline" />    
+                                    <div class="input-group-addon input-group-append bg-white">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
                                     </div>
