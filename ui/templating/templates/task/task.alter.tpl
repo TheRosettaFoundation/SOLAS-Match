@@ -93,7 +93,7 @@
                             </div>
                         {/if}
 
-                    <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> 
+                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
 
                         {* <p>
                         {assign var="deadlineDateTime" value=$task->getDeadline()}
