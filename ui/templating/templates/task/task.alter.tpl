@@ -102,9 +102,8 @@
                     </p> *}
 
                             <div class="input-group date"  id="id_1">
-                           
-
-                        <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
+  
+                                <input class="form-control" type="text"   value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
 
                                 {* <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> *}
                     
