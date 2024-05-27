@@ -92,8 +92,8 @@
                                 {$deadline_error}
                             </div>
                         {/if}
-                        {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
+                        {* {assign var="deadlineDateTime" value=$task->getDeadline()}
+                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
 
                         {* <p>
                         
@@ -101,19 +101,18 @@
                         <input type="hidden" name="deadline" id="deadline" />
                     </p> *}
 
-                            <div class="input-group date"  id="id_1">
+                          
   
 
                                 {* <input class="form-control" type="text" id="deadline_field"  name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> *}
-                                    <input type="hidden" name="deadline" id="deadline" />
+                                    {* <input type="hidden" name="deadline" id="deadline" />
                                     <div class="input-group-addon">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                </div>
-                            </div>
+                                </div> *}
+                            
 
-                        </div>
                        
                     </div>
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
