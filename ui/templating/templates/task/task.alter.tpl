@@ -333,13 +333,6 @@
     </div>
 </div>
 </section>
-{* <script src="../."></script>
-<script src="js/popper.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/moment-with-locales.min.js"></script>
-<script src="js/bootstrap-datetimepicker.min.js"></script>
-<script src="js/main.js"></script> *}
-
 
    
 
