@@ -5,14 +5,14 @@
             showClose: true,
             showClear: true,
             showTodayButton: true,
-            format: "YYYY/MM/DD hh:mm:ss",
+            format: "MM/DD/YYYY hh:mm:ss",
         });
         $("#id_1").datetimepicker({
             allowInputToggle: true,
             showClose: true,
             showClear: true,
             showTodayButton: true,
-            format: "YYYY/MM/DD HH:mm:ss",
+            format: "MM/DD/YYYY HH:mm:ss",
         });
         $("#id_2").datetimepicker({
             allowInputToggle: true,
