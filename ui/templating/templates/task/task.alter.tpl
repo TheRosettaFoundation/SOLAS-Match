@@ -92,7 +92,7 @@
                                 {$deadline_error}
                             </div>
                         {/if}
-                        <p>
+                        {* <p> *}
                             {* {assign var="deadlineDateTime" value=$task->getDeadline()}
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" /> *}
@@ -103,7 +103,7 @@
                                 <input type="text" value="" class="form-control" placeholder="MM/DD/YYYY hh:mm:ss" required/>
                                 </div>
                             </div>
-                        </p>
+                        {* </p> *}
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
