@@ -51,15 +51,15 @@
         {foreach $tasks as $task}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
-            <td>$task['country']}</td>
+            <td>{$task['country']}</td>
             <td><a href="{$task['google_drive_link']}"}" target="_blank">Link to Documentation</a></td>
             <td>${round($task['total_expected_cost'], 2)}</td>
             <td>{if !is_null($task['status'])}{if $task['status']&1}Proforma{else}Invoice{/if}{else}{if $task['proforma']}Proforma{else}Invoice{/if}{/if}</td>
             <td>{if !is_null($task['invoice_number'])}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
-            <td>$task['filename']}</td>
+            <td>{$task['filename']}</td>
             <td>{if !is_null($task['status']) && $task['status']&2}Paid{/if}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
-            <td>{if empty($task['invoice_date'])}$task['invoice_date']}{else}None{/if}</td>
+            <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
         </tr>
         {/foreach}
     </tbody>
