@@ -86,7 +86,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
+                        {* <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label> *}
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
