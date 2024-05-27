@@ -78,11 +78,11 @@
                 <td class="" >
                     <div class="mb-3">
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
-                        <textarea class="form-control" cols="1" rows="4" id="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
+                        <textarea class="form-control" cols="1" rows="4" id="title" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     <div class="mb-3" >
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
-                        <textarea class="form-control" cols="1" rows="6" id="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
+                        <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
                     <div class="mb-3">
@@ -93,19 +93,9 @@
                             </div>
                         {/if}
                         <p>
-                            {* {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
-                            <input type="hidden" name="deadline" id="deadline" /> *}
-
-                            {* <div class="form-group">
-                                <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                                <div class="input-group " >
-                                <input type="text" value="" class="form-control date" id="id_0"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
-                                </div>
-                            </div>  *}
 
                             <div class="input-group date"  id="id_1">
-                                <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                                <input type="text" value="05/16/2018 11:31:00" class="form-control" name="deadline" required/>
                                 <div class="input-group-addon input-group-append bg-white">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
