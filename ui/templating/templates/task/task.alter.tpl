@@ -97,12 +97,12 @@
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" /> *}
 
-                            <div class="form-group">
+                            {* <div class="form-group">
                                 <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
                                 <div class="input-group date" id="id_0">
                                 <input type="text" value="" class="form-control"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
                                 </div>
-                            </div>
+                            </div> *}
                         {* </p> *}
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
@@ -322,7 +322,7 @@
                                 type="text"
                                 value=""
                                 class="form-control"
-                                
+                                name="datePicker"
                                 placeholder="MM/DD/YYYY hh:mm:ss"
                                 required
                             />
