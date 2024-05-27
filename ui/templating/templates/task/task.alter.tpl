@@ -103,9 +103,9 @@
 
                             <div class="input-group date"  id="id_1">
   
-                                {* <input class="form-control" type="text"   value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
+                                <input class="form-control" type="text" name="deadline"  value="22jflldd"  /> 
 
-                                <input class="form-control" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
+                                {* <input class="form-control" type="text" id="deadline_field"  name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> *}
                                     <input type="hidden" name="deadline" id="deadline" />
                                     <div class="input-group-addon">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
