@@ -60,8 +60,8 @@
             {$platformJS}
         {/if}
         <!-- javascript -->
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+        {* <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script> *}
    
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
@@ -132,10 +132,11 @@
             
         <script src="{urlFor name="home"}ui/js/jquery.min.js"></script>
         <script src="{urlFor name="home"}ui/js/popper.js"></script>
+        <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script>
         <script src="{urlFor name="home"}ui/js/moment-with-locales.min.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
         <script src="{urlFor name="home"}ui/js/main.js"></script>
-        
+
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
      
      
