@@ -135,9 +135,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         {* <script src="{urlFor name="home"}ui/js/popper.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script> *}
-        <script src="{urlFor name="home"}ui/js/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="{urlFor name="home"}ui/js/main.js"></script>
+        <script src="{urlFor name="home"}ui/js/demo.js"></script>
 
      
      

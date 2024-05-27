@@ -97,12 +97,22 @@
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" /> *}
 
-                            <div class="form-group">
+                            {* <div class="form-group">
                                 <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
                                 <div class="input-group " >
                                 <input type="text" value="" class="form-control date" id="id_0"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
                                 </div>
-                            </div> 
+                            </div>  *}
+
+                            <label for="id_start_datetime">24hr Date-Time:</label>
+                            <div class="input-group date" id="id_1">
+                                <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                                <div class="input-group-addon input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </p>
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
