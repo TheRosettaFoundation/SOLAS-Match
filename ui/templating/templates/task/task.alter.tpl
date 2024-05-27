@@ -107,7 +107,7 @@
                             <div class="input-group date"  id="id_1">
                                 <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
                                 <div class="input-group-addon input-group-append bg-white">
-                                    <div class="input-group-text d-flex flex-column h-100 align-items-center">
+                                    <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                 </div>
