@@ -93,6 +93,8 @@
                             </div>
                         {/if}
 
+                    <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> 
+
                         {* <p>
                         {assign var="deadlineDateTime" value=$task->getDeadline()}
                         <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
@@ -102,7 +104,7 @@
                             <div class="input-group date"  id="id_1">
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
 
-                                <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> 
+                             
                                 <input class="form-control" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
                     
                                     <div class="input-group-addon">
