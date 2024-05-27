@@ -104,12 +104,14 @@
 
                                 <input class="form-control" type="date" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" />
                     
-                                    <div class="input-group-addon input-group-append bg-white">
+                                    <div class="input-group-addon">
                                     <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
                        
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
