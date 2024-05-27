@@ -78,11 +78,11 @@
                 <td class="" >
                     <div class="mb-3">
                         <label for="title" class="form-label"><strong>{Localisation::getTranslation('common_title')}</strong></label>
-                        <textarea class="form-control" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
+                        <textarea class="form-control" cols="1" rows="4" id="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     <div class="mb-3" >
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
-                        <textarea class="form-control" cols="1" rows="6" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
+                        <textarea class="form-control" cols="1" rows="6" id="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
                     <div class="mb-3">
@@ -120,7 +120,7 @@
                     <div>
                         <label for="publishTask" class="form-lable"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
-                        <input type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
+                        <input type="checkbox" id="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     {if $showRestrictTask}
                     <div >
