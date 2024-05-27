@@ -92,8 +92,8 @@
                                 {$deadline_error}
                             </div>
                         {/if}
-                        {* {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
+                        {assign var="deadlineDateTime" value=$task->getDeadline()}
+                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  /> 
 
                         {* <p>
                         
