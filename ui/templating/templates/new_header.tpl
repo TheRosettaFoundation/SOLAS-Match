@@ -26,10 +26,10 @@
 
         
         
-        <link href="{urlFor name="home"}ui/css/style.css" rel="stylesheet" type="text/css">
+
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
-        <link href="{urlFor name="home"}ui/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">      
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link href="{urlFor name="home"}ui/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css">  
 
       
     
@@ -130,9 +130,9 @@
         {/if}
        
             
-        <script src="{urlFor name="home"}ui/js/jquery.min.js"></script>
-        <script src="{urlFor name="home"}ui/js/popper.js"></script>
-        <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        {* <script src="{urlFor name="home"}ui/js/popper.js"></script>
+        <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script> *}
         <script src="{urlFor name="home"}ui/js/moment-with-locales.min.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
         <script src="{urlFor name="home"}ui/js/main.js"></script>
