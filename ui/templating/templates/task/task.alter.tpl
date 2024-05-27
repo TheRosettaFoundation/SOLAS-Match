@@ -117,6 +117,12 @@
                         </div>
                        
                     </div>
+                    <div class="input-group date" id="id_1">
+                            <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            </span>
+                        </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
