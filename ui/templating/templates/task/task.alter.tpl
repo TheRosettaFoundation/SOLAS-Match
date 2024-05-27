@@ -120,12 +120,12 @@
  
                     <p>
                     <label>24hr Date-Time:</label>
-                    {* <div class="input-group date" id="id_1"> *}
+                    <div class="input-group" id="id_1">
                         <input type="text" value="{$task->getDeadline()}" class="form-control" required/>
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                         </span>
-                    {* </div> *}
+                    </div>
                 </p>
                     {* <div class="input-group date" id="id_1">
                             <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
