@@ -92,7 +92,7 @@
                                 {$deadline_error}
                             </div>
                         {/if}
-                        <p>
+                        
 
                             <div class="input-group date"  id="id_1">
                                 <input type="text" value="05/16/2018 11:31:00" class="form-control" name="deadline" required/>
@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </p>
+                       
                     </div>
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
