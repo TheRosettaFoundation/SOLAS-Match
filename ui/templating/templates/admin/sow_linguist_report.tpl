@@ -31,8 +31,7 @@
 {if !empty($tasks)}
 
 <h2 style="text-align:center;">SoW Linguist Report</h2>
-<br />
-<a href="{urlFor name="sow_report"}" target="_blank">SoW Report}</a>
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>
 <br />
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
