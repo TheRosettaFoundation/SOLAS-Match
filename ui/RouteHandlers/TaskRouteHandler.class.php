@@ -889,6 +889,8 @@ class TaskRouteHandler
         $word_count_err = null;
         $deadlineError = "";
 
+        print_r($args);
+
         // $extra_scripts = "
         // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
         // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>
@@ -1067,7 +1069,7 @@ class TaskRouteHandler
                     if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);
                     else                                  $taskDao->insert_task_url($task_id, $url);
                 }
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
+                // return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
               }
           }
         }
