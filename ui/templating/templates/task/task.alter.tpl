@@ -115,9 +115,7 @@
 
                        
                     {* </div> *}
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input type="text" value="{$task->getDeadline()}" class="form-control" required/>
- 
+                    
                     <p>
                     <label>24hr Date-Time:</label>
                     <div class="input-group date" id="id_1">
