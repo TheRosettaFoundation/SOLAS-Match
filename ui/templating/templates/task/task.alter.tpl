@@ -86,7 +86,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        {* <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label> *}
+                        <label for="id_0" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
                                 {$deadline_error}
@@ -99,8 +99,8 @@
 
                             <div class="form-group">
                                 <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                                <div class="input-group date" id="id_0">
-                                <input type="text" value="" class="form-control"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
+                                <div class="input-group " >
+                                <input type="text" value="" class="form-control date" id="id_0"  placeholder="MM/DD/YYYY hh:mm:ss" required/>
                                 </div>
                             </div> 
                         </p>
