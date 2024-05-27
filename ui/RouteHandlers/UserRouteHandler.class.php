@@ -2594,8 +2594,9 @@ error_log("result: $result");//(**)
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_linguist_payment_information'])) {
                 if (empty($post['country_id'])) UserRouteHandler::flashNow('error', 'You must enter a valid Country');
+                elseif (empty($post['linguist_name'])) UserRouteHandler::flashNow('error', 'You must enter an Official Name');
                 else {
-                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link']);
+                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link'], $post['linguist_name']);
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }

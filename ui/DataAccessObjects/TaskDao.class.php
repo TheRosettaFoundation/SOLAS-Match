@@ -1054,9 +1054,9 @@ error_log("createTaskDirectly: $args");
         return $result[0];
     }
 
-    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link)
+    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link, $linguist_name)
     {
-        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link));
+        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($linguist_name));
     }
 
     public function get_linguist_payment_information($user_id)
