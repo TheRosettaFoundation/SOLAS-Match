@@ -131,6 +131,7 @@
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker1"
+                        value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"
                       
                       />
                       <span
