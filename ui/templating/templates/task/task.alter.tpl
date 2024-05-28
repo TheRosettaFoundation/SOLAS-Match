@@ -102,12 +102,12 @@
                     <p>
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label>24hr Date-Time:</label>
-                    <div class="input-group date" id="id_1">
-                    <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="display:block" class="form-control" required/>
-                    <span class="input-group-addon">
-                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                    </span>
-                </div>
+                        <div class="input-group date" id="id_1">
+                        <input type="date" value="" class="form-control" required/>
+                        <span class="input-group-addon">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        </span>
+                        </div>
 
                     </p>
                  
