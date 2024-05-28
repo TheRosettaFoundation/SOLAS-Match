@@ -1,5 +1,3 @@
-import { TempusDominus } from "@eonasdan/tempus-dominus";
-
-new TempusDominus(document.getElementById("datetimepicker1"), {
-    //put your config here
+$("#datetimepicker").datetimepicker({
+    format: "YYYY-MM-DD HH:mm:ss",
 });
