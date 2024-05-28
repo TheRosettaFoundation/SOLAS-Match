@@ -85,52 +85,15 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
-                    {* <div class="mb-3"> *}
-                        {* <label for="id_0" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
-                        {if $deadline_error != ''}
-                            <div class="alert alert-error">
-                                {$deadline_error}
-                            </div>
-                        {/if}
-                        {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="form-control" type="text" id="deadline" name="deadline"  value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"  />  *}
-
-                        {* <p>
+                    <div class="mb-3">
                         
-                        <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
-                        <input type="hidden" name="deadline" id="deadline" />
-                    </p> *}
-
-                          
-  
-
-                                {* <input class="form-control" type="text" id="deadline_field"  name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" /> *}
-                                    {* <input type="hidden" name="deadline" id="deadline" />
-                                    <div class="input-group-addon">
-                                    <div class="input-group-text d-flex flex-column h-100 align-items-center justify-content-center">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                </div> *}
-                            
-
                        
-                    {* </div> *}
+                    </div>
                     
                     <p>
                     <label>24hr Date-Time:</label>
-                    <div class="input-group date" id="id_1">
-                        <input type="text" value="{$task->getDeadline()}" class="form-control" style="display: block;" required/>
-                        <span class="input-group-addond d-flex flex-column h-100 align-items-center justify-content-center ">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        </span>
-                    </div>
-                </p>
-                    {* <div class="input-group date" id="id_1">
-                            <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" class="form-control" required/>
-                            <span class="input-group-addon">
-                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                            </span>
-                        </div> *}
+                 
+           
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
