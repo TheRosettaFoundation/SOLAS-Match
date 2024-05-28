@@ -85,15 +85,25 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
-                    <div class="mb-3">
-                        
-                       
-                    </div>
+                    {* <div class="mb-3">
+                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
+                        {if $deadline_error != ''}
+                            <div class="alert alert-error">
+                                {$deadline_error}
+                            </div>
+                        {/if}
+                        <p>
+                           
+                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                            <input type="hidden" name="deadline" id="deadline" />
+                        </p>
+                    </div> *}
                     
                     <p>
+                    {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label>24hr Date-Time:</label>
                     <div class="input-group date" id="id_1">
-                    <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                    <input type="text" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" class="form-control" required/>
                     <span class="input-group-addon">
                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                     </span>
