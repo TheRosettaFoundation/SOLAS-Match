@@ -139,7 +139,9 @@
         href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/css/tempus-dominus.css"
         />
 
-         <script>
+         <script defer>
+
+
 
              const datetimepicker1 = new tempusDominus.TempusDominus(
             document.getElementById('datetimepicker1'),
