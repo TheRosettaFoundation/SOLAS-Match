@@ -139,12 +139,17 @@
         href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/css/tempus-dominus.css"
         />
 
-        {* <script>
+         <script>
 
-        new temmpus
+            window.datetimepicker1 = new tempusDominus.TempusDominus(
+            document.getElementById('datetimepicker1'),
+            {
+                //put your config here
+            }
+);
         
         
-        </script> *}
+        </script> 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         
         
