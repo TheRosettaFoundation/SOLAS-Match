@@ -132,23 +132,24 @@
         {/if}
        
 
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        {* <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
         <script src="//code.jquery.com/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link href="./css/bootstrap-datetimepicker.min.css" type="text/css" media="all" rel="stylesheet" />
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
         <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="{urlFor name="home"}ui/js/demo.js"></script>
-{* 
+        <script src="{urlFor name="home"}ui/js/demo.js"></script> *}
+
             
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> *}
-        {* <script src="{urlFor name="home"}ui/js/popper.js"></script>
-        <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script> *}
-        {* <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
-        <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="{urlFor name="home"}ui/js/demo.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+         {* <script src="{urlFor name="home"}ui/js/popper.js"></script>
+        <script src="{urlFor name="home"}ui/js/bootstrap.min.js"></script>  *}
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+        {* <script src="{urlFor name="home"}ui/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="{urlFor name="home"}ui/js/demo.js"></script> *}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-      *}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/js/tempusdominus-bootstrap-4.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.38.0/css/tempusdominus-bootstrap-4.min.css" crossorigin="anonymous" />
      
      
     </head>
