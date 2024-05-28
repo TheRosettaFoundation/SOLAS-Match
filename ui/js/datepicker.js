@@ -4,6 +4,6 @@
 
 (function ($) {
     $(function () {
-        $("#datetimepicker1").datetimepicker({});
+        $("#datetimepicker1").TempusDominus({});
     });
 })(jQuery);
