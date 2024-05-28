@@ -85,7 +85,7 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
-                    {* <div class="mb-3">
+                    <div class="mb-3">
                         <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
@@ -97,7 +97,7 @@
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
-                    </div> *}
+                    </div>
 
                   
                     
