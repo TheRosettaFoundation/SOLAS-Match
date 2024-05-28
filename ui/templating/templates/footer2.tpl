@@ -284,7 +284,7 @@ document.getElementById('datetimepicker1'),
 {
    //put your config here
    display:{
-    viewMode:'clock',
+    
     components:{
         year:true,
         month:true,
