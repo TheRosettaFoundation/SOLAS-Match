@@ -285,10 +285,7 @@ document.getElementById('datetimepicker1'),
    //put your config here
    display:{
 
-   localization:{
-    format:''
-   },
-    
+
     components:{
         year:true,
         month:true,
@@ -297,7 +294,13 @@ document.getElementById('datetimepicker1'),
         minutes:true,
         seconds:true
     }
+   },
+
+   localization:{
+    format:'dd/MM/yyyy HH:mm:ss'
    }
+
+
 }
 );
 console.log(datetimepicker1);
