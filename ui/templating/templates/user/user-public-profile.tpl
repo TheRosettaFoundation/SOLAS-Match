@@ -93,7 +93,7 @@
                                     {if !empty($userPersonalInfo->getFirstName()) && !empty($userPersonalInfo->getLastName())}<h3 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())} {TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}</h3>{/if}
 
                                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-                                        {if !empty($linguist_payment_information['linguist_name'])}<h2 class="fw-bold mb-3">Official Name: {TemplateHelper::uiCleanseHTML($linguist_payment_information['linguist_name'])}</h2>{/if}
+                                        {if !empty($linguist_payment_information['linguist_name'])}<h4>Official Name: {TemplateHelper::uiCleanseHTML($linguist_payment_information['linguist_name'])}</h4>{/if}
                                     {/if}
 
                                      <div> {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
