@@ -136,6 +136,8 @@
 
          <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/js/jQuery-provider.js"></script>
 
+         <script src="{urlFor name="home"}ui/js/datepicker.js"></script>
+
         <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/css/tempus-dominus.css"
