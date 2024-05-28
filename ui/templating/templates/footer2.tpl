@@ -284,6 +284,10 @@ document.getElementById('datetimepicker1'),
 {
    //put your config here
    display:{
+
+   localization:{
+    format:''
+   }
     
     components:{
         year:true,

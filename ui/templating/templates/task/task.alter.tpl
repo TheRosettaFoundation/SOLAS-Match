@@ -113,7 +113,7 @@
 
                     </p> *}
                     
-
+                  <span> {if isset($deadlineDateTime)}{$task->getDeadline()} {$task->getDeadline()} {/if} </span>
                     <div class="mb-3" >
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label for="datetimepicker1Input" class="form-label"
