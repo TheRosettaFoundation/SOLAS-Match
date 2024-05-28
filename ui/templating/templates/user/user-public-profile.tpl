@@ -94,7 +94,7 @@
 
                                     {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                                         {if !empty($linguist_payment_information['linguist_name'])}
-                                            {if (empty($userPersonalInfo->getFirstName()) || empty($userPersonalInfo->getLastName())) || $linguist_payment_information['linguist_name']) != ($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName())}
+                                            {if (empty($userPersonalInfo->getFirstName()) || empty($userPersonalInfo->getLastName()) || $linguist_payment_information['linguist_name']) != ($userPersonalInfo->getFirstName() . ' ' . $userPersonalInfo->getLastName())}
                                                 <h4 class="mb-3">Official Name: {TemplateHelper::uiCleanseHTML($linguist_payment_information['linguist_name'])}</h4>
                                             {/if}
                                         {/if}
