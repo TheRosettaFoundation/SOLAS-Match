@@ -136,7 +136,7 @@
 
          <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/js/jQuery-provider.js"></script>
 
-         <script type="module" src="{urlFor name="home"}ui/js/datepicker.js"></script>
+         <script  src="{urlFor name="home"}ui/js/datepicker.js"></script>
 
         <link
         rel="stylesheet"
