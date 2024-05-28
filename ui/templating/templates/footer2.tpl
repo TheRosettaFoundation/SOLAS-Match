@@ -287,7 +287,7 @@ document.getElementById('datetimepicker1'),
 
    localization:{
     format:''
-   }
+   },
     
     components:{
         year:true,
