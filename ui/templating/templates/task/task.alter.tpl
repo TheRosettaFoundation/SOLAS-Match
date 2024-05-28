@@ -112,8 +112,10 @@
                         </div>
 
                     </p> *}
+                    
 
                     <div class="mb-3" >
+                    {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label for="datetimepicker1Input" class="form-label"
                       > Deadline : </label
                     >
@@ -123,11 +125,13 @@
                       data-td-target-input="nearest"
                       data-td-target-toggle="nearest"
                     >
+
                       <input
                         id="datetimepicker1Input"
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker1"
+                        value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"
                       />
                       <span
                         class="input-group-text"
