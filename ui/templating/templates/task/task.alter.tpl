@@ -101,7 +101,7 @@
 
                   
                     
-                    <p>
+                    {* <p>
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label>24hr Date-Time:</label>
                         <div class="input-group date" id="id_1">
@@ -111,7 +111,7 @@
                         </span>
                         </div>
 
-                    </p>
+                    </p> *}
 
                     <div >
                     <label for="datetimepicker1Input" class="form-label"
