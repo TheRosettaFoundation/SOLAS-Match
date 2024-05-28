@@ -283,6 +283,17 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
 {
    //put your config here
+   display:{
+    viewMode:'clock',
+    components:{
+        year:true,
+        month:true,
+        date:true,
+        hours:true,
+        minutes:true,
+        seconds:true
+    }
+   }
 }
 );
 console.log(datetimepicker1);
