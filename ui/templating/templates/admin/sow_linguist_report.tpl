@@ -37,7 +37,7 @@
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>Linguist</th>
-        <th>Country of Residency</th>
+        <th>Billing Country</th>
         <th>Link to the Documentation</th>
         <th>Total</th>
         <th>Invoice Type</th>
@@ -54,8 +54,8 @@
             <td>{$task['country']}</td>
             <td><a href="{$task['google_drive_link']}"}" target="_blank">Link to Documentation</a></td>
             <td>${round($task['total_expected_cost'], 2)}</td>
-            <td>{if !is_null($task['status'])}{if $task['status']&1}Proforma{else}Invoice{/if}{else}{if $task['proforma']}Proforma{else}Invoice{/if}{/if}</td>
-            <td>{if !is_null($task['invoice_number'])}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
+            <td>{if !is_null($task['status'])}{if $task['status']&1}Draft{else}Invoice{/if}{else}{if $task['proforma']}Draft{else}Invoice{/if}{/if}</td>
+            <td>{if !is_null($task['invoice_number'])}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
             <td>{$task['filename']}</td>
             <td>{if !is_null($task['status']) && $task['status']&2}Paid{/if}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>

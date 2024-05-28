@@ -1488,7 +1488,7 @@ If a language is to be removed from this list, the community will be informed be
     <tr valign="top">
         <td style="width: 20%"><strong>Admin</strong></td>
         <td style="width: 20%"><strong>Official Name</strong></td>
-        <td style="width: 20%"><strong>Country</strong></td>
+        <td style="width: 20%"><strong>Billing Country</strong></td>
         <td style="width: 40%"><strong>Google Drive Link</strong></td>
     </tr>
     <tr valign="top">
