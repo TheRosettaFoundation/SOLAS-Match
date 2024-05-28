@@ -92,6 +92,14 @@
                     
                     <p>
                     <label>24hr Date-Time:</label>
+                    <div class="input-group date" id="id_1">
+                    <input type="text" value="05/16/2018 11:31:00" class="form-control" required/>
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                    </span>
+                </div>
+
+                    </p>
                  
            
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
