@@ -297,7 +297,7 @@ document.getElementById('datetimepicker1'),
    },
 
    localization:{
-    format:'yy-MM-dd HH:mm:ss'
+    format:'yyyy-MM-dd HH:mm:ss'
    }
 
 
