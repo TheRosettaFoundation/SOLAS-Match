@@ -85,7 +85,7 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     
-                    <div class="mb-3">
+                    {* <div class="mb-3">
                         <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
                         {if $deadline_error != ''}
                             <div class="alert alert-error">
@@ -97,21 +97,9 @@
                             <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
-                    </div>
+                    </div> *}
 
-                  
-                    
-                    {* <p>
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <label>24hr Date-Time:</label>
-                        <div class="input-group date" id="id_1">
-                        <input type="text" value="" class="form-control" required/>
-                        <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        </span>
-                        </div>
 
-                    </p> *}
                     
                   <span> {if isset($deadlineDateTime)}{$task->getDeadline()} {$task->getDeadline()} {/if} </span>
                     <div class="mb-3" >
@@ -130,6 +118,7 @@
                         id="datetimepicker1Input"
                         type="text"
                         class="form-control"
+                        name="deadline"
                         data-td-target="#datetimepicker1"
                         value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"
                       
