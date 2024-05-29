@@ -895,14 +895,6 @@ class TaskRouteHandler
         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>
         ";
 
-        // $extra_scripts = "
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/jquery.min.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/popper.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/bootstrap.min.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/moment-with-locales.min.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/bootstrap-datetimepicker.min.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/main.js\"></script>
-        // ";
 
         $task = $taskDao->getTask($task_id);
 
@@ -1003,9 +995,7 @@ class TaskRouteHandler
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
-                    print_r("date");
-                    print_r($date);
-    
+
 
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
