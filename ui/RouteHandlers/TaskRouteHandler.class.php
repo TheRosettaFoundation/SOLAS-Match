@@ -890,13 +890,10 @@ class TaskRouteHandler
         $deadlineError = "";
 
 
-        // $extra_scripts = "
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/moment-with-locales.min.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/main.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/main.js\"></script>
-        // ";
+        $extra_scripts = "
+       
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>
+        ";
 
         // $extra_scripts = "
         // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/jquery.min.js\"></script>
