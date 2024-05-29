@@ -22,7 +22,7 @@
 
             <div class="d-flex justify-content-between flex-wrap">
 
-               <div class="fw-bold primaryDark fs-3 text-break flex-grow-1 bg-primary">
+               <div class="fw-bold primaryDark fs-3 text-break  bg-primary">
 
                         <span class="d-none">
                     <!-- Parameters... -->
@@ -38,7 +38,7 @@
 
 
             {assign var="project_id" value=$project->getId()}
-             <div class="">
+             <div class="flex-grow-1">
                
                     <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
