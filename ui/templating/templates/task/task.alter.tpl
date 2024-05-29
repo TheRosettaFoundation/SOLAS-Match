@@ -84,24 +84,7 @@
                         <label for="impact" class="form-label"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
-                    
-                    {* <div class="mb-3">
-                        <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
-                        {if $deadline_error != ''}
-                            <div class="alert alert-error">
-                                {$deadline_error}
-                            </div>
-                        {/if}
-                        <p>
-                           
-                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
-                            <input type="hidden" name="deadline" id="deadline" />
-                        </p>
-                    </div> *}
 
-
-                    
-                  <span> {if isset($deadlineDateTime)}{$task->getDeadline()} {$task->getDeadline()} {/if} </span>
                     <div class="mb-3" >
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label for="datetimepicker1Input" class="form-label"
