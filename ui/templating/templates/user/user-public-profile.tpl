@@ -1489,7 +1489,7 @@ If a language is to be removed from this list, the community will be informed be
         <td style="width: 20%"><strong>Admin</strong></td>
         <td style="width: 20%"><strong>Official Name</strong></td>
         <td style="width: 20%"><strong>Billing Country</strong></td>
-        <td style="width: 40%"><strong>Google Drive Link</strong></td>
+        <td style="width: 40%"><strong>Google Drive Folder Link</strong></td>
     </tr>
     <tr valign="top">
         <td style="width: 20%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>

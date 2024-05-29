@@ -13033,6 +13033,7 @@ BEGIN
     LEFT JOIN Users                          u3 ON mp.owner_uid=u3.id
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
+        tp.processed>=0 AND
         pos.status IS NOT NULL AND
         (pos.status='Completed' OR pos.status='Approved') AND
         t.`task-status_id`=4
@@ -13077,6 +13078,7 @@ BEGIN
     LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
+        tp.processed>=0 AND
         pos.status IS NOT NULL AND
         (pos.status='Completed' OR pos.status='Approved') AND
         t.`task-status_id`=4
