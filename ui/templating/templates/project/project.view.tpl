@@ -22,7 +22,7 @@
 
             <div class="d-flex justify-content-between flex-wrap">
 
-               <div class="fw-bold primaryDark fs-3 text-break w-25 flex-shrink-1">
+               <div class="fw-bold primaryDark fs-3 text-break flex-grow-1 bg-primary">
 
                         <span class="d-none">
                     <!-- Parameters... -->
