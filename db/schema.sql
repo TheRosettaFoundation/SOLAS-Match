@@ -12988,6 +12988,7 @@ BEGIN
     SELECT
         tc.user_id,
         IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        lpi.google_drive_link,
         p.organisation_id,
         o.name,
         t.project_id,
