@@ -22,14 +22,14 @@
 
             <div class="d-flex justify-content-between flex-wrap">
 
-               <div class="fw-bold primaryDark fs-3 text-break  bg-primary">
+               <div class="fw-bold primaryDark fs-3 text-break flex-shrink-1 bg-primary me-4">
 
                         <span class="d-none">
                     <!-- Parameters... -->
                         <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
                     </span>
 
-                    <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+                    <span >
                      {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                     <small class="text-light">{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
                     </span>
@@ -38,7 +38,7 @@
 
 
             {assign var="project_id" value=$project->getId()}
-             <div class="flex-grow-1">
+             <div class="">
                
                     <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
