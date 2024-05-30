@@ -747,7 +747,7 @@
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
                                                 <a class="btn-grayish" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                      <i class="fa-regular fa-envelope fa-lg"></i>
+                                                      <i class="fa-solid fa-envelope fa-lg"></i>
                                                 </a>
                                                 </span>
                                             {else}
