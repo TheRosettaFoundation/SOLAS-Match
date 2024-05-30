@@ -88,8 +88,7 @@
                     <div class="mb-3" >
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label for="datetimepicker1Input" class="form-label"
-                      > Deadline : </label
-                    >
+                      > <strong> Deadline : </strong> </label>
                     <div
                       class="input-group"
                       id="datetimepicker1"
