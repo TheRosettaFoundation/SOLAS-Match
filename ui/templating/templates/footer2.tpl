@@ -282,6 +282,7 @@
 
 var dUTC = $("#deadlineField").val();
 const date = new Date(dUTC) ;
+const offset = date.getTimezoneOffset();
 
 const localDate = new Date(date.getTime() + offset * 60000);
 console.log(localDate)
