@@ -725,7 +725,7 @@
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                         <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                         <i class="fa-regular fa-xs fa-circle-check"></i>
+                                        <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
                                         </a>
                                         </span>
                                         <input type="hidden" name="publishedTask" value="0" />
