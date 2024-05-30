@@ -140,7 +140,7 @@
         <tbody class="fs-4">
 
             <tr>                
-                <td class="w-50">
+                <td class="w-50 border border-light-subtle">
                     <i>
                     {if $project->getImpact() != ''}
                         {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
@@ -152,7 +152,7 @@
 
           
               
-                <td class="w-50">
+                <td class="w-50 border border-light-subtle">
                     {foreach from=$project->getTag() item=tag}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
@@ -185,7 +185,7 @@
             <tbody class="fs-4">
             <tr>
                 <td class="w-50 d-flex">
-                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Contact Us</a>{/if}</div>
+                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
                 </td>
               
                 <td class="w-50 ">
