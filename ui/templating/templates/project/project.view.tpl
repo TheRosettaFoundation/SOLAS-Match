@@ -350,7 +350,7 @@
          
                 {if !empty($memsource_project)}
                 <div class="d-flex">
-                    <select name="task_options" id="task_options" class="form-select me-1">
+                    <select name="task_options" id="task_options" class="form-select me-1 text-muted">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
                         <option value="all_translation_tasks">Select all Translation Tasks</option>
@@ -719,13 +719,13 @@
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
-                                    <td class="align-middle">
+                                    <td>
                                     <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                         <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                        <i class="fa-solid fa-circle-check fa-lg"></i>
+                                        <i class="fa-regular fa-circle-check fa-lg"></i>
                                         </a>
                                         </span>
                                         <input type="hidden" name="publishedTask" value="0" />
@@ -740,7 +740,7 @@
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
                                     </td>
-                                    <td class="align-middle">
+                                    <td>
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
@@ -761,14 +761,14 @@
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
-                                    <td class="align-middle">
+                                    <td>
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
                                             <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
                                         </span>
                                     </td>
-                                    <td class="align-middle">
+                                    <td>
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
