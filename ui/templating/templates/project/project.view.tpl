@@ -140,7 +140,9 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
-                                         <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" /> {Localisation::getTranslation('project_view_untrack_project')}
+                                         {* <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" />  *}
+                                         <i class="fa-solid fa-ban"></i>
+                                         {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
                             {else}
