@@ -140,7 +140,7 @@
         <tbody class="fs-4">
 
             <tr>                
-                <td class="w-50 border border-light-subtle">
+                <td class="w-50 border border-light-subtle rounded me-2">
                     <i>
                     {if $project->getImpact() != ''}
                         {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
@@ -152,7 +152,7 @@
 
           
               
-                <td class="w-50 border border-light-subtle">
+                <td class="w-50 border border-light-subtle rounded">
                     {foreach from=$project->getTag() item=tag}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
@@ -268,14 +268,14 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
                              {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                         
                              {Localisation::getTranslation('common_publish')}
                         </a>
@@ -292,7 +292,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
                    
-                    <a class="btngray-sm " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
+                    <a class="btn-grayish " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
@@ -305,7 +305,7 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btngray opacity-50" disabled>
+                    <a href="#" class="btn-grayish opacity-50" disabled>
                        Yes
                     </a>
                    
@@ -323,7 +323,7 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
                              <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                 
@@ -353,7 +353,7 @@
                     {else}
                 
                         <input type="hidden" name="paid_status" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
                             <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Make Unpaid
                         </a>
                     
