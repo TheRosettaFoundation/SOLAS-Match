@@ -12919,6 +12919,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   status         INT DEFAULT 0,
   revoked        INT DEFAULT 0,
   invoice_date   DATETIME NOT NULL,
+  invoice_paid_date DATETIME,
   linguist_id    INT UNSIGNED NOT NULL,
   linguist_name  VARCHAR(256) NOT NULL,
   amount         FLOAT NOT NULL,
@@ -12927,6 +12928,31 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   KEY (linguist_id),
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_invoice`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT)
+BEGIN
+    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, amount) VALUES (stat, date, lID, lNAME, a);
+    SELECT LAST_INSERT_ID() AS id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_invoice_filename`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_filename`(IN number INT, IN name VARCHAR(255))
+BEGIN
+    UPDATE invoices SET filename=name WHERE invoice_number=number;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_invoice_processed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_processed`(IN tID BIGINT UNSIGNED, IN number INT)
+BEGIN
+    UPDATE TaskPaids SET invoice_number=number, processed=1 WHERE task_id=tID;
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_invoices`;
 DELIMITER //

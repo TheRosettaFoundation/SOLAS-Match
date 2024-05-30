@@ -303,6 +303,47 @@
     <hr />
 {/if}
 
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+  {if $roles & ($SITE_ADMIN)}
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <label for="generate_invoices"><h2>Generate Invoices (at end of month)</h2></label>
+                </td>
+            </tr>
+            {if isset($flash['generate_invoices_error'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_error'])}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['generate_invoices_success'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_success'])}</p>
+                    </td>
+                </tr>
+            {/if}
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="generate_invoices" value="1" id="generate_invoices">
+                        <i class="icon-star icon-white"></i>
+                        Generate Invoices
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+  {/if}
+  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>
+  <hr />
+{/if}
+
 {if $roles & ($SITE_ADMIN)}
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table>

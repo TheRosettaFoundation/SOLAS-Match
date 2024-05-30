@@ -369,6 +369,15 @@ class AdminRouteHandler
                 }
             }
 
+            if (($roles & (SITE_ADMIN)) && isset($post['generate_invoices'])) {
+                [$tasks, $invoices] = $taskDao->generate_invoices();
+                if ($invoices) {
+                    UserRouteHandler::flashNow('generate_invoices_success', "$tasks Tasks Invoiced in $invoices Invoices");
+                } else {
+                    UserRouteHandler::flashNow('generate_invoices_error', 'No Invoices Generated');
+                }
+            }
+
             if (($roles & SITE_ADMIN) && isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
