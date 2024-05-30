@@ -282,7 +282,9 @@
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
 		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
-		            					<img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> {Localisation::getTranslation('project_view_image_approve')}</a>
+		            					{* <img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> *}
+                                        <i class="fa-regular fa-circle-check fa-lg me-2"></i>
+                                         {Localisation::getTranslation('project_view_image_approve')}</a>
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				</form>
                              </div>
@@ -291,7 +293,7 @@
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
 		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
-                                        <i class="fa-regular fa-circle-check fa-lg me-2"></i>
+                                        <i class="fa-regular fa-circle-xmark fa-lg me-2"></i>
                                         {Localisation::getTranslation('project_view_image_disapprove')}</a>
                              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				 </form>
