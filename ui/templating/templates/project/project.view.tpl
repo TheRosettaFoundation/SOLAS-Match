@@ -725,7 +725,6 @@
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                         <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                        {* <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" > *}
                                         <i class="fa-regular fa-circle-check fa-lg"></i>
                                         </a>
                                         </span>
@@ -734,7 +733,6 @@
                                         <input type="hidden" name="publishedTask" value="1" />
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}">
                                         <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();"  >
-                                        {* <img src="{urlFor name='home'}ui/img/cancel.svg" alt="unpublish" > *}
                                         <i class="fa-regular fa-circle-xmark fa-lg"></i>
                                         </a>
                                         </span>
@@ -749,7 +747,6 @@
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
                                                 <a class="btn-grayish" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                      {* <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" > *}
                                                       <i class="fa-regular fa-envelope fa-lg"></i>
                                                 </a>
                                                 </span>
@@ -757,7 +754,6 @@
                                                 <input type="hidden" name="trackTask" value="1" />
                                                  <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
                                                 <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                     {* <img src="{urlFor name='home'}ui/img/cancel.svg" alt="track" > *}
                                                      <i class="fa-regular fa-circle-xmark fa-lg"></i>
                                                 </a>
                                                 </span>
@@ -768,7 +764,6 @@
                                     <td>
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
-                                            {* <img src="{urlFor name='home'}ui/img/project-edit.svg" alt="Edit" > *}
                                             <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
                                         </span>
@@ -781,12 +776,10 @@
                                                 <a class="btn-grayish" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
-                                                     {* <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" > *}
                                                      <i class="fa-solid fa-trash fa-lg"></i>
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
                                                 <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn-grayish" disabled >
-                                                     {* <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" > *}
                                                      <i class="fa-regular fa-circle-check fa-lg"></i>
                                                  </button> 
                                                 </div>
