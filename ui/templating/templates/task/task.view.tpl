@@ -271,7 +271,7 @@
                 <div class=" col-sm-12  col-md-4"> 
 
 
-                            <h4 class="fw-bold">{Localisation::getTranslation('users_also_viewed')}</h4>
+                            <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
 
                             {if ($alsoViewedTasksCount>0)}
                             <div class="row"></div>
