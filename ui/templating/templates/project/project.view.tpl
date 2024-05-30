@@ -350,7 +350,7 @@
          
                 {if !empty($memsource_project)}
                 <div class="d-flex">
-                    <select name="task_options" id="task_options" class="form-select me-2">
+                    <select name="task_options" id="task_options" class="form-select me-1">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
                         <option value="all_translation_tasks">Select all Translation Tasks</option>
@@ -547,7 +547,7 @@
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
-                        <select name="language_options[]" id="language_options" class="form-select me-2" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
+                        <select name="language_options[]" id="language_options" class="form-select me-1" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
                             <option value="">-- Choose --</option>
                             <option value="all_tasks_{$languageCountry|replace:',':'_'}">Select all Tasks</option>
                             <option value="all_translation_tasks_{$languageCountry|replace:',':'_'}">Select all Translation Tasks</option>
