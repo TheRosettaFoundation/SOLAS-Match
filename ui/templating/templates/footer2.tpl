@@ -279,17 +279,15 @@
 
 <script>
 
-// const userLocale = moment.locale();
-// const localDate = moment.utc(utcDate).local();
+
 
 var dUTC = $("#datetimepicker1Input").val();
 const date = new Date(dUTC) ;
-const offset = date.getTimezoneOffset();
-// Add the offset to the UTC date to get the local time
-const localDate = new Date(date.getTime() + offset * 60000);
-console.log(localDate.toString())
 
-var dUTC = $("#datetimepicker1Input").val(localDate.toString);
+const localDate = moment.utc(date).local();;
+console.log(localDate)
+
+var dUTC = $("#datetimepicker1Input").val(localDate);
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
@@ -309,7 +307,7 @@ document.getElementById('datetimepicker1'),
 
    localization:{
     format:'yyyy-MM-dd HH:mm:ss'
-   },
+   }
 }
 );
 console.log(datetimepicker1);
