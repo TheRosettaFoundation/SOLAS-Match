@@ -271,13 +271,14 @@
                 <div class=" col-sm-12  col-md-4"> 
 
 
-                            <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
+                            
                             {if ($alsoViewedTasksCount>0)}
                             <div class="row">
                                 <div>
                                     <div>
                                         {if isset($alsoViewedTasks)}
                                         <div>
+                                        <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
                                             <div >
                                                 {for $count=0 to $alsoViewedTasksCount-1}
                                                     {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
@@ -339,8 +340,10 @@
                            
 
                             {else}
-
-                                <div>No task currently viewed by the Users at the time</div>
+                                <div>
+                                <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
+                                <div >No task currently viewed by the Users at the time</div>
+                                </div>
 
                                   
                             {/if}
