@@ -312,7 +312,8 @@ document.getElementById('datetimepicker1'),
    }
 }
 );
-console.log(datetimepicker1);
+
+datetimepicker1.dates.setValue(localDate)
 
 </script>
              

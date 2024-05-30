@@ -96,7 +96,7 @@
                       data-td-target-input="nearest"
                       data-td-target-toggle="nearest"
                     >
-
+                      <input id="deadlineField" class="d-none" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" ></input>
                       <input
                         id="datetimepicker1Input"
                         type="text"
@@ -104,7 +104,6 @@
                         name="deadline"   
                         data-td-target="#datetimepicker1"
                         value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"
-                      
                       />
                       <span
                         class="input-group-text"
