@@ -87,8 +87,6 @@
 
                     <div class="mb-3" >
 
-                
-
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <label for="datetimepicker1Input" class="form-label"
                       > <strong> Deadline : </strong> </label>
@@ -100,10 +98,10 @@
                     >
 
                       <input
-                        id="deadline_field"
+                        id="datetimepicker1Input"
                         type="text"
                         class="form-control"
-                        name="deadline"
+                        name="deadline"   
                         data-td-target="#datetimepicker1"
                         value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}"
                       
