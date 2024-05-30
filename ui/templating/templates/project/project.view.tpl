@@ -719,13 +719,13 @@
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
-                                    <td class="d-flex justify-content-center">
+                                    <td class="align-middle">
                                     <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                         <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                        <i class="fa-regular fa-circle-check fa-lg"></i>
+                                        <i class="fa-solid fa-circle-check fa-lg"></i>
                                         </a>
                                         </span>
                                         <input type="hidden" name="publishedTask" value="0" />
@@ -733,14 +733,14 @@
                                         <input type="hidden" name="publishedTask" value="1" />
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}">
                                         <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();"  >
-                                        <i class="fa-regular fa-circle-xmark fa-lg"></i>
+                                        <i class="fa-solid fa-circle-xmark fa-lg"></i>
                                         </a>
                                         </span>
                                     {/if}
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
                                     </td>
-                                    <td class="d-flex justify-content-center">
+                                    <td class="align-middle">
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
@@ -761,14 +761,14 @@
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
-                                    <td class="d-flex justify-content-center">
+                                    <td class="align-middle">
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
                                             <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
                                         </span>
                                     </td>
-                                    <td class="d-flex justify-content-center">
+                                    <td class="align-middle">
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
