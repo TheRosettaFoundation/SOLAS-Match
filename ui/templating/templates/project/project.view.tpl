@@ -39,7 +39,7 @@
 
             {assign var="project_id" value=$project->getId()}
              <div class="col-md-6">
-                    <div class="d-flex justify-content-md-end">     
+                    <div class="d-flex justify-content-sm-end">     
 
                         <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
