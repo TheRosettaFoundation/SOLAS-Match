@@ -140,7 +140,6 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
-                                         {* <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" />  *}
                                          <i class="fa-solid fa-ban fa-lg"></i>
                                          {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
@@ -149,7 +148,6 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
-                                         {* <img src="{urlFor name='home'}ui/img/track.svg" alt="track" />  *}
                                          <i class="fa-solid fa-envelope fa-lg"></i>
                                          {Localisation::getTranslation('common_track_project')}
                                     </a>
@@ -293,7 +291,8 @@
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
 		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
-		            					<img src="{urlFor name='home'}ui/img/cancel.svg" class="disapprove" />{Localisation::getTranslation('project_view_image_disapprove')}</a>
+                                        <i class="fa-regular fa-circle-check fa-lg me-2"></i>
+                                        {Localisation::getTranslation('project_view_image_disapprove')}</a>
                              {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            				 </form>
 		                        {/if}
