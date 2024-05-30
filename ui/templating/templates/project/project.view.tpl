@@ -575,7 +575,7 @@
                                  <th>Paid?</th>
                                 {/if}
                                  <th>Cancelled?</th>
-                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>                  
+                                 <th>Published?</th>                  
                                  <th>{Localisation::getTranslation('common_publish')}</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
                                  <th>{Localisation::getTranslation('common_edit')}</th>
@@ -724,7 +724,7 @@
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
-                                        <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();" >
+                                        <a class="btn btn-sm btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
                                         <img src="{urlFor name='home'}ui/img/check.svg" alt="publish" >
                                         </a>
                                         </span>
