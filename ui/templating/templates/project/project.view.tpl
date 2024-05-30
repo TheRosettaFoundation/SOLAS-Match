@@ -341,7 +341,7 @@
     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
 
-        <div class="d-flex justify-content-between mt-4 flex-wrap">
+        <div class="d-flex justify-content-between mt-4 flex-wrap align-items-center">
 
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
@@ -542,7 +542,7 @@
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                      <div class="mt-4">
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <span class="me-4">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
