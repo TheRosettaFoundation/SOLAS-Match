@@ -140,7 +140,7 @@
         <tbody class="fs-4">
 
             <tr>                
-                <td class="w-50 border border-light-subtle rounded me-2">
+                <td class="w-50">
                     <i>
                     {if $project->getImpact() != ''}
                         {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
@@ -152,7 +152,7 @@
 
           
               
-                <td class="w-50 border border-light-subtle rounded">
+                <td class="w-50">
                     {foreach from=$project->getTag() item=tag}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
