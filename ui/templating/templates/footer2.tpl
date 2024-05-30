@@ -279,8 +279,8 @@
 
 <script>
 
-const userLocale = moment.locale();
-const localDate = moment.utc(utcDate).local();
+// const userLocale = moment.locale();
+// const localDate = moment.utc(utcDate).local();
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
@@ -297,8 +297,7 @@ document.getElementById('datetimepicker1'),
         seconds:true
     }
    },
-   defaultDate:localDate.format(),
-   
+
    localization:{
     format:'yyyy-MM-dd HH:mm:ss'
    },
