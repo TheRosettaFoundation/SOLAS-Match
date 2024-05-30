@@ -888,13 +888,7 @@ class TaskRouteHandler
 
         $word_count_err = null;
         $deadlineError = "";
-
-
-        $extra_scripts = "
-       
-        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>
-        ";
-
+        
 
         $task = $taskDao->getTask($task_id);
 
