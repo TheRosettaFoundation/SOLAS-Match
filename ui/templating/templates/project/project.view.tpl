@@ -548,7 +548,7 @@
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                      <div class="mt-4">
                 <div class="d-flex align-items-center">
-                    <span class="me-4">
+                    <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
                     <span>
