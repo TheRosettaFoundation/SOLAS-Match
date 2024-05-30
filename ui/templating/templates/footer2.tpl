@@ -282,6 +282,9 @@
 // const userLocale = moment.locale();
 // const localDate = moment.utc(utcDate).local();
 
+var dUTC = $("#datetimepicker1Input").val();
+console.log(dUTC)
+
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
 {
