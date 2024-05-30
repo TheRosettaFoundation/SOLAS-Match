@@ -282,14 +282,12 @@
 
 var dUTC = $("#deadlineField").val();
 const date = new Date(dUTC) ;
-const offset = date.getTimezoneOffset();
-// Add the offset to the UTC date to get the local time
+
 const localDate = new Date(date.getTime() + offset * 60000);
 console.log(localDate)
-const formatedDate = localDate.format("yyyy-MM-dd HH:mm:ss")
+const formatedDate = localDate.toISOString().replace('/T/',' ').substr(0, 19);
 console.log(formatedDate)
 
-var dUTC = $("#datetimepicker1Input").val(localDate);
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
