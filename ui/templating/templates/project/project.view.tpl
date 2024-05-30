@@ -750,13 +750,15 @@
                                                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
                                                 <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
                                                       <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
+                                                      {* <i class="fa-regular fa-circle-xmark fa-lg"></i> *}
                                                 </a>
                                                 </span>
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                  <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
                                                 <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                     <img src="{urlFor name='home'}ui/img/cancel.svg" alt="track" >
+                                                     {* <img src="{urlFor name='home'}ui/img/cancel.svg" alt="track" > *}
+                                                     <i class="fa-regular fa-circle-xmark fa-lg"></i>
                                                 </a>
                                                 </span>
                                             {/if}
