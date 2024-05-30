@@ -279,10 +279,8 @@
 
 <script>
 
-const userLocale = moment.locale();
-const localDate = moment.utc(utcDate).local();
 
-var dUTC = $("#datetimepicker1Input").val();
+var dUTC = $("#deadlineField").val();
 const date = new Date(dUTC) ;
 const offset = date.getTimezoneOffset();
 // Add the offset to the UTC date to get the local time
