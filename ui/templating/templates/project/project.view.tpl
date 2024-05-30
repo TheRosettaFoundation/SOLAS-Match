@@ -141,7 +141,7 @@
                                     <input type="hidden" name="trackProject" value="0" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          {* <img src="{urlFor name='home'}ui/img/no.svg" alt="cancel" />  *}
-                                         <i class="fa-solid fa-ban"></i>
+                                         <i class="fa-solid fa-ban fa-lg"></i>
                                          {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
                                 </p>
@@ -149,7 +149,9 @@
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
                                     <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
-                                         <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_project')}
+                                         {* <img src="{urlFor name='home'}ui/img/track.svg" alt="track" />  *}
+                                         <i class="fa-solid fa-envelope fa-lg"></i>
+                                         {Localisation::getTranslation('common_track_project')}
                                     </a>
                                 </p>
                             {/if}
