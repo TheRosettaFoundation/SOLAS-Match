@@ -340,7 +340,7 @@
                            
 
                             {else}
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex flex-column justify-content-end">
                                 <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
                                 <div >No task currently viewed by the Users at the time</div>
                                 </div>
