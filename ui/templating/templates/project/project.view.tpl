@@ -724,8 +724,8 @@
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
-                                        <a class="btn btn-sm btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                         <i class="fa-regular fa-circle check"></i>
+                                        <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
+                                         <i class="fa-regular fa-circle-check"></i>
                                         </a>
                                         </span>
                                         <input type="hidden" name="publishedTask" value="0" />
@@ -779,7 +779,7 @@
                                                      <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
-                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class=" btn btn-sm btn-grayish" disabled >
+                                                <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn-grayish" disabled >
                                                      <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" >
                                                  </button> 
                                                 </div>
