@@ -287,6 +287,7 @@ const date = new Date(dUTC) ;
 const offset = date.getTimezoneOffset();
 // Add the offset to the UTC date to get the local time
 const localDate = new Date(date.getTime() + offset * 60000);
+console.log(localDate)
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
