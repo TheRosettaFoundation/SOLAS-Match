@@ -38,30 +38,32 @@
 
 
             {assign var="project_id" value=$project->getId()}
-             <div class="col-md-6 d-flex justify-content-md-end">
-               
-                    <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
-                        <input type="hidden" name="copyChunks" value="1" />
-                        <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
-                            <i class="fa-upload fa-solid me-1"></i> Sync Phrase TMS
-                        </a>
-                        <a href="{$matecat_analyze_url}" class="btnPrimary text-white mt-2 mt-md-0 me-2 " target="_blank">
-                            {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
-                        </a>
-                    {/if}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
-                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
-                             Add Shell Tasks
-                        </a>
-                    {/if}
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
-                        <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
-                        </a> 
-                    {/if}
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
+             <div class="col-md-6">
+                    <div class="d-flex justify-content-md-end">     
+
+                        <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
+                            <input type="hidden" name="copyChunks" value="1" />
+                            <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
+                                <i class="fa-upload fa-solid me-1"></i> Sync Phrase TMS
+                            </a>
+                            <a href="{$matecat_analyze_url}" class="btnPrimary text-white mt-2 mt-md-0 me-2 " target="_blank">
+                                {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
+                            </a>
+                        {/if}
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
+                            <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
+                                Add Shell Tasks
+                            </a>
+                        {/if}
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                            <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
+                            <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
+                            </a> 
+                        {/if}
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                 </div>
                
                 
             </div>
