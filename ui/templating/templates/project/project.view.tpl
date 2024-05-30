@@ -748,9 +748,9 @@
                                             {if $taskMetaData[$task_id]['tracking']}
                                                 <input type="hidden" name="trackTask" value="0" />
                                                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_untrack_task')}" >
-                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
-                                                      <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" >
-                                                      {* <i class="fa-regular fa-circle-xmark fa-lg"></i> *}
+                                                <a class="btn-grayish" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                      {* <img src="{urlFor name='home'}ui/img/track-project.svg" alt="track" > *}
+                                                      <i class="fa-regular fa-envelope fa-lg"></i>
                                                 </a>
                                                 </span>
                                             {else}
@@ -768,11 +768,12 @@
                                     <td>
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
-                                            <img src="{urlFor name='home'}ui/img/project-edit.svg" alt="Edit" >
+                                            {* <img src="{urlFor name='home'}ui/img/project-edit.svg" alt="Edit" > *}
+                                            <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
@@ -780,18 +781,20 @@
                                                 <a class="btn-grayish" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
-                                                     <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
+                                                     {* <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" > *}
+                                                     <i class="fa-solid fa-trash fa-lg"></i>
                                                 </a> 
                                             {elseif $status_id == TaskStatusEnum::IN_PROGRESS || $status_id == TaskStatusEnum::CLAIMED}
                                                 <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_2')}">  <button style="pointer-events: none;" class="btn-grayish" disabled >
-                                                     <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" >
+                                                     {* <img src="{urlFor name='home'}ui/img/check.svg" alt="retrieve" > *}
+                                                     <i class="fa-regular fa-circle-check fa-lg"></i>
                                                  </button> 
                                                 </div>
                                             {else}
                                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
                                                
-                                                <a class="  btn btn-sm btn-grayish"
+                                                <a class="btn-grayish"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}"> <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="retrieve" > </a>
                                                    
