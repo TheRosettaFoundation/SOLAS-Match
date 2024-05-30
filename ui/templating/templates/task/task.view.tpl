@@ -340,7 +340,7 @@
 
                             {else}
 
-                                TEST
+                                <div>No task currently viewed by the Users at the time</div>
 
                                   
                             {/if}
