@@ -312,7 +312,7 @@ document.getElementById('datetimepicker1'),
 }
 );
 
-datetimepicker1.dates.setValue(formatedDate)
+
 
 </script>
              
