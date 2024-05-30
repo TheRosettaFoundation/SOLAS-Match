@@ -725,7 +725,7 @@
                                     {if $task->getPublished() == 1}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_unpublish')}">
                                         <a class=" btn-grayish" onclick="$('#publishedForm{$task_id}').submit();" >
-                                         <i class="fa-regular fa-circle-check"></i>
+                                         <i class="fa-regular fa-xs fa-circle-check"></i>
                                         </a>
                                         </span>
                                         <input type="hidden" name="publishedTask" value="0" />
@@ -773,7 +773,7 @@
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
                                                 <input type="hidden" name="deleteTask" value="Delete" />
-                                                <a class=" btn btn-sm btn-grayish" 
+                                                <a class="btn-grayish" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_1')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_delete')}" >
                                                      <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="archive" >
