@@ -309,7 +309,6 @@ document.getElementById('datetimepicker1'),
    localization:{
     format:'yyyy-MM-dd HH:mm:ss'
    },
-   defaultDate:localDate
 }
 );
 console.log(datetimepicker1);
