@@ -297,11 +297,12 @@ document.getElementById('datetimepicker1'),
         seconds:true
     }
    },
-   defaultDate:localDate.format()
+   defaultDate:localDate.format(),
+   
    localization:{
     format:'yyyy-MM-dd HH:mm:ss'
    },
-   minDate:date
+  
 }
 );
 console.log(datetimepicker1);
