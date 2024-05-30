@@ -375,7 +375,7 @@
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1  text-body fs-6 text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
-                    <i class="fa-check fa-solid me-2"></i> Publish Selected Tasks
+                    <i class="fa-check fa-regular me-2"></i> Publish Selected Tasks
                 </a>
                 <input type="hidden" name="publish_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -733,7 +733,7 @@
                                         <input type="hidden" name="publishedTask" value="1" />
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{Localisation::getTranslation('common_publish')}">
                                         <a class="btngray" onclick="$('#publishedForm{$task_id}').submit();"  >
-                                        <i class="fa-solid fa-circle-xmark fa-lg"></i>
+                                        <i class="fa-regular fa-circle-xmark fa-lg"></i>
                                         </a>
                                         </span>
                                     {/if}
