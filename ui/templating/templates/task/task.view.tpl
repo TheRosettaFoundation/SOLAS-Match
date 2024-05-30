@@ -332,16 +332,16 @@
                                                 {/for}
                                             </div>
                                         </div>
+
+                                    { else }
+                                    <div class="fw-bold">Users also viewed</div>
+                                    <div class="mt-5">
+                                        No task currently viewed by Users at the moment.
+                                    </div>
                                         {/if}
                                         
                                     </div>
 
-                            { else }
-                            <div class="fw-bold">Users also viewed</div>
-                            <div class="mt-5">
-                            No task currently viewed by Users at the moment.
-                            
-                            </div>
                                   
                             {/if}
            
