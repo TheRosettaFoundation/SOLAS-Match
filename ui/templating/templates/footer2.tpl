@@ -291,7 +291,7 @@ const date = new Date(dUTC) ;
 // console.log(localDate)
 
 
-dayjs.extend(utc)
+
 const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
 
 
