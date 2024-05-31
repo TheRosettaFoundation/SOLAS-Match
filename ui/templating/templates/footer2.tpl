@@ -285,8 +285,8 @@
 var dUTC = $("#datetimepicker1Input").val();
 const date = new Date(dUTC) ;
 
-const dayjs = window.dayjs();
-console.log(dayjs)
+const dayjs = window.dayjs;
+dayjs.extend(window.dayjs_plugin_utc)
 
 
 
