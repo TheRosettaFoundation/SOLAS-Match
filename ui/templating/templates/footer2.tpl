@@ -292,10 +292,14 @@ const date = new Date(dUTC) ;
 
 const test = dayjs(date).format('YYYY-MM-DD HH:mm:ss').toString() ;
 console.log(test);
+let dom = document.getElementById('datetimepicker1'),
+
+console.log(dom)
+
 
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
-test,
+document.getElementById('datetimepicker1'),
 {
    //put your config here
    display:{
