@@ -284,12 +284,9 @@
 
 var dUTC = $("#datetimepicker1Input").val();
 const date = new Date(dUTC) ;
-// const offset = date.getTimezoneOffset();
-// Add the offset to the UTC date to get the local time
-// const localDate = new Date(date.getTime() + offset * 60000);
-// const localDate = moment.(utcDate).local();
-// console.log(localDate)
+const dayjs = window.dayjs ;
 
+console.log(dayjs)
 
 
 const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
