@@ -290,8 +290,13 @@ const date = new Date(dUTC) ;
 // const localDate = moment.(utcDate).local();
 // console.log(localDate)
 
-const test = dayjs(date).format('YYYY-MM-DD HH:mm:ss').toString() ;
+const test = dayjs(date).format('YYYY-MM-DD HH:mm:ss') ;
+
+cost local = test.dayjs.local()
+
 console.log(test);
+console.log(local);
+
 let dom = document.getElementById('datetimepicker1'),
 
 console.log(dom)
