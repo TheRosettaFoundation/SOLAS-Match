@@ -63,7 +63,9 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script> 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script> 
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/dayjs.min.js"></script> 
+        
+        
         
    
 <!-- Global site tag (gtag.js) - Google Analytics -->

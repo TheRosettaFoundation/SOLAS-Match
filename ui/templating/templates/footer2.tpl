@@ -290,6 +290,9 @@ const date = new Date(dUTC) ;
 const localDate = moment.(utcDate).local();
 console.log(localDate)
 
+const test = dayjs().format()  ;
+console.log(test);
+
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
