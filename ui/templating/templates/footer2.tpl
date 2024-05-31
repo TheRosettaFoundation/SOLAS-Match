@@ -292,7 +292,7 @@ const date = new Date(dUTC) ;
 
 const test = dayjs(date).format('YYYY-MM-DD HH:mm:ss') ;
 
-cost local = test.dayjs.local()
+cost local = test.local()
 
 console.log(test);
 console.log(local);
