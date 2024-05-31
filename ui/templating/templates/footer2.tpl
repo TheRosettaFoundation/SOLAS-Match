@@ -296,7 +296,7 @@ console.log(test);
 
 let domi = document.getElementById('datetimepicker1'),
 
-console.log(domi)
+console.log(domi);
 
 
 
