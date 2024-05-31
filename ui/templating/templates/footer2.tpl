@@ -294,7 +294,7 @@ const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss').toString() ;
 
 console.log(test);
 
-let domi = document.getElementById('datetimepicker1'),
+let domi = document.getElementById('datetimepicker1');
 
 console.log(domi);
 
