@@ -290,6 +290,8 @@ const date = new Date(dUTC) ;
 // const localDate = moment.(utcDate).local();
 // console.log(localDate)
 
+
+dayjs.extend(utc)
 const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
 
 
