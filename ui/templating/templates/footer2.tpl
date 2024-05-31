@@ -292,7 +292,7 @@ console.log(dayjs)
 
 // const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
 
-console.log(test);
+// console.log(test);
 
 // let dom = document.getElementById('datetimepicker1'),
 
