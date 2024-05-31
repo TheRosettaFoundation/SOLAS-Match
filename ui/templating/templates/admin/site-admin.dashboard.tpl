@@ -309,7 +309,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <label for="generate_invoices"><h2>Generate Invoices (normally for a month)</h2></label>
+                    <label for="generate_invoices"><h2>Generate Invoices (normally for month)</h2></label>
                 </td>
             </tr>
             {if isset($flash['generate_invoices_error'])}
