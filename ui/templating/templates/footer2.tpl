@@ -295,7 +295,7 @@ console.log(test);
 
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
-document.getElementById('datetimepicker1'),
+test,
 {
    //put your config here
    display:{
