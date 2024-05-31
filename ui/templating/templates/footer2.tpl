@@ -296,6 +296,11 @@ let domi = document.getElementById('datetimepicker1');
 
 console.log(domi);
 
+var a = dayjs.utc();
+a.format()
+a.local().format()
+
+console.log(a)
 
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
