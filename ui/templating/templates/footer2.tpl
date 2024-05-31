@@ -290,13 +290,13 @@ dayjs.extend(window.dayjs_plugin_utc)
 
 
 
-const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
+const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss').toString() ;
 
 console.log(test);
 
-// let dom = document.getElementById('datetimepicker1'),
+let dom = document.getElementById('datetimepicker1'),
 
-// console.log(dom)
+console.log(dom)
 
 
 
