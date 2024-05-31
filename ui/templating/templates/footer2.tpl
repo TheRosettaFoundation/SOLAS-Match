@@ -285,11 +285,12 @@
 var dUTC = $("#datetimepicker1Input").val();
 const date = new Date(dUTC) ;
 const dayjs = window.dayjs ;
+const test = date.local() ;
 
 console.log(dayjs)
 
 
-const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
+// const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss') ;
 
 
 
