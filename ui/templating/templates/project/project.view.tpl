@@ -22,7 +22,7 @@
 
             <div class="row">
 
-               <div class="fw-bold primaryDark fs-3  col-md-6 text-break text-wrap">
+               <div class="fw-bold primaryDark fs-3  col-md-5 text-break text-wrap">
 
                         <span class="d-none">
                     <!-- Parameters... -->
@@ -38,7 +38,7 @@
 
 
             {assign var="project_id" value=$project->getId()}
-             <div class="col-md-6">
+             <div class="col-md-7">
                     <div class="d-flex justify-content-sm-end">     
 
                         <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
