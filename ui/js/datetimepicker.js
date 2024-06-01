@@ -1,5 +1,6 @@
 var dUTC = $("#deadline_field").val();
 const date = new Date(dUTC);
+console.log(date);
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
 
@@ -8,6 +9,8 @@ const test = dayjs(date)
     .local()
     .format("YYYY-MM-DD HH:mm:ss")
     .toString();
+
+console.log(test);
 
 let domi = document.getElementById("datetimepicker1Input");
 
