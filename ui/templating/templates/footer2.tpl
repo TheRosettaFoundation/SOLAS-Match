@@ -282,7 +282,7 @@
 // const userLocale = moment.locale();
 // const localDate = moment.utc(utcDate).local();
 
-var dUTC = $("#deadlineField").val();
+var dUTC = $("#deadlineField").textContent;
 const date = new Date(dUTC) ;
 
 const dayjs = window.dayjs;
