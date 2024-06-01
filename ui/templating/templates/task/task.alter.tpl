@@ -87,32 +87,33 @@
 
                     <div class="mb-3" >
 
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <label for="datetimepicker1Input" class="form-label"
-                      > <strong> Deadline : </strong> </label>
+                    <span id="deadlineField" class="d-none">{assign var="deadlineDateTime" value=$task->getDeadline()}</span>
+
+                    
+                    <label for="datetimepicker1Input" class="form-label">Deadline</label>
                     <div
-                      class="input-group"
+                      class="input-group log-event"
                       id="datetimepicker1"
                       data-td-target-input="nearest"
                       data-td-target-toggle="nearest"
                     >
-                      <input id="deadlineField" class="d-none" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" ></input>
                       <input
                         id="datetimepicker1Input"
                         type="text"
                         class="form-control"
-                        name="deadline"   
                         data-td-target="#datetimepicker1"
-                        value=""
                       />
                       <span
                         class="input-group-text"
                         data-td-target="#datetimepicker1"
                         data-td-toggle="datetimepicker"
                       >
-                        <span class="fa-solid fa-calendar"></span>
+                        <i class="fas fa-calendar"></i>
                       </span>
                     </div>
+                  </div>
+                    
+                 
                   </div>
 
                   
