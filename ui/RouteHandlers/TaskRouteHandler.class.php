@@ -997,8 +997,8 @@ class TaskRouteHandler
 
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s A", $validTime);
-
+                    $date = date("Y-m-d H:i:s A ", $validTime);
+                    print_r(date);
 
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
@@ -1065,7 +1065,7 @@ class TaskRouteHandler
                     if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);
                     else                                  $taskDao->insert_task_url($task_id, $url);
                 }
-                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
+                //  return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("task-view", array("task_id" => $task_id)));
               }
           }
         }
