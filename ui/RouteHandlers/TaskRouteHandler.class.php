@@ -1001,6 +1001,9 @@ class TaskRouteHandler
 
                     // print_r($date);
 
+                    $task_test = $task->setDeadline($date);
+                    // print_r($task_test);
+
 
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
