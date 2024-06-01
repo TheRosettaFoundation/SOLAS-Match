@@ -87,9 +87,11 @@
 
                     <div class="mb-3" >
 
-
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input id="deadlineField" class="d-none"  value={deadlineDateTime} />
+                <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                <input type="hidden" name="deadline" id="deadline" />
+
+
                     <label for="datetimepicker1Input" class="form-label">Deadline</label>
                     <div
                       class="input-group log-event"
