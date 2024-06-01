@@ -288,7 +288,7 @@ const date = new Date(dUTC) ;
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc)
 
-const test = dayjs(date).utc('z').local().format('YYYY-MM-DD HH:mm:ss') ;
+const test = dayjs(date).utc('z').local().format('YYYY-MM-DD HH:mm:ss').toString() ;
 
 console.log(test);
 
