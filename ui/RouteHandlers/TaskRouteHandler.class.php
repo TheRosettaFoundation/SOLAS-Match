@@ -1444,7 +1444,7 @@ class TaskRouteHandler
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_price /= 60;
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
 
-
+        print_r($deadline_timestamps);
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
