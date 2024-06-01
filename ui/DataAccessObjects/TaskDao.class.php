@@ -1070,7 +1070,7 @@ error_log("createTaskDirectly: $args");
 
     public function generate_invoices()
     {
-        $statsDao = new DAO\StatisticsDao();
+        $statsDao = new StatisticsDao();
 
         $sow_reports = $statsDao->sow_report();
 
