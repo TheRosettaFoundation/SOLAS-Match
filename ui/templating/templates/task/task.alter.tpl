@@ -300,7 +300,7 @@
                 <div class="ms-4">
                    
                     <p>
-                        <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary text-white">
+                        <button type="submit"  value="Submit" name="submit" class="btn btn-primary text-white">
                             <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
                         </button>
                     </p>    
