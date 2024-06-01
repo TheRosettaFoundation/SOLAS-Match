@@ -898,8 +898,7 @@ class TaskRouteHandler
         $extra_scripts = "
          <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
          <script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepicker.js\" defer ></script>
-         // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>";     
-         ";
+              ";
 
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
@@ -1442,8 +1441,7 @@ class TaskRouteHandler
         if (!empty($paid_status) && $task->getWordCount() > 1) $total_expected_price = $task->get_word_count_partner_weighted()*$paid_status['unit_rate_pricing'];
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_price /= 60;
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
-        print_r($task);
-        $template_data = array_merge($template_data, array(
+        print_r($task);        $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
                 "extra_scripts" => $extra_scripts,
