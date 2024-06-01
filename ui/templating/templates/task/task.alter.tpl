@@ -104,6 +104,7 @@
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker1"
+                        name="deadline"
                       />
                       <span
                         class="input-group-text"
