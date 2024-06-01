@@ -317,6 +317,9 @@ document.getElementById('datetimepicker1'),
    },
 }
 );
+
+datetimepicker1.dates.setValue(tempusDominus.DateTime.convert(test));
+
 console.log(datetimepicker1);
 
 </script>
