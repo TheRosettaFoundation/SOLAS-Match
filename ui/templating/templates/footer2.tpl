@@ -297,7 +297,7 @@ let domi = document.getElementById('datetimepicker1Input');
 domi.setAttribute("value",test)
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
-document.getElementById('datetimepicker1Input'),
+document.getElementById('datetimepicker1'),
 {
    //put your config here
    display:{
