@@ -4,7 +4,7 @@ console.log(date);
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
 
-const test = dayjs(date)
+const test = dayjs(dUTC)
     .utc("z")
     .local()
     .format("YYYY-MM-DD HH:mm:ss")
