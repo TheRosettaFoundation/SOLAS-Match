@@ -288,23 +288,16 @@ const date = new Date(dUTC) ;
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc)
 
-const test = dayjs(date).utc('z').local().format('YYYY-MM-DD HH:mm:ss').toString() ;
+const test = dayjs(date).local().format('YYYY-MM-DD HH:mm:ss').toString() ;
 
 console.log(test);
 
-let domi = document.getElementById('datetimepicker1');
+let domi = document.getElementById('datetimepicker1Input');
 
-console.log(domi);
-
-var a = dayjs.utc();
-a.format()
-a.local().format()
-
-console.log(a)
-
+domi.setAttribute("value",test)
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
-document.getElementById('datetimepicker1'),
+document.getElementById('datetimepicker1Input'),
 {
    //put your config here
    display:{
