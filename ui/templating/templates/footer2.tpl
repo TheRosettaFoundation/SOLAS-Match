@@ -318,12 +318,14 @@ document.getElementById('datetimepicker1'),
 }
 );
 
-datetimepicker1.viewDate = test ;
-
-
+console.log(datetimepicker1.viewDate)
 
 
 console.log(datetimepicker1);
+
+
+
+
 
 </script>
              
