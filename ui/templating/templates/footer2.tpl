@@ -283,7 +283,7 @@
 // const localDate = moment.utc(utcDate).local();
 
 var dUTC = $("#deadline_field").val();
-console.log(dUTC);
+
 const date = new Date(dUTC) ;
 
 const dayjs = window.dayjs;
@@ -295,7 +295,7 @@ console.log(test);
 
 let domi = document.getElementById('datetimepicker1Input');
 
-// domi.setAttribute("value",test)
+domi.setAttribute("value",test)
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
 document.getElementById('datetimepicker1'),
