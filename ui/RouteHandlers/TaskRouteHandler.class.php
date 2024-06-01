@@ -1004,6 +1004,9 @@ class TaskRouteHandler
 
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
+                    $task_test = $task->setDeadline($date);
+                    print_r($task_test);
+
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                         $userDao = new DAO\UserDao();
                         $userDao->set_dateDue_in_memsource($task, $memsource_task, $date);
