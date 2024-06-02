@@ -59,7 +59,7 @@
             <td>{$task['filename']}</td>
             <td>{if !is_null($task['status']) && $task['status']&2}Paid{/if}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
-            <td>{if !empty($task['invoice_date'])}{substr($task['invoice_date'], 0, 10)}{else}None{/if}</td>
+            <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
         </tr>
         {/foreach}
     </tbody>
