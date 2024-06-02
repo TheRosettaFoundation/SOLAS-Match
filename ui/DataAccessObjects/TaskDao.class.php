@@ -881,8 +881,11 @@ error_log("createTaskDirectly: $args");
         $ids = [];
         foreach ($completed_paid_tasks as $task) {
             if ($task['payment_status'] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
-                if ($task['word-count']*$task['unit_rate'] < 600) $status = 'Ready for payment';
-                else                                              $status = 'Pending documentation';
+                $total_expected_cost = $task['word-count']*$task['unit_rate'];
+                if ($task['divide_rate_by_60']) $total_expected_cost /= 60;
+error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $task['divide_rate_by_60']);
+                if ($total_expected_cost < 600) $status = 'Ready for payment';
+                else                            $status = 'Pending documentation';
                 error_log('Task: ' . $task['id'] . ', PO: ' . $task['purchase_order'] . " Changed to $status");
                 LibAPI\PDOWrapper::call('update_paid_status_status', LibAPI\PDOWrapper::cleanse($task['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($status));
                 $ids[] = $task['id'];
