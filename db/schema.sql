@@ -13035,6 +13035,7 @@ BEGIN
         tcd.complete_date,
         tp.processed,
         i.status,
+        i.invoice_date,
         tp.invoice_number,
         tp.payment_status
     FROM TaskPaids                           tp
