@@ -1085,7 +1085,6 @@ error_log("createTaskDirectly: $args");
                 $tasks++;
             }
         }
-error_log(print_r($invoices, 1));
 
         $invoice_date = date('Y-m-d H:i:s');
         foreach ($invoices as $invoice) {
