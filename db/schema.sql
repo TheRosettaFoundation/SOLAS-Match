@@ -11202,8 +11202,9 @@ DROP PROCEDURE IF EXISTS `get_completed_paid_tasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_completed_paid_tasks`()
 BEGIN
-    SELECT t.id, t.`word-count`, t.project_id, tp.purchase_order, tp.payment_status, tp.unit_rate, tc.user_id
+    SELECT t.id, t.`word-count`, t.project_id, tp.purchase_order, tp.payment_status, tp.unit_rate, tc.user_id, ttd.divide_rate_by_60
     FROM Tasks t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN TaskPaids  tp ON t.id=tp.task_id
     JOIN TaskClaims tc ON t.id=tc.task_id
     WHERE t.`task-status_id`=4;
