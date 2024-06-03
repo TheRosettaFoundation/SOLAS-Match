@@ -13,7 +13,11 @@ let parsedT = dayjs.utc(date);
 
 console.log(parsedT);
 
-const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
+const test = dayjs(dUTC)
+    .utc(true)
+    .local()
+    .format("YYYY-MM-DD HH:mm:ss")
+    .toString();
 
 console.log(test);
 
