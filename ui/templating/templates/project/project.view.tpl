@@ -580,8 +580,8 @@
                                  <th>Paid?</th>
                                 {/if}
                                  <th>Cancelled?</th>
-                                 <th>Published?</th>                  
-                                 <th>{Localisation::getTranslation('common_publish')}</th>
+                                 <th>Published</th>                  
+                                 <th>{Localisation::getTranslation('common_publish')}?</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
                                  <th>{Localisation::getTranslation('common_edit')}</th>
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
@@ -704,7 +704,7 @@
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                          <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                    
-                                            <a class=" btngray cancel"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
+                                            <a class=" btn-grayish cancel"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                             Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
