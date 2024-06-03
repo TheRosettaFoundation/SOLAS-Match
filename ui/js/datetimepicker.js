@@ -10,8 +10,10 @@ var parsed = dayjs(dUTC);
 
 console.log(parsed);
 let parsedT = dayjs.utc(date);
+let local = parsedT.local();
 
 console.log(parsedT);
+console.log(local);
 
 const test = dayjs(dUTC)
     .utc(true)
