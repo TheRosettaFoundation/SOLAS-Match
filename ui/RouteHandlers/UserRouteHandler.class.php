@@ -3380,8 +3380,10 @@ EOF;
        
         $userDao = new DAO\UserDao();
         // print_r($args['invoice_number']);
-        $invoice = $userDao->getInvoice($args['invoice_number']);
-         print_r($invoice['0']);
+        $invoice = $userDao->getInvoice($args['invoice_number'])['0'];
+        $name = $invoice['linguist_name'];
+        $purchase_order = $invoice['purchase_order'];
+
     
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -3417,6 +3419,10 @@ EOF;
 
 $html = <<<EOF
         <style>
+        d-flex {
+            display:flex;
+            justify-content:space-between;
+        }
         div.test {
             color: #000000;
             font-size: 13pt;
@@ -3440,10 +3446,10 @@ $html = <<<EOF
         </style>
         <main class="h-100 p-4">
         <div class="mt-2"> <img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></div>
-        <div class="mt-3 d-flex">
+        <div class="d-flex">
             <div>
                 <div>From</div>
-                <div class="fw-bold">Recipient Name</div>
+                <div class="fw-bold">$name</div>
                 <div>Email Address</div>
                 <div>Country of Residence</div>
             </div>
