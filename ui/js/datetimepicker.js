@@ -17,11 +17,7 @@ console.log(local);
 const utcFrom = local.utc();
 console.log(utcFrom);
 
-const test = dayjs(dUTC)
-    .utc(true)
-    .local()
-    .format("YYYY-MM-DD HH:mm:ss")
-    .toString();
+const test = dayjs(dUTC).utc(true).local().format("YYYY-MM-DD HH:mm:ss");
 
 console.log(test);
 
