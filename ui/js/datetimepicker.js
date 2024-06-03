@@ -79,4 +79,5 @@ document
         console.log(local.format());
         console.log(utcTime.format("YYYY-MM-DD HH:mm:ss"));
         deadline.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
+        console.log(deadline);
     });
