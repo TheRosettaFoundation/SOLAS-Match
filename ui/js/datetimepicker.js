@@ -37,9 +37,9 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
     }
 );
 
-const sub = datetimepicker1.subscribe(
-    tempusdominus.Namespace.events.change,
-    (e) => {
+document
+    .getElementById("datetimepicker1Input")
+    .addEventListener("change", (e) => {
         console.log(e.target.value);
-    }
-);
+        console.log(dUTC);
+    });
