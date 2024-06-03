@@ -39,10 +39,7 @@ console.log("Parsed UTC time:", parsedUTC.format());
 
 // Convert the parsed UTC time to local time
 let localTime = parsedUTC.local();
-console.log(
-    "Converted to local time:",
-    localTime.format("yyyy-MM-dd HH:mm:ss")
-);
+console.log("Converted to local time:", localTime.format());
 
 let domi = document.getElementById("datetimepicker1Input");
 
