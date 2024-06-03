@@ -1,4 +1,5 @@
 var dUTC = $("#deadline_field").val();
+console.log(dUTC);
 
 console.log(dUTC);
 
@@ -15,7 +16,7 @@ console.log(utcT);
 
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value", test);
+domi.setAttribute("value", utcT);
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
