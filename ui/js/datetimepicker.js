@@ -73,7 +73,7 @@ document
     .addEventListener("change", (e) => {
         console.log(e.target.value);
         let local = dayjs.local(e.target.value);
-        let utc = local.utc();
+        let utc = dayjs.utc(local);
         console.log(local);
         console.log(utc);
     });
