@@ -1,5 +1,5 @@
 var dUTC = $("#deadline_field").val();
-var date = new Date(dUTC);
+var date = new Date(dUTC).toUTCString();
 
 console.log(dUTC);
 
