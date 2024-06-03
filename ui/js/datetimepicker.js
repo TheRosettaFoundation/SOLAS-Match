@@ -5,11 +5,13 @@ console.log(dUTC);
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
 dayjs.extend(window.dayjs_plugin_timezone);
-const dateUTCL = dayjs.local(dUTC);
 
-const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
+let utcTime = new Date(dUTC);
+const format = "yyyy-MM-dd HH:mm:ss";
 
-console.log(test);
+const utcT = utcTime.endsWith("Z") ? dayjs.utc(utcTime) : dayjs(utcTime);
+
+console.log(utcT);
 
 let domi = document.getElementById("datetimepicker1Input");
 
