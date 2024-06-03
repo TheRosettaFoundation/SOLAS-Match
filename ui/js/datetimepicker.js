@@ -5,6 +5,10 @@ console.log(dUTC);
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
 
+var parsed = dayjs(dUTC);
+
+console.log(parsed);
+
 const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
 
 console.log(test);
