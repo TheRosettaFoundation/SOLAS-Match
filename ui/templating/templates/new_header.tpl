@@ -3,9 +3,6 @@
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
-<!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
-
-        <!-- css -->
         <title>{Settings::get('site.title')}</title>
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
@@ -24,115 +21,66 @@
         <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
         <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
 
-        
-        
-        
-        <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css">
-      
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-      
-    
-        
-        
-		
-        
-        
+        <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css"> 
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
-        <!-- 
-        <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="apple-touch-icon" sizes="180x180" href="{urlFor name="home"}ui/img/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{urlFor name="home"}ui/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{urlFor name="home"}ui/img/favicon/favicon-16x16.png">
-        <link rel="manifest" href="{urlFor name="home"}ui/img/favicon/site.webmanifest"> 
-        -->
 		
-        <!-- extra styles-->
         {if isset($extra_styles)}
             {$extra_styles}
         {/if}
-
-        <!-- style overrides-->
-        
-
         {if isset($platformJS)}
             {$platformJS}
         {/if}
-        <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/dayjs.min.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/plugin/utc.js"></script>
    
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
-
-
-
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', 'G-3Z3VNH71D6');
-
-         
 </script>
-
-
-
 <script>
             var task_types = [0,
             {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                 {$ui['type_enum']},
             {/foreach}
             ]; 
-
-
-
             var source_and_target = [0,
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     {$ui['source_and_target']},
                 {/foreach}
             ];
-            
-       
-    
-
             var colours = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['colour']}",
                 {/foreach}
             ];
-
-
             var unit_count_text_shorts = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['unit_count_text_short']}",
                 {/foreach}
             ];
-
              var type_texts = ["",
                 {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     "{$ui['type_text']}",
                 {/foreach}
             ];
-        
-        
 </script>
-
-
-
-
-
-
-        <!-- extra Scripts -->
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
-       
-
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
-     
-     
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/js/tempus-dominus.js"></script>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.7.16/dist/css/tempus-dominus.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </head>
 
         <body  class="flex-grow-1">
@@ -140,13 +88,11 @@
       
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
-       
 
                  <a class="navbar-brand" href={urlFor name='home'}> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
-        
            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-md-flex align-items-center justify-content-around w-100">
@@ -162,15 +108,13 @@
                                  <a href="{urlFor name="org-dashboard"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_dashboard')}</a>
                              </li>
                 {/if}
-                
-            
+
                 {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item fw-bold" >
                         <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-5 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
                 {/if} 
-
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
@@ -211,12 +155,9 @@
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-5 nav-link fw-bold">Learn. Center</a>
                             </li>
                         {/if}
-            
-
             </ul>
 
              <ul class="navbar-nav d-flex align-items-center">
-
                         {if isset($user)}
                         {assign var="user_id" value=$user->getId()}
                               <li class="nav_item me-2" id="theme">
@@ -225,7 +166,6 @@
                                <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
                             </li>
                             <li class="profile nav-item">
-
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
@@ -234,9 +174,7 @@
                             <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
-                          
                         {else}
-                          
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
@@ -245,7 +183,6 @@
                                 <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
-                        
                     </ul>
             </div>
             </div>
@@ -253,23 +190,13 @@
         </nav>
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) ))}
 		    <div id="banner-container" class="container">
-		   
 		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
 			    <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing" >
 			    	<div id="banner-mid">
               <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
 			    	</div>
                 </a>
-			 
-		  
 		    </div>
             </div>
 		{/if}
         <main class="flex-grow-1">
-
-
-   
-    
-    
-
-    

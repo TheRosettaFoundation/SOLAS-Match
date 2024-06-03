@@ -185,7 +185,7 @@
             <tbody class="fs-4">
             <tr>
                 <td class="w-50 d-flex">
-                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Contact Us</a>{/if}</div>
+                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
                 </td>
               
                 <td class="w-50 ">
@@ -268,14 +268,14 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     {if $task->getPublished() == 1}
                         <input type="hidden" name="published" value="0" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
                             <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
                              {Localisation::getTranslation('common_unpublish')}
                         </a>
                    
                     {else}
                         <input type="hidden" name="published" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray-sm">
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
                         
                              {Localisation::getTranslation('common_publish')}
                         </a>
@@ -292,7 +292,7 @@
                     <input type="hidden" name="task_id" value="{$task_id}" />
                     <input type="hidden" name="complete_task" value="1" />
                    
-                    <a class="btngray-sm " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
+                    <a class="btn-grayish " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
                         
                          <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
 
@@ -305,7 +305,7 @@
             <td>
                 {if $task->get_cancelled()}
                    
-                    <a href="#" class="btngray opacity-50" disabled>
+                    <a href="#" class="btn-grayish opacity-50" disabled>
                        Yes
                     </a>
                    
@@ -323,15 +323,15 @@
                     {if $taskMetaData[$task_id]['tracking']}
                         <input type="hidden" name="track" value="Ignore" />
                      
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                 
                     {else}
                         <input type="hidden" name="track" value="Track" />
                      
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                            <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
+                        <i class="fa-solid fa-envelope fa-lg"></i> {Localisation::getTranslation('common_track_task')}
                         </a>
                  
                     {/if}
@@ -346,15 +346,15 @@
                     
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                             <img src="{urlFor name='home'}ui/img/check.svg" alt="ok_icon" /> Make Paid
+                        <i class="fa-regular fa-circle-check fa-lg"></i> Make Paid
                         </a>
                    
                         
                     {else}
                 
                         <input type="hidden" name="paid_status" value="1" />
-                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Make Unpaid
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> Make Unpaid
                         </a>
                     
                     {/if}

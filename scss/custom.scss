@@ -85,10 +85,6 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     padding: 2px 2px;
 }
 
-// #input {
-//     width: 250px !important;
-// }
-
 .btngray-sm {
     text-align: center;
     padding: 6px 8px;
@@ -112,6 +108,21 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     border-bottom: #112940 solid;
     border-width: 2px;
     color: black;
+    text-decoration: none;
+    border-radius: 4px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.btn-grayish {
+    text-align: center;
+    padding: 6px 8px;
+    font-size: 12px;
+    background-color: #364f67;
+    border-bottom: #112940 solid;
+    border-width: 2px;
+    color: rgb(255, 255, 255);
     text-decoration: none;
     border-radius: 4px;
     flex-wrap: nowrap;
