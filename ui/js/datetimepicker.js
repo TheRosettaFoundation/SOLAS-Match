@@ -43,7 +43,7 @@ console.log("Converted to local time:", localTime.format(""));
 
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value", localTime.format("YYYY-MM-dd HH:mm:ss"));
+domi.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
