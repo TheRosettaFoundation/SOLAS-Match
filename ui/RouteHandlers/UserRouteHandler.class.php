@@ -3438,30 +3438,56 @@ $html = <<<EOF
             text-align:center;
         }
         </style>
-        <table width="100%" cellspacing="0" cellpadding="55%">
-        <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
-              <td width="35%"></td>  
-              <td class="header1" rowspan="2" align="right" valign="middle"
-                    width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
-        </tr></table>
-        <div class="test">
-        <br /><br />This is to certify that
-        <br /><br /><br /><span class="uppercase"></span>
-        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since .
-        <br />  has contributed  providing language services for: .
-        <br />
-        <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
-        <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
+        <main class="h-100 p-4">
+        <div class="mt-2"> <img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></div>
+        <div class="mt-3 d-flex">
+            <div>
+                <div>From</div>
+                <div class="fw-bold">Recipient Name</div>
+                <div>Email Address</div>
+                <div>Country of Residence</div>
+            </div>
+
+            <div>
+            <div>Invoice:TWB0000</div>
+            <div class="fw-bold">DD/MM/YY</div>
+            </div>
+        
         </div>
-        <div class="footer-main">
-        <img  src="/ui/img/aimee_sign.png" />
+        <div class="mt-3">
+                <div>To</div>
+                <div class="fw-bold">CLEAR Global Inc.</div>
+                <div> Garden city ID 83714</div>
+                <div>(203) 794-6698</div>
         </div>
-        <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
-        <div class="footer-main">
-        <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
-        </div>
+
+      
+        
+        </main>
+        // <table width="100%" cellspacing="0" cellpadding="55%">
+        // <tr valign="bottom">
+        //       <td class="header1" rowspan="2" align="left" valign="middle"
+        //             width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
+        //       <td width="35%"></td>  
+        //       <td class="header1" rowspan="2" align="right" valign="middle"
+        //             width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
+        // </tr></table>
+        // <div class="test">
+        // <br /><br />This is to certify that
+        // <br /><br /><br /><span class="uppercase"></span>
+        // <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since .
+        // <br />  has contributed  providing language services for: .
+        // <br />
+        // <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
+        // <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
+        // </div>
+        // <div class="footer-main">
+        // <img  src="/ui/img/aimee_sign.png" />
+        // </div>
+        // <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
+        // <div class="footer-main">
+        // <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
+        // </div>
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
