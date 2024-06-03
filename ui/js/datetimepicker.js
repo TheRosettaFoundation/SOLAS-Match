@@ -1,8 +1,10 @@
 var dUTC = $("#deadline_field").val();
-const date = dayjs(dUTC).utc();
-console.log(date);
+
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
+
+const date = dayjs(dUTC).utc();
+console.log(date);
 
 const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
 
