@@ -9,7 +9,7 @@ dayjs.extend(window.dayjs_plugin_utc);
 var parsed = dayjs(dUTC);
 
 console.log(parsed);
-let parsedT = dayjs(date);
+let parsedT = dayjs.utc(date);
 
 console.log(parsedT);
 
