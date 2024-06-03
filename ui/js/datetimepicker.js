@@ -4,19 +4,18 @@ console.log(dUTC);
 
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
-dayjs.extend(window.dayjs_plugin_timezone);
+const dateUTCL = dayjs.local(dUTC);
+const dateUTC = dayjs.utc(dUTC);
+console.log(dateUTC);
+console.log(dateUTCL);
 
 const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
 
 console.log(test);
 
-// const utct = dayjs.utc(local).format("YYYY-MM-DD HH:mm:ss");
-
-// console.log(utct);
-
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value");
+domi.setAttribute("value", test);
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
@@ -45,8 +44,8 @@ document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
         console.log(e.target.value);
-        let local = dayjs.local(e.target.value);
-        let newDateUtc = dayjs.tx;
+        let local = dayjs(e.target.value);
+        let newDateUtc = local.utc();
         utc.value = newDateUtc;
         console.log(newDateUtc);
     });
