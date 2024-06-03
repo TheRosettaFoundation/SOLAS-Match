@@ -331,7 +331,7 @@
                         <input type="hidden" name="track" value="Track" />
                      
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                        <i class="fa-regular fa-circle-envelope fa-lg"></i> {Localisation::getTranslation('common_track_task')}
+                        <i class="fa-regular fa-envelope fa-lg"></i> {Localisation::getTranslation('common_track_task')}
                         </a>
                  
                     {/if}
