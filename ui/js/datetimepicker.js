@@ -35,7 +35,6 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
 );
 
 let deadline = document.getElementById("deadline_field");
-console.log(deadline);
 
 document
     .getElementById("datetimepicker1Input")
