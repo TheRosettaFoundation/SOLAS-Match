@@ -14,6 +14,8 @@ let local = parsedT.local();
 
 console.log(parsedT);
 console.log(local);
+const utcFrom = local.utc();
+console.log(utcFrom);
 
 const test = dayjs(dUTC)
     .utc(true)
