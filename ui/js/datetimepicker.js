@@ -44,7 +44,7 @@ document
     .addEventListener("change", (e) => {
         console.log(e.target.value);
         let local = dayjs(e.target.value);
-        let newDateUtc = local.utc();
+        let newDateUtc = local.utc(true).format();
         utc.value = newDateUtc;
         console.log(newDateUtc);
     });
