@@ -43,7 +43,8 @@ document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
         console.log(e.target.value);
-        let newDateUtc = e.target.value.utc();
+        let local = dayjs(e.target.value);
+        let newDateUtc = local.utc();
         utc.value = newDateUtc;
         console.log(newDateUtc);
     });
