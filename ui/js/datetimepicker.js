@@ -21,6 +21,8 @@ const test = dayjs(dUTC).utc(true).local().format("YYYY-MM-DD HH:mm:ss");
 
 console.log(test);
 
+const testUTC= 
+
 let domi = document.getElementById("datetimepicker1Input");
 
 domi.setAttribute("value", test);
