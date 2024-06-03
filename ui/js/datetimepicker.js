@@ -66,6 +66,9 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
     }
 );
 
+let deadline = document.getElementById("deadline_field");
+console.log(deadline);
+
 document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
@@ -75,5 +78,5 @@ document
         let utcTime = dayjs.utc(local);
         console.log(local.format());
         console.log(utcTime.format("YYYY-MM-DD HH:mm:ss"));
-        dUTC.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
+        deadline.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
     });
