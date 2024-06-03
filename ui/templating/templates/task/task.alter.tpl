@@ -88,7 +88,7 @@
                     <div class="mb-3" >
 
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="d-none" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                    <input class="d-none" type="text" id="deadline_field" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
              
 
                     <label for="datetimepicker1Input" class="form-label">Deadline</label>
@@ -103,7 +103,7 @@
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker1"
-                        name="deadline"
+                      
                       />
                       <span
                         class="input-group-text"

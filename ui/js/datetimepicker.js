@@ -1,32 +1,3 @@
-// var dUTC = $("#deadline_field").val();
-// var date = new Date(dUTC).toUTCString();
-
-// console.log(dUTC);
-
-// const dayjs = window.dayjs;
-// dayjs.extend(window.dayjs_plugin_utc);
-
-// var parsed = dayjs(dUTC);
-
-// console.log(parsed);
-// let parsedT = dayjs.utc(date);
-// let local = parsedT.local();
-
-// console.log(parsedT);
-// console.log(local);
-// const utcFrom = local.utc();
-// console.log(utcFrom);
-
-// const test = dayjs(dUTC).utc(true).local().format("YYYY-MM-DD HH:mm:ss");
-
-// console.log(test);
-
-// const testUTC = test.utc();
-
-// console.log(testUTC);
-
-// let domi = document.getElementById("datetimepicker1Input");
-
 var dUTC = $("#deadline_field").val();
 console.log("Original UTC time:", dUTC);
 
