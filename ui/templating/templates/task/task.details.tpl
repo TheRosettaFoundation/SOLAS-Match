@@ -324,14 +324,14 @@
                         <input type="hidden" name="track" value="Ignore" />
                      
                         <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
-                             <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_untrack_task')}
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> {Localisation::getTranslation('common_untrack_task')}
                         </a>
                 
                     {else}
                         <input type="hidden" name="track" value="Track" />
                      
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                            <img src="{urlFor name='home'}ui/img/track.svg" alt="track" /> {Localisation::getTranslation('common_track_task')}
+                        <i class="fa-regular fa-circle-envelope fa-lg"></i> {Localisation::getTranslation('common_track_task')}
                         </a>
                  
                     {/if}
