@@ -1,22 +1,23 @@
 var dUTC = $("#deadline_field").val();
-console.log(dUTC);
 
 console.log(dUTC);
 
 const dayjs = window.dayjs;
 dayjs.extend(window.dayjs_plugin_utc);
 dayjs.extend(window.dayjs_plugin_timezone);
+const dateUTCL = dayjs.local(dUTC);
 
-let utcTime = new Date(dUTC);
-const format = "yyyy-MM-dd HH:mm:ss";
+const test = dayjs(dUTC).utc().local().format("YYYY-MM-DD HH:mm:ss").toString();
 
-const utcT = utcTime.endsWith("Z") ? dayjs.utc(utcTime) : dayjs(utcTime);
+console.log(test);
 
-console.log(utcT);
+const utct = dayjs.utc(local).format("YYYY-MM-DD HH:mm:ss");
+
+console.log(utct);
 
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value", utcT);
+domi.setAttribute("value", test);
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
@@ -46,7 +47,7 @@ document
     .addEventListener("change", (e) => {
         console.log(e.target.value);
         let local = dayjs.local(e.target.value);
-        let newDateUtc = dayjs.tz("Coordinated Universal Time");
+        let newDateUtc = dayjs.tx;
         utc.value = newDateUtc;
         console.log(newDateUtc);
     });
