@@ -346,7 +346,7 @@
                     
                         <input type="hidden" name="paid_status" value="2" />
                         <a href="#" onclick="this.parentNode.submit()" class="btngray">
-                             <img src="{urlFor name='home'}ui/img/check.svg" alt="ok_icon" /> Make Paid
+                        <i class="fa-regular fa-circle-check fa-lg"></i> Make Paid
                         </a>
                    
                         
@@ -354,7 +354,7 @@
                 
                         <input type="hidden" name="paid_status" value="1" />
                         <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
-                            <img src="{urlFor name='home'}ui/img/cancel.svg" alt="cancel" /> Make Unpaid
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> Make Unpaid
                         </a>
                     
                     {/if}
