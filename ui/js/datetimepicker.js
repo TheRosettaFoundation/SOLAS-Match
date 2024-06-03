@@ -39,9 +39,12 @@ console.log("Parsed UTC time:", parsedUTC.format());
 
 // Convert the parsed UTC time to local time
 let localTime = parsedUTC.local();
-console.log("Converted to local time:", localTime.format());
+console.log(
+    "Converted to local time:",
+    localTime.format("yyyy-MM-dd HH:mm:ss")
+);
 
-// let domi = document.getElementById("datetimepicker1Input");
+let domi = document.getElementById("datetimepicker1Input");
 
 domi.setAttribute("value", localTime);
 
@@ -72,8 +75,6 @@ document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
         console.log(e.target.value);
-        let local = dayjs(e.target.value);
-        let newDateUtc = local.utc();
-        utc.value = newDateUtc;
-        console.log(newDateUtc);
+        let local = dayjs.utc(e.target.value);
+        console.log(local);
     });
