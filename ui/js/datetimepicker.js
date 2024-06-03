@@ -69,7 +69,7 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
 document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
-        console.log(e.target.value);
+        let local = dayjs(e.target.value);
         // No need to call utc() on the local object itself
         // Convert to UTC directly with dayjs.utc()
         let utcTime = dayjs.utc(local);
