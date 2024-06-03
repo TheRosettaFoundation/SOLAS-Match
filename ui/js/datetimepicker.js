@@ -74,5 +74,5 @@ document
         // Convert to UTC directly with dayjs.utc()
         let utcTime = dayjs.utc(local);
         console.log(local.format());
-        console.log(utcTime.format());
+        console.log(utcTime.format("YYYY-MM-DD HH:mm:ss"));
     });
