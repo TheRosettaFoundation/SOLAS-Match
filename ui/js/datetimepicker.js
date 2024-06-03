@@ -39,11 +39,11 @@ console.log("Parsed UTC time:", parsedUTC.format());
 
 // Convert the parsed UTC time to local time
 let localTime = parsedUTC.local();
-console.log("Converted to local time:", localTime.format());
+console.log("Converted to local time:", localTime.format(""));
 
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value", localTime);
+domi.setAttribute("value", localTime.format("YYYY-MM-dd HH:mm:ss"));
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
