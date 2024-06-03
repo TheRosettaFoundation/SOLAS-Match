@@ -37,10 +37,9 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
     }
 );
 
-document
-    .getElementById("datetimepicker1")
-    .addEventListener("change", function (e) {
-        e.preventDefault();
-
+const sub = datetimepicker1.subscribe(
+    tempusdominus.Namespace.events.change,
+    (e) => {
         console.log(e.target.value);
-    });
+    }
+);
