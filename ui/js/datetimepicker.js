@@ -36,7 +36,11 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
         },
     }
 );
-let newUTC = document.getElementById("#datetimepicker1Input").val();
-let newDate = dayjs(newUTC).utc();
-document.getElementById("deadline_field").value = newDate;
-console.log(newDate);
+
+document
+    .getElementById("datetimepicker1")
+    .addEventListener("change", function (e) {
+        e.preventDefault();
+
+        console.log(e.target.value);
+    });
