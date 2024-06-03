@@ -75,4 +75,5 @@ document
         let utcTime = dayjs.utc(local);
         console.log(local.format());
         console.log(utcTime.format("YYYY-MM-DD HH:mm:ss"));
+        dUTC.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
     });
