@@ -3445,7 +3445,26 @@ $html = <<<EOF
         }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-   
+       <div>
+
+                    <div>
+
+                            <div>From</div>
+                            <div>$name</div>
+                            <div>Email Address</div>
+                            <div>Country of Residence</div>
+                    </div>
+
+                    <div style="float:left">
+
+                    <div>From</div>
+                    <div>$name</div>
+                    <div>Email Address</div>
+                    <div>Country of Residence</div>
+            </div>
+       
+       
+       </div>
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
@@ -3459,47 +3478,13 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="right" valign="middle"
                     width="25%">
-                    <div>Invoice:</div>
-                    <div>Date</div>
-                   
+                    <div>From</div>
+                    <div>$name</div>
+                    <div>Email Address</div>
+                    <div>Country of Residence</div>
+                    <br/><br/>
                     </td>
         </tr></table>
-        <div style="margin-top:12px; margin-bottom:12px;">
-                    <div>To:</div>
-                    <div class="font-weight:500;">CLEAR GLOBAL Inc.</div>
-                    <div>9169 W State St #3065 </div>
-                    <div>Garden City ID 83714</div>
-                    <div>(203) 794-6698</div>
-        
-        <div>
-
-        <table>
-                <tr>
-                    <th>S/N</th>
-                    <th>Description</th>
-                    <th>PO</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Amount</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                    td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-        </table>
-
         <div class="test">
         <br /><br />This is to certify that
         <br /><br /><br /><span class="uppercase"></span>
