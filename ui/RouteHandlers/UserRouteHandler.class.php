@@ -3495,7 +3495,7 @@ EOF;
 $tbl = <<<EOD
 <table border="1" cellpadding="2" cellspacing="2">
 <thead>
- <tr style="background-color:#FAFAFA;color:#0000FF;">
+ <tr style="background-color:#FAFAFA;color:black;">
  <td width="30" align="center"><b></b></td>
   <td width="60" align="center"><b>S/N</b></td>
   <td width="300" align="center"><b>Description</b></td>
@@ -3507,10 +3507,10 @@ $tbl = <<<EOD
 
 </thead>
  <tr>
-  <td width="30" align="center">$taskId</td>
+  <td width="30" align="center">1</td>
   <td width="60" align="center"><b></b></td>
-  <td width="300">Description: $description<br /> Project : $project <br /> Language Pairs: $language<br /> Task type: $type<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
-  <td width="140">XXXX<br />$purchase_order</td>
+  <td width="300">Description: $description<br /> Project : $project <br /> Language Pairs: $language<br /> Task type: $type<br /></td>
+  <td width="140">$purchase_order</td>
   <td width="200">XXXX<br />XXXX</td>
   <td width="100">$unit</td>
   <td align="center" width="100">$amount</td>
