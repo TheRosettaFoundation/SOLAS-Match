@@ -3492,14 +3492,14 @@ EOF;
     $pdf->SetLineWidth(0.3);
     $pdf->SetFont('', 'B');
     // Header
-    $w = array(40, 35, 40, 45 ,40 ,45);
+    $w = array(40, 80, 40, 45 ,40 ,45);
     $num_headers = count($header);
     for($i = 0; $i < $num_headers; ++$i) {
         $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
     }
     $pdf->Ln();
     // Color and font restoration
-    $pdf->SetTextColor(0);
+    $pdf->SetTextColor(255);
     $pdf->SetFont('');
     // Data
     $fill = 0;
