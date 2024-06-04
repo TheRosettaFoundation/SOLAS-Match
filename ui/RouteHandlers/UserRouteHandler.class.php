@@ -3455,7 +3455,7 @@ $html = <<<EOF
                             <div>Country of Residence</div>
                     </div>
 
-                    <div style="float:left">
+                    <div style="float:left;">
 
                     <div>From</div>
                     <div>$name</div>
