@@ -3502,11 +3502,11 @@ $tbl = <<<EOD
  <tr>
   <td width="30" align="center">1.</td>
   <td width="60" align="center"><b></b></td>
-  <td width="140" rowspan="6">XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
+  <td width="300">XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
   <td width="140">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td width="80">XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
+  <td width="200">XXXX<br />XXXX</td>
+  <td width="100">XXXX</td>
+  <td align="center" width="100">XXXX</td>
  </tr>
  
  
