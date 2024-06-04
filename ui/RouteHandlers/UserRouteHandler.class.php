@@ -3466,7 +3466,7 @@ $html = <<<EOF
                     <br/><br/>
                     </td>
         </tr></table>
-        <table>
+        <table width="100%" cellspacing="0" cellpadding="55%">
                 <tr>
                     <th>S/N</th>
                     <th>Description</th>
