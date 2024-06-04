@@ -3472,10 +3472,10 @@ $html = <<<EOF
                     </td>
         </tr></table>
        <div style="margin-top:20px;">
-        <div>From</div>
-        <div>$name</div>
-        <div>Email Address</div>
-        <div>Country of Residence</div>
+        <div>To</div>
+        <div style="font-weight:bold;">CLEAR Glbal inc.</div>
+        <div>9169 W State St#83714</div>
+        <div>(203) 794-6698</div>
        </div> 
        
 EOF;
