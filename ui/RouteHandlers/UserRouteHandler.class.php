@@ -3384,36 +3384,36 @@ EOF;
         $name = $invoice['linguist_name'];
         $purchase_order = $invoice['purchase_order'];
 
-        $tbl = <<<EOD
+//         $tbl = <<<EOD
 
-        <table>
-        <tr>
-            <th>S/N</th>
-            <th>Description</th>
-            <th>PO</th>
-            <th>Quantity</th>
-            <th>Unit Price</th>
-            <th>Amount</th>
-        </tr>
-        <tr>
-            <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
-            <td>Germany</td>
-            <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
-            <td>Germany</td>
-        </tr>
-        <tr>
-            <td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-            td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-        </tr>
-</table>
+//         <table>
+//         <tr>
+//             <th>S/N</th>
+//             <th>Description</th>
+//             <th>PO</th>
+//             <th>Quantity</th>
+//             <th>Unit Price</th>
+//             <th>Amount</th>
+//         </tr>
+//         <tr>
+//             <td>Alfreds Futterkiste</td>
+//             <td>Maria Anders</td>
+//             <td>Germany</td>
+//             <td>Alfreds Futterkiste</td>
+//             <td>Maria Anders</td>
+//             <td>Germany</td>
+//         </tr>
+//         <tr>
+//             <td>Centro comercial Moctezuma</td>
+//             <td>Francisco Chang</td>
+//             <td>Mexico</td>
+//             td>Centro comercial Moctezuma</td>
+//             <td>Francisco Chang</td>
+//             <td>Mexico</td>
+//         </tr>
+// </table>
 
-                EOD;
+//                 EOD;
 
 
 
