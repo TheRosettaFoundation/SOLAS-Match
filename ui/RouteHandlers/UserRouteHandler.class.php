@@ -3385,9 +3385,9 @@ EOF;
         // print_r($invoice);
         $data = $userDao->getInvoice($args['invoice_number']);
         $name = $invoice['linguist_name'];
-        $email = $invoice['linguist_name'];
-        $country = $invoice['linguist_name'];
-        $date = $invoice['linguist_name'];
+        $email = $invoice['email'];
+        $country = $invoice['country'];
+        $date = $invoice['invoice_date'];
         $purchase_order = $invoice['purchase_order'];
         // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
@@ -3462,7 +3462,7 @@ $html = <<<EOF
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
-                    <div>From</div>
+                    <div>From:</div>
                     <div>$name</div>
                     <div>Email Address</div>
                     <div>Country of Residence</div>
@@ -3470,8 +3470,8 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>Invoice:TWB0000</div>
-                    <div>Date:DD/MM/YY</div>
+                    <div>Invoice:$purchase_order</div>
+                    <div>Date:$date</div>
 
                     <br/><br/>
                     </td>
@@ -3487,7 +3487,7 @@ EOF;
 
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->SetFillColor(239, 239, 240);
-    $pdf->SetTextColor(255);
+    $pdf->SetTextColor(255,255,245);
     $pdf->SetDrawColor(128, 0, 0);
     $pdf->SetLineWidth(0.3);
     $pdf->SetFont('', 'B');
@@ -3505,7 +3505,7 @@ EOF;
     $fill = 0;
     foreach($data as $row) {
         $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L');
-        $pdf->Cell($w[1], 10, $row[11], 'LR', 0, 'L');
+        $pdf->Cell($w[1], 6, $row[11], 'LR', 0, 'L');
         $pdf->Cell($w[2], 6, $row[10], 'LR', 0, 'R');
         $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');
         $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
