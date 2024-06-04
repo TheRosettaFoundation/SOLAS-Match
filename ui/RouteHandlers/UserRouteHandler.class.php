@@ -3447,8 +3447,8 @@ $html = <<<EOF
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
        <div>
 
-       <div style="width:50px ; display: inline-block; background-color: red;"></div>
-       <div style="width:50px ; display: inline-block; background-color: blue;"></div>
+       <div style="width:50px ; display: inline-block;"></div>
+       <div style="width:50px ; display: inline-block;"></div>
        
        </div>
        
