@@ -60,12 +60,15 @@
                         <textarea class="form-control" cols="1" rows="6" id="impact" name="impact">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
 
-                    <div class="mb-3" >
-
-                    {assign var="deadlineDateTime" value=$task->getDeadline()}
-                    <input class="d-none" type="text" id="deadline_field" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                    <div class="mb-3">
+                    <input class="d-none" type="text" id="deadline_field" name="deadline" value="{$task->getDeadline()}" style="width: 400px" />
 
                     <label for="datetimepicker1Input" class="form-label">Deadline</label>
+                        {if $deadline_error != ''}
+                            <div class="alert alert-error">
+                                {$deadline_error}
+                            </div>
+                        {/if}
                     <div
                       class="input-group log-event"
                       id="datetimepicker1"
@@ -86,7 +89,6 @@
                         <i class="fas fa-calendar"></i>
                       </span>
                     </div>
-                  </div>
                   </div>
 
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
