@@ -991,7 +991,6 @@ class TaskRouteHandler
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
-
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
