@@ -984,19 +984,16 @@ class TaskRouteHandler
                  elseif (isset($post['word_count_partner_weighted']) && $post['word_count_partner_weighted'] != "" || isset($post['word_count']) && $post['word_count'] != "" ) {
                     $word_count_err = Lib\Localisation::getTranslation('task_alter_6');
                 } else {
-                    $word_count_err = Lib\Localisation::getTranslation('task_alter_7'); 
+                    $word_count_err = Lib\Localisation::getTranslation('task_alter_7');
                 }
             }
 
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s ", $validTime);
+                    $date = date("Y-m-d H:i:s", $validTime);
 
                    if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
-                    $task_test = $task->setDeadline($date);
-                  
-
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                         $userDao = new DAO\UserDao();
                         $userDao->set_dateDue_in_memsource($task, $memsource_task, $date);
