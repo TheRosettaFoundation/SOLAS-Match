@@ -3385,6 +3385,9 @@ EOF;
         // print_r($invoice);
         $data = $userDao->getInvoice($args['invoice_number']);
         $name = $invoice['linguist_name'];
+        $email = $invoice['linguist_name'];
+        $country = $invoice['linguist_name'];
+        $date = $invoice['linguist_name'];
         $purchase_order = $invoice['purchase_order'];
         // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
@@ -3483,7 +3486,7 @@ $html = <<<EOF
 EOF;
 
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->SetFillColor(255, 0, 0);
+    $pdf->SetFillColor(239, 239, 240);
     $pdf->SetTextColor(255);
     $pdf->SetDrawColor(128, 0, 0);
     $pdf->SetLineWidth(0.3);
@@ -3502,7 +3505,7 @@ EOF;
     $fill = 0;
     foreach($data as $row) {
         $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L');
-        $pdf->Cell($w[1], 6, $row[11], 'LR', 0, 'L');
+        $pdf->Cell($w[1], 10, $row[11], 'LR', 0, 'L');
         $pdf->Cell($w[2], 6, $row[10], 'LR', 0, 'R');
         $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');
         $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
