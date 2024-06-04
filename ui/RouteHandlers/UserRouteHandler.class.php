@@ -3452,11 +3452,8 @@ $html = <<<EOF
         }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-       <div>
-
-       <div style="width:50px ; display: inline-block;"></div>
-
-       </div>
+       <br/>
+       <br/>
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
@@ -3479,7 +3476,7 @@ $html = <<<EOF
        <div style="margin-top:20px;">
        <br/>
        <br/>
-        <div>To</div>
+        <div>To:</div>
         <div style="font-weight:bold;">CLEAR Global inc.</div>
         <div>9169 W State St#83714</div>
         <div>(203) 794-6698</div>
