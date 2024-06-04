@@ -3382,6 +3382,7 @@ EOF;
         $userDao = new DAO\UserDao();
         // print_r($args['invoice_number']);
         $invoice = $userDao->getInvoice($args['invoice_number'])['0'];
+        print_r($invoice);
         $data = $userDao->getInvoice($args['invoice_number']);
         $name = $invoice['linguist_name'];
         $purchase_order = $invoice['purchase_order'];
