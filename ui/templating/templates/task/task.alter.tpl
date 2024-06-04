@@ -4,18 +4,11 @@
 {assign var="task_status_id" value=$task->getTaskStatus()}
 
 <div class="container-fluid">
-
     <header class="">
-
         <div class="container py-2"> 
-
                 <div class="py-2" >
-
                     <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a>  <i class="fa-solid fa-chevron-right mx-1"> </i>
-        
                     <a  href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a>       
-                    
-               
                 </div>
 
                     {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}                 
@@ -35,45 +28,27 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {/if}
-                 
-
         </div>
-
-     
-            
-
     </header>
 
 <section class="bg-light-subtle my-2 pb-4"> 
-
     <div class="container py-5">
-
         <div class="d-flex  flex-wrap justify-content-between mb-4"> 
-
-
             <h3 >
             <span class="fw-bold">{Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}<span>
-            
             </h3>
 
             <div>
-
                 <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btnPrimary text-white'>
                 {Localisation::getTranslation('task_alter_view_task_details')}
                 </a>
-            
-            
             </div>
-        
-        
         </div>
 
-
-        <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}"  accept-charset="utf-8">
+    <form method="post" action="{urlFor name="task-alter" options="task_id.$task_id"}"  accept-charset="utf-8">
         <div class="table-responsive">    
         <table class="w-100 ">
            <tbody class="mx-4">
-
                 <tr class="d-flex justify-content-between flex-wrap " >
                 <td class="" >
                     <div class="mb-3">
@@ -89,7 +64,6 @@
 
                     {assign var="deadlineDateTime" value=$task->getDeadline()}
                     <input class="d-none" type="text" id="deadline_field" name="deadline" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
-             
 
                     <label for="datetimepicker1Input" class="form-label">Deadline</label>
                     <div
@@ -103,7 +77,6 @@
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker1"
-                      
                       />
                       <span
                         class="input-group-text"
@@ -114,13 +87,8 @@
                       </span>
                     </div>
                   </div>
-                    
-                 
                   </div>
 
-                  
-                 
-           
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
@@ -195,9 +163,6 @@
                 </td>             
             </tr>
 
-
-
-             
             {if !empty($projectTasks)}
             <tr>
                 <td>
@@ -230,13 +195,6 @@
                                             />
                                         {/if} 
                                     {else}
-                                        {*
-                                        {if $tasksEnabled[$task_id]}
-                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}"
-                                        {else}
-                                            <input type="checkbox" name="preReq_{$i}" value="{$task_id}" disabled
-                                        {/if}
-                                        *}
                                         <input type="checkbox" name="preReq_{$i}" value="{$task_id}"
                                         {if in_array($task_id, $thisTaskPreReqIds)}
                                             checked="true" />
@@ -278,81 +236,28 @@
                 </td>
             </tr>
             {/if}
-
-               
- 
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-
            </tbody>
-
         </table>
         </div>
-
 
             <div class="d-flex justify-content-center mt-4 flex-wrap">
                 <div>
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='btn btn-danger text-white'>
                         <i class="icon-ban-circle icon-white"></i> {Localisation::getTranslation('common_cancel')}
                     </a>
-                   
                 </div>
                 <div class="ms-4">
-                   
                     <p>
-                    
                         <button type="submit" value="Submit" name="submit" class="btn btn-primary text-white">
-                        <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
-                    </button>
+                            <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
+                        </button>
                     </p>    
-                  
                 </div>
             </div>     
-     
-       
     </form>
-
-
     </div>
-
-
-
 </section>
-
 </div>
 
-{* <section class="ftco-section">
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 mb-5 text-center">
-            <h2 class="heading-section">Calendar #09</h2>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-4 text-center">
-            <h3 class="h5">Calendar Datepicker</h3>
-            <div class="w-100">
-                <form action="" method="post" class="datepickers">
-                    <div class="form-group">
-                        <!-- <label class="label-control" for="id_start_datetime">Datetime picker</label> -->
-                        <div class="input-group date" id="id_0">
-                            <input
-                                type="text"
-                                value=""
-                                class="form-control"
-                                name="datePicker"
-                                placeholder="MM/DD/YYYY hh:mm:ss"
-                                required
-                            />
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-</section> *}
-
-   
-
-                        
 {include file="footer2.tpl"}
