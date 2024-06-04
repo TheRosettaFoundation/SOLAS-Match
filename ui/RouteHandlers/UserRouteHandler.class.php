@@ -3485,7 +3485,26 @@ $html = <<<EOF
        
 EOF;
 
+$tbl = <<<EOD
+<table cellspacing="0" cellpadding="1" border="1">
+    <tr>
+        <td rowspan="3">COL 1 - ROW 1<br />COLSPAN 3</td>
+        <td>COL 2 - ROW 1</td>
+        <td>COL 3 - ROW 1</td>
+    </tr>
+    <tr>
+        <td rowspan="2">COL 2 - ROW 2 - COLSPAN 2<br />text line<br />text line<br />text line<br />text line</td>
+        <td>COL 3 - ROW 2</td>
+    </tr>
+    <tr>
+       <td>COL 3 - ROW 3</td>
+    </tr>
+
+</table>
+EOD;
+
     $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->SetFillColor(239, 239, 240);
     $pdf->SetTextColor(255,255,245);
     $pdf->SetDrawColor(128, 0, 0);
@@ -3505,7 +3524,7 @@ EOF;
     $fill = 0;
     foreach($data as $row) {
         $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L');
-        $pdf->Cell($w[1], 6, $row[11], 'LR', 0, 'L');
+        $pdf->Cell($w[1], 15, $row[11], 'LR', 0, 'L');
         $pdf->Cell($w[2], 6, $row[10], 'LR', 0, 'R');
         $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');
         $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
