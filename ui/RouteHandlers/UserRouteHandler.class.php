@@ -3479,8 +3479,7 @@ $html = <<<EOF
        <div>
 
        <div style="width:50px ; display: inline-block;"></div>
-       <div style="width:50px ; display: inline-block;"></div>
-       
+
        </div>
        
        <table width="100%" cellspacing="0" cellpadding="55%">
