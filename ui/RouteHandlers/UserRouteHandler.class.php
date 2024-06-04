@@ -3462,12 +3462,11 @@ $html = <<<EOF
                     <div>Country of Residence</div>
                     </td>
               <td width="35%"></td>  
-              <td class="header1" rowspan="2" align="right" valign="middle"
+              <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>From</div>
-                    <div>$name</div>
-                    <div>Email Address</div>
-                    <div>Country of Residence</div>
+                    <div>Invoice:TWB0000</div>
+                    <div>Date:DD/MM/YY</div>
+
                     <br/><br/>
                     </td>
         </tr></table>
