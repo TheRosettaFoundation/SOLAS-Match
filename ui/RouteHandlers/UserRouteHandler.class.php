@@ -3480,10 +3480,11 @@ $html = <<<EOF
        <br/>
        <br/>
         <div>To</div>
-        <div style="font-weight:bold;">CLEAR Glbal inc.</div>
+        <div style="font-weight:bold;">CLEAR Global inc.</div>
         <div>9169 W State St#83714</div>
         <div>(203) 794-6698</div>
        </div> 
+       <br/>
        
 EOF;
 
