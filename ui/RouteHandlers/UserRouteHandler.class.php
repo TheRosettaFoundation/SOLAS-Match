@@ -3419,7 +3419,10 @@ EOF;
 
 $html = <<<EOF
         <style>
-   
+        d-flex {
+            display:flex;
+            justify-content:space-between;
+        }
         div.test {
             color: #000000;
             font-size: 13pt;
@@ -3433,7 +3436,13 @@ $html = <<<EOF
             text-transform: uppercase;
             font-weight:bold;
         }
-       
+        .footer {
+            text-align: center;
+            font-size: 11pt;
+        }
+        .footer-main {
+            text-align:center;
+        }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
    
@@ -3457,7 +3466,7 @@ $html = <<<EOF
         </tr></table>
         <div style="margin-top:12px; margin-bottom:12px;">
                     <div>To:</div>
-                    <div class="font-weight:bold;">CLEAR GLOBAL Inc.</div>
+                    <div class="font-weight:500;">CLEAR GLOBAL Inc.</div>
                     <div>9169 W State St #3065 </div>
                     <div>Garden City ID 83714</div>
                     <div>(203) 794-6698</div>
@@ -3491,7 +3500,22 @@ $html = <<<EOF
                 </tr>
         </table>
 
-
+        <div class="test">
+        <br /><br />This is to certify that
+        <br /><br /><br /><span class="uppercase"></span>
+        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since .
+        <br />  has contributed  providing language services for: .
+        <br />
+        <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
+        <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
+        </div>
+        <div class="footer-main">
+        <img  src="/ui/img/aimee_sign.png" />
+        </div>
+        <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
+        <div class="footer-main">
+        <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
+        </div>
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
