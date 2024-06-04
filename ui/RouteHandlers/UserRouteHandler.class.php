@@ -3541,7 +3541,7 @@ $tbl = <<<EOD
         EOD;
 
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->writeHTML($tbl, true, false, true, false, '');
+    // $pdf->writeHTML($tbl, true, false, true, false, '');
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
     $pdf->lastPage();
