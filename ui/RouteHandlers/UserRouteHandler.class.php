@@ -3495,19 +3495,19 @@ EOF;
     }
     $pdf->Ln();
     // Color and font restoration
-    $pdf->SetFillColor(224, 235, 255);
     $pdf->SetTextColor(0);
     $pdf->SetFont('');
     // Data
     $fill = 0;
-    // foreach($data as $row) {
-    //     $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
-    //     $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
-    //     $pdf->Cell($w[2], 6, number_format($row[2]), 'LR', 0, 'R', $fill);
-    //     $pdf->Cell($w[3], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
-    //     $pdf->Ln();
-    //     $fill=!$fill;
-    // }
+    foreach($data as $row) {
+        $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
+        $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R', $fill);
+        $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R', $fill);
+        
+        $pdf->Ln();
+        $fill=!$fill;
+    }
     $pdf->Cell(array_sum($w), 0, '', 'T');
    
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
