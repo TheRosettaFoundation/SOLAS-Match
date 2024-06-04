@@ -1290,7 +1290,7 @@ If a language is to be removed from this list, the community will be informed be
             <td><a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" > {$invoice['invoice_number']}</a></td>
             <td>{$invoice['invoice_date']}</td>
             <td>${$invoice['amount']}</td>
-            <td>${$invoice['amount']}</td>
+            <td>{if $invoice['amount']== "0"}Normal {elseif  $invoice['amount']== "1"} Proforma {else} Paid </td>
             
           
         </tr>
