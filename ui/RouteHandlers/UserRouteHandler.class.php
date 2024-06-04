@@ -3466,33 +3466,7 @@ $html = <<<EOF
                     <br/><br/>
                     </td>
         </tr></table>
-        <table width="100%" cellspacing="0" cellpadding="55%">
-                <tr>
-                    <th>S/N</th>
-                    <th>Description</th>
-                    <th>PO</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Amount</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                    td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-        </table>
-
+        
        
         <div class="footer-main">
         <img  src="/ui/img/aimee_sign.png" />
