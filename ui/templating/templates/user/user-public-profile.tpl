@@ -1281,13 +1281,15 @@ If a language is to be removed from this list, the community will be informed be
             <td><strong>Invoice Number</strong></td>
             <td><strong>Invoice Date</strong></td>
             <td><strong>Invoice Amount</strong></td>
-            <td><strong>  </strong></td>
+            <td><strong>Invoice Status</strong></td>
+           
         </tr>
     </thead>
     {foreach $user_invoices as $invoice}
         <tr>
             <td><a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" > {$invoice['invoice_number']}</a></td>
             <td>{$invoice['invoice_date']}</td>
+            <td>${$invoice['amount']}</td>
             <td>${$invoice['amount']}</td>
             
           
