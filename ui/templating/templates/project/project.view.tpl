@@ -41,35 +41,30 @@
              <div class="col-md-7">
                     <div class="d-flex justify-content-sm-end">     
 
-                        <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
-                            <input type="hidden" name="copyChunks" value="1" />
-                            <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
-                                <i class="fa-upload fa-solid me-1"></i> Sync Phrase TMS
-                            </a>
-                            <a href="{$matecat_analyze_url}" class="btnPrimary text-white mt-2 mt-md-0 me-2 " target="_blank">
-                                {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
-                            </a>
-                        {/if}
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
-                            <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
-                                Add Shell Tasks
-                            </a>
-                        {/if}
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                            <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
-                            <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
-                            </a> 
-                        {/if}
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                 </div>
-               
-                
+                    <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
+                        <input type="hidden" name="copyChunks" value="1" />
+                        <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
+                            <i class="fa-upload fa-solid me-1"></i> Sync Phrase TMS
+                        </a>
+                        <a href="{$matecat_analyze_url}" class="btnPrimary text-white mt-2 mt-md-0 me-2 " target="_blank">
+                            {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
+                        </a>
+                    {/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
+                        <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
+                            Add Shell Tasks
+                        </a>
+                    {/if}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                        <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
+                        <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
+                        </a> 
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    </div>
             </div>
-
-       
-
         </div>
 
         {if isset($flash['success'])}
@@ -84,7 +79,6 @@
             </p>
         {/if}
 
-    
         <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
             <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
@@ -98,7 +92,6 @@
             {if isset($userSubscribedToProject)}
                 <th>{Localisation::getTranslation('common_tracking')}</th>
             {/if}
-
         </thead>
         <tbody class="fs-4">
             <tr >
@@ -164,8 +157,6 @@
     </table>    
     </div>  
     </div>
-
-
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
@@ -580,7 +571,7 @@
                                  <th>Paid?</th>
                                 {/if}
                                  <th>Cancelled?</th>
-                                 <th>Published</th>                  
+                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
                                  <th>{Localisation::getTranslation('common_publish')}?</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
                                  <th>{Localisation::getTranslation('common_edit')}</th>
@@ -660,7 +651,7 @@
                                             {/if}
                                             <br />
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
-                                            <i class=" fa-solid fa-user "></i>   <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
+                                            <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
                                     <td>
@@ -696,11 +687,9 @@
                                      {/if}
                                     </td>
                                     {/if}
-                                    <td>
 
+                                    <td>
                                      {if $task->get_cancelled()} 
-                                      
-                        
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                          <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                    
@@ -719,11 +708,12 @@
                                             </a>
                                         </span>
                                     {/if}
-                             
                                     </td>
+
                                     <td>
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
+
                                     <td>
                                     <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -745,6 +735,7 @@
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
                                     </td>
+
                                     <td>
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
