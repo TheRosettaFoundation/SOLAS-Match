@@ -3471,7 +3471,12 @@ $html = <<<EOF
                     <br/><br/>
                     </td>
         </tr></table>
-        
+       <div style="margin-top:20px;">
+        <div>From</div>
+        <div>$name</div>
+        <div>Email Address</div>
+        <div>Country of Residence</div>
+       </div> 
        
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
