@@ -3500,13 +3500,14 @@ EOF;
     // Data
     $fill = 0;
     foreach($data as $row) {
-        $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
-        $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R', $fill);
-        $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R', $fill);
-        
+        $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L');
+        $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L');
+        $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
+        $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');
+        $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
+        $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');       
         $pdf->Ln();
-        $fill=!$fill;
+      
     }
     $pdf->Cell(array_sum($w), 0, '', 'T');
    
