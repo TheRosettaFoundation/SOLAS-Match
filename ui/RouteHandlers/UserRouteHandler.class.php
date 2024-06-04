@@ -3501,7 +3501,7 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center">1.</td>
-  <td width="30" align="center"><b></b></td>
+  <td width="60" align="center"><b></b></td>
   <td width="140" rowspan="6">XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
   <td width="140">XXXX<br />XXXX</td>
   <td width="80">XXXX<br />XXXX</td>
