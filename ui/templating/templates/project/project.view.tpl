@@ -17,7 +17,7 @@
 
 <section class=" bg-light-subtle"> 
 
-        <div class="container py-5  ">
+        <div class="container py-5 ">
 
 
             <div class="row">
