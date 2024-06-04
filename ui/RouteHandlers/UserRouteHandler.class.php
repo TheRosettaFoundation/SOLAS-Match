@@ -3473,13 +3473,6 @@ $html = <<<EOF
         </tr></table>
         
        
-        <div class="footer-main">
-        <img  src="/ui/img/aimee_sign.png" />
-        </div>
-        <hr style="height: 1px; border: 0px solid #D6D6D6; border-top-width: 1px;" />
-        <div class="footer-main">
-        <span>Aimee Ansari, CEO, CLEAR Global / TWB</span>
-        </div>
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
