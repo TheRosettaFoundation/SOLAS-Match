@@ -3463,9 +3463,9 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
                     <div>From:</div>
-                    <div>$name</div>
-                    <div>Email Address</div>
-                    <div>Country of Residence</div>
+                    <div>Name : $name</div>
+                    <div>Email Address: $email</div>
+                    <div>Country of Residence : $country</div>
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
@@ -3477,6 +3477,8 @@ $html = <<<EOF
                     </td>
         </tr></table>
        <div style="margin-top:20px;">
+       <br/>
+       <br/>
         <div>To</div>
         <div style="font-weight:bold;">CLEAR Glbal inc.</div>
         <div>9169 W State St#83714</div>
