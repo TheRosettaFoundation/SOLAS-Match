@@ -3389,7 +3389,14 @@ EOF;
         $country = $invoice['country'];
         $date = $invoice['invoice_date'];
         $purchase_order = $invoice['purchase_order'];
-        // column titles
+        $description = $invoice['title'];
+        $type = $invoice['type_text'];
+        $language = $invoice['language_pair_name'];
+        $project = $invoice['project_title'];
+        $amount = $invoice['amount'];
+        $taskId = $invoice['amount'];
+        $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
+         // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
 
@@ -3500,13 +3507,13 @@ $tbl = <<<EOD
 
 </thead>
  <tr>
-  <td width="30" align="center">1.</td>
+  <td width="30" align="center">$taskId</td>
   <td width="60" align="center"><b></b></td>
-  <td width="300">XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
-  <td width="140">XXXX<br />XXXX</td>
+  <td width="300">Description: $description<br /> Project : $project <br /> Language Pairs: $language<br /> Task type: $type<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
+  <td width="140">XXXX<br />$purchase_order</td>
   <td width="200">XXXX<br />XXXX</td>
-  <td width="100">XXXX</td>
-  <td align="center" width="100">XXXX</td>
+  <td width="100">$unit</td>
+  <td align="center" width="100">$amount</td>
  </tr>
  
  
@@ -3516,34 +3523,7 @@ EOD;
 
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
-    // $pdf->SetFillColor(239, 239, 240);
-    // $pdf->SetTextColor(255,255,245);
-    // $pdf->SetDrawColor(128, 0, 0);
-    // $pdf->SetLineWidth(0.3);
-    // $pdf->SetFont('', 'B');
-    // // Header
-    // $w = array(40, 60, 40, 45 ,40 ,45);
-    // $num_headers = count($header);
-    // for($i = 0; $i < $num_headers; ++$i) {
-    //     $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
-    // }
-    // $pdf->Ln();
-    // // Color and font restoration
-    // $pdf->SetTextColor(0);
-    // $pdf->SetFont('');
-    // // Data
-    // $fill = 0;
-    // foreach($data as $row) {
-    //     $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L');
-    //     $pdf->Cell($w[1], 15, $row[11], 'LR', 0, 'L');
-    //     $pdf->Cell($w[2], 6, $row[10], 'LR', 0, 'R');
-    //     $pdf->Cell($w[3], 6, $row[3], 'LR', 0, 'R');
-    //     $pdf->Cell($w[2], 6, $row[2], 'LR', 0, 'R');
-    //     $pdf->Cell($w[3], 6, $row[7], 'LR', 0, 'R');       
-    //     $pdf->Ln();
-      
-    // }
-    // $pdf->Cell(array_sum($w), 0, '', 'T');
+
    
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
