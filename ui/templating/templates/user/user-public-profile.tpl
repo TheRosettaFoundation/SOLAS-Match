@@ -1270,9 +1270,8 @@ If a language is to be removed from this list, the community will be informed be
 
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-    <div class="mt-2 p-4 rounded-3 bg-body">
-
-{if !empty($user_invoices)}
+    {if !empty($user_invoices)}
+<div class="mt-2 p-4 rounded-3 bg-body">
 <div class="table-responsive fs-5 mt-2">
 <h4 class="fw-bold">Invoice Section</h4>
 <table class="table table-striped" style="width:100%">
