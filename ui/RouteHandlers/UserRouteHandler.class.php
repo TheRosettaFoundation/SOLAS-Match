@@ -3509,36 +3509,37 @@ $html = <<<EOF
        </div> 
        
 EOF;
-// $tbl = <<<EOD
 
-// <table>
-// <tr>
-//     <th>S/N</th>
-//     <th>Description</th>
-//     <th>PO</th>
-//     <th>Quantity</th>
-//     <th>Unit Price</th>
-//     <th>Amount</th>
-// </tr>
-// <tr>
-//     <td>Alfreds Futterkiste</td>
-//     <td>Maria Anders</td>
-//     <td>Germany</td>
-//     <td>Alfreds Futterkiste</td>
-//     <td>Maria Anders</td>
-//     <td>Germany</td>
-// </tr>
-// <tr>
-//     <td>Centro comercial Moctezuma</td>
-//     <td>Francisco Chang</td>
-//     <td>Mexico</td>
-//     td>Centro comercial Moctezuma</td>
-//     <td>Francisco Chang</td>
-//     <td>Mexico</td>
-// </tr>
-// </table>
+$tbl = <<<EOD
 
-//         EOD;
+<table>
+<tr>
+    <th>S/N</th>
+    <th>Description</th>
+    <th>PO</th>
+    <th>Quantity</th>
+    <th>Unit Price</th>
+    <th>Amount</th>
+</tr>
+<tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+</tr>
+<tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+    td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+</tr>
+</table>
+
+        EOD;
 
     $pdf->writeHTML($html, true, false, true, false, '');
     // $pdf->writeHTML($tbl, true, false, true, false, '');
