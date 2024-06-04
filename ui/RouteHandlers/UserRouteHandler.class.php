@@ -3445,26 +3445,7 @@ $html = <<<EOF
         }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-       <div>
-
-                    <div>
-
-                            <div>From</div>
-                            <div>$name</div>
-                            <div>Email Address</div>
-                            <div>Country of Residence</div>
-                    </div>
-
-                    <div style="float:left;">
-
-                    <div>From</div>
-                    <div>$name</div>
-                    <div>Email Address</div>
-                    <div>Country of Residence</div>
-            </div>
-       
-       
-       </div>
+    
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
@@ -3485,15 +3466,34 @@ $html = <<<EOF
                     <br/><br/>
                     </td>
         </tr></table>
-        <div class="test">
-        <br /><br />This is to certify that
-        <br /><br /><br /><span class="uppercase"></span>
-        <br /><br />is a volunteer with Translators without Borders (TWB) / CLEAR Global since .
-        <br />  has contributed  providing language services for: .
-        <br />
-        <br /><br />Translators without Borders is part of CLEAR Global, a nonprofit helping people get vital information and be
-        <br/>heard, whatever language they speak. We do this through language support, training, data, and technology.
-        </div>
+        <table>
+                <tr>
+                    <th>S/N</th>
+                    <th>Description</th>
+                    <th>PO</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                </tr>
+                <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                </tr>
+                <tr>
+                    <td>Centro comercial Moctezuma</td>
+                    <td>Francisco Chang</td>
+                    <td>Mexico</td>
+                    td>Centro comercial Moctezuma</td>
+                    <td>Francisco Chang</td>
+                    <td>Mexico</td>
+                </tr>
+        </table>
+
+       
         <div class="footer-main">
         <img  src="/ui/img/aimee_sign.png" />
         </div>
