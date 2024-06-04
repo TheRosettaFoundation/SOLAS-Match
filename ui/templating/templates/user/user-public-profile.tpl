@@ -1275,7 +1275,7 @@ If a language is to be removed from this list, the community will be informed be
 {if !empty($user_invoices)}
 <div class="table-responsive fs-5 mt-2">
 <h4 class="fw-bold">Invoice Section</h4>
-<table style="width:100%">
+<table class="table table-striped" style="width:100%">
     <thead>
         <tr>
             <td><strong>Invoice Number</strong></td>
@@ -1289,7 +1289,7 @@ If a language is to be removed from this list, the community will be informed be
             <td>{$invoice['invoice_number']}</td>
             <td>{$invoice['invoice_date']}</td>
             <td>{$invoice['amount']}</td>
-            <td><a class="btn btn-primary text-white" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" > Review Invoice</a></td>
+            <td><a class="btn btn-primary text-white" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" > View Invoice</a></td>
           
         </tr>
     {/foreach}
