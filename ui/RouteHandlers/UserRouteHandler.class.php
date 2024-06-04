@@ -3388,40 +3388,6 @@ EOF;
         // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
-        
-
-//         $tbl = <<<EOD
-
-//         <table>
-//         <tr>
-//             <th>S/N</th>
-//             <th>Description</th>
-//             <th>PO</th>
-//             <th>Quantity</th>
-//             <th>Unit Price</th>
-//             <th>Amount</th>
-//         </tr>
-//         <tr>
-//             <td>Alfreds Futterkiste</td>
-//             <td>Maria Anders</td>
-//             <td>Germany</td>
-//             <td>Alfreds Futterkiste</td>
-//             <td>Maria Anders</td>
-//             <td>Germany</td>
-//         </tr>
-//         <tr>
-//             <td>Centro comercial Moctezuma</td>
-//             <td>Francisco Chang</td>
-//             <td>Mexico</td>
-//             td>Centro comercial Moctezuma</td>
-//             <td>Francisco Chang</td>
-//             <td>Mexico</td>
-//         </tr>
-// </table>
-
-//                 EOD;
-
-
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
@@ -3517,32 +3483,32 @@ EOF;
 
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->SetFillColor(255, 0, 0);
-        $pdf->SetTextColor(255);
-        $pdf->SetDrawColor(128, 0, 0);
-        $pdf->SetLineWidth(0.3);
-        $pdf->SetFont('', 'B');
-        // Header
-        $w = array(40, 35, 40, 45);
-        $num_headers = count($header);
-        for($i = 0; $i < $num_headers; ++$i) {
-            $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
-        }
-        $pdf->Ln();
-        // Color and font restoration
-        $pdf->SetFillColor(224, 235, 255);
-        $pdf->SetTextColor(0);
-        $pdf->SetFont('');
-        // Data
-        $fill = 0;
-        foreach($data as $row) {
-            $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
-            $pdf->Cell($w[2], 6, number_format($row[2]), 'LR', 0, 'R', $fill);
-            $pdf->Cell($w[3], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
-            $pdf->Ln();
-            $fill=!$fill;
-        }
-        $pdf->Cell(array_sum($w), 0, '', 'T');
+    $pdf->SetTextColor(255);
+    $pdf->SetDrawColor(128, 0, 0);
+    $pdf->SetLineWidth(0.3);
+    $pdf->SetFont('', 'B');
+    // Header
+    $w = array(40, 35, 40, 45 ,40 ,45);
+    $num_headers = count($header);
+    for($i = 0; $i < $num_headers; ++$i) {
+        $pdf->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
+    }
+    $pdf->Ln();
+    // Color and font restoration
+    $pdf->SetFillColor(224, 235, 255);
+    $pdf->SetTextColor(0);
+    $pdf->SetFont('');
+    // Data
+    $fill = 0;
+    // foreach($data as $row) {
+    //     $pdf->Cell($w[0], 6, $row[0], 'LR', 0, 'L', $fill);
+    //     $pdf->Cell($w[1], 6, $row[1], 'LR', 0, 'L', $fill);
+    //     $pdf->Cell($w[2], 6, number_format($row[2]), 'LR', 0, 'R', $fill);
+    //     $pdf->Cell($w[3], 6, number_format($row[3]), 'LR', 0, 'R', $fill);
+    //     $pdf->Ln();
+    //     $fill=!$fill;
+    // }
+    $pdf->Cell(array_sum($w), 0, '', 'T');
    
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
