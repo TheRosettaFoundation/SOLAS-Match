@@ -3445,7 +3445,12 @@ $html = <<<EOF
         }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-    
+       <div>
+
+       <div style="width:50% ; background-color: red;"></div>
+       <div style="width:50% ; background-color: blue;"></div>
+       
+       </div>
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
