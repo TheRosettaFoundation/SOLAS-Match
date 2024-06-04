@@ -888,19 +888,12 @@ class TaskRouteHandler
 
         $word_count_err = null;
         $deadlineError = "";
-        
-
-        $task = $taskDao->getTask($task_id);
-        // $extra_scripts = "
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/DeadlinePicker1.js\"></script>";
 
         $extra_scripts = "
-         <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-         <script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepicker.js\" defer ></script>
-              ";
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepicker.js\" defer ></script>";
 
-
+        $task = $taskDao->getTask($task_id);
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $preReqTasks = $taskDao->getTaskPreReqs($task_id);
