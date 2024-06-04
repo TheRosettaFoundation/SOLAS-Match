@@ -3445,7 +3445,28 @@ $html = <<<EOF
         }
         </style>
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-        <table width="100%" cellspacing="0" cellpadding="55%">
+       <div>
+
+                    <div>
+
+                            <div>From</div>
+                            <div>$name</div>
+                            <div>Email Address</div>
+                            <div>Country of Residence</div>
+                    </div>
+
+                    <div style="float:left">
+
+                    <div>From</div>
+                    <div>$name</div>
+                    <div>Email Address</div>
+                    <div>Country of Residence</div>
+            </div>
+       
+       
+       </div>
+       
+       <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
@@ -3456,7 +3477,12 @@ $html = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="right" valign="middle"
-                    width="25%"><br/><br/>
+                    width="25%">
+                    <div>From</div>
+                    <div>$name</div>
+                    <div>Email Address</div>
+                    <div>Country of Residence</div>
+                    <br/><br/>
                     </td>
         </tr></table>
         <div class="test">
