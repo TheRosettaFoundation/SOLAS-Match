@@ -277,14 +277,6 @@
                             
                      </script>
 
-<script>
-
-// const userLocale = moment.locale();
-// const localDate = moment.utc(utcDate).local();
-
-
-</script>
-             
                      
 
    </div>               
