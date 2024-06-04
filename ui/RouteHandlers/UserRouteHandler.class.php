@@ -3489,21 +3489,15 @@ $tbl = <<<EOD
 <table border="1" cellpadding="2" cellspacing="2">
 <thead>
  <tr style="background-color:#FFFF00;color:#0000FF;">
-  <td width="30" align="center"><b>A</b></td>
-  <td width="140" align="center"><b>XXXX</b></td>
-  <td width="140" align="center"><b>XXXX</b></td>
-  <td width="80" align="center"> <b>XXXX</b></td>
-  <td width="80" align="center"><b>XXXX</b></td>
-  <td width="45" align="center"><b>XXXX</b></td>
+ <td width="30" align="center"><b></b></td>
+  <td width="60" align="center"><b>S/N</b></td>
+  <td width="140" align="center"><b>Description</b></td>
+  <td width="140" align="center"><b>PO</b></td>
+  <td width="80" align="center"> <b>Quantity</b></td>
+  <td width="80" align="center"><b>Unit Price</b></td>
+  <td width="45" align="center"><b>Amount</b></td>
  </tr>
- <tr style="background-color:#FF0000;color:#FFFF00;">
-  <td width="30" align="center"><b>B</b></td>
-  <td width="140" align="center"><b>XXXX</b></td>
-  <td width="140" align="center"><b>XXXX</b></td>
-  <td width="80" align="center"> <b>XXXX</b></td>
-  <td width="80" align="center"><b>XXXX</b></td>
-  <td width="45" align="center"><b>XXXX</b></td>
- </tr>
+
 </thead>
  <tr>
   <td width="30" align="center">1.</td>
