@@ -3398,6 +3398,7 @@ EOF;
         $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
+        print_r($invoice) ;
 
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
