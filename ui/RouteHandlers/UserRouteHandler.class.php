@@ -3386,8 +3386,9 @@ EOF;
         $data = $userDao->getInvoice($args['invoice_number']);
         $name = $invoice['linguist_name'];
         $email = $invoice['email'];
+        $invoice_number = $invoice['invoice_number'];
         $country = $invoice['country'];
-        $date = $invoice['invoice_date'];
+        $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
         $purchase_order = $invoice['purchase_order'];
         $description = $invoice['title'];
         $type = $invoice['type_text'];
@@ -3396,6 +3397,7 @@ EOF;
         $amount = $invoice['amount'];
         $taskId = $invoice['amount'];
         $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
+        $quantity =  $invoice['quantity'];
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
         print_r($invoice) ;
@@ -3475,7 +3477,7 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>Invoice:$purchase_order</div>
+                    <div>Invoice:$invoice_number</div>
                     <div>Date:$date</div>
 
                     <br/><br/>
@@ -3510,12 +3512,17 @@ $tbl = <<<EOD
  <tr>
   <td width="30" align="center">1</td>
   <td width="60" align="center"><b></b></td>
-  <td width="300">Description: $description<br /> Project : $project <br /> Language Pairs: $language<br /> Task type: $type<br /></td>
+  <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
   <td width="140">$purchase_order</td>
-  <td width="200">XXXX<br />XXXX</td>
+  <td width="200"> $quantity</td>
   <td width="100">$unit</td>
   <td align="center" width="100">$amount</td>
  </tr>
+ <tr>
+ <td colspan="5">Total</td>
+ <td width="100" align="center">$amount</td>
+ 
+</tr>
  
  
 
