@@ -65,9 +65,9 @@
 
                     <label for="datetimepicker1Input" class="form-label"><strong>Deadline</strong></label>
                         {if $deadline_error != ''}
-                            <div class="alert alert-error">
+                            <p class="alert alert-error">
                                 {$deadline_error}
-                            </div>
+                            </p>
                         {/if}
                     <div
                       class="input-group log-event"
