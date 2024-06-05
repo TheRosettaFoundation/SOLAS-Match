@@ -3518,7 +3518,7 @@ $tbl = <<<EOD
   <td align="center" width="100">$amount</td>
  </tr>
  <tr>
- <td colspan="6" style="font-weiGHT">Total</td>
+ <td colspan="5" style="font-weight:bold;">Total</td>
  <td width="100" align="center">$amount</td>
  
 </tr>
