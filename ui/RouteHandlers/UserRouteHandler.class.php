@@ -3498,8 +3498,7 @@ $tbl = <<<EOD
 <table border="1" cellpadding="2" cellspacing="2">
 <thead>
  <tr style="background-color:#FAFAFA;color:black;">
- <td width="30" align="center"><b></b></td>
-  <td width="60" align="center"><b>S/N</b></td>
+ <td width="30" align="center"><b> S/N</b></td>
   <td width="300" align="center"><b>Description</b></td>
   <td width="140" align="center"><b>PO</b></td>
   <td width="200" align="center"> <b>Quantity</b></td>
@@ -3510,15 +3509,14 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center">1</td>
-  <td width="60" align="center"><b></b></td>
   <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
-  <td width="140">$purchase_order</td>
-  <td width="200"> $quantity</td>
-  <td width="100">$unit</td>
+  <td width="140" align="center>$purchase_order</td>
+  <td width="200" align="center> $quantity</td>
+  <td width="100" align="center >$unit</td>
   <td align="center" width="100">$amount</td>
  </tr>
  <tr>
- <td colspan="6" style="font-weight:bold;">Total</td>
+ <td colspan="5" style="font-weight:bold;" align="center>Total</td>
  <td width="100" align="center">$amount</td>
  
 </tr>
