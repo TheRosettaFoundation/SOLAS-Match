@@ -12,6 +12,13 @@
 {if isset($flash['revoke_admin_success'])}
     <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['revoke_admin_success'])}</p>
 {/if}
+{if isset($flash['generate_invoices_error'])}
+    <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_error'])}</p>
+{/if}
+{if isset($flash['generate_invoices_success'])}
+    <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_success'])}</p>
+{/if}
+
 
 <div class="well">
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -305,42 +312,28 @@
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
   {if $roles & ($SITE_ADMIN)}
-    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
                     <label for="generate_invoices"><h2>Generate Invoices (normally for month)</h2></label>
                 </td>
             </tr>
-            {if isset($flash['generate_invoices_error'])}
-                <tr>
-                    <td colspan="2">
-                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_error'])}</p>
-                    </td>
-                </tr>
-            {/if}
-            {if isset($flash['generate_invoices_success'])}
-                <tr>
-                    <td colspan="2">
-                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_success'])}</p>
-                    </td>
-                </tr>
-            {/if}
             <tr>
                 <td>
                 </td>
                 <td valign="top">
+                    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
                     <button class="btn btn-success" type="submit" name="generate_invoices" value="1" id="generate_invoices">
                         <i class="icon-star icon-white"></i>
                         Generate Invoices
                     </button>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
                 </td>
             </tr>
         </table>
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-    </form>
   {/if}
-  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a> <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
+  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>&nbsp;&nbsp;&nbsp;<a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>
   <hr />
 {/if}
 
