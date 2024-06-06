@@ -64,7 +64,7 @@
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
             <td><a href="{urlFor name="project-view" options="project_id.{$task['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}</a></td>
-            <td>{substr($task['creator_email'], 0, strpos($task['creator_email'], '@'))}<br />{if !empty(substr($task['po_status'])}{$task['po_status']}{else}No PO{/if}{if !empty(substr($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}</td>
+            <td>{substr($task['creator_email'], 0, strpos($task['creator_email'], '@'))}<br />{if !empty($task['po_status'])}{$task['po_status']}{else}No PO{/if}{if !empty(substr($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}</td>
             <td><a href="{urlFor name="task-view" options="task_id.{$task['task_id']}"}" target="_blank">{$task['task_id']}</a></td>
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
