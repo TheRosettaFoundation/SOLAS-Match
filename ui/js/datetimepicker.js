@@ -42,6 +42,6 @@ document
         let local = dayjs(e.target.value);
         console.log(local);
         let utcTime = dayjs.utc(local);
-        console.log(utc);
+        console.log(utcTime);
         deadline.setAttribute("value", utcTime.format("YYYY-MM-DD HH:mm:ss"));
     });
