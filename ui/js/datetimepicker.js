@@ -31,6 +31,9 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
         localization: {
             format: "yyyy-MM-dd HH:mm:ss",
         },
+        defaultDate: dayjs(document.getElementById("datetimepicker1")).format(
+            "YYYY-MM-DD HH:mm:ss"
+        ),
     }
 );
 
