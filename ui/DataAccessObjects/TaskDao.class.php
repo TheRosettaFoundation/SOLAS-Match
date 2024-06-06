@@ -1080,7 +1080,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         $tasks = 0;
         $invoices = [];
         foreach ($sow_reports as $row) {
-            if ($row['processed'] == 0 && !empty($row['google_drive_link'])) {
+            if ($row['processed'] == 0 && !empty($row['google_drive_link']) && !empty($row['po_status']) && ($row['po_status'] == 'Completed' || $row['po_status'] == 'Approved')) {
                 $i = $row['user_id'];
                 if ($row['total_expected_cost'] >= 600) $i = "$i-P";
                 if (empty($invoices[$i])) $invoices[$i]   = [$row];

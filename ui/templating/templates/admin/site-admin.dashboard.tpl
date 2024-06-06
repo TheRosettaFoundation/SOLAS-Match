@@ -315,7 +315,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <label for="generate_invoices"><h2>Generate Invoices (normally for month)</h2></label>
+                    <h2>Generate Invoices (normally for month)</h2>
                 </td>
             </tr>
             <tr>
@@ -333,7 +333,7 @@
             </tr>
         </table>
   {/if}
-  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>&nbsp;&nbsp;&nbsp;<a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>
+  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>&nbsp;&nbsp;&nbsp;<a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
   <hr />
 {/if}
 
