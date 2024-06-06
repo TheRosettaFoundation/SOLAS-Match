@@ -1278,6 +1278,41 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+    {if !empty($user_invoices)}
+<div class="mt-2 p-4 rounded-3 bg-body">
+<div class="table-responsive fs-5 mt-2">
+<h4 class="fw-bold">Invoice Section</h4>
+<table class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <td><strong>Invoice Number</strong></td>
+            <td><strong>Invoice Date</strong></td>
+            <td><strong>Invoice Amount</strong></td>
+            <td><strong>Invoice Status</strong></td>
+           
+        </tr>
+    </thead>
+    {foreach $user_invoices as $invoice}
+        <tr>
+            <td><a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" > {$invoice['invoice_number']}</a></td>
+            <td>{$invoice['invoice_date']}</td>
+            <td>${$invoice['amount']}</td>
+    <td>{if $invoice['amount']== "0"}Normal {elseif  $invoice['amount']== "1"} Proforma {else} Paid </td> {/if}
+            
+          
+        </tr>
+    {/foreach}
+</table>
+</div>
+
+</div>
+{/if}
+{/if}
+
+
+
+
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">

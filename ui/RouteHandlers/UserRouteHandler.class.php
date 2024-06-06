@@ -122,6 +122,12 @@ class UserRouteHandler
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
+        '/invoice/{invoice_number}[/]',
+        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
+        ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+        ->setName('get-invoice');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/user-uploads/{cert_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
@@ -192,6 +198,7 @@ class UserRouteHandler
             '/native_languages/{term}/search[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
             ->setName('native_languages');
+        
 
         $app->map(['GET', 'POST'],
             '/{user_id}/{request_type}/printrequest[/]',
@@ -2627,6 +2634,9 @@ error_log("result: $result");//(**)
             }
         }
 
+        $user_invoices = $userDao->getUserInvoices($user_id);
+      
+
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/eligible.js\" defer ></script>";
@@ -2811,6 +2821,7 @@ error_log("result: $result");//(**)
             'countries' => $countryDao->getCountries(),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
+            'user_invoices'  => $user_invoices
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -3363,6 +3374,173 @@ EOF;
         if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || (!empty($docusign_hook['data']['recipientId']) && $docusign_hook['data']['recipientId'] == 1)))
             $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
         die;
+    }
+
+    
+    public function getInvoice(Request $request, Response $response, $args)
+    {
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
+       
+        $userDao = new DAO\UserDao();
+        // print_r($args['invoice_number']);
+        $invoice = $userDao->getInvoice($args['invoice_number'])['0'];
+        // print_r($invoice);
+        $data = $userDao->getInvoice($args['invoice_number']);
+        $name = $invoice['linguist_name'];
+        $email = $invoice['email'];
+        $invoice_number = $invoice['invoice_number'];
+        $country = $invoice['country'];
+        $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
+        $purchase_order = $invoice['purchase_order'];
+        $description = $invoice['title'];
+        $type = $invoice['type_text'];
+        $language = $invoice['language_pair_name'];
+        $project = $invoice['project_title'];
+        $amount = $invoice['amount'];
+        $taskId = $invoice['amount'];
+        $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
+        $quantity =  $invoice['quantity'];
+         // column titles
+        $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
+
+
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('TWB Platform');
+        $pdf->SetTitle("Invoice");
+        $pdf->SetSubject('Generate Linguist Invoice');
+        $pdf->SetKeywords('TWB Platform,Linguist Invoice');
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, [0, 64, 255], [0, 64, 128]);
+        $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+        //     require_once(dirname(__FILE__).'/lang/eng.php');
+        //     $pdf->setLanguageArray($l);
+        // }
+
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('dejavusans', '', 9, '', false);
+        $pdf->AddPage('L');
+        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
+        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
+
+$html = <<<EOF
+        <style>
+        d-flex {
+            display:flex;
+            justify-content:space-between;
+        }
+        div.test {
+            color: #000000;
+            font-size: 13pt;
+            border-style: solid solid solid solid;
+            border-width: 8px 8px 8px 8px;
+            border-color: #FFFFFF;
+            text-align: center;
+            margin: 50px auto;
+        }
+        .uppercase {
+            text-transform: uppercase;
+            font-weight:bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11pt;
+        }
+        .footer-main {
+            text-align:center;
+        }
+        </style>
+       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+       <br/>
+       <br/>
+       
+       <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%"><br/>
+                    <div>From:</div>
+                    <div>Name : $name</div>
+                    <div>Email Address: $email</div>
+                    <div>Country of Residence : $country</div>
+                    </td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="25%">
+                    <div>Invoice:$invoice_number</div>
+                    <div>Date:$date</div>
+
+                    <br/><br/>
+                    </td>
+        </tr></table>
+       <div style="margin-top:20px;">
+       <br/>
+       <br/>
+        <div>To:</div>
+        <div style="font-weight:bold;">CLEAR Global inc.</div>
+        <div>9169 W State St#83714</div>
+        <div>(203) 794-6698</div>
+       </div> 
+       <br/>
+       
+EOF;
+
+$tbl = <<<EOD
+<table border="1" cellpadding="2" cellspacing="2">
+<thead>
+ <tr style="background-color:#FAFAFA;color:black;">
+
+  <td width="30" align="center"><b>S/N</b></td>
+  <td width="300" align="center"><b>Description</b></td>
+  <td width="140" align="center"><b>PO</b></td>
+  <td width="200" align="center"> <b>Quantity</b></td>
+  <td width="100" align="center"><b>Unit Price</b></td>
+  <td width="100" align="center"><b>Amount</b></td>
+ </tr>
+
+</thead>
+ <tr>
+
+  <td width="30" align="center"><b>1</b></td>
+  <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
+  <td width="140">$purchase_order</td>
+  <td width="200"> $quantity</td>
+  <td width="100">$unit</td>
+  <td align="center" width="100">$amount</td>
+ </tr>
+ <tr>
+ <td colspan="5" style="font-weight:bold;">Total</td>
+ <td width="100" align="center">$amount</td>
+ 
+</tr>
+ 
+ 
+
+</table>
+EOD;
+
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->writeHTML($tbl, true, false, false, false, '');
+
+   
+    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
+    $pdf->lastPage();
+
+    $file_name = 'Invoice_.pdf';
+    $pdf->Output($file_name, 'I');
+    exit;
     }
 
     public static function flash($key, $value)
