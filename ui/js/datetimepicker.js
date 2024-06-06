@@ -41,7 +41,7 @@ document
     .addEventListener("change", (e) => {
         let local = dayjs(e.target.value);
         console.log(local);
-        let utcTime = dayjs.utc(local);
-        console.log(utcTime);
+        let utcTime = dayjs.utc(local).toString();
+        console.log(utcTime).toString();
         deadline.setAttribute("value", utcTime.format("YYYY-MM-DD HH:mm:ss"));
     });
