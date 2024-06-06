@@ -28,6 +28,12 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
             },
         },
         useCurrent: false,
+        change: function (date) {
+            if (date) {
+                console.log(date);
+                const selectedTime = date.format("YYYY-MM-DD HH:mm:ss");
+            }
+        },
 
         localization: {
             format: "yyyy-MM-dd HH:mm:ss",
