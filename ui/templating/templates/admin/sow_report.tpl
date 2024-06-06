@@ -53,7 +53,7 @@
         <th>Total</th>
         <th>Completed Date</th>
         <th>Payment Status</th>
-        <th>Processed?</th>
+        <th>Proc<br />essed?</th>
         <th>Invoice Date</th>
         <th>Invoice Status</th>
         <th>Invoice Number</th>
