@@ -27,9 +27,11 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
                 seconds: true,
             },
         },
+        useCurrent: false,
 
         localization: {
             format: "yyyy-MM-dd HH:mm:ss",
+            locale: "en-UK",
         },
     }
 );
@@ -40,6 +42,7 @@ document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
         let local = dayjs(e.target.value);
+        console.log(local);
         let utcTime = dayjs.utc(local);
         deadline.setAttribute("value", utcTime.format("YYYY-MM-DD HH:mm:ss"));
     });
