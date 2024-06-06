@@ -1,21 +1,13 @@
 {include file="new_header.tpl"}
 
     {assign var="task_id" value=$task->getId()}
-
     {assign var="type_id" value=$task->getTaskType()}
 
-
-
 <div class="container-fluid">
-
     <header class="">
-
         <div class="container py-2"> 
-
                 <div class="py-2" >
-
                     <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
-        
                     <a  href="{urlFor name="task-view" options="task_id.$task_id"}" class="text-primaryDark fw-bold text-decoration-none"> Task </a>       
                     
                     {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
@@ -24,20 +16,13 @@
                     <a class=" text-decoration-none text-body fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
                     {/if}
                      {/if}
-               
                 </div>
-                 
-
         </div>
-
     </header>
 
 <section class="bg-light-subtle my-2 pb-4"> 
-
         <div class="container py-5 ">
-
           <div class="d-flex  flex-wrap justify-content-between">
-
                <div class="fw-bold primaryDark fs-3">
 
                 {if $task->getTitle() != ''}
@@ -61,7 +46,6 @@
                  {if isset($chunks[$task_id])}
                    - <span class="text-quinary fs-5"> [Part {$chunks[$task_id]['low_level'] }</span><span class="text-quinary fs-5" >/{$chunks[$task_id]['number_of_chunks'] }]</span>
                 {/if}
-              
 
                 </div>
 
@@ -82,38 +66,23 @@
                         {Localisation::getTranslation('task_view_download_task')}  </a>
                     {/if}
                 {/if}
-               
-                
             </div>
-       
-
-
         </div>
 
                 {if $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                 <p class="alert alert-info alert-dismissible fade show mt-4">
-                    
                      {Localisation::getTranslation('task_view_0')}
-
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-
-
                 </p>
                 {elseif $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
                     <p class="alert alert-info  alert-dismissible fade show mt-4">
-
-                 
                         Note: You cannot claim this task, because you have previously claimed the matching translation task.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    
                     </p>
                 {elseif $is_denied_for_task}
-                  
                     <p class="alert alert-info  alert-dismissible fade show mt-4">
-                  
                          Note: You cannot claim this task, because you have previously claimed the matching revision or proofreading task.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                       
                     </p>
                 {/if}
             
@@ -121,43 +90,31 @@
                     <p class="alert alert-success  alert-dismissible fade show mt-4 ">
                     <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        
                     </p>
                 {/if}
 
                 {if isset($flash['error'])}
                     <p class="alert alert-error  alert-dismissible fade show mt-4">
-                   
                         <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    
                     </p>
                 {/if}
-        
-
-
        </div>
 
         <div class="container">
-     
-            <div class="row d-flex justify-content-between  ">
-
-                <div class=" col-sm-12  col-md-8 "> 
+            <div class="row d-flex justify-content-between">
+                <div class=" col-sm-12  col-md-8 gx-5"> 
 
                          {include file="task/task.details.tpl"} 
-
 
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                             <div class="bg-body p-2 border-secondary rounded-3 mt-2">
                               <div class="d-none d-md-flex justify-content-around p-2">
-
                                    <div class="fs-5 fw-bold w-75"> {Localisation::getTranslation('task_view_assign_label')}</div>
                                       <div class="fs-5 fw-bold w-75"> Remove a user from deny list for this task:</div>
-
                               </div>
-                              
+
                                <hr class="d-none d-md-block"></hr>
-                           
                         
                                <div class=" d-block d-md-flex p-2 fs-6 mt-2">
                                  <div class="w-50" >
@@ -183,8 +140,7 @@
                                         </a>
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                     </form> 
- 
-                                    
+
                                     </div>
                                     
                                     <div class="w-50">
@@ -199,20 +155,13 @@
                                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </div>
-
-
-                               
                                </div> 
 
-    
-                           
                                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btngray-sm mt-4 mb-2">
                                      <img src="{urlFor name='home'}ui/img/search-user.svg" alt="arrow" class="mx-1" ></i>&nbsp;Search for Translators
                                 </a>
                             </div>
                         {/if}
-
-                    
 
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
                         <div class="mb-2 mt-3">
@@ -265,19 +214,12 @@
                                 </a>
                             </p>
                         {/if}
-       
                 </div>
 
                 <div class=" col-sm-12  col-md-4"> 
-
-
-                         
+                            <h4 class="fw-bold mt-4">{Localisation::getTranslation('users_also_viewed')}</h4>
                             {if ($alsoViewedTasksCount>0)}
-                            <div class="row"></div>
-                                <div>
                                     <div>
-                                        <h4 class="fw-bold">{Localisation::getTranslation('users_also_viewed')}</h4>
-                                        
                                         {if isset($alsoViewedTasks)}
                                         <div>
                                             <div >
@@ -293,7 +235,6 @@
                                                             <a  href="{$siteLocation}task/{$also_viewed_task_id}/view" class="text-decoration-none custom-link fw-bold "> <h4>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)} </h4> </a>
                                                             </div>
                                                          <div class="mt-2 px-1">
-
                                                                       {if TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['source_and_target']}
                                                                         <span>
                                                                             {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
@@ -304,12 +245,9 @@
                                                                         <span>
                                                                             {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
                                                                         </span>
-                                                         
-                                                         
                                                          </div>   
                                                   
                                                         <div class="my-2 d-flex align-items-center">                                                                
-                                
                                                                     <span  class=" ms-1 rounded-pill badge  border border-2 border-greenBorder border-opacity-25  text-white font-bold fs-7" style="background-color:{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$also_viewed_type_id]['type_text_short']}</span>
 
                                                                     {if $alsoViewedTask->getWordCount()}
@@ -318,68 +256,36 @@
                                                                     {if isset($chunksViews[$also_viewed_task_id])}
                                                                         <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span > Part {$chunksViews[$also_viewed_task_id]['low_level'] }</span>/<span>{$chunksViews[$also_viewed_task_id]['number_of_chunks'] } </span></span>
                                                                     {/if}
-                                                            
                                                         </div>
                                                             <p class="px-1 mt-2">
                                                             <span class="text-muted">Due by </span> <strong><span class="convert_utc_to_local_deadline" style="display: inline-block; visibility: hidden">{$deadline_timestamps[$also_viewed_task_id]}</span></strong>
                                                             </p>
                                                             <p  class="project" class="px-1  text-decoration-none">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
                                                         </div>
-
-
-
                                                     </div>
                                                 {/for}
                                             </div>
                                         </div>
                                         {/if}
-                                        
                                     </div>
-                                  
+                            {else}
+                                <div>No tasks currently viewed by other Users at this time</div>
                             {/if}
-           
-        
                 </div>
-            
             </div>
-
         </div>
-
-
-         
-
 </section>
 
-
  <div class="container-sm">
-
          {if !empty($file_preview_path)}
-
- 
-
-
           <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap"> 
-          
           <div class="fw-bold">
-
                 {Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}
-          
           </div>
-
           <div class="d-flex ">
-
-                   
                         <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 d-none" />
-       
-                   
-
-                    
                          <a class="d-none" href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downing" alt="download" /> </a>
-
-    
-          
           </div>
-          
           </div>
          <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
             <iframe width="100%" height="100%" id="iframe"
@@ -387,14 +293,8 @@
                 frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
             </iframe>
          </div>
-
-       
         {/if}
- 
- 
  </div>
-
  </div>
-      
 
 {include file="footer2.tpl"}
