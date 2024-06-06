@@ -31,7 +31,7 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
 
         localization: {
             format: "yyyy-MM-dd HH:mm:ss",
-            locale: "pt-BR",
+            locale: "us",
         },
     }
 );
