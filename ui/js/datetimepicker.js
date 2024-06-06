@@ -31,12 +31,6 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
         localization: {
             format: "yyyy-MM-dd HH:mm:ss",
         },
-        useCurrent: false,
-        validateOnSelect: true,
-
-        validate: function (date) {
-            return date && date.format("HH:mm:ss") != "24:00:00";
-        },
     }
 );
 
