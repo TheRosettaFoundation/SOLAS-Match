@@ -39,9 +39,9 @@ let deadline = document.getElementById("deadline_field");
 document
     .getElementById("datetimepicker1Input")
     .addEventListener("change", (e) => {
-        let local = dayjs(e.target.value);
+        let local = dayjs(e.target.value).format("YYYY-MM-DD HH:mm:ss");
         console.log(local.toString());
-        let utcTime = dayjs.utc(local);
-        console.log(utcTime.format("YYYY-MM-DD HH:mm:ss").toString());
+        let utcTime = dayjs.utc(local).format("YYYY-MM-DD HH:mm:ss");
+        console.log(utcTime);
         deadline.setAttribute("value", utcTime.format("YYYY-MM-DD HH:mm:ss"));
     });
