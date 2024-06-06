@@ -340,7 +340,7 @@
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
   {/if}
-  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>
+  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a> <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
   <hr />
 {/if}
 

@@ -13028,6 +13028,7 @@ BEGIN
         pcd.deal_id,
         '2.9.2' AS budget_code,
         tp.purchase_order,
+        pos.status AS po_status,
         pos.approver_mail,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
         ttd.pricing_and_recognition_unit_text_hours,
@@ -13063,8 +13064,6 @@ BEGIN
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
-        pos.status IS NOT NULL AND
-        (pos.status='Completed' OR pos.status='Approved') AND
         t.`task-status_id`=4
     ORDER BY
         tp.processed,
