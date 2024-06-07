@@ -3401,7 +3401,7 @@ EOF;
             $row_amount = '$' . round($row['row_amount'], 2);
             $unit = $row['pricing_and_recognition_unit_text_hours'];
             $unit_rate = '$' . $row['unit_rate'];
-            $quantity = $row['quantity'];
+            $quantity = round($row['quantity'], 2);
         }
 
          // column titles
