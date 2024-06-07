@@ -3377,13 +3377,16 @@ EOF;
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
-        // print_r($args['invoice_number']);
-        $invoice = $userDao->getInvoice($args['invoice_number'])['0'];
-        // print_r($invoice);
-        $data = $userDao->getInvoice($args['invoice_number']);
+
+        $invoice_number = $args['invoice_number'];
+        $invoice = $userDao->getInvoice($invoice_number);
+
+        $TWB = 'TWB-';
+        if ($invoice['status']&1) $TWB = 'DRAFT-';
+        $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
+
         $name = $invoice['linguist_name'];
         $email = $invoice['email'];
-        $invoice_number = $invoice['invoice_number'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
         $purchase_order = $invoice['purchase_order'];
@@ -3392,12 +3395,10 @@ EOF;
         $language = $invoice['language_pair_name'];
         $project = $invoice['project_title'];
         $amount = $invoice['amount'];
-        $taskId = $invoice['amount'];
         $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
         $quantity =  $invoice['quantity'];
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
-
 
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
@@ -3415,12 +3416,6 @@ EOF;
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-        //     require_once(dirname(__FILE__).'/lang/eng.php');
-        //     $pdf->setLanguageArray($l);
-        // }
-
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
         $pdf->AddPage('L');
@@ -3429,7 +3424,6 @@ EOF;
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, 0, 0, $pdf->getPageHeight());
-
 $html = <<<EOF
         <style>
         d-flex {
@@ -3466,16 +3460,15 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
                     <div>From:</div>
-                    <div>Name : $name</div>
+                    <div>Name: $name</div>
                     <div>Email Address: $email</div>
-                    <div>Country of Residence : $country</div>
+                    <div>Country of Residence: $country</div>
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>Invoice:$invoice_number</div>
-                    <div>Date:$date</div>
-
+                    <div>Invoice: $invoice_number</div>
+                    <div>Date: $date</div>
                     <br/><br/>
                     </td>
         </tr></table>
@@ -3488,14 +3481,12 @@ $html = <<<EOF
         <div>(203) 794-6698</div>
        </div> 
        <br/>
-       
 EOF;
 
 $tbl = <<<EOD
 <table border="1" cellpadding="2" cellspacing="2">
 <thead>
  <tr style="background-color:#FAFAFA;color:black;">
-
   <td width="30" align="center"><b>S/N</b></td>
   <td width="300" align="center"><b>Description</b></td>
   <td width="140" align="center"><b>PO</b></td>
@@ -3503,10 +3494,8 @@ $tbl = <<<EOD
   <td width="100" align="center"><b>Unit Price</b></td>
   <td width="100" align="center"><b>Amount</b></td>
  </tr>
-
 </thead>
  <tr>
-
   <td width="30" align="center"><b>1</b></td>
   <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
   <td width="140">$purchase_order</td>
@@ -3517,24 +3506,16 @@ $tbl = <<<EOD
  <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
  <td width="100" align="center">$amount</td>
- 
 </tr>
- 
- 
-
 </table>
 EOD;
-
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
-
-   
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Cell(0, 9, "Ref: $valid_key", 0, false, 'R', 0, '', 0, false, 'T', 'M' );
     $pdf->lastPage();
 
-    $file_name = 'Invoice_.pdf';
-    $pdf->Output($file_name, 'I');
+    $pdf->Output($invoice['filename'], 'I');
     exit;
     }
 
