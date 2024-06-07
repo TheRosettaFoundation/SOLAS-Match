@@ -1290,7 +1290,6 @@ If a language is to be removed from this list, the community will be informed be
             <td><strong>Invoice Date</strong></td>
             <td><strong>Invoice Amount</strong></td>
             <td><strong>Invoice Status</strong></td>
-           
         </tr>
     </thead>
     {foreach $user_invoices as $invoice}
@@ -1299,19 +1298,13 @@ If a language is to be removed from this list, the community will be informed be
             <td>{$invoice['invoice_date']}</td>
             <td>${$invoice['amount']}</td>
     <td>{if $invoice['amount']== "0"}Normal {elseif  $invoice['amount']== "1"} Proforma {else} Paid </td> {/if}
-            
-          
         </tr>
     {/foreach}
 </table>
 </div>
-
 </div>
 {/if}
 {/if}
-
-
-
 
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}

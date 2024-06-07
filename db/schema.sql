@@ -6512,7 +6512,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 DROP PROCEDURE IF EXISTS `setDefaultUserLanguagePref`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setDefaultUserLanguagePref`()

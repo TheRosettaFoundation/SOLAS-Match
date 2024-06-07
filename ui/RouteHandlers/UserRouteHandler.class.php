@@ -198,7 +198,6 @@ class UserRouteHandler
             '/native_languages/{term}/search[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
             ->setName('native_languages');
-        
 
         $app->map(['GET', 'POST'],
             '/{user_id}/{request_type}/printrequest[/]',
@@ -2634,9 +2633,6 @@ error_log("result: $result");//(**)
             }
         }
 
-        $user_invoices = $userDao->getUserInvoices($user_id);
-      
-
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/eligible.js\" defer ></script>";
@@ -2821,7 +2817,7 @@ error_log("result: $result");//(**)
             'countries' => $countryDao->getCountries(),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
-            'user_invoices'  => $user_invoices
+            'user_invoices'  => $userDao->getUserInvoices($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -3376,7 +3372,6 @@ EOF;
         die;
     }
 
-    
     public function getInvoice(Request $request, Response $response, $args)
     {
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
