@@ -3379,7 +3379,8 @@ EOF;
         $userDao = new DAO\UserDao();
 
         $invoice_number = $args['invoice_number'];
-        $invoice = $userDao->getInvoice($invoice_number);
+        $rows = $userDao->getInvoice($invoice_number);
+        $invoice = $rows[0];
 
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
@@ -3389,14 +3390,20 @@ EOF;
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
-        $purchase_order = $invoice['purchase_order'];
-        $description = $invoice['title'];
-        $type = $invoice['type_text'];
-        $language = $invoice['language_pair_name'];
-        $project = $invoice['project_title'];
-        $amount = $invoice['amount'];
-        $unit =  $invoice['pricing_and_recognition_unit_text_hours'];
-        $quantity =  $invoice['quantity'];
+        $amount = round($invoice['amount'], 2);
+
+        foreach ($rows as $row) {
+            $purchase_order = $row['purchase_order'];
+            $description = $row['title'];
+            $type = $row['type_text'];
+            $language = $row['language_pair_name'];
+            $project = $row['project_title'];
+            $row_amount = round($row['row_amount'], 2);
+            $unit = $row['pricing_and_recognition_unit_text_hours'];
+            $unit_rate = $row['unit_rate'];
+            $quantity = $row['quantity'];
+        }
+
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
@@ -3499,13 +3506,13 @@ $tbl = <<<EOD
   <td width="30" align="center"><b>1</b></td>
   <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
   <td width="140">$purchase_order</td>
-  <td width="200"> $quantity</td>
-  <td width="100">$unit</td>
-  <td align="center" width="100">$amount</td>
+  <td width="200">$quantity $unit</td>
+  <td width="100">$unit_rate</td>
+  <td align="center" width="100">${$row_amount}</td>
  </tr>
  <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
- <td width="100" align="center">$amount</td>
+ <td width="100" align="center">${$amount}</td>
 </tr>
 </table>
 EOD;
