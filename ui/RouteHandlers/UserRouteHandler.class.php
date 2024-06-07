@@ -3390,7 +3390,7 @@ EOF;
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
-        $amount = round($invoice['amount'], 2);
+        $amount = '$' . round($invoice['amount'], 2);
 
         foreach ($rows as $row) {
             $purchase_order = $row['purchase_order'];
@@ -3398,9 +3398,9 @@ EOF;
             $type = $row['type_text'];
             $language = $row['language_pair_name'];
             $project = $row['project_title'];
-            $row_amount = round($row['row_amount'], 2);
+            $row_amount = '$' . round($row['row_amount'], 2);
             $unit = $row['pricing_and_recognition_unit_text_hours'];
-            $unit_rate = $row['unit_rate'];
+            $unit_rate = '$' . $row['unit_rate'];
             $quantity = $row['quantity'];
         }
 
@@ -3508,11 +3508,11 @@ $tbl = <<<EOD
   <td width="140">$purchase_order</td>
   <td width="200">$quantity $unit</td>
   <td width="100">$unit_rate</td>
-  <td align="center" width="100">${$row_amount}</td>
+  <td align="center" width="100">$row_amount</td>
  </tr>
  <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
- <td width="100" align="center">${$amount}</td>
+ <td width="100" align="center">$amount</td>
 </tr>
 </table>
 EOD;
