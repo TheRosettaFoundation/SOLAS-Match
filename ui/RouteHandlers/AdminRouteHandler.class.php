@@ -298,13 +298,13 @@ class AdminRouteHandler
 
         $app->map(['GET', 'POST'],
             '/set_invoice_paid/{invoice_number}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_invoice_paid')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_paid')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('set_invoice_paid');
 
         $app->map(['GET', 'POST'],
             '/set_invoice_revoked/{invoice_number}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_invoice_revoked')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('set_invoice_revoked');
     }

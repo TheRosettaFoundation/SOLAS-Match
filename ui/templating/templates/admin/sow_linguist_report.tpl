@@ -92,9 +92,7 @@
 const mark_paid_buttons = document.querySelectorAll("form .mark_paid_button");
 
 async function set_invoice_paid({ invoice_number, sesskey }) {
-alert("invoice_number set_invoice_paid : " + invoice_number + sesskey);
     let url = `/set_invoice_paid/${ invoice_number }/`;
-alert("url : " + url);
     const key = { sesskey };
     try {
         const response = await fetch(url, {
