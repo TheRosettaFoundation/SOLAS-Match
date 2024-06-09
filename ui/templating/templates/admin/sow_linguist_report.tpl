@@ -117,13 +117,13 @@ if (mark_paid_buttons_array.length > 0) {
         curr.addEventListener("click", function (e) {
             e.preventDefault();
             let parent = curr.parentElement;
-            let invoice_number = parent.querySelector(".invoice_number").textContent;
+            let invoice_number = parent.querySelector(".invoice_number").value;
             let mark_paid_button = parent.querySelector(".mark_paid_button");
             let revoke_button    = parent.querySelector(".revoke_button");
             mark_paid_button.disabled = true;
             revoke_button = true;
 
-            let sesskey = parent.querySelector(".sesskey").textContent;
+            let sesskey = parent.querySelector(".sesskey").value;
 alert("invoice_number: " + invoice_number + sesskey);
             codes = {
                 invoice_number,
@@ -162,13 +162,13 @@ if (revoke_buttons_array.length > 0) {
         curr.addEventListener("click", function (e) {
             e.preventDefault();
             let parent = curr.parentElement;
-            let invoice_number = parent.querySelector(".invoice_number").textContent;
+            let invoice_number = parent.querySelector(".invoice_number").value;
             let mark_paid_button = parent.querySelector(".mark_paid_button");
             let revoke_button    = parent.querySelector(".revoke_button");
             mark_paid_button.disabled = true;
             revoke_button = true;
 
-            let sesskey = parent.querySelector(".sesskey").textContent;
+            let sesskey = parent.querySelector(".sesskey").value;
             codes = {
                 invoice_number,
                 sesskey,
