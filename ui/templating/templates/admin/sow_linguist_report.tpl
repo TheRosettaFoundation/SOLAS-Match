@@ -72,6 +72,7 @@
                         <button type="button" class="btn btn-success mark_paid_button" name="mark_paid_button">
                             <i class="icon-check icon-white"></i> Mark Paid
                         </button>
+                        <p style="margin-bottom: 5px;" />
                         <button type="button" class="btn btn-danger revoke_button" name="revoke_button">
                             <i class="icon-ban-circle icon-white"></i> Revoke
                         </button>
