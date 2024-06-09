@@ -67,10 +67,12 @@
             <td>
                 {if !is_null($task['status']) && !($task['status']&2)}
                     <form>
+                        <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
+
                         <button type="button" class="btn btn-success mark_paid_button" name="mark_paid_button">
                             <i class="icon-check icon-white"></i> Mark Paid
                         </button>
-                        <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
+                        <p style="margin-bottom: 5px;" />
                         <button type="button" class="btn btn-danger revoke_button" name="revoke_button">
                             <i class="icon-ban-circle icon-white"></i> Revoke
                         </button>
