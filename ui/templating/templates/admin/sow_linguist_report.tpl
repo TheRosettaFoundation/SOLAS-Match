@@ -92,7 +92,6 @@
 const mark_paid_buttons = document.querySelectorAll("form .mark_paid_button");
 
 async function set_invoice_paid({ invoice_number, sesskey }) {
-alert("POSTING revoke");
     let url = `/set_invoice_paid/${ invoice_number }/`;
     const key = { sesskey };
     try {
@@ -137,7 +136,6 @@ if (mark_paid_buttons_array.length > 0) {
 const revoke_buttons = document.querySelectorAll("form .revoke_button");
 
 async function set_invoice_revoked({ invoice_number, sesskey }) {
-alert("POSTING revoke");
     let url = `/set_invoice_revoked/${ invoice_number }/`;
     const key = { sesskey };
     try {
@@ -162,21 +160,13 @@ if (revoke_buttons_array.length > 0) {
         curr.addEventListener("click", function (e) {
             e.preventDefault();
             let parent = curr.parentElement;
-alert("revoke clicked");
-alert(parent);
-var t = parent.childNodes;
-for (i=0; i<t.length; i++) alert(t[i].id);
-for (i=0; i<t.length; i++) alert(t[i].class);
-alert(parent.querySelector(".invoice_number"));
             let invoice_number = parent.querySelector(".invoice_number").value;
-alert("invoice_number: " + invoice_number);
             let mark_paid_button = parent.querySelector(".mark_paid_button");
             let revoke_button    = parent.querySelector(".revoke_button");
             mark_paid_button.disabled = true;
             revoke_button.disabled = true;
 
             let sesskey = parent.querySelector(".sesskey").value;
-alert("sesskey: " + sesskey);
             codes = {
                 invoice_number,
                 sesskey,
