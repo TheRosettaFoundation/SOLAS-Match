@@ -92,6 +92,7 @@
 const mark_paid_buttons = document.querySelectorAll("form .mark_paid_button");
 
 async function set_invoice_paid({ invoice_number, sesskey }) {
+alert("invoice_number set_invoice_paid : " + invoice_number + sesskey);
     let url = `/set_invoice_paid/${ invoice_number }/`;
     const key = { sesskey };
     try {
@@ -123,6 +124,7 @@ if (mark_paid_buttons_array.length > 0) {
             revoke_button = true;
 
             let sesskey = parent.querySelector(".sesskey").textContent;
+alert("invoice_number: " + invoice_number + sesskey);
             codes = {
                 invoice_number,
                 sesskey,
