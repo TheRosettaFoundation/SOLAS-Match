@@ -13123,6 +13123,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_invoice_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT)
+BEGIN
+    UPDATE invoices SET status=status|2, invoice_paid_date=NOW() WHERE invoice_number=inv;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_invoice_revoked`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_revoked`(IN inv INT)
+BEGIN
+    UPDATE invoices SET revoked=1 WHERE invoice_number=inv;
+    UPDATE TaskPaids SET invoice_number=0, processed=0 WHERE invoice_number=inv;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

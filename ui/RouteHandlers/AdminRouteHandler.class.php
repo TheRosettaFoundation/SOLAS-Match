@@ -295,6 +295,18 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_linguist_report')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('sow_linguist_report');
+
+        $app->map(['GET', 'POST'],
+            '/set_invoice_paid/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_invoice_paid')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('set_invoice_paid');
+
+        $app->map(['GET', 'POST'],
+            '/set_invoice_revoked/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_invoice_revoked')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('set_invoice_revoked');
     }
 
     public function adminDashboard(Request $request, Response $response)
@@ -1626,9 +1638,36 @@ class AdminRouteHandler
     {
         global $template_data;
         $statsDao = new DAO\StatisticsDao();
+        $adminDao = new DAO\AdminDao();
 
         $template_data['tasks'] = $statsDao->sow_linguist_report();
+        $template_data['roles'] = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
+        $template_data['sesskey'] = Common\Lib\UserSession::getCSRFKey();
         return UserRouteHandler::render('admin/sow_linguist_report.tpl', $response);
+    }
+
+    public function set_invoice_paid(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_paid')) $result = 0;
+        if ($result) $taskDao->set_invoice_paid($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function set_invoice_revoked(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_revoked')) $result = 0;
+        if ($result) $taskDao->set_invoice_revoked($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 

@@ -46,7 +46,10 @@
         <th>Status (filled by Finance)</th>
         <th>Processed?</th>
         <th>Invoice Date</th>
-    </thead>    
+        {if $roles&($SITE_ADMIN + 128)}
+        <th></th>
+        {/if}
+    </thead>
     <tbody>
         {foreach $tasks as $task}
         <tr>
@@ -60,6 +63,22 @@
             <td>{if !is_null($task['status']) && $task['status']&2}Paid{/if}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
             <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
+            {if $roles&($SITE_ADMIN + 128)}
+            <td>
+                {if !is_null($task['status']) && !($task['status']&2)}
+                    <form>
+                        <button type="button" class="btn btn-success mark_paid_button" name="mark_paid_button">
+                            <i class="icon-check icon-white"></i> Mark Paid
+                        </button>
+                        <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
+                        <button type="button" class="btn btn-danger revoke_button" name="revoke_button">
+                            <i class="icon-ban-circle icon-white"></i> Revoke
+                        </button>
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+            </td>
+            {/if}
         </tr>
         {/foreach}
     </tbody>
@@ -67,5 +86,94 @@
 
 {else}<p class="alert alert-info">No Paid Tasks found</p>{/if}
 
+<script>
+const mark_paid_buttons = document.querySelectorAll("form .mark_paid_button");
+
+async function set_invoice_paid({ invoice_number, sesskey }) {
+    let url = `/set_invoice_paid/${invoice_number}/`;
+    const key = { sesskey };
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: new URLSearchParams(key),
+        });
+
+        if (!response.ok) {
+            throw new Error("error");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const arr = [...mark_paid_buttons];
+
+if (arr.length > 0) {
+    arr.forEach(function (curr, index, arr) {
+        let codes = {};
+        curr.addEventListener("click", function (e) {
+            e.preventDefault();
+            let parent = curr.parentElement;
+            let invoice_number = parent.querySelector(".invoice_number").textContent;
+            let mark_paid_button = parent.querySelector(".mark_paid_button");
+            let revoke_button    = parent.querySelector(".revoke_button");
+            mark_paid_button.disabled = true;
+            revoke_button = true;
+
+            let sesskey = parent.querySelector(".sesskey").textContent;
+            codes = {
+                invoice_number,
+                sesskey,
+            };
+
+            set_invoice_paid(codes);
+        });
+    });
+}
+
+const revoke_buttons = document.querySelectorAll("form .revoke_button");
+
+async function set_invoice_revoked({ invoice_number, sesskey }) {
+    let url = `/set_invoice_revoked/${invoice_number}/`;
+    const key = { sesskey };
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: new URLSearchParams(key),
+        });
+
+        if (!response.ok) {
+            throw new Error("error");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const arr = [...revoke_buttons];
+
+if (arr.length > 0) {
+    arr.forEach(function (curr, index, arr) {
+        let codes = {};
+        curr.addEventListener("click", function (e) {
+            e.preventDefault();
+            let parent = curr.parentElement;
+            let invoice_number = parent.querySelector(".invoice_number").textContent;
+            let mark_paid_button = parent.querySelector(".mark_paid_button");
+            let revoke_button    = parent.querySelector(".revoke_button");
+            mark_paid_button.disabled = true;
+            revoke_button = true;
+
+            let sesskey = parent.querySelector(".sesskey").textContent;
+            codes = {
+                invoice_number,
+                sesskey,
+            };
+
+            set_invoice_revoked(codes);
+        });
+    });
+}
+</script>
 </body>
 </html>

@@ -1108,4 +1108,14 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         }
         return [$tasks, count($invoices)];
     }
+
+    public function set_invoice_paid($invoice_number)
+    {
+        LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
+    }
+
+    public function set_invoice_revoked($invoice_number)
+    {
+        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
+    }
 }
