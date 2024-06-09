@@ -108,10 +108,10 @@ async function set_invoice_paid({ invoice_number, sesskey }) {
     }
 }
 
-const arr = [...mark_paid_buttons];
+const mark_paid_buttons_array = [...mark_paid_buttons];
 
-if (arr.length > 0) {
-    arr.forEach(function (curr, index, arr) {
+if (mark_paid_buttons_array.length > 0) {
+    mark_paid_buttons_array.forEach(function (curr, index, mark_paid_buttons_array) {
         let codes = {};
         curr.addEventListener("click", function (e) {
             e.preventDefault();
@@ -152,10 +152,10 @@ async function set_invoice_revoked({ invoice_number, sesskey }) {
     }
 }
 
-const arr = [...revoke_buttons];
+const revoke_buttons_array = [...revoke_buttons];
 
-if (arr.length > 0) {
-    arr.forEach(function (curr, index, arr) {
+if (revoke_buttons_array.length > 0) {
+    revoke_buttons_array.forEach(function (curr, index, revoke_buttons_array) {
         let codes = {};
         curr.addEventListener("click", function (e) {
             e.preventDefault();
