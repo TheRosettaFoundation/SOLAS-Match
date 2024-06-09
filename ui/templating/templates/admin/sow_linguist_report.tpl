@@ -76,7 +76,7 @@
                         <button type="button" class="btn btn-danger revoke_button" name="revoke_button">
                             <i class="icon-ban-circle icon-white"></i> Revoke
                         </button>
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}
             </td>
