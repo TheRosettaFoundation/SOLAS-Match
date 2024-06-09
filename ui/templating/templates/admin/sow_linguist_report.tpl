@@ -90,7 +90,7 @@
 const mark_paid_buttons = document.querySelectorAll("form .mark_paid_button");
 
 async function set_invoice_paid({ invoice_number, sesskey }) {
-    let url = `/set_invoice_paid/${invoice_number}/`;
+    let url = `/set_invoice_paid/${ invoice_number }/`;
     const key = { sesskey };
     try {
         const response = await fetch(url, {
@@ -134,7 +134,7 @@ if (arr.length > 0) {
 const revoke_buttons = document.querySelectorAll("form .revoke_button");
 
 async function set_invoice_revoked({ invoice_number, sesskey }) {
-    let url = `/set_invoice_revoked/${invoice_number}/`;
+    let url = `/set_invoice_revoked/${ invoice_number }/`;
     const key = { sesskey };
     try {
         const response = await fetch(url, {
