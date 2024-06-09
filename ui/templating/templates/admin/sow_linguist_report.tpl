@@ -163,6 +163,10 @@ if (revoke_buttons_array.length > 0) {
             e.preventDefault();
             let parent = curr.parentElement;
 alert("revoke clicked");
+alert(parent);
+var t = parent.childNodes;
+for (i=0; i<t.length; i++) alert(t[i].id);
+for (i=0; i<t.length; i++) alert(t[i].class);
 alert(parent.querySelector(".invoice_number"));
             let invoice_number = parent.querySelector(".invoice_number").value;
 alert("invoice_number: " + invoice_number);
