@@ -156,7 +156,6 @@
                     });
                     
                     let textarea = document.getElementById("display");
-                    let deltaInput = document.getElementById('deltaInput')
 
 
                    console.log(textarea)
@@ -176,10 +175,6 @@
                       console.log(htmlContent);
                       let delta = quill.getContents();
                       textarea.value = htmlContent;
-                      deltaInput.value=JSON.stringify(delta);
-
-                      
-                     
 
                     
                     }
