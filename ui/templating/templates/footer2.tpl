@@ -303,6 +303,7 @@
                      function updateFormattedText(){
 
                        let delta = quill.getContents();
+                       
                        console.log(displayQuill.getContents());
                        displayQuill.setContents(delta) ;
                        setDescription(delta,sesskey,project_id) ;
