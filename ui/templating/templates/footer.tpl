@@ -183,6 +183,7 @@
                     }
 
                     let displayH = document.querySelector(".displayH").textContent ;
+                    console.log(displayH)
                     let display_F = document.querySelector('.displayF');
                     display_F.innerHTML = displayH;
 
