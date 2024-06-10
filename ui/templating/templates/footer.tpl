@@ -159,7 +159,9 @@
                     
                     let textarea = document.getElementById("project_description");
                     
-                    quill.root.innerHTM = textarea.value;
+                     var delta = quill.cliboard.convert(textarea.value)
+
+                     quill.setContents(delta)
 
                    console.log(textarea)
                
