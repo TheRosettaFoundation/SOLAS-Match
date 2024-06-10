@@ -204,6 +204,8 @@
                             {if $project->getDescription() != ''}
                                     
                                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                                 { $project->getDescription()}
+
                             {else}
                                 {Localisation::getTranslation('common_no_description_has_been_listed')}
                             {/if}  
