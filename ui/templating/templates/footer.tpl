@@ -165,7 +165,7 @@
                      var delta = quill.clipboard.convert(htmlText)
                      console.log(delta)
 
-                    //  quill.root.innerHTML = 
+                     quill.root.innerHTML = htmlText;
                 
                
 
