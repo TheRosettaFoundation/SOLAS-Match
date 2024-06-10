@@ -154,17 +154,8 @@
 
                      
                     const quill = new Quill('#editor', {
-                                        modules: {
-                                            toolbar: {
-                                            container: '#toolbar', // Selector for toolbar container
-                                            handlers: {
-                                                bold: customBoldHandler
-                                            }
-                                            }
-                                        },
-                                        theme:'snow'
-
-                                        });
+                      theme: 'snow'
+                    });
                     
                     let textarea = document.getElementById("project_description");
                                     
