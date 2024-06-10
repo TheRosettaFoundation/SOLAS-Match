@@ -159,9 +159,9 @@
                     
                     let textarea = document.getElementById("project_description");
                     
-                    console.log(textarea) ;
+                    console.log(textarea.value) ;
                     
-                     var delta = quill.cliboard.convert(textarea.value)
+                     var delta = quill.clipboard.convert(textarea.value)
 
                      quill.setContents(delta)
 
