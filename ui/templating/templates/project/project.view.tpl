@@ -210,10 +210,10 @@
                             </div>
 
                        </div>
-                       {assign var="project_id" value=$project->getId()}
+                       {* {assign var="project_id" value=$project->getId()}
                         <span class="d-none" id="project_id">{$project_id}</span>
-                        {if isset($sesskey)}<input type="hidden" id="sesskey" name="sesskey" value="{$sesskey}" />{/if}
-
+                        {if isset($sesskey)}<input type="hidden" id="sesskey" name="sesskey" value="{$sesskey}" />{/if} *}
+{* 
                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                         <div id="editor">
 
@@ -224,7 +224,7 @@
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
                         </div>
-                    {/if}
+                    {/if} *}
 
                     </td>
                     <td></td>
