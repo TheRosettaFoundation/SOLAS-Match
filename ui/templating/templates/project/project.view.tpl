@@ -212,7 +212,7 @@
                        </div>
 
                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                        <div id="editor" class="mt-4">
+                        <div id="editor">
 
                         {if $project->getDescription() != ''}
                             
