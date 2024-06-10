@@ -155,7 +155,7 @@
                       theme: 'snow'
                     });
                     
-                    let textarea = document.getElementById("display").value;
+                    let textarea = document.getElementById("display");
                     let deltaInput = document.getElementById('deltaInput')
 
 
@@ -172,10 +172,10 @@
 
                     function updateFormattedText(){
 
-                      let htmlContent = quill.root.innerHtml;
+                      let htmlContent = quill.root.innerHTML;
                       console.log(htmlContent);
                       let delta = quill.getContents();
-                      textarea = htmlContent;
+                      textarea.value = htmlContent;
                       deltaInput.value=JSON.stringify(delta);
 
                       
