@@ -162,10 +162,11 @@
                     console.log(textarea.value) ;
                     
                      var delta = quill.clipboard.convert(textarea.value)
+                     console.log(delta)
 
                      quill.setContents(delta)
 
-                     console.log(textarea)
+                
                
 
                     quill.on('text-change', function(delta, oldDelta, source){
