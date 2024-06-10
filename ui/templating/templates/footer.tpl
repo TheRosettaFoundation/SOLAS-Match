@@ -155,8 +155,8 @@
                       theme: 'snow'
                     });
                     
-                    let textarea = document.getElementById("#display");
-                    let deltaInput = document.getElementById('#deltaInput')
+                    let textarea = document.getElementById("display");
+                    let deltaInput = document.getElementById('deltaInput')
                    
                
 
