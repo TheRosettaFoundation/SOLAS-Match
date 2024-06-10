@@ -196,18 +196,8 @@
             <tbody class="fs-4 ">
                 <tr >
                     <td>
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                        <div id="editor">
-
-                        {if $project->getDescription() != ''}
-                            
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
-                        {else}
-                            {Localisation::getTranslation('common_no_description_has_been_listed')}
-                        {/if}  
-                        </div>
-                    {/if}
-                       <div id="formattedText" class="mt-2 p-2">
+                
+                       <div id="formattedText" class="mb-2 p-1">
 
                        <div id="display">
                           
@@ -218,6 +208,18 @@
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
                         </div>
+
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                            <div id="editor">
+    
+                            {if $project->getDescription() != ''}
+                                
+                                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                            {else}
+                                {Localisation::getTranslation('common_no_description_has_been_listed')}
+                            {/if}  
+                            </div>
+                        {/if}
 
                        </div>
                     </td>
