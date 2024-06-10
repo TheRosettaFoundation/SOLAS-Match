@@ -160,12 +160,12 @@
                     let textarea = document.getElementById("project_description");
                     
                     console.log(textarea.value) ;
+                    let htmlText = textarea.value ;
                     
-                     var delta = quill.clipboard.convert(textarea.value)
+                     var delta = quill.clipboard.convert(htmlText)
                      console.log(delta)
 
-                     quill.setContents(delta)
-
+                    //  quill.root.innerHTML = 
                 
                
 
