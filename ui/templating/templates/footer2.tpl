@@ -287,7 +287,7 @@
                         readOnly:true
                      });
                      
-                     const project_id = document.getElementById("project_id") ;
+                     const project_id = document.getElementById("project_id").textContent ;
                      console.log(project_id)
                      const  sesskey = document.getElementById("#sesskey");
 
