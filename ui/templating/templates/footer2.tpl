@@ -287,7 +287,8 @@
                         readOnly:true
                      });
                      
-                     const project_id = document.getElementById("project_id")
+                     const project_id = document.getElementById("project_id") ;
+                     console.log(project_id)
                      const  sesskey = document.getElementById("#sesskey");
 
                      quill.on('text-change', function(delta, oldDelta, source){
@@ -312,7 +313,7 @@
 
                     async function setDescription( description,sesskey,project_id) {
                     
-                    let url = `/project/${project_id}/alter/`;
+                    let url = `/project/9486/alter/`;
                     const key = { description,sesskey };
                     try {
                         const response = await fetch(url, {
