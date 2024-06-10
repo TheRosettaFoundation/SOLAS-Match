@@ -280,6 +280,11 @@
                      const quill = new Quill('#editor', {
                        theme: 'snow'
                      });
+                     
+                     let displayQuill = new Quill('#display',{
+                        theme:null,
+                        readOnly:true
+                     })
 
                      quill.on('text-change', function(delta, oldDelta, source){
                         if(source =='user'){
@@ -289,8 +294,8 @@
 
                      function updateFormattedText(){
 
-                     var editorHtml = document.getElementById("editor").children[0].innerHtml ;
-                     document.getElementById('display').innerHtml = editorHtml;
+                       let delta = quill.getContents();
+                       displayQuill.setContents(delta) ;
 
                      }
                    </script>

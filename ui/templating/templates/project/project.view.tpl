@@ -207,7 +207,7 @@
                         {/if}  
                         </div>
                     {/if}
-                       <div id="formattedText" class="mt-2">
+                       <div id="formattedText" class="mt-2 p-2">
 
                        <div id="display">
                           
