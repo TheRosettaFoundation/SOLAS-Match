@@ -151,16 +151,14 @@
                     <br/>
                     <br/>
                     <script>
-
-                     
+      
                     const quill = new Quill('#editor', {
                       theme: 'snow',
                       modules: {
                             toolbar: {
                                 container: '#toolbar-container'
                             }
-                        }
-                      
+                        }  
                     });
                     
                     let textarea = document.getElementById("project_description");
