@@ -304,16 +304,17 @@
 
                        let delta = quill.getContents();
                        displayQuill.setContents(delta) ;
-                       setDescription(delta,sesskey,project_id) ;
+                       setDescription(delta,sesskey) ;
 
                      
                      }
 
 
 
-                    async function setDescription( description,sesskey,project_id) {
-                    
-                    let url = `/project/3738/alter/`
+                   function setDescription( description,sesskey) {
+
+                    console.log(project_id) ;
+                    let url = `/project/${project_id}/alter/`
                     const key = { description,sesskey };
                     try {
                         const response = await fetch(url, {
