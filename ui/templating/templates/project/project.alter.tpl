@@ -58,7 +58,14 @@
                     {* <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea> *}
                   
                     <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
-                    <div id="editor"></div> 
+                    <div id="editor">
+                        <div id="toolbar">
+                          <select class="ql-color">
+                            <option value ="red"></option>
+                            <option value ="blue"></option>
+                            <option value ="green"></option>
+                          </select>
+                    </div> 
                     <br/>
                  
                     <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_impact')}</strong><span style="color: red">*</span></label>

@@ -158,17 +158,13 @@
                     });
                     
                     let textarea = document.getElementById("project_description");
-                    
-                    console.log(textarea.value) ;
+                                    
                     let htmlText = textarea.value ;
                     
-                     var delta = quill.clipboard.convert(htmlText)
-                     console.log(delta)
+                     var delta = quill.clipboard.convert(htmlText)                   
 
                      quill.root.innerHTML = htmlText;
                 
-               
-
                     quill.on('text-change', function(delta, oldDelta, source){
                        if(source =='user'){
                            updateFormattedText() ;
