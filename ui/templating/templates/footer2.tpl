@@ -310,8 +310,8 @@
 
 
                     async function setDescription( description,sesskey) {
-                    let url = `/project/{project_id}/alter/`
-                    const key = { description };
+                    let url = `/project/${project_id}/alter/`
+                    const key = { description,sesskey };
                     try {
                         const response = await fetch(url, {
                             method: "POST",
