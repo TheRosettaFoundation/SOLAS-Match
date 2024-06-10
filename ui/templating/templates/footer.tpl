@@ -155,11 +155,8 @@
                       theme: 'snow'
                     });
                     
-                    let displayQuill = new Quill('#display',{
-                       theme:null,
-                       readOnly:true
-                    });
-                    
+                    let textarea = document.getElementById("#display")
+                   
                
 
                     quill.on('text-change', function(delta, oldDelta, source){
@@ -172,7 +169,9 @@
 
                     function updateFormattedText(){
 
+                      let htmlContent = quill.root.innerHtml;
                       let delta = quill.getContents();
+                      textarea.value = htmlContent;
                       
                       console.log(displayQuill.getContents());
                       displayQuill.setContents(delta) ;
