@@ -197,7 +197,7 @@
                 <tr >
                     <td>
                 
-                       <div id="formattedText" class="mb-2 p-1">
+                       <div id="formattedText" class="mb-4 p-1">
 
                        <div id="display">
                           
@@ -210,7 +210,7 @@
                         </div>
 
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                            <div id="editor">
+                            <div id="editor" class="mt-4">
     
                             {if $project->getDescription() != ''}
                                 
