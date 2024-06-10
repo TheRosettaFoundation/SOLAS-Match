@@ -197,7 +197,7 @@
                 <tr >
                     <td>
                  
-                       <div id="formattedText" class="mb-4 p-2">
+                       <div id="formattedText" class="mb-4">
 
                         <div id="display">
                             
