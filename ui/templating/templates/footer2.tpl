@@ -304,15 +304,16 @@
 
                        let delta = quill.getContents();
                        displayQuill.setContents(delta) ;
-                       setDescription(delta,sesskey) ;
+                       setDescription(delta,sesskey,project_id) ;
 
                      
                      }
 
 
 
-                   function setDescription( description,sesskey,project_id) {
+                   async function setDescription( description,sesskey,project_id) {
 
+                    console.log(project_id);
                   
                     let url = `/project/9486/alter/`
                     const key = { description,sesskey };
