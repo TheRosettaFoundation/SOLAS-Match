@@ -288,8 +288,11 @@
 
                      quill.on('text-change', function(delta, oldDelta, source){
                         if(source =='user'){
-                            updateFormattedText()
+                            updateFormattedText() ;
                         }
+
+                        let formattedT = displayQuill.root.innerHTML;
+                        console.log(formattedT) ;
                      } )
 
                      function updateFormattedText(){
