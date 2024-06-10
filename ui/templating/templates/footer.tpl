@@ -159,7 +159,7 @@
                     let deltaInput = document.getElementById('deltaInput')
 
 
-                    quill.root.innerHtml = textareaText
+                    // quill.root.innerHtml = textareaText
                
 
                     quill.on('text-change', function(delta, oldDelta, source){
