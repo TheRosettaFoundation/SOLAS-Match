@@ -287,7 +287,8 @@
                         readOnly:true
                      });
                      
-                     let sesskey = document.getElementById("#sesskey");
+                     const project_id = document.getElementById("#project_id")
+                     const  sesskey = document.getElementById("#sesskey");
 
                      quill.on('text-change', function(delta, oldDelta, source){
                         if(source =='user'){
@@ -302,15 +303,15 @@
 
                        let delta = quill.getContents();
                        displayQuill.setContents(delta) ;
-                       setDescription(delta,sesskey) ;
+                       setDescription(delta,sesskey,project_id) ;
 
                      
                      }
 
 
 
-                    async function setDescription( description,sesskey) {
-                    let project_id = document.getElementById("#project_id")
+                    async function setDescription( description,sesskey,project_id) {
+                    
                     let url = `/project/${project_id}/alter/`;
                     const key = { description,sesskey };
                     try {
