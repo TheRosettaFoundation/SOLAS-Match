@@ -155,7 +155,7 @@
                       theme: 'snow'
                     });
                     
-                    let textarea = document.getElementById("display");
+                    let textarea = document.getElementById("project_description");
                     
                     quill.root.innerHTM = textarea.value;
 
