@@ -175,7 +175,7 @@
                       let htmlContent = quill.root.innerHtml;
                       console.log(htmlContent);
                       let delta = quill.getContents();
-                      textarea.value = htmlContent;
+                      textarea = htmlContent;
                       deltaInput.value=JSON.stringify(delta);
 
                       
