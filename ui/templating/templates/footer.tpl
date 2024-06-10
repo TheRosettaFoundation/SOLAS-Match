@@ -156,7 +156,8 @@
                     });
                     
                     let textarea = document.getElementById("display");
-
+                    
+                    quill.root.innerHTM = textarea.value;
 
                    console.log(textarea)
                
