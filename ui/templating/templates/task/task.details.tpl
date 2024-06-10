@@ -88,8 +88,8 @@
             <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
          
           
-            <th class="w-50 displayF"></th>
-            <th class="w-50 d-none displayH" >{Localisation::getTranslation('common_project_description')}</th>
+            
+            <th class="w-50" >{Localisation::getTranslation('common_project_description')}</th>
 
             </thead>
        
@@ -111,7 +111,8 @@
                 <td class="w-50">
                    
                         {if $project->getDescription() != ''}
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                            <div class="displayF"></div>
+                            <div class="d-none displayH">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}</div>
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
