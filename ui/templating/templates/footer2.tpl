@@ -276,6 +276,7 @@
 
                             
                      </script>
+{* RichEditor CODE  *}
                      <script>
                      const quill = new Quill('#editor', {
                        theme: 'snow'
@@ -284,7 +285,9 @@
                      let displayQuill = new Quill('#display',{
                         theme:null,
                         readOnly:true
-                     })
+                     });
+                     let project_id = document.getElementById("#project_id")
+                     let sesskey = document.getElementById("#sesskey");
 
                      quill.on('text-change', function(delta, oldDelta, source){
                         if(source =='user'){
@@ -299,8 +302,29 @@
 
                        let delta = quill.getContents();
                        displayQuill.setContents(delta) ;
+                       setDescription(delta,sesskey) ;
 
+                     
                      }
+
+
+
+                    async function setDescription( description,sesskey) {
+                    let url = `/project/{project_id}/alter/`
+                    const key = { description };
+                    try {
+                        const response = await fetch(url, {
+                            method: "POST",
+                            body: new URLSearchParams(key),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error("error");
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
                    </script>
 
                      

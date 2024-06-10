@@ -1166,6 +1166,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
 
+        print_r($request) ;
+
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
         }
