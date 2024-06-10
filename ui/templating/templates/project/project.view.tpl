@@ -211,7 +211,7 @@
 
                        </div>
                        {assign var="project_id" value=$project->getId()}
-                        <span class="d-none" id="project_id"> {$project_id}</span>
+                        <span class="d-none" id="project_id">{$project_id}</span>
                         {if isset($sesskey)}<input type="hidden" id="sesskey" name="sesskey" value="{$sesskey}" />{/if}
 
                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
