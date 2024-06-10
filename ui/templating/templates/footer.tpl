@@ -151,6 +151,8 @@
                     <br/>
                     <br/>
                     <script>
+
+                     
                     const quill = new Quill('#editor', {
                       theme: 'snow'
                     });
@@ -180,6 +182,9 @@
                     
                     }
 
+                    let displayH = document.getElementById("displayH").textContent ;
+                    let display_F = document.getElementById('displayF');
+                    display_F.innerHTML = displayH;
 
 
              

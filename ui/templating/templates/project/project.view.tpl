@@ -197,21 +197,20 @@
                 <tr >
                     <td>
                  
-                       <div id="formattedText" class="mb-4">
+                      
 
                         <div id="display">
                             
                             {if $project->getDescription() != ''}
                                     
-                                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
-                                 { $project->getDescription()}
+                              <div class="d-none displayH">  {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())} </div>
+                              <div class="displayF">  </div>
 
                             {else}
                                 {Localisation::getTranslation('common_no_description_has_been_listed')}
                             {/if}  
                             </div>
 
-                       </div>
                        {* {assign var="project_id" value=$project->getId()}
                         <span class="d-none" id="project_id">{$project_id}</span>
                         {if isset($sesskey)}<input type="hidden" id="sesskey" name="sesskey" value="{$sesskey}" />{/if} *}
