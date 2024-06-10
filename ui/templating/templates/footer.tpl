@@ -161,7 +161,9 @@
                                                 bold: customBoldHandler
                                             }
                                             }
-                                        }
+                                        },
+                                        theme:'snow'
+
                                         });
                     
                     let textarea = document.getElementById("project_description");
