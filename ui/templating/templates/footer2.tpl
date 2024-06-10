@@ -288,7 +288,7 @@
                      });
                      
                 
-                     const  sesskey = document.getElementById("sesskey");
+                     const  sesskey = document.getElementById("sesskey").textContent;
                      const  project_id = document.getElementById("project_id").textContent;
 
                      quill.on('text-change', function(delta, oldDelta, source){
