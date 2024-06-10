@@ -57,7 +57,7 @@
                     <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong><span style="color: red">*</span></label>
                     {* <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea> *}
                   
-                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="display">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
+                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
                     <div id="editor"></div> 
                     <br/>
                  
