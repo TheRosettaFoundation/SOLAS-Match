@@ -24,6 +24,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css"> 
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
+        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+   
 		
         {if isset($extra_styles)}
             {$extra_styles}
@@ -35,7 +37,10 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/dayjs.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/plugin/utc.js"></script>
-   
+
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+        
+        
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
 <script>
