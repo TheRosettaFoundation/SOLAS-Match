@@ -277,7 +277,7 @@
                             
                      </script>
 {* RichEditor CODE  *}
-                     <script>
+                     {* <script>
                      const quill = new Quill('#editor', {
                        theme: 'snow'
                      });
@@ -332,7 +332,7 @@
                         console.error(error);
                     }
                 }
-                   </script>
+                   </script> *}
 
                      
 

@@ -155,7 +155,8 @@
                       theme: 'snow'
                     });
                     
-                    let textarea = document.getElementById("#display")
+                    let textarea = document.getElementById("#display");
+                    let deltaInput = document.getElementById('#deltaInput')
                    
                
 
@@ -172,35 +173,17 @@
                       let htmlContent = quill.root.innerHtml;
                       let delta = quill.getContents();
                       textarea.value = htmlContent;
+                      deltaInput.value=JSON.stringify(delta);
+
                       
-                      console.log(displayQuill.getContents());
-                      displayQuill.setContents(delta) ;
-                      setDescription(delta,sesskey,project_id) ;
+                     
 
                     
                     }
 
 
 
-                  async function setDescription( description,sesskey,project_id) {
-
-                   console.log(project_id);
-                 
-                   let url = `/project/9486/alter/`
-                   const key = { description,sesskey };
-                   try {
-                       const response = await fetch(url, {
-                           method: "POST",
-                           body: new URLSearchParams(key),
-                       });
-
-                       if (!response.ok) {
-                           throw new Error("error");
-                       }
-                   } catch (error) {
-                       console.error(error);
-                   }
-               }
+             
                   </script>
 
     </body>  
