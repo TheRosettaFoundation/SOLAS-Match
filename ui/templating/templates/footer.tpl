@@ -176,7 +176,6 @@
                     function updateFormattedText(){
 
                       let htmlContent = quill.root.innerHTML;
-                      console.log(htmlContent);
                       let delta = quill.getContents();
                       textarea.value = htmlContent;
 
