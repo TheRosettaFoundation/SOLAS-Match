@@ -3512,7 +3512,7 @@ $tbl = <<<EOD
 <thead>
  <tr style="background-color:#FAFAFA;color:black;">
   <td width="30" align="center"><b>S/N</b></td>
-  <td width="300"  style="margin-left:10px;"><b>Description</b></td>
+  <td width="300" style="padding-right:10px;"><b>Description</b></td>
   <td width="140" align="center"><b>PO</b></td>
   <td width="200" align="center"> <b>Quantity</b></td>
   <td width="100" align="center"><b>Unit Price</b></td>
@@ -3521,7 +3521,7 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300"  style="padding-left:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project </span> <br />$language<br /> $type<br /></td>
+  <td width="300"  style="padding-right:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project </span> <br />$language<br /> $type<br /></td>
   <td width="140" align="center">$purchase_order</td>
   <td width="200" align="center">$quantity $unit</td>
   <td width="100" align="center">$unit_rate</td>
