@@ -3382,9 +3382,6 @@ EOF;
         $rows = $userDao->getInvoice($invoice_number);
    
         $invoice = $rows[0];
-        $invoice_1 =  $rows[1];
-        print_r($invoice);
-        print_r($invoice_1);
 
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
@@ -3407,6 +3404,8 @@ EOF;
             $unit_rate = '$' . $row['unit_rate'];
             $quantity = round($row['quantity'], 2);
         }
+
+        print_r($rows);
 
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
