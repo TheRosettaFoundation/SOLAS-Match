@@ -3490,7 +3490,7 @@ $html = <<<EOF
         <div style="font-weight:bold;">To</div>
         <div>CLEAR Global inc.</div>
         <div>9169 W State St#83714</div>
-        <div>(203) 794-6698</div>
+        <div> + 1 (203) 794-6698</div>
        </div> 
        <br/>
 EOF;
