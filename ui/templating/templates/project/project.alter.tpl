@@ -80,6 +80,8 @@
     <span class="ql-formats">
         <button class="ql-header" value="1"></button>
         <button class="ql-header" value="2"></button>
+        <button class="ql-header" value="3"></button>
+        <button class="ql-header" value="4"></button>
         <button class="ql-blockquote"></button>
 
     </span>
