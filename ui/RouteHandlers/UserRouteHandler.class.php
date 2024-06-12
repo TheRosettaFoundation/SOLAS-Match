@@ -3509,7 +3509,7 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300"  style="margin-left:10px;">$description<br /> <span style="font-weight:bold;">$project </span> <br /> Language: $language<br />$type<br /></td>
+  <td width="300"  style="margin-right:10px;"> $description<br /> <span style="font-weight:bold;"> $project </span> <br />  Language: $language<br /> $type<br /></td>
   <td width="140" align="center">$purchase_order</td>
   <td width="200" align="center">$quantity $unit</td>
   <td width="100" align="center">$unit_rate</td>
