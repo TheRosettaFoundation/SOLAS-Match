@@ -3480,6 +3480,7 @@ $html = <<<EOF
                     width="25%">
                     <div>$invoice_number</div>
                     <div>$date</div>
+                    
                     <br/><br/>
                     </td>
         </tr></table>
@@ -3487,7 +3488,7 @@ $html = <<<EOF
        <br/>
        <br/>
         <div style="font-weight:bold;">To</div>
-        <div style="font-weight:bold;">CLEAR Global inc.</div>
+        <div>CLEAR Global inc.</div>
         <div>9169 W State St#83714</div>
         <div>(203) 794-6698</div>
        </div> 
@@ -3508,7 +3509,7 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300">$description<br /> $project <br /> Language: $language<br />$type<br /></td>
+  <td width="300"  align="center">$description<br /> <span style="font-weight:bold;"> $project </span> <br /> Language: $language<br />$type<br /></td>
   <td width="140" align="center">$purchase_order</td>
   <td width="200" align="center">$quantity $unit</td>
   <td width="100" align="center">$unit_rate</td>
