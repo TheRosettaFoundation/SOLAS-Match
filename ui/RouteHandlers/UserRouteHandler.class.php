@@ -3523,7 +3523,7 @@ $tbl = '
  </tr>
 </thead>
 ';
-foreach ($rows as $row) {
+foreach ($rows as $index => $row) {
     $purchase_order = $row['purchase_order'];
     $description = $row['title'];
     $type = $row['type_text'];
@@ -3536,19 +3536,21 @@ foreach ($rows as $row) {
 
 $tbl .='
  <tr>
-  <td width="30" align="center"><b>1</b></td>
+  <td width="30" align="center"><b>' . $index . ' </b></td>
   <td width="300"  style="padding-right:10px; padding-top:10px;">' . $description . '<br /><span style="font-weight:bold;">' . $project . ' </span> <br />' . $language . '<br />' . $type . '<br /></td>
   <td width="140" align="center">' . $purchase_order . '</td>
   <td width="200" align="center">' . $unit . '</td>
   <td width="100" align="center">' . $unit_rate . '</td>
   <td align="center" width="100">' . $row_amount . '</td>
  </tr>
- <tr>
+';
+}
+
+ $tbl .=' <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
  <td width="100" align="center">' . $row_amount . '</td>
 </tr>
 </table>';
-}
 
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
