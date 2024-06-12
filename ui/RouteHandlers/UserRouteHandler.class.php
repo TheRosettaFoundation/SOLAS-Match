@@ -3425,8 +3425,7 @@ EOF;
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
-        $pdf->Cell(0, 10, 'Invoice', 0, 1, 'C');
-        
+
         $pdf->AddPage('L');
         $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
         $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
@@ -3467,6 +3466,24 @@ $html = <<<EOF
 
        <br/>
        <br/>
+         <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%"><br/>
+                    <div style="font-weight:bold;">From</div>
+                    <div>$name</div>
+                    <div>$email</div>
+                    <div>$country</div>
+                    </td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="25%">
+                    <div>$invoice_number</div>
+                    <div>$date</div>
+                    
+                    <br/><br/>
+                    </td>
+        </tr></table>
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
