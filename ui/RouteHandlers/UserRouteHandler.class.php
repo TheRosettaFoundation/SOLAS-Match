@@ -3393,19 +3393,19 @@ EOF;
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
         $amount = '$' . round($invoice['amount'], 2);
 
-        foreach ($rows as $row) {
-            $purchase_order = $row['purchase_order'];
-            $description = $row['title'];
-            $type = $row['type_text'];
-            $language = $row['language_pair_name'];
-            $project = $row['project_title'];
-            $row_amount = '$' . round($row['row_amount'], 2);
-            $unit = $row['pricing_and_recognition_unit_text_hours'];
-            $unit_rate = '$' . $row['unit_rate'];
-            $quantity = round($row['quantity'], 2);
-        }
+        // foreach ($rows as $row) {
+        //     $purchase_order = $row['purchase_order'];
+        //     $description = $row['title'];
+        //     $type = $row['type_text'];
+        //     $language = $row['language_pair_name'];
+        //     $project = $row['project_title'];
+        //     $row_amount = '$' . round($row['row_amount'], 2);
+        //     $unit = $row['pricing_and_recognition_unit_text_hours'];
+        //     $unit_rate = '$' . $row['unit_rate'];
+        //     $quantity = round($row['quantity'], 2);
+        // }
 
-        print_r($rows);
+        // print_r($rows);
 
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
@@ -3510,7 +3510,7 @@ $html = <<<EOF
        <br/>
 EOF;
 
-$tbl = <<<EOD
+$tbl = '
 <table border="1" cellpadding="2" cellspacing="2">
 <thead>
  <tr style="background-color:#FAFAFA;color:black;">
@@ -3522,20 +3522,34 @@ $tbl = <<<EOD
   <td width="100" align="center"><b>Amount</b></td>
  </tr>
 </thead>
+';
+foreach ($rows as $row) {
+    $purchase_order = $row['purchase_order'];
+    $description = $row['title'];
+    $type = $row['type_text'];
+    $language = $row['language_pair_name'];
+    $project = $row['project_title'];
+    $row_amount = '$' . round($row['row_amount'], 2);
+    $unit = $row['pricing_and_recognition_unit_text_hours'];
+    $unit_rate = '$' . $row['unit_rate'];
+    $quantity = round($row['quantity'], 2);
+
+$tbl .='
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300"  style="padding-right:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project </span> <br />$language<br /> $type<br /></td>
-  <td width="140" align="center">$purchase_order</td>
-  <td width="200" align="center">$quantity $unit</td>
-  <td width="100" align="center">$unit_rate</td>
-  <td align="center" width="100">$row_amount</td>
+  <td width="300"  style="padding-right:10px; padding-top:10px;">' . $description . '<br /><span style="font-weight:bold;">' . $project . ' </span> <br />' . $language . '<br />' . $type . '<br /></td>
+  <td width="140" align="center">' . $purchase_order . '</td>
+  <td width="200" align="center">' . $quantity $unit . '</td>
+  <td width="100" align="center">' . $unit_rate . '</td>
+  <td align="center" width="100">' . $row_amount . '</td>
  </tr>
  <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
- <td width="100" align="center">$amount</td>
+ <td width="100" align="center">' . $row_amount . '</td>
 </tr>
-</table>
-EOD;
+</table>';
+}
+
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
