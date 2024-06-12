@@ -3458,7 +3458,11 @@ $html = <<<EOF
             text-align:center;
         }
         </style>
+       <div> 
        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+       <div class=""><div>
+       </div>
+       <div style="font-weight:bold; float:left ;">INVOICE<div>
        <br/>
        <br/>
        
@@ -3466,23 +3470,23 @@ $html = <<<EOF
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
-                    <div>From:</div>
-                    <div>Name: $name</div>
-                    <div>Email Address: $email</div>
-                    <div>Country of Residence: $country</div>
+                    <div style="font-weight:bold;">From</div>
+                    <div>$name</div>
+                    <div>$email</div>
+                    <div>$country</div>
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>Invoice: $invoice_number</div>
-                    <div>Date: $date</div>
+                    <div>$invoice_number</div>
+                    <div>$date</div>
                     <br/><br/>
                     </td>
         </tr></table>
        <div style="margin-top:20px;">
        <br/>
        <br/>
-        <div>To:</div>
+        <div style="font-weight:bold;">To</div>
         <div style="font-weight:bold;">CLEAR Global inc.</div>
         <div>9169 W State St#83714</div>
         <div>(203) 794-6698</div>
@@ -3504,10 +3508,10 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
-  <td width="140">$purchase_order</td>
-  <td width="200">$quantity $unit</td>
-  <td width="100">$unit_rate</td>
+  <td width="300">$description<br /> $project <br /> Language: $language<br />$type<br /></td>
+  <td width="140" align="center">$purchase_order</td>
+  <td width="200" align="center">$quantity $unit</td>
+  <td width="100" align="center">$unit_rate</td>
   <td align="center" width="100">$row_amount</td>
  </tr>
  <tr>
