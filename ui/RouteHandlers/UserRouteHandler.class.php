@@ -3521,7 +3521,7 @@ foreach ($rows as $index => $row) {
     $unit = $row['pricing_and_recognition_unit_text_hours'];
     $unit_rate = '$' . $row['unit_rate'];
     $quantity = round($row['quantity'], 2);
-    $total += intval($row_amount) ;
+    $total += round($row['row_amount'], 2) ;
 
 
 $tbl .='
