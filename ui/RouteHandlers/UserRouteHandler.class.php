@@ -3476,8 +3476,7 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>$invoice_number</div>
-                    <div>$date</div>
+                    <div style="font-weight:bold; float:left ;">INVOICE</div>
                     
                     <br/><br/>
                     </td>
