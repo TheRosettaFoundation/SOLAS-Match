@@ -57,7 +57,7 @@
                     <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong><span style="color: red">*</span></label>
                     {* <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea> *}
                   
-                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
+                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px ,display:none ;" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
                     <div id="toolbar-container">
     <!-- Add the color picker to the toolbar -->
     <span class="ql-formats">
@@ -74,15 +74,12 @@
         <select class="ql-color"></select>
         <select class="ql-background"></select>
     </span>
-    <span class="ql-formats">
-        <button class="ql-script" value="sub"></button>
-        <button class="ql-script" value="super"></button>
-    </span>
+
     <span class="ql-formats">
         <button class="ql-header" value="1"></button>
         <button class="ql-header" value="2"></button>
         <button class="ql-blockquote"></button>
-        <button class="ql-code-block"></button>
+
     </span>
     <span class="ql-formats">
         <button class="ql-list" value="ordered"></button>
@@ -97,11 +94,9 @@
     <span class="ql-formats">
         <button class="ql-link"></button>
     </span>
-    <span class="ql-formats">
-        <button class="ql-clean"></button>
-    </span>
+  
 </div>
-                    <div id="editor">
+                    <div id="editor" style="width: 400px; margin-bottom: 40px">
         
                     </div> 
                     <br/>
