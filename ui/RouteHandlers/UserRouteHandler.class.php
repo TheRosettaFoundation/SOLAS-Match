@@ -3538,7 +3538,7 @@ $tbl .='
 
  $tbl .=' <tr>
  <td colspan="5" style="font-weight:bold;">Total</td>
- <td width="100" align="center">  '$' .' . $total . '</td>
+ <td width="100" align="center"> $ ' . $total . '</td>
 </tr>
 </table>';
 
