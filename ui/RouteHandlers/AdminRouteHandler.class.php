@@ -289,6 +289,24 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_report')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('sow_report');
+
+        $app->get(
+            '/sow_linguist_report[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_linguist_report')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('sow_linguist_report');
+
+        $app->map(['GET', 'POST'],
+            '/set_invoice_paid/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_paid')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('set_invoice_paid');
+
+        $app->map(['GET', 'POST'],
+            '/set_invoice_revoked/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('set_invoice_revoked');
     }
 
     public function adminDashboard(Request $request, Response $response)
@@ -360,6 +378,15 @@ class AdminRouteHandler
                     UserRouteHandler::flashNow('sync_hubspot_success', 'HubSpot Synchronized');
                 } else {
                     UserRouteHandler::flashNow('sync_hubspot_error', 'HubSpot NOT Synchronized');
+                }
+            }
+
+            if (($roles & (SITE_ADMIN)) && isset($post['generate_invoices'])) {
+                [$tasks, $invoices] = $taskDao->generate_invoices();
+                if ($invoices) {
+                    UserRouteHandler::flashNow('generate_invoices_success', "$tasks Tasks Invoiced in $invoices Invoices");
+                } else {
+                    UserRouteHandler::flashNow('generate_invoices_error', 'No Invoices Generated');
                 }
             }
 
@@ -1605,6 +1632,42 @@ class AdminRouteHandler
 
         $template_data['tasks'] = $statsDao->sow_report();
         return UserRouteHandler::render('admin/sow_report.tpl', $response);
+    }
+
+    public function sow_linguist_report(Request $request, Response $response)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+        $adminDao = new DAO\AdminDao();
+
+        $template_data['tasks'] = $statsDao->sow_linguist_report();
+        $template_data['roles'] = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
+        $template_data['sesskey'] = Common\Lib\UserSession::getCSRFKey();
+        return UserRouteHandler::render('admin/sow_linguist_report.tpl', $response);
+    }
+
+    public function set_invoice_paid(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_paid')) $result = 0;
+        if ($result) $taskDao->set_invoice_paid($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function set_invoice_revoked(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_revoked')) $result = 0;
+        if ($result) $taskDao->set_invoice_revoked($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 

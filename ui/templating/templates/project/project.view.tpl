@@ -572,7 +572,7 @@
                                 {/if}
                                  <th>Cancelled?</th>
                                  <th>{Localisation::getTranslation('common_task_deadline')}</th>
-                                 <th>{Localisation::getTranslation('common_publish')}?</th>
+                                 <th>Published?</th>
                                  <th>{Localisation::getTranslation('common_tracking')}</th>
                                  <th>{Localisation::getTranslation('common_edit')}</th>
                                  <th>{Localisation::getTranslation('project_view_archive_delete')}</th>

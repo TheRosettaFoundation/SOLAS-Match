@@ -430,4 +430,11 @@ class StatisticsDao extends BaseDao
         if (empty($result)) return [];
         return $result;
     }
+
+    public function sow_linguist_report()
+    {
+        $result = LibAPI\PDOWrapper::call('sow_linguist_report', '');
+        if (empty($result)) return [];
+        return $result;
+    }
 }

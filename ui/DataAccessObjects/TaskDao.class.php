@@ -881,14 +881,12 @@ error_log("createTaskDirectly: $args");
         $ids = [];
         foreach ($completed_paid_tasks as $task) {
             if ($task['payment_status'] == 'Unsettled' && !empty($po_ss_completed[$task['purchase_order']])) {
-                $linguist_total_for_project = 0;
-                foreach ($completed_paid_tasks as $t) {
-                    if ($task['project_id'] == $t['project_id'] && $task['user_id'] == $t['user_id'])
-                        $linguist_total_for_project += $t['word-count']*$t['unit_rate'];
-                }
-                if ($linguist_total_for_project < 600) $status = 'Ready for payment';
-                else                                   $status = 'Pending documentation';
-                error_log('Task: ' . $task['id'] . ', PO: ' . $task['purchase_order'] . " Changed to $status ($linguist_total_for_project)");
+                $total_expected_cost = $task['word-count']*$task['unit_rate'];
+                if ($task['divide_rate_by_60']) $total_expected_cost /= 60;
+error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $task['divide_rate_by_60']);
+                if ($total_expected_cost < 600) $status = 'Ready for payment';
+                else                            $status = 'Pending documentation';
+                error_log('Task: ' . $task['id'] . ', PO: ' . $task['purchase_order'] . " Changed to $status");
                 LibAPI\PDOWrapper::call('update_paid_status_status', LibAPI\PDOWrapper::cleanse($task['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($status));
                 $ids[] = $task['id'];
             }
@@ -1054,9 +1052,9 @@ error_log("createTaskDirectly: $args");
         return $result[0];
     }
 
-    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link)
+    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link, $linguist_name)
     {
-        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link));
+        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($linguist_name));
     }
 
     public function get_linguist_payment_information($user_id)
@@ -1071,5 +1069,53 @@ error_log("createTaskDirectly: $args");
         $result = LibAPI\PDOWrapper::call('get_active_languages', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) return [];
         return $result;
+    }
+
+    public function generate_invoices()
+    {
+        $statsDao = new StatisticsDao();
+
+        $sow_reports = $statsDao->sow_report();
+
+        $tasks = 0;
+        $invoices = [];
+        foreach ($sow_reports as $row) {
+            if ($row['processed'] == 0 && !empty($row['google_drive_link']) && !empty($row['po_status']) && ($row['po_status'] == 'Completed' || $row['po_status'] == 'Approved')) {
+                $i = $row['user_id'];
+                if ($row['total_expected_cost'] >= 600) $i = "$i-P";
+                if (empty($invoices[$i])) $invoices[$i]   = [$row];
+                else                      $invoices[$i][] = $row;
+                $tasks++;
+            }
+        }
+
+        $invoice_date = date('Y-m-d H:i:s');
+        foreach ($invoices as $invoice) {
+            $amount = 0;
+            $proforma = 0;
+            foreach ($invoice as $row) {
+                $amount += $row['total_expected_cost'];
+                if ($row['total_expected_cost'] >= 600) $proforma = 1;
+            }
+            $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanse($amount));
+            $invoice_number = $result[0]['id'];
+            $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
+            LibAPI\PDOWrapper::call('update_invoice_filename', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename));
+
+            foreach ($invoice as $row) {
+                LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
+            }
+        }
+        return [$tasks, count($invoices)];
+    }
+
+    public function set_invoice_paid($invoice_number)
+    {
+        LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
+    }
+
+    public function set_invoice_revoked($invoice_number)
+    {
+        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
     }
 }
