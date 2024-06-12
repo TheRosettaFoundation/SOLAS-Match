@@ -3471,7 +3471,7 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px;">INVOICE</div>
-                    <div style="padding:5px ; border-radius:  3px; background-color: green ; color : white ; display:"inline-block ; width:100px ;">$status_text</div>
+                    <div style="padding:5px ; border-radius:  3px; background-color: green ; color : white ; display:inline-block ; width:100px ;">$status_text</div>
                     
                     <br/><br/>
                     </td>
