@@ -3535,7 +3535,6 @@ $tbl = <<<EOD
 EOD;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
-    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->lastPage();
 
     $pdf->Output($invoice['filename'], 'I');
