@@ -3514,7 +3514,7 @@ $tbl = <<<EOD
 </thead>
  <tr>
   <td width="30" align="center"><b>1</b></td>
-  <td width="300">$description<br /> <span style="font-weight:bold;">  $project </span> <br /> Language: $language<br /> $type<br /></td>
+  <td width="300">$description<br /> <span >  $project </span> <br /> Language: $language<br /> $type<br /></td>
   <td width="140" align="center">$purchase_order</td>
   <td width="200" align="center">$quantity $unit</td>
   <td width="100" align="center">$unit_rate</td>
@@ -3528,6 +3528,7 @@ $tbl = <<<EOD
 EOD;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
+    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->lastPage();
 
     $pdf->Output($invoice['filename'], 'I');
