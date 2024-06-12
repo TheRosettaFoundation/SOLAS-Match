@@ -3459,13 +3459,7 @@ $html = <<<EOF
             text-align:center;
         }
         </style>
-       <div style="display:flex;justify-content:between;"> 
-        <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-        <div style="font-weight:bold; float:left ;">INVOICE</div>
-        </div>
-
-       <br/>
-       <br/>
+    
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
