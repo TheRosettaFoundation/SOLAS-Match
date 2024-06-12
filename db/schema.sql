@@ -12920,10 +12920,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   status         INT DEFAULT 0,
   revoked        INT DEFAULT 0,
   invoice_date   DATETIME NOT NULL,
-<<<<<<< HEAD
-=======
   invoice_paid_date DATETIME,
->>>>>>> sow
   linguist_id    INT UNSIGNED NOT NULL,
   linguist_name  VARCHAR(256) NOT NULL,
   amount         FLOAT NOT NULL,
@@ -12933,8 +12930,6 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-<<<<<<< HEAD
-=======
 DROP PROCEDURE IF EXISTS `insert_invoice`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT)
@@ -12960,7 +12955,6 @@ BEGIN
 END//
 DELIMITER ;
 
->>>>>>> sow
 DROP PROCEDURE IF EXISTS `get_user_invoices`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_invoices`(IN uID INT UNSIGNED)
@@ -12986,10 +12980,7 @@ BEGIN
         i.*,
         tp.task_id,
         tp.purchase_order,
-<<<<<<< HEAD
-=======
         tp.unit_rate,
->>>>>>> sow
         t.title,
         p.title AS project_title,
         o.name,
@@ -12998,11 +12989,7 @@ BEGIN
         CONCAT(l1.`en-name`, '-', l2.`en-name`) AS language_pair_name,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS quantity,
         ttd.pricing_and_recognition_unit_text_hours,
-<<<<<<< HEAD
-        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS amount,
-=======
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS row_amount,
->>>>>>> sow
         usr.email,
         usr.id,
         c.`en-name` AS country,
@@ -13022,8 +13009,6 @@ BEGIN
 END//
 DELIMITER ;
 
-<<<<<<< HEAD
-=======
 DROP PROCEDURE IF EXISTS `sow_report`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_report`()
@@ -13155,7 +13140,6 @@ BEGIN
 END//
 DELIMITER ;
 
->>>>>>> sow
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
