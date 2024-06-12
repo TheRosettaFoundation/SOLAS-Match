@@ -3388,6 +3388,17 @@ EOF;
         $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
         $name = $invoice['linguist_name'];
+        $status_text = '';
+        $status = $invoice['status'];
+        if($status == 0){
+            $status_text = 'Invoice';
+        }elseif($status == 1){
+               $status_text = 'Draft';
+        }elseif($status == 2){
+            $status_text = 'Invoice Paid';
+        }elseif($status == 3){
+            $status_text = 'Draft Paid';
+        }
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
@@ -3460,6 +3471,7 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px;">INVOICE</div>
+                    <div>$status_text</div>
                     
                     <br/><br/>
                     </td>
