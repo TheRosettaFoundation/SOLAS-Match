@@ -3380,7 +3380,11 @@ EOF;
 
         $invoice_number = $args['invoice_number'];
         $rows = $userDao->getInvoice($invoice_number);
+   
         $invoice = $rows[0];
+        $invoice_1 =  $rows[1];
+        print_r($invoice);
+        print_r($invoice_1);
 
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
