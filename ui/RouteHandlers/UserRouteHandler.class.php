@@ -3551,7 +3551,7 @@ $tbl .='
 }
 
     $pdf->writeHTML($html, true, false, true, false, '');
-    // $pdf->writeHTML($tbl, true, false, false, false, '');
+    $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
     $pdf->Output($invoice['filename'], 'I');
