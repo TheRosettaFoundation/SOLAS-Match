@@ -63,6 +63,10 @@
     <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
     <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
     <hr />
+{elseif $roles & (128)}
+    <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
+    <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
+    <hr />
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -310,8 +314,8 @@
     <hr />
 {/if}
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-  {if $roles & ($SITE_ADMIN)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
+  {if $roles & ($SITE_ADMIN + 128)}
         <table style="width: 40%">
             <tr>
                 <td colspan="2">

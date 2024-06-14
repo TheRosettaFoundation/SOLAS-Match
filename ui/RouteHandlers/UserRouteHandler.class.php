@@ -124,7 +124,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
         '/invoice/{invoice_number}[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
-        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
         ->setName('get-invoice');
 
         $app->map(['GET', 'POST'],

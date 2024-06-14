@@ -252,6 +252,21 @@ class Middleware
         return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
     }
 
+    public function authIsSiteAdmin_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, FINANCE);
+    }
+
+    public function authIsSiteAdmin_any_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE);
+    }
+
+    public function authIsSiteAdmin_or_PO_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | FINANCE);
+    }
+
     public function authIsSiteAdmin_any_or_org_admin_or_po_for_any_org(Request $request, RequestHandler $handler)
     {
         global $app;
