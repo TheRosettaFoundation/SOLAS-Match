@@ -12399,6 +12399,7 @@ DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_for_any_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_for_any_org`(IN uID INT UNSIGNED)
 BEGIN
+    SET @FINANCE=           128;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -12407,7 +12408,7 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
-    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @FINANCE | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
 
     SELECT *
     FROM Admins

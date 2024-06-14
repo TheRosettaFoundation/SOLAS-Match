@@ -318,7 +318,6 @@ class AdminRouteHandler
         $orgDao = new DAO\OrganisationDao();
 
         $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($userId);
-        if ($adminDao->get_roles($userId)&FINANCE) $roles |= FINANCE;
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
