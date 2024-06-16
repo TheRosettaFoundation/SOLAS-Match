@@ -1160,7 +1160,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
 
         $ch = curl_init("https://www.googleapis.com/drive/v3/files/$google_id?supportsAllDrives=true");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => str_replace('.pdf', 'REVOKED.pdf', $filename)]));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => str_replace('.pdf', '-REVOKED.pdf', $filename)]));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
