@@ -1125,6 +1125,8 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
                 error_log("Failed to read data from Google (upload): $result");
                 $res['id'] = '';
             }
+            error_log("$invoice_number , $filename" . $res['id']);
+            error_log(LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($res['id']));
             LibAPI\PDOWrapper::call('update_invoice_filename', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($res['id']));
         }
         return [$tasks, count($invoices)];
