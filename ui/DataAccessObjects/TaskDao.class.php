@@ -1155,8 +1155,6 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
     {
         $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
 
-        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
-
         $access_token = $this->get_google_access_token();
         [$filename, $google_id] = $this->get_invoice_file_id($invoice_number);
 
@@ -1169,6 +1167,8 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         curl_close($ch);
         $res = json_decode($result, true);
         if (empty($res['id'])) error_log("Failed to read data from Google (rename): $result");
+
+        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
     }
 
     public function get_google_access_token()
