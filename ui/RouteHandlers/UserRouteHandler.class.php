@@ -3374,7 +3374,7 @@ EOF;
 
     public function getInvoice(Request $request, Response $response, $args)
     {
-        [$filename, $file] = $this->get_invoice_pdf($args['invoice_number'])
+        [$filename, $file] = $this->get_invoice_pdf($args['invoice_number']);
         $response->getBody()->write($file);
         return $response->withHeader('Content-Type', 'application/pdf')->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
