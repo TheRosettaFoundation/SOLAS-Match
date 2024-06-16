@@ -1105,11 +1105,14 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
+            $TWB = '-TWB-';
+            if ($proforma) $TWB = '-DRAFT-';
+            $filename = date('Ym') . $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
 
-            $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
+            [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
             $data = [
                 'metadata' => new \CURLStringFile(json_encode(['name' => $filename, 'mimeType' => 'application/pdf', 'parents' => [substr($invoice[0]['google_drive_link'], strrpos($invoice[0]['google_drive_link'], '/') + 1)]]), $filename, 'application/json; charset=UTF-8'),
-                'file'     => new \CURLStringFile($RH->get_invoice_pdf($invoice_number), $filename, 'application/pdf')
+                'file'     => new \CURLStringFile($file, $filename, 'application/pdf')
             ];
             $ch = curl_init('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -1134,11 +1137,12 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
 
         $access_token = $this->get_google_access_token();
-        [$f, $google_id] = $this->get_invoice_file_id($invoice_number);
+        [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
+        [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
 
         $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $RH->get_invoice_pdf($invoice_number));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/pdf', "Authorization: Bearer $access_token"]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);

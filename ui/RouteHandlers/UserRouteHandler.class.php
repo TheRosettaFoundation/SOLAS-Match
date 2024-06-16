@@ -3374,8 +3374,9 @@ EOF;
 
     public function getInvoice(Request $request, Response $response, $args)
     {
-        echo $this->get_invoice_pdf($args['invoice_number']);
-        exit;
+        [$filename, $file] = $this->get_invoice_pdf($args['invoice_number'])
+        $response->getBody()->write($file);
+        return $response->withHeader('Content-Type', 'application/pdf')->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 
     public function get_invoice_pdf($invoice_number)
@@ -3385,7 +3386,7 @@ EOF;
         $userDao = new DAO\UserDao();
 
         $rows = $userDao->getInvoice($invoice_number);
-        if (empty($rows)) return '';
+        if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
 
         $TWB = 'TWB-';
@@ -3527,7 +3528,7 @@ EOD;
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->lastPage();
 
-    return $pdf->Output($invoice['filename'], 'S');
+    return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)
