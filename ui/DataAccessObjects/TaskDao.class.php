@@ -1073,7 +1073,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
 
     public function generate_invoices()
     {
-        $RH = new UserRouteHandler();
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
         $statsDao = new StatisticsDao();
 
         $sow_reports = $statsDao->sow_report();
@@ -1132,7 +1132,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
 
     public function set_invoice_paid($invoice_number)
     {
-        $RH = new UserRouteHandler();
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
 
         LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
 
@@ -1153,7 +1153,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
 
     public function set_invoice_revoked($invoice_number)
     {
-        $RH = new UserRouteHandler();
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
 
         LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
 
