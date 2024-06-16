@@ -1134,7 +1134,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
 
         $access_token = $this->get_google_access_token();
-        [$f, $google_id] = $this->function get_invoice_file_id($invoice_number);
+        [$f, $google_id] = $this->get_invoice_file_id($invoice_number);
 
         $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
@@ -1154,7 +1154,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
 
         $access_token = $this->get_google_access_token();
-        [$filename, $google_id] = $this->function get_invoice_file_id($invoice_number);
+        [$filename, $google_id] = $this->get_invoice_file_id($invoice_number);
 
         $ch = curl_init("https://www.googleapis.com/drive/v3/files/$google_id?supportsAllDrives=true");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
