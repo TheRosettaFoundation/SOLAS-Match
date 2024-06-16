@@ -3374,12 +3374,18 @@ EOF;
 
     public function getInvoice(Request $request, Response $response, $args)
     {
+        echo $this->get_invoice_pdf($args['invoice_number']);
+        exit;
+    }
+
+    public function get_invoice_pdf($invoice_number)
+    {
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
 
-        $invoice_number = $args['invoice_number'];
         $rows = $userDao->getInvoice($invoice_number);
+        if (empty($rows)) return '';
         $invoice = $rows[0];
 
         $TWB = 'TWB-';
@@ -3521,8 +3527,7 @@ EOD;
     $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->lastPage();
 
-    $pdf->Output($invoice['filename'], 'I');
-    exit;
+    return $pdf->Output($invoice['filename'], 'S');
     }
 
     public static function flash($key, $value)
