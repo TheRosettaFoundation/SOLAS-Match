@@ -3553,12 +3553,12 @@ foreach ($rows as $index => $row) {
 
     $tbl .= <<<EOF
     <tr>
-    <td width="30" align="center"><b>' . $index+1 . ' </b></td>
-    <td width="300"  style="padding-right:10px; padding-top:10px;">' . $description . '<br /><span style="font-weight:bold;">' . $project . ' </span> <br />' . $language . '<br />' . $type . '<br /></td>
-    <td width="140" align="center">' . $purchase_order . '</td>
-    <td width="200" align="center">' . $unit . '</td>
-    <td width="100" align="center">' . $unit_rate . '</td>
-    <td align="center" width="100">' . $row_amount . '</td>
+    <td width="30" align="center"><b>$index+1</b></td>
+    <td width="300"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br />' . $language . '<br />' . $type . '<br /></td>
+    <td width="140" align="center">$purchase_order</td>
+    <td width="200" align="center">$unit</td>
+    <td width="100" align="center">$unit_rate</td>
+    <td align="center" width="100">$row_amount</td>
     </tr>
     EOF;
 }
@@ -3566,7 +3566,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;">Total</td>
-    <td width="100" align="center"> $ ' . $total . '</td>
+    <td width="100" align="center"> $ $total</td>
     </tr>
     </table>
     EOF;
