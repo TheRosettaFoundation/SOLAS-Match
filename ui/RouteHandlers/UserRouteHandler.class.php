@@ -3470,33 +3470,32 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
- 
-                    
-                    <br/><br/>
-                    </td>
-                    
-        </tr>
-        
-     
-        <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/>
-                      
-                  
-                    </td>
-              <td width="35%"></td>  
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="25%">
-                    
                           <div style="font-size: 15px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 50px;">
   $status_text 
 </div>
                     
                     <br/><br/>
                     </td>
-                    
         </tr>
-           </table>
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%"><br/>
+                      <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+                  
+                    </td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="25%">
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
+                          <div style="font-size: 15px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 50px;">
+  $status_text 
+</div>
+                    
+                    <br/><br/>
+                    </td>
+        </tr>
+        
+        </table>
         <br/>
         <br/>
 
