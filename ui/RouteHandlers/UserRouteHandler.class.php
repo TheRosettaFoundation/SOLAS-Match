@@ -3497,36 +3497,31 @@ EOF;
 
        
     $html1 = <<<EOF
-        <table width="100%" cellspacing="0" cellpadding="55%">
-        <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/>
-                    <div style="font-weight:bold;">From</div>
-                    <div>$name</div>
-                    <div>$email</div>
-                    <div>$country</div>
-                    </td>
-              <td width="35%"></td>  
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="25%">
-                    <div>Invoice No :$invoice_number</div>
-                    <div>$date</div>
-                    
-                    <br/><br/>
-                    </td>
-        </tr></table>
-       <div style="margin-top:20px;">
-       <br/>
-       <br/>
-        <div style="font-weight:bold;">To</div>
-        <div>CLEAR Global inc.</div>
-        <div>9169 W State St#83714</div>
-        <div> + 1 (203) 794-6698</div>
-       </div> 
-       <br/>
-        EOF;
+<table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
+            <br/>
+            <div style="font-weight:bold;">From</div>
+            <div>$name</div>
+            <div>$email</div>
+            <div>$country</div>
+        </td>
+        <td width="34%">  </td>
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</div>  <div>$date</div>
+            <br/><br/>
+        </td>
+    </tr>
+</table>
+<div style="margin-top:20px;">
+    <br/>
+    <br/>
+    <div style="font-weight:bold;">To</div>
+    <div>CLEAR Global Inc.</div>  <div>9169 W State St #83714</div>  <div>+ 1 (203) 794-6698</div>  </div>
+<br/>
+EOF;
 
-        $pdf->writeHTML($html1, true, false, true, false, '');
+// ... rest of your TCPDF code
+
+    $pdf->writeHTML($html1, true, false, true, false, '');
         $tbl = <<<EOF
         <table border="1" cellpadding="2" cellspacing="2">
         <thead>
