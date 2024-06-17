@@ -3484,16 +3484,16 @@ $html = <<<EOF
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
 
-    // Insert the custom cell
-    $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
-    $pdf->SetFillColor(0, 0, 255); // Set background color to blue
-    $pdf->SetTextColor(255, 255, 255); // Set text color to white
-    $pdf->SetDrawColor(255, 0, 0); // Set border color to red
-    $pdf->SetFont('helvetica', '', 12); // Set font
-    $pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
+    // // Insert the custom cell
+    // $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
+    // $pdf->SetFillColor(0, 0, 255); // Set background color to blue
+    // $pdf->SetTextColor(255, 255, 255); // Set text color to white
+    // $pdf->SetDrawColor(255, 0, 0); // Set border color to red
+    // $pdf->SetFont('helvetica', '', 12); // Set font
+    // $pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
 
-    // Move to the next line
-    $pdf->Ln(5);
+    // // Move to the next line
+    // $pdf->Ln(5);
 
        
     $html1 = <<<EOF
