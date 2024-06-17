@@ -3489,9 +3489,9 @@ $paid_badge = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="5%">
+                    width="8%">
                 
-                          <div style="font-size: 12px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 40px;">
+                          <div style="font-size: 12px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; ">
   $status_text 
 </div>
                     
