@@ -3472,7 +3472,13 @@ $html = <<<EOF
                     
                     <br/><br/>
                     </td>
-        </tr></table>
+        </tr>
+        <tr>
+        <td style="padding: 5px; background-color: blue; color: white; font-size: 15px; border: 2px solid red; border-radius: 3px; text-align: center; vertical-align: middle;">
+            ' . $status_text . '
+        </td>
+    </tr>
+        </table>
         <br/>
         <br/>
        
