@@ -3476,7 +3476,7 @@ $html = <<<EOF
         <br/>
         <br/>
 
-      <div style="background-color: blue; color: white; font-size: 15px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 50px;">
+      <div style="background-color: blue; color: white; font-size: 12px; border: 2px solid red; width: 50px; height: 20px; padding: 2px; border-radius: 3px; text-align: center; line-height: 20px; display: inline-block;">
   $status_text 
 </div>'
 
