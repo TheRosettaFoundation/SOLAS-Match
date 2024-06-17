@@ -3479,9 +3479,22 @@ $html = <<<EOF
       <div style="background-color: blue; color: white; font-size: 12px; border: 2px solid red; width: 50px; height: 20px; padding: 2px; border-radius: 3px; text-align: center; line-height: 20px; display: inline-block;">
   $status_text 
 </div>'
+EOF;
+
+$pdf->writeHTML($html, true, false, true, false, '');
+
+$pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
+$pdf->SetFillColor(0, 0, 255); // Set background color to blue
+$pdf->SetTextColor(255, 255, 255); // Set text color to white
+$pdf->SetDrawColor(255, 0, 0); // Set border color to red
+$pdf->SetFont('helvetica', '', 12); // Set font
+$pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
+
+// Move to the next line
+$pdf->Ln(5);
 
        
-       <table width="100%" cellspacing="0" cellpadding="55%">
+$html1 = ' <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
@@ -3507,8 +3520,10 @@ $html = <<<EOF
         <div>9169 W State St#83714</div>
         <div> + 1 (203) 794-6698</div>
        </div> 
-       <br/>
+       <br/>'
 EOF;
+
+
 
 $tbl = '
 <table border="1" cellpadding="2" cellspacing="2">
@@ -3556,7 +3571,7 @@ $tbl .='
 </tr>
 </table>';
 
-    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->writeHTML($html1, true, false, true, false, '');
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
