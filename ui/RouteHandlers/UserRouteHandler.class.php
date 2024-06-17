@@ -3477,7 +3477,7 @@ $html = <<<EOF
                     <br/><br/>
                     </td>
         </tr>
-        <tr valign="bottom">
+        <tr >
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
                       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
