@@ -3471,7 +3471,6 @@ $html = <<<EOF
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
             
-                    <br/><br/>
                     </td>
         </tr>
         
@@ -3479,7 +3478,7 @@ $html = <<<EOF
 
 EOF;
 
-$html2 = <<<EOF
+$paid_badge = <<<EOF
        
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
@@ -3490,9 +3489,9 @@ $html2 = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="10%">
+                    width="5%">
                 
-                          <div style="font-size: 15px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 50px;">
+                          <div style="font-size: 12px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 40px;">
   $status_text 
 </div>
                     
@@ -3507,7 +3506,7 @@ $html2 = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->writeHTML($html2, true, false, true, false, '');
+    $pdf->writeHTML($paid_badge, true, false, true, false, '');
 
     // // Insert the custom cell
     // $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
