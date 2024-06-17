@@ -3553,7 +3553,7 @@ foreach ($rows as $index => $row) {
 
     $tbl .= <<<EOF
     <tr>
-    <td width="30" align="center"><b>$index++</b></td>
+    <td width="30" align="center"><b>$index + 1</b></td>
     <td width="300"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br />$language <br />$type<br /></td>
     <td width="140" align="center">$purchase_order</td>
     <td width="200" align="center">$unit</td>
