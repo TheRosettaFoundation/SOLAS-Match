@@ -3412,7 +3412,8 @@ EOF;
             $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
             break;
         default:
-            // Handle unexpected status values (optional)
+            $status_text = 'Draft Paid';
+            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
         }
 
         // Use $status_text and $badge_style in your HTML
