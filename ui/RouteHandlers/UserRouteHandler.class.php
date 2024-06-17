@@ -3389,15 +3389,21 @@ EOF;
 
         $name = $invoice['linguist_name'];
         $status_text = '';
+        $badge_style = '' ;
         $status = $invoice['status'];
         if($status == 0){
             $status_text = 'Invoice';
+            $badge_style = "font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; " ;
         }elseif($status == 1){
                $status_text = 'Draft';
+               $badge_style = "font-size: 14px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; " ;
+               
         }elseif($status == 2){
             $status_text = 'Invoice Paid';
+            $badge_style = "font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; " ;
         }elseif($status == 3){
             $status_text = 'Draft Paid';
+            $badge_style = "font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; " ;
         }
         $email = $invoice['email'];
         $country = $invoice['country'];
