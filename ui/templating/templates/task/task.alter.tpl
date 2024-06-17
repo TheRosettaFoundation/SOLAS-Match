@@ -63,11 +63,7 @@
                     <div class="mb-3">
                     <input class="d-none" type="text" id="deadline_field" name="deadline" value="{$task->getDeadline()}" style="width: 400px" />
 
-<<<<<<< HEAD
-                    <label for="datetimepicker1Input" class="form-label">Deadline</label>
-=======
                     <label for="datetimepicker1Input" class="form-label"><strong>Deadline</strong></label>
->>>>>>> sow
                         {if $deadline_error != ''}
                             <p class="alert alert-error text-danger fw-bold">
                                 {$deadline_error}

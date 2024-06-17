@@ -3434,10 +3434,7 @@ EOF;
         $pdf->Line(0, 0, 0, $pdf->getPageHeight());
 $html = <<<EOF
         <style>
-        d-flex {
-            display:flex;
-            justify-content:space-between;
-        }
+ 
         div.test {
             color: #000000;
             font-size: 13pt;
@@ -3470,8 +3467,8 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div style="font-weight:bold; float:left ; font-size:24px;">INVOICE</div>
-                    <div style="padding:5px ; border-radius:  3px; background-color: green ; color : white ; display:inline-block ; width:100px ;">$status_text</div>
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
+                    <div style="padding:5px ; border-radius:  3px; background-color: green ; color : white ; display:block ; width:200px ;">$status_text</div>
                     
                     <br/><br/>
                     </td>
