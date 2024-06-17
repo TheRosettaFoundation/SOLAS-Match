@@ -3470,7 +3470,9 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
-                    
+                          <div style="font-size: 15px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; line-height: 50px;">
+  $status_text 
+</div>
                     
                     <br/><br/>
                     </td>
@@ -3478,19 +3480,20 @@ $html = <<<EOF
         <br/>
         <br/>
 
+
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    //Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
-    // Insert the custom cell
-    $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
-    $pdf->SetFillColor(0, 0, 255); // Set background color to blue
-    $pdf->SetTextColor(255, 255, 255); // Set text color to white
-    $pdf->SetDrawColor(255, 0, 0); // Set border color to red
-    $pdf->SetFont('helvetica', '', 12); // Set font
-    $pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
 
-    // Move to the next line
-    $pdf->Ln(5);
+    // // Insert the custom cell
+    // $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
+    // $pdf->SetFillColor(0, 0, 255); // Set background color to blue
+    // $pdf->SetTextColor(255, 255, 255); // Set text color to white
+    // $pdf->SetDrawColor(255, 0, 0); // Set border color to red
+    // $pdf->SetFont('helvetica', '', 12); // Set font
+    // $pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
+
+    // // Move to the next line
+    // $pdf->Ln(5);
 
        
     $html1 = <<<EOF
