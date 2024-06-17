@@ -3388,23 +3388,36 @@ EOF;
         $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
         $name = $invoice['linguist_name'];
+
         $status_text = '';
-        $badge_style = '' ;
+        $badge_style = '';
+
         $status = $invoice['status'];
-        if($status == 0){
+
+        switch ($status) {
+        case 0:
             $status_text = 'Invoice';
-            $badge_style = "style = 'font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;' " ;
-        }elseif($status == 1){
+            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            break;
+        case 1:
             $status_text = 'Draft';
-            $badge_style = " style='font-size: 14px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;' " ;
-            
-        }elseif($status == 2){
+            $badge_style = "style='font-size: 14px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            break;
+        case 2:
             $status_text = 'Invoice Paid';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;' " ;
-        }elseif($status == 3){
+            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            break;
+        case 3:
             $status_text = 'Draft Paid';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; '" ;
+            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            break;
+        default:
+            // Handle unexpected status values (optional)
         }
+
+        // Use $status_text and $badge_style in your HTML
+
+      
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
@@ -3496,9 +3509,10 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
-                
-                          <div $badge_style> $status_text </div>
-                    
+                        div $badge_style>
+                                $status_text
+                            </div>
+     
                     <br/><br/>
                     </td>
         </tr>
