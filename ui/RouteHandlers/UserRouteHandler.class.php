@@ -3491,7 +3491,7 @@ $html = <<<EOF
                     <div>Invoice No :$invoice_number</div>
                     <div>$date</div>
                     
-                    <br/><br/>
+                    <br/>
                     </td>
         </tr></table>
        <div style="margin-top:20px;">
