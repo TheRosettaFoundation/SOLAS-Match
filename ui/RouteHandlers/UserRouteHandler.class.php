@@ -3510,7 +3510,7 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
-                        <div $badge_style>
+                        <div style='font-size: 14px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'>
                                 $status_text
                             </div>
      
