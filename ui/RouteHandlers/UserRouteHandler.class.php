@@ -3497,7 +3497,7 @@ $badge = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
                 
-                          <div style= ' . $badge_style . '>
+                          <div style='.$badge_style.'>
   $status_text 
 </div>
                     
@@ -3514,18 +3514,6 @@ EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->writeHTML($badge, true, false, true, false, '');
 
-    // // Insert the custom cell
-    // $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
-    // $pdf->SetFillColor(0, 0, 255); // Set background color to blue
-    // $pdf->SetTextColor(255, 255, 255); // Set text color to white
-    // $pdf->SetDrawColor(255, 0, 0); // Set border color to red
-    // $pdf->SetFont('helvetica', '', 12); // Set font
-    // $pdf->Cell(50, 20, $status_text, 1, 1, 'C', 1, '', 0, false, 'T', 'C'); // Create a cell with the desired format
-
-    // // Move to the next line
-    // $pdf->Ln(5);
-
-       
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
