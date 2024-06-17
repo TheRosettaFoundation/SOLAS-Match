@@ -3496,8 +3496,8 @@ EOF;
     $pdf->Ln(5);
 
        
-    $html1 = <<<EOF  
-    <table width="100%" cellspacing="0" cellpadding="55%">
+    $html1 = <<<EOF
+        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/>
@@ -3525,7 +3525,7 @@ EOF;
        </div> 
        <br/>
         EOF;
-        
+
         $pdf->writeHTML($html1, true, false, true, false, '');
         $tbl = <<<EOF
         <table border="1" cellpadding="2" cellspacing="2">
