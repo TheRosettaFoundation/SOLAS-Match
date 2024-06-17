@@ -3468,19 +3468,18 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
-                    <div style="padding: 5px; background-color: blue; color: white; font-size: 15px; border: 2px solid red; width: 50%; display: inline-block;">$status_text</div>
+                    
                     
                     <br/><br/>
                     </td>
-        </tr>
-        <tr>
-        <td style="padding: 5px; background-color: blue; color: white; font-size: 15px; border: 2px solid red; border-radius: 3px; text-align: center; vertical-align: middle;">
-            ' . $status_text . '
-        </td>
-    </tr>
-        </table>
+        </tr></table>
         <br/>
         <br/>
+
+      <div style="background-color: blue; color: white; font-size: 15px; border: 2px solid red; width: 50px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: center; line-height: 50px;">
+  $status_text 
+</div>'
+
        
        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
