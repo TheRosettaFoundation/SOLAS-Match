@@ -3497,7 +3497,7 @@ $badge = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
                 
-                          <div style=$badge_style>
+                          <div style= ' . $badge_style . '>
   $status_text 
 </div>
                     
