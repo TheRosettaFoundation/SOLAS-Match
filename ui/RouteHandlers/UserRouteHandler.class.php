@@ -3468,7 +3468,7 @@ $html = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
-                    <div style="padding: 5px; background-color: blue; color: white; font-size: 15px; border: 2px solid red; width: auto; display: inline-block;">$status_text</div>
+                    <div style="padding: 5px; background-color: blue; color: white; font-size: 15px; border: 2px solid red; width: 20px; display: inline-block;">$status_text</div>
                     
                     <br/><br/>
                     </td>
