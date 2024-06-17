@@ -3484,7 +3484,7 @@ $html = <<<EOF
 
 EOF;
 
-$paid_badge = <<<EOF
+$badge = <<<EOF
        
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
@@ -3497,7 +3497,7 @@ $paid_badge = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
                 
-                          <div style="font-size: 12px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left; ">
+                          <div style=$badge_style>
   $status_text 
 </div>
                     
@@ -3512,7 +3512,7 @@ $paid_badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->writeHTML($paid_badge, true, false, true, false, '');
+    $pdf->writeHTML($badge, true, false, true, false, '');
 
     // // Insert the custom cell
     // $pdf->SetXY($pdf->GetX(), $pdf->GetY() + 5); // Adjust position
