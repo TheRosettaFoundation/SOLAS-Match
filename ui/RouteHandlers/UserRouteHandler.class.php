@@ -3545,7 +3545,7 @@ EOF;
             <div>$email</div>
             <div>$country</div>
         </td>
-        <td width="34%">  </td>
+        <td width="35%">  </td>
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</div>  <div>$date</div>
             <br/><br/>
         </td>
