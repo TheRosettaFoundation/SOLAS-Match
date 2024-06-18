@@ -3395,33 +3395,26 @@ EOF;
 
         $name = $invoice['linguist_name'];
 
-        $status_text = '';
-       
-
         $status = $invoice['status'];
 
         switch ($status) {
         case 0:
             $status_text = 'Invoice';
-            $badge_style = 'green' ;
+            break;
         case 1:
             $status_text = 'DRAFT';
-            $badge_style = 'black';
             break;
         case 2:
             $status_text = 'PAID';
-            $badge_style = 'green';
             break;
         case 3:
             $status_text = 'DRAFT PAID';
-            $badge_style = 'green';
             break;
         default:
            
         }
         
-        $badge_style = 'blue';
-
+ 
         // Use $status_text and $badge_style in your HTML
 
       
