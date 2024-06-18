@@ -3396,25 +3396,31 @@ EOF;
         $name = $invoice['linguist_name'];
 
         $status = $invoice['status'];
+        $badge_text=''
 
         switch ($status) {
         case 0:
             $status_text = 'INVOICE';
+            $badge_text = 'INVOICE';
             break;
         case 1:
             $status_text = 'DRAFT';
+            $badge_text = 'DRAFT';
             break;
         case 2:
             $status_text = 'INVOICE';
+            $badge_text = 'PAID';
             break;
         case 3:
-            $status_text = 'DRAFT PAID';
+            $status_text = 'DRAFT';
+            $badge_text = 'PAID';
             break;
         default:
            
         }
         
- 
+  
+
         // Use $status_text and $badge_style in your HTML
 
       
@@ -3510,7 +3516,7 @@ $badge = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="7%">
                          <div style="font-size: 12px; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
-                                 $status_text
+                                 $badge_text
                             </div>
        
                     <br/><br/>
