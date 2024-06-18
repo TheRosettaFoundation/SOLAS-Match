@@ -3396,7 +3396,7 @@ EOF;
         $name = $invoice['linguist_name'];
 
         $status_text = '';
-        $badge_style = '';
+       
 
         $status = $invoice['status'];
 
@@ -3419,6 +3419,8 @@ EOF;
         default:
            
         }
+        
+        $badge_style = 'blue';
 
         // Use $status_text and $badge_style in your HTML
 
@@ -3514,7 +3516,7 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
-                         <div style="font-size: 16px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
+                         <div style="font-size: 12px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $status_text
                             </div>
                                <div  style="font-size: 14px; font-weight:bold; border: 2px solid ' . $badge_style . '; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
