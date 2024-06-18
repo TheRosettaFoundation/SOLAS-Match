@@ -3399,13 +3399,13 @@ EOF;
 
         switch ($status) {
         case 0:
-            $status_text = 'Invoice';
+            $status_text = 'INVOICE';
             break;
         case 1:
             $status_text = 'DRAFT';
             break;
         case 2:
-            $status_text = 'PAID';
+            $status_text = 'INVOICE';
             break;
         case 3:
             $status_text = 'DRAFT PAID';
