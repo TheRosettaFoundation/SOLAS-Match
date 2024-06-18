@@ -269,43 +269,43 @@ class AdminRouteHandler
         $app->get(
             '/deal/{deal_id}/report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:deal_id_report')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO_or_FINANCE')
             ->setName('deal_id_report');
 
         $app->get(
             '/paid_projects[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:paid_projects')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO_or_FINANCE')
             ->setName('paid_projects');
 
         $app->get(
             '/all_deals_report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_deals_report')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_PO_or_FINANCE')
             ->setName('all_deals_report');
 
         $app->get(
             '/sow_report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_report')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
             ->setName('sow_report');
 
         $app->get(
             '/sow_linguist_report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_linguist_report')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
             ->setName('sow_linguist_report');
 
         $app->map(['GET', 'POST'],
             '/set_invoice_paid/{invoice_number}[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_paid')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
             ->setName('set_invoice_paid');
 
         $app->map(['GET', 'POST'],
             '/set_invoice_revoked/{invoice_number}[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
             ->setName('set_invoice_revoked');
     }
 
@@ -381,7 +381,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($roles & (SITE_ADMIN)) && isset($post['generate_invoices'])) {
+            if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['generate_invoices'])) {
                 [$tasks, $invoices] = $taskDao->generate_invoices();
                 if ($invoices) {
                     UserRouteHandler::flashNow('generate_invoices_success', "$tasks Tasks Invoiced in $invoices Invoices");

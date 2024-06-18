@@ -124,7 +124,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
         '/invoice/{invoice_number}[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
-        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
         ->setName('get-invoice');
 
         $app->map(['GET', 'POST'],
@@ -3374,13 +3374,19 @@ EOF;
 
     public function getInvoice(Request $request, Response $response, $args)
     {
+        [$filename, $file] = $this->get_invoice_pdf($args['invoice_number']);
+        $response->getBody()->write($file);
+        return $response->withHeader('Content-Type', 'application/pdf')->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function get_invoice_pdf($invoice_number)
+    {
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
 
-        $invoice_number = $args['invoice_number'];
         $rows = $userDao->getInvoice($invoice_number);
-   
+        if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
 
         $TWB = 'TWB-';
@@ -3607,8 +3613,7 @@ foreach ($rows as $index => $row) {
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
-    $pdf->Output($invoice['filename'], 'I');
-    exit;
+    return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)

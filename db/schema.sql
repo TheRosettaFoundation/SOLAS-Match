@@ -12399,6 +12399,7 @@ DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_for_any_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_for_any_org`(IN uID INT UNSIGNED)
 BEGIN
+    SET @FINANCE=           128;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -12407,7 +12408,7 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
-    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @FINANCE | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
 
     SELECT *
     FROM Admins
@@ -12925,6 +12926,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   linguist_name  VARCHAR(256) NOT NULL,
   amount         FLOAT NOT NULL,
   filename       VARCHAR(255),
+  google_id      VARCHAR(50) DEFAULT '',
   PRIMARY KEY (invoice_number),
   KEY (linguist_id),
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -12941,9 +12943,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_invoice_filename`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_filename`(IN number INT, IN name VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_filename`(IN number INT, IN name VARCHAR(255), IN gID VARCHAR(50))
 BEGIN
-    UPDATE invoices SET filename=name WHERE invoice_number=number;
+    UPDATE invoices SET filename=name, google_id=gID WHERE invoice_number=number;
 END//
 DELIMITER ;
 

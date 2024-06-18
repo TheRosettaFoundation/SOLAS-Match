@@ -1073,6 +1073,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
 
     public function generate_invoices()
     {
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
         $statsDao = new StatisticsDao();
 
         $sow_reports = $statsDao->sow_report();
@@ -1089,6 +1090,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
             }
         }
 
+        $access_token = $this->get_google_access_token();
         $invoice_date = date('Y-m-d H:i:s');
         foreach ($invoices as $invoice) {
             $amount = 0;
@@ -1099,23 +1101,104 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
             }
             $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanse($amount));
             $invoice_number = $result[0]['id'];
-            $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
-            LibAPI\PDOWrapper::call('update_invoice_filename', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename));
 
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
+            $TWB = '-TWB-';
+            if ($proforma) $TWB = '-DRAFT-';
+            $filename = date('Ym') . $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
+
+            [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
+            $data = [
+                'metadata' => new \CURLStringFile(json_encode(['name' => $filename, 'mimeType' => 'application/pdf', 'parents' => [substr($invoice[0]['google_drive_link'], strrpos($invoice[0]['google_drive_link'], '/') + 1)]]), $filename, 'application/json; charset=UTF-8'),
+                'file'     => new \CURLStringFile($file, $filename, 'application/pdf')
+            ];
+            $ch = curl_init('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data', "Authorization: Bearer $access_token"]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $res = json_decode($result, true);
+            if (empty($res['id'])) {
+                error_log("Failed to read data from Google (upload): $result");
+                $res['id'] = '';
+            }
+            error_log("$invoice_number , $filename" . $res['id']);
+            error_log(LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($res['id']));
+            LibAPI\PDOWrapper::call('update_invoice_filename', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($res['id']));
         }
         return [$tasks, count($invoices)];
     }
 
     public function set_invoice_paid($invoice_number)
     {
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
+
         LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
+
+        $access_token = $this->get_google_access_token();
+        [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
+        [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
+
+        $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/pdf', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['id'])) error_log("Failed to read data from Google (PATCH): $result");
     }
 
     public function set_invoice_revoked($invoice_number)
     {
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
+
+        $access_token = $this->get_google_access_token();
+        [$filename, $google_id] = $this->get_invoice_file_id($invoice_number);
+
+        $ch = curl_init("https://www.googleapis.com/drive/v3/files/$google_id?supportsAllDrives=true");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => str_replace('.pdf', '-REVOKED.pdf', $filename)]));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['id'])) error_log("Failed to read data from Google (rename): $result");
+
         LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
+    }
+
+    public function get_google_access_token()
+    {
+        $ch = curl_init('https://www.googleapis.com/oauth2/v4/token');
+        $data = [
+            'client_id' => Common\Lib\Settings::get('google_ss.client_id'),
+            'client_secret' => Common\Lib\Settings::get('google_ss.client_secret'),
+            'refresh_token' => Common\Lib\Settings::get('google_ss.refresh_token'),
+            'grant_type' => 'refresh_token',
+        ];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['access_token'])) {
+            error_log("Failed to get Google access_token (drive): $result");
+            return '';
+        }
+        return $res['access_token'];
+    }
+
+    public function get_invoice_file_id($invoice_number)
+    {
+        $result = LibAPI\PDOWrapper::call('get_invoice', LibAPI\PDOWrapper::cleanse($invoice_number));
+        if (empty($result)) return ['', ''];
+        return [$result[0]['filename'], $result[0]['google_id']];
     }
 }
