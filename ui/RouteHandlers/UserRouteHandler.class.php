@@ -3406,19 +3406,18 @@ EOF;
             $badge_style = 'green' ;
         case 1:
             $status_text = 'Draft';
-            $badge_style = "style='font-size: 14px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            $badge_style = 'black';
             break;
         case 2:
             $status_text = 'Paid';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            $badge_style = 'green';
             break;
         case 3:
             $status_text = 'Draft Paid';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            $badge_style = 'green';
             break;
         default:
-            $status_text = 'Draft Paid';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+           
         }
 
         // Use $status_text and $badge_style in your HTML
