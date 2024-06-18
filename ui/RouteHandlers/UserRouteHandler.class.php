@@ -3410,7 +3410,7 @@ EOF;
             $badge_style = "style='font-size: 14px; border: 2px solid red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
             break;
         case 2:
-            $status_text = 'Invoice Paid';
+            $status_text = 'Paid';
             $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
             break;
         case 3:
@@ -3516,7 +3516,7 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
-                        <div style='font-size: 14px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'>
+                        <div style="font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
                                 $status_text
                             </div>
      
@@ -3585,7 +3585,7 @@ foreach ($rows as $index => $row) {
     $unit = $row['pricing_and_recognition_unit_text_hours'];
     $unit_rate = '$' . $row['unit_rate'];
     $quantity = round($row['quantity'], 2);
-    $total += round($row['row_amount'], 2) ;
+
     $number = $index + 1;
 
 
@@ -3604,7 +3604,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;">Total</td>
-    <td width="100" align="center"> $ $total</td>
+    <td width="100" align="center"> $ $row_amount</td>
     </tr>
     </table>
     EOF;
