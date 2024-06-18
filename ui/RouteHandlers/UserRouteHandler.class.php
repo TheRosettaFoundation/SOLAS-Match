@@ -3396,7 +3396,7 @@ EOF;
         $name = $invoice['linguist_name'];
 
         $status = $invoice['status'];
-        $badge_text=''
+        $badge_text='';
 
         switch ($status) {
         case 0:
