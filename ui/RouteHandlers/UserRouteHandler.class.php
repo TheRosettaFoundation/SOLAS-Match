@@ -3405,15 +3405,15 @@ EOF;
             $status_text = 'Invoice';
             $badge_style = 'green' ;
         case 1:
-            $status_text = 'Draft';
+            $status_text = 'DRAFT';
             $badge_style = 'black';
             break;
         case 2:
-            $status_text = 'Paid';
+            $status_text = 'PAID';
             $badge_style = 'green';
             break;
         case 3:
-            $status_text = 'Draft Paid';
+            $status_text = 'DRAFT PAID';
             $badge_style = 'green';
             break;
         default:
@@ -3517,7 +3517,7 @@ $badge = <<<EOF
                          <div style="font-size: 14px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
                                  $status_text
                             </div>
-                               <div style="font-size: 14px; border: 2px solid ' . $badge_style . ' ; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
+                               <div  style="font-size: 14px; font-weight:bold; border: 2px solid ' . $badge_style . '; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
                                  $status_text
                             </div>
      
