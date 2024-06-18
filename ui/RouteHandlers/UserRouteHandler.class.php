@@ -3403,7 +3403,7 @@ EOF;
         switch ($status) {
         case 0:
             $status_text = 'Invoice';
-            $badge_style = "style='font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;'";
+            $badge_style = "font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;";
             break;
         case 1:
             $status_text = 'Draft';
@@ -3516,8 +3516,11 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="8%">
-                        <div style="font-size: 14px; border: 2px solid green; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
-                                $status_text
+                         <div style="font-size: 14px; border: 2px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align: left;">
+                                 $status_text
+                            </div>
+                               <div style=$badge_style>
+                                 $status_text
                             </div>
      
                     <br/><br/>
