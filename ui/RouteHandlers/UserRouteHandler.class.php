@@ -3472,6 +3472,7 @@ $html = <<<EOF
                     </td>
         </tr>
         <br/>
+        <br/>
         </table>
 
 EOF;
