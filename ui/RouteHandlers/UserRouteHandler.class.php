@@ -3558,7 +3558,7 @@ foreach ($rows as $index => $row) {
     <td width="30" align="center"><b>$number</b></td>
     <td width="250"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br /> <span> $language </span> <br /><span> $type</span></td>
     <td width="80" align="center">$purchase_order</td>
-    <td width="80" align="center">$unit</td>
+    <td width="80" align="center"> $quantity $unit</td>
     <td width="80" align="center">$unit_rate</td>
     <td align="center" width="80">$row_amount</td>
     </tr>
