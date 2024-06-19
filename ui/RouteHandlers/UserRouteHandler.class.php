@@ -3578,7 +3578,7 @@ foreach ($rows as $index => $row) {
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
-    return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
+    // return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)
