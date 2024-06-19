@@ -3445,7 +3445,7 @@ EOF;
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
-        $pdf->AddPage('L');
+        $pdf->AddPage('P');
         $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
         $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
