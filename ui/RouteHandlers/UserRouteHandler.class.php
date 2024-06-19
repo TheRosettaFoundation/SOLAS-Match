@@ -3418,12 +3418,6 @@ EOF;
         default:
            
         }
-        
-  
-
-        // Use $status_text and $badge_style in your HTML
-
-      
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
@@ -3572,7 +3566,6 @@ EOF;
         </thead>
         EOF;
 
-$total = 0 ;
 
 foreach ($rows as $index => $row) {
     $purchase_order = $row['purchase_order'];
@@ -3584,10 +3577,8 @@ foreach ($rows as $index => $row) {
     $unit = $row['pricing_and_recognition_unit_text_hours'];
     $unit_rate = '$' . $row['unit_rate'];
     $quantity = round($row['quantity'], 2);
-
     $number = $index + 1;
-
-
+    
     $tbl .= <<<EOF
     <tr>
     <td width="30" align="center"><b>$number</b></td>
