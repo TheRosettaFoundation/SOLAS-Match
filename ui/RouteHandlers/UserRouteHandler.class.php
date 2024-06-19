@@ -3470,6 +3470,7 @@ $html = <<<EOF
             
                     </td>
         </tr>
+        <br/>
 
         </table>
 
