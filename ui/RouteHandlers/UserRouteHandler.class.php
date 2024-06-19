@@ -3446,7 +3446,7 @@ EOF;
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
         $pdf->AddPage('P');
-        // $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
         $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
@@ -3486,7 +3486,7 @@ $badge = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="20%">
+                    width="auto">
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
