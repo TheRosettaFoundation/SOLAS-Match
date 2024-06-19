@@ -3533,10 +3533,10 @@ EOF;
         <tr style="background-color:#FAFAFA;color:black;">
         <td width="30" align="center"><b>S/N</b></td>
         <td width="200" style="padding-right:10px;"><b>Description</b></td>
-        <td width="50" align="center"><b>PO</b></td>
-        <td width="50" align="center"> <b>Quantity</b></td>
-        <td width="50" align="center"><b>Unit Price</b></td>
-        <td width="50" align="center"><b>Amount</b></td>
+        <td width="70" align="center"><b>PO</b></td>
+        <td width="70" align="center"> <b>Quantity</b></td>
+        <td width="70" align="center"><b>Unit Price</b></td>
+        <td width="70" align="center"><b>Amount</b></td>
         </tr>
         </thead>
         EOF;
@@ -3558,10 +3558,10 @@ foreach ($rows as $index => $row) {
     <tr>
     <td width="30" align="center"><b>$number</b></td>
     <td width="200"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br /> <span> $language </span> <br /><span> $type</span></td>
-    <td width="50" align="center">$purchase_order</td>
-    <td width="50" align="center">$unit</td>
-    <td width="50" align="center">$unit_rate</td>
-    <td align="center" width="50">$row_amount</td>
+    <td width="70" align="center">$purchase_order</td>
+    <td width="70" align="center">$unit</td>
+    <td width="70" align="center">$unit_rate</td>
+    <td align="center" width="70">$row_amount</td>
     </tr>
     EOF;
 }
@@ -3569,7 +3569,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;"> Total</td>
-    <td width="100" align="center"> $amount</td>
+    <td width="70" align="center"> $amount</td>
     </tr>
     </table>
     EOF;
