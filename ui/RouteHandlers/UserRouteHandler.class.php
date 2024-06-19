@@ -3388,6 +3388,7 @@ EOF;
         $rows = $userDao->getInvoice($invoice_number);
         if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
+        print_r($invoice);
 
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
