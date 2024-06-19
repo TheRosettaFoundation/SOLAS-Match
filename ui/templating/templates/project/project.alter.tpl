@@ -70,8 +70,8 @@
     </span>
     <span class="ql-formats">
         <select class="ql-color">
-            <option>black</option>
-            <option style="background-color:red ;">red</option>
+            <option value="black"></option>
+            <option value="red"></option>
         </select>
     </span>
     <span class="ql-formats">
