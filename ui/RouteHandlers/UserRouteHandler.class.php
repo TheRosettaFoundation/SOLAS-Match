@@ -3514,14 +3514,13 @@ EOF;
             </div>
         </td>
         <td width="35%">  </td>
-        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</div>  <div>$date</div>
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</br> $date</div>
             <br/><br/>
         </td>
     </tr>
 </table>
-<div style="margin-top:30px;">
-    <br/>
-    <br/>
+<div style="margin-top:20px;">
+
     <br/>
     <div style="font-weight:bold;">To</div>
     <div>CLEAR Global Inc.<br/> 9169 W State St #83714 <br/>+ 1 (203) 794-6698  </div>
