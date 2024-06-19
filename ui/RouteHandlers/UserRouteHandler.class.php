@@ -3594,7 +3594,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;"> Total</td>
-    <td width="100" align="center">  $row_amount</td>
+    <td width="100" align="center"> $amount</td>
     </tr>
     </table>
     EOF;
