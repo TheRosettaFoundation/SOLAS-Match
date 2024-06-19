@@ -3470,8 +3470,7 @@ $html = <<<EOF
             
                     </td>
         </tr>
-       
-        
+
         </table>
 
 EOF;
@@ -3517,7 +3516,8 @@ EOF;
         </td>
     </tr>
 </table>
-<div style="margin-top:20px;">
+<div style="margin-top:30px;">
+    <br/>
     <br/>
     <br/>
     <div style="font-weight:bold;">To</div>
