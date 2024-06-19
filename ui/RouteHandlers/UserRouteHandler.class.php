@@ -3532,11 +3532,11 @@ EOF;
         <thead>
         <tr style="background-color:#FAFAFA;color:black;">
         <td width="30" align="center"><b>S/N</b></td>
-        <td width="300" style="padding-right:10px;"><b>Description</b></td>
-        <td width="140" align="center"><b>PO</b></td>
-        <td width="200" align="center"> <b>Quantity</b></td>
-        <td width="100" align="center"><b>Unit Price</b></td>
-        <td width="100" align="center"><b>Amount</b></td>
+        <td width="100" style="padding-right:10px;"><b>Description</b></td>
+        <td width="50" align="center"><b>PO</b></td>
+        <td width="50" align="center"> <b>Quantity</b></td>
+        <td width="50" align="center"><b>Unit Price</b></td>
+        <td width="50" align="center"><b>Amount</b></td>
         </tr>
         </thead>
         EOF;
