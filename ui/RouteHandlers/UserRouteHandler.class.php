@@ -3487,11 +3487,11 @@ $badge = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="12%">
+                    width="25%">
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
-                                 $badge_text        
+                                 $badge_text ($paid_date)      
                             </div>
-                            <br/> $paid_date
+                            <br/> 
                            
        
                     <br/><br/>
@@ -3513,7 +3513,7 @@ EOF;
             <div>$name<br/>$email<br/>$country<br/></div>
         </td>
         <td width="35%">  </td>
-        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</div>  <div>$date</div>
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number<br/>$date</div>
             <br/><br/>
         </td>
     </tr>
