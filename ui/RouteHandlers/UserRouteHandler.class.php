@@ -3446,7 +3446,7 @@ EOF;
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
         $pdf->AddPage('P');
-        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        // $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
         $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
