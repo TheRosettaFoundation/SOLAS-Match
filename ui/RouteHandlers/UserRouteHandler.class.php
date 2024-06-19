@@ -3466,7 +3466,7 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="35%">
-                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span style="font-weight:bold; float:left ; font-size:12px; text-transform:uppercase"> ( $badge_text ) </span></div>
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
             
                     </td>
         </tr>
@@ -3487,7 +3487,7 @@ $badge = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="10%">
-                         <div style="font-size: 12px; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
+                         <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
        
