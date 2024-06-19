@@ -3421,6 +3421,7 @@ EOF;
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
+        $paid_date = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
         $amount = '$' . round($invoice['amount'], 2);
 
 
@@ -3490,6 +3491,7 @@ $badge = <<<EOF
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
+                            <br/> $paid_date
        
                     <br/><br/>
                     </td>
