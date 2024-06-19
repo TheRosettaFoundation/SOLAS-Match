@@ -3595,7 +3595,7 @@ foreach ($rows as $index => $row) {
     <td width="140" align="center">$purchase_order</td>
     <td width="200" align="center">$unit</td>
     <td width="100" align="center">$unit_rate</td>
-    <td align="center" width="100">$row_amount</td>
+    <td align="center" width="100">$unit_rate</td>
     </tr>
     EOF;
 }
@@ -3603,7 +3603,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;"> Total</td>
-    <td width="100" align="center"> $ $row_amount</td>
+    <td width="100" align="center">  $row_amount</td>
     </tr>
     </table>
     EOF;
