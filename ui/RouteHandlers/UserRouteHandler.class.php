@@ -3454,41 +3454,19 @@ EOF;
 
         
 $html = <<<EOF
-        <style>
- 
-        div.test {
-            color: #000000;
-            font-size: 13pt;
-            border-style: solid solid solid solid;
-            border-width: 8px 8px 8px 8px;
-            border-color: #FFFFFF;
-            text-align: center;
-            margin: 50px auto;
-        }
-        .uppercase {
-            text-transform: uppercase;
-            font-weight:bold;
-        }
-        .footer {
-            text-align: center;
-            font-size: 11pt;
-        }
-        .footer-main {
-            text-align:center;
-        }
-        </style>
+    
     
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/>
+                    width="33%">
                       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
                   
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text</div>
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ( $badge_text ) </span></div>
             
                     </td>
         </tr>
@@ -3502,7 +3480,7 @@ $badge = <<<EOF
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/>
+                    width="33%">
                       
                   
                     </td>
