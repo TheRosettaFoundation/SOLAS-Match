@@ -3394,27 +3394,41 @@ EOF;
         $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
         $name = $invoice['linguist_name'];
+
+        $status = $invoice['status'];
+        $badge_text='';
+
+        switch ($status) {
+        case 0:
+            $status_text = 'INVOICE';
+            $badge_text = 'INVOICE';
+            break;
+        case 1:
+            $status_text = 'DRAFT';
+            $badge_text = 'DRAFT';
+            break;
+        case 2:
+            $status_text = 'INVOICE';
+            $badge_text = 'PAID';
+            break;
+        case 3:
+            $status_text = 'DRAFT';
+            $badge_text = 'PAID';
+            break;
+        default:
+           
+        }
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
+        $paid_date = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
         $amount = '$' . round($invoice['amount'], 2);
 
-        foreach ($rows as $row) {
-            $purchase_order = $row['purchase_order'];
-            $description = $row['title'];
-            $type = $row['type_text'];
-            $language = $row['language_pair_name'];
-            $project = $row['project_title'];
-            $row_amount = '$' . round($row['row_amount'], 2);
-            $unit = $row['pricing_and_recognition_unit_text_hours'];
-            $unit_rate = '$' . $row['unit_rate'];
-            $quantity = round($row['quantity'], 2);
-        }
 
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
         $pdf->SetTitle("Invoice");
@@ -3432,100 +3446,140 @@ EOF;
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('dejavusans', '', 9, '', false);
-        $pdf->AddPage('L');
+        $pdf->AddPage('P');
         $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
         $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, 0, 0, $pdf->getPageHeight());
+
+        
 $html = <<<EOF
-        <style>
-        d-flex {
-            display:flex;
-            justify-content:space-between;
-        }
-        div.test {
-            color: #000000;
-            font-size: 13pt;
-            border-style: solid solid solid solid;
-            border-width: 8px 8px 8px 8px;
-            border-color: #FFFFFF;
-            text-align: center;
-            margin: 50px auto;
-        }
-        .uppercase {
-            text-transform: uppercase;
-            font-weight:bold;
-        }
-        .footer {
-            text-align: center;
-            font-size: 11pt;
-        }
-        .footer-main {
-            text-align:center;
-        }
-        </style>
-       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-       <br/>
-       <br/>
-       
-       <table width="100%" cellspacing="0" cellpadding="55%">
+    
+    
+         <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"><br/>
-                    <div>From:</div>
-                    <div>Name: $name</div>
-                    <div>Email Address: $email</div>
-                    <div>Country of Residence: $country</div>
+                    width="33%">
+                      <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+                  
+                    </td>
+              <td width="35%"></td>  
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="35%">
+                    <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
+            
+                    </td>
+        </tr>
+        <br/>
+        <br/>
+        </table>
+
+EOF;
+
+$badge = <<<EOF
+       
+         <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+              <td class="header1" rowspan="2" align="left" valign="middle"
+                    width="33%">
+                      
+                  
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
-                    <div>Invoice: $invoice_number</div>
-                    <div>Date: $date</div>
-                    <br/><br/>
+                         <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
+                                 $badge_text ($paid_date)      
+                            </div>
+                            <br/> 
+                           
+       
+                    
                     </td>
-        </tr></table>
-       <div style="margin-top:20px;">
-       <br/>
-       <br/>
-        <div>To:</div>
-        <div style="font-weight:bold;">CLEAR Global inc.</div>
-        <div>9169 W State St#83714</div>
-        <div>(203) 794-6698</div>
-       </div> 
-       <br/>
+        </tr>
+        
+        </table>
+
+EOF;
+    $pdf->writeHTML($html, true, false, true, false, '');
+    if($status == 2 or $status == 3){
+    $pdf->writeHTML($badge, true, false, true, false, '');
+    }
+    $html1 = <<<EOF
+<table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
+            <br/>
+            <div style="font-weight:bold;">From</div>
+            <div>$name<br/>$email<br/>$country<br/></div>
+        </td>
+        <td width="35%">  </td>
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number<br/>$date</div>
+            <br/><br/>
+        </td>
+
+    </tr>
+</table>
+<div style="margin-top:20px;">
+    <br/>
+    <div style="font-weight:bold;">To</div>
+    <div>CLEAR Global Inc.<br/> 9169 W State St #83714 <br/>+ 1 (203) 794-6698  </div>
+<br/>
+<br/>
 EOF;
 
-$tbl = <<<EOD
-<table border="1" cellpadding="2" cellspacing="2">
-<thead>
- <tr style="background-color:#FAFAFA;color:black;">
-  <td width="30" align="center"><b>S/N</b></td>
-  <td width="300" align="center"><b>Description</b></td>
-  <td width="140" align="center"><b>PO</b></td>
-  <td width="200" align="center"> <b>Quantity</b></td>
-  <td width="100" align="center"><b>Unit Price</b></td>
-  <td width="100" align="center"><b>Amount</b></td>
- </tr>
-</thead>
- <tr>
-  <td width="30" align="center"><b>1</b></td>
-  <td width="300">Description: $description<br /> Project : $project <br /> Language Pair: $language<br /> Task type: $type<br /></td>
-  <td width="140">$purchase_order</td>
-  <td width="200">$quantity $unit</td>
-  <td width="100">$unit_rate</td>
-  <td align="center" width="100">$row_amount</td>
- </tr>
- <tr>
- <td colspan="5" style="font-weight:bold;">Total</td>
- <td width="100" align="center">$amount</td>
-</tr>
-</table>
-EOD;
-    $pdf->writeHTML($html, true, false, true, false, '');
+// ... rest of your TCPDF code
+
+    $pdf->writeHTML($html1, true, false, true, false, '');
+        $tbl = <<<EOF
+        <table border="1" cellpadding="2" cellspacing="2">
+        <thead>
+        <tr style="background-color:#FAFAFA;color:black;">
+        <td width="30" align="center"><b>S/N</b></td>
+        <td width="250" style="padding-right:10px;"><b>Description</b></td>
+        <td width="80" align="center"><b>PO</b></td>
+        <td width="80" align="center"> <b>Quantity</b></td>
+        <td width="80" align="center"><b>Unit Price</b></td>
+        <td width="80" align="center"><b>Amount</b></td>
+        </tr>
+        </thead>
+        EOF;
+
+
+foreach ($rows as $index => $row) {
+    $purchase_order = $row['purchase_order'];
+    $description = $row['title'];
+    $type = $row['type_text'];
+    $language = $row['language_pair_name'];
+    $project = $row['project_title'];
+    $row_amount = '$' . round($row['row_amount'], 2);
+    $unit = $row['pricing_and_recognition_unit_text_hours'];
+    $unit_rate = '$' . $row['unit_rate'];
+    $quantity = round($row['quantity'], 2);
+    $number = $index + 1;
+    
+    $tbl .= <<<EOF
+    <tr>
+    <td width="30" align="center"><b>$number</b></td>
+    <td width="250"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br /> <span> $language </span> <br /><span> $type</span></td>
+    <td width="80" align="center">$purchase_order</td>
+    <td width="80" align="center"> $quantity $unit</td>
+    <td width="80" align="center">$unit_rate</td>
+    <td align="center" width="80">$row_amount</td>
+    </tr>
+    EOF;
+}
+
+    $tbl .= <<<EOF
+    <tr>
+    <td colspan="5" style="font-weight:bold;"> Total</td>
+    <td width="80" align="center"> $amount</td>
+    </tr>
+    </table>
+    EOF;
+
+
     $pdf->writeHTML($tbl, true, false, false, false, '');
-    $pdf->Cell(20, 10, "Issued on " . date("d F Y"), 0, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->lastPage();
 
     return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
