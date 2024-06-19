@@ -3388,7 +3388,7 @@ EOF;
         $rows = $userDao->getInvoice($invoice_number);
         if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
-       
+
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
         $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
@@ -3421,7 +3421,6 @@ EOF;
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
-        $paidDate = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
         $amount = '$' . round($invoice['amount'], 2);
 
 
@@ -3491,7 +3490,6 @@ $badge = <<<EOF
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
-                            <div> Paid : $paid_date $<div>
        
                     <br/><br/>
                     </td>
@@ -3579,7 +3577,7 @@ foreach ($rows as $index => $row) {
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
-    // return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
+    return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)
