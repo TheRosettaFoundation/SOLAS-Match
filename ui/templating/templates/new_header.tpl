@@ -26,9 +26,11 @@
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 
-        <style> .ql-color .ql-picker-options span[data-value="black"]::before { background-color: black; } .ql-color .ql-picker-options span[data-value="red"]::before { background-color: red; } </style>
+        <style> .ql-color .ql-picker-options span[data-value="black"]::before { background-color: black; } 
+        .ql-color .ql-picker-options span[data-value="red"]::before { background-color: red; } </style>
    
 		
+
         {if isset($extra_styles)}
             {$extra_styles}
         {/if}
