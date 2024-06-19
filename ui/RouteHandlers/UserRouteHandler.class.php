@@ -3427,7 +3427,7 @@ EOF;
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
         $pdf->SetTitle("Invoice");
@@ -3486,7 +3486,7 @@ $badge = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="7%">
+                    width="10%">
                          <div style="font-size: 12px; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
@@ -3499,7 +3499,7 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->writeHTML($badge, true, false, true, false, '');
+    // $pdf->writeHTML($badge, true, false, true, false, '');
 
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
