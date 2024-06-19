@@ -3501,7 +3501,7 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    if($status==2){
+    if($status == 2 or $status == 1){
     $pdf->writeHTML($badge, true, false, true, false, '');
     }
     $html1 = <<<EOF
