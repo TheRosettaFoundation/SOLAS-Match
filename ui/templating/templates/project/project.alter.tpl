@@ -67,17 +67,13 @@
         <button class="ql-bold"></button>
         <button class="ql-italic"></button>
         <button class="ql-underline"></button>
-        <button class="ql-strike"></button>
     </span>
     <span class="ql-formats">
         <select class="ql-color">
             <option>black</option>
             <option>red</option>
         </select>
-        
     </span>
-
-   
     <span class="ql-formats">
         <button class="ql-list" value="ordered"></button>
         <button class="ql-list" value="bullet"></button>
