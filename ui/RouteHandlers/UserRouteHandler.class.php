@@ -3471,7 +3471,7 @@ $html = <<<EOF
             
                     </td>
         </tr>
-        <br/><br/>
+        <br/>
         </table>
 
 EOF;
@@ -3494,7 +3494,7 @@ $badge = <<<EOF
                             <br/> 
                            
        
-                    <br/><br/>
+                    
                     </td>
         </tr>
         
