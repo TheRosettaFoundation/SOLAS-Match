@@ -3465,7 +3465,7 @@ $html = <<<EOF
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="25%">
+                    width="35%">
                     <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ( $badge_text ) </span></div>
             
                     </td>
@@ -3499,7 +3499,7 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    $pdf->writeHTML($badge, true, false, true, false, '');
+    // $pdf->writeHTML($badge, true, false, true, false, '');
 
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
