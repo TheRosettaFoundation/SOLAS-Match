@@ -3388,8 +3388,7 @@ EOF;
         $rows = $userDao->getInvoice($invoice_number);
         if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
-      
-
+       
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
         $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
@@ -3561,7 +3560,7 @@ foreach ($rows as $index => $row) {
     <td width="30" align="center"><b>$number</b></td>
     <td width="250"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br /> <span> $language </span> <br /><span> $type</span></td>
     <td width="80" align="center">$purchase_order</td>
-    <td width="80" align="center">$quantity $unit/td>
+    <td width="80" align="center">$unit</td>
     <td width="80" align="center">$unit_rate</td>
     <td align="center" width="80">$row_amount</td>
     </tr>
@@ -3580,7 +3579,7 @@ foreach ($rows as $index => $row) {
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
-     return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
+    // return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)
