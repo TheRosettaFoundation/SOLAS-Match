@@ -3499,7 +3499,7 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    // $pdf->writeHTML($badge, true, false, true, false, '');
+    $pdf->writeHTML($badge, true, false, true, false, '');
 
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
