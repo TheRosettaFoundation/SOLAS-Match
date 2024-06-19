@@ -3499,8 +3499,9 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
+    if($status==2){
     $pdf->writeHTML($badge, true, false, true, false, '');
-
+    }
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
