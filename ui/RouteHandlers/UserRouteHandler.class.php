@@ -3401,7 +3401,7 @@ EOF;
         switch ($status) {
         case 0:
             $status_text = 'INVOICE';
-            $badge_text = 'NOT PAID';
+            $badge_text = 'INVOICE';
             break;
         case 1:
             $status_text = 'DRAFT';
@@ -3427,7 +3427,7 @@ EOF;
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
-        $pdf = new \TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('TWB Platform');
         $pdf->SetTitle("Invoice");
@@ -3459,15 +3459,14 @@ $html = <<<EOF
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%"> 
-                      <br/>
-                      <img width="140"  style="margin-bottom:10px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
+                    width="33%">
+                      <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
                   
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="35%">
-                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span style="font-size:12px">($badge_text)</spam> </div>
+                    width="25%">
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ( $badge_text ) </span></div>
             
                     </td>
         </tr>
@@ -3500,7 +3499,7 @@ $badge = <<<EOF
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    // $pdf->writeHTML($badge, true, false, true, false, '');
+    $pdf->writeHTML($badge, true, false, true, false, '');
 
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
