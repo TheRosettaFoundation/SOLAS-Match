@@ -439,7 +439,7 @@ error_log("createTaskDirectly: $args");
 
     public function get_matecat_analyze_url($project_id, $memsource_project)
     {
-        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
+        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
     }
 
@@ -481,14 +481,14 @@ error_log("createTaskDirectly: $args");
 
     public function get_matecat_url($task, $memsource_task)
     {
-        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }
 
     public function get_matecat_url_regardless($task, $memsource_task)
     {
         if (empty($memsource_task)) return '';
-        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }
 
