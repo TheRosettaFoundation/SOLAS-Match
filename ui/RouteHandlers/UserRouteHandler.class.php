@@ -3459,14 +3459,15 @@ $html = <<<EOF
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%">
+                    width="33%"> 
+                      <br/>
                       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
                   
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="35%">
-                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ( $badge_text ) </span></div>
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ($badge_text) </span></div>
             
                     </td>
         </tr>
