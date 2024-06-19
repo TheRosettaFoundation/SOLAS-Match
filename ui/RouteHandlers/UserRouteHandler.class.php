@@ -3595,7 +3595,7 @@ foreach ($rows as $index => $row) {
     <td width="140" align="center">$purchase_order</td>
     <td width="200" align="center">$unit</td>
     <td width="100" align="center">$unit_rate</td>
-    <td align="center" width="100">$unit_rate</td>
+    <td align="center" width="100">$row_amount</td>
     </tr>
     EOF;
 }
