@@ -224,6 +224,12 @@ a[href^="mailto:"] {
     color: #de8e16;
     font-weight: 500;
 }
+.ql-color .ql-picker-options span[data-value="black"]::before {
+    background-color: black;
+}
+.ql-color .ql-picker-options span[data-value="red"]::before {
+    background-color: red;
+}
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
