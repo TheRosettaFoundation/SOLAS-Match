@@ -3518,9 +3518,6 @@ $badge = <<<EOF
         </tr>
         
         </table>
-        <br/>
-        <br/>
-
 
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
