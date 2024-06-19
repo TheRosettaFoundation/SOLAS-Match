@@ -3491,7 +3491,7 @@ $badge = <<<EOF
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
                                  $badge_text
                             </div>
-                            <br/> $paid_date
+                             $paid_date
        
                     <br/><br/>
                     </td>
