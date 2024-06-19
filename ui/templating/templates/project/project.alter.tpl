@@ -62,10 +62,7 @@
                     <div id="toolbar-container"  style="width: 400px">
     <!-- Add the color picker to the toolbar -->
 
-    <span class="ql-formats">
-        <select class="ql-font"></select>
-        <select class="ql-size"></select>
-    </span>
+  
     <span class="ql-formats">
         <button class="ql-bold"></button>
         <button class="ql-italic"></button>
@@ -73,18 +70,14 @@
         <button class="ql-strike"></button>
     </span>
     <span class="ql-formats">
-        <select class="ql-color"></select>
-        <select class="ql-background"></select>
+        <select class="ql-color">
+            <option>black</option>
+            <option>red</option>
+        </select>
+        
     </span>
 
-    <span class="ql-formats">
-        <button class="ql-header" value="1"></button>
-        <button class="ql-header" value="2"></button>
-        <button class="ql-header" value="3"></button>
-        <button class="ql-header" value="4"></button>
-        <button class="ql-blockquote"></button>
-
-    </span>
+   
     <span class="ql-formats">
         <button class="ql-list" value="ordered"></button>
         <button class="ql-list" value="bullet"></button>
