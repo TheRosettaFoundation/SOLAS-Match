@@ -3507,11 +3507,7 @@ EOF;
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
             <br/>
             <div style="font-weight:bold;">From</div>
-            <div>
-            $name<br/>
-            $email<br/>
-            $country<br/>
-            </div>
+            <div>$name<br/>$email<br/>$country<br/></div>
         </td>
         <td width="35%">  </td>
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number</div>  <div>$date</div>
@@ -3520,9 +3516,7 @@ EOF;
     </tr>
 </table>
 <div style="margin-top:10px;">
-    <br/>
-    <br/>
-    <br/>
+   
     <div style="font-weight:bold;">To</div>
     <div>CLEAR Global Inc.<br/> 9169 W State St #83714 <br/>+ 1 (203) 794-6698  </div>
 <br/>
