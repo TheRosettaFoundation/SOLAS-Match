@@ -3401,7 +3401,7 @@ EOF;
         switch ($status) {
         case 0:
             $status_text = 'INVOICE';
-            $badge_text = 'INVOICE';
+            $badge_text = 'NOT PAID';
             break;
         case 1:
             $status_text = 'DRAFT';
@@ -3467,7 +3467,7 @@ $html = <<<EOF
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="35%">
-                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text <span> ($badge_text) </span></div>
+                    <div style="font-weight:bold; float:left ; font-size:24px; text-transform:uppercase">$status_text  ($badge_text) /div>
             
                     </td>
         </tr>
