@@ -3505,7 +3505,7 @@ EOF;
 <div style="margin-top:20px;">
     <br/>
     <div style="font-weight:bold;">To</div>
-    <div>CLEAR Global Inc.<br/> 9169 W State St #83714 <br/>+ 1 (203) 794-6698  </div>
+    <div>CLEAR Global Inc.<br/>9169 W State St #83714<br/>+1 (203) 794-6698</div>
 <br/>
 <br/>
 EOF;
