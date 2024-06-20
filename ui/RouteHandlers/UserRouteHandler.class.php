@@ -3396,15 +3396,13 @@ EOF;
         $name = $invoice['linguist_name'];
 
         $status = $invoice['status'];
-        $badge_text='';
+        $badge_text = '';
         switch ($status) {
         case 0:
             $status_text = 'INVOICE';
-            $badge_text = 'INVOICE';
             break;
         case 1:
             $status_text = 'DRAFT';
-            $badge_text = 'DRAFT';
             break;
         case 2:
             $status_text = 'INVOICE';
@@ -3422,7 +3420,6 @@ EOF;
         $paid_date = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
         $amount = '$' . round($invoice['amount'], 2);
 
-         // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
 
         $pdf = new \TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
