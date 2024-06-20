@@ -2950,7 +2950,7 @@ $html = <<<EOF
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
-              <td width="35%"></td>  
+              <td width="35%"></td>
               <td class="header1" rowspan="2" align="right" valign="middle"
                     width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
         </tr></table>
@@ -3456,7 +3456,7 @@ $html = <<<EOF
                     width="33%">
                       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
                     </td>
-              <td width="35%"></td>  
+              <td width="35%"></td>
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="35%">
                     <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
@@ -3473,13 +3473,13 @@ $badge = <<<EOF
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%">
                     </td>
-              <td width="35%"></td>  
+              <td width="35%"></td>
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="25%">
                          <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
-                                 $badge_text ($paid_date)      
+                                 $badge_text ($paid_date)
                             </div>
-                            <br/> 
+                            <br/>
                     </td>
         </tr>
         </table>
@@ -3495,17 +3495,17 @@ EOF;
             <div style="font-weight:bold;">From</div>
             <div>$name<br/>$email<br/>$country<br/></div>
         </td>
-        <td width="35%">  </td>
+        <td width="35%"></td>
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number<br/>$date</div>
             <br/><br/>
         </td>
-
     </tr>
 </table>
 <div style="margin-top:20px;">
     <br/>
     <div style="font-weight:bold;">To</div>
     <div>CLEAR Global Inc.<br/>9169 W State St #83714<br/>+1 (203) 794-6698</div>
+</div>
 <br/>
 <br/>
 EOF;
