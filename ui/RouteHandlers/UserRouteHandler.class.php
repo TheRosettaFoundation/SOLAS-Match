@@ -3397,7 +3397,6 @@ EOF;
 
         $status = $invoice['status'];
         $badge_text='';
-
         switch ($status) {
         case 0:
             $status_text = 'INVOICE';
@@ -3416,14 +3415,12 @@ EOF;
             $badge_text = 'PAID';
             break;
         default:
-           
         }
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
         $paid_date = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
         $amount = '$' . round($invoice['amount'], 2);
-
 
          // column titles
         $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
@@ -3452,39 +3449,29 @@ EOF;
         $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, 0, 0, $pdf->getPageHeight());
-
-        
 $html = <<<EOF
-    
-    
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%">
                       <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-                  
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="35%">
                     <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
-            
                     </td>
         </tr>
         <br/>
         <br/>
         </table>
-
 EOF;
 
 $badge = <<<EOF
-       
          <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%">
-                      
-                  
                     </td>
               <td width="35%"></td>  
               <td class="header1" rowspan="2" align="left" valign="middle"
@@ -3493,14 +3480,9 @@ $badge = <<<EOF
                                  $badge_text ($paid_date)      
                             </div>
                             <br/> 
-                           
-       
-                    
                     </td>
         </tr>
-        
         </table>
-
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
     if($status == 2 or $status == 3){
@@ -3527,9 +3509,6 @@ EOF;
 <br/>
 <br/>
 EOF;
-
-// ... rest of your TCPDF code
-
     $pdf->writeHTML($html1, true, false, true, false, '');
         $tbl = <<<EOF
         <table border="1" cellpadding="2" cellspacing="2">
@@ -3545,7 +3524,6 @@ EOF;
         </thead>
         EOF;
 
-
 foreach ($rows as $index => $row) {
     $purchase_order = $row['purchase_order'];
     $description = $row['title'];
@@ -3557,7 +3535,7 @@ foreach ($rows as $index => $row) {
     $unit_rate = '$' . $row['unit_rate'];
     $quantity = round($row['quantity'], 2);
     $number = $index + 1;
-    
+
     $tbl .= <<<EOF
     <tr>
     <td width="30" align="center"><b>$number</b></td>
@@ -3569,7 +3547,6 @@ foreach ($rows as $index => $row) {
     </tr>
     EOF;
 }
-
     $tbl .= <<<EOF
     <tr>
     <td colspan="5" style="font-weight:bold;"> Total</td>
@@ -3577,8 +3554,6 @@ foreach ($rows as $index => $row) {
     </tr>
     </table>
     EOF;
-
-
     $pdf->writeHTML($tbl, true, false, false, false, '');
     $pdf->lastPage();
 
