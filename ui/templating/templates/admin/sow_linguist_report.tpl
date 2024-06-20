@@ -115,6 +115,8 @@ if (mark_paid_buttons_array.length > 0) {
         let codes = {};
         curr.addEventListener("click", function (e) {
             e.preventDefault();
+
+          if (confirm("Are you sure you want to permanently mark this invoice as paid?")) {
             let parent = curr.parentElement;
             let invoice_number = parent.querySelector(".invoice_number").value;
             let mark_paid_button = parent.querySelector(".mark_paid_button");
@@ -129,6 +131,7 @@ if (mark_paid_buttons_array.length > 0) {
             };
 
             set_invoice_paid(codes);
+          }
         });
     });
 }
@@ -159,6 +162,8 @@ if (revoke_buttons_array.length > 0) {
         let codes = {};
         curr.addEventListener("click", function (e) {
             e.preventDefault();
+
+          if (confirm("Are you sure you want to revoke (delete from reports) this invoice? It can be regenerated later.")) {
             let parent = curr.parentElement;
             let invoice_number = parent.querySelector(".invoice_number").value;
             let mark_paid_button = parent.querySelector(".mark_paid_button");
@@ -173,6 +178,7 @@ if (revoke_buttons_array.length > 0) {
             };
 
             set_invoice_revoked(codes);
+          }
         });
     });
 }
