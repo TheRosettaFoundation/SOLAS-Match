@@ -41,7 +41,7 @@
       {if preg_match('/^\d*$/', $user_row['memsource_project_uid'])}
       <td>Shell Project</td>
       {else}
-      <td><a href="https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Phrase Project</a></td>
+      <td><a href="https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Phrase Project</a></td>
       {/if}
       <td>{if $user_row['word-count'] != 1}{$user_row['word-count']}{else}None{/if}</td>
     </tr>
