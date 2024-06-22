@@ -196,13 +196,11 @@
             <tbody class="fs-4 ">
                 <tr >
                     <td>
-                        <i>
                         {if $project->getDescription() != ''}
                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
-                        </i>
                     </td>
                     <td></td>
                     
