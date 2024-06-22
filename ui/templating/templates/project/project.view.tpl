@@ -237,12 +237,12 @@
                 </tr>
                 <tr valign="top">
                     <td colspan="2">
-                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong>
+                        <strong>Questions or Comments on this project?</strong>
                     </td>
                 </tr>
                 <tr>
                     <td >
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank">Contact Us</a>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank">Discuss project</a>
                     </td>
                 </tr>
                 {/if}
