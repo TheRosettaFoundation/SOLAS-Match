@@ -30,27 +30,17 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
-        <!-- 
-        <link rel="shortcut icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="{urlFor name="home"}ui/img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="apple-touch-icon" sizes="180x180" href="{urlFor name="home"}ui/img/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{urlFor name="home"}ui/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{urlFor name="home"}ui/img/favicon/favicon-16x16.png">
-        <link rel="manifest" href="{urlFor name="home"}ui/img/favicon/site.webmanifest"> 
-        -->
-		
-        <!-- extra styles-->
+        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+
         {if isset($extra_styles)}
             {$extra_styles}
         {/if}
 
-        <!-- style overrides-->
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
 
         {if isset($platformJS)}
             {$platformJS}
         {/if}
-        <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 
