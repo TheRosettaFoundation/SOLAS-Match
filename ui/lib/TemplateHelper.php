@@ -416,6 +416,11 @@ class TemplateHelper
         return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", htmlspecialchars($string, ENT_COMPAT, 'UTF-8')));
     }
 
+    public static function clean_project_description($string)
+    {
+        return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", strip_tags($string, '<p><span><strong><em><u><a><ol><li><br>')));
+    }
+
     public static function uiCleanseHTMLReinsertNewlineAndTabs($string)
     {
         return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "\r\n", htmlspecialchars($string, ENT_COMPAT, 'UTF-8')));

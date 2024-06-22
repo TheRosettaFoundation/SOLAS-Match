@@ -2288,7 +2288,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $discourseapiparams = array(
             'category' => '7',
             'title' => $title,
-            'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
+            'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', strip_tags($project->getDescription())),
         );
         $fields = '';
         foreach($discourseapiparams as $name => $value){

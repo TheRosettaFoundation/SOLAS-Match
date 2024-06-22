@@ -81,13 +81,11 @@
                 </td>
                 <td></td>
                 <td>
-                    <i>
                         {if $project->getDescription() != ''}
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                            {TemplateHelper::clean_project_description($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
-                    </i>
                 </td>
             </tr>
             <tr>
