@@ -192,6 +192,12 @@ a[href^="mailto:"] {
   padding-left: 120px;
 }
 
+li[data-list=bullet] {
+  list-style-type: circle;
+  position: relative;
+  padding: 10px;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
