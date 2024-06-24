@@ -50,7 +50,7 @@
         Block.tagName = 'DIV';
         Quill.register(Block,true) ;
 
-        var quill = new Quill('#editor-container',{
+        var quill = new Quill('#editor',{
             modules:{
                 toolbar:'#toolbar-container'
             }
