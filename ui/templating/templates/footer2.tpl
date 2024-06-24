@@ -291,7 +291,8 @@
                     { formats: { block: 'div' } } });
 
                     quill.root.addEventListener('keydown', function(event) { if (event.key === 'Enter') { event.preventDefault(); const range = quill.getSelection(); if (range) { quill.insertText(range.index, '\n'); quill.setSelection(range.index + 1); } } });
-                
+
+                    quill.on('text-change', function() { var editorContent = quill.root.innerHTML;  editorContent = editorContent.replace(/ +(?= )/g, ''); quill.root.innerHTML = editorContent; });
             
                    </script>
 
