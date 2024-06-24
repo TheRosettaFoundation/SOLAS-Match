@@ -90,7 +90,7 @@
     </span>
   
 </div>
-                    <div id="editor-container" style="width: 400px; margin-bottom: 40px">
+                    <div id="editor" style="width: 400px; margin-bottom: 40px">
         
                     </div> 
                     <br/>
