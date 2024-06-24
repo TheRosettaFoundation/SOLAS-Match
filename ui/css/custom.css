@@ -193,7 +193,7 @@ a[href^="mailto:"] {
 }
 
 li[data-list=bullet] {
-  list-style-type: circle;
+  list-style-type: disc;
   position: relative;
   padding: 5px;
   margin-bottom: 5px;

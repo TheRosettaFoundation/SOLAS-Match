@@ -263,9 +263,6 @@ a[href^="mailto:"] {
 
 li[data-list="bullet"] {
     list-style-type: disc;
-    position: relative;
-    padding: 5px;
-    margin-bottom: 5px;
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
