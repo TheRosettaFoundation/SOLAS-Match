@@ -150,6 +150,15 @@ a[href^="mailto:"] {
   font-weight: 500;
 }
 
+.displayF p {
+  margin: 0;
+  margin-bottom: 5x;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

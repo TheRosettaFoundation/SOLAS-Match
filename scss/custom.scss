@@ -225,6 +225,15 @@ a[href^="mailto:"] {
     font-weight: 500;
 }
 
+.displayF p {
+    margin: 0;
+    margin-bottom: 5x;
+}
+
+.ql-align-center {
+    text-align: center;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
