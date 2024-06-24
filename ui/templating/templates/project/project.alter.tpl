@@ -81,7 +81,10 @@
         <button class="ql-indent" value="+1"></button>
     </span>
     <span class="ql-formats">
-        <select class="ql-align"></select>
+        <button class="ql-align" value=""></button>
+        <button class="ql-align" value="center"></button>
+        <button class="ql-align" value="right"></button>
+        <button class="ql-align" value="justify"></button>
     </span>
     <span class="ql-formats">
         <button class="ql-link"></button>
