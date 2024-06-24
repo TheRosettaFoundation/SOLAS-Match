@@ -284,62 +284,16 @@
                      display_F.innerHTML = displayH;
    </script>
 {* RichEditor CODE  *}
-                     {* <script>
-                     const quill = new Quill('#editor', {
-                       theme: 'snow'
-                     });
-                     
-                     let displayQuill = new Quill('#display',{
-                        theme:null,
-                        readOnly:true
-                     });
-                     
+                     <script>
+
+                    var quill = new Quill('#editor', { modules: 
+
+                    { formats: { block: 'div' } } });
+
+                    quill.root.addEventListener('keydown', function(event) { if (event.key === 'Enter') { event.preventDefault(); const range = quill.getSelection(); if (range) { quill.insertText(range.index, '\n'); quill.setSelection(range.index + 1); } } });
                 
-                     const  sesskey = document.getElementById("sesskey").textContent;
-                     const  project_id = document.getElementById("project_id").textContent;
-
-                     quill.on('text-change', function(delta, oldDelta, source){
-                        if(source =='user'){
-                            updateFormattedText() ;
-                        }
-
-                        let formattedT = displayQuill.root.innerHTML;
-                        console.log(formattedT) ;
-                     } )
-
-                     function updateFormattedText(){
-
-                       let delta = quill.getContents();
-                       
-                       console.log(displayQuill.getContents());
-                       displayQuill.setContents(delta) ;
-                       setDescription(delta,sesskey,project_id) ;
-
-                     
-                     }
-
-
-
-                   async function setDescription( description,sesskey,project_id) {
-
-                    console.log(project_id);
-                  
-                    let url = `/project/9486/alter/`
-                    const key = { description,sesskey };
-                    try {
-                        const response = await fetch(url, {
-                            method: "POST",
-                            body: new URLSearchParams(key),
-                        });
-
-                        if (!response.ok) {
-                            throw new Error("error");
-                        }
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }
-                   </script> *}
+            
+                   </script>
 
                      
 
