@@ -250,6 +250,16 @@ a[href^="mailto:"] {
 .ql-indent-3 {
     padding-left: 60px;
 }
+.ql-indent-4 {
+    padding-left: 80px;
+}
+
+.ql-indent-5 {
+    padding-left: 100px;
+}
+.ql-indent-6 {
+    padding-left: 120px;
+}
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 

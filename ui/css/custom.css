@@ -180,6 +180,18 @@ a[href^="mailto:"] {
   padding-left: 60px;
 }
 
+.ql-indent-4 {
+  padding-left: 80px;
+}
+
+.ql-indent-5 {
+  padding-left: 100px;
+}
+
+.ql-indent-6 {
+  padding-left: 120px;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
