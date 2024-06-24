@@ -42,9 +42,9 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/dayjs.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/plugin/utc.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
          {* RichEditor CODE  *}
-        <script>
+        <script defer>
 
         var Block = Quill.import('blots/block');
         Block.tagName = 'DIV';
@@ -53,7 +53,8 @@
         var quill = new Quill('#editor',{
             modules:{
                 toolbar:'#toolbar-container'
-            }
+            },
+            theme:'snow'
         })
 
 
