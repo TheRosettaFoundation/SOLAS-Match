@@ -194,8 +194,7 @@ a[href^="mailto:"] {
 
 li[data-list=bullet] {
   list-style-type: disc;
-  position: relative;
-  padding: 5px;
+  margin: 0;
   margin-bottom: 5px;
 }
 
