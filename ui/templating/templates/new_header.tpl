@@ -43,22 +43,7 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/plugin/utc.js"></script>
 
         <script  src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-         {* RichEditor CODE  *}
-        <script>
 
-        var Block = Quill.import('blots/block');
-        Block.tagName = 'DIV';
-        Quill.register(Block,true) ;
-
-        // var quill = new Quill('#editor-container',{
-        //     modules:{
-        //         toolbar:'#toolbar-container'
-        //     },
-        //     theme:'snow'
-        // })
-
-
-    </script>
         
         
 <!-- Global site tag (gtag.js) - Google Analytics -->
