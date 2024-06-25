@@ -59,7 +59,7 @@
             <td>${round($task['total_expected_cost'], 2)}</td>
             <td>{if !is_null($task['status'])}{if $task['status']&1}Draft{else}Invoice{/if}{/if}</td>
             <td>{if !is_null($task['invoice_number'])}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
-            <td>{$task['filename']}</td>
+            <td>{if !empty($task['google_id'])}<a href="https://drive.google.com/file/d/{$task['google_id']}/view" target="_blank">{$task['filename']}</a>{else}{$task['filename']}{/if}</td>
             <td>{if !is_null($task['status']) && $task['status']&2}Paid{/if}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
             <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>

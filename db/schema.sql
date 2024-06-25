@@ -13093,6 +13093,7 @@ BEGIN
         i.status,
         i.invoice_number,
         i.filename,
+        i.google_id,
         MIN(tp.processed) AS processed,
         i.invoice_date,
         MAX(IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)) AS proforma
