@@ -55,7 +55,37 @@
                     <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" {if empty($memsource_project)}onblur="checkTitleNotUsed();"{/if}>{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
+                    <textarea wrap="soft" cols="1" rows="6" style="display:none ;" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
+
+                    <div id="toolbar-container" style="width: 400px">
+                        <!-- Add the color picker to the toolbar -->
+                        <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-color">
+                                <option value="black"></option>
+                                <option value="red"></option>
+                            </select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="ordered"></button>
+                            <button class="ql-list" value="bullet"></button>
+                            <button class="ql-indent" value="-1"></button>
+                            <button class="ql-indent" value="+1"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-align"></select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-link"></button>
+                        </span>
+                    </div>
+                    <div id="editor" style="width: 400px; margin-bottom: 40px">
+                    </div>
+                    <br />
 
                     <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_impact')}</strong><span style="color: red">*</span></label>
                     <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
@@ -175,5 +205,34 @@
 
     <div id="placeholder_for_errors_2"></div>
 </div>
+
+<script>
+const quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#toolbar-container'
+        }
+    }
+});
+
+let textarea = document.getElementById("project_description");
+let htmlText = textarea.value ;
+var delta = quill.clipboard.convert(htmlText);
+
+quill.root.innerHTML = htmlText;
+
+quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       updateFormattedText();
+   }
+} )
+
+function updateFormattedText() {
+    let htmlContent = quill.root.innerHTML;
+    let delta = quill.getContents();
+    textarea.value = htmlContent;
+}
+</script>
     
 {include file="footer.tpl"}

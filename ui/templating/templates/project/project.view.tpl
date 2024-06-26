@@ -196,13 +196,11 @@
             <tbody class="fs-4 ">
                 <tr >
                     <td>
-                        <i>
                         {if $project->getDescription() != ''}
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
+                            <div class="displayF">{TemplateHelper::clean_project_description($project->getDescription())}</div>
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
-                        </i>
                     </td>
                     <td></td>
                     
@@ -237,12 +235,12 @@
                 </tr>
                 <tr valign="top">
                     <td colspan="2">
-                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong>
+                        <strong>Questions or Comments on this project?</strong>
                     </td>
                 </tr>
                 <tr>
                     <td >
-                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank">Contact Us</a>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" class=" btngray" target="_blank">Discuss project</a>
                     </td>
                 </tr>
                 {/if}

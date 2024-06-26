@@ -150,6 +150,56 @@ a[href^="mailto:"] {
   font-weight: 500;
 }
 
+.displayF p,
+.displayH p {
+  margin: 0;
+  margin-bottom: 5x;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
+
+.ql-indent-1 {
+  padding-left: 20px;
+}
+
+.ql-indent-2 {
+  padding-left: 40px;
+}
+
+.ql-indent-3 {
+  padding-left: 60px;
+}
+
+.ql-indent-4 {
+  padding-left: 80px;
+}
+
+.ql-indent-5 {
+  padding-left: 100px;
+}
+
+.ql-indent-6 {
+  padding-left: 120px;
+}
+
+li[data-list=bullet] {
+  list-style-type: disc;
+  position: relative;
+  margin: 0;
+  margin-bottom: 5px;
+  margin-left: 2px;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
