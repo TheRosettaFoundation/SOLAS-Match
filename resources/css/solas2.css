@@ -444,6 +444,11 @@ input[value^="-"] {
     margin-top: 2%;
 }
 
+.displayF p,
+.displayH p {
+  margin: 0;
+  margin-bottom: 5px;
+}
 .ql-align-center {
     text-align: center;
 }
