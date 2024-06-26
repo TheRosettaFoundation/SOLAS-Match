@@ -1099,7 +1099,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
                 $amount += $row['total_expected_cost'];
                 if ($row['total_expected_cost'] >= 600) $proforma = 1;
             }
-            $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanse($amount));
+            $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanse($amount) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
             $invoice_number = $result[0]['id'];
 
             foreach ($invoice as $row) {
@@ -1134,7 +1134,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
     {
         $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
 
-        LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number));
+        LibAPI\PDOWrapper::call('set_invoice_paid', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
 
         $access_token = $this->get_google_access_token();
         [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
@@ -1168,7 +1168,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         $res = json_decode($result, true);
         if (empty($res['id'])) error_log("Failed to read data from Google (rename): $result");
 
-        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number));
+        LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
     }
 
     public function get_google_access_token()

@@ -12927,6 +12927,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   amount         FLOAT NOT NULL,
   filename       VARCHAR(255),
   google_id      VARCHAR(50) DEFAULT '',
+  admin_id       INT UNSIGNED,
   PRIMARY KEY (invoice_number),
   KEY (linguist_id),
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -12934,9 +12935,9 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 
 DROP PROCEDURE IF EXISTS `insert_invoice`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT, IN aID INT UNSIGNED)
 BEGIN
-    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, amount) VALUES (stat, date, lID, lNAME, a);
+    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, amount, admin_id) VALUES (stat, date, lID, lNAME, a, aID);
     SELECT LAST_INSERT_ID() AS id;
 END//
 DELIMITER ;
@@ -13128,17 +13129,17 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_invoice_paid`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
-    UPDATE invoices SET status=status|2, invoice_paid_date=NOW() WHERE invoice_number=inv;
+    UPDATE invoices SET status=status|2, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_invoice_revoked`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_revoked`(IN inv INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_revoked`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
-    UPDATE invoices SET revoked=1 WHERE invoice_number=inv;
+    UPDATE invoices SET revoked=1, admin_id=aID WHERE invoice_number=inv;
     UPDATE TaskPaids SET invoice_number=0, processed=0 WHERE invoice_number=inv;
 END//
 DELIMITER ;
