@@ -1679,14 +1679,7 @@ CREATE TABLE IF NOT EXISTS `email_sents` (
   KEY (logged_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
-  id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  language_id INT UNSIGNED NOT NULL,
-  country_id  INT UNSIGNED NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (language_id) REFERENCES Languages(id),
-  FOREIGN KEY (country_id) REFERENCES Countries(id) 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `UserRequest` (
   id              INT NOT NULL AUTO_INCREMENT,
@@ -3563,7 +3556,8 @@ BEGIN
         t.`task-type_id`   AS type_id,
         t.`task-status_id` AS status_id,
         t.deadline
-    FROM      Tasks                            t
+    FROM      Tasks                            t,
+              Users                            u
     JOIN      Projects                         p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -3575,10 +3569,10 @@ BEGIN
     WHERE
         t.project_id=projectID AND
         t.published=1 AND
-        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+        (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
             (tq.native_matching=0 OR 
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
+            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -4176,7 +4170,7 @@ BEGIN
         (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
             (tq.native_matching=0 OR
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
@@ -4255,7 +4249,9 @@ BEGIN
   ELSE
     SELECT COUNT(*) AS result FROM (
         SELECT t.id
-        FROM Tasks t
+        FROM Users  u,
+            Tasks t
+
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
