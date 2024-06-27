@@ -1679,6 +1679,14 @@ CREATE TABLE IF NOT EXISTS `email_sents` (
   KEY (logged_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
+  id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  language_id INT UNSIGNED NOT NULL,
+  country_id  INT UNSIGNED NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (language_id) REFERENCES Languages(id),
+  FOREIGN KEY (country_id) REFERENCES Countries(id) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserRequest` (
   id              INT NOT NULL AUTO_INCREMENT,
@@ -2526,7 +2534,10 @@ BEGIN
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+            (tq.native_matching=0 OR 
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
+            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
         (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
             @isSiteAdmin=1 OR
@@ -3564,7 +3575,10 @@ BEGIN
     WHERE
         t.project_id=projectID AND
         t.published=1 AND
-        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+            (tq.native_matching=0 OR 
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
+            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -4159,10 +4173,10 @@ BEGIN
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
         FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level) AND 
-        (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-        (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
+            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
@@ -4258,10 +4272,10 @@ BEGIN
         AND (taskType is null or t.`task-type_id` = taskType)
         AND FIND_IN_SET(t.`task-type_id`, @allowed_types)>0
         AND NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0
-        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level) AND 
+        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
             (tq.native_matching=0 OR
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))
+            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
