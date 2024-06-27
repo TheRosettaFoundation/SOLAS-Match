@@ -7005,7 +7005,7 @@ BEGIN
             (tq.native_matching=0 OR 
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
             (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)   
-            )) l
+            )) 
     ) THEN
         SELECT 1 AS result;
 
