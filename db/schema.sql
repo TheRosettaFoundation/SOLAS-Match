@@ -2911,6 +2911,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
@@ -2944,6 +2945,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
