@@ -1680,7 +1680,6 @@ CREATE TABLE IF NOT EXISTS `email_sents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-
 CREATE TABLE IF NOT EXISTS `UserRequest` (
   id              INT NOT NULL AUTO_INCREMENT,
   user_id         INT NOT NULL,
@@ -2527,10 +2526,7 @@ BEGIN
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
             @isSiteAdmin=1 OR
@@ -3556,8 +3552,7 @@ BEGIN
         t.`task-type_id`   AS type_id,
         t.`task-status_id` AS status_id,
         t.deadline
-    FROM      Tasks                            t,
-              Users                            u
+    FROM      Tasks                            t
     JOIN      Projects                         p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -3569,10 +3564,7 @@ BEGIN
     WHERE
         t.project_id=projectID AND
         t.published=1 AND
-        (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))) AND
+        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -4477,11 +4469,7 @@ BEGIN
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE
             r.restricted_task_id IS NULL AND
-            (tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)   
-            ))
+            tq.required_qualification_level<=uqp.qualification_level
         GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
@@ -6911,11 +6899,7 @@ BEGIN
             t.`language_id-target`=uqp.language_id_target
         WHERE
             t.id=taskID AND
-            (tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)   
-            )) 
+            tq.required_qualification_level<=uqp.qualification_level
     ) THEN
         SELECT 1 AS result;
 
@@ -7011,11 +6995,7 @@ BEGIN
             t.`language_id-target`=uqp.language_id_target
         WHERE
             t.id=taskID AND
-            (tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)   
-            )) 
+            tq.required_qualification_level<=uqp.qualification_level
     ) THEN
         SELECT 1 AS result;
 
@@ -7074,10 +7054,7 @@ BEGIN
             t.project_id=projectID AND
             t.published=1 AND
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
-            ((uqp.user_id IS NOT NULL AND (tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))))) AND
+            ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
             (
                 r.restricted_task_id IS NULL OR
                 b.id IS NULL OR
@@ -7139,10 +7116,7 @@ BEGIN
         JOIN UserQualifiedPairs uqp ON
             t.`language_id-source`=uqp.language_id_source AND
             t.`language_id-target`=uqp.language_id_target AND
-            (tq.required_qualification_level<=uqp.qualification_level AND 
-            (tq.native_matching=0 OR 
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id)OR 
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id)))
+            tq.required_qualification_level<=uqp.qualification_level
         JOIN Users  u ON uqp.user_id=u.id
         JOIN Admins a ON uqp.user_id=a.user_id
         LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
@@ -8848,10 +8822,7 @@ BEGIN
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND 
-        (tq.native_matching=0 OR 
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR 
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
+        tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -8903,10 +8874,7 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND 
-        (tq.native_matching=0 OR 
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR 
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
+        tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -9006,10 +8974,7 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND 
-        (tq.native_matching=0 OR 
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR 
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
+        tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -9060,10 +9025,7 @@ BEGIN
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND 
-        (tq.native_matching=0 OR 
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR 
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
+        tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -11047,10 +11009,7 @@ BEGIN
         t.`task-status_id`=2 AND
         t.published=1 AND
         bl.task_id IS NULL AND
-        (tq.required_qualification_level<=uqp.qualification_level AND 
-        (tq.native_matching=0 OR 
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR 
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))) AND
+        tq.required_qualification_level<=uqp.qualification_level AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR

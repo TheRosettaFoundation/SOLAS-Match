@@ -25,3 +25,5 @@ ui/css/custom.css.map
 .eslintrc.js
 calendar
 /db/practice.sql
+/db/schema_1.sql
+/db/schema-sourcing.sql
