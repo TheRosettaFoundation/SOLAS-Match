@@ -573,7 +573,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 }
             }
-            if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
+            if ($part['status'] == 'COMPLETED_BY_LINGUIST' || $part['status'] == 'COMPLETED') {
                 if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
