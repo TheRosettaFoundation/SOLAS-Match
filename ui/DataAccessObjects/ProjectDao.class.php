@@ -1151,7 +1151,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 }
             }
         }
-        if ($status == 'COMPLETED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
+        if ($status == 'COMPLETED' || $status == 'DELIVERED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
