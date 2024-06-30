@@ -513,7 +513,7 @@ error_log("claimTask_shell($userId, $taskId)");
         $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
     }
 
-    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow = 1, $hook_from_phrase = 0)
+    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow, $hook_from_phrase = 0)
     {
       if (!$memsource_project) return 0;
       error_log("function propagate_cancelled($cancelled... $task_id... $whole_workflow, $hook_from_phrase)");
