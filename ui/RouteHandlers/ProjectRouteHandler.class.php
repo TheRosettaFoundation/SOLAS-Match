@@ -603,6 +603,20 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
                 }
             }
+            if ($part['status'] == 'CANCELLED') {
+                if (empty($part['project']['id'])) {
+                    error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: CANCELLED");
+                    continue;
+                }
+                $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                if (empty($memsource_project)) {
+                    error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: CANCELLED");
+                    continue;
+                }
+                $userDao = new DAO\UserDao();
+                $userDao->propagate_cancelled(1, $memsource_project, $task_id, 'Hook from Phrase', 1, 1);
+                error_log("JOB_STATUS_CHANGED CANCELLED in memsource task_id: $task_id, memsource job: {$part['uid']}");
+            }
         }
     }
 
