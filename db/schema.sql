@@ -12989,6 +12989,7 @@ BEGIN
         t.title,
         p.title AS project_title,
         o.name,
+        pcd.deal_id,
         ttd.type_text,
         CONCAT(l1.code, '-', l2.code) AS language_pair,
         CONCAT(l1.`en-name`, '-', l2.`en-name`) AS language_pair_name,
@@ -13009,6 +13010,7 @@ BEGIN
     INNER JOIN Countries           c ON lpi.country_id=c.id
     INNER JOIN Projects            p ON t.project_id=p.id
     INNER JOIN Organisations       o ON p.organisation_id=o.id
+    INNER JOIN project_complete_dates pcd ON p.id=pcd.project_id
     INNER JOIN Users             usr ON i.linguist_id=usr.id
     WHERE i.invoice_number=iID;
 END//
