@@ -904,10 +904,21 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  language_id INT UNSIGNED NOT NULL,
+  country_id INT UNSIGNED NOT NULL,
+  native_matching_default INT NOT NULL DEFAULT 2,
+  PRIMARY KEY (id),
+  FOREIGN KEY (language_id) REFERENCES Languages(id),
+  FOREIGN KEY (country_id) REFERENCES Countries(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
-  task_id                      BIGINT(20) UNSIGNED NOT NULL,
-  required_qualification_level INT(10)    UNSIGNED NOT NULL,
+  task_id                      BIGINT UNSIGNED NOT NULL,
+  required_qualification_level INT    UNSIGNED NOT NULL,
+  native_matching              INT    NOT NULL DEFAULT 0,
   PRIMARY KEY (task_id),
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2590,6 +2601,41 @@ BEGIN
 END//
 DELIMITER ;
 
+DELIMITER //
+DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
+    JOIN Tasks t ON tsa.task_id = t.id
+    JOIN MemsourceProjects mp ON t.project_id = mp.project_id
+    JOIN MemsourceSelfServiceProjects msp ON mp.memsource_project_id = msp.memsource_project_id
+    SET tq.native_matching = 1
+    WHERE tq.native_matching = 2
+      AND t.published = 1
+      AND t.`task-status_id` != 1
+      AND tsa.`status_id` != 1
+      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_native_matching_phase_2`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
+    JOIN Tasks t ON tsa.task_id = t.id
+    JOIN MemsourceProjects mp ON t.project_id = mp.project_id
+    JOIN MemsourceSelfServiceProjects msp ON mp.memsource_project_id = msp.memsource_project_id
+    SET tq.native_matching = 0
+    WHERE tq.native_matching = 1
+      AND t.published = 1
+      AND t.`task-status_id` != 1
+      AND tsa.`status_id` != 1
+      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getAdmins`;
 DELIMITER //
@@ -8597,7 +8643,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `inheritRequiredTaskQualificationLevel`(IN taskID BIGINT)
 BEGIN
     INSERT INTO RequiredTaskQualificationLevels
-        (task_id, required_qualification_level)
+        (task_id, required_qualification_level,native_matching)
     VALUES (
         taskID,
         IFNULL(
@@ -8608,8 +8654,15 @@ BEGIN
                 JOIN RequiredOrgQualificationLevels oql ON p.organisation_id=oql.org_id
                 WHERE t.id=taskID
             ),
-            1)
-    );
+            1),
+        IFNULL(
+            (
+                SELECT 2
+                FROM Tasks t
+                JOIN enforce_native_languages enl ON t.`language_id-target`=enl.language_id AND t.`country_id-target`= enl.country_id
+                WHERE t.id=taskID
+            ),
+            0));
 END//
 DELIMITER ;
 
@@ -8617,7 +8670,8 @@ DROP PROCEDURE IF EXISTS `updateRequiredTaskQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskQualificationLevel`(IN taskID BIGINT, IN requiredQualificationLevel INT)
 BEGIN
-    REPLACE INTO RequiredTaskQualificationLevels (task_id, required_qualification_level) VALUES (taskID, requiredQualificationLevel);
+    UPDATE RequiredTaskQualificationLevels  SET required_qualification_level=requiredQualificationLevel WHERE task_id=taskID
+
 END//
 DELIMITER ;
 
