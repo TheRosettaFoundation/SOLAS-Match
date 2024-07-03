@@ -324,6 +324,22 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
+    public function updateNativeMatchingPhase_1()
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('update_native_language_phase_1');  
+        return $ret;
+    }
+
+    public function updateNativeMatchingPhase_1()
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('update_native_language_phase_2');
+        return $ret;
+    }
+
+
+
     public function setRestrictedTask($task_id)
     {
         LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
