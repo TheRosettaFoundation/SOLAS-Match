@@ -2663,6 +2663,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             }
 
             $projectDao->delete_not_accepted_user();
+            $taskDao->updateNativeMatchingPhase_1();
+            $taskDao->updateNativeMatchingPhase_2();
+           
+
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
