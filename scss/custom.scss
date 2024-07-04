@@ -269,7 +269,9 @@ li[data-list="bullet"] {
 }
 
 .form_action {
-    width: 150px;
+    width: 100px;
+    padding: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
