@@ -5,6 +5,15 @@ function runStartup() {
     select();
 }
 
+let menu = document.querySelector('.menu');
+let menuList = document.querySelector('.menu_list');
+
+menu.addEventListener("click",function(){
+   
+    console.log('clicked');
+    menuList.classList.toggle('d-none')
+})
+
 function select() {
     $('#task_options').on('change', function (e) {
         var arr = [];
