@@ -281,12 +281,12 @@ li[data-list="bullet"] {
 }
 
 .form_action:hover {
-    background-color: #ececec; /* Change this to your desired hover color */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
-    cursor: pointer; /* Change cursor to indicate clickability (optional) */
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
     color: #ba7b1a !important;
     font-weight: bold;
-    border: 2px solid rgba(#ba7b1a, 0.3);
+    border: 2px solid rgba(f89406, 0.3);
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
