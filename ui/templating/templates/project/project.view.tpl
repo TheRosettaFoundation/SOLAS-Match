@@ -340,7 +340,7 @@
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
                 <div class="">
-              <div class="menu_open bg-primary text-white  cursor-pointer"  >
+              <div class="menu_open btn btn-primary text-white  cursor-pointer"  >
                     click here
                 </div>
                     <div class=" d-flex menu_list d-none">
