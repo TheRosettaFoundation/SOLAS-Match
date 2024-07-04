@@ -340,6 +340,16 @@
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
             </h3>
+            <div>
+              <button class="btn btn-primary text-white menu" type="button" >
+                    ...
+                </button>
+                    <div class="menu_list d-none">
+                                Menu List here 
+                    <div>
+        
+
+            </div>
 
          
                 {if !empty($memsource_project)}
@@ -357,13 +367,7 @@
                         {/if}
                         <option value="delesect_all">Deselect all</option>
                     </select>
-                    {* <button class="btn btn-primary text-white menu" type="button" >
-                    ...
-                    </button>
-                    <div class="menu_list d-none">
-                                Menu List here 
-                    <div>
-         *}
+                    
                     
        
         <div class="dropdown ">
