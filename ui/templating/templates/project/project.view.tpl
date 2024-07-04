@@ -385,6 +385,24 @@
                             <input type="hidden" name="tasks_as_unpaid" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
+
+                        <form id="tasks_as_unpaid" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                        <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#restrict_task').submit();" >
+                            <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Restrict Task to native users</spam>
+                        </a>
+                        <input type="hidden" name="all_as_paid1" value="1" />
+                        <input type="hidden" name="tasks_as_unpaid" value="" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+
+                    <form id="tasks_as_unpaid" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                    <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#release_task').submit();" >
+                        <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Release Task to all</spam>
+                    </a>
+                    <input type="hidden" name="all_as_paid1" value="1" />
+                    <input type="hidden" name="tasks_as_unpaid" value="" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
                     {/if}
                     </div>
                     <div class="d-flex mb-4">
