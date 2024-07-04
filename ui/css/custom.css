@@ -207,7 +207,15 @@ li[data-list=bullet] {
   margin-left: 4px;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 2pxl;
+  border-radius: 2px;
+}
+
+.form_action:hover {
+  background-color: #eeeae5; /* Change this to your desired hover color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+  cursor: pointer; /* Change cursor to indicate clickability (optional) */
+  color: #ba7b1a;
+  font-weight: 400;
 }
 
 /*!
