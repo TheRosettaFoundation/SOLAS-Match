@@ -357,13 +357,13 @@
                         {/if}
                         <option value="delesect_all">Deselect all</option>
                     </select>
-                    <button class="btn btn-primary text-white menu" type="button" >
+                    {* <button class="btn btn-primary text-white menu" type="button" >
                     ...
                     </button>
                     <div class="menu_list d-none">
                                 Menu List here 
                     <div>
-        
+         *}
                     
        
         <div class="dropdown ">
