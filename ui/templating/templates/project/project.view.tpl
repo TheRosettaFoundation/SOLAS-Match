@@ -340,10 +340,10 @@
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
                 <div class="">
-              <div class="menu_open btn btn-primary text-white  cursor-pointer"  >
-                    click here
+              <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
+                    test menu
                 </div>
-                    <div class=" menu_list d-none ">
+                    <div class=" menu_list d-none text-muted ">
                     <div class="d-flex">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="publish_selected_tasks" class=" d-flex flex-column form_action me-2" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
