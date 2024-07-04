@@ -443,7 +443,7 @@
                         <div class="d-flex flex-column justify-content-center form_action">
             
                         <a class="d-flex p-1 text-muted fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
-                        <i class="fa fa-credit-card me-2" style="font-size: 15px !important;padding:2px !important;width:12px !important;" aria-hidden="true"></i> <span> Set Purchase Order # </span>
+                        <i class="fa fa-credit-card me-2"  aria-hidden="true"></i> <span> Set Purchase Order # </span>
                         </a>
                         
                         </div>
