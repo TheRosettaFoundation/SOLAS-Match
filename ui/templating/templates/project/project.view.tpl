@@ -343,8 +343,8 @@
               <div class="menu_open btn btn-primary text-white  cursor-pointer"  >
                     click here
                 </div>
-                    <div class=" d-flex menu_list d-none">
-
+                    <div class=" menu_list d-none ">
+                    <div class="d-flex">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="publish_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class=" fs-6 text-sm text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
@@ -386,6 +386,8 @@
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
                     {/if}
+                    </div>
+                    <div class=d-flex>
             
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="status_as_unclaimed" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -435,7 +437,8 @@
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                          </form>
                     {/if}
-            
+                    </div>
+                    <div class="d-flex">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                         <div class="d-flex flex-column btn btn-small">
             
@@ -471,6 +474,7 @@
                         </form>
                     {/if}
                                 
+                    </div>
                     </div>
 
 
