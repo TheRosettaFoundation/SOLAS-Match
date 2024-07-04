@@ -208,6 +208,7 @@ li[data-list=bullet] {
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 2px;
+  font-weight: 400;
 }
 
 .form_action:hover {
@@ -215,7 +216,7 @@ li[data-list=bullet] {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
   cursor: pointer; /* Change cursor to indicate clickability (optional) */
   color: #ba7b1a;
-  font-weight: 400;
+  font-weight: bold;
 }
 
 /*!
