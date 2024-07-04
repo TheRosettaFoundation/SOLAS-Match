@@ -344,7 +344,7 @@
                     test menu
                 </div>
                     <div class=" menu_list d-none text-muted ">
-                    <div class="d-flex">
+                    <div class="d-flex mb-4">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="publish_selected_tasks" class=" d-flex flex-column justify-content-center form_action me-2" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class="d-flex fs-6 text-muted text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
@@ -387,7 +387,7 @@
                         </form>
                     {/if}
                     </div>
-                    <div class=d-flex>
+                    <div class="d-flex mb-4">
             
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="status_as_unclaimed" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
@@ -438,7 +438,7 @@
                          </form>
                     {/if}
                     </div>
-                    <div class="d-flex mt-2">
+                    <div class="d-flex mt-4">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                         <div class="d-flex flex-column justify-content-center form_action">
             
