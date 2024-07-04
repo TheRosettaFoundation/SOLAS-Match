@@ -392,7 +392,7 @@
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <form id="status_as_unclaimed" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
-                                <i class="fa fa-unlock me-4"  aria-hidden="true"></i> <span>Set Status of Selected to Unclaimed</span>
+                                <i class="fa fa-unlock me-2"  aria-hidden="true"></i> <span>Set Status of Selected to Unclaimed</span>
                             </a>
                             <input type="hidden" name="status_as_unclaimed" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -400,7 +400,7 @@
             
                         <form id="status_as_waiting" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#status_as_waiting').submit();">
-                                <i class="fa fa-pause me-4"  aria-hidden="true"></i> <span>Set Status of Selected to Waiting </span>
+                                <i class="fa fa-pause me-2"  aria-hidden="true"></i> <span>Set Status of Selected to Waiting </span>
                             </a>
                             <input type="hidden" name="status_as_waiting" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -408,7 +408,7 @@
             
                         <form id="complete_selected_tasks" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
-                            <i class="fa-solid fa-check me-4 "></i> <span>Set Shell Tasks Status&nbsp;&nbsp;Complete</span>
+                            <i class="fa-solid fa-check me-2 "></i> <span>Set Shell Tasks Status&nbsp;&nbsp;Complete</span>
                             </a>
                             <input type="hidden" name="complete_selected_tasks" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -416,7 +416,7 @@
             
                         <form id="uncomplete_selected_tasks" class=" d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                             <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
-                            <i class="fa-solid fa-pause me-4 "></i><span>Set Shell Tasks Status In Progress</span>
+                            <i class="fa-solid fa-pause me-2 "></i><span>Set Shell Tasks Status In Progress</span>
                             </a>
                             <input type="hidden" name="uncomplete_selected_tasks" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -424,13 +424,13 @@
                          
                         <div class="d-flex flex-column justify-content-center form_action">
                         <a class=" d-flex p-1 text-muted fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
-                            <i class="fa fa-ban me-4"  aria-hidden="true"></i> <span>Set Selected Tasks to Cancelled</span>
+                            <i class="fa fa-ban me-2"  aria-hidden="true"></i> <span>Set Selected Tasks to Cancelled</span>
                         </a>
                         </div>
             
                         <form id="cancel" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
                         <a class="d-flex p-1 text-muted fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
-                            <i class="fa fa-check-square me-4"  aria-hidden="true"></i> <span>Set Selected Tasks to Uncancelled</span>
+                            <i class="fa fa-check-square me-2"  aria-hidden="true"></i> <span>Set Selected Tasks to Uncancelled</span>
                         </a>
                             <input type="hidden" name="cancel" value="" />
                             <input type="hidden" name="cancelled" value="0" />
@@ -443,14 +443,14 @@
                         <div class="d-flex flex-column justify-content-center form_action">
             
                         <a class="d-flex p-1 text-muted fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
-                        <i class="fa fa-credit-card me-4"  aria-hidden="true"></i> <span> Set Purchase Order # </span>
+                        <i class="fa fa-credit-card me-2"  aria-hidden="true"></i> <span> Set Purchase Order # </span>
                         </a>
                         
                         </div>
             
                         <form id="ready_payment" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
                         <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                            <i class="fa fa-money me-4" aria-hidden="true"></i> <span>Set tasks to Ready for Payment</span>
+                            <i class="fa fa-money me-2" aria-hidden="true"></i> <span>Set tasks to Ready for Payment</span>
                         </a>
                             <input type="hidden" name="ready_payment" value="" />
                             <input type="hidden" name="ready_payment_status" value="Ready for payment" />
@@ -458,7 +458,7 @@
                         </form>
                         <form id="pending_documentation" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
                         <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                            <i class="fa fa-book me-4"  aria-hidden="true"></i> <span> Set tasks to Pending Documentation </span>
+                            <i class="fa fa-book me-2"  aria-hidden="true"></i> <span> Set tasks to Pending Documentation </span>
                         </a>
                             <input type="hidden" name="pending_documentation" value="" />
                             <input type="hidden" name="ready_payment_status" value="Pending documentation" />
@@ -466,7 +466,7 @@
                         </form>
                         <form id="tasks_settled" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                         <a class="d-flex  p-1 text-muted fs-6 text-decoration-none" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                            <i class="fa fa-check-square me-4"  aria-hidden="true"></i><span> Set tasks to Settled </span>
+                            <i class="fa fa-check-square me-2"  aria-hidden="true"></i><span> Set tasks to Settled </span>
                         </a>
                             <input type="hidden" name="tasks_settled" value="" />
                             <input type="hidden" name="ready_payment_status" value="Settled" />
