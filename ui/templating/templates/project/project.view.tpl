@@ -335,7 +335,7 @@
     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
 
-        <div class="d-flex justify-content-between mt-4 flex-wrap align-items-center">
+        <div class="d-flex justify-content-between mt-4 flex-wrap ">
 
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
