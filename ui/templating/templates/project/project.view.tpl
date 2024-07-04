@@ -438,7 +438,7 @@
                          </form>
                     {/if}
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex mt-2">
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                         <div class="d-flex flex-column form_action">
             
@@ -484,7 +484,7 @@
 
          
                 {if !empty($memsource_project)}
-                <div class="d-flex">
+                <div class="d-flex mt-2">
                     <select name="task_options" id="task_options" class="form-select me-1 text-muted">
                         <option value="">-- Choose --</option>
                         <option value="all_tasks">Select all Tasks</option>
