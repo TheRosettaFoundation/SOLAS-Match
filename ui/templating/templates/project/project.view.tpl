@@ -466,7 +466,7 @@
                         </form>
                         <form id="tasks_settled" class="d-flex flex-column form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                         <a class="d-flex  p-1 text-body fs-6 text-decoration-none" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                            <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set tasks to Settled
+                            <i class="fa fa-check-square me-2"  aria-hidden="true"></i><span> Set tasks to Settled </span>
                         </a>
                             <input type="hidden" name="tasks_settled" value="" />
                             <input type="hidden" name="ready_payment_status" value="Settled" />
