@@ -200,13 +200,14 @@ li[data-list=bullet] {
 }
 
 .form_action {
-  width: 120px;
-  height: 50px;
+  width: 125px;
+  height: 55px;
   padding: 2px;
   display: flex;
   margin-left: 4px;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 2pxl;
 }
 
 /*!
