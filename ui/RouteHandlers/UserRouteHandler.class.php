@@ -3447,17 +3447,13 @@ EOF;
         $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
         $pdf->Line(0, 0, 0, $pdf->getPageHeight());
 $html = <<<EOF
-         <table width="100%" cellspacing="0" cellpadding="55%">
+        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%">
-                      <img width="140"  style="margin-bottom:14px;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg">
-                    </td>
+              <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
               <td width="35%"></td>
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="35%">
-                    <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
-                    </td>
+              <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
+                  <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
+              </td>
         </tr>
         <br/>
         <br/>
