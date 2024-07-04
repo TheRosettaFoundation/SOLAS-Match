@@ -357,8 +357,8 @@
                    
             
                         <form id="unpublish_selected_tasks" class="d-flex flex-column form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                            <a class=" text-body fs-6 p-1 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
-                                <i class="fa-solid fa-xmark me-2" ></i> Unpublish Selected Tasks
+                            <a class=" d-flex text-body fs-6 p-1 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
+                                <i class="fa-solid fa-xmark me-2" ></i> <span>Unpublish Selected Tasks</span>
                             </a>
                             <input type="hidden" name="unpublish_selected_tasks" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -369,9 +369,9 @@
             
             
                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                        <form id="tasks_as_paid" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                            <a class="form_action text-body p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
-                                <i class="fa fa-usd me-2"  aria-hidden="true"></i> Mark Selected Tasks as Paid
+                        <form id="tasks_as_paid" class="d-flex flex-column btn btn-small form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                            <a class="d-flex form_action text-body p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
+                                <i class="fa fa-usd me-2"  aria-hidden="true"></i><span>Mark Selected Tasks as Paid</span>
                             </a>
                             <input type="hidden" name="tasks_as_paid" value="" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
