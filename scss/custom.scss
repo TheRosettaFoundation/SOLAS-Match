@@ -284,7 +284,7 @@ li[data-list="bullet"] {
     background-color: #eeeae5; /* Change this to your desired hover color */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
     cursor: pointer; /* Change cursor to indicate clickability (optional) */
-    color: #ba7b1a;
+    color: #ba7b1a !important;
     font-weight: bold;
 }
 
