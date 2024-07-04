@@ -197,7 +197,10 @@ li[data-list=bullet] {
   position: relative;
   margin: 0;
   margin-bottom: 5px;
-  margin-left: 2px;
+}
+
+.form_action {
+  width: 100px;
 }
 
 /*!
