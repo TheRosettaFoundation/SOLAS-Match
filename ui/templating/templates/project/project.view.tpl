@@ -357,18 +357,20 @@
                         {/if}
                         <option value="delesect_all">Deselect all</option>
                     </select>
-              
-
-        <div class="dropdown ">
+        
+                    
         <button class="btn btn-primary text-white menu" type="button" >
-           ...
-        </button>
-        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
-           ...
+        ...
         </button>
         <div class="menu_list d-none">
                     Menu List here 
         <div>
+        <div class="dropdown ">
+        
+        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
+           ...
+        </button>
+     
         <ul class="dropdown-menu drop-up">
          
 
