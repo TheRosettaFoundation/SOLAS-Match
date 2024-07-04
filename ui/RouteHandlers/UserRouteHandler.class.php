@@ -3449,11 +3449,11 @@ EOF;
 $html = <<<EOF
         <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
-              <td width="35%"></td>
-              <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
-                  <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
-              </td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
+            <td width="35%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
+                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
+            </td>
         </tr>
         <br/>
         <br/>
@@ -3461,19 +3461,16 @@ $html = <<<EOF
 EOF;
 
 $badge = <<<EOF
-         <table width="100%" cellspacing="0" cellpadding="55%">
+        <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="33%">
-                    </td>
-              <td width="35%"></td>
-              <td class="header1" rowspan="2" align="left" valign="middle"
-                    width="25%">
-                         <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
-                                 $badge_text ($paid_date)
-                            </div>
-                            <br/>
-                    </td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
+            <td width="35%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="25%">
+                <div style="font-size: 12px; font-weight:bold ; border: 1px solid black; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
+                    $badge_text ($paid_date)
+                </div>
+                <br/>
+            </td>
         </tr>
         </table>
 EOF;
