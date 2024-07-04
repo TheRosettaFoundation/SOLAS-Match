@@ -331,7 +331,7 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
-    public function updateNativeMatchingPhase_1()
+    public function updateNativeMatchingPhase_2()
     {
         $ret = 0;
         $result = LibAPI\PDOWrapper::call('update_native_language_phase_2');
