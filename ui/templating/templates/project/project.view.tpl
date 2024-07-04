@@ -340,10 +340,10 @@
             <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
             </h3>
-            <div>
-              <button class="btn btn-primary text-white menu" type="button" >
+            <div class="d-flex">
+              <div class="bg-primary text-white menu"  >
                     ...
-                </button>
+                </div>
                     <div class="menu_list d-none">
                                 Menu List here 
                     <div>
