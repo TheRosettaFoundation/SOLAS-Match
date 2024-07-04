@@ -286,7 +286,7 @@ li[data-list="bullet"] {
     cursor: pointer; /* Change cursor to indicate clickability (optional) */
     color: #ba7b1a !important;
     font-weight: bold;
-    border: 1px solid #ba7b1a;
+    border: 2px solid rgba(#ba7b1a, 0.3);
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";

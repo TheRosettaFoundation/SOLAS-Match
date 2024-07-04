@@ -217,7 +217,7 @@ li[data-list=bullet] {
   cursor: pointer; /* Change cursor to indicate clickability (optional) */
   color: #ba7b1a !important;
   font-weight: bold;
-  border: 1px solid #ba7b1a;
+  border: 2px solid rgba(186, 123, 26, 0.3);
 }
 
 /*!
