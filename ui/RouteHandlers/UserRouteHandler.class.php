@@ -3516,6 +3516,7 @@ foreach ($rows as $index => $row) {
     $type = $row['type_text'];
     $language = $row['language_pair_name'];
     $project = $row['project_title'];
+    $org = $row['name'];
     $row_amount = '$' . round($row['row_amount'], 2);
     $unit = $row['pricing_and_recognition_unit_text_hours'];
     $unit_rate = '$' . $row['unit_rate'];
@@ -3525,7 +3526,7 @@ foreach ($rows as $index => $row) {
     $tbl .= <<<EOF
     <tr>
     <td width="30" align="center"><b>$number</b></td>
-    <td width="250"  style="padding-right:10px; padding-top:10px;"> $description <br /><span style="font-weight:bold;"> $project </span> <br /> <span> $language </span> <br /><span> $type</span></td>
+    <td width="250"  style="padding-right:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project</span><br />$org<br />$language<br />$type</td>
     <td width="80" align="center">$purchase_order</td>
     <td width="80" align="center"> $quantity $unit</td>
     <td width="80" align="center">$unit_rate</td>
