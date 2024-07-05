@@ -1278,7 +1278,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128))}
     {if !empty($user_invoices)}
 <div class="mt-2 p-4 rounded-3 bg-body">
 <div class="table-responsive fs-5 mt-2">
@@ -1294,10 +1294,26 @@ If a language is to be removed from this list, the community will be informed be
     </thead>
     {foreach $user_invoices as $invoice}
         <tr>
-            <td><a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">{if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a></td>
+            <td>
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || !($invoice['status']&1)}
+                    <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">{if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
+                {else}
+                    {if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}
+                {/if}
+            </td>
             <td>{substr($invoice['invoice_date'], 0, 10)}</td>
             <td>${round($invoice['amount'], 2)}</td>
-            <td>{if $invoice['status'] == 0}Invoice{elseif $invoice['status'] == 1}Draft{elseif $invoice['status'] == 2}Invoice Paid{elseif $invoice['status'] == 3}Draft Paid{/if}</td>
+            <td>
+                {if     $invoice['status'] == 0}Invoice
+                {elseif $invoice['status'] == 1}Draft
+                {elseif $invoice['status'] == 2}Invoice Paid
+                {elseif $invoice['status'] == 3}Draft Paid
+                {elseif $invoice['status'] == 4}Invoice Bounced
+                {elseif $invoice['status'] == 5}Draft Bounced
+                {elseif $invoice['status'] == 6}Invoice Bounced
+                {elseif $invoice['status'] == 7}Draft Bounced
+                {/if}
+            </td>
         </tr>
     {/foreach}
 </table>
