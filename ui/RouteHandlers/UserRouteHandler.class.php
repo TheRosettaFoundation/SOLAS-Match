@@ -3512,6 +3512,7 @@ EOF;
 
 foreach ($rows as $index => $row) {
     $purchase_order = $row['purchase_order'];
+    $deal_id = $row['deal_id'];
     $description = $row['title'];
     $type = $row['type_text'];
     $language = $row['language_pair_name'];
@@ -3527,7 +3528,7 @@ foreach ($rows as $index => $row) {
     <tr>
     <td width="30" align="center"><b>$number</b></td>
     <td width="250"  style="padding-right:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project</span><br />$org<br />$language<br />$type</td>
-    <td width="80" align="center">$purchase_order</td>
+    <td width="80" align="center">$purchase_order<br /><br />$deal_id</td>
     <td width="80" align="center"> $quantity $unit</td>
     <td width="80" align="center">$unit_rate</td>
     <td align="center" width="80">$row_amount</td>
