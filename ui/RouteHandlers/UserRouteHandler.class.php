@@ -3396,24 +3396,10 @@ EOF;
         $name = $invoice['linguist_name'];
 
         $status = $invoice['status'];
-        $badge_text = '';
-        switch ($status) {
-        case 0:
-            $status_text = 'INVOICE';
-            break;
-        case 1:
-            $status_text = 'DRAFT';
-            break;
-        case 2:
-            $status_text = 'INVOICE';
-            $badge_text = 'PAID';
-            break;
-        case 3:
-            $status_text = 'DRAFT';
-            $badge_text = 'PAID';
-            break;
-        default:
-        }
+        $inv = $status&1 ? 'DRAFT' : 'INVOICE';
+        $paid = $status&2 ? 'PAID' : '';
+        if ($status&4) $paid = 'BOUNCED';
+
         $email = $invoice['email'];
         $country = $invoice['country'];
         $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
@@ -3452,7 +3438,7 @@ $html = <<<EOF
             <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
             <td width="35%"></td>
             <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
-                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$status_text</div>
+                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$inv</div>
             </td>
         </tr>
         <br/>
@@ -3467,7 +3453,7 @@ $badge = <<<EOF
             <td width="35%"></td>
             <td class="header1" rowspan="2" align="left" valign="middle" width="25%">
                 <div style="font-size: 12px; font-weight:bold ; border: 1px solid red; color:red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
-                    $badge_text ($paid_date)
+                    $paid ($paid_date)
                 </div>
                 <br/>
             </td>
@@ -3475,9 +3461,7 @@ $badge = <<<EOF
         </table>
 EOF;
     $pdf->writeHTML($html, true, false, true, false, '');
-    if($status == 2 or $status == 3){
-    $pdf->writeHTML($badge, true, false, true, false, '');
-    }
+    if ($paid) $pdf->writeHTML($badge, true, false, true, false, '');
     $html1 = <<<EOF
 <table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
         <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
