@@ -80,7 +80,18 @@
             <td>{$task['payment_status']}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
             <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
-            <td>{if is_null($task['status'])}{elseif $task['status'] == 0}0-Invoice{elseif $task['status'] == 1}1-Draft{elseif $task['status'] == 2}2-Invoice Paid{elseif $task['status'] == 3}3-Draft Paid{/if}</td>
+            <td>
+                {if is_null($task['status'])}
+                {elseif $task['status'] == 0}0-Invoice
+                {elseif $task['status'] == 1}1-Draft
+                {elseif $task['status'] == 4}2-Invoice Bounced
+                {elseif $task['status'] == 5}3-Draft Bounced
+                {elseif $task['status'] == 6}2-Invoice Bounced
+                {elseif $task['status'] == 7}3-Draft Bounced
+                {elseif $task['status'] == 2}4-Invoice Paid
+                {elseif $task['status'] == 3}5-Draft Paid
+                {/if}
+            </td>
             <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
         </tr>
         {/foreach}
