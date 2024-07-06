@@ -84,6 +84,16 @@
                         {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}
+                {if !is_null($task['status']) && $task['status']&2}
+                    <form>
+                        <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
+
+                        <button type="button" class="btn btn-danger mark_bounced_button" name="mark_bounced_button">
+                            <i class="icon-ban-circle icon-white"></i> Mark Bounced
+                        </button>
+                        {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
             </td>
             {/if}
         </tr>
@@ -121,7 +131,7 @@ if (mark_paid_buttons_array.length > 0) {
         curr.addEventListener("click", function (e) {
             e.preventDefault();
 
-          if (confirm("Are you sure you want to permanently mark this invoice as paid?")) {
+          if (confirm("Are you sure you want to mark this invoice as paid?")) {
             let parent = curr.parentElement;
             let invoice_number = parent.querySelector(".invoice_number").value;
             let mark_paid_button = parent.querySelector(".mark_paid_button");
@@ -140,6 +150,53 @@ if (mark_paid_buttons_array.length > 0) {
         });
     });
 }
+
+
+const mark_bounced_buttons = document.querySelectorAll("form .mark_bounced_button");
+
+async function set_invoice_bounced({ invoice_number, sesskey }) {
+    let url = `/set_invoice_bounced/${ invoice_number }/`;
+    const key = { sesskey };
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: new URLSearchParams(key),
+        });
+
+        if (!response.ok) {
+            throw new Error("error");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const mark_bounced_buttons_array = [...mark_bounced_buttons];
+
+if (mark_bounced_buttons_array.length > 0) {
+    mark_bounced_buttons_array.forEach(function (curr, index, mark_bounced_buttons_array) {
+        let codes = {};
+        curr.addEventListener("click", function (e) {
+            e.preventDefault();
+
+          if (confirm("Are you sure you want to mark this invoice as bounced?")) {
+            let parent = curr.parentElement;
+            let invoice_number = parent.querySelector(".invoice_number").value;
+            let mark_bounced_button = parent.querySelector(".mark_bounced_button");
+            mark_bounced_button.disabled = true;
+
+            let sesskey = parent.querySelector(".sesskey").value;
+            codes = {
+                invoice_number,
+                sesskey,
+            };
+
+            set_invoice_bounced(codes);
+          }
+        });
+    });
+}
+
 
 const revoke_buttons = document.querySelectorAll("form .revoke_button");
 
