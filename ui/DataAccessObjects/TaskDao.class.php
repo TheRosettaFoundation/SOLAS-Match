@@ -1151,6 +1151,27 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         if (empty($res['id'])) error_log("Failed to read data from Google (PATCH): $result");
     }
 
+    public function set_invoice_bounced($invoice_number)
+    {
+        $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();
+
+        LibAPI\PDOWrapper::call('set_invoice_bounced', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
+
+        $access_token = $this->get_google_access_token();
+        [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
+        [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
+
+        $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/pdf', "Authorization: Bearer $access_token"]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        if (empty($res['id'])) error_log("Failed to read data from Google (PATCH bounced): $result");
+    }
+
     public function set_invoice_revoked($invoice_number)
     {
         $RH = new \SolasMatch\UI\RouteHandlers\UserRouteHandler();

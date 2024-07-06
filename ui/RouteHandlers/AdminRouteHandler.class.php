@@ -303,6 +303,12 @@ class AdminRouteHandler
             ->setName('set_invoice_paid');
 
         $app->map(['GET', 'POST'],
+            '/set_invoice_bounced/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_bounced')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
+            ->setName('set_invoice_bounced');
+
+        $app->map(['GET', 'POST'],
             '/set_invoice_revoked/{invoice_number}[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
@@ -1653,6 +1659,18 @@ class AdminRouteHandler
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_paid')) $result = 0;
         if ($result) $taskDao->set_invoice_paid($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function set_invoice_bounced(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_bounced')) $result = 0;
+        if ($result) $taskDao->set_invoice_bounced($args['invoice_number']);
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
