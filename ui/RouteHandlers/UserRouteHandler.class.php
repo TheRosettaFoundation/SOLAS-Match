@@ -124,7 +124,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
         '/invoice/{invoice_number}[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
-        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
+        ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
         ->setName('get-invoice');
 
         $app->map(['GET', 'POST'],
@@ -3384,10 +3384,15 @@ EOF;
         require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
        
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
 
         $rows = $userDao->getInvoice($invoice_number);
         if (empty($rows)) return ['none.pdf', 'Not Found'];
         $invoice = $rows[0];
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($user_id);
+        if (!(($user_id == $invoice['linguist_id'] && !($invoice['status']&1)) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)))) return ['none.pdf', 'Not Allowed'];
 
         $TWB = 'TWB-';
         if ($invoice['status']&1) $TWB = 'DRAFT-';
