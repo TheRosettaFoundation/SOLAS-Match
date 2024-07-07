@@ -84,16 +84,7 @@
                         {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}
-
-status: 
-{$task['status']}<br />
-{$task['status']&2}<br />
-{$task['status']&4}<br />
-{$task['invoice_paid_date']}<br />
-{gmdate('Y-m-d H:i:s', strtotime('31 days ago'))}<br />
-
-
-                {if !is_null($task['status']) && $task['status']&2 && !$task['status']&4 && $task['invoice_paid_date'] > gmdate('Y-m-d H:i:s', strtotime('31 days ago'))}
+                {if !is_null($task['status']) && $task['status']&2 && !($task['status']&4) && $task['invoice_paid_date'] > gmdate('Y-m-d H:i:s', strtotime('31 days ago'))}
                     <form>
                         <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
 
