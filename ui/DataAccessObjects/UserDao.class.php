@@ -109,6 +109,20 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function getUserInvoices($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_invoices', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function getInvoice($invoice_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_invoice', LibAPI\PDOWrapper::cleanse($invoice_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function find_all_orgs_for_user($user_id)
     {
         $result = LibAPI\PDOWrapper::call('find_all_orgs_for_user', LibAPI\PDOWrapper::cleanse($user_id));

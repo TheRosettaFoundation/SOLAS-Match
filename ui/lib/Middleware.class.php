@@ -109,8 +109,8 @@ class Middleware
                 if ($roles) $template_data = array_merge($template_data, ['dashboard' => 1]);
                 $tasks = $userDao->getUserTasks($current_user_id);
                 if (!empty($tasks)) $template_data = array_merge($template_data, ['user_has_active_tasks' => 1]);
-                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) $template_data = array_merge($template_data, ['site_admin' => 1]);
-                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) $template_data = array_merge($template_data, ['show_admin_dashboard' => 1]);                
+                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)) $template_data = array_merge($template_data, ['site_admin' => 1]);
+                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | NGO_ADMIN)) $template_data = array_merge($template_data, ['show_admin_dashboard' => 1]);                
               } catch (Common\Exceptions\SolasMatchException $e) {
                 Common\Lib\UserSession::clearCurrentUserID();
                 Common\Lib\UserSession::clearAccessToken();
@@ -250,6 +250,21 @@ class Middleware
     public function authIsSiteAdmin_any(Request $request, RequestHandler $handler)
     {
         return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
+    }
+
+    public function authIsSiteAdmin_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, FINANCE);
+    }
+
+    public function authIsSiteAdmin_any_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE);
+    }
+
+    public function authIsSiteAdmin_or_PO_or_FINANCE(Request $request, RequestHandler $handler)
+    {
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | FINANCE);
     }
 
     public function authIsSiteAdmin_any_or_org_admin_or_po_for_any_org(Request $request, RequestHandler $handler)

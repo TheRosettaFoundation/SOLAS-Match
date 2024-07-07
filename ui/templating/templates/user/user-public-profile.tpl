@@ -72,7 +72,7 @@
 {/if}
 
 
-    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || $receive_credit)}
+    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || $receive_credit)}
   
         <div class="row g-4 ">    
 
@@ -86,15 +86,24 @@
         <p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
         <p>If you do not want to take the test, please click “Cancel”.</p>
         </div>
-             
-
         </span>
-        
 
                     {if isset($userPersonalInfo)}
                             <div class="mb-3 ">
-                          
-                                      {if !empty($userPersonalInfo->getFirstName())}<h3 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                    {if !empty($userPersonalInfo->getFirstName()) && !empty($userPersonalInfo->getLastName())}<h3 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())} {TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}</h3>{/if}
+
+                                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                                        {if !empty($linguist_payment_information['linguist_name'])}
+                                            {assign var="full_name" value="++++++++++"}
+                                            {if !empty($userPersonalInfo->getFirstName()) && !empty($userPersonalInfo->getLastName())}
+                                                {assign var="full_name" value="`$userPersonalInfo->getFirstName()` `$userPersonalInfo->getLastName()`"}
+                                            {/if}
+                                            {if empty($userPersonalInfo->getFirstName()) || empty($userPersonalInfo->getLastName()) || $linguist_payment_information['linguist_name'] != $full_name}
+                                                <h4 class="mb-3">Official Name: {TemplateHelper::uiCleanseHTML($linguist_payment_information['linguist_name'])}</h4>
+                                            {/if}
+                                        {/if}
+                                    {/if}
+
                                      <div> {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                                      {if $admin_role&$SITE_ADMIN}TWB ADMIN{if $admin_role&($PROJECT_OFFICER + $COMMUNITY_OFFICER)},{/if}{/if} {if $admin_role&$PROJECT_OFFICER}PROJECT OFFICER{if $admin_role&$COMMUNITY_OFFICER},{/if}{/if} {if $admin_role&$COMMUNITY_OFFICER}COMMUNITY OFFICER{/if}
                                      {if $admin_role&$NGO_ADMIN}NGO ADMIN{if $admin_role&$NGO_PROJECT_OFFICER},{/if}{/if} {if $admin_role&$NGO_PROJECT_OFFICER}NGO PROJECT OFFICER{/if}
@@ -1269,6 +1278,50 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128))}
+    {if !empty($user_invoices)}
+<div class="mt-2 p-4 rounded-3 bg-body">
+<div class="table-responsive fs-5 mt-2">
+<h4 class="fw-bold">Invoice Section</h4>
+<table class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <td><strong>Invoice Number</strong></td>
+            <td><strong>Invoice Date</strong></td>
+            <td><strong>Invoice Amount</strong></td>
+            <td><strong>Invoice Status</strong></td>
+        </tr>
+    </thead>
+    {foreach $user_invoices as $invoice}
+        <tr>
+            <td>
+                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || !($invoice['status']&1)}
+                    <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">{if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
+                {else}
+                    {if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}
+                {/if}
+            </td>
+            <td>{substr($invoice['invoice_date'], 0, 10)}</td>
+            <td>${round($invoice['amount'], 2)}</td>
+            <td>
+                {if     $invoice['status'] == 0}Invoice
+                {elseif $invoice['status'] == 1}Draft
+                {elseif $invoice['status'] == 2}Invoice Paid
+                {elseif $invoice['status'] == 3}Draft Paid
+                {elseif $invoice['status'] == 4}Invoice Bounced
+                {elseif $invoice['status'] == 5}Draft Bounced
+                {elseif $invoice['status'] == 6}Invoice Bounced
+                {elseif $invoice['status'] == 7}Draft Bounced
+                {/if}
+            </td>
+        </tr>
+    {/foreach}
+</table>
+</div>
+</div>
+{/if}
+{/if}
+
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
@@ -1471,18 +1524,21 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 33%"><h4 class="fw-bold">Linguist Payment Information</h4></td>
-        <td style="width: 33%"></td>
-        <td style="width: 34%"></td>
+        <td style="width: 20%"><h4 class="fw-bold">Linguist Payment Information</h4></td>
+        <td style="width: 20%"></td>
+        <td style="width: 20%"></td>
+        <td style="width: 40%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 33%"><strong>Admin</strong></td>
-        <td style="width: 33%"><strong>Country</strong></td>
-        <td style="width: 34%"><strong>Google Drive Link</strong></td>
+        <td style="width: 20%"><strong>Admin</strong></td>
+        <td style="width: 20%"><strong>Official Name</strong></td>
+        <td style="width: 20%"><strong>Billing Country</strong></td>
+        <td style="width: 40%"><strong>Google Drive Folder Link</strong></td>
     </tr>
     <tr valign="top">
-        <td style="width: 33%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
-        <td style="width: 33%">
+        <td style="width: 20%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
+        <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_name'])}{$linguist_payment_information['linguist_name']}{else}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getFirstName())}{$userPersonalInfo->getFirstName()}{/if}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getLastName())} {$userPersonalInfo->getLastName()}{/if}{/if}" name="linguist_name" id="linguist_name" /></td>
+        <td style="width: 20%">
             <select class="form-select form-select-sm" name="country_id" id="country">
                 <option value="">--Select--</option>
                 {foreach $countries as $country}
@@ -1492,13 +1548,14 @@ If a language is to be removed from this list, the community will be informed be
                 {/foreach}
             </select>
         </td>
-        <td style="width: 34%"><input class="form-control form-control-sm" type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+        <td style="width: 40%"><input class="form-control form-control-sm" type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
-        <td style="width: 33%"><input type="submit" class="btn btn-primary text-white  border-0" name="mark_linguist_payment_information" value="Submit" /></td>
-        <td style="width: 33%"></td>
-        <td style="width: 34%"></td>
+        <td style="width: 20%"><input type="submit" class="btn btn-primary text-white  border-0" name="mark_linguist_payment_information" value="Submit" /></td>
+        <td style="width: 20%"></td>
+        <td style="width: 20%"></td>
+        <td style="width: 40%"></td>
     </tr>
     {/if}
 </table>
