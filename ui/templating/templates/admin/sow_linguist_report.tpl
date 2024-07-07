@@ -70,7 +70,7 @@
             <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
             {if $roles&($SITE_ADMIN + 128)}
             <td>
-                {if !is_null($task['status']) && !($task['status']&2)}
+                {if !is_null($task['status']) && ($task['status']&6) != 2}
                     <form>
                         <input type="hidden" class="invoice_number" name="invoice_number" value="{$task['invoice_number']}" />
 
