@@ -46,6 +46,7 @@ function gc($maxlifetime)
 
 require_once __DIR__ . '/ui/vendor/autoload.php';
 
+define('FINANCE',           128);
 define('SITE_ADMIN',         64);
 define('PROJECT_OFFICER',    32);
 define('COMMUNITY_OFFICER',  16);

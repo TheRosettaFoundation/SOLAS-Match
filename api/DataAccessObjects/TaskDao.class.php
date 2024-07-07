@@ -162,45 +162,6 @@ class TaskDao
         return $ret;
     }
 
-    //! Get a list of the most recently created Tasks
-    /*!
-      Get a list of the most recently created Task objects. This will only return Task objects that are in the
-      unclaimed state. A limit and an offset can be used to return all available Tasks in batches. The limit
-      defaults to 15 and the offset defaults to 0.
-      @param int $limit is the number of Task objects that will be returned
-      @param int $offset is the index of the Task to start returning
-      @return Returns an array of Task objects
-    */
-    public static function getLatestAvailableTasks($limit = 15, $offset = 0)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($limit).', '.
-                Lib\PDOWrapper::cleanseNull($offset);
-        $result = Lib\PDOWrapper::call("getLatestAvailableTasks", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
-            }
-        }
-        return $ret;
-    }
-
-    //! Get the count of most recently created Tasks
-    /*!
-      Get the count  of the most recently created Task objects. 
-      @return Returns an integer
-    */
-    public static function getLatestAvailableTasksCount()
-    {
-        $result = Lib\PDOWrapper::call("getLatestAvailableTasksCount", "");
-        if ($result) {
-            return $result[0]['result'];
-        } else {
-            return null;
-        }
-    }
-    
     //! Get Tasks with the specified Tag
     /*!
       Return a list of Task objects where each Task returned has the specified Tag.

@@ -1430,7 +1430,7 @@ INSERT INTO task_type_details VALUES
 (13,4,1,0,1,1,0,1,1,'Transcription',              'Transcription',              '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
 (14,4,1,0,1,1,0,1,1,'Voiceover',                  'Voiceover',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
 (15,5,1,0,1,1,1,0,1,'lexiQA quality assurance',   'lexiQA quality assurance',   '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
-(16,5,1,0,1,1,1,0,1,'Alignment',                  'Alignment',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
+(16,3,1,0,1,1,1,0,1,'Alignment',                  'Alignment',                  '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
 (17,5,1,0,1,1,1,0,1,'SME review',                 'SME review',                 '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 4.17,0,0.0166667,0),
 (18,5,1,0,1,1,1,0,1,'QA on Phrase',               'QA on Phrase',               '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',1.667, 5.83,0,0.0166667,0),
 (19,5,1,0,1,1,1,0,1,'Language Quality Assessment','Language Quality Assessment','#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',0.333, 5.83,0,0.0166667,0),
@@ -1705,7 +1705,7 @@ CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
   supplier_reference VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT '',
   total              FLOAT NOT NULL DEFAULT 0.0,
   currency           VARCHAR(10) COLLATE utf8mb4_unicode_ci DEFAULT '',
-  description        VARCHAR(1000) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  description        VARCHAR(2500) COLLATE utf8mb4_unicode_ci DEFAULT '',
   division_name      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   status             VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Created',
   approver_mail      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
@@ -2911,6 +2911,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
@@ -2944,6 +2945,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
@@ -11138,7 +11140,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_zahara_purchase_order
     IN p_supplier_reference VARCHAR(50),
     IN p_total              FLOAT,
     IN p_currency           VARCHAR(10),
-    IN p_description        VARCHAR(1000),
+    IN p_description        VARCHAR(2500),
     IN p_division_name      VARCHAR(255),
     IN p_status             VARCHAR(30),
     IN p_approver_mail      VARCHAR(255),
@@ -11202,8 +11204,9 @@ DROP PROCEDURE IF EXISTS `get_completed_paid_tasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_completed_paid_tasks`()
 BEGIN
-    SELECT t.id, t.`word-count`, t.project_id, tp.purchase_order, tp.payment_status, tp.unit_rate, tc.user_id
+    SELECT t.id, t.`word-count`, t.project_id, tp.purchase_order, tp.payment_status, tp.unit_rate, tc.user_id, ttd.divide_rate_by_60
     FROM Tasks t
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
     JOIN TaskPaids  tp ON t.id=tp.task_id
     JOIN TaskClaims tc ON t.id=tc.task_id
     WHERE t.`task-status_id`=4;
@@ -12398,6 +12401,7 @@ DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_for_any_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_for_any_org`(IN uID INT UNSIGNED)
 BEGIN
+    SET @FINANCE=           128;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -12406,7 +12410,7 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
-    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @FINANCE | @NGO_ADMIN | @NGO_PROJECT_OFFICER;
 
     SELECT *
     FROM Admins
@@ -12919,14 +12923,42 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   status         INT DEFAULT 0,
   revoked        INT DEFAULT 0,
   invoice_date   DATETIME NOT NULL,
+  invoice_paid_date DATETIME,
   linguist_id    INT UNSIGNED NOT NULL,
   linguist_name  VARCHAR(256) NOT NULL,
   amount         FLOAT NOT NULL,
   filename       VARCHAR(255),
+  google_id      VARCHAR(50) DEFAULT '',
+  admin_id       INT UNSIGNED,
   PRIMARY KEY (invoice_number),
   KEY (linguist_id),
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_invoice`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT, IN aID INT UNSIGNED)
+BEGIN
+    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, amount, admin_id) VALUES (stat, date, lID, lNAME, a, aID);
+    SELECT LAST_INSERT_ID() AS id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_invoice_filename`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_filename`(IN number INT, IN name VARCHAR(255), IN gID VARCHAR(50))
+BEGIN
+    UPDATE invoices SET filename=name, google_id=gID WHERE invoice_number=number;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_invoice_processed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_invoice_processed`(IN tID BIGINT UNSIGNED, IN number INT)
+BEGIN
+    UPDATE TaskPaids SET invoice_number=number, processed=1 WHERE task_id=tID;
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_invoices`;
 DELIMITER //
@@ -12953,15 +12985,17 @@ BEGIN
         i.*,
         tp.task_id,
         tp.purchase_order,
+        tp.unit_rate,
         t.title,
         p.title AS project_title,
         o.name,
+        pcd.deal_id,
         ttd.type_text,
         CONCAT(l1.code, '-', l2.code) AS language_pair,
         CONCAT(l1.`en-name`, '-', l2.`en-name`) AS language_pair_name,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS quantity,
         ttd.pricing_and_recognition_unit_text_hours,
-        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS amount,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS row_amount,
         usr.email,
         usr.id,
         c.`en-name` AS country,
@@ -12976,8 +13010,152 @@ BEGIN
     INNER JOIN Countries           c ON lpi.country_id=c.id
     INNER JOIN Projects            p ON t.project_id=p.id
     INNER JOIN Organisations       o ON p.organisation_id=o.id
+    INNER JOIN project_complete_dates pcd ON p.id=pcd.project_id
     INNER JOIN Users             usr ON i.linguist_id=usr.id
     WHERE i.invoice_number=iID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `sow_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_report`()
+BEGIN
+    SELECT
+        tc.user_id,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        lpi.google_drive_link,
+        p.organisation_id,
+        o.name,
+        t.project_id,
+        p.title,
+        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
+        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
+        t.id AS task_id,
+        ttd.type_text,
+        CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
+        pcd.deal_id,
+        '2.9.2' AS budget_code,
+        tp.purchase_order,
+        pos.status AS po_status,
+        pos.approver_mail,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
+        ttd.pricing_and_recognition_unit_text_hours,
+        tp.unit_rate,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
+        tcd.complete_date,
+        tp.processed,
+        i.status,
+        i.invoice_date,
+        tp.invoice_number,
+        tp.payment_status
+    FROM TaskPaids                           tp
+    JOIN Tasks                                t ON tp.task_id=t.id
+    JOIN TaskClaims                          tc ON t.id=tc.task_id
+    JOIN TaskCompleteDates                  tcd ON t.id=tcd.task_id
+    JOIN UserPersonalInformation            upi ON tc.user_id=upi.user_id
+    JOIN Projects                             p ON t.project_id=p.id
+    JOIN Organisations                        o ON p.organisation_id=o.id
+    JOIN project_complete_dates             pcd ON p.id=pcd.project_id
+    JOIN MemsourceProjects                   mp ON p.id=mp.project_id
+    JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Languages                           l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                           l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                           c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN MemsourceUsers                 mu ON mp.owner_uid=memsource_user_uid
+    LEFT JOIN Users                           u ON mu.user_id=u.id
+    LEFT JOIN ProjectFiles                   pf ON mp.project_id=pf.project_id
+    LEFT JOIN Users                          u2 ON pf.user_id=u2.id
+    LEFT JOIN Users                          u3 ON mp.owner_uid=u3.id
+    LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
+    WHERE
+        tp.processed>=0 AND
+        t.`task-status_id`=4
+    ORDER BY
+        tp.processed,
+        IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))),
+        IFNULL(i.status, -1),
+        o.name,
+        p.title,
+        IF(u.email IS NOT NULL AND u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)),
+        t.id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `sow_linguist_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_linguist_report`()
+BEGIN
+    SELECT
+        tc.user_id,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        c.`en-name` AS country,
+        lpi.google_drive_link,
+        IFNULL(i.amount, SUM(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0))) AS total_expected_cost,
+        i.status,
+        i.invoice_number,
+        i.filename,
+        i.google_id,
+        MIN(tp.processed) AS processed,
+        i.invoice_date,
+        i.invoice_paid_date,
+        MAX(IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)) AS proforma
+    FROM TaskPaids                           tp
+    JOIN Tasks                                t ON tp.task_id=t.id
+    JOIN TaskClaims                          tc ON t.id=tc.task_id
+    JOIN TaskCompleteDates                  tcd ON t.id=tcd.task_id
+    JOIN UserPersonalInformation            upi ON tc.user_id=upi.user_id
+    JOIN Projects                             p ON t.project_id=p.id
+    JOIN Organisations                        o ON p.organisation_id=o.id
+    JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    LEFT JOIN Countries                       c ON lpi.country_id=c.id
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
+    WHERE
+        tp.processed>=0 AND
+        pos.status IS NOT NULL AND
+        (pos.status='Completed' OR pos.status='Approved') AND
+        t.`task-status_id`=4
+    GROUP BY
+        i.invoice_date,
+        tc.user_id,
+        tp.invoice_number,
+        IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)
+    ORDER BY
+        IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
+        IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))),
+        IFNULL(i.status, -1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_invoice_paid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)
+BEGIN
+    UPDATE invoices SET status=(status&~4)|2, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status='Settled', status_changed=NOW() WHERE invoice_number=inv;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_invoice_bounced`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_bounced`(IN inv INT, IN aID INT UNSIGNED)
+BEGIN
+    UPDATE invoices SET status=status|4, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status='Ready for payment', status_changed=NOW() WHERE invoice_number=inv;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_invoice_revoked`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_revoked`(IN inv INT, IN aID INT UNSIGNED)
+BEGIN
+    UPDATE invoices SET revoked=1, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
+    UPDATE TaskPaids SET invoice_number=0, processed=0 WHERE invoice_number=inv;
 END//
 DELIMITER ;
 
