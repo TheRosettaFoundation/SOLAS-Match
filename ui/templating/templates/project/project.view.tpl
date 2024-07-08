@@ -567,7 +567,7 @@
 
               <form id="publish_native_users" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
               <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_native_users').submit();" >
-                  <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Publish Task for only native users</spam>
+                  <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Restrict Task to native users</spam>
               </a>
              
               <input type="hidden" name="publish_native_users" value="" />
@@ -577,7 +577,7 @@
 
           <form id="publish_language_match" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_language_match').submit();" >
-              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task matching language</spam>
+              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Restrict Task matching language</spam>
           </a>
           <input type="hidden" name="publish_language_match" value="" />     
           {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -585,7 +585,7 @@
 
       <form id="publish_all" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
       <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
-          <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task for all users</spam>
+          <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Unrestrict Task to all </spam>
       </a>
 
       <input type="hidden" name="publish_all" value="" />
