@@ -326,8 +326,20 @@ error_log("createTaskDirectly: $args");
 
     public function update_native_matching_phase_1()
     {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_language_phase_1');  
+        try {
+            $result = LibAPI\PDOWrapper::call('update_native_language_phase_1');
+            if ($result === false) {
+                // Handle the case where the stored procedure call failed
+                throw new Exception('Failed to call stored procedure');
+            }
+            // Optionally, set $ret to a different value based on the result
+            // $ret = $result;
+        } catch (Exception $e) {
+            // Log the error or handle it appropriately
+            error_log('Error in update_native_matching_phase_1: ' . $e->getMessage());
+            return -1; // Return a different value to indicate an error
+        }
+        
         return $ret;
     }
 
