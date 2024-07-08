@@ -328,6 +328,9 @@ error_log("createTaskDirectly: $args");
     {
         $ret = 0;
         $result = LibAPI\PDOWrapper::call('update_native_matching_phase_1',LibAPI\PDOWrapper::cleanseNull(''));
+        if (!empty($result)) {
+            $ret = 1;
+        }
         return $ret;
     }
 
@@ -335,6 +338,9 @@ error_log("createTaskDirectly: $args");
     {
         $ret = 0;
         $result = LibAPI\PDOWrapper::call('update_native_matching_phase_2',LibAPI\PDOWrapper::cleanseNull(''));
+        if (!empty($result)) {
+            $ret = 1;
+        }
         return $ret;
     }
 
