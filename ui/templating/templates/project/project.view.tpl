@@ -576,7 +576,7 @@
 
           <form id="publish_language_match" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
           <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_language_match').submit();" >
-              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task  to users matching language</spam>
+              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task matching language</spam>
           </a>
           <input type="hidden" name="publish_language_match" value="1" />
        
