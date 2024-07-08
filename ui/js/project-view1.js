@@ -23,6 +23,9 @@ function select() {
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
@@ -45,6 +48,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -65,6 +71,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -85,6 +94,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -106,6 +118,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -126,6 +141,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -146,6 +164,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -163,6 +184,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -199,6 +223,9 @@ function select() {
         $("[name=publish_selected_tasks]").val(select_all_tasks);
         $("[name=tasks_as_paid]").val(select_all_tasks);
         $("[name=tasks_as_unpaid]").val(select_all_tasks);
+        $("[name=publish_native_users]").val(arr);
+        $("[name=publish_language_match]").val(arr);
+        $("[name=publish_all]").val(arr);
         $("[name=status_as_unclaimed]").val(select_all_tasks);
         $("[name=status_as_waiting]").val(select_all_tasks);
         $("[name=cancel]").val(select_all_tasks);
@@ -221,6 +248,9 @@ function select() {
         $("[name=publish_selected_tasks]").val(arr_select_task);
         $("[name=tasks_as_paid]").val(arr_select_task);
         $("[name=tasks_as_unpaid]").val(arr_select_task);
+        $("[name=publish_native_users]").val(arr);
+        $("[name=publish_language_match]").val(arr);
+        $("[name=publish_all]").val(arr);
         $("[name=status_as_unclaimed]").val(arr_select_task);
         $("[name=status_as_waiting]").val(arr_select_task);
         $("[name=cancel]").val(arr_select_task);
@@ -241,6 +271,9 @@ function select() {
         "status_as_waiting",
         "complete_selected_tasks",
         "uncomplete_selected_tasks",
+        "publish_native_users",
+        "publish_matching_language",
+        "publish_all"
     ];
 
     // Validation if user clicks on action without doing a selection
@@ -294,6 +327,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -315,6 +351,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -336,6 +375,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -357,6 +399,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -379,6 +424,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -400,6 +448,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
@@ -414,6 +465,9 @@ function select() {
             $("[name=publish_selected_tasks]").val(arr);
             $("[name=tasks_as_paid]").val(arr);
             $("[name=tasks_as_unpaid]").val(arr);
+            $("[name=publish_native_users]").val(arr);
+            $("[name=publish_language_match]").val(arr);
+            $("[name=publish_all]").val(arr);
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
