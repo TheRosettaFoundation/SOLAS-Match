@@ -8650,7 +8650,7 @@ END//
 DELIMITER ;
 
 DELIMITER //
-DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
+DROP PROCEDURE IF EXISTS `update_native_language_phase_1`;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
