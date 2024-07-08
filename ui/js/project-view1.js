@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script defer type="text/javascript">
     window.onload = runStartup;
 
 
