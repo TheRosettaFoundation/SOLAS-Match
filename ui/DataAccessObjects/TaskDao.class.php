@@ -327,14 +327,14 @@ error_log("createTaskDirectly: $args");
     public function update_native_matching_phase_1()
     {
         $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_1',[]);
+        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_1',NULL);
         return $ret;
     }
 
     public function update_native_matching_phase_2()
     {
         $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_2',[]);
+        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_2',NULL);
         return $ret;
     }
 
