@@ -947,6 +947,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (!empty($post['publish_native_users'])) {
                     $task_ids = preg_split ("/\,/", $post['publish_native_users']);
                     print_r($post['publish_native_users']);
+                    print_r($task_ids);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 2);
                     }
@@ -955,6 +956,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 if (!empty($post['publish_language_match'])) {
                     $task_ids = preg_split ("/\,/", $post['publish_language_match']);
+                    print_r($task_ids);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
                     }
@@ -963,6 +965,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 if (!empty($post['publish_all'])) {
                     $task_ids = preg_split ("/\,/", $post['publish_all']);
+                    print_r($task_ids);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 0);
                     }
