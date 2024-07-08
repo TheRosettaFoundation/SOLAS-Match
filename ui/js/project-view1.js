@@ -12,7 +12,7 @@ function select() {
         var optionSelected = $("option:selected", this);
         var valueSelected = this.value;
         $('[type=checkbox]').prop("checked", false);
-        $('menu_list').toggleClass('d-none');
+        $('.menu_list').toggleClass('d-none');
 
         if (valueSelected == "all_translation_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
