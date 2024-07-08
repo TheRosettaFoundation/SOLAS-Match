@@ -7933,7 +7933,7 @@ BEGIN
     LEFT JOIN Users              u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles      pf ON mp.project_id=pf.project_id
     LEFT JOIN Users             u2 ON pf.user_id=u2.id
-    LEFT JOIN Users             u3 ON mp.owner_uid=u3.id
+    LEFT JOIN Users             u3 ON LENGTH(mp.owner_uid)<22 AND mp.owner_uid=u3.id
     ORDER BY mp.project_id DESC
     LIMIT 250;
 END//
