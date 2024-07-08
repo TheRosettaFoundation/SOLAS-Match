@@ -8675,6 +8675,15 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeLanguage`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN native_matching INT)
+BEGIN
+    UPDATE RequiredTaskQualificationLevels  SET native_matching=native_matching WHERE task_id=taskID
+
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getRequiredTaskQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredTaskQualificationLevel`(IN taskID BIGINT)

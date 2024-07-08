@@ -566,22 +566,31 @@
               </form>
 
               <form id="tasks_as_unpaid" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-              <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#restrict_task').submit();" >
+              <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_native_users').submit();" >
                   <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Publish Task for only native users</spam>
               </a>
-              <input type="hidden" name="all_as_paid1" value="1" />
-              <input type="hidden" name="tasks_as_unpaid" value="" />
+              <input type="hidden" name="publish_native_users" value="2" />
+           
               {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
           </form>
 
           <form id="tasks_as_unpaid" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-          <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#release_task').submit();" >
-              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task for all users</spam>
+          <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_language_match').submit();" >
+              <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task  to users matching language</spam>
           </a>
-          <input type="hidden" name="all_as_paid1" value="1" />
-          <input type="hidden" name="tasks_as_unpaid" value="" />
+          <input type="hidden" name="publish_language_match" value="1" />
+       
           {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
       </form>
+
+      <form id="tasks_as_unpaid" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+      <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
+          <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task for all users</spam>
+      </a>
+      <input type="hidden" name="publish_all" value="0" />
+    
+      {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </form>
           {/if}
           </div>
           <div class="d-flex mb-4 flex-wrap">

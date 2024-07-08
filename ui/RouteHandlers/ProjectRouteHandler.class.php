@@ -942,6 +942,34 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
                 }
             }
+
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+                if (!empty($post['publish_native_users'])) {
+                    $task_ids = preg_split ("/\,/", $post['publish_native_users']);
+                    print_r($post['publish_native_users']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->updateRequiredTaskNativeMatching($id, 2);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks is now published to native users .');
+                }
+
+                if (!empty($post['publish_language_match'])) {
+                    $task_ids = preg_split ("/\,/", $post['publish_language_match']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->updateRequiredTaskNativeMatching($id, 1);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks is now published to users that match the language and variant.');
+                }
+
+                if (!empty($post['publish_all'])) {
+                    $task_ids = preg_split ("/\,/", $post['publish_all']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->updateRequiredTaskNativeMatching($id, 0);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks is now published to all ');
+                }
+            }
+
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['status_as_unclaimed'])) {
                     $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
