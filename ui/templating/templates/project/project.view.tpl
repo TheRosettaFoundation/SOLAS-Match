@@ -920,7 +920,7 @@
                                             {else}
                                                 <input type="hidden" name="trackTask" value="1" />
                                                  <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_track_task')}" >
-                                                <a class=" btngray" onclick="$('#trackedForm{$task_id}').submit();" >
+                                                <a class="btngray" onclick="$('#trackedForm{$task_id}').submit();" >
                                                      <i class="fa-regular fa-circle-xmark fa-lg"></i>
                                                 </a>
                                                 </span>
@@ -928,10 +928,10 @@
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
-                                    <td class="align-middle">
+                                    <td>
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
-                                            <i class="fa-solid fa-pen fa-lg"></i>
+                                            <i class="fa-regular fa-pen fa-lg"></i>
                                         </a>
                                         </span>
                                     </td>
