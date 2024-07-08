@@ -929,11 +929,11 @@
                                         </form>
                                     </td>    
                                     <td class="d-flex items-center">
-                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
+                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
                                             <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
-                                        </span>
+                                        </div>
                                     </td>
                                     <td>
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
