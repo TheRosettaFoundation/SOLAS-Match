@@ -281,10 +281,13 @@
 
                         let menu = document.querySelector(".menu_open");
                         let menuList = document.querySelector(".menu_list");
-
-                        menu.addEventListener("click", function () {
+                        if(menu&&menuList){
+                            menu.addEventListener("click", function () {
                             menuList.classList.toggle("d-none");
                         });
+
+                        }
+                       
 
                      </script>
 
