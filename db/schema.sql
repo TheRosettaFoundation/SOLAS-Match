@@ -8651,7 +8651,7 @@ DELIMITER ;
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`(null)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
     JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
@@ -8669,7 +8669,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_native_matching_phase_2`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`(null)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
     JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
