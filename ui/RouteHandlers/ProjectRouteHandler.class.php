@@ -947,7 +947,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (!empty($post['publish_native_users'])) {
                     $task_ids = preg_split ("/\,/", $post['publish_native_users']);
-                    print_r($post['publish_native_users']);
                     print_r($task_ids);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 2);

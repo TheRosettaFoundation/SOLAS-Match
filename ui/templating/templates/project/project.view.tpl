@@ -570,6 +570,7 @@
                   <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Publish Task for only native users</spam>
               </a>
               <input type="hidden" name="publish_native_users" value="2" />
+              <input type="hidden" name="publish_native_users" value="" />
            
               {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
           </form>
@@ -578,8 +579,8 @@
           <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_language_match').submit();" >
               <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task matching language</spam>
           </a>
-          <input type="hidden" name="publish_language_match" value="1" />
-       
+          <input type="hidden" name="publish_language_match" value="1" />  
+          <input type="hidden" name="publish_language_match" value="" />     
           {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
       </form>
 
@@ -588,6 +589,7 @@
           <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span> Publish Task for all users</spam>
       </a>
       <input type="hidden" name="publish_all" value="0" />
+      <input type="hidden" name="publish_all" value="" />
     
       {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </form>
