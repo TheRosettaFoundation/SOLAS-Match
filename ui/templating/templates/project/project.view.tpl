@@ -575,14 +575,14 @@
       </form>
 
       <form id="publish_all" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-      <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
-         Unrestrict Task to all </spam>
-      </a>
+        <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
+            Unrestrict Task to all </spam>
+        </a>
 
-      <input type="hidden" name="publish_all" value="" />
-    
-      {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-  </form>
+        <input type="hidden" name="publish_all" value="" />
+        
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
           {/if}
           </div>
           <div class="d-flex mb-4 flex-wrap">
@@ -612,8 +612,8 @@
                   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
               </form>
   
-              <form id="uncomplete_selected_tasks" class=" d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                  <a class="bg-light-subtle d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
+              <form id="uncomplete_selected_tasks" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+                  <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
                   <i class="fa-solid fa-pause me-2 "></i><span>Set Shell Tasks Status In Progress</span>
                   </a>
                   <input type="hidden" name="uncomplete_selected_tasks" value="" />
@@ -626,8 +626,8 @@
               </a>
               </div>
   
-              <form id="cancel" class="d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-              <a class="bg-light-subtle d-flex p-1 text-muted fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
+              <form id="cancel" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+              <a class=" d-flex p-1 text-muted fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                   <i class="fa fa-check-square me-2"  aria-hidden="true"></i> <span>Set Selected Tasks to Uncancelled</span>
               </a>
                   <input type="hidden" name="cancel" value="" />
