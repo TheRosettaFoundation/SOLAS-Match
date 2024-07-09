@@ -518,11 +518,11 @@
         {/if}
 
     </div>
-    <div class="">
+    <div class="sticky-top">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
           test menu
       </div>
-          <div class="menu_list d-none sticky-top">
+          <div class="menu_list d-none ">
           <div class="d-flex flex-wrap mb-4">
           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
               <form id="publish_selected_tasks" class=" d-flex flex-column justify-content-center form_action me-2" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
