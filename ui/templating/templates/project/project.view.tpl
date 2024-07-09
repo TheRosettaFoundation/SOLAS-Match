@@ -437,7 +437,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="uncomplete_selected_tasks" class=" d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="uncomplete_selected_tasks" class="bg-light-subtle d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="flex-grow-1 p-1 text-body fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
                 <i class="fa-solid fa-pause me-2 "></i>Set Shell Tasks Status In Progress
                 </a>
@@ -445,13 +445,13 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
              
-            <div class="d-flex flex-column btn btn-small">
+            <div class="bg-light-subtled-flex flex-column btn btn-small">
             <a class=" flex-grow-1 p-1 text-body fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban me-2"  aria-hidden="true"></i> Set Selected Tasks to Cancelled
             </a>
             </div>
 
-            <form id="cancel" class="d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <form id="cancel" class="bg-light-subtle d-flex flex-column btn btn-small" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class="flex-grow-1 p-1 text-body fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square me-2"  aria-hidden="true"></i> Set Selected Tasks to Uncancelled
             </a>
