@@ -211,7 +211,7 @@ li[data-list=bullet] {
 }
 
 .form_action:hover {
-  width: 128px;
+  width: 130px;
   height: 58px;
   background-color: #e0e0e0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -219,7 +219,7 @@ li[data-list=bullet] {
   color: #ba7b1a !important;
   font-weight: bold;
   border: 2px solid rgba(249, 236, 217, 0.3);
-  padding: 8px;
+  padding: 6px;
 }
 
 /*!
