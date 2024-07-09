@@ -700,7 +700,7 @@
     {/if}      
 
 
-        <div>
+        <div class="mt-4">
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
