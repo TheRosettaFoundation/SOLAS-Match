@@ -535,9 +535,7 @@
               </form>
           {/if}
   
-  
-  
-  
+
           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
               <form id="tasks_as_paid" class="bg-light-subtle d-flex flex-column  justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                   <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
@@ -559,10 +557,8 @@
               <form id="publish_native_users" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
               <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_native_users').submit();" >
                    <span>Restrict Task to native users</spam>
-              </a>
-             
+              </a>     
               <input type="hidden" name="publish_native_users" value="" />
-           
               {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
           </form>
 
@@ -572,7 +568,7 @@
           </a>
           <input type="hidden" name="publish_language_match" value="" />     
           {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-      </form>
+        </form>
 
       <form id="publish_all" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
         <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
@@ -585,6 +581,7 @@
     </form>
           {/if}
           </div>
+          
           <div class="d-flex mb-4 flex-wrap">
   
           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -655,7 +652,7 @@
                   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
               </form>
               <form id="pending_documentation" class="bg-light-subtle d-flex flex-column justify-content-center form_action" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-              <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
+              <a class="d-flex p-2 text-muted fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
                   <i class="fa fa-book me-2"  aria-hidden="true"></i> <span> Set tasks to Pending Documentation </span>
               </a>
                   <input type="hidden" name="pending_documentation" value="" />

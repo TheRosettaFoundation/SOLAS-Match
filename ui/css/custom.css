@@ -217,6 +217,7 @@ li[data-list=bullet] {
   color: #ba7b1a !important;
   font-weight: bold;
   border: 2px solid rgba(249, 236, 217, 0.3);
+  padding: 8px;
 }
 
 /*!
