@@ -904,16 +904,6 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  language_id INT UNSIGNED NOT NULL,
-  country_id INT UNSIGNED NOT NULL,
-  native_matching_default INT NOT NULL DEFAULT 2,
-  PRIMARY KEY (id),
-  FOREIGN KEY (language_id) REFERENCES Languages(id),
-  FOREIGN KEY (country_id) REFERENCES Countries(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT UNSIGNED NOT NULL,
@@ -2537,7 +2527,10 @@ BEGIN
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
             @isSiteAdmin=1 OR
@@ -3575,7 +3568,10 @@ BEGIN
     WHERE
         t.project_id=projectID AND
         t.published=1 AND
-        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -4170,9 +4166,9 @@ BEGIN
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
         FIND_IN_SET(t.`task-type_id`, @allowed_types)>0 AND
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
@@ -4252,9 +4248,8 @@ BEGIN
   ELSE
     SELECT COUNT(*) AS result FROM (
         SELECT t.id
-        FROM Users  u,
-            Tasks t
-
+        FROM      Tasks    t
+        JOIN      Users    u ON u.id=uID
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -4271,10 +4266,10 @@ BEGIN
         AND (taskType is null or t.`task-type_id` = taskType)
         AND FIND_IN_SET(t.`task-type_id`, @allowed_types)>0
         AND NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0
-        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND 
+        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND  t.`country_id-target`=u.country_id) OR
-            (tq.native_matching= 1 AND t.`language_id-target`=u.language_id))))
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id))))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
@@ -4480,7 +4475,11 @@ BEGIN
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE
             r.restricted_task_id IS NULL AND
-            tq.required_qualification_level<=uqp.qualification_level
+            (tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
+            ))
         GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
@@ -6910,7 +6909,11 @@ BEGIN
             t.`language_id-target`=uqp.language_id_target
         WHERE
             t.id=taskID AND
-            tq.required_qualification_level<=uqp.qualification_level
+            (tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
+            ))
     ) THEN
         SELECT 1 AS result;
 
@@ -7006,7 +7009,11 @@ BEGIN
             t.`language_id-target`=uqp.language_id_target
         WHERE
             t.id=taskID AND
-            tq.required_qualification_level<=uqp.qualification_level
+            (tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
+            ))
     ) THEN
         SELECT 1 AS result;
 
@@ -7065,7 +7072,10 @@ BEGIN
             t.project_id=projectID AND
             t.published=1 AND
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
-            ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+            ((uqp.user_id IS NOT NULL AND (tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id))))) AND
             (
                 r.restricted_task_id IS NULL OR
                 b.id IS NULL OR
@@ -7127,7 +7137,10 @@ BEGIN
         JOIN UserQualifiedPairs uqp ON
             t.`language_id-source`=uqp.language_id_source AND
             t.`language_id-target`=uqp.language_id_target AND
-            tq.required_qualification_level<=uqp.qualification_level
+            (tq.required_qualification_level<=uqp.qualification_level AND
+            (tq.native_matching=0 OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
         JOIN Users  u ON uqp.user_id=u.id
         JOIN Admins a ON uqp.user_id=a.user_id
         LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
@@ -8608,7 +8621,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `inheritRequiredTaskQualificationLevel`(IN taskID BIGINT)
 BEGIN
     INSERT INTO RequiredTaskQualificationLevels
-        (task_id, required_qualification_level,native_matching)
+        (task_id, required_qualification_level, native_matching)
     VALUES (
         taskID,
         IFNULL(
@@ -8622,12 +8635,13 @@ BEGIN
             1),
         IFNULL(
             (
-                SELECT 2
+                SELECT enl.native_matching_default
                 FROM Tasks t
                 JOIN enforce_native_languages enl ON t.`language_id-target`=enl.language_id AND t.`country_id-target`= enl.country_id
                 WHERE t.id=taskID
             ),
-            0));
+            0)
+    );
 END//
 DELIMITER ;
 
@@ -8635,56 +8649,17 @@ DROP PROCEDURE IF EXISTS `updateRequiredTaskQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskQualificationLevel`(IN taskID BIGINT, IN requiredQualificationLevel INT)
 BEGIN
-    UPDATE RequiredTaskQualificationLevels  SET required_qualification_level=requiredQualificationLevel WHERE task_id=taskID;
-
+    UPDATE RequiredTaskQualificationLevels SET required_qualification_level=requiredQualificationLevel WHERE task_id=taskID;
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeLanguage`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN native_matching INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN matching INT)
 BEGIN
-    UPDATE RequiredTaskQualificationLevels  SET native_matching=native_matching WHERE task_id=taskID;
-
+    UPDATE RequiredTaskQualificationLevels SET native_matching=matching WHERE task_id=taskID;
 END//
 DELIMITER ;
-
-DELIMITER //
-DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
-BEGIN
-    UPDATE RequiredTaskQualificationLevels tq
-    JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
-    JOIN Tasks t ON tsa.task_id = t.id
-    JOIN MemsourceProjects mp ON t.project_id = mp.project_id
-    JOIN MemsourceSelfServiceProjects msp ON mp.memsource_project_id = msp.memsource_project_id
-    SET tq.native_matching = 1
-    WHERE tq.native_matching = 2
-      AND t.published = 1
-      AND t.`task-status_id` != 1
-      AND tsa.`status_id` != 1
-      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
-END//
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `update_native_matching_phase_2`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`()
-BEGIN
-    UPDATE RequiredTaskQualificationLevels tq
-    JOIN tasks_status_audit_trail tsa ON tq.task_id = tsa.task_id
-    JOIN Tasks t ON tsa.task_id = t.id
-    JOIN MemsourceProjects mp ON t.project_id = mp.project_id
-    JOIN MemsourceSelfServiceProjects msp ON mp.memsource_project_id = msp.memsource_project_id
-    SET tq.native_matching = 0
-    WHERE tq.native_matching = 1
-      AND t.published = 1
-      AND t.`task-status_id` != 1
-      AND tsa.`status_id` != 1
-      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
-END//
-DELIMITER ;
-
 
 DROP PROCEDURE IF EXISTS `getRequiredTaskQualificationLevel`;
 DELIMITER //
@@ -8887,7 +8862,10 @@ BEGIN
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        tq.required_qualification_level<=uqp.qualification_level
+        (tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.native_matching=0 OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -8939,7 +8917,10 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
-        tq.required_qualification_level<=uqp.qualification_level
+        (tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.native_matching=0 OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -9039,7 +9020,10 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        tq.required_qualification_level<=uqp.qualification_level
+        (tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.native_matching=0 OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -9090,7 +9074,10 @@ BEGIN
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
-        tq.required_qualification_level<=uqp.qualification_level
+        (tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.native_matching=0 OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
     JOIN Users                            u ON uqp.user_id=u.id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
@@ -11074,7 +11061,10 @@ BEGIN
         t.`task-status_id`=2 AND
         t.published=1 AND
         bl.task_id IS NULL AND
-        tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.required_qualification_level<=uqp.qualification_level AND
+        (tq.native_matching=0 OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -13051,6 +13041,55 @@ BEGIN
     INNER JOIN Organisations       o ON p.organisation_id=o.id
     INNER JOIN Users             usr ON i.linguist_id=usr.id
     WHERE i.invoice_number=iID;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
+  id                      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  language_id             INT UNSIGNED NOT NULL,
+  country_id              INT UNSIGNED NOT NULL,
+  native_matching_default INT NOT NULL DEFAULT 2,
+  PRIMARY KEY (id),
+  FOREIGN KEY (language_id) REFERENCES Languages(id),
+  FOREIGN KEY (country_id) REFERENCES Countries(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
+    JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
+    SET tq.native_matching=1
+    WHERE
+        tq.native_matching=2 AND
+        t.published=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_native_matching_phase_2`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
+    JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
+    SET tq.native_matching=0
+    WHERE
+        tq.native_matching=1 AND
+        t.published=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
 END//
 DELIMITER ;
 
