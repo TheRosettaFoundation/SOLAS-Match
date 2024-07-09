@@ -15,7 +15,7 @@
                 </div>
 
 
-<section class=" bg-light-subtle"> 
+<section class="bg-light-subtle"> 
 
         <div class="container py-5 ">
 
@@ -509,7 +509,7 @@
         {/if}
 
     </div>
-    <div class="sticky-top bg-light-subtle p-4 mt-2 mb-4  rounded-2">
+    <div class="sticky-top bg-body p-4 mt-2 mb-4 rounded-2">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
           Task Actions
       </div>
