@@ -339,7 +339,6 @@
 
             <h3 class="fw-bold flex-grow-1 align-middle">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
-               
             </h3>
             
 
@@ -508,6 +507,7 @@
 
         {/if}
 
+        <hr></hr>
 
         <div class="menu_list d-none bg-body p-4 mt-2 mb-4 rounded-2">
  
