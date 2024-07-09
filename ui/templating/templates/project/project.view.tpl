@@ -361,12 +361,16 @@
                     
                     
        
-        <div class="dropdown ">
+        {* <div class="dropdown "> *}
         
-        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
+        {* <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
+           ...
+        </button> *}
+
+        <button class="menu_open btn  btn-primary text-white" type="button" >
            ...
         </button>
-     
+{*      
         <ul class="dropdown-menu drop-up">
          
 
@@ -495,11 +499,10 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         {/if}
-            </ul>
-
+            </ul> *}
 
        
-          </div>
+          {* </div> *}
 
          </div>
 
@@ -510,7 +513,7 @@
 
     </div>
     <div class="sticky-top bg-body p-4 mt-2 mb-4 rounded-2">
-    <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
+    <div class=" btn btn-primary text-white  cursor-pointe mb-4"  >
           Task Actions
       </div>
           <div class="menu_list d-none ">

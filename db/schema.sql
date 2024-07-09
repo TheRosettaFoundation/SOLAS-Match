@@ -923,6 +923,7 @@ INSERT INTO enforce_native_languages (language_id, country_id) VALUES
   (5385, 184),
   (6429, 234),
   (1786, 236),
+  
   (1507, 84);
   
  
