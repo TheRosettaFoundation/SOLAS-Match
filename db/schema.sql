@@ -904,6 +904,7 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   language_id INT UNSIGNED NOT NULL,
@@ -914,6 +915,7 @@ CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
   FOREIGN KEY (country_id) REFERENCES Countries(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 INSERT INTO enforce_native_languages (language_id, country_id) VALUES
   (1897, 77),
   (329, 235),
@@ -922,6 +924,7 @@ INSERT INTO enforce_native_languages (language_id, country_id) VALUES
   (6429, 234),
   (1786, 236),
   (1507, 84);
+  
  
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT UNSIGNED NOT NULL,
