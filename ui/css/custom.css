@@ -200,7 +200,7 @@ li[data-list=bullet] {
 }
 
 .form_action {
-  width: 125px;
+  width: 126px;
   height: 55px;
   padding: 4px;
   display: flex;
@@ -211,6 +211,8 @@ li[data-list=bullet] {
 }
 
 .form_action:hover {
+  width: 128px;
+  height: 58px;
   background-color: #e0e0e0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
