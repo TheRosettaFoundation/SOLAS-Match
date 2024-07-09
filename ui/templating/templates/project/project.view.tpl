@@ -518,7 +518,7 @@
         {/if}
 
     </div>
-    <div class="sticky-top bg-white p-4">
+    <div class="sticky-top bg-white p-4 mt-2">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
           test menu
       </div>
@@ -686,10 +686,6 @@
 
 
   </div>
-
-    <hr> </hr>
- 
-
 
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success alert-dismissible fade show mt-2">
