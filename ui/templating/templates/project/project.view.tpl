@@ -507,7 +507,7 @@
 
         {/if}
 
-        <hr></hr>
+      
 
         <div class="menu_list d-none bg-body p-4 mt-2 mb-4 rounded-2">
  
@@ -678,7 +678,8 @@
 
     </div>
 
-
+    <hr></hr>
+    <br/>
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success alert-dismissible fade show mt-2">
             <span>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}</span>
