@@ -518,7 +518,7 @@
         {/if}
 
     </div>
-    <div class="sticky-top bg-white p-4 mt-2 mb-4">
+    <div class="sticky-top bg-white p-4 mt-2 mb-4  rounded-2">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
           test menu
       </div>
@@ -722,7 +722,7 @@
                     </span>
                     </div>                             
                   
-                    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+                    <div class="bg-body p-2 border-secondary mt-4">
          
                     <div class="table-responsive mt-4 ">
 
