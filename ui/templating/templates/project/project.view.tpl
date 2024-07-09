@@ -337,13 +337,12 @@
 
         <div class="d-flex justify-content-between mt-4 flex-wrap align-items-center">
 
-            <h3 class="fw-bold flex-grow-1">{Localisation::getTranslation('project_view_tasks')}
+            <h3 class="fw-bold flex-grow-1 align-middle">{Localisation::getTranslation('project_view_tasks')}
                 <small class="text-muted text-sm">{Localisation::getTranslation('project_view_0')}</small>
                
             </h3>
             
 
-         
                 {if !empty($memsource_project)}
                 <div class="d-flex mt-2">
                     <select name="task_options" id="task_options" class="form-select me-1 text-muted">
@@ -499,14 +498,6 @@
             </ul>
 
 
-     
-        
-   
-
-
-
-
-     
        
           </div>
 
@@ -520,7 +511,7 @@
     </div>
     <div class="sticky-top bg-light-subtle p-4 mt-2 mb-4  rounded-2">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
-          test menu
+          Task Actions
       </div>
           <div class="menu_list d-none ">
           <div class="d-flex flex-wrap mb-4">
