@@ -518,7 +518,7 @@
         {/if}
 
     </div>
-    <div class="sticky-top">
+    <div class="sticky-top bg-white">
     <div class="menu_open btn btn-primary text-white  cursor-pointe mb-4"  >
           test menu
       </div>
