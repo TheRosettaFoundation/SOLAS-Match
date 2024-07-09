@@ -13064,7 +13064,8 @@ BEGIN
     JOIN   Tasks                            t ON tsa.task_id=t.id
     JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
     JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
-    SET tq.native_matching=1
+    SET
+        tq.native_matching=1
     WHERE
         tq.native_matching=2 AND
         t.published=1 AND
@@ -13083,13 +13084,14 @@ BEGIN
     JOIN   Tasks                            t ON tsa.task_id=t.id
     JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
     JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
-    SET tq.native_matching=0
+    SET
+        tq.native_matching=0
     WHERE
         tq.native_matching=1 AND
         t.published=1 AND
         t.`task-status_id`!=1 AND
         tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
 END//
 DELIMITER ;
 
