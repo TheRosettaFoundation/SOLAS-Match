@@ -288,6 +288,10 @@ li[data-list="bullet"] {
     border: 2px solid rgba(#f9ecd9, 0.3);
 }
 
+.menu_list {
+    position: sticky;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
