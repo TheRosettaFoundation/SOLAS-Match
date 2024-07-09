@@ -673,12 +673,9 @@
 
 </div>
 
-
-
-
     </div>
 
-    <hr></hr>
+    <hr class="bg-light-subtle"></hr>
     <br/>
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success alert-dismissible fade show mt-2">
