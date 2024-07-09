@@ -914,7 +914,15 @@ CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
   FOREIGN KEY (country_id) REFERENCES Countries(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
+INSERT INTO enforce_native_languages (language_id, country_id) VALUES
+  (1897, 77),
+  (329, 235),
+  (5716, 210),
+  (5385, 184),
+  (6429, 234),
+  (1786, 236),
+  (1507, 84);
+ 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT UNSIGNED NOT NULL,
   required_qualification_level INT    UNSIGNED NOT NULL,
