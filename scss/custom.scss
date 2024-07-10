@@ -290,6 +290,19 @@ li[data-list="bullet"] {
     border: 2px solid rgba(#f9ecd9, 0.3);
     padding: 6px;
 }
+@include media-breakpoint-up(sm) {
+    .menu_list {
+        height: 50%;
+        width: 100%;
+        overflow: scroll;
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .menu_list {
+        height: 100%;
+    }
+}
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
