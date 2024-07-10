@@ -4468,6 +4468,7 @@ BEGIN
             t.`language_id-source`=current_task_langSource AND
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
+        JOIN      Users                            u ON u.id=userID
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN      UserQualifiedPairs             uqp ON
