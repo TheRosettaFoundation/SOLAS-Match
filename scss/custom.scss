@@ -292,9 +292,9 @@ li[data-list="bullet"] {
 }
 @media (min-width: 576px) {
     .menu_list {
-        height: 50%;
+        height: 40%;
         width: 100%;
-        overflow: scroll;
+        overflow-y: scroll;
     }
 }
 
@@ -302,6 +302,7 @@ li[data-list="bullet"] {
     .menu_list {
         height: 100%;
         background-color: #0d5520;
+        overflow: hidden;
     }
 }
 
