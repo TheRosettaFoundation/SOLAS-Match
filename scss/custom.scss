@@ -290,7 +290,7 @@ li[data-list="bullet"] {
     border: 2px solid rgba(#f9ecd9, 0.3);
     padding: 6px;
 }
-@include media-breakpoint-up(sm) {
+@media (min-width: 576px) {
     .menu_list {
         height: 50%;
         width: 100%;
@@ -298,7 +298,7 @@ li[data-list="bullet"] {
     }
 }
 
-@include media-breakpoint-up(lg) {
+@media (min-width: 768px) {
     .menu_list {
         height: 100%;
     }
