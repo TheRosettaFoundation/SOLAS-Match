@@ -371,7 +371,7 @@
     <br/>
 
 
-        <div class="menu_list d-none bg-body w-100 mh-50 overflow-auto p-4 mt-2 mb-4 rounded-2">
+        <div class="menu_list d-none bg-body p-4 mt-2 mb-4 rounded-2">
  
         <div class="">
         <div class="d-flex flex-wrap mb-4">

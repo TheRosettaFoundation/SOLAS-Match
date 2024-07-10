@@ -8640,7 +8640,7 @@ BEGIN
             1),
         IFNULL(
             (
-                SELECT 2
+                SELECT e.native_matching_default
                 FROM Tasks t
                 JOIN enforce_native_languages enl ON t.`language_id-target`=enl.language_id AND t.`country_id-target`= enl.country_id
                 WHERE t.id=taskID
@@ -8699,7 +8699,7 @@ BEGIN
       AND t.published = 1
       AND t.`task-status_id` != 1
       AND tsa.`status_id` != 1
-      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+      AND tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
 END//
 DELIMITER ;
 
