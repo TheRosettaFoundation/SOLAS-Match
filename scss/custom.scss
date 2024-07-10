@@ -290,18 +290,16 @@ li[data-list="bullet"] {
     border: 2px solid rgba(#f9ecd9, 0.3);
     padding: 6px;
 }
-@media (min-width: 576px) {
-    .menu_list {
-        height: 40%;
-        width: 100%;
-        overflow-y: scroll;
-    }
+
+.menu_list {
+    height: 200px;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 @media (min-width: 768px) {
     .menu_list {
         height: 100%;
-        background-color: #0d5520;
         overflow: hidden;
     }
 }
