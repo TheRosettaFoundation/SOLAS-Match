@@ -2510,6 +2510,7 @@ BEGIN
         lt.code      AS lt_code,
         lt.`en-name` AS lt_name
     FROM      Tasks                            t
+    JOIN      Users                            u ON u.id=uID
     JOIN      Languages                       ls ON t.`language_id-source`=ls.id
     JOIN      Languages                       lt ON t.`language_id-target`=lt.id
     JOIN      Countries                       ct ON t.`country_id-target`=ct.id
