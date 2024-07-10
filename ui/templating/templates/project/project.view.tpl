@@ -358,8 +358,8 @@
                         <option value="delesect_all">Deselect all</option>
                     </select>
         
-                    <button class="menu_open btn  btn-primary text-white" type="button" >
-                    ...<i class="fa-solid fa-chevron-down"></i>
+                    <button class="menu_open btn  btn-primary text-white d-flex" type="button" >
+                   <span class="me-1">Task Actions</span><i class="fa-solid fa-chevron-down"></i>
                  </button>
                     
                     
