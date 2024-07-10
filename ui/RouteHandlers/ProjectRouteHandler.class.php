@@ -957,7 +957,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to all users matching the language and variant.');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to users matching the language and variant.');
                 }
 
                 if (!empty($post['publish_all'])) {
