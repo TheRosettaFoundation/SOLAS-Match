@@ -7066,6 +7066,7 @@ BEGIN
     ELSEIF EXISTS (
         SELECT t.id
         FROM      Tasks                            t
+        JOIN      Users                            u ON u.id=userID
         JOIN      Projects                         p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
