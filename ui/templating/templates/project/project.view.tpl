@@ -359,19 +359,17 @@
                     </select>
         
                     <button class="menu_open btn  btn-primary text-white" type="button" >
-                    ...
+                    ...<i class="fa-solid fa-chevron-down"></i>
                  </button>
                     
                     
        
-         <div class="dropdown ">
+         {* <div class="dropdown ">
         
         <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
            ...
         </button> 
 
-     
-     
         <ul class="dropdown-menu drop-up">
          
 
@@ -503,7 +501,7 @@
             </ul>
 
        
-          </div>
+          </div> *}
 
          </div>
 
