@@ -359,7 +359,7 @@
                     </select>
         
                     <button class="menu_open btn  btn-primary text-white d-flex items-center" type="button" >
-                   <span class="me-1">...</span><i class="fa-solid fa-chevron-down fs"></i>
+                   <span class="me-1">...</span><i class="fa-solid fa-caret-down fa-xs"></i>
                  </button>
 
          </div>
