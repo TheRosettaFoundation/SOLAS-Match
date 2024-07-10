@@ -3559,6 +3559,7 @@ BEGIN
         t.`task-status_id` AS status_id,
         t.deadline
     FROM      Tasks                            t
+    JOIN      Users                            u ON u.id=uID
     JOIN      Projects                         p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
