@@ -357,19 +357,21 @@
                         {/if}
                         <option value="delesect_all">Deselect all</option>
                     </select>
+        
+                    <button class="menu_open btn  btn-primary text-white" type="button" >
+                    ...
+                 </button>
                     
                     
        
-        {* <div class="dropdown "> *}
+         <div class="dropdown ">
         
-        {* <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
+        <button class="dropdown-toggle btn  btn-primary text-white" type="button" data-bs-toggle="dropdown" data-bs-popper="auto" aria-expanded="false">
            ...
-        </button> *}
+        </button> 
 
-        <button class="menu_open btn  btn-primary text-white" type="button" >
-           ...
-        </button>
-{*      
+     
+     
         <ul class="dropdown-menu drop-up">
          
 
@@ -498,10 +500,10 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         {/if}
-            </ul> *}
+            </ul>
 
        
-          {* </div> *}
+          </div>
 
          </div>
 
