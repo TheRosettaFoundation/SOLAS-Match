@@ -6906,6 +6906,7 @@ BEGIN
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
+        JOIN Users                            u ON u.id=userID
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
@@ -7006,6 +7007,7 @@ BEGIN
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
+        JOIN Users                            u ON u.id=userID
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
