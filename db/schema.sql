@@ -11052,6 +11052,7 @@ BEGIN
     FROM ProjectTags                     pt
     JOIN Projects                         p ON pt.project_id=p.id
     JOIN Tasks                            t ON p.id=t.project_id
+    JOIN Users                            u ON u.id=uID
     JOIN tasks_status_audit_trail       sat ON t.id=sat.task_id AND sat.status_id=2
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
