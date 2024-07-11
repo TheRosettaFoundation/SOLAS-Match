@@ -8660,7 +8660,7 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeLanguage`;
+DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeMatching`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN matching INT)
 BEGIN
