@@ -7144,11 +7144,11 @@ BEGIN
         JOIN UserQualifiedPairs uqp ON
             t.`language_id-source`=uqp.language_id_source AND
             t.`language_id-target`=uqp.language_id_target AND
-            (tq.required_qualification_level<=uqp.qualification_level AND
+            tq.required_qualification_level<=uqp.qualification_level
+        JOIN Users  u ON uqp.user_id=u.id AND
             (tq.native_matching=0 OR
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
-            (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
-        JOIN Users  u ON uqp.user_id=u.id
+            (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
         JOIN Admins a ON uqp.user_id=a.user_id
         LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
         WHERE
@@ -8869,11 +8869,11 @@ BEGIN
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
-    JOIN Users                            u ON uqp.user_id=u.id
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -8924,11 +8924,11 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-source`=uqp.language_id_source AND
         t.`language_id-target`=uqp.language_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
-    JOIN Users                            u ON uqp.user_id=u.id
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -9027,11 +9027,11 @@ BEGIN
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
         t.`country_id-target`=uqp.country_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
-    JOIN Users                            u ON uqp.user_id=u.id
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -9081,11 +9081,11 @@ BEGIN
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-target`=uqp.language_id_target AND
-        (tq.required_qualification_level<=uqp.qualification_level AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
-        (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))
-    JOIN Users                            u ON uqp.user_id=u.id
+        (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
