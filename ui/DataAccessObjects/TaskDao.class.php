@@ -324,24 +324,10 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
-    public function update_native_matching_phase_1()
+    public function update_native_matching()
     {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_1',LibAPI\PDOWrapper::cleanseNull(''));
-        if (!empty($result)) {
-            $ret = 1;
-        }
-        return $ret;
-    }
-
-    public function update_native_matching_phase_2()
-    {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_2',LibAPI\PDOWrapper::cleanseNull(''));
-        if (!empty($result)) {
-            $ret = 1;
-        }
-        return $ret;
+        LibAPI\PDOWrapper::call('update_native_matching_phase_1', '');
+        LibAPI\PDOWrapper::call('update_native_matching_phase_2', '');
     }
 
     public function setRestrictedTask($task_id)
