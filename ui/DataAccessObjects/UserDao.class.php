@@ -554,9 +554,7 @@ error_log("claimTask_shell($userId, $taskId)");
         }
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        $user_id = 0;
-        $details_claimant = $taskDao->getUserClaimedTask($task_id);
-        if ($details_claimant) $user_id = $details_claimant->getId();
+        $user_id = $projectDao->getUserClaimedTask($task_id);
 
         if ($memsource_project && $memsource_task) {
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
@@ -567,7 +565,7 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $status_id = Common\Enums\TaskStatusEnum::CLAIMED;
 
             $memsource_user_uid = 0;
-            if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
+            if ($user_id) $memsource_user_uid = $this->get_memsource_user($user_id);
 
             $deadline = $task->getDeadline();
             $status = 'CANCELLED';
