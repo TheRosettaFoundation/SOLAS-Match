@@ -630,7 +630,16 @@ error_log("claimTask_shell($userId, $taskId)");
             }
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
-            $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
+            $args =
+                LibAPI\PDOWrapper::cleanse(PROJECTQUEUE) . ',' .
+                LibAPI\PDOWrapper::cleanse(UserTaskCancelled) . ',' .
+                LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+                '0,0,0,' .
+                LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+                '0,' .
+                LibAPI\PDOWrapper::cleanseWrapStr('');
+            LibAPI\PDOWrapper::call('insert_queue_request', $args);
+            error_log("notifyUserTaskCancelled($user_id, $task_id)");
 
             $creator = $taskDao->get_creator($memsource_project['project_id'], $memsource_project); // email owner (or projects@translatorswithoutborders.org for self service)
             $args =
