@@ -461,7 +461,7 @@ class AdminRouteHandler
                 if ($taskId && !is_null($userToRevokeFrom)) {
                     $task = $taskDao->getTask($taskId);
                     $projectDao = new DAO\projectDao();
-                    if ($projectDao->getUserClaimedTask($taskId)->getId() != $userToRevokeFrom->getId()) {
+                    if ($projectDao->getUserClaimedTask($taskId) != $userToRevokeFrom->getId()) {
                         UserRouteHandler::flashNow('revokeTaskError', Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_no_claim'));
                     } else {
                         $adminDao->revokeTaskFromUser($taskId, $userId);
