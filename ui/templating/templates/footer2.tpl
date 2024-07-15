@@ -287,7 +287,31 @@
                         });
 
                         }
-                       
+
+                        const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
+
+
+                        const myModalEl = document.getElementById('modal_taskRestrictions_1')
+                                myModalEl.addEventListener('show.bs.modal', event => {
+
+                                // do something...
+                                    console.log('showing first modal') ;
+                                    const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
+
+                                    console.log(areAnyTaskSelected.length);
+
+                                })
+
+                        
+                        const myModalEl_2 = document.getElementById('modal_taskRestrictions_1')
+                        myModalEl_2.addEventListener('show.bs.modal', event => {
+
+                        // do something...
+                            console.log('showing second modal') ;
+                            
+
+                        })
+                                            
 
                      </script>
 
