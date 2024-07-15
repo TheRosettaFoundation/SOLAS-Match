@@ -288,14 +288,18 @@
 
                         }
 
-                        
+                        // code for 
 
-                        const areAnyTaskSelected = document.querySelectorAll('input[name="select_task"]') ;
+                        const checkboxes = document.querySelectorAll('input[name="select_task"]') ;
 
-                        console.log(areAnyTaskSelected)
-                        
+                        let anySelected= false
 
+                        for (let checkbox of checkboxes) {
+                            if (checkbox.checked) {
+                                anySelected = true ;
 
+                                break;
+                            }}
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                 
@@ -305,7 +309,7 @@
                         savedPreferences.addEventListener('click' , e =>{
                                         e.preventDefault();
                                         console.log("clicked on button");
-                                        if(areAnyTaskSelected.length==0){
+                                        if(!anySelected){
 
                                             error.classList.toggle("d-none");
 
