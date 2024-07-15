@@ -577,11 +577,24 @@
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Modal 1</h1>
+                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Select task type </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          Show a second modal and hide this one with the button below.
+                        <div class="d-flex">
+                            <span class="select_task d-none me-4"></span>
+                            <select class="form-select me-4" aria-label="Default select example" id="project_task">
+                                <option selected>Choose task type</option>
+                                <option value="1">Translation</option>
+                                <option value="2">Proofreading</option>
+                                <option value="3">Revision</option>
+                            </select>
+                            <span id="taskCount"></span>
+
+
+                        </div>
+                            
+                          
                         </div>
                         <div class="modal-footer">
                           <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Apply restrictions</button>
@@ -597,10 +610,15 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          Hide this modal and show the first with the button below.
+                        <select class="form-select me-4" aria-label="Default select example" id="project_task">
+                                <option selected>Choose task type</option>
+                                <option value="0">No Restriction</option>
+                                <option value="2">Match Native Language</option>
+                                <option value="3">Match Native Langauge and Country</option>
+                            </select>
                         </div>
                         <div class="modal-footer">
-                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to first</button>
+                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to selecting task type</button>
                         </div>
                       </div>
                     </div>
