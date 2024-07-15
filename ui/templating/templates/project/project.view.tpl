@@ -582,7 +582,7 @@
                         </div>
                         <div class="modal-body py-4">
                         <div class="d-flex">
-                            <span class="error_task d-none me-4"></span>
+                            <span class="select_task d-none me-4"></span>
                             <select class="form-select me-4" aria-label="Default select example" id="project_task">
                                 <option selected>Choose task type</option>
                                 <option value="1">Translation</option>
@@ -633,7 +633,7 @@
                       </div>
                     </div>
                   </div>
-                  <button class="btn btn-primary" id="saveTaskPr" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Save</button>
+                  <button class="btn btn-primary" id="saveTaskP" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
 
                     
                     </div>
