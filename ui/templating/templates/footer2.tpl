@@ -291,7 +291,7 @@
                         
 
 
-                        const myModalEl = document.getElementById('modal_taskRestrictions_1')
+                        const myModalEl = document.getElementById('modal')
                                 myModalEl.addEventListener('show.bs.modal', event => {
 
                                 // do something...
@@ -303,7 +303,7 @@
                                 })
 
                         
-                        const myModalEl_2 = document.getElementById('modal_taskRestrictions_1')
+                        const myModalEl_2 = document.getElementById('modal')
                         myModalEl_2.addEventListener('show.bs.modal', event => {
 
                         // do something...
