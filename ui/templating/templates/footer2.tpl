@@ -292,7 +292,7 @@
 
 
                         const myModalEl_1 = document.getElementById('modal_taskRestriction_first')
-                                myModalEl_1.addEventListener('show.bs.modal', event => {
+                                myModalEl_1.addEventListener('shown.bs.modal', event => {
 
                                 // do something...
                                     console.log('showing first modal') ;
