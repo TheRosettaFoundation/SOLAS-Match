@@ -299,7 +299,11 @@
                                     console.log('showing first modal') ;
                                    
                                     let savedPreferences = document.querySelector('#saveTaskPr') ;
+                                   
                                     let error = document.querySelector('.error_task');
+
+                                    console.log(savedPreferences);
+                                    console.log(error) ;
 
                                     savedPreferences.addEventListener('click' , event =>{
                                         e.preventDefault();
