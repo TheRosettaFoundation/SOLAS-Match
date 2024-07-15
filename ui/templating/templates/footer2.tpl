@@ -304,6 +304,8 @@
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                 
                         let savedPreferences = document.querySelector("#saveTaskP");
+
+                        let error = document.querySelector('.error_task');
                 
                          
                         savedPreferences.addEventListener('click' , e =>{
@@ -321,7 +323,7 @@
 
                            
        
-                                    console.log(areAnyTaskSelected.length);
+                                    console.log(checkboxes.length);
 
                                 })
 
