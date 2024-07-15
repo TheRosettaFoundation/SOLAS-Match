@@ -296,14 +296,14 @@
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
 
                                 // do something...
-                                    console.log('showing first modal') ;
+                                    console.log(this) ;
                                    
-                                    let savedPreferences = document.querySelector('#saveTaskPr') ;
+                                    // let savedPreferences = document.querySelector('#saveTaskPr') ;
                                    
-                                    let error = document.querySelector('.error_task');
+                                    // let error = document.querySelector('.error_task');
 
-                                    console.log(savedPreferences);
-                                    console.log(error) ;
+                                    // console.log(savedPreferences);
+                                    // console.log(error) ;
 
                                     savedPreferences.addEventListener('click' , event =>{
                                         e.preventDefault();
