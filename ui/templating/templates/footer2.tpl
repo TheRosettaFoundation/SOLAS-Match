@@ -308,7 +308,7 @@
                         savedPreferences.addEventListener('click' , event =>{
                                         e.preventDefault();
                                         console.log("clicked on button");
-                                        if(areAnyTaskSelected.length){
+                                        if(areAnyTaskSelected.length==0){
 
                                             error.classList.toggle("d-none");
 
