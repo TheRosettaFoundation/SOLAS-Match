@@ -305,7 +305,7 @@
                         let savedPreferences = document.querySelector("#saveTaskP");
                         console.log(error);
                          
-                        savedPreferences.addEventListener('click' , event =>{
+                        savedPreferences.addEventListener('click' , e =>{
                                         e.preventDefault();
                                         console.log("clicked on button");
                                         if(areAnyTaskSelected.length==0){
