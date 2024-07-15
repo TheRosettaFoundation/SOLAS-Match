@@ -291,8 +291,8 @@
                         
 
 
-                        const myModalEl = document.getElementById('modal')
-                                myModalEl.addEventListener('show.bs.modal', event => {
+                        const myModalEl_1 = document.getElementById('modal_taskRestriction_first')
+                                myModalEl_1.addEventListener('show.bs.modal', event => {
 
                                 // do something...
                                     console.log('showing first modal') ;
@@ -303,14 +303,14 @@
                                 })
 
                         
-                        const myModalEl_2 = document.getElementById('modal')
-                        myModalEl_2.addEventListener('show.bs.modal', event => {
+                        // const myModalEl_2 = document.getElementById('modal')
+                        // myModalEl_2.addEventListener('show.bs.modal', event => {
 
-                        // do something...
-                            console.log('showing second modal') ;
+                        // // do something...
+                        //     console.log('showing second modal') ;
                             
 
-                        })
+                        // })
                                             
 
                      </script>

@@ -573,7 +573,7 @@
 
                     {* //Modal *}
                     <div>
-                    <div class="modal fade" id="modal_taskRestriction_1" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                    <div class="modal fade" id="modal_taskRestriction_first" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
