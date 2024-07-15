@@ -581,8 +581,9 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body py-4">
+
+                        <div class="error_task d-none text-danger"> You need to first select a task!</div>
                         <div class="d-flex">
-                            <span class="error_task d-none me-4"></span>
                             <select class="form-select me-4" aria-label="Default select example" id="project_task">
                                 <option selected>Choose task type</option>
                                 <option value="1">Translation</option>
