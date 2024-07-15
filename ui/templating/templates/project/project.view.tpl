@@ -596,7 +596,7 @@
                           
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" id="saveTaskP" >Save</button>
+                        <button class="btn btn-primary" id="saveTaskP" >Save</button>
                           <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Apply restrictions</button>
                         </div>
                       </div>

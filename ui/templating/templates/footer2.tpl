@@ -290,7 +290,7 @@
 
                         
 
-                        const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
+                        const areAnyTaskSelected = document.querySelectorAll('input[name="select_task"]') ;
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
