@@ -291,19 +291,16 @@
                         
 
                         const areAnyTaskSelected = document.querySelectorAll('input[name="select_task"]') ;
+
+                        console.log(areAnyTaskSelected)
                         
 
-                            
-               
-                                   
-                                    let error = document.querySelector('.error_task');
-                        
-    
+
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
-                        // let savedPreferences = document.getElementById("saveTaskP");
+                
                         let savedPreferences = document.querySelector("#saveTaskP");
-                        console.log(error);
+                
                          
                         savedPreferences.addEventListener('click' , e =>{
                                         e.preventDefault();
