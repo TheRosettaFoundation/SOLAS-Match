@@ -291,18 +291,21 @@
                         
 
                         const areAnyTaskSelected = document.querySelectorAll('input[name="select_task"]') ;
-                            let savedPreferences = document.querySelector('#saveTaskPr') ;
+                        
+
+                            
+               
                                    
                                     let error = document.querySelector('.error_task');
-                                    if(savedPreferences){
-
-                                    console.log(savedPreferences);
-                                    console.log(error) ;
-
-                                    }
-                                    
+                        
+    
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
+                        let savedPreferences = myModalEl_1.getElementById("saveTaskP");
+                        if(savedPreferences){
+                            console.log(savedPreferences);
+                        }
+
                         console.log(myModalEl_1);
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
 
