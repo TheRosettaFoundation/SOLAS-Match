@@ -7065,6 +7065,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()
@@ -7124,6 +7125,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `active_now`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_now`()
@@ -7145,6 +7147,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `active_now_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_now_matecat`()
@@ -7191,6 +7194,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `testing_center`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `testing_center`()
@@ -7318,6 +7322,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `complete_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `complete_matecat`()
@@ -7365,6 +7370,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `user_task_reviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_reviews`()
@@ -7403,6 +7409,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `submitted_task_reviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `submitted_task_reviews`()
@@ -7445,6 +7452,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
@@ -7475,6 +7483,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `project_source_file_scores`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `project_source_file_scores`()
@@ -7510,7 +7519,7 @@ END//
 DELIMITER ;
 
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_users`()
@@ -7536,6 +7545,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `unclaimed_tasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unclaimed_tasks`()
@@ -7586,6 +7596,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `user_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_languages`(IN `languageCode` VARCHAR(3))
@@ -7663,6 +7674,7 @@ ORDER BY language_name, country_name, display_name;
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `search_users_by_language_pair`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `search_users_by_language_pair`(IN `languageCodeSource` VARCHAR(3), IN `languageCodeTarget` VARCHAR(3))
@@ -7701,6 +7713,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `community_stats`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats`()
@@ -7728,6 +7741,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `community_stats_secondary`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_secondary`()
@@ -7746,6 +7760,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `community_stats_words`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_words`()
@@ -7761,6 +7776,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `user_task_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_languages`(IN `languageCode` VARCHAR(3))
@@ -7796,6 +7812,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `user_words_by_language`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_words_by_language`()
@@ -7889,6 +7906,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `matecat_analyse_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `matecat_analyse_status`()
@@ -8096,6 +8114,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getTaskSubChunks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskSubChunks`(IN `jID` INT)
@@ -8303,6 +8322,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
@@ -8313,6 +8333,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `all_org_admins`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_org_admins`()
@@ -8325,6 +8346,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `all_org_members`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_org_members`()
@@ -8336,6 +8358,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `org_stats_words`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_words`()
@@ -8357,6 +8380,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `org_stats_words_req`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_words_req`()
@@ -8376,6 +8400,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `org_stats_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_languages`()
@@ -9405,6 +9430,7 @@ ORDER BY user_id, certificate;
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `users_new`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_new`()
@@ -9604,6 +9630,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `covid_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `covid_projects`()
@@ -9634,6 +9661,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `afghanistan_2021_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `afghanistan_2021_projects`()
@@ -9664,6 +9692,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `haiti_2021_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `haiti_2021_projects`()
@@ -9724,6 +9753,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `users_tracked`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_tracked`()
@@ -9750,6 +9780,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `peer_to_peer_vetting`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting`()
@@ -9783,6 +9814,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_qualification_level`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_qualification_level`()
@@ -9802,6 +9834,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_reviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_reviews`()

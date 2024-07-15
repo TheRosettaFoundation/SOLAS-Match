@@ -394,12 +394,6 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
-    public function getTaskSubChunks($matecat_id_job)
-    {
-        $result = LibAPI\PDOWrapper::call('getTaskSubChunks', LibAPI\PDOWrapper::cleanse($matecat_id_job));
-        return $result;
-    }
-
     public function getMatchingTask($id_job, $id_chunk_password, $matching_type_id)
     {
         $result = LibAPI\PDOWrapper::call('getMatchingTask', LibAPI\PDOWrapper::cleanse($id_job) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($id_chunk_password) . ',' . LibAPI\PDOWrapper::cleanse($matching_type_id));
