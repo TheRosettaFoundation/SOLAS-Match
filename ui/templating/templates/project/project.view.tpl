@@ -580,7 +580,7 @@
                           <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Select task type </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body py-4">
                         <div class="d-flex">
                             <span class="select_task d-none me-4"></span>
                             <select class="form-select me-4" aria-label="Default select example" id="project_task">
@@ -602,14 +602,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="modal fade"  id="modal_taskRestriction_2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+                  <div class="modal fade"  id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body py-4">
                         <select class="form-select me-4" aria-label="Default select example" id="project_task">
                                 <option selected>Choose task type</option>
                                 <option value="0">No Restriction</option>

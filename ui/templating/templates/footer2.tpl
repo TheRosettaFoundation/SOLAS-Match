@@ -290,15 +290,16 @@
 
                         
 
+                        const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
 
                                 // do something...
                                     console.log('showing first modal') ;
-                                    const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
+                                    
 
-                                    // console.log(areAnyTaskSelected.length);
+                                    console.log(areAnyTaskSelected.length);
 
                                 })
 
