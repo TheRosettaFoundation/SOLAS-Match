@@ -305,19 +305,7 @@
                         let savedPreferences = document.querySelector("#saveTaskP");
                         console.log(error);
                          
-                        if(savedPreferences){
-                            console.log(savedPreferences);
-                        }
-
-                        console.log(myModalEl_1);
-                                myModalEl_1.addEventListener('shown.bs.modal', event => {
-
-                                // do something...
-                                    console.log(this) ;
-                                   
-                                
-
-                                    savedPreferences.addEventListener('click' , event =>{
+                        savedPreferences.addEventListener('click' , event =>{
                                         e.preventDefault();
                                         console.log("clicked on button");
                                         if(areAnyTaskSelected.length){
@@ -327,6 +315,11 @@
                                         }
                                     })
 
+                        console.log(myModalEl_1);
+                                myModalEl_1.addEventListener('shown.bs.modal', event => {
+
+                           
+       
                                     console.log(areAnyTaskSelected.length);
 
                                 })
