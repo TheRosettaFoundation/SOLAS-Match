@@ -291,7 +291,7 @@
                         
 
 
-                        const myModalEl_1 = document.getElementById('modal_taskRestriction_first')
+                        const myModalEl_1 = document.getElementById('exampleModalToggle')
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
 
                                 // do something...
