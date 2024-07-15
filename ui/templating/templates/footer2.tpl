@@ -301,7 +301,7 @@
     
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
-                        let savedPreferences = document.getElementById('exampleModalToggle').getElementById("saveTaskP");
+                        let savedPreferences = document.getElementById("saveTaskP");
                         if(savedPreferences){
                             console.log(savedPreferences);
                         }
