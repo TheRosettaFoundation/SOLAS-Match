@@ -582,7 +582,7 @@
                         </div>
                         <div class="modal-body py-4">
                         <div class="d-flex">
-                            <span class="select_task d-none me-4"></span>
+                            <span class="error_task d-none me-4"></span>
                             <select class="form-select me-4" aria-label="Default select example" id="project_task">
                                 <option selected>Choose task type</option>
                                 <option value="1">Translation</option>
