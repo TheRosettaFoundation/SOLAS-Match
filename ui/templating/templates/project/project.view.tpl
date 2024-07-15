@@ -591,12 +591,12 @@
                             </select>
                             <span id="taskCount"></span>
 
-
                         </div>
                             
                           
                         </div>
                         <div class="modal-footer">
+                            <button class="btn btn-primary" id="saveTaskP" >Save</button>
                           <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Apply restrictions</button>
                         </div>
                       </div>
@@ -633,7 +633,7 @@
                       </div>
                     </div>
                   </div>
-                  <button class="btn btn-primary" id="saveTaskP" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
+                  <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
 
                     
                     </div>
