@@ -297,7 +297,19 @@
 
                                 // do something...
                                     console.log('showing first modal') ;
-                                    
+                                   
+                                    let savedPreferences = document.querySelector('#saveTaskPr') ;
+                                    let error = document.querySelector('.error_task');
+
+                                    savedPreferences.addEventListener('click' , event =>{
+                                        e.preventDefault();
+                                        console.log("clicked on button");
+                                        if(areAnyTaskSelected.length){
+
+                                            error.classList.toggle("d-none");
+
+                                        }
+                                    })
 
                                     console.log(areAnyTaskSelected.length);
 
