@@ -303,6 +303,7 @@
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                         // let savedPreferences = document.getElementById("saveTaskP");
                         let savedPreferences = document.querySelector("#saveTaskP");
+                        console.log(error);
                          
                         if(savedPreferences){
                             console.log(savedPreferences);
