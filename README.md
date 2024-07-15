@@ -40,6 +40,12 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+
+## Version 16.1
+
+- Ability to create invoices for completed paid tasks on behalf of linguists (which they can download) and store these in Google Drive.
+- A new FINANCE role has been added.
+
 ## Version 16.0
 
 - New Responsive UI added to Linguist facing parts of the system.

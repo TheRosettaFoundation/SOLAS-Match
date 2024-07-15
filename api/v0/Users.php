@@ -50,11 +50,6 @@ class Users
             '\SolasMatch\API\V0\Users:userUnClaimTask')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTask');
 
-        $app->delete(
-            '/api/v0/users/{userId}/UserTaskCancelled/{taskId}/',
-            '\SolasMatch\API\V0\Users:UserTaskCancelled')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTask');
-
         $app->put(
             '/api/v0/users/{userId}/tags/{tagId}/',
             '\SolasMatch\API\V0\Users:addUserTagById')
@@ -352,12 +347,6 @@ class Users
         } else {
             return API\Dispatcher::sendResponse($response, DAO\TaskDao::unClaimTask($taskId, $userId), null);
         }
-    }
-
-    public static function UserTaskCancelled(Request $request, Response $response, $args)
-    {
-        Lib\Notify::notifyUserTaskCancelled($args['userId'], $args['taskId']);
-        return API\Dispatcher::sendResponse($response, 1, null); // Return 1, just do notification
     }
 
     public static function addUserTagById(Request $request, Response $response, $args)

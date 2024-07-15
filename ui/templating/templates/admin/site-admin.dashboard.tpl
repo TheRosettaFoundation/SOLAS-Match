@@ -12,6 +12,13 @@
 {if isset($flash['revoke_admin_success'])}
     <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['revoke_admin_success'])}</p>
 {/if}
+{if isset($flash['generate_invoices_error'])}
+    <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_error'])}</p>
+{/if}
+{if isset($flash['generate_invoices_success'])}
+    <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['generate_invoices_success'])}</p>
+{/if}
+
 
 <div class="well">
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
@@ -55,6 +62,10 @@
     <p><a href="{urlFor name="download_covid_projects"}">[Download covid projects]</a></p>
     <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
     <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
+    <hr />
+{elseif $roles & (128)}
+    <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
+    <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
     <hr />
 {/if}
 
@@ -301,6 +312,33 @@
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     <hr />
+{/if}
+
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
+  {if $roles & ($SITE_ADMIN + 128) & 0}
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <h2>Generate Invoices (normally for month)</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+                    <button class="btn btn-success" type="submit" name="generate_invoices" value="1" id="generate_invoices">
+                        <i class="icon-star icon-white"></i>
+                        Generate Invoices
+                    </button>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </td>
+            </tr>
+        </table>
+  {/if}
+  <a href="{urlFor name="sow_report"}" target="_blank">SoW Report</a>&nbsp;&nbsp;&nbsp;<a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
+  <hr />
 {/if}
 
 {if $roles & ($SITE_ADMIN)}

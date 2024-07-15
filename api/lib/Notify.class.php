@@ -206,19 +206,4 @@ class Notify
             $claimant_id,
             '');
     }
-
-    public static function notifyUserTaskCancelled($user_id, $task_id)
-    {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-            UserTaskCancelled,
-            $user_id,
-            0,
-            0,
-            0,
-            $task_id,
-            0,
-            '');
-        error_log("notifyUserTaskCancelled($user_id, $task_id)");
-    }
 }

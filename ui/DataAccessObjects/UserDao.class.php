@@ -109,6 +109,20 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function getUserInvoices($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_invoices', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function getInvoice($invoice_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_invoice', LibAPI\PDOWrapper::cleanse($invoice_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function find_all_orgs_for_user($user_id)
     {
         $result = LibAPI\PDOWrapper::call('find_all_orgs_for_user', LibAPI\PDOWrapper::cleanse($user_id));
@@ -513,16 +527,16 @@ error_log("claimTask_shell($userId, $taskId)");
         $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
     }
 
-    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment)
+    public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow, $hook_from_phrase = 0)
     {
       if (!$memsource_project) return 0;
-      error_log("function propagate_cancelled($cancelled... $task_id)");
+      error_log("function propagate_cancelled($cancelled... $task_id... $whole_workflow, $hook_from_phrase)");
       $projectDao = new ProjectDao();
       $taskDao = new TaskDao();
       $memsource_task = $projectDao->get_memsource_task($task_id);
       $task_ids = [$task_id];
       $shell_task = $memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']); // A Phrase uid will not be an int, for a Shell Task this contains task_id (an int)
-      if ($cancelled && $memsource_project && $memsource_task && !$shell_task) {
+      if ($cancelled && $whole_workflow && $memsource_project && $memsource_task && !$shell_task) {
           $top_level = $projectDao->get_top_level($memsource_task['internalId']);
           $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
           $task_ids = [];
@@ -540,9 +554,7 @@ error_log("claimTask_shell($userId, $taskId)");
         }
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        $user_id = 0;
-        $details_claimant = $taskDao->getUserClaimedTask($task_id);
-        if ($details_claimant) $user_id = $details_claimant->getId();
+        $user_id = $projectDao->getUserClaimedTask($task_id);
 
         if ($memsource_project && $memsource_task) {
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
@@ -553,7 +565,7 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $status_id = Common\Enums\TaskStatusEnum::CLAIMED;
 
             $memsource_user_uid = 0;
-            if ($details_claimant) $memsource_user_uid = $this->get_memsource_user($user_id);
+            if ($user_id) $memsource_user_uid = $this->get_memsource_user($user_id);
 
             $deadline = $task->getDeadline();
             $status = 'CANCELLED';
@@ -574,7 +586,7 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
             error_log(print_r($data, true));
 
-           if (!$shell_task) {
+           if ($whole_workflow && !$shell_task && !$hook_from_phrase) {
             $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -582,7 +594,7 @@ error_log("claimTask_shell($userId, $taskId)");
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             $result = curl_exec($ch);
             curl_close($ch);
-           } else error_log('Skipping Phrase for Shell Task');
+           } else error_log('Skipping Phrase for Shell Task or !whole_workflow or hook_from_phrase');
 
             if ($cancelled) {
                 $task->set_cancelled(1);
@@ -618,7 +630,16 @@ error_log("claimTask_shell($userId, $taskId)");
             }
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
-            $this->client->call(null, "{$this->siteApi}v0/users/$user_id/UserTaskCancelled/$task_id", Common\Enums\HttpMethodEnum::DELETE);
+            $args =
+                LibAPI\PDOWrapper::cleanse(PROJECTQUEUE) . ',' .
+                LibAPI\PDOWrapper::cleanse(UserTaskCancelled) . ',' .
+                LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+                '0,0,0,' .
+                LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+                '0,' .
+                LibAPI\PDOWrapper::cleanseWrapStr('');
+            LibAPI\PDOWrapper::call('insert_queue_request', $args);
+            error_log("notifyUserTaskCancelled($user_id, $task_id)");
 
             $creator = $taskDao->get_creator($memsource_project['project_id'], $memsource_project); // email owner (or projects@translatorswithoutborders.org for self service)
             $args =
