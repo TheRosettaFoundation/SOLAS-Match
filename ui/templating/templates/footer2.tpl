@@ -288,7 +288,7 @@
 
                         }
 
-                        const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
+                        
 
 
                         const myModalEl = document.getElementById('modal_taskRestrictions_1')
@@ -298,7 +298,7 @@
                                     console.log('showing first modal') ;
                                     const areAnyTaskSelected = document.querySelectorAll('input[type"checkbox"][name="select_task"]') ;
 
-                                    console.log(areAnyTaskSelected.length);
+                                    // console.log(areAnyTaskSelected.length);
 
                                 })
 
