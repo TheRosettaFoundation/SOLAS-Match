@@ -300,6 +300,8 @@
 
                                 break;
                             }}
+                         
+                        console.log(anySelected);
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                 
