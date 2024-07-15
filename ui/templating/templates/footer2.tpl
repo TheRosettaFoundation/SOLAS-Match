@@ -303,6 +303,7 @@
                                     
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
+                        console.log(myModalEl_1);
                                 myModalEl_1.addEventListener('shown.bs.modal', event => {
 
                                 // do something...
