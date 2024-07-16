@@ -372,7 +372,7 @@
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt
-                                modal.appendChild = taskelt;
+                                console.log(taskelt) ;
                             })
 
                              
