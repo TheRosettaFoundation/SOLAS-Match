@@ -310,20 +310,6 @@
                             console.log('this is running')
                             });
 
-                        // const checkboxes = document.querySelectorAll('input[name="select_task"]') ;
-
-                        // let anySelected= false
-
-                        // for (let checkbox of checkboxes) {
-                        //     if (checkbox.checked) {
-                        //         anySelected = true ;
-
-                        //         break;
-                        //     }}
-                         
-                        // console.log(anySelected);
-
-                       
 
                         let uniqueElements=[] ;
 
@@ -411,7 +397,19 @@
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt
-                                form_1.appendChild(taskelt);
+                                let extendedEL = `<div class="d-flex mt-4 mb-2">
+                                    <div>${elt}</div>
+                                    <select class="form-select" aria-label="Default select example">
+                                    <option selected> Select Restrictions</option>
+                                        <option value="0">Native matching </option>
+                                        <option value="2">Target language matching</option>
+                                        <option value="3">Country and target language matching</option>
+                                    </select>
+  
+                                </div>`
+
+                                let extendedHtml = document.createRange().createContextualFragment(extendedEL);
+                                form_1.appendChild(extendedHtml);
                             })
 
                              
