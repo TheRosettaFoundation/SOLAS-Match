@@ -346,8 +346,14 @@
                             console.log('clicked on this one') ;
 
                             const clickedElement = event.target ;
-                            const parent = clickedElement.parentElement.parentElement;
-                            console.log(parent.nextElementSibling);
+                            const parent = clickedElement.parentElement.parentElement.nextElementSibling;
+                            console.log(parent);
+
+                            let table = parent.querySelector('table') ;
+                            console.log(table)
+
+
+
                         } )
 
                         })
