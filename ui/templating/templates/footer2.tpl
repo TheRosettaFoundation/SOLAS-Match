@@ -290,18 +290,45 @@
 
                         // code for 
 
-                        const checkboxes = document.querySelectorAll('input[name="select_task"]') ;
+                        const requestPage = (url) => {
+                                const req = new XMLHttpRequest();
+                                req.addEventListener("load", reqListner);
+                                req.open("POST", url, true);
+                                req.send();
+                            };
 
-                        let anySelected= false
 
-                        for (let checkbox of checkboxes) {
-                            if (checkbox.checked) {
-                                anySelected = true ;
+                        const form = document.getElementById('get_translators_count_availability');
 
-                                break;
-                            }}
+                            form.addEventListener('submit', (event) => {
+                            event.preventDefault();
+                            
+                            let url = '/project/9489/view'
+
+                            requestPage(url)
+                            // Your custom form submission logic here
+                            console.log('this is running')
+                            });
+
+                        // const checkboxes = document.querySelectorAll('input[name="select_task"]') ;
+
+                        // let anySelected= false
+
+                        // for (let checkbox of checkboxes) {
+                        //     if (checkbox.checked) {
+                        //         anySelected = true ;
+
+                        //         break;
+                        //     }}
                          
-                        console.log(anySelected);
+                        // console.log(anySelected);
+
+                        const checkedCheckboxes = document.querySelectorAll('#language-id input[type="checkbox"]:checked');
+                        
+                        checkedCheckboxes.forEach(checkbox => { 
+                            const taskType = checkbox.getAttribute('data-task-type'); 
+                            console.log(taskType)})
+
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                 
@@ -315,20 +342,21 @@
                                         console.log("clicked on button");
                                         if(!anySelected){
 
-                                            error.classList.toggle("d-none");
+                                            error.classList.add("d-none");
 
                                         }
                                     })
 
                         console.log(myModalEl_1);
-                                myModalEl_1.addEventListener('shown.bs.modal', event => {
+                                myModalEl_1.addEventListener('show.bs.modal', event => {
 
-                           
+                                    const clickedElement = event.target ;
+                                    console.log(clickedElement);
        
-                                    console.log(checkboxes.length);
 
                                 })
 
+                          
                         
                         // const myModalEl_2 = document.getElementById('modal')
                         // myModalEl_2.addEventListener('show.bs.modal', event => {
