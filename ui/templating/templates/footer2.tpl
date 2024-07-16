@@ -331,7 +331,7 @@
            
                         let form_1  = myModalEl.querySelector('form') ;
 
-                        let error = `<p> Please select one or more task </p>`
+                        let error = `<div> Please select one or more task </div>`
                         
                         let errorHtml = document.createRange().createContextualFragment(error);
 
@@ -351,14 +351,16 @@
 
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
-
+                                // can be improve save everything under one node with a specific class
                                         uniqueElements = [];
 
                                         if(form_1){
 
-                                        let children  = form_1.querySelectorAll('p') ;
+                                        let children  = form_1.querySelectorAll('div') ;
 
-                                        console.log(children);
+                                        children.forEach(elt =>{
+                                            form_1.removeChild(elt) ;
+                                        })
 
 
                                         }
