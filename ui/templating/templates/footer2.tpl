@@ -397,9 +397,10 @@
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt;
+                                let tasktype = elt ;
                                 let extendedEL = `<div class="d-flex mt-4 mb-2">
-                                    <div>text</div>
-                                    <select class="form-select" aria-label="Default select example">
+                                    <div class="me-4">${tasktype}</div>
+                                    <select class="form-select ms-2" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
                                         <option value="0">Native matching </option>
                                         <option value="2">Target language matching</option>
