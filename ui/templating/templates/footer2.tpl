@@ -335,6 +335,18 @@
                         let savedPreferences = document.querySelector("#saveTaskP");
 
                         let error = document.querySelector('.error_task');
+
+                        let restrictionsB = document.querySelectorAll(".restrictions");
+
+                        console.log(restrictionsB);
+
+                        restrictionsB.forEach(elt=>{
+
+                        elt.addEventListener("click" , e=>{
+                            console.log('clicked on this one')
+                        } )
+
+                        })
                 
                          
                         savedPreferences.addEventListener('click' , e =>{
