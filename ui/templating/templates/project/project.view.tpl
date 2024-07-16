@@ -532,13 +532,13 @@
         </div>
         </div>
 
-
+        </br>
+        </br>
+        
+      </hr>
 </div>
 
-  </br>
-  </br>
   
-</hr>
     </div>
 
     {if isset($flash['taskSuccess'])}
