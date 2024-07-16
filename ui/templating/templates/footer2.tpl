@@ -325,22 +325,40 @@
 
                        
 
-                        const myModalEl = document.getElementById('exampleModalToggle')
-                                myModalEl.addEventListener('show.bs.shown', event => {
+                        let uniqueElements ;
 
-                                console.log(e.target.value) ;
- 
+                        const myModalEl = document.getElementById('exampleModalToggle')
+           
+
+
+                                myModalEl.addEventListener('show.bs.modal', event => {
+
+                                    console.log(e.target.value) ;
+
+                                    if(!uniqueElements){
+
+                                    console.log('please select one or more task')
+
+                                    }
+
                                 })
+                                
+                                let form_1  = myModalEl.querySelector('form') ;
+
+                                myModalEl.addEventListener('hide.bs.modal', event => {
+
+                                        console.log(e.target.value) ;
+
+                                        uniqueElements = [];
+
+                                        form_1.removeChild('div')
+
+                                    })
 
                               
-                        let form_1  = myModalEl.querySelector('form') ;
-
-                        myModalEl.addEventListener('hidden.bs.hidden', event => {
-
-                           form_1.removeChild('div')
+                        
 
 
-                        })
 
 
  
@@ -381,7 +399,7 @@
                             console.log(taskName)})
 
                             
-                            const uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
+                             uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
                             acc[curr] = (acc[curr] || 0) + 1;
                             return acc;
                             }, {}));
