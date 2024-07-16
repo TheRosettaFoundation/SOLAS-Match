@@ -356,7 +356,7 @@
 
                                         if(form_1){
 
-                                        form_1.removeChild('div')
+                                        form_1.removeChild('p')
                                         }
 
 
