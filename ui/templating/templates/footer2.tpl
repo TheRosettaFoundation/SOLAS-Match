@@ -346,7 +346,7 @@
                             console.log('clicked on this one') ;
 
                             const clickedElement = event.target ;
-                            const parent = clickedElement.parentElement.parentElement.parentElement;
+                            const parent = clickedElement.parentElement.parentElement;
                             console.log(parent);
                         } )
 
