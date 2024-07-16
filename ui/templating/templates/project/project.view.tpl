@@ -531,10 +531,7 @@
         </div>
         </div>
 
-        </br>
-        </br>
         
-      <hr></hr>
 </div>
 </br>
 </br>
