@@ -367,9 +367,16 @@
 
                             const modal = document.getElementById('get_translators_count_availability');
 
-                            console.log(modal);
 
-                            console.log(uniqueElements)
+                            uniqueElements.forEach(elt =>{
+                                let taskelt = document.createElement('div')
+                                taskelt.textContent = elt
+                                modal.appendChild = taskelt;
+                            })
+
+                             
+
+                           
 
 
 

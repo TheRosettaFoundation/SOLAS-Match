@@ -589,13 +589,6 @@
                         <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 
-                        
-                            <select name="task_type" class="form-select me-4" aria-label="Default select example" id="project_task">
-                                <option selected>Choose task type</option>
-                                <option value="1">Translation</option>
-                                <option value="2">Proofreading</option>
-                                <option value="3">Revision</option>
-                            </select>
 
                            
                         
