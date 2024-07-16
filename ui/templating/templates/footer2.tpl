@@ -326,15 +326,24 @@
                        
 
                         const myModalEl = document.getElementById('exampleModalToggle')
-                                myModalEl.addEventListener('hidden.bs.shown', event => {
+                                myModalEl.addEventListener('show.bs.shown', event => {
 
                                 console.log(e.target.value) ;
  
                                 })
 
+                              
                         let form_1  = myModalEl.querySelector('form') ;
 
-                        console.log(form_1)
+                        myModalEl.addEventListener('hidden.bs.hidden', event => {
+
+                           form_1.removeChild('div')
+
+
+                        })
+
+
+ 
 
 
                         let savedPreferences = document.querySelector("#saveTaskP");
