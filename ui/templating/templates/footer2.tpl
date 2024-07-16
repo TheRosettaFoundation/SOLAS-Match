@@ -343,6 +343,8 @@
 
                                     console.log('please select one or more task')
 
+                                    console.log(errorHtml)
+
                                     form_1.appendChild(document.createRange().createContextualFragment(error)) ;
 
                                     }
