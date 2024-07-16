@@ -329,7 +329,11 @@
 
                         const myModalEl = document.getElementById('exampleModalToggle')
            
+                        let form_1  = myModalEl.querySelector('form') ;
 
+                        let error = `<p> Please select one or more task </p>`
+                        
+                        let errorHtml = document.createRange().createContextualFragment(error);
 
                                 myModalEl.addEventListener('show.bs.modal', event => {
 
@@ -338,34 +342,25 @@
 
                                     console.log('please select one or more task')
 
+                                    form_1.appendChild(errorHtml) ;
+
                                     }
 
                                 })
                                 
-                                let form_1  = myModalEl.querySelector('form') ;
 
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
 
-
                                         uniqueElements = [];
 
+                                        if(form_1){
+
                                         form_1.removeChild('div')
+                                        }
+
 
                                     })
-
-                              
-                        
-
-
-
-
- 
-
-
-                        let savedPreferences = document.querySelector("#saveTaskP");
-
-                        let error = document.querySelector('.error_task');
 
                         let restrictionsB = document.querySelectorAll(".restrictions");
 
@@ -422,15 +417,7 @@
                         })
                 
                          
-                        savedPreferences.addEventListener('click' , e =>{
-                                        e.preventDefault();
-                                        console.log("clicked on button");
-                                        if(!anySelected){
-
-                                            error.classList.add("d-none");
-
-                                        }
-                                    })
+               
 
                     
 
