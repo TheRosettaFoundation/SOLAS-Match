@@ -263,7 +263,7 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
-  {if $roles & ($SITE_ADMIN + 128) & 0}
+  {if $roles & ($SITE_ADMIN + 128)}
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
