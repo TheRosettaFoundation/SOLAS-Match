@@ -343,7 +343,11 @@
                         restrictionsB.forEach(elt=>{
 
                         elt.addEventListener("click" , e=>{
-                            console.log('clicked on this one')
+                            console.log('clicked on this one') ;
+
+                            const clickedElement = event.target ;
+                            const parent = clickedElement.parentElement.parentElement ;
+                            console.log(parent);
                         } )
 
                         })
