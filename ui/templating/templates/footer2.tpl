@@ -365,6 +365,10 @@
                             return acc;
                             }, {}));
 
+                            const modal = document.getElementById('get_translators_count_availability');
+
+                            console.log(modal);
+
                             console.log(uniqueElements)
 
 
