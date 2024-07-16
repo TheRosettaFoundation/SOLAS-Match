@@ -396,7 +396,7 @@
 
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
-                                taskelt.textContent = elt
+                                taskelt.textContent = elt;
                                 let extendedEL = `<div class="d-flex mt-4 mb-2">
                                     <div>${elt}</div>
                                     <select class="form-select" aria-label="Default select example">
