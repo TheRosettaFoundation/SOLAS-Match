@@ -367,11 +367,10 @@
         {/if}
 
 
-    <hr class="bg-light-subtle"></hr>
-    <br/>
+     </br>
+     </br>
 
-
-        <div class="menu_list d-none bg-body p-4 mt-2 mb-4 rounded-2">
+        <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
  
         <div class="">
         <div class="d-flex flex-wrap mb-4">
