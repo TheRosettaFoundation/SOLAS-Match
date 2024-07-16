@@ -344,6 +344,16 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
+    public function count_users_who_can_claim($task_id)
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('count_users_who_can_claim',LibAPI\PDOWrapper::cleanse($task_id));
+        if (!empty($result)) {
+            $ret = $result;
+        }
+        return $ret;
+    }
+
     public function setRestrictedTask($task_id)
     {
         LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));

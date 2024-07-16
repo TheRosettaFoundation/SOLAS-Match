@@ -719,7 +719,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        print_r($request);
+        print_r($post["translators_count"]);
+        
       
 
         $project = $projectDao->getProject($project_id);
@@ -749,6 +750,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['task_id']);
             } elseif (isset($post['revokeTaskId'])) {
                 $task = $taskDao->getTask($post['revokeTaskId']);
+            }
+
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['translators_count'])) {
+             
+                    $users_count_claim = $task->count_users_who_can_claim($post['translators_count']);
+                    print_r($users_count_claim);
+                    UserRouteHandler::flashNow("success", " Task published  ");
+
+              
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
