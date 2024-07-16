@@ -610,6 +610,9 @@
                     </div>
                   </div>
 
+                  <button class="btn btn-primary restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
+
+                    
                     </div>
                     {* endofModal *}
                     </div>                             
