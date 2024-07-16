@@ -398,7 +398,7 @@
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt;
                                 let extendedEL = `<div class="d-flex mt-4 mb-2">
-                                    <div>${elt}</div>
+                                    <div>text</div>
                                     <select class="form-select" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
                                         <option value="0">Native matching </option>
