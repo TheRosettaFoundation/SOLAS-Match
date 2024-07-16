@@ -323,12 +323,7 @@
                          
                         // console.log(anySelected);
 
-                        const checkedCheckboxes = document.querySelectorAll('#language-id input[type="checkbox"]:checked');
-                        
-                        checkedCheckboxes.forEach(checkbox => { 
-                            const taskType = checkbox.getAttribute('data-task-type'); 
-                            console.log(taskType)})
-
+                       
 
                         const myModalEl_1 = document.getElementById('exampleModalToggle')
                 
@@ -349,8 +344,16 @@
                             const parent = clickedElement.parentElement.parentElement.nextElementSibling;
                             console.log(parent);
 
-                            let table = parent.querySelector('table') ;
-                            console.log(table)
+
+
+                            const checkedCheckboxes = parent.querySelectorAll('input[type="checkbox"]:checked');
+
+                            console.log(checkedCheckboxes);
+                        
+                            checkedCheckboxes.forEach(checkbox => { 
+                            const taskType = checkbox.getAttribute('data-task-type'); 
+                            console.log(taskType)})
+
 
 
 
