@@ -397,8 +397,10 @@
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt;
+                                
                                 let type = elt.textContent;
-                                console.log(type) ;
+                                console.log(type);
+                                console.log(elt);
                                 let extendedEL = `<div class="d-flex mt-4 mb-2">
                                     <div class="me-4"> test </div>
                                     <select class="form-select ms-2" aria-label="Default select example">
