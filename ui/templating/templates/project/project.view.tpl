@@ -535,9 +535,12 @@
         </br>
         </br>
         
-      </hr>
+      <hr></hr>
 </div>
+</br>
+</br>
 
+<hr></hr>
   
     </div>
 
