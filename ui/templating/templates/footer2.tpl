@@ -337,8 +337,6 @@
                         console.log(form_1)
 
 
-
-                
                         let savedPreferences = document.querySelector("#saveTaskP");
 
                         let error = document.querySelector('.error_task');
@@ -379,15 +377,11 @@
                             return acc;
                             }, {}));
 
-                           
-
-                         
-
 
                             uniqueElements.forEach(elt =>{
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt
-                                console.log(taskelt) ;
+                                form_1.appendChild(taskelt);
                             })
 
                              
