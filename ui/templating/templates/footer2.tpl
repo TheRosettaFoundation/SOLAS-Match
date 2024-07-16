@@ -349,10 +349,13 @@
                             const checkedCheckboxes = parent.querySelectorAll('input[type="checkbox"]:checked');
 
                             console.log(checkedCheckboxes);
+                            const arraySelected = [];
                         
                             checkedCheckboxes.forEach(checkbox => { 
                             const taskType = checkbox.getAttribute('data-task-type'); 
-                            const taskName = type_texts[taskType]
+                            const taskName = type_texts[taskType] ;
+                            arraySelected.push(taskName);
+                            console.log(arraySelected);
                             console.log(taskName)})
 
 
