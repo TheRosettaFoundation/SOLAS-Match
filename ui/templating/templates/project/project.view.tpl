@@ -573,7 +573,7 @@
 
                     {* //Modal *}
                     <div>
-                    <div class="modal fade" id="exampleModalToggle-{$languageCountry}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -642,7 +642,7 @@
                         
                         </div>
                         <div class="modal-footer">
-                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle-{$languageCountry}" data-bs-toggle="modal">Back to selecting task type</button>
+                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to selecting task type</button>
                         </div>
                       </div>
                     </div>
