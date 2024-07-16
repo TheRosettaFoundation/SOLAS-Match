@@ -347,7 +347,7 @@
 
                             const clickedElement = event.target ;
                             const parent = clickedElement.parentElement.parentElement;
-                            console.log(parent);
+                            console.log(parent.nextElementSibling);
                         } )
 
                         })
