@@ -353,7 +353,7 @@
                             checkedCheckboxes.forEach(checkbox => { 
                             const taskType = checkbox.getAttribute('data-task-type'); 
                             const taskName = type_texts[taskType]
-                            console.log(taskname)})
+                            console.log(taskName)})
 
 
 
