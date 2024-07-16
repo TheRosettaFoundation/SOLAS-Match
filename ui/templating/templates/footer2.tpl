@@ -325,7 +325,19 @@
 
                        
 
-                        const myModalEl_1 = document.getElementById('exampleModalToggle')
+                        const myModalEl = document.getElementById('exampleModalToggle')
+                                myModalEl.addEventListener('hidden.bs.shown', event => {
+
+                                console.log(e.target.value) ;
+ 
+                                })
+
+                        let form  = myModalEl.querySelector('form') ;
+
+                        console.log(form)
+
+
+                        
                 
                         let savedPreferences = document.querySelector("#saveTaskP");
 
@@ -334,6 +346,8 @@
                         let restrictionsB = document.querySelectorAll(".restrictions");
 
                         console.log(restrictionsB);
+
+
 
                         restrictionsB.forEach(elt=>{
 
@@ -367,16 +381,7 @@
 
                            
 
-                            const myModalEl = document.getElementById('exampleModalToggle')
-                                myModalEl.addEventListener('hidden.bs.shown', event => {
-
-                                console.log(e.target.value) ;
- 
-                                })
-
-                            let form  = myModalEl.querySelector('form') ;
-
-                            console.log(form)
+                         
 
 
                             uniqueElements.forEach(elt =>{
