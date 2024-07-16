@@ -26,8 +26,6 @@
     <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
     <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
   {/if}
-    <p><a href="{urlFor name="language_work_requested"}" target="_blank">List language pairs with translation work requested in those pairs.</a> <a href="{urlFor name="download_language_work_requested"}">[Download]</a></p>
-    <p><a href="{urlFor name="translators_for_language_pairs"}" target="_blank">List language pairs with number of translators who have that pair.</a> <a href="{urlFor name="download_translators_for_language_pairs"}">[Download]</a></p>
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
     <p><a href="{urlFor name="users_review"}">List user certificates to be reviewed</a></p>
     <hr />

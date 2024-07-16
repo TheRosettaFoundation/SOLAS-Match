@@ -7849,6 +7849,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `language_work_requested`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `language_work_requested`()
@@ -7868,6 +7869,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `translators_for_language_pairs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `translators_for_language_pairs`()
