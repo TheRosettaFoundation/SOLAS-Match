@@ -594,7 +594,7 @@
                                 <option value="3">Revision</option>
                             </select>
 
-                            <div class="btn btn-secondary"> Submit</div>
+                           
                         
                             <input type="hidden" name="translators_count" value="{$task_id}" />
 
