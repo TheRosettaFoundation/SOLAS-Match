@@ -325,7 +325,7 @@
 
                        
 
-                        let uniqueElements ;
+                        let uniqueElements=[] ;
 
                         const myModalEl = document.getElementById('exampleModalToggle')
            
