@@ -331,14 +331,13 @@
            
                         let form_1  = myModalEl.querySelector('form') ;
 
-                        let error = `<div> Please select one or more task </div>`
+                        let error = `<div class="text-danger fw-bold"> Please select one or more task </div>`
                         
                         let errorHtml = document.createRange().createContextualFragment(error);
 
                                 myModalEl.addEventListener('show.bs.modal', event => {
 
-
-                                    if(!uniqueElements){
+                                    if(uniqueElements.length==0){
 
                                     console.log('please select one or more task')
 
