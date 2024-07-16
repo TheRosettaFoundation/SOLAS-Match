@@ -351,7 +351,7 @@
                                 myModalEl_1.addEventListener('show.bs.modal', event => {
 
                                     const clickedElement = event.target ;
-                                    const parent = clickedElement.parentElement.nextElementSibling ;
+                                    const parent = clickedElement.parentElement ;
                                     console.log(parent);
        
 
