@@ -355,8 +355,17 @@
                             const taskType = checkbox.getAttribute('data-task-type'); 
                             const taskName = type_texts[taskType] ;
                             arraySelected.push(taskName);
+
                             console.log(arraySelected);
                             console.log(taskName)})
+
+                            
+                            const uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
+                            acc[curr] = (acc[curr] || 0) + 1;
+                            return acc;
+                            }, {}));
+
+                            console.log(uniqueElements)
 
 
 
