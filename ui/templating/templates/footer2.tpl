@@ -356,7 +356,11 @@
 
                                         if(form_1){
 
-                                        form_1.removeChild('p')
+                                        let children  = form_1.querySelectorAll('p') ;
+
+                                        console.log(children);
+
+
                                         }
 
 
