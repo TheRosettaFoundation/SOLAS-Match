@@ -365,8 +365,18 @@
                             return acc;
                             }, {}));
 
-                            const modal = document.getElementById('get_translators_count_availability');
-                            console.log(modal) ;
+                           
+
+                            const myModalEl = document.getElementById('exampleModalToggle')
+                                myModalEl.addEventListener('hidden.bs.shown', event => {
+
+                                console.log(e.target.value) ;
+ 
+                                })
+
+                            let form  = myModalEl.querySelector('form') ;
+
+                            console.log(form)
 
 
                             uniqueElements.forEach(elt =>{
