@@ -333,7 +333,6 @@
 
                                 myModalEl.addEventListener('show.bs.modal', event => {
 
-                                    console.log(e.target.value) ;
 
                                     if(!uniqueElements){
 
@@ -347,7 +346,7 @@
 
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
-                                        console.log(e.target.value) ;
+
 
                                         uniqueElements = [];
 
