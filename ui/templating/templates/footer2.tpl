@@ -335,7 +335,7 @@
                         
                         let errorHtml = document.createRange().createContextualFragment(error);
 
-                                myModalEl.addEventListener('show.bs.modal', event => {
+                                myModalEl.addEventListener('shown.bs.modal', event => {
 
                                     if(uniqueElements.length==0){
 
