@@ -351,22 +351,15 @@
                                 myModalEl_1.addEventListener('show.bs.modal', event => {
 
                                     const clickedElement = event.target ;
-                                    console.log(clickedElement);
+                                    const parent = clickedElement.parentElement ;
+                                    console.log(parent);
        
 
                                 })
 
                           
                         
-                        // const myModalEl_2 = document.getElementById('modal')
-                        // myModalEl_2.addEventListener('show.bs.modal', event => {
-
-                        // // do something...
-                        //     console.log('showing second modal') ;
-                            
-
-                        // })
-                                            
+                                
 
                      </script>
 
