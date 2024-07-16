@@ -582,15 +582,38 @@
                         </div>
                         <div class="modal-body py-4">
 
-                        <div class="error_task d-none text-danger"> You need to first select a task!</div>
+                        <div class="error_task d-none text-danger mb-4"> You need to first select a task!</div>
                         <div class="d-flex">
-                            <select class="form-select me-4" aria-label="Default select example" id="project_task">
+                        <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+
+                        
+                            <select name="task_type" class="form-select me-4" aria-label="Default select example" id="project_task">
                                 <option selected>Choose task type</option>
                                 <option value="1">Translation</option>
                                 <option value="2">Proofreading</option>
                                 <option value="3">Revision</option>
                             </select>
+                        
+                            <input type="hidden" name="translators_count" value="{$task_id}" />
+
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />/if
                             <span id="taskCount"></span>
+
+                            <a class="d-flex p-2 text-muted fs-6 text-decoration-none" onclick="$('#get_translators_count_availability').submit();" style="color:#000000;" role="button">
+                            <i class="fa fa-book me-2"  aria-hidden="true"></i> <span> Save </span>
+                        </a>
+                        
+                        </form>
+
+
+                        {* <form id="pending_documentation" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+                        <a class="d-flex p-2 text-muted fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
+                            <i class="fa fa-book me-2"  aria-hidden="true"></i> <span> Set tasks to Pending Documentation </span>
+                        </a>
+                            <input type="hidden" name="pending_documentation" value="" />
+                            <input type="hidden" name="ready_payment_status" value="Pending documentation" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form> *}
 
                         </div>
                             

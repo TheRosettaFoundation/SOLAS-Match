@@ -719,6 +719,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
+        print_r($request);
       
 
         $project = $projectDao->getProject($project_id);
