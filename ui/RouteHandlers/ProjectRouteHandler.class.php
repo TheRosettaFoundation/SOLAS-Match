@@ -755,7 +755,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['translators_count'])) {
              
-                    $users_count_claim = $task->count_users_who_can_claim($post['translators_count']);
+                    $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
                     print_r($users_count_claim);
                     UserRouteHandler::flashNow("success", " Task published  ");
 
