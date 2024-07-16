@@ -596,7 +596,7 @@
                         
                             <input type="hidden" name="translators_count" value="{$task_id}" />
 
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />/if
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             <span id="taskCount"></span>
 
                             <a class="d-flex p-2 text-muted fs-6 text-decoration-none" onclick="$('#get_translators_count_availability').submit();" style="color:#000000;" role="button">
