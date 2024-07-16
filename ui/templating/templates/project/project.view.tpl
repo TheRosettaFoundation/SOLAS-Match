@@ -605,47 +605,11 @@
                             
                           
                         </div>
-                        <div class="modal-footer">
-                        <button class="btn btn-primary" id="saveTaskP" >Save</button>
-                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Apply restrictions</button>
-                        </div>
+                  
                       </div>
                     </div>
                   </div>
-                  <div class="modal fade"  id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body py-4">
 
-                        <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                            <input type="hidden" name="task_id" value="{$task_id}" />
-                            <input type="hidden" name="complete_task" value="1" />
-                            <select class="form-select me-4" aria-label="Default select example" id="project_task">
-                                    <option selected>Choose task type</option>
-                                    <option value="0">No Restriction</option>
-                                    <option value="2">Match Native Language</option>
-                                    <option value="3">Match Native Langauge and Country</option>
-                                </select>
-                       
-                        </a>
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
-                          
-                        
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to selecting task type</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <button class="btn btn-primary restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
-
-                    
                     </div>
                     {* endofModal *}
                     </div>                             
