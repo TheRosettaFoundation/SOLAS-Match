@@ -332,12 +332,12 @@
  
                                 })
 
-                        let form  = myModalEl.querySelector('form') ;
+                        let form_1  = myModalEl.querySelector('form') ;
 
-                        console.log(form)
+                        console.log(form_1)
 
 
-                        
+
                 
                         let savedPreferences = document.querySelector("#saveTaskP");
 
