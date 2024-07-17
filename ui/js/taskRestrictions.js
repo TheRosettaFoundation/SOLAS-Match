@@ -92,24 +92,26 @@ restrictionsB.forEach((elt) => {
 
                 let selected = taskSelected[key];
                 let count = selected[0];
+                let allCount = [...count];
 
                 if (!tobefetched[key]) {
                     tobefetched[key] = count;
                 }
+                console.log(allCount);
             }
         }
 
         uniqueElements.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-<div class="me-4 elt"></div>
-<select class="form-select ms-2 w-50" aria-label="Default select example">
-<option selected> Select Restrictions</option>
-    <option value="0">Native matching </option>
-    <option value="2">Target language matching</option>
-    <option value="3">Country and target language matching</option>
-</select>
+                <div class="me-4 elt"></div>
+                <select class="form-select ms-2 w-50" aria-label="Default select example">
+                <option selected> Select Restrictions</option>
+                    <option value="0">Native matching </option>
+                    <option value="2">Target language matching</option>
+                    <option value="3">Country and target language matching</option>
+                </select>
 
-</div>`;
+                </div>`;
 
             let extendedHtml = document
                 .createRange()
