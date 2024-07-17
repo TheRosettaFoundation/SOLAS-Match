@@ -362,7 +362,7 @@
 
 
                         async function getUsersCount(task_id) {
-                                    let url = `/project/${task_id}/view`;
+                                    let url = `/project//view`;
                                     const key = { sesskey };
                                     try {
                                         const response = await fetch(url, {
@@ -406,11 +406,6 @@
                             console.log('######################')
 
                             
-
-                       
-                            // Feching from the DB 
-                            console.log('FECTED FROM DB')
-
 
 
 
