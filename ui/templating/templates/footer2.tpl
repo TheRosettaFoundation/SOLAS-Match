@@ -338,7 +338,8 @@
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
                                 // can be improve save everything under one node with a specific class
-                                        taskSelected = {}
+                                        taskSelected = {};
+                                        uniqueElements = [];
 
                                         if(form_1){
 
