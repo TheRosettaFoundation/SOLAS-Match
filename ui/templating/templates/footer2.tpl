@@ -423,7 +423,8 @@
                             console.log(taskSelected[key]);
 
                             let selected = taskSelected[key];
-                            let count = taskSelected[0]
+                            let count = selected[0]
+                      
                             if(!tobefetched[key]){
                                 tobefetched[key] = count
                             }
