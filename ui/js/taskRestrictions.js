@@ -44,7 +44,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
 });
 
 async function getUsersCount(task_id) {
-    let url = `project/get_users_count/${task_id}`;
+    let url = `/project/get_users_count/${task_id}`;
     const taskIds = { sesskey, translators_count: task_id };
     try {
         const response = await fetch(url, {
