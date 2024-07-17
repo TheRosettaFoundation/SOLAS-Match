@@ -28,6 +28,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     // Clear state
     taskSelected = {};
     uniqueElements = [];
+    tobefetched = {};
     countFetch = [];
 
     if (form_1) {
