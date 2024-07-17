@@ -398,8 +398,8 @@
                                 let taskelt = document.createElement('div')
                                 taskelt.textContent = elt;
                                 
-                                let type = elt.textContent;
-                                console.log(type);
+                                // let type = elt.textContent;
+                          
                                 console.log(elt);
                                 let extendedEL = `<div class="d-flex mt-4 mb-2">
                                     <div class="me-4"> test </div>
