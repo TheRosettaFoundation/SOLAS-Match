@@ -744,7 +744,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        error_log(' translatorscount: ' . $args . " by");
+      
+        error_log(var_export($args, true));
         // error_log("translators count",$post["translators_count"]);
         // error_log("args",$args);
         // $users_count_claim ;
