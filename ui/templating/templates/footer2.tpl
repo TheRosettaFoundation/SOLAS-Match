@@ -347,7 +347,7 @@
 
                                         if(form_1){
 
-                                        let children  = form_1.querySelectorAll('div') ;
+                                        let children  = form_1.querySelectorAll('.extended') ;
 
                                         console.log('###################')
                                         console.log(children)
@@ -407,7 +407,7 @@
 
                             uniqueElements.forEach(elt =>{
             
-                                let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center">
+                                let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
                                     <div class="me-4 elt"></div>
                                     <select class="form-select ms-2" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
