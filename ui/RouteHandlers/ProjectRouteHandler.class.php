@@ -747,7 +747,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $params = $request->getParsedBody();
 
 
-        error_log(' translatorscount: ' . $params . " by");
+        error_log(' translatorscount: ' . $post['translators_count'] . " by");
         error_log(var_export($params, true));
         // error_log("translators count",$post["translators_count"]);
         // error_log("args",$args);
