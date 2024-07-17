@@ -381,47 +381,38 @@
 
                             console.log('######################');
                             console.log(taskSelected) ;
-                            const uniqueElements = Object.keys(taskSelected);
+                            uniqueElements = Object.keys(taskSelected);
                             console.log(uniqueElements);
                             console.log('######################')
                        
-                            
-                            //  uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
-                            // acc[curr] = (acc[curr] || 0) + 1;
-                            // return acc;
-                            // }, {}));
-
-
-                            uniqueElements.forEach(elt =>{
-
-                                console.log(elt)
-            
-                                // let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
-                                //     <div class="me-4 elt"></div>
-                                //     <select class="form-select ms-2" aria-label="Default select example">
-                                //     <option selected> Select Restrictions</option>
-                                //         <option value="0">Native matching </option>
-                                //         <option value="2">Target language matching</option>
-                                //         <option value="3">Country and target language matching</option>
-                                //     </select>
-  
-                                // </div>`;
-
-                                // let extendedHtml = document.createRange().createContextualFragment(extendedEL);
-                                // let taskelt = extendedHtml.querySelector('.elt') ;
-                                // taskelt.textContent = elt ;
-                                // form_1.appendChild(extendedHtml);
-                              
-                            })
-
-                             
-
-                           
 
 
 
+                        })
 
-                        } )
+
+
+                        uniqueElements.forEach(elt =>{
+
+                        console.log(elt)
+
+                        let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
+                            <div class="me-4 elt"></div>
+                            <select class="form-select ms-2" aria-label="Default select example">
+                            <option selected> Select Restrictions</option>
+                                <option value="0">Native matching </option>
+                                <option value="2">Target language matching</option>
+                                <option value="3">Country and target language matching</option>
+                            </select>
+
+                        </div>`;
+
+                        let extendedHtml = document.createRange().createContextualFragment(extendedEL);
+                        let taskelt = extendedHtml.querySelector('.elt') ;
+                        taskelt.textContent = elt ;
+                        form_1.appendChild(extendedHtml);
+
+                        })
 
                         })
                         })
