@@ -25,7 +25,7 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
-        '/project/get_users_count/{task_id}/[/]',
+        '/project/{task_id}/get_users_count[/]',
         '\SolasMatch\UI\RouteHandlers\UserRouteHandler:get_users_count')
         ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_COMMUNITY')
         ->setName('get_users_count');
