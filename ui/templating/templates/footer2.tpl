@@ -315,6 +315,9 @@
 
                         let taskSelected = {};
 
+                        let tobefetched = {}
+
+
                         const myModalEl = document.getElementById('exampleModalToggle')
            
                         let form_1  = myModalEl.querySelector('form') ;
@@ -411,9 +414,7 @@
 
                         })
 
-
-                        let tobefetched = {}
-
+                
                         if(uniqueElements.length>0){
 
 
@@ -435,14 +436,8 @@
 
                         }
 
-                        
-
-                      
-
-
 
                         uniqueElements.forEach(elt =>{
-
 
                         let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                             <div class="me-4 elt"></div>
@@ -458,6 +453,7 @@
                         let extendedHtml = document.createRange().createContextualFragment(extendedEL);
                         let taskelt = extendedHtml.querySelector('.elt') ;
                         taskelt.textContent = elt ;
+                        taskelt.classList.add =tobefetched[elt] ;
                         form_1.appendChild(extendedHtml);
 
                         })
