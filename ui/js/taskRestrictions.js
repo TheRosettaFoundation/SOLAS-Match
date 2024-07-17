@@ -63,12 +63,12 @@ async function getUsersCount(task_id) {
     }
 }
 
-async function getUrl(task_id) {
-    let getC = await getUsersCount(task_id);
-    console.log(getC);
-}
+
+
+async function display(){
 
 restrictionsB.forEach((elt) => {
+
     elt.addEventListener("click", (e) => {
         const clickedElement = e.target;
         const parent =
@@ -116,7 +116,7 @@ restrictionsB.forEach((elt) => {
             console.log(countFetch);
         }
 
-        let call = getUsersCount(countFetch[0]);
+        let call = await getUsersCount(countFetch[0]);
 
         console.log(call);
 
@@ -143,3 +143,9 @@ restrictionsB.forEach((elt) => {
         });
     });
 });
+
+}
+
+
+await display();
+
