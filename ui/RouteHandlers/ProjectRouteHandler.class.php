@@ -720,14 +720,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         // print_r($post["translators_count"]);
+        $users_count_claim ;
         
         if(isset($post['task_id'])){
 
             $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
-            $payload = json_encode(['result'=> $users_count_claim]);
-            print_r($payload);
-            $response->getBody()->write($payload);
-            return $response ->withHeader('Content-Type','application/json') ;
+            // $payload = json_encode(['result'=> $users_count_claim]);
+            // print_r($payload);
+            // $response->getBody()->write($payload);
+            // return $response ->withHeader('Content-Type','application/json') ;
 
         }
         
