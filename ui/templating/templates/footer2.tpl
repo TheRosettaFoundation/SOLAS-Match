@@ -313,6 +313,8 @@
 
                         let uniqueElements=[] ;
 
+                        const taskSelected = {};
+
                         const myModalEl = document.getElementById('exampleModalToggle')
            
                         let form_1  = myModalEl.querySelector('form') ;
@@ -341,7 +343,7 @@
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
                                 // can be improve save everything under one node with a specific class
-                                        uniqueElements = [];
+                                        taskSelected = {}
 
                                         if(form_1){
 
@@ -375,7 +377,7 @@
                             const checkedCheckboxes = parent.querySelectorAll('input[type="checkbox"]:checked');
 
                             console.log(checkedCheckboxes);
-                            const taskSelected = {};
+                            
                         
                             checkedCheckboxes.forEach(checkbox => { 
                             const taskType = checkbox.getAttribute('data-task-type'); 
@@ -399,12 +401,7 @@
 
 
                             uniqueElements.forEach(elt =>{
-                               
-
-                                // let type = elt.textContent;
-                                console.log('#############')
-                                console.log(elt);
-                                console.log('################');
+            
                                 let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center">
                                     <div class="me-4 elt"></div>
                                     <select class="form-select ms-2" aria-label="Default select example">
