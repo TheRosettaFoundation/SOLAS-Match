@@ -6,6 +6,10 @@ let tobefetched = {};
 
 let countFetch = [];
 
+const sesskey = document.querySelector('input[name="sesskey"]').value;
+
+console.log(sesskey);
+
 const myModalEl = document.getElementById("exampleModalToggle");
 
 let form_1 = myModalEl.querySelector("form");
