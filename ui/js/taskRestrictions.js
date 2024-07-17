@@ -65,6 +65,7 @@ async function getUsersCount(task_id) {
 
         // If you just want to log a success message:
         console.log("Request successful");
+        return data;
     } catch (error) {
         console.error(error);
     }
