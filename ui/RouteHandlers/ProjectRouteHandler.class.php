@@ -743,21 +743,22 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-        // print_r($post["translators_count"]);
+        error_log($post["translators_count"]);
+        error_log($args);
         // $users_count_claim ;
         // $users_count_claim = $taskDao->count_users_who_can_claim(9586);
         
-        // if(isset($post['translators_count'])){
+        if(isset($post['translators_count'])){
 
-        //     $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
+            $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
            
-        //     $results = json_encode(['tasks'=> $users_count_claim]);
+            $results = json_encode(['tasks'=> $users_count_claim]);
 
-        //     $response->getBody()->write($results);
+            $response->getBody()->write($results);
             
-        //     return $response ->withHeader('Content-Type','application/json') ;
+            return $response ->withHeader('Content-Type','application/json') ;
 
-        // }
+        }
         
       
 
