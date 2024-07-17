@@ -360,6 +360,24 @@
 
 
 
+
+                        async function getUsersCount(task_id) {
+                                    let url = `/project/${task_id}/view`;
+                                    const key = { sesskey };
+                                    try {
+                                        const response = await fetch(url, {
+                                            method: "POST",
+                                            body: new URLSearchParams(key),
+                                        });
+
+                                        if (!response.ok) {
+                                            throw new Error("error");
+                                        }
+                                    } catch (error) {
+                                        console.error(error);
+                                    }
+                        }
+
                         restrictionsB.forEach(elt=>{
 
                         elt.addEventListener("click" , e=>{
@@ -368,7 +386,6 @@
                             const clickedElement = event.target ;
                             const parent = clickedElement.parentElement.parentElement.nextElementSibling;
           
-
                             const checkedCheckboxes = parent.querySelectorAll('input[type="checkbox"]:checked');
 
                             checkedCheckboxes.forEach(checkbox => { 
@@ -387,11 +404,32 @@
                             uniqueElements = Object.keys(taskSelected);
                             console.log(uniqueElements);
                             console.log('######################')
+
+                            
+
                        
+                            // Feching from the DB 
+                            console.log('FECTED FROM DB')
+
 
 
 
                         })
+
+
+                        let tobefetched = {}
+
+                        for (const key in taskSelected) [
+
+                            let selected = taskSelected[key];
+                            let count = taskSelected[0]
+                            if(!tobefetched[key])[
+                                tobefetched[key] = count
+                            ]
+                        ]
+
+                        console.log('to be fetched');
+                        console.log(tobefetched)
 
 
 
