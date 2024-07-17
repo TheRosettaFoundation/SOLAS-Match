@@ -69,12 +69,11 @@ restrictionsB.forEach((elt) => {
             const taskType = checkbox.getAttribute("data-task-type");
             const taskName = type_texts[taskType];
             let value = checkbox.value;
-            if (taskName) {
-                if (taskSelected[taskName]) {
-                    taskSelected[taskName] = [value];
-                } else {
-                    taskSelected[taskName].push(value);
-                }
+
+            if (taskSelected[taskName]) {
+                taskSelected[taskName] = [value];
+            } else {
+                taskSelected[taskName].push(value);
             }
 
             console.log("######################");
