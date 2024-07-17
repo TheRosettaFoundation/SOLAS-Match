@@ -1,9 +1,6 @@
 let uniqueElements = [];
-
 let taskSelected = {};
-
 let tobefetched = {};
-
 let countFetch = [];
 
 const sesskey = document.querySelector('input[name="sesskey"]').value;
@@ -58,14 +55,6 @@ async function getUsersCount(task_id) {
         if (!response.ok) {
             throw new Error("error");
         }
-
-        // If you expect a JSON response:
-        const data = await response.json();
-        console.log("Users count:", data.count); // Assuming your response JSON has a 'count' property
-
-        // If you just want to log a success message:
-        console.log("Request successful");
-        return data;
     } catch (error) {
         console.error(error);
     }
