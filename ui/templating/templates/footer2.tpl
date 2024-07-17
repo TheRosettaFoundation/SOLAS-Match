@@ -337,7 +337,7 @@
 
                                 myModalEl.addEventListener('hide.bs.modal', event => {
 
-                                // can be improve save everything under one node with a specific class
+                                 
                                         taskSelected = {};
                                         uniqueElements = [];
 
@@ -398,9 +398,9 @@
                         uniqueElements.forEach(elt =>{
 
 
-                        let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
+                        let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                             <div class="me-4 elt"></div>
-                            <select class="form-select ms-2" aria-label="Default select example">
+                            <select class="form-select ms-2 w-50" aria-label="Default select example">
                             <option selected> Select Restrictions</option>
                                 <option value="0">Native matching </option>
                                 <option value="2">Target language matching</option>

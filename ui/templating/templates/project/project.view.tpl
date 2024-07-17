@@ -580,18 +580,13 @@
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Set Tasks sRestrictions </h1>
+                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body py-4">
-
-                        <div class="error_task d-none text-danger mb-4"> You need to first select a task!</div>
                         <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 
-
-                           
-                        
                             <input type="hidden" name="translators_count" value="{$task_id}" />
 
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -610,9 +605,8 @@
                     </div>
                   </div>
 
-                  <button class="btn btn-primary restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"> Set Restrictions</button>
-
-                    
+                  <button class="btn btn-primary restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+ 
                     </div>
                     {* endofModal *}
                     </div>                             
