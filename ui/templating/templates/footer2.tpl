@@ -416,9 +416,10 @@
                                 </div>`;
 
                                 let extendedHtml = document.createRange().createContextualFragment(extendedEL);
-                                form_1.appendChild(extendedHtml);
                                 let taskelt = extendedHtml.querySelector('.elt') ;
                                 taskelt.textContent = elt ;
+                                form_1.appendChild(extendedHtml);
+                              
                             })
 
                              
