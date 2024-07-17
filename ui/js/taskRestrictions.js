@@ -72,7 +72,7 @@ async function getUsersCount(task_id) {
 }
 
 restrictionsB.forEach((elt) => {
-    elt.addEventListener("click", (e) => {
+    elt.addEventListener("click", async (e) => {
         const clickedElement = e.target;
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
@@ -119,7 +119,7 @@ restrictionsB.forEach((elt) => {
             console.log(countFetch);
         }
 
-        let call = getUsersCount(countFetch[0]);
+        let call = await getUsersCount(countFetch[0]);
 
         console.log(call);
 
