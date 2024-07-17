@@ -414,20 +414,29 @@
 
                         let tobefetched = {}
 
-                        for (const key in taskSelected) [
+                        if(uniqueElements.length>0){
 
-                         console.log(key);
-                         console.log(taskSelected[key]);
 
-                            // let selected = taskSelected[key];
-                            // let count = taskSelected[0]
-                            // if(!tobefetched[key])[
-                            //     tobefetched[key] = count
-                            // ]
-                        ]
+                        for (const key in taskSelected) {
+
+                            console.log(key);
+                            console.log(taskSelected[key]);
+
+                            let selected = taskSelected[key];
+                            let count = taskSelected[0]
+                            if(!tobefetched[key]){
+                                tobefetched[key] = count
+                            }
+                        }
 
                         console.log('to be fetched');
                         console.log(tobefetched)
+
+                        }
+
+                        
+
+                      
 
 
 
