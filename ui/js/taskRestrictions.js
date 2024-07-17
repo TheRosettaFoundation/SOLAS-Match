@@ -100,11 +100,11 @@ restrictionsB.forEach((elt) => {
                     tobefetched[key] = count;
                 }
             }
-        }
 
-        countFetch = Object.values(tobefetched);
-        console.log("countFetch");
-        console.log(countFetch);
+            countFetch = Object.values(tobefetched);
+            console.log("countFetch");
+            console.log(countFetch);
+        }
 
         uniqueElements.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
