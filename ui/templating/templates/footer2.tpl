@@ -395,7 +395,7 @@
                             const taskType = checkbox.getAttribute('data-task-type'); 
                             const taskName = type_texts[taskType] ;
                             let value  = checkbox.value ;
-                            if(!taskSelected[taskName]){
+                            if(taskName&&!taskSelected[taskName]){
                                 taskSelected[taskName] = [value]
                             }
                             else{
@@ -431,9 +431,6 @@
                             }
                         }
 
-                        console.log('to be fetched');
-                        console.log(tobefetched)
-
                         }
 
 
@@ -452,11 +449,7 @@
 
                         let extendedHtml = document.createRange().createContextualFragment(extendedEL);
                         let taskelt = extendedHtml.querySelector('.elt') ;
-                        taskelt.textContent = elt ;
-                        console.log("adding class")
-                        console.log(elt)
-                        console.log(tobefetched)
-                        console.log(tobefetched[elt])
+                        taskelt.textContent = elt ;                      
                         let taskId = tobefetched[elt];
                         taskelt.setAttribute("id",taskId) ;
                         form_1.appendChild(extendedHtml);
