@@ -457,7 +457,8 @@
                         console.log(elt)
                         console.log(tobefetched)
                         console.log(tobefetched[elt])
-
+                        let taskId = tobefetched[elt];
+                        taskelt.classList.add(taskId) ;
                         form_1.appendChild(extendedHtml);
 
                         })
