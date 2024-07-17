@@ -345,7 +345,7 @@
 
                                         if(form_1){
 
-                                        let children  = form_1.querySelectorAll('.task') ;
+                                        let children  = form_1.querySelectorAll('div') ;
 
                                         children.forEach(elt =>{
                                             form_1.removeChild(elt) ;
@@ -392,7 +392,6 @@
 
                             console.log(taskSelected) ;
                             const uniqueElements = Object.keys(taskSelected);
-                            console.log(uniqueElements) ;
                             
                             //  uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
                             // acc[curr] = (acc[curr] || 0) + 1;
@@ -407,7 +406,7 @@
                                 console.log('#############')
                                 console.log(elt);
                                 console.log('################');
-                                let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center task">
+                                let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center">
                                     <div class="me-4 elt"></div>
                                     <select class="form-select ms-2" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
@@ -426,7 +425,7 @@
                             })
 
                              
-}
+
                            
 
 
