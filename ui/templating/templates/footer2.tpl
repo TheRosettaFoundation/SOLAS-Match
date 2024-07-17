@@ -349,6 +349,11 @@
 
                                         let children  = form_1.querySelectorAll('div') ;
 
+                                        console.log('###################')
+                                        console.log(children)
+                                        console.log('###################')
+
+
                                         children.forEach(elt =>{
                                             form_1.removeChild(elt) ;
                                         })
