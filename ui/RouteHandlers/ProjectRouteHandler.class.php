@@ -726,7 +726,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if(isset($post['translators_count'])){
 
             $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
-            $payload = json_encode(['result'=> $users_count_claim]);
+            $payload = json_encode($users_count_claim);
             print_r($payload);
             $response->getBody()->write($payload);
             return $response ->withHeader('Content-Type','application/json') ;
