@@ -380,7 +380,6 @@
                             checkedCheckboxes.forEach(checkbox => { 
                             const taskType = checkbox.getAttribute('data-task-type'); 
                             const taskName = type_texts[taskType] ;
-                            arraySelected.push(taskName);
                             let value  = checkbox.value ;
                             if(!taskSelected[taskName]){
                                 taskSelected[taskName] = [value]
