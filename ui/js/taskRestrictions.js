@@ -70,10 +70,12 @@ restrictionsB.forEach((elt) => {
             const taskName = type_texts[taskType];
             let value = checkbox.value;
 
-            if (taskSelected[taskName]) {
-                taskSelected[taskName] = [value];
-            } else {
-                taskSelected[taskName].push(value);
+            if (taskName) {
+                if (!taskSelected[taskName]) {
+                    taskSelected[taskName] = [value];
+                } else {
+                    taskSelected[taskName].push(value);
+                }
             }
 
             console.log("######################");
