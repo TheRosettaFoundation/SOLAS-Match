@@ -458,7 +458,7 @@
                         console.log(tobefetched)
                         console.log(tobefetched[elt])
                         let taskId = tobefetched[elt];
-                        taskelt.classList.add(taskId) ;
+                        taskelt.setAttribute("id",taskId) ;
                         form_1.appendChild(extendedHtml);
 
                         })
