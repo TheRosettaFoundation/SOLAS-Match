@@ -416,8 +416,8 @@
 
                         for (const key in taskSelected) [
 
-                         console.log(key)
-                         console.log(taskSelected[key])
+                         console.log(key);
+                         console.log(taskSelected[key]);
 
                             // let selected = taskSelected[key];
                             // let count = taskSelected[0]
