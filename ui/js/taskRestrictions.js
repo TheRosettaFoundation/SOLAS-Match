@@ -59,6 +59,11 @@ async function getUsersCount(task_id) {
     }
 }
 
+async function getUrl(task_id) {
+    let getC = await getUsersCount(task_id);
+    console.log(getC);
+}
+
 restrictionsB.forEach((elt) => {
     elt.addEventListener("click", (e) => {
         const clickedElement = e.target;
@@ -106,6 +111,10 @@ restrictionsB.forEach((elt) => {
             console.log("countFetch");
             console.log(countFetch);
         }
+
+        let call = getUsersCount(countFetch[0]);
+
+        console.log(call);
 
         uniqueElements.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
