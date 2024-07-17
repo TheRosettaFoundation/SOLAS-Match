@@ -49,7 +49,11 @@ async function getUsersCount(task_id) {
     try {
         const response = await fetch(url, {
             method: "POST",
-            body: new URLSearchParams(taskIds),
+            headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(taskIds),
         });
 
         if (!response.ok) {
