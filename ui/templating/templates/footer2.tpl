@@ -395,11 +395,8 @@
 
 
                             uniqueElements.forEach(elt =>{
-                                let taskelt = document.createElement('div')
-                                taskelt.textContent = elt;
-                                let taskType = `<span>${elt}</span>`
-                                
-                                
+                               
+
                                 // let type = elt.textContent;
                                 console.log('#############')
                                 console.log(elt);
