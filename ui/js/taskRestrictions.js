@@ -92,14 +92,15 @@ restrictionsB.forEach((elt) => {
 
                 let selected = taskSelected[key];
                 let count = selected[0];
-                let allCount = [...count];
 
                 if (!tobefetched[key]) {
                     tobefetched[key] = count;
                 }
-                console.log(allCount);
             }
         }
+
+        let countFetch = Object.values(tobefetched);
+        console.log(countFetch);
 
         uniqueElements.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
