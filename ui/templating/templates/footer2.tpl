@@ -453,7 +453,11 @@
                         let extendedHtml = document.createRange().createContextualFragment(extendedEL);
                         let taskelt = extendedHtml.querySelector('.elt') ;
                         taskelt.textContent = elt ;
-                        taskelt.classList.add =tobefetched[elt] ;
+                        console.log("adding class")
+                        console.log(elt)
+                        console.log(tobefetched)
+                        console.log(tobefetched[elt])
+
                         form_1.appendChild(extendedHtml);
 
                         })
