@@ -123,7 +123,7 @@ restrictionsB.forEach((elt) => {
                
                 <select class="form-select ms-2 w-75" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
-                    <option value="0"> No restriction <span>, Matching CMs : #</span>
+                    <option value="0"> </br>No restriction <span>, Matching CMs : #</span> </br>
                 <span>, Successful CMs : #</span> </option>
                     <option value="2">Matching Native Language <span> , Matching CMs : #</span>
                 <span>, Successful CMs : #</span></option>
