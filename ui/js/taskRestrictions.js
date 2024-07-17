@@ -58,6 +58,13 @@ async function getUsersCount(task_id) {
         if (!response.ok) {
             throw new Error("error");
         }
+
+        // If you expect a JSON response:
+        const data = await response.json();
+        console.log("Users count:", data.count); // Assuming your response JSON has a 'count' property
+
+        // If you just want to log a success message:
+        console.log("Request successful");
     } catch (error) {
         console.error(error);
     }
