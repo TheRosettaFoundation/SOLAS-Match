@@ -325,9 +325,9 @@
 
                                 myModalEl.addEventListener('shown.bs.modal', event => {
 
-                                    console.log(uniqueElements);
+                             
 
-                                    if(uniqueElements.length==0){
+                                    if(Object.keys(taskSelected).length === 0){
 
                                     console.log('please select one or more task')
 
