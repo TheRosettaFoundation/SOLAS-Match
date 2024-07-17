@@ -402,7 +402,7 @@
                                 console.log('#############')
                                 console.log(elt);
                                 console.log('################')
-                                let extendedEL = `<div class="d-flex mt-4 mb-2">
+                                let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center">
                                     <div class="me-4"> ${elt} </div>
                                     <select class="form-select ms-2" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
@@ -411,7 +411,7 @@
                                         <option value="3">Country and target language matching</option>
                                     </select>
   
-                                </div>`
+                                </div>`;
 
                                 let extendedHtml = document.createRange().createContextualFragment(extendedEL);
                                 form_1.appendChild(extendedHtml);
