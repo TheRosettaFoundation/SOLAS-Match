@@ -344,6 +344,8 @@
 
                                         let children  = form_1.querySelectorAll('.extended') ;
 
+                                        console.log(children)
+
                                         children.forEach(elt =>{
                                             form_1.removeChild(elt) ;
                                         })
@@ -394,7 +396,6 @@
 
                         uniqueElements.forEach(elt =>{
 
-                        console.log(elt)
 
                         let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
                             <div class="me-4 elt"></div>
