@@ -747,14 +747,17 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $params = $request->getParsedBody();
 
 
+        error_log(' translatorscount: ' . $post['translators_count'] . " by post");
+
         error_log(' translatorscount: ' . $params['translators_count'] . " by");
-        error_log(var_export($post, true));
+
+        // error_log(var_export($post, true));
         // error_log("translators count",$post["translators_count"]);
         // error_log("args",$args);
         // $users_count_claim ;
         // $users_count_claim = $taskDao->count_users_who_can_claim(9586);
         
-        if($params['translators_count']){
+        if(isset($params['translators_count'])){
 
             $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
            
