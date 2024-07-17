@@ -118,7 +118,7 @@ restrictionsB.forEach((elt) => {
             console.log(countFetch);
         }
 
-        getUsersCount(countFetch[0]);
+        let call = getUsersCount(countFetch[0]);
 
         console.log(call);
 
