@@ -103,6 +103,7 @@ restrictionsB.forEach((elt) => {
         }
 
         countFetch = Object.values(tobefetched);
+        console.log("countFetch");
         console.log(countFetch);
 
         uniqueElements.forEach((elt) => {
