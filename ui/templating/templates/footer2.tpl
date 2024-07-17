@@ -393,6 +393,8 @@
 
 
                             uniqueElements.forEach(elt =>{
+
+                                console.log(elt)
             
                                 let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center extended">
                                     <div class="me-4 elt"></div>
