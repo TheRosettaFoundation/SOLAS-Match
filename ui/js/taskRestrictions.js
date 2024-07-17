@@ -47,19 +47,17 @@ async function getUsersCount(task_id) {
     let url = `/project/${task_id}/get_users_count`;
 
     const taskIds = { sesskey, translators_count: task_id };
+
     try {
         const response = await fetch(url, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(taskIds),
+            body: new URLSearchParams(taskIds),
         });
 
         if (!response.ok) {
             throw new Error("error");
         }
+        console.log(error);
         return response;
     } catch (error) {
         console.error(error);
