@@ -416,11 +416,14 @@
 
                         for (const key in taskSelected) [
 
-                            let selected = taskSelected[key];
-                            let count = taskSelected[0]
-                            if(!tobefetched[key])[
-                                tobefetched[key] = count
-                            ]
+                         console.log(key)
+                         console.log(taskSelected[key])
+
+                            // let selected = taskSelected[key];
+                            // let count = taskSelected[0]
+                            // if(!tobefetched[key])[
+                            //     tobefetched[key] = count
+                            // ]
                         ]
 
                         console.log('to be fetched');
