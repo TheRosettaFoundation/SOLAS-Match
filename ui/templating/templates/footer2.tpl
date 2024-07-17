@@ -405,7 +405,7 @@
                                 console.log(elt);
                                 console.log('################');
                                 let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center">
-                                    <div class="me-4">test</div>
+                                    <div class="me-4 elt"></div>
                                     <select class="form-select ms-2" aria-label="Default select example">
                                     <option selected> Select Restrictions</option>
                                         <option value="0">Native matching </option>
@@ -417,6 +417,8 @@
 
                                 let extendedHtml = document.createRange().createContextualFragment(extendedEL);
                                 form_1.appendChild(extendedHtml);
+                                let taskelt = extendedHtml.querySelector('.elt') ;
+                                taskelt.textContent = elt ;
                             })
 
                              
