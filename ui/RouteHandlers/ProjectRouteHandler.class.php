@@ -766,8 +766,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             // error_log(' translatorscount: ' . $users_count_claim . " by");
 
-            error_log($errorMessage . print_r($users_count_claim, true));
-            
+            error_log('testing the return array' . print_r($users_count_claim, true));
+
             $results = json_encode($users_count_claim);
 
             $response->getBody()->write($results);
