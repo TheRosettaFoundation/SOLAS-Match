@@ -4,11 +4,11 @@ let taskSelected = {};
 
 let tobefetched = {};
 
+const myModalEl = document.getElementById("exampleModalToggle");
+
 let form_1 = myModalEl.querySelector("form");
 
 let restrictionsB = document.querySelectorAll(".restrictions");
-
-const myModalEl = document.getElementById("exampleModalToggle");
 
 let error = `<div class="text-danger fw-bold extended"> Please select one or more task </div>`;
 
