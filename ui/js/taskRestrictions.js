@@ -4,6 +4,8 @@ let taskSelected = {};
 
 let tobefetched = {};
 
+let countFetch = [];
+
 const myModalEl = document.getElementById("exampleModalToggle");
 
 let form_1 = myModalEl.querySelector("form");
@@ -26,6 +28,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     // Clear state
     taskSelected = {};
     uniqueElements = [];
+    countFetch = [];
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -99,7 +102,7 @@ restrictionsB.forEach((elt) => {
             }
         }
 
-        let countFetch = Object.values(tobefetched);
+        countFetch = Object.values(tobefetched);
         console.log(countFetch);
 
         uniqueElements.forEach((elt) => {
