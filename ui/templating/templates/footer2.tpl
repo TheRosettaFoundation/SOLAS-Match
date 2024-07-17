@@ -325,13 +325,8 @@
 
                                 myModalEl.addEventListener('shown.bs.modal', event => {
 
-                             
-
+         
                                     if(Object.keys(taskSelected).length === 0){
-
-                                    console.log('please select one or more task')
-
-                                    console.log(errorHtml)
 
                                     form_1.appendChild(document.createRange().createContextualFragment(error)) ;
 
@@ -349,11 +344,6 @@
 
                                         let children  = form_1.querySelectorAll('.extended') ;
 
-                                        console.log('###################')
-                                        console.log(children)
-                                        console.log('###################')
-
-
                                         children.forEach(elt =>{
                                             form_1.removeChild(elt) ;
                                         })
@@ -361,29 +351,23 @@
 
                                         }
 
-
                                     })
 
                         let restrictionsB = document.querySelectorAll(".restrictions");
-
-                        console.log(restrictionsB);
 
 
 
                         restrictionsB.forEach(elt=>{
 
                         elt.addEventListener("click" , e=>{
-                            console.log('clicked on this one') ;
+
 
                             const clickedElement = event.target ;
                             const parent = clickedElement.parentElement.parentElement.nextElementSibling;
-                            console.log(parent);
+          
 
                             const checkedCheckboxes = parent.querySelectorAll('input[type="checkbox"]:checked');
 
-                            console.log(checkedCheckboxes);
-                            
-                        
                             checkedCheckboxes.forEach(checkbox => { 
                             const taskType = checkbox.getAttribute('data-task-type'); 
                             const taskName = type_texts[taskType] ;
@@ -395,9 +379,12 @@
                                 taskSelected[taskName].push(value) ;
                             }
 
-
+                            console.log('######################');
                             console.log(taskSelected) ;
                             const uniqueElements = Object.keys(taskSelected);
+                            console.log(uniqueElements);
+                            console.log('######################')
+                       
                             
                             //  uniqueElements = Object.keys(arraySelected.reduce((acc, curr) => {
                             // acc[curr] = (acc[curr] || 0) + 1;
