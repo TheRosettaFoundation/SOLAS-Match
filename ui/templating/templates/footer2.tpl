@@ -319,7 +319,7 @@
            
                         let form_1  = myModalEl.querySelector('form') ;
 
-                        let error = `<div class="text-danger fw-bold"> Please select one or more task </div>`
+                        let error = `<div class="text-danger fw-bold extended"> Please select one or more task </div>`
                         
                         let errorHtml = document.createRange().createContextualFragment(error);
 
