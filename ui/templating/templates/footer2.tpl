@@ -313,7 +313,7 @@
 
                         let uniqueElements=[] ;
 
-                        const taskSelected = {};
+                        let taskSelected = {};
 
                         const myModalEl = document.getElementById('exampleModalToggle')
            
