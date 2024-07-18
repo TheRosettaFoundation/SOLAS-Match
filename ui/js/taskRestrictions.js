@@ -204,6 +204,10 @@ restrictionsB.forEach((elt) => {
                 console.log(elt);
                 const matching = e.target.value; // Get the first selected option
                 console.log(matching);
+                if (matching == "no") {
+                    taskToRestrict = [];
+                }
+
                 let tasksToupdate = taskSelected[elt];
                 taskToRestrict = [...tasksToupdate];
                 console.log(tasksToupdate);
