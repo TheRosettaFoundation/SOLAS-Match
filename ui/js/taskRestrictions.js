@@ -169,8 +169,8 @@ restrictionsB.forEach((elt) => {
             let taskId = tobefetched[elt];
             selectNative.setAttribute("id", taskId);
 
-            let NoMatchinRestriction = selectNative.querySelector(".noMCM");
-            let NoSuccRestriction = selectNative.querySelector(".noSCM");
+            let NoMatchinRestriction = extendedHtml.querySelector(".noMCM");
+            let NoSuccRestriction = extendedHtml.querySelector(".noSCM");
 
             console.log(NoMatchinRestriction);
 
