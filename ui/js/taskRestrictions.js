@@ -150,12 +150,12 @@ restrictionsB.forEach((elt) => {
                
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
-                    <option value="0"> </br>No restriction <span>, Matching CMs : #</span> </br>
-                <span>, Successful CMs : #</span> </option>
-                    <option value="2">Matching Native Language <span> , Matching CMs : #</span>
-                <span>, Successful CMs : #</span></option>
-                    <option value="3">Matching Native Language and Locale/Country <span>, Matching CMs : #</span>
-                <span>, Successful CMs : #</span></option>
+                    <option value="0"> </br>No restriction <span class="noMCM">, Matching CMs : #</span> </br>
+                <span class="noSCM">, Successful CMs : #</span> </option>
+                    <option value="2">Matching Native Language <span class="mlCM"> , Matching CMs : #</span>
+                <span class="slCM">, Successful CMs : #</span></option>
+                    <option value="3">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : #</span>
+                <span class="sCM">, Successful CMs : #</span></option>
                 </select>
 
                 </div>`;
@@ -168,6 +168,15 @@ restrictionsB.forEach((elt) => {
             taskelt.textContent = elt;
             let taskId = tobefetched[elt];
             selectNative.setAttribute("id", taskId);
+
+            let NoMatchinRestriction = selectNative.querySelector(".noMCM");
+            let NoSuccRestriction = selectNative.querySelector(".noSCM");
+
+            NoMatchinRestriction.textContent =
+                nativeMatching[taskId].native_matching_0;
+            NoSuccRestriction.textContent =
+                nativeMatching[taskId].native_matching_1;
+
             form_1.appendChild(extendedHtml);
         });
     });
