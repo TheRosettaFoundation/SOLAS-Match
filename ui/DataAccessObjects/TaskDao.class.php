@@ -653,9 +653,10 @@ error_log("createTaskDirectly: $args");
 
     public function updateRequiredTaskNativeMatching($task_id, $native_matching)
     {
-        LibAPI\PDOWrapper::call('updateRequiredTaskNativeMatching',
+        $result = LibAPI\PDOWrapper::call('updateRequiredTaskNativeMatching',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($native_matching));
+        return $result;
     }
 
     public function getRequiredTaskQualificationLevel($task_id)
