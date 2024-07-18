@@ -225,7 +225,7 @@ restrictionsB.forEach((elt) => {
                     let status = updatedTask.querySelector("span:first-child");
                     let newNative =
                         updatedTask.querySelector("span:nth-child(2)");
-                    console.log(status.textContent);
+                    console.log(newNative);
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         console.log("this is working ....");
