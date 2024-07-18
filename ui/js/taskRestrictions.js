@@ -223,6 +223,7 @@ restrictionsB.forEach((elt) => {
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     console.log(updatedTask);
+                    console.log(updatedTask.textContent);
                 });
             });
 
