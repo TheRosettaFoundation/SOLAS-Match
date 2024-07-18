@@ -43,21 +43,20 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     }
 });
 
-async function getUsersCount(urls) {
-    // let url = `/project/${task_id}/view`;
+async function getUsersCount(taskIds) {
+    let url = `/project/9586/view`;
 
-    // const taskIds = {
-    //     sesskey,
-    //     translators_count: task_id,
-    //     project_id: 9884,
-    //     task_ud: 33305,
-    // };
-
-    const promises = urls.map(async (url) => {
+    const promises = taskIds.map(async (id) => {
+        let reqBody = {
+            sesskey,
+            translators_count: id,
+            project_id: 9586,
+            task_ud: 33305,
+        };
         try {
             const response = await fetch(url, {
                 method: "POST",
-                body: new URLSearchParams(taskIds),
+                body: new URLSearchParams(reqBody),
             });
 
             if (!response.ok) {
