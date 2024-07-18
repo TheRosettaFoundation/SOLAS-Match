@@ -8711,14 +8711,20 @@ BEGIN
         users_task_native_matching.task_id,
         SUM(users_task_native_matching.native_matching_0) AS native_matching_0,
         SUM(users_task_native_matching.native_matching_1) AS native_matching_1,
-        SUM(users_task_native_matching.native_matching_2) AS native_matching_2
+        SUM(users_task_native_matching.native_matching_2) AS native_matching_2,
+        SUM(users_task_native_matching.native_matching_active_0) AS native_matching_active_0,
+        SUM(users_task_native_matching.native_matching_active_1) AS native_matching_active_1,
+        SUM(users_task_native_matching.native_matching_active_2) AS native_matching_active_2
     FROM (
         SELECT
             u.id AS user_id,
             t.id AS task_id,
             1 AS native_matching_0,
             IF(t.`language_id-target`=u.language_id, 1, 0) AS native_matching_1,
-            IF(t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id, 1, 0) AS native_matching_2
+            IF(t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id, 1, 0) AS native_matching_2,
+            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR), 1, 0) AS native_matching_active_0,
+            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id, 1, 0) AS native_matching_active_1,
+            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id, 1, 0) AS native_matching_active_2
         FROM Tasks                            t
         JOIN Projects                         p ON t.project_id=p.id
         JOIN task_type_details              ttd ON t.`task-type_id`=ttd.type_enum
@@ -8729,14 +8735,13 @@ BEGIN
             (t.`language_id-source`=uqp.language_id_source OR ttd.source_and_target=0) AND
             tq.required_qualification_level<=uqp.qualification_level
         JOIN Users                            u ON uqp.user_id=u.id
-        LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND t.id=tis.task_id
+        LEFT JOIN TaskClaims                 tc ON u.id=tc.user_id
         LEFT JOIN SpecialTranslators         st ON u.id=st.user_id
              JOIN Admins                      a ON uqp.user_id=a.user_id
         LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
         WHERE
             t.id=taskID AND
-            tis.user_id IS NULL AND
             (st.user_id IS NULL OR st.type=0) AND
             (a.roles=@LINGUIST OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
