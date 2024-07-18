@@ -3,6 +3,8 @@ let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
 
+let taskToRestrict = [];
+
 const sesskey = document.querySelector('input[name="sesskey"]').value;
 
 console.log(sesskey);
@@ -203,7 +205,9 @@ restrictionsB.forEach((elt) => {
                 const matching = e.target.value; // Get the first selected option
                 console.log(matching);
                 let tasksToupdate = taskSelected[elt];
+                taskToRestrict = [...tasksToupdate];
                 console.log(tasksToupdate);
+                console.log(taskToRestrict);
 
                 let updateCall = await updateTaskRestrictions(
                     tasksToupdate,
