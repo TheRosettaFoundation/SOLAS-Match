@@ -223,7 +223,28 @@ restrictionsB.forEach((elt) => {
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     let status = updatedTask.querySelector("span:first-child");
+                    let newNative =
+                        updatedTask.querySelector("span:nth-child(2)");
                     console.log(status.textContent);
+                    if (status == "Unclaimed" || status == "Waiting") {
+                        switch (matching) {
+                            case "0":
+                                newNative.textContent = "No Restriction";
+                                break;
+
+                            case "1":
+                                newNative.textContent =
+                                    "Matching Native Language";
+                                break;
+
+                            case "2":
+                                newNative.textContent =
+                                    "Matching Native Language and Country";
+                                break;
+                        }
+
+                        newNative.textContent = matching;
+                    }
                 });
             });
 
