@@ -172,10 +172,12 @@ restrictionsB.forEach((elt) => {
             let NoMatchinRestriction = selectNative.querySelector(".noMCM");
             let NoSuccRestriction = selectNative.querySelector(".noSCM");
 
-            NoMatchinRestriction.textContent =
-                nativeMatching[taskId].native_matching_0;
-            NoSuccRestriction.textContent =
-                nativeMatching[taskId].native_matching_1;
+            console.log(NoMatchinRestriction);
+
+            // NoMatchinRestriction.textContent =
+            //     nativeMatching[taskId].native_matching_0;
+            // NoSuccRestriction.textContent =
+            //     nativeMatching[taskId].native_matching_1;
 
             form_1.appendChild(extendedHtml);
         });
