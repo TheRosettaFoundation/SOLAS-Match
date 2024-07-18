@@ -211,13 +211,15 @@ restrictionsB.forEach((elt) => {
 
                 let tasksToupdate = taskSelected[elt];
                 taskToRestrict = [...tasksToupdate];
-                console.log(tasksToupdate);
+
                 console.log(taskToRestrict);
 
                 let updateCall = await updateTaskRestrictions(
                     tasksToupdate,
                     matching
                 );
+
+                console.log(updateCall);
             });
 
             taskelt.textContent = elt;
