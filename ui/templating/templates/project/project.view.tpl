@@ -647,6 +647,7 @@
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             {Localisation::getTranslation('common_waiting')} <br>
+                                             <div class="text-secondary">
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                               <span> No Restriction</span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
@@ -654,9 +655,19 @@
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span> Matching Native Language and Country</span> 
                                             {/if}
+                                            </div>
 
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             {Localisation::getTranslation('common_unclaimed')} <br>
+                                            <div class="text-secondary">
+                                            {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
+                                                <span> No Restriction</span>
+                                                {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
+                                                <span> Matching Native Languagae</span> 
+                                                {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
+                                                <span> Matching Native Language and Country</span> 
+                                              {/if}
+                                            </div>
                                             <span>{$get_payment_status_for_project[$task_id]['native_matching']} </span>
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
