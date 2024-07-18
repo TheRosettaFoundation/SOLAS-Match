@@ -172,7 +172,7 @@ restrictionsB.forEach((elt) => {
             let NoMatchinRestriction = extendedHtml.querySelector(".noMCM");
             let NoSuccRestriction = extendedHtml.querySelector(".noSCM");
 
-            console.log(NoMatchinRestriction);
+            console.log(extendedHtml);
 
             // NoMatchinRestriction.textContent =
             //     nativeMatching[taskId].native_matching_0;
