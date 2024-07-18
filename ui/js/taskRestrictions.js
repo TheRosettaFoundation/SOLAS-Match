@@ -229,16 +229,16 @@ restrictionsB.forEach((elt) => {
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         console.log("this is working ....");
                         switch (matching) {
-                            case "0":
+                            case 0:
                                 newNative.textContent = "No Restriction";
                                 break;
 
-                            case "1":
+                            case 1:
                                 newNative.textContent =
                                     "Matching Native Language";
                                 break;
 
-                            case "2":
+                            case 2:
                                 newNative.textContent =
                                     "Matching Native Language and Country";
                                 break;
