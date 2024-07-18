@@ -149,13 +149,10 @@ restrictionsB.forEach((elt) => {
                 <div class="me-4 elt"></div>
                
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
-                <option selected> Select Restrictions</option> 
-                    <option value="0"> </br>No restriction <span class="nocm">, Matching CMs : #</span> </br>
-                <span class="nosm">, Successful CMs : #</span> </option>
-                    <option value="2">Matching Native Language <span class="mlCM"> , Matching CMs : #</span>
-                <span class="slCM">, Successful CMs : #</span></option>
-                    <option value="3">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : #</span>
-                <span class="sCM">, Successful CMs : #</span></option>
+                    <option selected> Select Restrictions</option> 
+                    <option value="0">No restriction  </option>
+                    <option value="2">Matching Native Language</option>
+                    <option value="3">Matching Native Language and Locale/Country</option>
                 </select>
 
                 </div>`;
@@ -172,6 +169,8 @@ restrictionsB.forEach((elt) => {
             taskelt.textContent = elt;
             let taskId = tobefetched[elt];
             selectNative.setAttribute("id", taskId);
+
+            console.log(selectNative);
 
             console.log(extendedHtml);
             console.log(NoSuccRestriction);
