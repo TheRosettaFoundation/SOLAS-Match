@@ -591,14 +591,11 @@
 
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             <span id="taskCount"></span>
-
-                           
                         
                         </form>
 
                         </div>
-                            
-                          
+   
                         </div>
                   
                       </div>
@@ -609,7 +606,7 @@
  
                     </div>
                     {* endofModal *}
-                    </div>                             
+                </div>                             
                   
                     <div class="bg-body p-2 border-secondary mt-4">
          

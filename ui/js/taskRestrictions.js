@@ -142,7 +142,8 @@ restrictionsB.forEach((elt) => {
                 elt[0].native_matching_active_2;
         });
 
-        console.log(nativeMatching);
+        console.log("taskSelected");
+        console.log(taskSelected);
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
