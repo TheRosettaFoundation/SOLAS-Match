@@ -223,8 +223,7 @@ restrictionsB.forEach((elt) => {
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     let status = updatedTask.querySelector("span:first-child");
-                    let newNative =
-                        updatedTask.querySelector("span:nth-child(2)");
+                    let newNative = updatedTask.querySelector("div");
                     console.log(updatedTask);
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
