@@ -148,7 +148,7 @@ restrictionsB.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt"></div>
                
-                <select class="form-select ms-2 w-75" aria-label="Default select example">
+                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
                     <option value="0"> </br>No restriction <span>, Matching CMs : #</span> </br>
                 <span>, Successful CMs : #</span> </option>
@@ -164,9 +164,10 @@ restrictionsB.forEach((elt) => {
                 .createRange()
                 .createContextualFragment(extendedEL);
             let taskelt = extendedHtml.querySelector(".elt");
+            let selectNative = extendedHtml.querySelector(".selectedId");
             taskelt.textContent = elt;
             let taskId = tobefetched[elt];
-            taskelt.setAttribute("id", taskId);
+            selectNative.setAttribute("id", taskId);
             form_1.appendChild(extendedHtml);
         });
     });
