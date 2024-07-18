@@ -123,7 +123,17 @@ restrictionsB.forEach((elt) => {
 
         let call = await getUsersCount(countFetch);
 
-        console.log(call);
+        let nativeMatching = {};
+
+        call.forEach((elt) => {
+            if (!nativeMatching["id"]) {
+                nativeMatching["id"] = {};
+            } else {
+                nativeMatching.id.native_matching_0 = elt[0].native_matching_0;
+            }
+        });
+
+        console.log(nativeMatching);
 
         uniqueElements.forEach((elt) => {
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
