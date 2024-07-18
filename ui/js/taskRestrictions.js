@@ -171,9 +171,8 @@ restrictionsB.forEach((elt) => {
             let selectNative = extendedHtml.querySelector(".selectedId");
             selectNative.addEventListener("change", (e) => {
                 console.log(elt);
-                const selectedOption = e.target.parentElement; // Get the first selected option
-                const previousSibling = selectedOption.previousElementSibling;
-                console.log(previousSibling);
+                const selectedOption = e.target.value; // Get the first selected option
+                console.log(selectedOption);
             });
 
             taskelt.textContent = elt;
