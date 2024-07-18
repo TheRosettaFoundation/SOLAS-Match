@@ -201,9 +201,8 @@ restrictionsB.forEach((elt) => {
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
             selectNative.addEventListener("change", async (e) => {
-                console.log(elt);
                 const matching = e.target.value; // Get the first selected option
-                console.log(matching);
+
                 if (matching == "no") {
                     taskToRestrict = [];
                     return taskToRestrict;
