@@ -228,8 +228,6 @@ restrictionsB.forEach((elt) => {
 
             taskelt.textContent = elt;
 
-            selectNative.setAttribute("id", taskId);
-
             form_1.appendChild(extendedHtml);
         });
     });
