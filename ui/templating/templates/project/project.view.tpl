@@ -587,10 +587,10 @@
                         <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 
-                            <input type="hidden" name="translators_count" value="{$task_id}" />
+                       
 
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                            <span id="taskCount"></span>
+                           
                         
                         </form>
 
