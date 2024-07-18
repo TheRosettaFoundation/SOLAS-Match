@@ -643,14 +643,14 @@
                                         </a>
                                         <br/>
                                     </td>
-                                    <td>
+                                    <td id={$task->getId()}>
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             {Localisation::getTranslation('common_waiting')} <br>
-                                            {$get_payment_status_for_project[$task_id]['native_matching']}
+                                            <span> {$get_payment_status_for_project[$task_id]['native_matching']}<span>
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             {Localisation::getTranslation('common_unclaimed')} <br>
-                                            {$get_payment_status_for_project[$task_id]['native_matching']}
+                                            <span>{$get_payment_status_for_project[$task_id]['native_matching']} </span>
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
