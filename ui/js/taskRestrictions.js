@@ -206,7 +206,7 @@ restrictionsB.forEach((elt) => {
                 console.log(matching);
                 if (matching == "no") {
                     taskToRestrict = [];
-                    return [];
+                    return taskToRestrict;
                 }
 
                 let tasksToupdate = taskSelected[elt];
