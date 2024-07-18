@@ -145,14 +145,19 @@ restrictionsB.forEach((elt) => {
         console.log(nativeMatching);
 
         uniqueElements.forEach((elt) => {
+            let taskId = tobefetched[elt];
+
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt"></div>
                
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
-                    <option selected> Select Restrictions</option> 
-                    <option value="0">No restriction  </option>
-                    <option value="2">Matching Native Language</option>
-                    <option value="3">Matching Native Language and Locale/Country</option>
+                <option selected> Select Restrictions</option> 
+                    <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
+                <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
+                    <option value="2">Matching Native Language <span class="mlCM"> , Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
+                <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
+                    <option value="3">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
+                <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2} </span></option>
                 </select>
 
                 </div>`;
@@ -163,22 +168,9 @@ restrictionsB.forEach((elt) => {
 
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
-            let NoMatchinRestriction = extendedHtml.querySelector(".nocm");
-            let NoSuccRestriction = extendedHtml.querySelector(".nosm");
-
             taskelt.textContent = elt;
-            let taskId = tobefetched[elt];
+
             selectNative.setAttribute("id", taskId);
-
-            console.log(selectNative);
-
-            console.log(extendedHtml);
-            console.log(NoSuccRestriction);
-
-            // NoMatchinRestriction.textContent =
-            //     nativeMatching[taskId].native_matching_0;
-            // NoSuccRestriction.textContent =
-            //     nativeMatching[taskId].native_matching_1;
 
             form_1.appendChild(extendedHtml);
         });
