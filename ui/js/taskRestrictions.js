@@ -163,6 +163,7 @@ restrictionsB.forEach((elt) => {
             let extendedHtml = document
                 .createRange()
                 .createContextualFragment(extendedEL);
+
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
             taskelt.textContent = elt;
@@ -173,6 +174,7 @@ restrictionsB.forEach((elt) => {
             let NoSuccRestriction = extendedHtml.querySelector(".noSCM");
 
             console.log(extendedHtml);
+            console.log(NoSuccRestriction);
 
             // NoMatchinRestriction.textContent =
             //     nativeMatching[taskId].native_matching_0;
