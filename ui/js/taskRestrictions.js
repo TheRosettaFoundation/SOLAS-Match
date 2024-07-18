@@ -170,7 +170,7 @@ restrictionsB.forEach((elt) => {
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
             selectNative.addEventListener("change", (e) => {
-                const selectedOption = e.target.selectedOptions[0]; // Get the first selected option
+                const selectedOption = e.target.parentElement; // Get the first selected option
                 const previousSibling = selectedOption.previousElementSibling;
                 console.log(previousSibling);
             });
