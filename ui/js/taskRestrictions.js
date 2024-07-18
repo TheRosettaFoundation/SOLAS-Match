@@ -123,11 +123,13 @@ restrictionsB.forEach((elt) => {
 
         let call = await getUsersCount(countFetch);
 
+        console.log(call);
+
         let nativeMatching = {};
 
         call.forEach((elt) => {
-            if (!nativeMatching["id"]) {
-                nativeMatching["id"] = {};
+            if (!nativeMatching[elt["task_id"]]) {
+                nativeMatching[elt["task_id"]] = {};
             } else {
                 nativeMatching.id.native_matching_0 = elt[0].native_matching_0;
             }
