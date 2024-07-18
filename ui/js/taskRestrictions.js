@@ -150,7 +150,7 @@ restrictionsB.forEach((elt) => {
 
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break"></div>
-               
+        
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
                     <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
@@ -169,6 +169,12 @@ restrictionsB.forEach((elt) => {
 
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
+            selectNative.addEventListener("change", (e) => {
+                const selectedOption = e.target.selectedOptions[0]; // Get the first selected option
+                const previousSibling = selectedOption.previousElementSibling;
+                console.log(previousSibling);
+            });
+
             taskelt.textContent = elt;
 
             selectNative.setAttribute("id", taskId);
