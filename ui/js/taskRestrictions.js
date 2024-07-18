@@ -183,7 +183,7 @@ restrictionsB.forEach((elt) => {
                 <div class="me-4 elt text-break textwrap"></div>
         
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
-                <option selected> Select Restrictions</option> 
+                <option selected value="no"> Select Restrictions</option> 
                     <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
                 <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
                     <option value="1">Matching Native Language <span class="mlCM"> , Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
