@@ -741,7 +741,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         if(isset($params['matching'])){
 
-            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id']),$params['matching']);
+            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id'],$params['matching']);
             $results = json_encode($updateMatching);
             $response->getBody()->write($results);            
             return $response ->withHeader('Content-Type','application/json') ;
