@@ -132,6 +132,14 @@ restrictionsB.forEach((elt) => {
             let taskId = elt[0].task_id;
             nativeMatching[taskId] = {};
             nativeMatching[taskId].native_matching_0 = elt[0].native_matching_0;
+            nativeMatching[taskId].native_matching_1 = elt[0].native_matching_1;
+            nativeMatching[taskId].native_matching_2 = elt[0].native_matching_2;
+            nativeMatching[taskId].native_matching_active_0 =
+                elt[0].native_matching_active_0;
+            nativeMatching[taskId].native_matching_active_1 =
+                elt[0].native_matching_active_1;
+            nativeMatching[taskId].native_matching_active_2 =
+                elt[0].native_matching_active_2;
         });
 
         console.log(nativeMatching);
