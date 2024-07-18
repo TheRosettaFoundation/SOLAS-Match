@@ -128,10 +128,12 @@ restrictionsB.forEach((elt) => {
         let nativeMatching = {};
 
         call.forEach((elt) => {
-            if (!nativeMatching[elt["task_id"]]) {
-                nativeMatching[elt["task_id"]] = {};
+            console.log(elt[0]);
+            let taskId = elt[0].task_id;
+            if (!nativeMatching.hasOwnProperty(String(taskId))) {
+                nativeMatching[taskId] = {};
             } else {
-                nativeMatching[elt["task_id"]].native_matching_0 =
+                nativeMatching[taskId].native_matching_0 =
                     elt[0].native_matching_0;
             }
         });
