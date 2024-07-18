@@ -43,15 +43,14 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     }
 });
 
-async function updateTaskRestrictions(taskIds) {
+async function updateTaskRestrictions(taskIds, matching) {
     let url = `/project/9586/view`;
 
     const promises = taskIds.map(async (id) => {
         let reqBody = {
             sesskey,
-            translators_count: id,
-            project_id: 9586,
-            task_ud: 33305,
+            task_id: id,
+            matching: matching,
         };
         try {
             const response = await fetch(url, {
@@ -199,10 +198,17 @@ restrictionsB.forEach((elt) => {
 
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
-            selectNative.addEventListener("change", (e) => {
+            selectNative.addEventListener("change", async (e) => {
                 console.log(elt);
-                const selectedOption = e.target.value; // Get the first selected option
-                console.log(selectedOption);
+                const matching = e.target.value; // Get the first selected option
+                console.log(matching);
+                let tasksToupdate = taskSelected[elt];
+                console.log(tasksToupdate);
+
+                let updateCall = await updateTaskRestrictions(
+                    tasksToupdate,
+                    matching
+                );
             });
 
             taskelt.textContent = elt;

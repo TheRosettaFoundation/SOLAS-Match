@@ -713,23 +713,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return [$translation_level, $revision_level];
     }
 
-    public function get_users_count(Request $request, Response $response, $args)
-    {
-        $taskDao = new DAO\TaskDao();
 
-        if(isset($post['translators_count'])){
-
-            $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
-           
-            $results = json_encode(['tasks'=> $users_count_claim]);
-
-            $response->getBody()->write($results);
-            
-            return $response ->withHeader('Content-Type','application/json') ;
-
-        }
-
-    }
 
     public function projectView(Request $request, Response $response, $args)
     {
@@ -750,6 +734,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
             $results = json_encode($users_count_claim);
+            $response->getBody()->write($results);            
+            return $response ->withHeader('Content-Type','application/json') ;
+
+        }
+
+        if(isset($params['matching'])){
+
+            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id']),$params['matching']);
+            $results = json_encode($updateMatching);
             $response->getBody()->write($results);            
             return $response ->withHeader('Content-Type','application/json') ;
 
