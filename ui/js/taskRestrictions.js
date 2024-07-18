@@ -43,30 +43,35 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     }
 });
 
-async function getUsersCount(task_id) {
-    let url = `/project/${task_id}/view`;
+async function getUsersCount(urls) {
+    // let url = `/project/${task_id}/view`;
 
-    const taskIds = {
-        sesskey,
-        translators_count: task_id,
-        project_id: 9884,
-        task_ud: 33305,
-    };
+    // const taskIds = {
+    //     sesskey,
+    //     translators_count: task_id,
+    //     project_id: 9884,
+    //     task_ud: 33305,
+    // };
 
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            body: new URLSearchParams(taskIds),
-        });
+    const promises = urls.map(async (url) => {
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                body: new URLSearchParams(taskIds),
+            });
 
-        if (!response.ok) {
-            throw new Error("error");
+            if (!response.ok) {
+                throw new Error("error");
+            }
+            console.log(error);
+            return response.json();
+        } catch (error) {
+            console.error(error);
         }
-        console.log(error);
-        return response.json();
-    } catch (error) {
-        console.error(error);
-    }
+    });
+
+    const results = await Promise.all(promises);
+    return results;
 }
 
 restrictionsB.forEach((elt) => {
@@ -117,7 +122,7 @@ restrictionsB.forEach((elt) => {
             console.log(countFetch);
         }
 
-        let call = await getUsersCount(countFetch[0]);
+        let call = await getUsersCount(countFetch);
 
         console.log(call);
 
