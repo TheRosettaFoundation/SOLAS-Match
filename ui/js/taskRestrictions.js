@@ -213,12 +213,17 @@ restrictionsB.forEach((elt) => {
 
                 console.log(taskToRestrict);
 
-                let updateCall = await updateTaskRestrictions(
+                let updated = await updateTaskRestrictions(
                     tasksToupdate,
                     matching
                 );
                 console.log("##################RESPONSE###############");
-                console.log(updateCall);
+                console.log(updated);
+
+                updated.forEach((elt) => {
+                    let updatedTask = document.getElementById(elt);
+                    console.log(updateTask);
+                });
             });
 
             taskelt.textContent = elt;
