@@ -746,32 +746,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $params = $request->getParsedBody();
 
-
-        error_log(' translatorscount: ' . $post['translators_count'] . " by post");
-
-        error_log(' translatorscount: ' . $params['translators_count'] . " by");
-
-        error_log(var_export($post, true));
-        // error_log("translators count",$post["translators_count"]);
-        // error_log("args",$args);
-        // $users_count_claim ;
-        // $users_count_claim = $taskDao->count_users_who_can_claim(9586);
-        
         if(isset($params['translators_count'])){
 
-            error_log('i am inside');
-
-            $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
-
-
-            // error_log(' translatorscount: ' . $users_count_claim . " by");
-
-            error_log('testing the return array' . print_r($users_count_claim, true));
-
+            $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count'])
             $results = json_encode($users_count_claim);
-
-            $response->getBody()->write($results);
-            
+            $response->getBody()->write($results);            
             return $response ->withHeader('Content-Type','application/json') ;
 
         }
@@ -2772,7 +2751,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             }
 
             $projectDao->delete_not_accepted_user();
-            // $taskDao->update_native_matching_phase_1();
+            $taskDao->update_native_matching_phase_1();
             $taskDao->update_native_matching_phase_2();
            
 

@@ -43,6 +43,36 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     }
 });
 
+async function updateTaskRestrictions(taskIds) {
+    let url = `/project/9586/view`;
+
+    const promises = taskIds.map(async (id) => {
+        let reqBody = {
+            sesskey,
+            translators_count: id,
+            project_id: 9586,
+            task_ud: 33305,
+        };
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                body: new URLSearchParams(reqBody),
+            });
+
+            if (!response.ok) {
+                throw new Error("error");
+            }
+            console.log(error);
+            return response.json();
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    const results = await Promise.all(promises);
+    return results;
+}
+
 async function getUsersCount(taskIds) {
     let url = `/project/9586/view`;
 
@@ -155,9 +185,9 @@ restrictionsB.forEach((elt) => {
                 <option selected> Select Restrictions</option> 
                     <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
                 <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
-                    <option value="2">Matching Native Language <span class="mlCM"> , Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
+                    <option value="1">Matching Native Language <span class="mlCM"> , Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
                 <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
-                    <option value="3">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
+                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
                 <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2} </span></option>
                 </select>
 
