@@ -63,7 +63,7 @@ async function updateTaskRestrictions(taskIds, matching) {
             if (!response.ok) {
                 throw new Error("error");
             }
-            console.log(error);
+
             return response.json();
         } catch (error) {
             console.error(error);
@@ -217,7 +217,7 @@ restrictionsB.forEach((elt) => {
                     tasksToupdate,
                     matching
                 );
-
+                console.log("##################RESPONSE###############");
                 console.log(updateCall);
             });
 
