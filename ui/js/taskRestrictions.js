@@ -222,7 +222,7 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
-                    console.log(updateTask);
+                    console.log(updatedTask);
                 });
             });
 
