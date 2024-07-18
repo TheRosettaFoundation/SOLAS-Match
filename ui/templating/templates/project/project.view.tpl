@@ -651,7 +651,7 @@
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                               <span> No Restriction</span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
-                                              <span> Matching Native Languagae</span> 
+                                              <span> Matching Native Language</span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span> Matching Native Language and Country</span> 
                                             {/if}
@@ -663,7 +663,7 @@
                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                                 <span> No Restriction</span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
-                                                <span> Matching Native Languagae</span> 
+                                                <span> Matching Native Language</span> 
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                                 <span> Matching Native Language and Country</span> 
                                               {/if}
