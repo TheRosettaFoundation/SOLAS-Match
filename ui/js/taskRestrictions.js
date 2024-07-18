@@ -149,7 +149,7 @@ restrictionsB.forEach((elt) => {
             let taskId = tobefetched[elt];
 
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-                <div class="me-4 elt"></div>
+                <div class="me-4 elt text-break"></div>
                
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
