@@ -149,7 +149,7 @@ restrictionsB.forEach((elt) => {
             let taskId = tobefetched[elt];
 
             let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-                <div class="me-4 elt text-break"></div>
+                <div class="me-4 elt text-break textwrap"></div>
         
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected> Select Restrictions</option> 
@@ -170,6 +170,7 @@ restrictionsB.forEach((elt) => {
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
             selectNative.addEventListener("change", (e) => {
+                console.log(elt);
                 const selectedOption = e.target.parentElement; // Get the first selected option
                 const previousSibling = selectedOption.previousElementSibling;
                 console.log(previousSibling);
