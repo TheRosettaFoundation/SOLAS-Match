@@ -131,7 +131,8 @@ restrictionsB.forEach((elt) => {
             if (!nativeMatching[elt["task_id"]]) {
                 nativeMatching[elt["task_id"]] = {};
             } else {
-                nativeMatching.id.native_matching_0 = elt[0].native_matching_0;
+                nativeMatching[elt["task_id"]].native_matching_0 =
+                    elt[0].native_matching_0;
             }
         });
 
