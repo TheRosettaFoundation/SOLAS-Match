@@ -8656,11 +8656,12 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeLanguage`;
+DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeMatching`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN native_matching INT)
 BEGIN
     UPDATE RequiredTaskQualificationLevels  SET native_matching=native_matching WHERE task_id=taskID;
+    SELECT ROW_COUNT() AS RowsAffected;
 
 END//
 DELIMITER ;
