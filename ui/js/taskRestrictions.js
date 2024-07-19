@@ -5,7 +5,7 @@ let countFetch = [];
 
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
-const project_id = url.match(regex);
+const project_id = url.match(regex)[1];
 console.log(project_id);
 
 let taskToRestrict = [];
