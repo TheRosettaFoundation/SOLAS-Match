@@ -51,7 +51,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
 });
 
 async function updateTaskRestrictions(taskIds, matching) {
-    let url = `/project/9586/view`;
+    let url = `/project/${project_id}/view`;
 
     const promises = taskIds.map(async (id) => {
         let reqBody = {
