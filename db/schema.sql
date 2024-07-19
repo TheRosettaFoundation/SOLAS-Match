@@ -10214,6 +10214,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `update_project_description`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(4096))

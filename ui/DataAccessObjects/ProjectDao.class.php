@@ -812,11 +812,6 @@ $replace = array(
         LibAPI\PDOWrapper::call('update_project_due_date', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
     }
 
-    public function update_project_description($project_id, $description)
-    {
-        LibAPI\PDOWrapper::call('update_project_description', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($description));
-    }
-
     public function update_project_organisation($project_id, $org_id)
     {
         LibAPI\PDOWrapper::call('update_project_organisation', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
