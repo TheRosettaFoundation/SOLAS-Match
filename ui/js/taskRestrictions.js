@@ -180,6 +180,13 @@ restrictionsB.forEach((elt) => {
                     elt[0].native_matching_active_1;
                 nativeMatching[taskId].native_matching_active_2 =
                     elt[0].native_matching_active_2;
+            } else {
+                nativeMatching[taskId].native_matching_0 = 0;
+                nativeMatching[taskId].native_matching_1 = 0;
+                nativeMatching[taskId].native_matching_2 = 0;
+                nativeMatching[taskId].native_matching_active_0 = 0;
+                nativeMatching[taskId].native_matching_active_1 = 0;
+                nativeMatching[taskId].native_matching_active_2 = 0;
             }
         });
 
