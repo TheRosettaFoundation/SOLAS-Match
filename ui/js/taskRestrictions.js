@@ -163,8 +163,8 @@ restrictionsB.forEach((elt) => {
 
         let nativeMatching = {};
 
-        if (call.length > 0) {
-            call.forEach((elt) => {
+        call.forEach((elt) => {
+            if (elt.length > 0) {
                 console.log(elt[0]);
                 let taskId = elt[0].task_id;
                 nativeMatching[taskId] = {};
@@ -180,8 +180,8 @@ restrictionsB.forEach((elt) => {
                     elt[0].native_matching_active_1;
                 nativeMatching[taskId].native_matching_active_2 =
                     elt[0].native_matching_active_2;
-            });
-        }
+            }
+        });
 
         console.log("taskSelected");
         console.log(taskSelected);
