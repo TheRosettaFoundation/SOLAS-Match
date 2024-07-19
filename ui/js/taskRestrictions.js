@@ -3,6 +3,11 @@ let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
 
+const url = window.location.href;
+const regex = /project\/(\d+)\//;
+const project_id = url.match(regex);
+console.log(project_id);
+
 let taskToRestrict = [];
 
 const sesskey = document.querySelector('input[name="sesskey"]').value;
@@ -227,7 +232,6 @@ restrictionsB.forEach((elt) => {
                     console.log(updatedTask);
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
-                        console.log("this is working ....");
                         switch (matching) {
                             case "0":
                                 newNative.textContent = "No Restriction";
