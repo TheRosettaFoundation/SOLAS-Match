@@ -2511,6 +2511,7 @@ BEGIN
         lt.`en-name` AS lt_name
     FROM      Tasks                            t
     JOIN      Users                            u ON u.id=uID
+    JOIN      user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     JOIN      Languages                       ls ON t.`language_id-source`=ls.id
     JOIN      Languages                       lt ON t.`language_id-target`=lt.id
     JOIN      Countries                       ct ON t.`country_id-target`=ct.id
@@ -3560,6 +3561,7 @@ BEGIN
         t.deadline
     FROM      Tasks                            t
     JOIN      Users                            u ON u.id=uID
+    JOIN      user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     JOIN      Projects                         p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -4151,6 +4153,7 @@ BEGIN
     FROM
         Users u,
         Tasks t
+    JOIN      user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
     JOIN      Projects p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -4253,6 +4256,7 @@ BEGIN
         SELECT t.id
         FROM      Tasks    t
         JOIN      Users    u ON u.id=uID
+        JOIN      user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -4469,6 +4473,7 @@ BEGIN
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
         JOIN      Users                            u ON u.id=userID
+        JOIN      user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN      UserQualifiedPairs             uqp ON
@@ -6907,6 +6912,7 @@ BEGIN
         SELECT t.id
         FROM Tasks t
         JOIN Users                            u ON u.id=userID
+        JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
@@ -7008,6 +7014,7 @@ BEGIN
         SELECT t.id
         FROM Tasks t
         JOIN Users                            u ON u.id=userID
+        JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
@@ -7067,6 +7074,7 @@ BEGIN
         SELECT t.id
         FROM      Tasks                            t
         JOIN      Users                            u ON u.id=userID
+        JOIN      user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         JOIN      Projects                         p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -7149,6 +7157,7 @@ BEGIN
             (tq.native_matching=0 OR
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
+        JOIN user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
         JOIN Admins a ON uqp.user_id=a.user_id
         LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
         WHERE
@@ -8874,6 +8883,7 @@ BEGIN
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
+    JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -8929,6 +8939,7 @@ BEGIN
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
+    JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -9032,6 +9043,7 @@ BEGIN
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
+    JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -9086,6 +9098,7 @@ BEGIN
         (tq.native_matching=0 OR
         (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
+    JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
@@ -11053,6 +11066,7 @@ BEGIN
     JOIN Projects                         p ON pt.project_id=p.id
     JOIN Tasks                            t ON p.id=t.project_id
     JOIN Users                            u ON u.id=uID
+    JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     JOIN tasks_status_audit_trail       sat ON t.id=sat.task_id AND sat.status_id=2
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
