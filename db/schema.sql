@@ -13138,10 +13138,10 @@ BEGIN
             t.id AS task_id,
             1 AS native_matching_0,
             IF(t.`language_id-target`=u.language_id, 1, 0) AS native_matching_1,
-            IF(t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id, 1, 0) AS native_matching_2,
+            IF(t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1), 1, 0) AS native_matching_2,
             IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR), 1, 0) AS native_matching_active_0,
             IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id, 1, 0) AS native_matching_active_1,
-            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id, 1, 0) AS native_matching_active_2
+            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1), 1, 0) AS native_matching_active_2
         FROM Tasks                            t
         JOIN Projects                         p ON t.project_id=p.id
         JOIN task_type_details              ttd ON t.`task-type_id`=ttd.type_enum
@@ -13152,6 +13152,7 @@ BEGIN
             (t.`language_id-source`=uqp.language_id_source OR ttd.source_and_target=0) AND
             tq.required_qualification_level<=uqp.qualification_level
         JOIN Users                            u ON uqp.user_id=u.id
+        JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         LEFT JOIN TaskClaims                 tc ON u.id=tc.user_id
         LEFT JOIN SpecialTranslators         st ON u.id=st.user_id
              JOIN Admins                      a ON uqp.user_id=a.user_id
