@@ -13065,15 +13065,15 @@ CREATE TABLE IF NOT EXISTS `enforce_native_languages` (
   FOREIGN KEY (country_id) REFERENCES Countries(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO enforce_native_languages VALUES( 1, 1897,  77, 2);
-INSERT INTO enforce_native_languages VALUES( 2,  329, 196, 1);
+INSERT INTO enforce_native_languages VALUES( 2,  329, 196, 2);
 INSERT INTO enforce_native_languages VALUES( 3, 5716, 210, 2);
 INSERT INTO enforce_native_languages VALUES( 4, 5385, 184, 2);
 INSERT INTO enforce_native_languages VALUES( 5, 6429, 234, 2);
 INSERT INTO enforce_native_languages VALUES( 6, 1786, 236, 2);
 INSERT INTO enforce_native_languages VALUES( 7, 1786, 237, 2);
-INSERT INTO enforce_native_languages VALUES( 8, 1507,   1, 1);
-INSERT INTO enforce_native_languages VALUES( 9, 5716, 254, 1);
-INSERT INTO enforce_native_languages VALUES(10, 5716,  50, 1);
+INSERT INTO enforce_native_languages VALUES( 8, 1507,   1, 2);
+INSERT INTO enforce_native_languages VALUES( 9, 5716, 254, 2);
+INSERT INTO enforce_native_languages VALUES(10, 5716,  50, 2);
 INSERT INTO enforce_native_languages VALUES(11, 5093, 179, 2);
 INSERT INTO enforce_native_languages VALUES(12, 5093,  33, 2);
 
