@@ -13149,10 +13149,10 @@ BEGIN
             t.id AS task_id,
             1 AS native_matching_0,
             IF(t.`language_id-target`=u.language_id, 1, 0) AS native_matching_1,
-            IF(t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1), 1, 0) AS native_matching_2,
+            IF(t.`language_id-target`=u.language_id AND (t.`country_id-target`=MAX(ucv.variant_id) OR t.`country_id-target`=MAX(ucv.variant_id0) OR t.`country_id-target`=MAX(ucv.variant_id1)), 1, 0) AS native_matching_2,
             IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR), 1, 0) AS native_matching_active_0,
             IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id, 1, 0) AS native_matching_active_1,
-            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1), 1, 0) AS native_matching_active_2
+            IF(MIN(tc.task_id) IS NOT NULL AND MAX(`claimed-time`)>DATE_SUB(NOW(), INTERVAL 1 YEAR) AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=MAX(ucv.variant_id) OR t.`country_id-target`=MAX(ucv.variant_id0) OR t.`country_id-target`=MAX(ucv.variant_id1)), 1, 0) AS native_matching_active_2
         FROM Tasks                            t
         JOIN Projects                         p ON t.project_id=p.id
         JOIN task_type_details              ttd ON t.`task-type_id`=ttd.type_enum
