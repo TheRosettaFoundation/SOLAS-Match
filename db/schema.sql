@@ -13117,6 +13117,17 @@ BEGIN
 END//
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `user_country_id_to_variant` (
+  country_id  INT UNSIGNED,
+  variant_id  INT UNSIGNED NOT NULL,
+  variant_id0 INT UNSIGNED NOT NULL DEFAULT 0,
+  variant_id1 INT UNSIGNED NOT NULL DEFAULT 0,
+  UNIQUE KEY (country_id),
+  KEY (variant_id),
+  KEY (variant_id0),
+  KEY (variant_id1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP PROCEDURE IF EXISTS `count_users_who_can_claim`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `count_users_who_can_claim`(IN taskID BIGINT UNSIGNED)
