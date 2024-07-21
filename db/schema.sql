@@ -2532,7 +2532,7 @@ BEGIN
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
         (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (@isSiteAdmin=1 OR @site_linguist=1 OR FIND_IN_SET(p.organisation_id, @NGO_list)>0) AND
         (
@@ -3575,7 +3575,7 @@ BEGIN
         t.published=1 AND
         ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (
             r.restricted_task_id IS NULL OR
@@ -4174,7 +4174,7 @@ BEGIN
         NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0 AND
         (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
@@ -4275,7 +4275,7 @@ BEGIN
         AND NOT FIND_IN_SET(p.organisation_id, @excluded_orgs)>0
         AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
@@ -4486,7 +4486,7 @@ BEGIN
             r.restricted_task_id IS NULL AND
             (tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
             ))
         GROUP BY tv.task_id
@@ -6922,7 +6922,7 @@ BEGIN
             t.id=taskID AND
             (tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
             ))
     ) THEN
@@ -7024,7 +7024,7 @@ BEGIN
             t.id=taskID AND
             (tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
             ))
     ) THEN
@@ -7089,7 +7089,7 @@ BEGIN
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
             ((uqp.user_id IS NOT NULL AND (tq.required_qualification_level<=uqp.qualification_level AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))))) AND
             (
                 r.restricted_task_id IS NULL OR
@@ -7155,7 +7155,7 @@ BEGIN
             tq.required_qualification_level<=uqp.qualification_level
         JOIN Users  u ON uqp.user_id=u.id AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
         JOIN user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
         JOIN Admins a ON uqp.user_id=a.user_id
@@ -8881,7 +8881,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -8937,7 +8937,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -9041,7 +9041,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -9096,7 +9096,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -11085,7 +11085,7 @@ BEGIN
         bl.task_id IS NULL AND
         (tq.required_qualification_level<=uqp.qualification_level AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND t.`country_id-target`=u.country_id) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))) AND
         (
             r.restricted_task_id IS NULL OR
