@@ -122,10 +122,12 @@ restrictionsB.forEach((elt) => {
             console.log(selectedCol);
             if (selectedCol) {
                 let statusTag = selectedCol.querySelector("a:first-child");
-                let statusValidText = statusTag.textContent.trim();
-                console.log(statusValidText);
-                if (statusValidText == "Complete") {
-                    return;
+                if (statusTag) {
+                    let statusValidText = statusTag.textContent.trim();
+                    console.log(statusValidText);
+                    if (statusValidText == "Complete") {
+                        return;
+                    }
                 }
             }
 
