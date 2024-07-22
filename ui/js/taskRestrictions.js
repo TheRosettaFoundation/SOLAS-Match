@@ -189,7 +189,7 @@ restrictionsB.forEach((elt) => {
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
         
-                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
+                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
                 <option selected value="no"> Select Restrictions</option> 
                     <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : 0</span> </br>
                 <span class="nosm">, Successful CMs : 0 </span> </option>
