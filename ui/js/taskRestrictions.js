@@ -215,7 +215,7 @@ restrictionsB.forEach((elt) => {
                 <span class="nosm">, Successful CMs : 0 </span> </option>
                     <option value="1">Matching Native Language <span class="mlCM"> , Matching CMs : 0</span>
                 <span class="slCM">, Successful CMs : 0</span></option>
-                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : 0/span>
+                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : 0 </span>
                 <span class="sCM">, Successful CMs : 0</span></option>
                 </select>
 
