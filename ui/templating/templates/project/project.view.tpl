@@ -580,7 +580,7 @@
                     </div>
                   </div>
 
-                  <button class="btn btn-primary text-white restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
  
                     </div>
                     {* endofModal *}
