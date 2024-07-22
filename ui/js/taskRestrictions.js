@@ -117,7 +117,7 @@ restrictionsB.forEach((elt) => {
 
             const taskName = type_texts[taskType];
             let targetValue = checkbox.value;
-            console.log(val);
+            console.log(targetValue);
 
             const selectedRow = document.querySelector(
                 `input[value="${targetValue}"]`
