@@ -118,9 +118,11 @@ restrictionsB.forEach((elt) => {
             const ivalid = checkbox.querySelector("a");
             console.log(checkbox.value);
             // console.log(`isValid ${ivalid}`);
-            let selectId = document.getElementById(checkbox.value);
-            let testValid = selectId.parent;
-            console.log(testValid);
+            let selectId = document.querySelector(
+                input[(value = checkbox.value)]
+            );
+
+            console.log(selectId);
 
             const taskName = type_texts[taskType];
             let value = checkbox.value;
