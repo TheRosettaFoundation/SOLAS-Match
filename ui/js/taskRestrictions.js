@@ -111,13 +111,10 @@ restrictionsB.forEach((elt) => {
         const checkedCheckboxes = parent.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
-        const validCheck = parent.querySelectorAll(
-            'input[type="checkbox"]:checked'
-        );
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
-            console.log(taskType);
+
             const taskName = type_texts[taskType];
             let value = checkbox.value;
 
@@ -169,9 +166,6 @@ restrictionsB.forEach((elt) => {
                 nativeMatching = 0;
             }
         });
-
-        console.log("taskSelected");
-        console.log(taskSelected);
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
