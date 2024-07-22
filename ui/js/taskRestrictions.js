@@ -119,8 +119,7 @@ restrictionsB.forEach((elt) => {
             console.log(checkbox.value);
             // console.log(`isValid ${ivalid}`);
             let selectId = document.getElementById(checkbox.value);
-            let testValid =
-                selectId.parent.nextElementSibling.nextElementSibling;
+            let testValid = selectId.parent;
             console.log(testValid);
 
             const taskName = type_texts[taskType];
