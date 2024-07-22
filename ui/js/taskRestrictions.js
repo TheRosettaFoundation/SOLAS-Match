@@ -117,14 +117,16 @@ restrictionsB.forEach((elt) => {
 
             const taskName = type_texts[taskType];
             let value = checkbox.value;
+            entElement.nextElementSibling.nextElementSibling;
 
-            const selectedRow = document.querySelector(
-                `input[type="checkbox"][value="${value}"]`
-            ).parentElement.nextElementSibling.nextElementSibling;
+            let selectedCol = document.getElementById(value);
+            console.log(selectedCol);
 
-            let idR = document.getElementById(value);
-            console.log(selectedRow);
-            console.log(idR);
+            let validStatus = selectedCol.querySelector("a:first-child");
+            let textStatus = validStatus.textContent.trim();
+            console.log(validStatus);
+            console.log(textStatus);
+
             if (taskName) {
                 if (!taskSelected[taskName]) {
                     taskSelected[taskName] = [value];
