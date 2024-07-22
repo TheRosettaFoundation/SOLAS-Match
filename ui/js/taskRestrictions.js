@@ -118,7 +118,7 @@ restrictionsB.forEach((elt) => {
             const ivalid = checkbox.querySelector("a");
             console.log(checkbox.value);
             // console.log(`isValid ${ivalid}`);
-            let selectId = documemt.getElementById(checkbox.value);
+            let selectId = document.getElementById(checkbox.value);
             let testValid =
                 selectId.parent.nextElementSibling.nextElementSibling;
             console.log(testValid);
