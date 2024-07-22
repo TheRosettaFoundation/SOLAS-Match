@@ -114,7 +114,7 @@ restrictionsB.forEach((elt) => {
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
-            let status = clickedElement.parentElement;
+            let status = clickedElement.nextElementSibling;
             console.log(status);
 
             const taskName = type_texts[taskType];
