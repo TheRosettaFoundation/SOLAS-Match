@@ -117,7 +117,6 @@ restrictionsB.forEach((elt) => {
 
             const taskName = type_texts[taskType];
             let value = checkbox.value;
-            entElement.nextElementSibling.nextElementSibling;
 
             let selectedCol = document.getElementById(value);
             console.log(selectedCol);
