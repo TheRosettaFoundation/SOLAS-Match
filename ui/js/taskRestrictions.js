@@ -181,12 +181,7 @@ restrictionsB.forEach((elt) => {
                 nativeMatching[taskId].native_matching_active_2 =
                     elt[0].native_matching_active_2;
             } else {
-                nativeMatching[taskId].native_matching_0 = 0;
-                nativeMatching[taskId].native_matching_1 = 0;
-                nativeMatching[taskId].native_matching_2 = 0;
-                nativeMatching[taskId].native_matching_active_0 = 0;
-                nativeMatching[taskId].native_matching_active_1 = 0;
-                nativeMatching[taskId].native_matching_active_2 = 0;
+                nativeMatching = 0;
             }
         });
 
@@ -196,7 +191,8 @@ restrictionsB.forEach((elt) => {
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
 
-            let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
+            let extendedEL = nativeMatching[taskId]
+                ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
         
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
@@ -209,8 +205,21 @@ restrictionsB.forEach((elt) => {
                 <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
-                </div>`;
+                </div>`
+                : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
+                <div class="me-4 elt text-break textwrap"></div>
+        
+                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
+                <option selected value="no"> Select Restrictions</option> 
+                    <option value="0"> </br>No restriction  <span class="nocm">, Matching CMs : 0</span> </br>
+                <span class="nosm">, Successful CMs : 0 </span> </option>
+                    <option value="1">Matching Native Language <span class="mlCM"> , Matching CMs : 0</span>
+                <span class="slCM">, Successful CMs : 0</span></option>
+                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : 0/span>
+                <span class="sCM">, Successful CMs : 0</span></option>
+                </select>
 
+                </div>`;
             let extendedHtml = document
                 .createRange()
                 .createContextualFragment(extendedEL);
