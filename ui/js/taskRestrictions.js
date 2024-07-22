@@ -91,7 +91,7 @@ async function getUsersCount(taskIds) {
             if (!response.ok) {
                 throw new Error("error");
             }
-            console.log(error);
+
             return response.json();
         } catch (error) {
             console.error(error);
