@@ -122,8 +122,9 @@ restrictionsB.forEach((elt) => {
                 `input[type="checkbox"][value="${value}"]`
             ).parentElement.nextElementSibling.nextElementSibling;
 
+            let idR = document.getElementById(value);
             console.log(selectedRow);
-
+            console.log(idR);
             if (taskName) {
                 if (!taskSelected[taskName]) {
                     taskSelected[taskName] = [value];
