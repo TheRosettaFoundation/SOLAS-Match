@@ -235,6 +235,9 @@ restrictionsB.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     console.log(updatedTask);
                     let status = updatedTask.querySelector("span:first-child");
+                    if (!status) {
+                        return;
+                    }
                     let newNative = updatedTask.querySelector("div");
                     console.log(updatedTask);
                     let statusText = status.textContent.trim();
