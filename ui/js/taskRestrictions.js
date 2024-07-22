@@ -51,7 +51,6 @@ async function updateTaskRestrictions(taskIds, matching) {
     const promises = taskIds.map(async (id) => {
         let reqBody = {
             sesskey,
-            task_id: id,
             matching: matching,
         };
         try {
@@ -75,14 +74,12 @@ async function updateTaskRestrictions(taskIds, matching) {
 }
 
 async function getUsersCount(taskIds) {
-    let url = `/project/9586/view`;
+    let url = `/project/${project_id}/view`;
 
     const promises = taskIds.map(async (id) => {
         let reqBody = {
             sesskey,
             translators_count: id,
-            project_id: 9586,
-            task_ud: 33305,
         };
         try {
             const response = await fetch(url, {
@@ -127,11 +124,7 @@ restrictionsB.forEach((elt) => {
                 }
             }
 
-            // console.log("######################");
-            // console.log(taskSelected);
             uniqueElements = Object.keys(taskSelected);
-            // console.log(uniqueElements);
-            // console.log("######################");
         });
 
         if (uniqueElements.length > 0) {
@@ -148,7 +141,7 @@ restrictionsB.forEach((elt) => {
             }
 
             countFetch = Object.values(tobefetched);
-            // console.log("countFetch");
+
             console.log(countFetch);
         }
 
@@ -179,9 +172,6 @@ restrictionsB.forEach((elt) => {
                 nativeMatching = 0;
             }
         });
-
-        console.log("taskSelected");
-        console.log(taskSelected);
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
