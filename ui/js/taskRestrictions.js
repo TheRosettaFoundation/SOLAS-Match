@@ -117,6 +117,7 @@ restrictionsB.forEach((elt) => {
 
             const taskName = type_texts[taskType];
             let value = checkbox.value;
+            console.log(value);
 
             if (taskName) {
                 if (!taskSelected[taskName]) {
