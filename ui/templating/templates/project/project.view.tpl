@@ -637,7 +637,7 @@
 
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span> <br>
-                                            <div class="text-grayish fs-6 fw-bold">
+                                            <div class="text-light-sublte fs-6 fw-bold">
                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                                 <span> No Restriction</span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
