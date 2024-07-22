@@ -6,13 +6,10 @@ let countFetch = [];
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
 const project_id = url.match(regex)[1];
-console.log(project_id);
 
 let taskToRestrict = [];
 
 const sesskey = document.querySelector('input[name="sesskey"]').value;
-
-console.log(sesskey);
 
 const myModalEl = document.getElementById("exampleModalToggle");
 
@@ -41,8 +38,6 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
-
-        console.log(children);
 
         children.forEach((elt) => {
             form_1.removeChild(elt);
@@ -132,11 +127,11 @@ restrictionsB.forEach((elt) => {
                 }
             }
 
-            console.log("######################");
-            console.log(taskSelected);
+            // console.log("######################");
+            // console.log(taskSelected);
             uniqueElements = Object.keys(taskSelected);
-            console.log(uniqueElements);
-            console.log("######################");
+            // console.log(uniqueElements);
+            // console.log("######################");
         });
 
         if (uniqueElements.length > 0) {
@@ -153,7 +148,7 @@ restrictionsB.forEach((elt) => {
             }
 
             countFetch = Object.values(tobefetched);
-            console.log("countFetch");
+            // console.log("countFetch");
             console.log(countFetch);
         }
 
@@ -243,14 +238,11 @@ restrictionsB.forEach((elt) => {
                     tasksToupdate,
                     matching
                 );
-                console.log("##################RESPONSE###############");
-                console.log(updated);
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     let status = updatedTask.querySelector("span:first-child");
                     let newNative = updatedTask.querySelector("div");
-                    console.log(updatedTask);
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
