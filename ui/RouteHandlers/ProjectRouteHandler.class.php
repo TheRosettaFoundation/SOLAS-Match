@@ -730,7 +730,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $params = $request->getParsedBody();
 
-        if(isset($params['translators_count'])){
+        if(isset($params['translators_count']) && $params['sesskey']){
 
             $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
             $results = json_encode($users_count_claim);
@@ -739,10 +739,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         }
 
-        if(isset($params['matching'])){
+        if(isset($params['matching']) && $params['sesskey']){
 
             $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id'],$params['matching']);
-            error_log('updating matching' . $updateMatching  . " by ");
             $results = json_encode($updateMatching);
             $response->getBody()->write($results);            
             return $response ->withHeader('Content-Type','application/json') ;
