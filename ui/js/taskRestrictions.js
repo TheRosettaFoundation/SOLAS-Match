@@ -119,12 +119,13 @@ restrictionsB.forEach((elt) => {
             let value = checkbox.value;
 
             let selectedCol = document.getElementById(value);
-
-            let statusTag = selectedCol.querySelector("a:first-child");
-            if (statusTag) {
-                let statusValidText = statusTag.textContent.trim();
-                if (statusValidText == "Complete") {
-                    return;
+            if (selectedCol) {
+                let statusTag = selectedCol.querySelector("a:first-child");
+                if (statusTag) {
+                    let statusValidText = statusTag.textContent.trim();
+                    if (statusValidText == "Complete") {
+                        return;
+                    }
                 }
             }
 
