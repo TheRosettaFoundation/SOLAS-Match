@@ -120,7 +120,7 @@ restrictionsB.forEach((elt) => {
 
             const selectedRow = document.querySelector(
                 `input[value="${value}"]`
-            ).parentElement;
+            ).parentElement.parentElement;
 
             console.log(selectedRow);
 
