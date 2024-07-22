@@ -115,16 +115,18 @@ restrictionsB.forEach((elt) => {
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
 
-            const taskName = type_texts[taskType];
             let value = checkbox.value;
 
             let selectedCol = document.getElementById(value);
-            console.log(selectedCol);
 
             let validStatus = selectedCol.querySelector("a:first-child");
             let textStatus = validStatus.textContent.trim();
-            console.log(validStatus);
-            console.log(textStatus);
+
+            if (textStatus == "Complete") {
+                return;
+            }
+
+            const taskName = type_texts[taskType];
 
             if (taskName) {
                 if (!taskSelected[taskName]) {
