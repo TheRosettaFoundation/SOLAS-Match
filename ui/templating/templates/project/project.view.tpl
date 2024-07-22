@@ -413,28 +413,6 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="publish_native_users" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_native_users').submit();" >
-                 <span>Restrict Task to native users</spam>
-            </a>     
-            <input type="hidden" name="publish_native_users" value="" />
-            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-        </form>
-
-        <form id="publish_language_match" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-        <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_language_match').submit();" >
-             <span>Restrict Task matching language</spam>
-        </a>
-        <input type="hidden" name="publish_language_match" value="" />     
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-      </form>
-
-    <form id="publish_all" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-      <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#publish_all').submit();" >
-          Unrestrict Task to all </spam>
-      </a>
-
-      <input type="hidden" name="publish_all" value="" />
       
       {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
   </form>
@@ -558,7 +536,7 @@
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
                      <div class="mt-4">
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center flex-wrap">
                     <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
