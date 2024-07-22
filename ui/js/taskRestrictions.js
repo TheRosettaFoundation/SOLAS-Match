@@ -123,7 +123,6 @@ restrictionsB.forEach((elt) => {
             let statusTag = selectedCol.querySelector("a:first-child");
             if (statusTag) {
                 let statusValidText = statusTag.textContent.trim();
-                console.log(statusValidText);
                 if (statusValidText == "Complete") {
                     return;
                 }
