@@ -121,8 +121,12 @@ restrictionsB.forEach((elt) => {
             let selectedCol = document.getElementById(value);
             console.log(selectedCol);
 
-            let validStatus = selectedCol.querySelector("span:first-child");
-            console.log(validStatus);
+            let statusTag = selectedCol.querySelector("a:first-child");
+            let statusValidText = statusTag.textContent.trim();
+            console.log(statusValidText);
+            if (statusValidText == "Complete") {
+                return;
+            }
 
             if (taskName) {
                 if (!taskSelected[taskName]) {
