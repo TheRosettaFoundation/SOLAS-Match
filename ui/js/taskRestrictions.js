@@ -125,11 +125,7 @@ restrictionsB.forEach((elt) => {
                 }
             }
 
-            // console.log("######################");
-            // console.log(taskSelected);
             uniqueElements = Object.keys(taskSelected);
-            // console.log(uniqueElements);
-            // console.log("######################");
         });
 
         if (uniqueElements.length > 0) {
@@ -146,8 +142,6 @@ restrictionsB.forEach((elt) => {
             }
 
             countFetch = Object.values(tobefetched);
-            // console.log("countFetch");
-            console.log(countFetch);
         }
 
         let call = await getUsersCount(countFetch);
