@@ -657,10 +657,8 @@ error_log("createTaskDirectly: $args");
         $result = LibAPI\PDOWrapper::call('updateRequiredTaskNativeMatching',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($native_matching));
-        
-            print_r($result);
-
-        return $task_id;
+    
+        return $result;
         
     }
 
