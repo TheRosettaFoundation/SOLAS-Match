@@ -114,6 +114,7 @@ restrictionsB.forEach((elt) => {
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
+            console.log(taskType);
             const taskName = type_texts[taskType];
             let value = checkbox.value;
 
@@ -145,8 +146,6 @@ restrictionsB.forEach((elt) => {
         }
 
         let call = await getUsersCount(countFetch);
-
-        console.log(call);
 
         let nativeMatching = {};
 
