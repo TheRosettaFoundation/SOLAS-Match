@@ -201,7 +201,7 @@ restrictionsB.forEach((elt) => {
                 <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
                     <option value="1">Matching Native Language <span class="mlCM"> , Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
                 <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
-                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}/span>
+                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
                 <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
