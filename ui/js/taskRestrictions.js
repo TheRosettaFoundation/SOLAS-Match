@@ -114,12 +114,12 @@ restrictionsB.forEach((elt) => {
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
-            let status = clickedElement.nextElementSibling;
-            console.log(status);
 
             const taskName = type_texts[taskType];
             let value = checkbox.value;
-            // console.log(value);
+
+            const selectedRow = document.querySelector("input[value=value]");
+            console.log(selectedRow);
 
             if (taskName) {
                 if (!taskSelected[taskName]) {
