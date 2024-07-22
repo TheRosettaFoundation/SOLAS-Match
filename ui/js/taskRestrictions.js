@@ -119,7 +119,7 @@ restrictionsB.forEach((elt) => {
             let value = checkbox.value;
 
             const selectedRow = document.querySelector(
-                `input[value="${value}"]`
+                `td > input[value="${value}"]`
             ).nextElementSibling;
 
             console.log(selectedRow);
