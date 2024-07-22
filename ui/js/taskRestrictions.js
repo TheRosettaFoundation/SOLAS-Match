@@ -51,6 +51,7 @@ async function updateTaskRestrictions(taskIds, matching) {
     const promises = taskIds.map(async (id) => {
         let reqBody = {
             sesskey,
+            task_id: id,
             matching: matching,
         };
         try {
@@ -124,7 +125,11 @@ restrictionsB.forEach((elt) => {
                 }
             }
 
+            // console.log("######################");
+            // console.log(taskSelected);
             uniqueElements = Object.keys(taskSelected);
+            // console.log(uniqueElements);
+            // console.log("######################");
         });
 
         if (uniqueElements.length > 0) {
@@ -141,7 +146,7 @@ restrictionsB.forEach((elt) => {
             }
 
             countFetch = Object.values(tobefetched);
-
+            // console.log("countFetch");
             console.log(countFetch);
         }
 
@@ -172,6 +177,9 @@ restrictionsB.forEach((elt) => {
                 nativeMatching = 0;
             }
         });
+
+        console.log("taskSelected");
+        console.log(taskSelected);
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
@@ -231,8 +239,10 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
+                    console.log(updatedTask);
                     let status = updatedTask.querySelector("span:first-child");
                     let newNative = updatedTask.querySelector("div");
+                    console.log(updatedTask);
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
