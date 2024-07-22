@@ -115,6 +115,9 @@ restrictionsB.forEach((elt) => {
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
 
+            const ivalid = checkbox.querySelector("a");
+            console.log(`isValid ${ivalid}`);
+
             const taskName = type_texts[taskType];
             let value = checkbox.value;
             console.log(value);
