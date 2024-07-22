@@ -131,9 +131,6 @@ restrictionsB.forEach((elt) => {
 
         if (uniqueElements.length > 0) {
             for (const key in taskSelected) {
-                console.log(key);
-                console.log(taskSelected[key]);
-
                 let selected = taskSelected[key];
                 let count = selected[0];
 
@@ -151,7 +148,6 @@ restrictionsB.forEach((elt) => {
 
         call.forEach((elt) => {
             if (elt.length > 0) {
-                console.log(elt[0]);
                 let taskId = elt[0].task_id;
                 nativeMatching[taskId] = {};
                 nativeMatching[taskId].native_matching_0 =
