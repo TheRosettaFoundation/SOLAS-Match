@@ -123,7 +123,10 @@ restrictionsB.forEach((elt) => {
                 let statusTag = selectedCol.querySelector("a:first-child");
                 if (statusTag) {
                     let statusValidText = statusTag.textContent.trim();
-                    if (statusValidText == "Complete") {
+                    if (
+                        statusValidText == "Complete" ||
+                        statusValidText == "In Progress"
+                    ) {
                         return;
                     }
                 }
