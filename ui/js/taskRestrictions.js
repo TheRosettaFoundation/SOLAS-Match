@@ -120,7 +120,7 @@ restrictionsB.forEach((elt) => {
 
             const selectedRow = document.querySelector(
                 `input[type="checkbox"][value="${value}"]`
-            ).parentElement;
+            ).parentElement.nextElementSibling.nextElementSibling;
 
             console.log(selectedRow);
 
