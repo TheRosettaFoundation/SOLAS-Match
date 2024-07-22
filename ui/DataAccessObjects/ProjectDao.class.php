@@ -1151,7 +1151,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 }
             }
         }
-        if ($status == 'COMPLETED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
+        if ($status == 'COMPLETED' || $status == 'DELIVERED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
@@ -1171,6 +1171,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 }
                 error_log("Sync DECLINED task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}");
             }
+        }
+        if ($status == 'CANCELLED') {
+            $userDao = new UserDao();
+            $userDao->propagate_cancelled(1, $memsource_project, $task_id, 'Sync from Phrase', 1, 1);
+            error_log("Sync CANCELLED task_id: $task_id, memsource job: {$job['uid']}");
         }
     }
 

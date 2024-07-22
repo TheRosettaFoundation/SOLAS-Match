@@ -1063,7 +1063,7 @@
   </div>
   <div class="modal-body">
   <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
-  <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled. Additionally an email will be sent to any linguists working on the tasks.</p>
+  <p>Note: when you cancel a task all tasks in the same language pair/file combination will also be cancelled (unless the "Cancel only the selected task" checkbox is checked). Additionally an email will be sent to any linguists working on the tasks.</p>
   <p>Reason to cancel selected task(s):</p>
   <select name="cancel_task" id="cancel_task" class="form-select text-wrap">
     <option value="">--Select--</option>
@@ -1077,6 +1077,8 @@
   <p name="reason_text">Further details:</p>
   <br/>
   <textarea rows="4" cols="40" name="reason" id="reason" style="width:auto;"></textarea>
+  <br />
+  <input type="checkbox" name="cancel_selected_only" value="1" /> Cancel only the selected task on TWB only (not on Phrase)
   <input type="hidden" name="cancel" value="" />
   <input type="hidden" name="cancelled" value="" />
    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}

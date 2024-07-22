@@ -573,7 +573,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 }
             }
-            if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
+            if ($part['status'] == 'COMPLETED_BY_LINGUIST' || $part['status'] == 'COMPLETED') {
                 if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
@@ -602,6 +602,20 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
                 }
+            }
+            if ($part['status'] == 'CANCELLED') {
+                if (empty($part['project']['id'])) {
+                    error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: CANCELLED");
+                    continue;
+                }
+                $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                if (empty($memsource_project)) {
+                    error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: CANCELLED");
+                    continue;
+                }
+                $userDao = new DAO\UserDao();
+                $userDao->propagate_cancelled(1, $memsource_project, $task_id, 'Hook from Phrase', 1, 1);
+                error_log("JOB_STATUS_CHANGED CANCELLED in memsource task_id: $task_id, memsource job: {$part['uid']}");
             }
         }
     }
@@ -894,7 +908,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $cancelled = $post['cancelled'] ? 1 : 0;
                     $number = 0;
                     foreach ($task_ids as $id) {
-                        $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment);
+                        $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
                     }
                     error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, IDs: " . $post['cancel']);
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");

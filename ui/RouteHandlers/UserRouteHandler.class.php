@@ -122,6 +122,12 @@ class UserRouteHandler
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
+        '/invoice/{invoice_number}[/]',
+        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getInvoice')
+        ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+        ->setName('get-invoice');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/user-uploads/{cert_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
@@ -141,40 +147,10 @@ class UserRouteHandler
             ->setName('users_review');
 
         $app->map(['GET', 'POST'],
-            '/users_new[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('users_new');
-
-        $app->get(
-            '/users_tracked[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('users_tracked');
-
-        $app->map(['GET', 'POST'],
             '/add_tracking_code[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('add_tracking_code');
-
-        $app->get(
-            '/download_users_tracked[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_tracked');
-
-        $app->get(
-            '/download_users_new[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_new');
-
-        $app->get(
-            '/download_users_new_unreviewed[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
             '/{user_id}/notification/stream[/]',
@@ -2280,75 +2256,6 @@ class UserRouteHandler
         return UserRouteHandler::render('user/users_review.tpl', $response);
     }
 
-    public function users_new(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $all_users = $userDao->users_new();
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'users_new')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-            if (!empty($post['max_user_id'])) {
-                foreach ($all_users as $user_row) {
-                    if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
-                        if (empty($user_row['reviewed_text'])) $userDao->updateUserHowheard($user_row['user_id'], 1);
-                    }
-                }
-                $all_users = $userDao->users_new();
-            }
-        }
-
-        $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
-        return UserRouteHandler::render('user/users_new.tpl', $response);
-    }
-
-    public function download_users_new(Request $request, Response $response, $args)
-    {
-        $this->download_users_new_unreviewed($request, $response, $args, true);
-    }
-
-    public function download_users_new_unreviewed(Request $request, Response $response, $args, $all = false)
-    {
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_new();
-
-        $data = "\xEF\xBB\xBF" . '"Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
-
-        foreach ($all_users as $user_row) {
-            if ($all || empty($user_row['reviewed_text'])) {
-                $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
-                    $user_row['created_time'] . '","' .
-                    str_replace('"', '""', $user_row['native_language']) . '","' .
-                    $user_row['language_pairs'] . '","' .
-                    str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
-                    $user_row['certificates'] . '","' .
-                    $user_row['email'] . '"' . "\n";
-            }
-        }
-
-        header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="users_new.csv"');
-        header('Content-length: ' . strlen($data));
-        header('X-Frame-Options: ALLOWALL');
-        header('Pragma: no-cache');
-        header('Cache-control: no-cache, must-revalidate, no-transform');
-        echo $data;
-        die;
-    }
-
-    public function users_tracked(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_tracked();
-        $template_data = array_merge($template_data, array('all_users' => $all_users));
-        return UserRouteHandler::render('user/users_tracked.tpl', $response);
-    }
-
     public function add_tracking_code(Request $request, Response $response)
     {
         global $app, $template_data;
@@ -2374,34 +2281,6 @@ class UserRouteHandler
             'referers' => $referers,
         ));
         return UserRouteHandler::render('user/add_tracking_code.tpl', $response);
-    }
-
-    public function download_users_tracked(Request $request, Response $response)
-    {
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_tracked();
-
-        $data = "\xEF\xBB\xBF" . '"Tracked","Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
-
-        foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['referer']) . '","' .
-                str_replace('"', '""', $user_row['name']) . '","' .
-                $user_row['created_time'] . '","' .
-                str_replace('"', '""', $user_row['native_language']) . '","' .
-                $user_row['language_pairs'] . '","' .
-                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
-                $user_row['certificates'] . '","' .
-                $user_row['email'] . '"' . "\n";
-        }
-
-        header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="users_tracked.csv"');
-        header('Content-length: ' . strlen($data));
-        header('X-Frame-Options: ALLOWALL');
-        header('Pragma: no-cache');
-        header('Cache-control: no-cache, must-revalidate, no-transform');
-        echo $data;
-        die;
     }
 
     /**
@@ -2594,8 +2473,10 @@ error_log("result: $result");//(**)
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_linguist_payment_information'])) {
                 if (empty($post['country_id'])) UserRouteHandler::flashNow('error', 'You must enter a valid Country');
+                elseif (empty($post['linguist_name'])) UserRouteHandler::flashNow('error', 'You must enter an Official Name');
+                elseif (substr($post['google_drive_link'], 0, 25) != 'https://drive.google.com/') UserRouteHandler::flashNow('error', 'You must enter a valid Google Drive Folder Link');
                 else {
-                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link']);
+                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link'], $post['linguist_name']);
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }
@@ -2809,6 +2690,7 @@ error_log("result: $result");//(**)
             'countries' => $countryDao->getCountries(),
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
+            'user_invoices'  => $userDao->getUserInvoices($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -2941,7 +2823,7 @@ $html = <<<EOF
         <tr valign="bottom">
               <td class="header1" rowspan="2" align="left" valign="middle"
                     width="33%"><br/><img width="240"  style="text-align:left;" alt="TWB logo"  class="clearlogo" src="/ui/img/cropped-TWB_Logo_horizontal_primary_RGB-1-1.png"></td>
-              <td width="35%"></td>  
+              <td width="35%"></td>
               <td class="header1" rowspan="2" align="right" valign="middle"
                     width="25%"><br/><br/><img width="140"  style="text-align:right;" alt="CLEAR Global logo" data-src="/ui/img/CG_Logo_horizontal_primary_RGB.svg" class="clearlogo" src="/ui/img/CG_Logo_horizontal_primary_RGB.svg"></td>
         </tr></table>
@@ -3361,6 +3243,171 @@ EOF;
         if (!empty($docusign_hook['data']['envelopeId']) && !empty($docusign_hook['event']) && ($docusign_hook['event'] == 'envelope-completed' || (!empty($docusign_hook['data']['recipientId']) && $docusign_hook['data']['recipientId'] == 1)))
             $userDao->update_sent_contract($docusign_hook['event'], $docusign_hook['data']['envelopeId']);
         die;
+    }
+
+    public function getInvoice(Request $request, Response $response, $args)
+    {
+        [$filename, $file] = $this->get_invoice_pdf($args['invoice_number']);
+        $response->getBody()->write($file);
+        return $response->withHeader('Content-Type', 'application/pdf')->withHeader('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function get_invoice_pdf($invoice_number)
+    {
+        require_once 'resources/TCPDF-main/examples/tcpdf_include.php';
+       
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $rows = $userDao->getInvoice($invoice_number);
+        if (empty($rows)) return ['none.pdf', 'Not Found'];
+        $invoice = $rows[0];
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $roles = $adminDao->get_roles($user_id);
+        if (!(($user_id == $invoice['linguist_id'] && !($invoice['status']&1)) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)))) return ['none.pdf', 'Not Allowed'];
+
+        $TWB = 'TWB-';
+        if ($invoice['status']&1) $TWB = 'DRAFT-';
+        $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
+
+        $name = $invoice['linguist_name'];
+
+        $status = $invoice['status'];
+        $inv = $status&1 ? 'DRAFT' : 'INVOICE';
+        $paid = $status&2 ? 'PAID' : '';
+        if ($status&4) $paid = 'BOUNCED';
+
+        $email = $invoice['email'];
+        $country = $invoice['country'];
+        $date = date("Y-m-d" , strtotime($invoice['invoice_date']));
+        $paid_date = date("Y-m-d" , strtotime($invoice['invoice_paid_date']));
+        $amount = '$' . round($invoice['amount'], 2);
+
+        $header = array('S/N', 'Description', 'PO', 'Quantity', 'Unit Price','Amount');
+
+        $pdf = new \TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('TWB Platform');
+        $pdf->SetTitle("Invoice");
+        $pdf->SetSubject('Generate Linguist Invoice');
+        $pdf->SetKeywords('TWB Platform,Linguist Invoice');
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, [0, 64, 255], [0, 64, 128]);
+        $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('dejavusans', '', 9, '', false);
+        $pdf->AddPage('P');
+        $pdf->SetLineStyle(['width' => 5, 'color' => [232, 153, 28]]);
+        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
+        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
+        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
+$html = <<<EOF
+        <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+            <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
+            <td width="35%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
+                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$inv</div>
+            </td>
+        </tr>
+        <br/>
+        <br/>
+        </table>
+EOF;
+
+$badge = <<<EOF
+        <table width="100%" cellspacing="0" cellpadding="55%">
+        <tr valign="bottom">
+            <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
+            <td width="35%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="25%">
+                <div style="font-size: 12px; font-weight:bold ; border: 1px solid red; color:red; width: 20px; height: 50px; display: inline-block; padding: 5px; border-radius: 5px; text-align:left ;">
+                    $paid ($paid_date)
+                </div>
+                <br/>
+            </td>
+        </tr>
+        </table>
+EOF;
+    $pdf->writeHTML($html, true, false, true, false, '');
+    if ($paid) $pdf->writeHTML($badge, true, false, true, false, '');
+    $html1 = <<<EOF
+<table width="100%" cellspacing="0" cellpadding="5%">  <tr valign="bottom">
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">
+            <div><span style="font-weight:bold;">From</span><br/>$name<br/>$email<br/>$country<br/></div>
+        </td>
+        <td width="35%"></td>
+        <td class="header1" rowspan="2" align="left" valign="middle" width="33%">  <div>Invoice No: $invoice_number<br/>$date</div>
+            <br/><br/>
+        </td>
+    </tr>
+</table>
+<div style="margin-top:20px;">
+    <br/>
+    <div><span style="font-weight:bold;">To</span><br/>CLEAR Global Inc.<br/>9169 W State St #83714<br/>+1 (203) 794-6698</div>
+</div>
+<br/>
+EOF;
+    $pdf->writeHTML($html1, true, false, true, false, '');
+        $tbl = <<<EOF
+        <table border="1" cellpadding="2" cellspacing="2">
+        <thead>
+        <tr style="background-color:#FAFAFA;color:black;">
+        <td width="30" align="center"><b>S/N</b></td>
+        <td width="250" style="padding-right:10px;"><b>Description</b></td>
+        <td width="80" align="center"><b>PO</b></td>
+        <td width="80" align="center"> <b>Quantity</b></td>
+        <td width="80" align="center"><b>Unit Price</b></td>
+        <td width="80" align="center"><b>Amount</b></td>
+        </tr>
+        </thead>
+        EOF;
+
+foreach ($rows as $index => $row) {
+    $purchase_order = $row['purchase_order'];
+    $deal_id = $row['deal_id'];
+    $description = $row['title'];
+    $type = $row['type_text'];
+    $language = $row['language_pair_name'];
+    $project = $row['project_title'];
+    $org = $row['name'];
+    $row_amount = '$' . round($row['row_amount'], 2);
+    $unit = $row['pricing_and_recognition_unit_text_hours'];
+    $unit_rate = '$' . $row['unit_rate'];
+    $quantity = round($row['quantity'], 2);
+    $number = $index + 1;
+
+    $tbl .= <<<EOF
+    <tr>
+    <td width="30" align="center"><b>$number</b></td>
+    <td width="250"  style="padding-right:10px; padding-top:10px;">$description<br /><span style="font-weight:bold;">$project</span><br />$org<br />$language<br />$type</td>
+    <td width="80" align="center">$purchase_order<br /><br />$deal_id</td>
+    <td width="80" align="center"> $quantity $unit</td>
+    <td width="80" align="center">$unit_rate</td>
+    <td align="center" width="80">$row_amount</td>
+    </tr>
+    EOF;
+}
+    $tbl .= <<<EOF
+    <tr>
+    <td colspan="5" style="font-weight:bold;"> Total</td>
+    <td width="80" align="center"> $amount</td>
+    </tr>
+    </table>
+    EOF;
+    $pdf->writeHTML($tbl, true, false, false, false, '');
+    $pdf->lastPage();
+
+    return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
     }
 
     public static function flash($key, $value)
