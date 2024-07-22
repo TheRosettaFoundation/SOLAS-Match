@@ -111,6 +111,9 @@ restrictionsB.forEach((elt) => {
         const checkedCheckboxes = parent.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
+        const validCheck = parent.querySelectorAll(
+            'input[type="checkbox"]:checked'
+        );
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
