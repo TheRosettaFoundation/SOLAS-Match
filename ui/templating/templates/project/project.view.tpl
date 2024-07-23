@@ -541,7 +541,7 @@
                     <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
-                    <span class="me-4">
+                    <span class="me-2">
                         <select name="language_options[]" id="language_options" class="form-select me-1 text-muted" id="language_options" data-select-name="{$languageCountry|replace:',':'_'}">
                             <option value="">-- Choose --</option>
                             <option value="all_tasks_{$languageCountry|replace:',':'_'}">Select all Tasks</option>
