@@ -626,7 +626,7 @@
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             <span>{Localisation::getTranslation('common_waiting')}</span> <br>
-                                             <div class="text-secondary-sublte fs-6 fw-bold">
+                                             <div class="text-secondary-sublte fs-6 fw-bold text-center">
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                               <span> </span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
@@ -642,7 +642,7 @@
 
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span> <br>
-                                            <div class="text-secondary-sublte fs-6 fw-bold">
+                                            <div class="text-secondary-sublte fs-6 fw-bold text-center">
                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                                 <span> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
