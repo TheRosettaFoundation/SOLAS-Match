@@ -262,7 +262,7 @@ restrictionsB.forEach((elt) => {
                                         data-bs-title="Matching Native Language"
                                     >
                                         <img
-                                            src="{urlFor name='home'}ui/img/Native lm.svg"
+                                            src="../img/Native lm.svg"
                                             alt="Matching Native language icon"
                                             width="20%"
                                             height="20%"
@@ -280,7 +280,7 @@ restrictionsB.forEach((elt) => {
                                     >
                                         {" "}
                                         <img
-                                            src="{urlFor name='home'}ui/img/Native lcm.svg"
+                                            src="../img/Native lcm.svg"
                                             alt="Matching Country and Language icon"
                                             width="20%"
                                             height="20%"
