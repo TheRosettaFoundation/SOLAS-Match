@@ -596,18 +596,18 @@
                             <tr>
                                 
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
-                                 <th>{Localisation::getTranslation('common_title')}</th>
-                                 <th>{Localisation::getTranslation('common_status')}</th>       
-                                 <th>{Localisation::getTranslation('common_type')}</th> 
+                                 <th class="text-center">{Localisation::getTranslation('common_title')}</th>
+                                 <th class="text-center">{Localisation::getTranslation('common_status')}</th>       
+                                 <th class="text-center">{Localisation::getTranslation('common_type')}</th> 
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                  <th>Paid?</th>
                                 {/if}
-                                 <th>Cancelled?</th>
-                                 <th>{Localisation::getTranslation('common_task_deadline')}</th>
-                                 <th>Published?</th>
-                                 <th>{Localisation::getTranslation('common_tracking')}</th>
-                                 <th>{Localisation::getTranslation('common_edit')}</th>
-                                 <th>{Localisation::getTranslation('project_view_archive_delete')}</th>
+                                 <th class="text-center">Cancelled?</th>
+                                 <th class="text-center">{Localisation::getTranslation('common_task_deadline')}</th>
+                                 <th class="text-center">Published?</th>
+                                 <th class="text-center">{Localisation::getTranslation('common_tracking')}</th>
+                                 <th class="text-center">{Localisation::getTranslation('common_edit')}</th>
+                                 <th class="text-center">{Localisation::getTranslation('project_view_archive_delete')}</th>
                             </tr>
                         </thead>
                         <tbody class="fs-4 bg-primary">
@@ -615,8 +615,8 @@
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
                                 <tr class="align-middle">
-                                <td> <input type="checkbox"  name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
-                                    <td >
+                                <td class="text-center"> <input type="checkbox"  name="select_task" value="{$task->getId()}" data-task-type="{$task->getTaskType()}" data-lang="{$languageCountry|replace:',':'_'}" data-paid="{$get_paid_for_project[$task_id]}" data-payment-status="{$get_payment_status_for_project[$task_id]['payment_status']}" /> </td>
+                                    <td class="text-center">
                                         <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
@@ -714,7 +714,7 @@
                                             <i class=" fa-solid fa-user "></i>    <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
                                         {/if}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <strong>
                                             <small>                                  
                                                 {assign var="type_id" value=$task->getTaskType()}
@@ -728,7 +728,7 @@
                                         {if $get_payment_status_for_project[$task_id]['total_words']}<br />{round($get_payment_status_for_project[$task_id]['total_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}{/if}
                                     </td>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                    <td>                                    
+                                    <td class="text-center">                                    
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-x" ></i> </span>
@@ -748,7 +748,7 @@
                                     </td>
                                     {/if}
 
-                                    <td>
+                                    <td class="text-center">
                                      {if $task->get_cancelled()} 
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                                          <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
@@ -770,11 +770,11 @@
                                     {/if}
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
                                         <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
                                     <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
                                     <input type="hidden" name="task_id" value="{$task_id}" />
                                     {if $task->getPublished() == 1}
@@ -796,7 +796,7 @@
                                 </form>
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
                                         <form id="trackedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $taskMetaData[$task_id]['tracking']}
@@ -817,14 +817,14 @@
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                         </form>
                                     </td>    
-                                    <td class="">
+                                    <td class="text-center">
                                         <div data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('project_view_edit_task')}">
                                         <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class="btngray" >
                                             <i class="fa-solid fa-pen fa-lg"></i>
                                         </a>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <form id="archiveDeleteForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                             <input type="hidden" name="task_id" value="{$task_id}" />
                                             {if $status_id < TaskStatusEnum::IN_PROGRESS}
