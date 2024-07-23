@@ -7157,12 +7157,13 @@ BEGIN
             tq.required_qualification_level<=uqp.qualification_level
         JOIN Users  u ON uqp.user_id=u.id AND
             (tq.native_matching=0 OR
-            (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
+            (tq.native_matching=2 AND t.`language_id-target`=u.language_id) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
         JOIN user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
         JOIN Admins a ON uqp.user_id=a.user_id
         LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
         WHERE
+           (tq.native_matching!=2 OR (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) AND
             t.id=taskID AND
             (
                 (include_site>0 AND (a.roles&@LINGUIST)!=0) OR
@@ -8909,7 +8910,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -8921,6 +8922,7 @@ BEGIN
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
+        (tq.native_matching!=2 OR (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) AND
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
@@ -8965,7 +8967,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -8977,6 +8979,7 @@ BEGIN
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
+        (tq.native_matching!=2 OR (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) AND
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
@@ -9069,7 +9072,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -9081,6 +9084,7 @@ BEGIN
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
+        (tq.native_matching!=2 OR (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) AND
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
@@ -9124,7 +9128,7 @@ BEGIN
         tq.required_qualification_level<=uqp.qualification_level
     JOIN Users                            u ON uqp.user_id=u.id AND
         (tq.native_matching=0 OR
-        (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
+        (tq.native_matching=2 AND t.`language_id-target`=u.language_id) OR
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))
     JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
     LEFT JOIN Languages                  ln ON u.language_id=ln.id
@@ -9136,6 +9140,7 @@ BEGIN
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
+        (tq.native_matching!=2 OR (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) AND
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
