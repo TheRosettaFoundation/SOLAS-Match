@@ -250,17 +250,44 @@ restrictionsB.forEach((elt) => {
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
                             case "0":
-                                newNative.textContent = "No Restriction";
+                                newNative.innerHTML = "";
                                 break;
 
                             case "1":
-                                newNative.textContent =
-                                    "Matching Native Language";
+                                newNative.innerHTML = (
+                                    <span
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Matching Native Language"
+                                    >
+                                        <img
+                                            src="{urlFor name='home'}ui/img/Native lm.svg"
+                                            alt="Matching Native language icon"
+                                            width="20%"
+                                            height="20%"
+                                        />{" "}
+                                    </span>
+                                );
                                 break;
 
                             case "2":
-                                newNative.textContent =
-                                    "Matching Native Language and Country";
+                                newNative.innerHTML = (
+                                    <span
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="Matching Native Language and Country"
+                                    >
+                                        {" "}
+                                        <img
+                                            src="{urlFor name='home'}ui/img/Native lcm.svg"
+                                            alt="Matching Country and Language icon"
+                                            width="20%"
+                                            height="20%"
+                                        />{" "}
+                                    </span>
+                                );
                                 break;
                         }
                     }
