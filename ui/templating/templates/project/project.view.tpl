@@ -600,7 +600,7 @@
                                  <th class="text-center">{Localisation::getTranslation('common_status')}</th>       
                                  <th class="text-center">{Localisation::getTranslation('common_type')}</th> 
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                                 <th>Paid?</th>
+                                 <th class="text-center">Paid?</th>
                                 {/if}
                                  <th class="text-center">Cancelled?</th>
                                  <th class="text-center">{Localisation::getTranslation('common_task_deadline')}</th>
