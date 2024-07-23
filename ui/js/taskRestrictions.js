@@ -254,7 +254,7 @@ restrictionsB.forEach((elt) => {
                                 break;
 
                             case "1":
-                                newNative.innerHTML = (
+                                newNative.innerHTML = `
                                     <span
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
@@ -267,12 +267,11 @@ restrictionsB.forEach((elt) => {
                                             width="20%"
                                             height="20%"
                                         />{" "}
-                                    </span>
-                                );
+                                    </span>`;
                                 break;
 
                             case "2":
-                                newNative.innerHTML = (
+                                newNative.innerHTML = `
                                     <span
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
@@ -286,8 +285,7 @@ restrictionsB.forEach((elt) => {
                                             width="20%"
                                             height="20%"
                                         />{" "}
-                                    </span>
-                                );
+                                    </span>`;
                                 break;
                         }
                     }
