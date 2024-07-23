@@ -230,8 +230,6 @@ restrictionsB.forEach((elt) => {
                 let tasksToupdate = taskSelected[elt];
                 taskToRestrict = [...tasksToupdate];
 
-                console.log(taskToRestrict);
-
                 let updated = await updateTaskRestrictions(
                     tasksToupdate,
                     matching
@@ -239,13 +237,12 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
-                    console.log(updatedTask);
                     let status = updatedTask.querySelector("span:first-child");
                     if (!status) {
                         return;
                     }
                     let newNative = updatedTask.querySelector("div");
-                    console.log(updatedTask);
+
                     let statusText = status.textContent.trim();
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
