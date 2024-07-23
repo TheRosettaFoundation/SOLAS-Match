@@ -630,9 +630,11 @@
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
                                               <span> No Restriction</span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
-                                              <span><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="10%" height="10%" >  Matching Native Language</span> 
+                                              <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                              data-bs-custom-class="custom-tooltip"
+                                              data-bs-title="Native Language Matching"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="10%" height="10%" >  Matching Native Language</span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
-                                              <span> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="10%" height="10%"" > Matching Native Language and Country</span> 
+                                              <span> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="10%" height="10%" > Matching Native Language and Country</span> 
                                             {/if}
                                             </div>
 
