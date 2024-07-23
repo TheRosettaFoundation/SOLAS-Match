@@ -628,15 +628,15 @@
                                             <span>{Localisation::getTranslation('common_waiting')}</span> <br>
                                              <div class="text-secondary-sublte fs-6 fw-bold">
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
-                                              <span> No Restriction</span>
+                                              <span> </span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top"
                                               data-bs-custom-class="custom-tooltip"
-                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="10%" height="10%" >  </span> 
+                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="15%" height="15%" >  </span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top"
                                               data-bs-custom-class="custom-tooltip"
-                                              data-bs-title="Matching Native Language and Country"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="10%" height="10%" > </span> 
+                                              data-bs-title="Matching Native Language and Country"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="15%" height="15%" > </span> 
                                             {/if}
                                             </div>
 
@@ -644,15 +644,15 @@
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span> <br>
                                             <div class="text-secondary-sublte fs-6 fw-bold">
                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
-                                                <span> No Restriction</span>
+                                                <span> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top"
                                                 data-bs-custom-class="custom-tooltip"
-                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="10%" height="10%"> Matching Native Language</span> 
+                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="15%" height="15%"> </span> 
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top"
                                                 data-bs-custom-class="custom-tooltip"
-                                                data-bs-title="Matching Native Language and Country"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="10%" height="10%">  Matching Native Language and Country</span> 
+                                                data-bs-title="Matching Native Language and Country"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="15%" height="15%"> </span> 
                                               {/if}
                                             </div>
                                            
