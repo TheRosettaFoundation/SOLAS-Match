@@ -622,7 +622,7 @@
                                         </a>
                                         <br/>
                                     </td>
-                                    <td id={$task->getId()}>
+                                    <td id={$task->getId()} class="text-center">
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             <span>{Localisation::getTranslation('common_waiting')}</span> <br>
