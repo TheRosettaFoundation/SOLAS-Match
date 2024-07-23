@@ -262,11 +262,11 @@ restrictionsB.forEach((elt) => {
                                         data-bs-title="Matching Native Language"
                                     >
                                         <img
-                                            src="../img/Native lm.svg"
+                                            src="/ui/img/Native lm.svg"
                                             alt="Matching Native language icon"
                                             width="20%"
                                             height="20%"
-                                        />{" "}
+                                        />
                                     </span>`;
                                 break;
 
@@ -278,13 +278,12 @@ restrictionsB.forEach((elt) => {
                                         data-bs-custom-class="custom-tooltip"
                                         data-bs-title="Matching Native Language and Country"
                                     >
-                                        {" "}
                                         <img
-                                            src="../img/Native lcm.svg"
+                                            src="/ui/img/Native lcm.svg"
                                             alt="Matching Country and Language icon"
                                             width="20%"
                                             height="20%"
-                                        />{" "}
+                                        />
                                     </span>`;
                                 break;
                         }
