@@ -4152,9 +4152,8 @@ BEGIN
         (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryName`,
         (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryCode`,
         t.`comment`, t.`task-type_id` AS taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline, t.`created-time` AS createdTime 
-    FROM
-        Users u,
-        Tasks t
+    FROM      Users    u
+    JOIN      Tasks    t
     JOIN      user_country_id_to_variant ucv ON u.country_id<=>ucv.country_id
     JOIN      Projects p ON t.project_id=p.id
     JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
