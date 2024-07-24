@@ -1,19 +1,16 @@
-<script  type="text/javascript">
+<script type="text/javascript">
     window.onload = runStartup;
 
 function runStartup() {
     select();
 }
 
-
 function select() {
-  
     $('#task_options').on('change', function (e) {
         var arr = [];
         var optionSelected = $("option:selected", this);
         var valueSelected = this.value;
         $('[type=checkbox]').prop("checked", false);
-       
 
         if (valueSelected == "all_translation_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
@@ -280,9 +277,7 @@ function select() {
 
     // Validation if user clicks on action without doing a selection
     jQuery.each(forms, function(index, item) {
-       
         $(document).on("submit","#"+item, function () {
-           
             if ($("[name='"+item+"']").val() == "") {
                 alert("No selection done");
                 return false;
@@ -549,6 +544,3 @@ function select() {
       });
 }
 </script>
-
-
-
