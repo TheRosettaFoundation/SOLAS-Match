@@ -291,6 +291,19 @@ li[data-list="bullet"] {
     padding: 6px;
 }
 
+.menu_list {
+    height: 200px;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+@media (min-width: 768px) {
+    .menu_list {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed

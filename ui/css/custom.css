@@ -222,6 +222,18 @@ li[data-list=bullet] {
   padding: 6px;
 }
 
+.menu_list {
+  height: 200px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+@media (min-width: 768px) {
+  .menu_list {
+    height: 100%;
+    overflow: hidden;
+  }
+}
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
