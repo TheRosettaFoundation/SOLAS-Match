@@ -25,6 +25,12 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
+            '/project/{task_id}/get_users_count[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:get_users_count')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_COMMUNITY')
+            ->setName('get_users_count');
+
+        $app->map(['GET', 'POST'],
             '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
@@ -719,7 +725,22 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
-      
+
+        $params = $request->getParsedBody();
+
+        if (isset($params['translators_count'])) {
+            $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
+            $results = json_encode($users_count_claim);
+            $response->getBody()->write($results);
+            return $response ->withHeader('Content-Type', 'application/json');
+        }
+
+        if (isset($params['matching'])) {
+            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id'],$params['matching']);
+            $results = json_encode($updateMatching);
+            $response->getBody()->write($results);
+            return $response ->withHeader('Content-Type', 'application/json');
+        }
 
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
@@ -748,6 +769,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['task_id']);
             } elseif (isset($post['revokeTaskId'])) {
                 $task = $taskDao->getTask($post['revokeTaskId']);
+            }
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['translators_count'])) {
+                $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
+                $payload = json_encode($users_count_claim);
+                $response->getBody()->write($payload);
+                return $response ->withHeader('Content-Type', 'application/json');
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
@@ -942,7 +970,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (!empty($post['tasks_as_paid'])) {
                     $task_ids = preg_split ("/\,/", $post['tasks_as_paid']);
-                    print_r($task_ids);
                     foreach ($task_ids as $id) {
                         $taskDao->set_paid_status($id);
                     }
@@ -972,7 +999,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to all users matching the language and variant.');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to users matching the language and variant.');
                 }
 
                 if (!empty($post['publish_all'])) {
@@ -1121,6 +1148,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
           
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
+            $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/taskRestrictions.js\"></script>";
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view1.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
