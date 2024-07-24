@@ -497,10 +497,10 @@
         </div>
         </div>
 </div>
-</br>
-</br>
+<br />
+<br />
 
-<hr>
+<hr />
   
     </div>
 
@@ -881,7 +881,7 @@
                                         <a  class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
-                                        <br/>
+                                        <br />
                                     </td>
                                     <td>
                                         {assign var="status_id" value=$task['status_id']}
@@ -942,9 +942,9 @@
     <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
     <option value="other">Other</option>    
   </select>
-  <br/>
+  <br />
   <p name="reason_text">Further details:</p>
-  <br/>
+  <br />
   <textarea rows="4" cols="40" name="reason" id="reason" style="width:auto;"></textarea>
   <br />
   <input type="checkbox" name="cancel_selected_only" value="1" /> Cancel only the selected task on TWB only (not on Phrase)
