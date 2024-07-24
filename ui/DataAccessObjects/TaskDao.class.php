@@ -330,6 +330,16 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('update_native_matching_phase_2', '');
     }
 
+    public function count_users_who_can_claim($task_id)
+    {
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('count_users_who_can_claim', LibAPI\PDOWrapper::cleanse($task_id));
+        if (!empty($result)) {
+            $ret = $result;
+        }
+        return $ret;
+    }
+
     public function setRestrictedTask($task_id)
     {
         LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
