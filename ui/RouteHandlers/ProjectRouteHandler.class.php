@@ -91,6 +91,27 @@ class ProjectRouteHandler
             '/memsource_hook',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:memsourceHook')
             ->setName('memsource_hook');
+
+        $app->map(['GET', 'POST'],
+            '/api_hook',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:api_hook')
+            ->setName('api_hook');
+    }
+
+    public function api_hook(Request $request)
+    {
+        global $app;
+        if ($request->getHeaderLine('X-API-TOKEN') !== Common\Lib\Settings::get('api_hook.X-API-TOKEN')) {
+            error_log('X-API-TOKEN does not match!');
+            die;
+        }
+        $body = (string)$request->getBody();
+        $hook = json_decode($body, true);
+        if (empty($hook)) {
+            error_log("api_hook not decoded: $body");
+        }
+        error_log('api_hook: ' . print_r(json_decode($body, true), true));
+        die;
     }
 
     public function memsourceHook(Request $request)
